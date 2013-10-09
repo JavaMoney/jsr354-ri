@@ -38,12 +38,17 @@ import javax.money.MonetaryQuery;
  * As required by {@link MonetaryAmount} this class is final, thread-safe,
  * immutable and serializable.
  * 
- * @version 0.6
+ * @version 0.6.1
  * @author Anatole Tresch
  * @author Werner Keil
  */
 public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7565813772046251748L;
 
 	public static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
 
