@@ -4,4 +4,7 @@ JSR 354 provides an API for representing, transporting, and performing comprehen
 See the home page for more details:
 http://jcp.org/en/jsr/detail?id=354
 
+Or the GitHub project page:
+http://javamoney.github.io/jsr354-ri/
+
 The current module contains the reference implementation of JSR 354.
