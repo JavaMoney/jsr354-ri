@@ -11,7 +11,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.javamoney</groupId>
+	<groupId>org.javamoney.ri</groupId>
 	<artifactId>jsr354-ri</artifactId>
 	<packaging>jar</packaging>
 
@@ -800,4 +800,9 @@
 		</plugins>
 	</reporting>
 
+	<parent>
+		<groupId>org.javamoney</groupId>
+		<artifactId>javamoney-parent</artifactId>
+		<version>0.3-SNAPSHOT</version>
+	</parent>
 </project>
