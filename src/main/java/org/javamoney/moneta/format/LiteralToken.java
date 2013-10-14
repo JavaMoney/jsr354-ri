@@ -27,12 +27,14 @@ import javax.money.MonetaryAmount;
  * This class is thread safe, immutable and serializable.
  * 
  * @author Anatole Tresch
+ * @author Werner Keil
  * 
  * @param <T>
  *            The item type.
  */
 final class LiteralToken implements FormatToken {
-
+// TODO does not implement Serializable
+	
 	/**
 	 * The literal part.
 	 */

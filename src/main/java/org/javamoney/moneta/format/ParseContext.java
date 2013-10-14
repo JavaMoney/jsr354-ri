@@ -23,7 +23,7 @@ import javax.money.CurrencyUnit;
  * This class is mutable and intended for use by a single thread. A new instance
  * is created for each parse.
  */
-// TODO ItemFormatBuilder does not exist any more. Fix JavaDoc
+// FIXME ItemFormatBuilder does not exist any more. Fix JavaDoc
 public final class ParseContext {
 	/** The current position of parsing. */
 	private int index;
