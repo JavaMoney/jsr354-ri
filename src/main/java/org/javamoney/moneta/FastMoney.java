@@ -21,11 +21,13 @@ package org.javamoney.moneta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
+import javax.money.Subunit;
 
 /**
  * <type>long</type> based implementation of {@link MonetaryAmount}. This class
@@ -939,6 +941,18 @@ public final class FastMoney implements MonetaryAmount,
 	@Override
 	public long getAmountFractionDenominator() {
 		return SCALING_DENOMINATOR;
+	}
+
+	@Override
+	public List<Subunit> getSubunits() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long get(CurrencyUnit unit) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

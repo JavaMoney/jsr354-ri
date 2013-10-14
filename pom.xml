@@ -15,7 +15,7 @@
 	<artifactId>jsr354-ri</artifactId>
 	<packaging>jar</packaging>
 
-	<version>0.7-SNAPSHOT</version>
+	<version>0.7.1-SNAPSHOT</version>
 
 	<name>JSR 354 RI (Moneta)</name>
 	<url>http://java.net/projects/javamoney</url>
@@ -803,6 +803,6 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.3.1-SNAPSHOT</version>
 	</parent>
 </project>

@@ -24,12 +24,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
+import javax.money.Subunit;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
@@ -38,7 +40,7 @@ import javax.money.MonetaryQuery;
  * As required by {@link MonetaryAmount} this class is final, thread-safe,
  * immutable and serializable.
  * 
- * @version 0.6.1
+ * @version 0.6.2
  * @author Anatole Tresch
  * @author Werner Keil
  */
@@ -1034,6 +1036,18 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		if (number == null) {
 			throw new IllegalArgumentException("Number is required.");
 		}
+	}
+
+	@Override
+	public List<Subunit> getSubunits() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long get(CurrencyUnit unit) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

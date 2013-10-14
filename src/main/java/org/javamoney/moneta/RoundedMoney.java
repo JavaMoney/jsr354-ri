@@ -23,12 +23,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
+import javax.money.Subunit;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
@@ -954,5 +956,17 @@ public final class RoundedMoney implements MonetaryAmount,
 		if (number == null) {
 			throw new IllegalArgumentException("Number is required.");
 		}
+	}
+
+	@Override
+	public List<Subunit> getSubunits() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long get(CurrencyUnit unit) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
