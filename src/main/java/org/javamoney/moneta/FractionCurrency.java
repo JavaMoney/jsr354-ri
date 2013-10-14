@@ -21,17 +21,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.money.CurrencyUnit;
-import javax.money.Subunit;
+import javax.money.SubUnit;
 
 /**
- * Platform RI: Adapter that implements the new {@link Subunit} interface
+ * Platform RI: Adapter that implements the new {@link SubUnit} interface
  * using the JDK's {@link Currency}.
  * 
- * @version 0.1
+ * @version 0.2
  * @author Werner Keil
  */
-public final class FractionCurrency implements Subunit, Serializable,
-		Comparable<Subunit> {
+public final class FractionCurrency implements SubUnit, Serializable,
+		Comparable<SubUnit> {
 
 	/**
 	 * 
@@ -40,8 +40,6 @@ public final class FractionCurrency implements Subunit, Serializable,
 	
 	/** main currency code for this fraction currency. */
 	private String currencyCode;
-	/** numeric code, or -1. */
-	private int numericCode;
 	
     /**
      * Id for this fraction currency.
@@ -67,12 +65,9 @@ public final class FractionCurrency implements Subunit, Serializable,
 	 * @param currency
 	 * @param id
 	 */
-	private FractionCurrency(String code, String id,
-			int numCode,
-			int fractionDigits) {
+	private FractionCurrency(String code, String id, int fractionDigits) {
 		this.currencyCode = code;
 		this.id = id;
-		this.numericCode = numCode;
 		this.fractionDigits = fractionDigits;
 	}
 
@@ -87,9 +82,23 @@ public final class FractionCurrency implements Subunit, Serializable,
 			throw new IllegalArgumentException("Currency required.");
 		}
 		this.currencyCode = currency.getCurrencyCode();
-		this.numericCode = currency.getNumericCode();
 		this.fractionDigits = currency.getDefaultFractionDigits();
 		this.id= id;
+	}
+	
+	/**
+	 * Private constructor.
+	 * 
+	 * @param currency
+	 * @param id
+	 */
+	private FractionCurrency(Currency currency) {
+		if (currency == null) {
+			throw new IllegalArgumentException("Currency required.");
+		}
+		this.currencyCode = currency.getCurrencyCode();
+		this.fractionDigits = currency.getDefaultFractionDigits();
+		this.id= "";
 	}
 
 	/**
@@ -148,44 +157,12 @@ public final class FractionCurrency implements Subunit, Serializable,
 		return currencyCode;
 	}
 
-	/**
-	 * Gets a numeric currency code. within the ISO-4217 name space, this equals
-	 * to the ISO numeric code. In other currency name spaces this number may be
-	 * different, or even undefined (-1).
-	 * <p>
-	 * The numeric code is an optional alternative to the standard currency
-	 * code. If defined, the numeric code is required to be unique within its
-	 * namespace.
-	 * <p>
-	 * This method matches the API of <type>java.util.Currency</type>.
-	 * 
-	 * @see #getNamespace()
-	 * @return the numeric currency code
-	 */
-	public int getNumericCode() {
-		return numericCode;
-	}
-
-
-	/**
-	 * Get the rounding steps in minor units for when using a cash amount of
-	 * this currency. E.g. Swiss Francs in cash are always rounded in 5 minor
-	 * unit steps. This results in {@code 1.00, 1.05, 1.10} etc. The cash
-	 * rounding consequently extends the default fraction units for certain
-	 * currencies.
-	 * 
-	 * @return the cash rounding, or -1, if not defined.
-	 */
-	public int getCashRounding() {
-		return cacheRounding;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Subunit currency) {
+	public int compareTo(SubUnit currency) {
 		return getCurrencyCode().compareTo(currency.getCurrencyCode());
 	}
 
@@ -226,20 +203,20 @@ public final class FractionCurrency implements Subunit, Serializable,
 	}
 
 	/**
-	 * Returns {@link #getCurrencyCode()}
+	 * Returns {@link #getCurrencyCode()} and {@link #getId()}
 	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return id;
+		return currencyCode + " " + id;
 	}
 
 	/**
 	 * Platform RI: Builder class that supports building complex instances of
 	 * {@link FractionCurrency}.
 	 * 
-	 * @author Anatole Tresch
+	 * @author Werner Keil
 	 */
 	public static final class Builder {
 		/** currency code for this currency. */
@@ -251,7 +228,7 @@ public final class FractionCurrency implements Subunit, Serializable,
 		/** numeric code, or -1. */
 		private int numericCode = -1;
 		/** fraction digits, or -1. */
-		private int defaultFractionDigits = -1;
+		private int fractionDigits = -1;
 		/**
 		 * Creates a new {@link Builder}.
 		 */
@@ -287,7 +264,7 @@ public final class FractionCurrency implements Subunit, Serializable,
 						"Invalid value for defaultFractionDigits: "
 								+ defaultFractionDigits);
 			}
-			this.defaultFractionDigits = defaultFractionDigits;
+			this.fractionDigits = defaultFractionDigits;
 			return this;
 		}
 
@@ -347,13 +324,12 @@ public final class FractionCurrency implements Subunit, Serializable,
 				FractionCurrency current = CACHED.get(currencyCode);
 				if (current == null) {
 					current = new FractionCurrency(currencyCode, id,
-							numericCode, defaultFractionDigits);
+							fractionDigits);
 					CACHED.put(currencyCode, current);
 				}
 				return current;
 			}
-			return new FractionCurrency(currencyCode, id, numericCode,
-					defaultFractionDigits);
+			return new FractionCurrency(currencyCode, id, fractionDigits);
 		}
 	}
 
@@ -362,6 +338,14 @@ public final class FractionCurrency implements Subunit, Serializable,
 			return (FractionCurrency) currency;
 		}
 		return FractionCurrency.of(currency.getCurrencyCode(), id);
+	}
+
+	public static FractionCurrency from(CurrencyUnit currency) {
+		if (FractionCurrency.class == currency.getClass()) {
+			return (FractionCurrency) currency;
+		}
+		String defId = "";
+		return from(currency, defId);
 	}
 
 

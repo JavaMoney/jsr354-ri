@@ -21,13 +21,14 @@ package org.javamoney.moneta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
-import javax.money.Subunit;
+import javax.money.SubUnit;
 
 /**
  * <type>long</type> based implementation of {@link MonetaryAmount}. This class
@@ -73,7 +74,7 @@ import javax.money.Subunit;
  * executed one million (1000000) times may execute significantly longer, since
  * monetary amount type conversion is involved.
  * 
- * @version 0.5
+ * @version 0.5.1
  * @author Anatole Tresch
  * @author Werner Keil
  */
@@ -92,6 +93,8 @@ public final class FastMoney implements MonetaryAmount,
 
 	/** The currency of this amount. */
 	private final CurrencyUnit currency;
+	
+	private final List<SubUnit> currencySubUnits;
 
 	/**
 	 * Creates a new instance os {@link FastMoney}.
@@ -111,6 +114,7 @@ public final class FastMoney implements MonetaryAmount,
 		checkNumber(number);
 		this.currency = currency;
 		this.number = getInternalNumber(number);
+		this.currencySubUnits = new ArrayList<SubUnit>();
 	}
 
 	private long getInternalNumber(Number number) {
@@ -151,13 +155,15 @@ public final class FastMoney implements MonetaryAmount,
 		if (amount.getClass() == Money.class) {
 			return ((Money) amount).asNumber().doubleValue();
 		}
+		else if (amount.getClass() == FastMoney.class) {
+			long fractionNumerator = ((FastMoney) amount).getAmountFractionNumerator();
+			long divisor = ((FastMoney) amount).getAmountFractionDenominator() / SCALING_DENOMINATOR;
 
-		long fractionNumerator = amount.getAmountFractionNumerator();
-		long divisor = amount.getAmountFractionDenominator() / SCALING_DENOMINATOR;
-
-		double fraction = ((double) fractionNumerator) / divisor / SCALING_DENOMINATOR;
-		return amount.getAmountWhole() +
-				fraction;
+			double fraction = ((double) fractionNumerator) / divisor / SCALING_DENOMINATOR;
+			return amount.getAmountWhole() +
+					fraction;
+		}
+		return -1;
 	}
 
 	// private static double getDoubleValue(MonetaryAmount amount) {
@@ -175,6 +181,7 @@ public final class FastMoney implements MonetaryAmount,
 		}
 		this.currency = currency;
 		this.number = number;
+		this.currencySubUnits = new ArrayList<SubUnit>();
 	}
 
 	private BigDecimal getBigDecimal(Number num) {
@@ -933,26 +940,22 @@ public final class FastMoney implements MonetaryAmount,
 		return longValue();
 	}
 
-	@Override
-	public long getAmountFractionNumerator() {
+	long getAmountFractionNumerator() {
 		return this.number % SCALING_DENOMINATOR;
 	}
 
-	@Override
-	public long getAmountFractionDenominator() {
+	long getAmountFractionDenominator() {
 		return SCALING_DENOMINATOR;
 	}
 
 	@Override
-	public List<Subunit> getSubunits() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<SubUnit> getSubUnits() {
+		return currencySubUnits;
 	}
 
 	@Override
 	public long get(CurrencyUnit unit) {
-		// TODO Auto-generated method stub
-		return 0;
+		return -1;
 	}
 
 }

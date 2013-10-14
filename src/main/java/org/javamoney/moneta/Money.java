@@ -31,7 +31,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
-import javax.money.Subunit;
+import javax.money.SubUnit;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
@@ -54,8 +54,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 
 	public static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
 
-	private static final int[] DENOM_ARRAY = new int[] { 1, 10, 100, 1000,
-			10000, 100000, 1000000 };
+//	private static final int[] DENOM_ARRAY = new int[] { 1, 10, 100, 1000,
+//			10000, 100000, 1000000 };
 
 	/** The numeric part of this amount. */
 	private BigDecimal number;
@@ -65,6 +65,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 
 	/** tHE DEFAULT {@link MathContext} used by this instance, e.g. on division. */
 	private MathContext mathContext;
+	
+	private List<SubUnit> subunits;
 
 	/**
 	 * Creates a new instance os {@link Money}.
@@ -899,8 +901,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * 
 	 * @see javax.money.MonetaryAmount#getAmountFractionNumerator()
 	 */
-	@Override
-	public long getAmountFractionNumerator() {
+	long getAmountFractionNumerator() {
 		BigDecimal bd = this.number.remainder(BigDecimal.ONE);
 		return bd.movePointRight(getScale()).longValueExact();
 	}
@@ -910,8 +911,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * 
 	 * @see javax.money.MonetaryAmount#getAmountFractionDenominator()
 	 */
-	@Override
-	public long getAmountFractionDenominator() {
+	long getAmountFractionDenominator() {
 		return BigDecimal.valueOf(10).pow(getScale()).longValueExact();
 	}
 
@@ -933,25 +933,38 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 				DEFAULT_MATH_CONTEXT);
 	}
 
-	public static BigDecimal asNumber(MonetaryAmount amt) {
-		long denom = amt.getAmountFractionDenominator();
-		for (int i = 0; i < DENOM_ARRAY.length; i++) {
-			if (denom == DENOM_ARRAY[i]) {
-				try {
-					long total = amt.getAmountWhole() * denom;
-					total = total + amt.getAmountFractionNumerator();
-					return BigDecimal.valueOf(total, i);
-				} catch (ArithmeticException ex) {
-					// go ahead, using slow conversion
-				}
+	static BigDecimal asNumber(MonetaryAmount amt) {
+//		long denom = amt.getAmountFractionDenominator();
+//		for (int i = 0; i < DENOM_ARRAY.length; i++) {
+//			if (denom == DENOM_ARRAY[i]) {
+//				try {
+//					long total = amt.getAmountWhole() * denom;
+//					total = total + amt.getAmountFractionNumerator();
+//					return BigDecimal.valueOf(total, i);
+//				} catch (ArithmeticException ex) {
+//					// go ahead, using slow conversion
+//				}
+//			}
+//		}
+
+		for (SubUnit sub : amt.getSubUnits()) {
+			int i = sub.getFractionDigits();
+			long denom = 10 ^ i;
+			try {
+				long total = amt.getAmountWhole() * denom;
+				total = total + amt.get(sub);
+				return BigDecimal.valueOf(total, i);
+			} catch (ArithmeticException ex) {
+				// go ahead, using slow conversion
 			}
 		}
-		// slow creation follows here
+//		// slow creation follows here
 		BigDecimal whole = BigDecimal.valueOf(amt.getAmountWhole());
-		BigDecimal fraction = BigDecimal.valueOf(amt
+		BigDecimal fraction = BigDecimal.valueOf(((Money)amt)
 				.getAmountFractionNumerator());
 		return whole.add(fraction);
 	}
+	
 
 	/**
 	 * Platform RI: This is an inner checker class for aspects of
@@ -1039,15 +1052,17 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	@Override
-	public List<Subunit> getSubunits() {
+	public List<SubUnit> getSubUnits() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public long get(CurrencyUnit unit) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (unit.getClass() == SubUnit.class) {
+			return getAmountFractionNumerator();
+		} 
+		return getAmountWhole();
 	}
 
 }

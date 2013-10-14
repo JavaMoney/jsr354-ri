@@ -19,6 +19,10 @@ import java.io.Serializable;
 import java.util.Currency;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.money.CurrencyUnit;
 
@@ -26,7 +30,7 @@ import javax.money.CurrencyUnit;
  * Platform RI: Adapter that implements the new {@link CurrencyUnit} interface
  * using the JDK's {@link Currency}.
  * 
- * @version 0.5.1
+ * @version 0.5.2
  * @author Anatole Tresch
  * @author Werner Keil
  */
@@ -49,8 +53,10 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 
 	private static final Map<String, MoneyCurrency> CACHED = new ConcurrentHashMap<String, MoneyCurrency>();
 
-	public static final String ISO_NAMESPACE = "IDO 4217";
+	public static final String ISO_NAMESPACE = "ISO 4217";
 
+	private static final Map<String, FractionCurrency> CACHED_FRACTIONS = new ConcurrentHashMap<String, FractionCurrency>();
+	
 	/**
 	 * Private constructor.
 	 * 
@@ -77,6 +83,88 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		this.numericCode = currency.getNumericCode();
 		this.defaultFractionDigits = currency.getDefaultFractionDigits();
 	}
+	
+    private static void info(String message, Throwable t) {
+    	Logger logger = Logger.getLogger("org.javamoney.moneta.MoneyCurrency");
+        if (logger.isLoggable(Level.INFO)) {
+            if (t != null) {
+                logger.info(message + " " + t.getMessage());
+            } else {
+                logger.info(message);
+            }
+        }
+    }
+	
+	/**
+     * Replaces currency data found in the currencydata.properties file
+     *
+     * @param pattern regex pattern for the properties
+     * @param ctry country code
+     * @param data currency data.  This is a comma separated string that
+     *    consists of "three-letter alphabet code", "three-digit numeric code",
+     *    and "one-digit (0,1,2, or 3) default fraction digit".
+     *    For example, "JPZ,392,0".
+     * @throws
+     */
+    private static void replaceCurrencyData(Pattern pattern, String ctry, String curdata) {
+
+        if (ctry.length() != 2) {
+            // ignore invalid country code
+            String message = new StringBuilder()
+                .append("The entry in currency.properties for ")
+                .append(ctry).append(" is ignored because of the invalid country code.")
+                .toString();
+            info(message, null);
+            return;
+        }
+
+        Matcher m = pattern.matcher(curdata);
+        if (!m.find()) {
+            // format is not recognized.  ignore the data
+            String message = new StringBuilder()
+                .append("The entry in currency.properties for ")
+                .append(ctry)
+                .append(" is ignored because the value format is not recognized.")
+                .toString();
+            info(message, null);
+            return;
+        }
+
+        String code = m.group(1);
+        int numeric = Integer.parseInt(m.group(2));
+        int fraction = Integer.parseInt(m.group(3));
+//        int entry = numeric << NUMERIC_CODE_SHIFT;
+//
+//        int index;
+//        for (index = 0; index < scOldCurrencies.length; index++) {
+//            if (scOldCurrencies[index].equals(code)) {
+//                break;
+//            }
+//        }
+
+//        if (index == scOldCurrencies.length) {
+//            // simple case
+//            entry |= (fraction << SIMPLE_CASE_COUNTRY_DEFAULT_DIGITS_SHIFT) |
+//                     (code.charAt(2) - 'A');
+//        } else {
+//            // special case
+//            entry |= SPECIAL_CASE_COUNTRY_MASK |
+//                     (index + SPECIAL_CASE_COUNTRY_INDEX_DELTA);
+//        }
+        setSubTableEntry(ctry.charAt(0), ctry.charAt(1));
+    }
+    
+    /**
+     * Sets the main table entry for the country whose country code consists
+     * of char1 and char2.
+     */
+    private static void setSubTableEntry(char char1, char char2) {
+        if (char1 < 'A' || char1 > 'Z' || char2 < 'A' || char2 > 'Z') {
+            throw new IllegalArgumentException();
+        }
+        //mainTable[(char1 - 'A') * A_TO_Z + (char2 - 'A')] = entry;
+    }
+
 
 	/**
 	 * Access a new instance based on {@link Currency}.

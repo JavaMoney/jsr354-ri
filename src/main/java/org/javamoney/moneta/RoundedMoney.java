@@ -30,7 +30,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
-import javax.money.Subunit;
+import javax.money.SubUnit;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
@@ -907,12 +907,10 @@ public final class RoundedMoney implements MonetaryAmount,
 		return this.number.longValue();
 	}
 
-	@Override
 	public long getAmountFractionNumerator() {
 		return this.number.scale();
 	}
 
-	@Override
 	public long getAmountFractionDenominator() {
 		return BigDecimal.valueOf(10)
 				.pow(MoneyCurrency.from(currency).getDefaultFractionDigits())
@@ -959,7 +957,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	}
 
 	@Override
-	public List<Subunit> getSubunits() {
+	public List<SubUnit> getSubUnits() {
 		// TODO Auto-generated method stub
 		return null;
 	}
