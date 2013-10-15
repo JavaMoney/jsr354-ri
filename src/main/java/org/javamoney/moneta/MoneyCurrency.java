@@ -17,6 +17,7 @@ package org.javamoney.moneta;
 
 import java.io.Serializable;
 import java.util.Currency;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -55,7 +56,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 
 	public static final String ISO_NAMESPACE = "ISO 4217";
 
-	private static final Map<String, FractionCurrency> CACHED_FRACTIONS = new ConcurrentHashMap<String, FractionCurrency>();
+	//private static final Map<String, List<SubCurrency>> CACHED_FRACTIONS = new ConcurrentHashMap<String, List<SubCurrency>>();
 	
 	/**
 	 * Private constructor.

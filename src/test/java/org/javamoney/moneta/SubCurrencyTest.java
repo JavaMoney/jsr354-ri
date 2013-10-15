@@ -29,12 +29,11 @@ import javax.money.CurrencyUnit;
 import org.junit.Test;
 
 /**
- * Tests for the {@link MoneyCurrency} class.
+ * Tests for the {@link CurrencyUnitImpl} class.
  * 
- * @author Anatole Tresch
  * @author Werner Keil
  */
-public class MoneyCurrencyTest {
+public class SubCurrencyTest {
 
 	/**
 	 * Test method for

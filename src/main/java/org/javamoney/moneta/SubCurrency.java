@@ -16,7 +16,9 @@
 package org.javamoney.moneta;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,10 +29,10 @@ import javax.money.SubUnit;
  * Platform RI: Adapter that implements the new {@link SubUnit} interface
  * using the JDK's {@link Currency}.
  * 
- * @version 0.2
+ * @version 0.3
  * @author Werner Keil
  */
-public final class FractionCurrency implements SubUnit, Serializable,
+public final class SubCurrency implements SubUnit, Serializable,
 		Comparable<SubUnit> {
 
 	/**
@@ -38,7 +40,7 @@ public final class FractionCurrency implements SubUnit, Serializable,
 	 */
 	private static final long serialVersionUID = 8482610025974818160L;
 	
-	/** main currency code for this fraction currency. */
+	/** main currency code of this fraction currency. */
 	private String currencyCode;
 	
     /**
@@ -53,11 +55,8 @@ public final class FractionCurrency implements SubUnit, Serializable,
      * Set from currency data tables.
      */
     transient private final int fractionDigits;
-    
-	/** The cache rounding value, -1 if not defined. */
-	private int cacheRounding = -1;
 
-	private static final Map<String, FractionCurrency> CACHED = new ConcurrentHashMap<String, FractionCurrency>();
+	private static final Map<String, List<SubCurrency>> CACHED = new ConcurrentHashMap<String, List<SubCurrency>>();
 
 	/**
 	 * Private constructor.
@@ -65,7 +64,7 @@ public final class FractionCurrency implements SubUnit, Serializable,
 	 * @param currency
 	 * @param id
 	 */
-	private FractionCurrency(String code, String id, int fractionDigits) {
+	private SubCurrency(String code, String id, int fractionDigits) {
 		this.currencyCode = code;
 		this.id = id;
 		this.fractionDigits = fractionDigits;
@@ -77,7 +76,7 @@ public final class FractionCurrency implements SubUnit, Serializable,
 	 * @param currency
 	 * @param id
 	 */
-	private FractionCurrency(Currency currency, String id) {
+	private SubCurrency(Currency currency, String id) {
 		if (currency == null) {
 			throw new IllegalArgumentException("Currency required.");
 		}
@@ -92,7 +91,7 @@ public final class FractionCurrency implements SubUnit, Serializable,
 	 * @param currency
 	 * @param id
 	 */
-	private FractionCurrency(Currency currency) {
+	private SubCurrency(Currency currency) {
 		if (currency == null) {
 			throw new IllegalArgumentException("Currency required.");
 		}
@@ -108,14 +107,15 @@ public final class FractionCurrency implements SubUnit, Serializable,
 	 *            the currency unit not null.
 	 * @return the new instance, never null.
 	 */
-	public static FractionCurrency of(Currency currency, String id) {
+	public static SubCurrency of(Currency currency, String id) {
 		String key = currency.getCurrencyCode();
-		FractionCurrency cachedItem = CACHED.get(key);
-		if (cachedItem == null) {
-			cachedItem = new FractionCurrency(currency, id);
-			CACHED.put(key, cachedItem);
-		}
-		return cachedItem;
+//		SubCurrency cachedItem = CACHED.get(key);
+//		if (cachedItem == null) {
+//			cachedItem = new SubCurrency(currency, id);
+//			CACHED.put(key, cachedItem);
+//		}
+//		return cachedItem;
+		return of(key, id);
 	}
 
 	/**
@@ -131,21 +131,29 @@ public final class FractionCurrency implements SubUnit, Serializable,
 	 * @throws IllegalArgumentException
 	 *             if no such currency exists.
 	 */
-	public static FractionCurrency of(String currencyCode, String id) {
-		FractionCurrency cu = CACHED.get(currencyCode);
-		if (cu == null) {
+	public static SubCurrency of(String currencyCode, String id) {
+		List<SubCurrency> subs = CACHED.get(currencyCode);
+		if (subs == null) {
 			if (MoneyCurrency.isJavaCurrency(currencyCode)) {
 				Currency cur = Currency.getInstance(currencyCode);
 				if (cur != null) {
 					return of(cur, id);
 				}
 			}
+		} else {
+			if (subs.size() == 0) {
+				throw new IllegalArgumentException("No such sub-currency: "
+						+ currencyCode + " " + id);
+			} else {
+				for (SubCurrency sub : subs) {
+					if (currencyCode.equals(sub.getCurrencyCode()) && id.equals(sub.getId())) {
+						return sub;
+					}
+				}
+			}
 		}
-		if (cu == null) {
-			throw new IllegalArgumentException("No such currency: "
-					+ currencyCode);
-		}
-		return cu;
+		throw new IllegalArgumentException("No such sub-currency: "
+				+ currencyCode + " " + id);
 	}
 
 	/*
@@ -193,7 +201,7 @@ public final class FractionCurrency implements SubUnit, Serializable,
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FractionCurrency other = (FractionCurrency) obj;
+		SubCurrency other = (SubCurrency) obj;
 		if (currencyCode == null) {
 			if (other.currencyCode != null)
 				return false;
@@ -214,7 +222,7 @@ public final class FractionCurrency implements SubUnit, Serializable,
 
 	/**
 	 * Platform RI: Builder class that supports building complex instances of
-	 * {@link FractionCurrency}.
+	 * {@link SubCurrency}.
 	 * 
 	 * @author Werner Keil
 	 */
@@ -304,45 +312,53 @@ public final class FractionCurrency implements SubUnit, Serializable,
 		 * internally.
 		 * 
 		 * @see #build(boolean)
-		 * @return a new instance of {@link FractionCurrency}.
+		 * @return a new instance of {@link SubCurrency}.
 		 */
-		public FractionCurrency build() {
+		public SubCurrency build() {
 			return build(true);
 		}
 
 		/**
-		 * Builds a new currency instance, which ia additinoally stored to the
+		 * Builds a new currency instance, which is additionally stored to the
 		 * internal cache for reuse.
 		 * 
 		 * @param cache
 		 *            flag to optionally store the instance created into the
 		 *            locale cache.
-		 * @return a new instance of {@link FractionCurrency}.
+		 * @return a new instance of {@link SubCurrency}.
 		 */
-		public FractionCurrency build(boolean cache) {
+		public SubCurrency build(boolean cache) {
 			if (cache) {
-				FractionCurrency current = CACHED.get(currencyCode);
-				if (current == null) {
-					current = new FractionCurrency(currencyCode, id,
+				List<SubCurrency> currents = CACHED.get(currencyCode);
+				if (currents == null) {
+					currents = new ArrayList<SubCurrency>();
+						SubCurrency subCurr = new SubCurrency(currencyCode, id,
 							fractionDigits);
-					CACHED.put(currencyCode, current);
+					currents.add(subCurr);
+					CACHED.put(currencyCode, currents);
+					return subCurr;
+				} else {
+					for (SubCurrency sc : currents) {
+						if(currencyCode.equals(sc.getCurrencyCode()) && id.equals(sc.getId())) {
+							return sc;
+						}
+					}
 				}
-				return current;
 			}
-			return new FractionCurrency(currencyCode, id, fractionDigits);
+			return new SubCurrency(currencyCode, id, fractionDigits);
 		}
 	}
 
-	public static FractionCurrency from(CurrencyUnit currency, String id) {
-		if (FractionCurrency.class == currency.getClass()) {
-			return (FractionCurrency) currency;
+	public static SubCurrency from(CurrencyUnit currency, String id) {
+		if (SubCurrency.class == currency.getClass()) {
+			return (SubCurrency) currency;
 		}
-		return FractionCurrency.of(currency.getCurrencyCode(), id);
+		return SubCurrency.of(currency.getCurrencyCode(), id);
 	}
 
-	public static FractionCurrency from(CurrencyUnit currency) {
-		if (FractionCurrency.class == currency.getClass()) {
-			return (FractionCurrency) currency;
+	public static SubCurrency from(CurrencyUnit currency) {
+		if (SubCurrency.class == currency.getClass()) {
+			return (SubCurrency) currency;
 		}
 		String defId = "";
 		return from(currency, defId);
