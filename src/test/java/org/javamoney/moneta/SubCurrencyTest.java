@@ -22,8 +22,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Currency;
-
 import javax.money.CurrencyUnit;
 
 import org.junit.Test;
@@ -37,76 +35,15 @@ public class SubCurrencyTest {
 
 	/**
 	 * Test method for
-	 * {@link net.java.javamoney.ri.CurrencyUnitImpl#of(java.util.Currency)} .
-	 */
-	@Test
-	public void testGetInstanceCurrency() {
-		Currency jdkCurrency = Currency.getInstance("CHF");
-		MoneyCurrency cur = MoneyCurrency.of(jdkCurrency);
-		assertNotNull(cur);
-		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
-		assertEquals(jdkCurrency.getNumericCode(), cur.getNumericCode());
-		assertEquals(jdkCurrency.getDefaultFractionDigits(),
-				cur.getDefaultFractionDigits());
-	}
-
-	/**
-	 * Test method for
-	 * {@link net.java.javamoney.ri.CurrencyUnitImpl#of(java.lang.String)} .
-	 */
-	@Test
-	public void testGetInstanceString() {
-		MoneyCurrency cur = MoneyCurrency.of("CHF");
-		assertNotNull(cur);
-		Currency jdkCurrency = Currency.getInstance("CHF");
-		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
-		assertEquals(jdkCurrency.getNumericCode(), cur.getNumericCode());
-		assertEquals(jdkCurrency.getDefaultFractionDigits(),
-				cur.getDefaultFractionDigits());
-	}
-
-	/**
-	 * Test method for
-	 * {@link net.java.javamoney.ri.CurrencyUnitImpl#of(java.lang.String, java.lang.String)}
-	 * .
-	 */
-	@Test
-	public void testGetInstanceStringString() {
-		MoneyCurrency cur = MoneyCurrency.of("USD");
-		MoneyCurrency cur2 = MoneyCurrency
-				.of("USD");
-		assertNotNull(cur2);
-		assertTrue(cur == cur2);
-		Currency jdkCurrency = Currency.getInstance("USD");
-		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
-		assertEquals(jdkCurrency.getNumericCode(), cur.getNumericCode());
-		assertEquals(jdkCurrency.getDefaultFractionDigits(),
-				cur.getDefaultFractionDigits());
-	}
-
-
-	/**
-	 * Test method for
 	 * {@link net.java.javamoney.ri.CurrencyUnitImpl#getCurrencyCode()}.
 	 */
 	@Test
-	public void testGetCurrencyCode() {
+	public void testGetCurrencyCodeAndId() {
 		CurrencyUnit cur = MoneyCurrency.of("USD");
 		assertEquals("USD", cur.getCurrencyCode());
-		cur = MoneyCurrency.of("EUR");
-		assertEquals("EUR", cur.getCurrencyCode());
-	}
-
-	/**
-	 * Test method for
-	 * {@link net.java.javamoney.ri.CurrencyUnitImpl#getNumericCode()}.
-	 */
-	@Test
-	public void testGetNumericCode() {
-		MoneyCurrency cur = MoneyCurrency.of("USD");
-		assertEquals(840, cur.getNumericCode());
-		cur = MoneyCurrency.of("EUR");
-		assertEquals(978, cur.getNumericCode());
+		SubCurrency subCur = SubCurrency.of(cur, "cent");
+		assertEquals("USD", subCur.getCurrencyCode());
+		assertEquals("cent", subCur.getId());
 	}
 
 	/**
@@ -115,11 +52,10 @@ public class SubCurrencyTest {
 	 * .
 	 */
 	@Test
-	public void testGetDefaultFractionDigits() {
+	public void testGetFractionDigits() {
 		MoneyCurrency cur = MoneyCurrency.of("USD");
-		assertEquals(2, cur.getDefaultFractionDigits());
-		cur = MoneyCurrency.of("JPY");
-		assertEquals(0, cur.getDefaultFractionDigits());
+		SubCurrency subCur = SubCurrency.of(cur, "cent");
+		assertEquals(2, subCur.getFractionDigits());
 	}
 
 	/**

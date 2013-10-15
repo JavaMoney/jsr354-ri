@@ -117,14 +117,24 @@ public final class SubCurrency implements SubUnit, Serializable,
 //		return cachedItem;
 		return of(key, id);
 	}
+	
+	/**
+	 * Access a new instance based on {@link CurrencyUnit}.
+	 * 
+	 * @param unit
+	 *            the currency unit not null.
+	 * @return the new instance, never null.
+	 */
+	public static SubCurrency of(CurrencyUnit unit, String id) {
+		String key = unit.getCurrencyCode();
+		return of(key, id);
+	}
 
 	/**
 	 * Access a new instance based on the ISO currency code. The code must
 	 * return a {@link Currency} when passed to
 	 * {@link Currency#getInstance(String)}.
 	 * 
-	 * @param namespace
-	 *            the target namespace.
 	 * @param currencyCode
 	 *            the ISO currency code, not null.
 	 * @return the corresponding {@link MonetaryCurrency} instance.
@@ -137,8 +147,12 @@ public final class SubCurrency implements SubUnit, Serializable,
 			if (MoneyCurrency.isJavaCurrency(currencyCode)) {
 				Currency cur = Currency.getInstance(currencyCode);
 				if (cur != null) {
-					return of(cur, id);
+					SubCurrency sub = new SubCurrency(cur.getCurrencyCode(), 
+							id, cur.getDefaultFractionDigits());
+					return sub;
 				}
+				throw new IllegalArgumentException("No such sub-currency: "
+						+ currencyCode + " " + id);
 			}
 		} else {
 			if (subs.size() == 0) {
