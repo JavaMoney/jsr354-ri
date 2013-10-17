@@ -1060,8 +1060,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	@Override
 	public long get(CurrencyUnit unit) {
 		if (unit.getClass() == SubUnit.class) {
+			// TODO make this more flexible
 			return getAmountFractionNumerator();
-		} 
+		}
 		return getAmountWhole();
 	}
 
