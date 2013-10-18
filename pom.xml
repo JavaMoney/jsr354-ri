@@ -15,7 +15,7 @@
 	<artifactId>jsr354-ri</artifactId>
 	<packaging>jar</packaging>
 
-	<version>0.7-SNAPSHOT</version>
+	<version>0.7</version>
 
 	<name>JSR 354 RI (Moneta)</name>
 	<url>http://java.net/projects/javamoney</url>
@@ -23,29 +23,35 @@
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
 	This module impelements JSR 354.</description>
 
+	<organization>
+		<name>JavaMoney</name>
+		<url>http://javamoney.org</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>Apache 2 License</name>
+			<comments>Spec</comments>
+			<url>LICENSE.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<properties>
-
-		<moduleDir>.</moduleDir>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
+		<jsr.version>0.7</jsr.version>
 		<jdkVersion>1.7</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<moduleDir>.</moduleDir>
 		<basedir>.</basedir>
 		<!-- Dependency versions -->
 		<junit.version>4.8.2</junit.version>
 
 		<license.licenseName>jcp_spec</license.licenseName>
 		<license.licenseResolver>src/license</license.licenseResolver>
-
 	</properties>
-
-	<organization>
-		<name>JSR 354 - Expert Group</name>
-		<url>https://javamoney.java.net</url>
-	</organization>
 
 	<developers>
 		<developer>
@@ -202,14 +208,7 @@
 	</issueManagement>
 
 
-	<licenses>
-		<license>
-			<name>Spec License</name>
-			<comments>Spec</comments>
-			<url>LICENSE.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+	
 
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -313,7 +312,7 @@
 								<encoding>UTF-8</encoding>
 								<excludes>
 									<exclude>target/**</exclude>
-									<exclude>LICENSE*.txt</exclude>
+									<exclude>LICENSE*.html</exclude>
 									<exclude>README.*</exclude>
 									<exclude>checkstyle*.*</exclude>
 									<exclude>*.css</exclude>
