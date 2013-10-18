@@ -957,12 +957,6 @@ public final class RoundedMoney implements MonetaryAmount,
 	}
 
 	@Override
-	public List<SubUnit> getSubUnits() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public long get(CurrencyUnit unit) {
 		// TODO Auto-generated method stub
 		return 0;

@@ -24,7 +24,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
@@ -947,7 +950,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 //			}
 //		}
 
-		for (SubUnit sub : amt.getSubUnits()) {
+		for (SubUnit sub : MoneyCurrency.getSubCurrencies(amt.getCurrency())) {
 			int i = sub.getFractionDigits();
 			long denom = 10 ^ i;
 			try {
@@ -1049,12 +1052,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		if (number == null) {
 			throw new IllegalArgumentException("Number is required.");
 		}
-	}
-
-	@Override
-	public List<SubUnit> getSubUnits() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

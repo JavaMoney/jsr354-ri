@@ -17,8 +17,10 @@ package org.javamoney.moneta;
 
 import java.io.Serializable;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.money.CurrencyUnit;
+import javax.money.SubUnit;
 
 /**
  * Platform RI: Adapter that implements the new {@link CurrencyUnit} interface
@@ -214,6 +217,33 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		return cu;
 	}
 
+    /**
+     * Gets the set of available currencies.  The returned set of currencies
+     * contains all of the available currencies, which may include currencies
+     * that represent obsolete ISO 4217 codes.  The set can be modified
+     * without affecting the available currencies in the runtime.
+     *
+     * @return the set of available currencies.  If there is no currency
+     *    available in the runtime, the returned set is empty.
+     * @since 1.7
+     */
+    public static Set<CurrencyUnit> getAvailableCurrencies() {
+    	return new HashSet<CurrencyUnit>();
+    }
+    
+    /**
+     * Gets the set of available subunits for a currency.  The returned set of currencies
+     * contains all of the available currencies, which may include currencies
+     * that represent obsolete ISO 4217 codes.  The set can be modified
+     * without affecting the available currencies in the runtime.
+     *
+     * @return the set of sub-currencies.  If there is no subunit for the given currency, 
+     * the returned set is empty.
+     */
+    public static Set<SubUnit> getSubCurrencies(CurrencyUnit currency) {
+    	return new HashSet<SubUnit>();
+    }
+    
 	/*
 	 * (non-Javadoc)
 	 * 
