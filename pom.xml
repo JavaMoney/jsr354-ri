@@ -799,9 +799,4 @@
 		</plugins>
 	</reporting>
 
-	<parent>
-		<groupId>org.javamoney</groupId>
-		<artifactId>javamoney-parent</artifactId>
-		<version>0.3-SNAPSHOT</version>
-	</parent>
 </project>
