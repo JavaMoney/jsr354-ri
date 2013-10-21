@@ -721,6 +721,8 @@ public class MoneyTest {
 				.getAmountFractionNumerator());
 		assertEquals(1000000000000000L, Money.of("CHF", 0.0100d)
 				.getAmountFractionNumerator());
+		
+		assertEquals(25, Money.of("CHF", 11.25d).getAmountFractionNumerator());
 	}
 
 	/**
@@ -736,6 +738,7 @@ public class MoneyTest {
 				.getAmountFractionDenominator());
 		assertEquals(100000000000000000L, Money.of("CHF", 0.0100d)
 				.getAmountFractionDenominator());
+		assertEquals(100L, Money.of("CHF", 10.25d).getAmountFractionDenominator());
 	}
 
 	/**
