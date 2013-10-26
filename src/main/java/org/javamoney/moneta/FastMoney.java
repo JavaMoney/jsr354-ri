@@ -940,11 +940,13 @@ public final class FastMoney implements MonetaryAmount,
 		return longValue();
 	}
 
-	long getAmountFractionNumerator() {
+	@Override
+	public long getAmountFractionNumerator() {
 		return this.number % SCALING_DENOMINATOR;
 	}
 
-	long getAmountFractionDenominator() {
+	@Override
+	public long getAmountFractionDenominator() {
 		return SCALING_DENOMINATOR;
 	}
 

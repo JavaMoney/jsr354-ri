@@ -904,7 +904,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * 
 	 * @see javax.money.MonetaryAmount#getAmountFractionNumerator()
 	 */
-	long getAmountFractionNumerator() {
+	@Override
+	public long getAmountFractionNumerator() {
 		BigDecimal bd = this.number.remainder(BigDecimal.ONE);
 		return bd.movePointRight(getScale()).longValueExact();
 	}
@@ -914,7 +915,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * 
 	 * @see javax.money.MonetaryAmount#getAmountFractionDenominator()
 	 */
-	long getAmountFractionDenominator() {
+	@Override
+	public long getAmountFractionDenominator() {
 		return BigDecimal.valueOf(10).pow(getScale()).longValueExact();
 	}
 
