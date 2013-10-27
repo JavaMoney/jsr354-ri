@@ -26,7 +26,7 @@ import javax.money.CurrencyUnit;
 import javax.money.SubUnit;
 
 /**
- * Platform RI: Adapter that implements the new {@link SubUnit} interface
+ * Platform RI: Implements the new {@link SubUnit} interface
  * using the JDK's {@link Currency}.
  * 
  * @version 0.3
