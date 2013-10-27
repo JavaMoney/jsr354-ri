@@ -247,8 +247,6 @@ public final class SubCurrency implements SubUnit, Serializable,
 		/** Id for this currency. */
 		private String id;
 		
-		/** numeric code, or -1. */
-		private int numericCode = -1;
 		/** fraction digits, or -1. */
 		private int fractionDigits = -1;
 		/**
@@ -317,7 +315,6 @@ public final class SubCurrency implements SubUnit, Serializable,
 				throw new IllegalArgumentException(
 						"Invalid value for numericCode: " + numericCode);
 			}
-			this.numericCode = numericCode;
 			return this;
 		}
 
@@ -378,15 +375,6 @@ public final class SubCurrency implements SubUnit, Serializable,
 		return from(currency, defId);
 	}
 
-
-//	public static boolean isAvailable(String code) {
-//		try {
-//			of(code);
-//			return true;
-//		} catch (Exception e) {
-//			return false;
-//		}
-//	}
 
 	@Override
 	public String getId() {

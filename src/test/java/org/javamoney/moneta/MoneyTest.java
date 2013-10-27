@@ -723,6 +723,7 @@ public class MoneyTest {
 				.getAmountFractionNumerator());
 		
 		assertEquals(25, Money.of("CHF", 11.25d).getAmountFractionNumerator());
+		assertEquals(20, Money.of("CHF", 11.2d).getAmountFractionNumerator());
 	}
 
 	/**
