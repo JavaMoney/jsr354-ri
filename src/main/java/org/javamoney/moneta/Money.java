@@ -16,6 +16,7 @@
 package org.javamoney.moneta;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
@@ -24,7 +25,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.net.URL;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
@@ -76,10 +83,96 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		this(currency, number, DEFAULT_MATH_CONTEXT);
 	}
 
+	/**
+	 * Evaluates the default MathContext to be used for {@link Money}. This will
+	 * try to read /javamoney.properties from the classpath:
+	 * 
+	 * <pre>
+	 * # Default MathContext for Money
+	 * #-------------------------------
+	 * # Custom MathContext, overrides entries from org.javamoney.moneta.Money.mathContext
+	 * # RoundingMode hereby is optional (default = HALF_EVEN)
+	 * org.javamoney.moneta.Money.defaults.precision=256
+	 * org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
+	 * # or, 
+	 * # use one of DECIMAL32,DECIMAL64(default),DECIMAL128,UNLIMITED
+	 * # org.javamoney.moneta.Money.mathContext=DECIMAL128
+	 * </pre>
+	 * 
+	 * @return
+	 */
 	private static MathContext initDefaultMathContext() {
-		// TODO Initialize default, e.g. by system properties, or better:
-		// classpath properties!
-		return MathContext.DECIMAL64;
+		InputStream is = null;
+		try {
+			Properties props = new Properties();
+			URL url = Money.class.getResource("/javamoney.properties");
+			if (url != null) {
+				is = url
+						.openStream();
+				props.load(is);
+				String value = props
+						.getProperty("org.javamoney.moneta.Money.defaults.precision");
+				if (value != null) {
+					int prec = Integer.parseInt(value);
+					value = props
+							.getProperty("org.javamoney.moneta.Money.defaults.roundingMode");
+					RoundingMode rm = value != null ? RoundingMode
+							.valueOf(value
+									.toUpperCase(Locale.ENGLISH))
+							: RoundingMode.HALF_EVEN;
+					MathContext mc = new MathContext(prec, rm);
+					Logger.getLogger(Money.class.getName()).info(
+							"Using custom MathContext: precision=" + prec
+									+ ", roundingMode=" + rm);
+					return mc;
+				}
+				else {
+					value = props
+							.getProperty("org.javamoney.moneta.Money.defaults.mathContext");
+					if (value != null) {
+						switch (value.toUpperCase(Locale.ENGLISH)) {
+						case "DECIMAL32":
+							Logger.getLogger(Money.class.getName()).info(
+									"Using MathContext.DECIMAL32");
+							return MathContext.DECIMAL32;
+						case "DECIMAL64":
+							Logger.getLogger(Money.class.getName()).info(
+									"Using MathContext.DECIMAL64");
+							return MathContext.DECIMAL64;
+						case "DECIMAL128":
+							Logger.getLogger(Money.class.getName())
+									.info(
+											"Using MathContext.DECIMAL128");
+							return MathContext.DECIMAL128;
+						case "UNLIMITED":
+							Logger.getLogger(Money.class.getName()).info(
+									"Using MathContext.UNLIMITED");
+							return MathContext.UNLIMITED;
+						}
+					}
+				}
+			}
+			Logger.getLogger(Money.class.getName()).info(
+					"Using default MathContext.DECIMAL64");
+			return MathContext.DECIMAL64;
+		} catch (Exception e) {
+			Logger.getLogger(Money.class.getName())
+					.log(Level.SEVERE,
+							"Error evaluating default MathContext, using default (MathContext.DECIMAL64).",
+							e);
+			return MathContext.DECIMAL64;
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e) {
+					Logger.getLogger(Money.class.getName())
+							.log(Level.WARNING,
+									"Error closing InputStream after evaluating default MathContext.",
+									e);
+				}
+			}
+		}
 	}
 
 	/**
@@ -257,7 +350,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(MonetaryAmount o) {
-		checkAmountParameter(o);
+		Objects.requireNonNull(o);
 		int compare = -1;
 		if (this.currency.equals(o.getCurrency())) {
 			compare = this.number.compareTo(Money.from(o).number);
