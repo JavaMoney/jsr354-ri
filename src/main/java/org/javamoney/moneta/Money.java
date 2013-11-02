@@ -44,6 +44,22 @@ import javax.money.MonetaryQuery;
  * <p>
  * As required by {@link MonetaryAmount} this class is final, thread-safe,
  * immutable and serializable.
+ * <p>
+ * This class uses a default MathContext. The default MathContext can be
+ * configured by adding a file {@code /javamoney.properties} to the classpath,
+ * with the following content:
+ * 
+ * <pre>
+ * # Default MathContext for Money
+ * #-------------------------------
+ * # Custom MathContext, overrides entries from org.javamoney.moneta.Money.mathContext
+ * # RoundingMode hereby is optional (default = HALF_EVEN)
+ * org.javamoney.moneta.Money.defaults.precision=256
+ * org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
+ * # or, 
+ * # use one of DECIMAL32,DECIMAL64(default),DECIMAL128,UNLIMITED
+ * # org.javamoney.moneta.Money.mathContext=DECIMAL128
+ * </pre>
  * 
  * @version 0.6.1
  * @author Anatole Tresch
