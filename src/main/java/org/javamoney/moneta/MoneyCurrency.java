@@ -18,6 +18,7 @@ package org.javamoney.moneta;
 import java.io.Serializable;
 import java.util.Currency;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.money.CurrencyUnit;
@@ -70,9 +71,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 	 * @param currency
 	 */
 	private MoneyCurrency(Currency currency) {
-		if (currency == null) {
-			throw new IllegalArgumentException("Currency required.");
-		}
+		Objects.requireNonNull(currency,"Currency required.");
 		this.currencyCode = currency.getCurrencyCode();
 		this.numericCode = currency.getNumericCode();
 		this.defaultFractionDigits = currency.getDefaultFractionDigits();

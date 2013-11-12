@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
@@ -77,15 +78,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	private RoundedMoney(CurrencyUnit currency, Number number,
 			MathContext mathContext) {
-		if (currency == null) {
-			throw new IllegalArgumentException("Currency is required.");
-		}
-		if (number == null) {
-			throw new IllegalArgumentException("Number is required.");
-		}
-		if (mathContext == null) {
-			throw new IllegalArgumentException("MathContext is required.");
-		}
+		Objects.requireNonNull(currency,"Currency is required.");
+		Objects.requireNonNull(number,"Number is required.");
+		Objects.requireNonNull(mathContext,"MathContext is required.");
 		checkNumber(number);
 		this.currency = currency;
 		this.mathContext = mathContext;
@@ -232,9 +227,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *         {@link MathContext}.
 	 */
 	public RoundedMoney setMathContext(MathContext mathContext) {
-		if (mathContext == null) {
-			throw new IllegalArgumentException("MathContext required.");
-		}
+		Objects.requireNonNull(mathContext,"MathContext required.");
 		return new RoundedMoney(this.currency, this.number, mathContext);
 	}
 
@@ -871,9 +864,7 @@ public final class RoundedMoney implements MonetaryAmount,
 		 *             If the number is null
 		 */
 		static final void checkNumber(Number number) {
-			if (number == null) {
-				throw new IllegalArgumentException("Number is required.");
-			}
+			Objects.requireNonNull(number,"Number is required.");
 		}
 
 		/**
@@ -889,9 +880,7 @@ public final class RoundedMoney implements MonetaryAmount,
 		 */
 		static final void checkAmountParameter(CurrencyUnit currency,
 				MonetaryAmount amount) {
-			if (amount == null) {
-				throw new IllegalArgumentException("Amount must not be null.");
-			}
+			Objects.requireNonNull(amount,"Amount must not be null.");
 			final CurrencyUnit amountCurrency = amount.getCurrency();
 			if (!(currency.getCurrencyCode().equals(amountCurrency
 					.getCurrencyCode()))) {
@@ -932,9 +921,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException("Amount must not be null.");
-		}
+		Objects.requireNonNull(amount,"Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
@@ -951,8 +938,6 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *             If the number is null
 	 */
 	private void checkNumber(Number number) {
-		if (number == null) {
-			throw new IllegalArgumentException("Number is required.");
-		}
+		Objects.requireNonNull(number,"Number is required.");
 	}
 }

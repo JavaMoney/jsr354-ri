@@ -18,6 +18,8 @@
  */
 package org.javamoney.moneta;
 
+import java.util.Objects;
+
 import javax.money.MonetaryException;
 
 /**
@@ -61,9 +63,7 @@ public class UnknownCurrencyException extends MonetaryException {
 			String message) {
 		super(message == null ? "Unknown currency - "
 				+ currencyCode : message);
-		if (currencyCode == null) {
-			throw new IllegalArgumentException("currencyCode may not be null.");
-		}
+		Objects.requireNonNull(currencyCode,"currencyCode may not be null.");
 		this.currencyCode = currencyCode;
 	}
 

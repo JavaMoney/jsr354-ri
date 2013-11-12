@@ -21,6 +21,7 @@ package org.javamoney.moneta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
@@ -100,12 +101,8 @@ public final class FastMoney implements MonetaryAmount,
 	 *            the amount, not null.
 	 */
 	private FastMoney(CurrencyUnit currency, Number number) {
-		if (currency == null) {
-			throw new IllegalArgumentException("Currency is required.");
-		}
-		if (number == null) {
-			throw new IllegalArgumentException("Number is required.");
-		}
+		Objects.requireNonNull(currency,"Currency is required.");
+		Objects.requireNonNull(number,"Number is required.");
 		checkNumber(number);
 		this.currency = currency;
 		this.number = getInternalNumber(number);
@@ -168,9 +165,7 @@ public final class FastMoney implements MonetaryAmount,
 	// }
 
 	private FastMoney(CurrencyUnit currency, long number) {
-		if (currency == null) {
-			throw new IllegalArgumentException("Currency is required.");
-		}
+		Objects.requireNonNull(currency,"Currency is required.");
 		this.currency = currency;
 		this.number = number;
 	}
@@ -868,9 +863,7 @@ public final class FastMoney implements MonetaryAmount,
 	 *             If the number is null
 	 */
 	public void checkNumber(Number number) {
-		if (number == null) {
-			throw new IllegalArgumentException("Number is required.");
-		}
+		Objects.requireNonNull(number,"Number is required.");
 	}
 
 	/**
@@ -884,9 +877,7 @@ public final class FastMoney implements MonetaryAmount,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException("Amount must not be null.");
-		}
+		Objects.requireNonNull(amount,"Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {

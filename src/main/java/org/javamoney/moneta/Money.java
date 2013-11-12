@@ -200,15 +200,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *            the amount, not null.
 	 */
 	private Money(CurrencyUnit currency, Number number, MathContext mathContext) {
-		if (currency == null) {
-			throw new IllegalArgumentException("Currency is required.");
-		}
-		if (number == null) {
-			throw new IllegalArgumentException("Number is required.");
-		}
-		if (mathContext == null) {
-			throw new IllegalArgumentException("MathContext is required.");
-		}
+		Objects.requireNonNull(currency,"Currency is required.");
+		Objects.requireNonNull(number,"Number is required.");
+		Objects.requireNonNull(mathContext,"MathContext is required.");
 		checkNumber(number);
 		this.currency = currency;
 		this.mathContext = mathContext;
@@ -405,9 +399,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @return a new {@link Money} instance, with the new {@link MathContext}.
 	 */
 	public Money withMathContext(MathContext mathContext) {
-		if (mathContext == null) {
-			throw new IllegalArgumentException("MathContext required.");
-		}
+		Objects.requireNonNull(mathContext,"MathContext required.");
 		return new Money(this.currency, this.number, mathContext);
 	}
 
@@ -715,9 +707,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *         {@link CurrencyUnit}, but the new {@link MathContext}.
 	 */
 	public Money with(MathContext context) {
-		if (context == null) {
-			throw new IllegalArgumentException("MathContext required");
-		}
+		Objects.requireNonNull(context,"MathContext required");
 		return new Money(currency, this.number, context);
 	}
 
@@ -744,9 +734,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
 	 */
 	public Money with(CurrencyUnit currency) {
-		if (currency == null) {
-			throw new IllegalArgumentException("currency required");
-		}
+		Objects.requireNonNull(currency,"currency required");
 		return new Money(currency, this.number, this.mathContext);
 	}
 
@@ -1081,9 +1069,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		 *             If the number is null
 		 */
 		static final void checkNumber(Number number) {
-			if (number == null) {
-				throw new IllegalArgumentException("Number is required.");
-			}
+			Objects.requireNonNull(number,"Number is required.");
 		}
 
 		/**
@@ -1099,9 +1085,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		 */
 		static final void checkAmountParameter(CurrencyUnit currency,
 				MonetaryAmount amount) {
-			if (amount == null) {
-				throw new IllegalArgumentException("Amount must not be null.");
-			}
+			Objects.requireNonNull(amount,"Amount must not be null.");
 			final CurrencyUnit amountCurrency = amount.getCurrency();
 			if (!(currency.getCurrencyCode().equals(amountCurrency
 					.getCurrencyCode()))) {
@@ -1121,9 +1105,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException("Amount must not be null.");
-		}
+		Objects.requireNonNull(amount,"Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
@@ -1140,9 +1122,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *             If the number is null
 	 */
 	private void checkNumber(Number number) {
-		if (number == null) {
-			throw new IllegalArgumentException("Number is required.");
-		}
+		Objects.requireNonNull(number,"Number is required.");
 	}
 
 }
