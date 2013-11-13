@@ -58,7 +58,7 @@ public class MonetaryAmountFormatTest {
 				Locale.GERMANY).build();
 		assertEquals("12,50 CHF"
 				, defaultFormat.format(Money.of("CHF", 12.50)));
-		assertEquals("123.456.789.101.112,10 INR",
+		assertEquals("123.456.789.101.112,12 INR",
 				defaultFormat.format(Money.of("INR",
 						123456789101112.123456)));
 		defaultFormat = new MonetaryAmountFormat.Builder(new Locale("", "IN"))
@@ -94,7 +94,7 @@ public class MonetaryAmountFormatTest {
 		b.setLength(0);
 		defaultFormat.print(b, Money.of("INR",
 				123456789101112.123456));
-		assertEquals("123.456.789.101.112,10 INR",
+		assertEquals("123.456.789.101.112,12 INR",
 				b.toString());
 		b.setLength(0);
 		defaultFormat = new MonetaryAmountFormat.Builder(new Locale("", "IN"))

@@ -96,7 +96,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *            the amount, not null.
 	 */
 	private Money(CurrencyUnit currency, Number number) {
-		this(currency, number, DEFAULT_MATH_CONTEXT);
+		this(currency, number, null);
 	}
 
 	/**
@@ -200,13 +200,19 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *            the amount, not null.
 	 */
 	private Money(CurrencyUnit currency, Number number, MathContext mathContext) {
-		Objects.requireNonNull(currency,"Currency is required.");
-		Objects.requireNonNull(number,"Number is required.");
-		Objects.requireNonNull(mathContext,"MathContext is required.");
+		Objects.requireNonNull(currency, "Currency is required.");
+		Objects.requireNonNull(number, "Number is required.");
 		checkNumber(number);
 		this.currency = currency;
-		this.mathContext = mathContext;
-		this.number = getBigDecimal(number, mathContext);
+		if (mathContext != null) {
+			this.mathContext = mathContext;
+			this.number = getBigDecimal(number, mathContext);
+		}
+		else {
+			this.mathContext = DEFAULT_MATH_CONTEXT;
+			this.number = getBigDecimal(number, null);
+		}
+
 	}
 
 	// Static Factory Methods
@@ -221,7 +227,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static Money of(CurrencyUnit currency, BigDecimal number) {
-		return new Money(currency, number, DEFAULT_MATH_CONTEXT);
+		return new Money(currency, number);
 	}
 
 	/**
@@ -251,7 +257,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(CurrencyUnit currency, Number number) {
-		return new Money(currency, number, DEFAULT_MATH_CONTEXT);
+		return new Money(currency, number);
 	}
 
 	/**
@@ -278,8 +284,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, Number number) {
-		return new Money(MoneyCurrency.of(currencyCode), number,
-				DEFAULT_MATH_CONTEXT);
+		return new Money(MoneyCurrency.of(currencyCode), number);
 	}
 
 	/**
@@ -351,7 +356,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		if (number == null) {
 			if (other.number != null)
 				return false;
-		} else if (!number.equals(other.number))
+		}
+		if (number.equals(other.number)) {
+			return true;
+		}
+		else if (number.compareTo(other.number) != 0)
 			return false;
 		return true;
 	}
@@ -399,7 +408,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @return a new {@link Money} instance, with the new {@link MathContext}.
 	 */
 	public Money withMathContext(MathContext mathContext) {
-		Objects.requireNonNull(mathContext,"MathContext required.");
+		Objects.requireNonNull(mathContext, "MathContext required.");
 		return new Money(this.currency, this.number, mathContext);
 	}
 
@@ -424,9 +433,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money add(MonetaryAmount amount) {
 		checkAmountParameter(amount);
+		if(Money.from(amount).isZero()){
+			return this;
+		}
 		return new Money(this.currency, this.number.add(
-				Money.from(amount).number, this.mathContext),
-				this.mathContext);
+				Money.from(amount).number));
 	}
 
 	private BigDecimal getBigDecimal(Number num) {
@@ -450,12 +461,44 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		return BigDecimal.valueOf(num.doubleValue());
 	}
 
-	private BigDecimal getBigDecimal(Number number, MathContext mathContext) {
-		if (number instanceof BigDecimal) {
-			return (BigDecimal) number;
-		} else {
-			return new BigDecimal(number.doubleValue(), mathContext);
+	private BigDecimal getBigDecimal(Number num, MathContext mathContext) {
+		if (num instanceof BigDecimal) {
+			BigDecimal bd = (BigDecimal) num;
+			if (mathContext != null) {
+				return new BigDecimal(bd.toString(), mathContext);
+			}
+			return bd;
 		}
+		if (num instanceof Long || num instanceof Integer) {
+			if (mathContext != null) {
+				return new BigDecimal(num.longValue(), mathContext);
+			}
+			return BigDecimal.valueOf(num.longValue());
+		}
+		if (num instanceof Float || num instanceof Double) {
+			if (mathContext != null) {
+				return new BigDecimal(num.doubleValue(), mathContext);
+			}
+			return new BigDecimal(num.toString());
+		}
+		if (num instanceof Byte || num instanceof AtomicLong) {
+			if (mathContext != null) {
+				return new BigDecimal(num.longValue(), mathContext);
+			}
+			return BigDecimal.valueOf(num.longValue());
+		}
+		try {
+			// Avoid imprecise conversion to double value if at all possible
+			if (mathContext != null) {
+				return new BigDecimal(num.toString(), mathContext);
+			}
+			return new BigDecimal(num.toString());
+		} catch (NumberFormatException e) {
+		}
+		if (mathContext != null) {
+			return new BigDecimal(num.doubleValue(), mathContext);
+		}
+		return BigDecimal.valueOf(num.doubleValue());
 	}
 
 	/*
@@ -465,9 +508,13 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money divide(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
+		if (divisor.getAmountWhole() == 1
+				&& divisor.getAmountFractionNumerator() == 0) {
+			return this;
+		}
 		BigDecimal dec = this.number.divide(Money.from(divisor).number,
 				this.mathContext);
-		return new Money(this.currency, dec, this.mathContext);
+		return new Money(this.currency, dec, null);
 	}
 
 	/*
@@ -476,9 +523,12 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see javax.money.MonetaryAmount#divide(javax.money.MonetaryAmount)
 	 */
 	public Money divide(Number divisor) {
+		if (getBigDecimal(divisor).equals(BigDecimal.ONE)) {
+			return this;
+		}
 		BigDecimal dec = this.number.divide(getBigDecimal(divisor),
 				this.mathContext);
-		return new Money(this.currency, dec, this.mathContext);
+		return new Money(this.currency, dec);
 	}
 
 	/*
@@ -490,10 +540,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	public Money[] divideAndRemainder(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
 		BigDecimal[] dec = this.number.divideAndRemainder(
-				Money.from(divisor).number, this.mathContext);
+				Money.from(divisor).number);
 		return new Money[] {
-				new Money(this.currency, dec[0], this.mathContext),
-				new Money(this.currency, dec[1], this.mathContext) };
+				new Money(this.currency, dec[0]),
+				new Money(this.currency, dec[1]) };
 	}
 
 	/*
@@ -504,10 +554,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money[] divideAndRemainder(Number divisor) {
 		BigDecimal[] dec = this.number.divideAndRemainder(
-				getBigDecimal(divisor), this.mathContext);
+				getBigDecimal(divisor));
 		return new Money[] {
-				new Money(this.currency, dec[0], this.mathContext),
-				new Money(this.currency, dec[1], this.mathContext) };
+				new Money(this.currency, dec[0]),
+				new Money(this.currency, dec[1]) };
 	}
 
 	/*
@@ -520,8 +570,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	public Money divideToIntegralValue(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
 		BigDecimal dec = this.number.divideToIntegralValue(
-				Money.from(divisor).number, this.mathContext);
-		return new Money(this.currency, dec, this.mathContext);
+				Money.from(divisor).number);
+		return new Money(this.currency, dec);
 	}
 
 	/*
@@ -531,8 +581,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money divideToIntegralValue(Number divisor) {
 		BigDecimal dec = this.number.divideToIntegralValue(
-				getBigDecimal(divisor), this.mathContext);
-		return new Money(this.currency, dec, this.mathContext);
+				getBigDecimal(divisor));
+		return new Money(this.currency, dec);
 	}
 
 	/*
@@ -542,9 +592,13 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money multiply(MonetaryAmount multiplicand) {
 		checkAmountParameter(multiplicand);
+		if (multiplicand.getAmountWhole() == 1
+				&& multiplicand.getAmountFractionNumerator() == 0) {
+			return this;
+		}
 		BigDecimal dec = this.number.multiply(
-				Money.from(multiplicand).number, this.mathContext);
-		return new Money(this.currency, dec, this.mathContext);
+				Money.from(multiplicand).number);
+		return new Money(this.currency, dec);
 	}
 
 	/*
@@ -553,9 +607,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see javax.money.MonetaryAmount#multiply(Number)
 	 */
 	public Money multiply(Number multiplicand) {
-		BigDecimal dec = this.number.multiply(getBigDecimal(multiplicand),
-				this.mathContext);
-		return new Money(this.currency, dec, this.mathContext);
+		if (getBigDecimal(multiplicand).equals(BigDecimal.ONE)) {
+			return this;
+		}
+		BigDecimal dec = this.number.multiply(getBigDecimal(multiplicand));
+		return new Money(this.currency, dec);
 	}
 
 	/*
@@ -564,8 +620,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see javax.money.MonetaryAmount#negate()
 	 */
 	public Money negate() {
-		return new Money(this.currency, this.number.negate(this.mathContext),
-				this.mathContext);
+		return new Money(this.currency, this.number.negate());
 	}
 
 	/*
@@ -574,8 +629,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see javax.money.MonetaryAmount#plus()
 	 */
 	public Money plus() {
-		return new Money(this.currency, this.number.plus(this.mathContext),
-				this.mathContext);
+		return new Money(this.currency, this.number.plus());
 	}
 
 	/*
@@ -585,9 +639,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money subtract(MonetaryAmount subtrahend) {
 		checkAmountParameter(subtrahend);
+		if(Money.from(subtrahend).isZero()){
+			return this;
+		}
 		return new Money(this.currency, this.number.subtract(
-				Money.from(subtrahend).number, this.mathContext),
-				this.mathContext);
+				Money.from(subtrahend).number));
 	}
 
 	/*
@@ -596,8 +652,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see javax.money.MonetaryAmount#pow(int)
 	 */
 	public Money pow(int n) {
-		return new Money(this.currency, this.number.pow(n, this.mathContext),
-				this.mathContext);
+		return new Money(this.currency, this.number.pow(n));
 	}
 
 	/*
@@ -617,8 +672,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	public Money remainder(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
 		return new Money(this.currency, this.number.remainder(
-				Money.from(divisor).number, this.mathContext),
-				this.mathContext);
+				Money.from(divisor).number));
 	}
 
 	/*
@@ -628,8 +682,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money remainder(Number divisor) {
 		return new Money(this.currency, this.number.remainder(
-				getBigDecimal(divisor), this.mathContext),
-				this.mathContext);
+				getBigDecimal(divisor)));
 	}
 
 	/*
@@ -638,8 +691,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
 	 */
 	public Money scaleByPowerOfTen(int n) {
-		return new Money(this.currency, this.number.scaleByPowerOfTen(n),
-				this.mathContext);
+		return new Money(this.currency, this.number.scaleByPowerOfTen(n));
 	}
 
 	/*
@@ -694,7 +746,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money with(Number amount) {
 		checkNumber(amount);
-		return new Money(this.currency, getBigDecimal(amount), this.mathContext);
+		return new Money(this.currency, getBigDecimal(amount, this.mathContext));
 	}
 
 	/**
@@ -707,7 +759,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *         {@link CurrencyUnit}, but the new {@link MathContext}.
 	 */
 	public Money with(MathContext context) {
-		Objects.requireNonNull(context,"MathContext required");
+		Objects.requireNonNull(context, "MathContext required");
 		return new Money(currency, this.number, context);
 	}
 
@@ -722,7 +774,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money with(CurrencyUnit currency, Number amount) {
 		checkNumber(amount);
-		return new Money(currency, getBigDecimal(amount), this.mathContext);
+		return new Money(currency, getBigDecimal(amount, this.mathContext));
 	}
 
 	/**
@@ -734,8 +786,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
 	 */
 	public Money with(CurrencyUnit currency) {
-		Objects.requireNonNull(currency,"currency required");
-		return new Money(currency, this.number, this.mathContext);
+		Objects.requireNonNull(currency, "currency required");
+		return new Money(currency, this.number);
 	}
 
 	/*
@@ -1069,7 +1121,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		 *             If the number is null
 		 */
 		static final void checkNumber(Number number) {
-			Objects.requireNonNull(number,"Number is required.");
+			Objects.requireNonNull(number, "Number is required.");
 		}
 
 		/**
@@ -1085,7 +1137,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		 */
 		static final void checkAmountParameter(CurrencyUnit currency,
 				MonetaryAmount amount) {
-			Objects.requireNonNull(amount,"Amount must not be null.");
+			Objects.requireNonNull(amount, "Amount must not be null.");
 			final CurrencyUnit amountCurrency = amount.getCurrency();
 			if (!(currency.getCurrencyCode().equals(amountCurrency
 					.getCurrencyCode()))) {
@@ -1105,7 +1157,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		Objects.requireNonNull(amount,"Amount must not be null.");
+		Objects.requireNonNull(amount, "Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
@@ -1122,7 +1174,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *             If the number is null
 	 */
 	private void checkNumber(Number number) {
-		Objects.requireNonNull(number,"Number is required.");
+		Objects.requireNonNull(number, "Number is required.");
 	}
 
 }
