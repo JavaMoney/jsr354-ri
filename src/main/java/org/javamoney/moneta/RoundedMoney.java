@@ -78,9 +78,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	private RoundedMoney(CurrencyUnit currency, Number number,
 			MathContext mathContext) {
-		Objects.requireNonNull(currency,"Currency is required.");
-		Objects.requireNonNull(number,"Number is required.");
-		Objects.requireNonNull(mathContext,"MathContext is required.");
+		Objects.requireNonNull(currency, "Currency is required.");
+		Objects.requireNonNull(number, "Number is required.");
+		Objects.requireNonNull(mathContext, "MathContext is required.");
 		checkNumber(number);
 		this.currency = currency;
 		this.mathContext = mathContext;
@@ -227,7 +227,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *         {@link MathContext}.
 	 */
 	public RoundedMoney setMathContext(MathContext mathContext) {
-		Objects.requireNonNull(mathContext,"MathContext required.");
+		Objects.requireNonNull(mathContext, "MathContext required.");
 		return new RoundedMoney(this.currency, this.number, mathContext);
 	}
 
@@ -522,6 +522,20 @@ public final class RoundedMoney implements MonetaryAmount,
 				this.mathContext);
 	}
 
+	/**
+	 * Creates a new Money instance, by just replacing the {@link CurrencyUnit}.
+	 * 
+	 * @param currency
+	 *            the currency unit to be replaced, not {@code null}
+	 * @return the new amount with the same numeric value and
+	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
+	 */
+	public RoundedMoney with(CurrencyUnit currency) {
+		Objects.requireNonNull(currency, "currency required");
+		return new RoundedMoney(currency, asType(BigDecimal.class),
+				this.mathContext);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -689,6 +703,23 @@ public final class RoundedMoney implements MonetaryAmount,
 	@Override
 	public RoundedMoney with(MonetaryAdjuster operation) {
 		return (RoundedMoney) operation.adjustInto(this);
+	}
+
+	public static RoundedMoney from(MonetaryAmount amt) {
+		if (amt.getClass() == RoundedMoney.class) {
+			return (RoundedMoney) amt;
+		}
+		if (amt.getClass() == FastMoney.class) {
+			return RoundedMoney.of(amt.getCurrency(),
+					((FastMoney) amt).asNumber(),
+					DEFAULT_MATH_CONTEXT);
+		}
+		else if (amt.getClass() == Money.class) {
+			return RoundedMoney.of(amt.getCurrency(), ((Money) amt).asNumber(),
+					DEFAULT_MATH_CONTEXT);
+		}
+		return RoundedMoney.of(amt.getCurrency(), Money.asNumber(amt),
+				DEFAULT_MATH_CONTEXT);
 	}
 
 	/*
@@ -864,7 +895,7 @@ public final class RoundedMoney implements MonetaryAmount,
 		 *             If the number is null
 		 */
 		static final void checkNumber(Number number) {
-			Objects.requireNonNull(number,"Number is required.");
+			Objects.requireNonNull(number, "Number is required.");
 		}
 
 		/**
@@ -880,7 +911,7 @@ public final class RoundedMoney implements MonetaryAmount,
 		 */
 		static final void checkAmountParameter(CurrencyUnit currency,
 				MonetaryAmount amount) {
-			Objects.requireNonNull(amount,"Amount must not be null.");
+			Objects.requireNonNull(amount, "Amount must not be null.");
 			final CurrencyUnit amountCurrency = amount.getCurrency();
 			if (!(currency.getCurrencyCode().equals(amountCurrency
 					.getCurrencyCode()))) {
@@ -921,7 +952,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		Objects.requireNonNull(amount,"Amount must not be null.");
+		Objects.requireNonNull(amount, "Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
@@ -938,6 +969,6 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *             If the number is null
 	 */
 	private void checkNumber(Number number) {
-		Objects.requireNonNull(number,"Number is required.");
+		Objects.requireNonNull(number, "Number is required.");
 	}
 }

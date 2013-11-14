@@ -21,6 +21,7 @@ package org.javamoney.moneta;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
@@ -101,8 +102,8 @@ public final class FastMoney implements MonetaryAmount,
 	 *            the amount, not null.
 	 */
 	private FastMoney(CurrencyUnit currency, Number number) {
-		Objects.requireNonNull(currency,"Currency is required.");
-		Objects.requireNonNull(number,"Number is required.");
+		Objects.requireNonNull(currency, "Currency is required.");
+		Objects.requireNonNull(number, "Number is required.");
 		checkNumber(number);
 		this.currency = currency;
 		this.number = getInternalNumber(number);
@@ -148,9 +149,11 @@ public final class FastMoney implements MonetaryAmount,
 		}
 
 		long fractionNumerator = amount.getAmountFractionNumerator();
-		long divisor = amount.getAmountFractionDenominator() / SCALING_DENOMINATOR;
+		long divisor = amount.getAmountFractionDenominator()
+				/ SCALING_DENOMINATOR;
 
-		double fraction = ((double) fractionNumerator) / divisor / SCALING_DENOMINATOR;
+		double fraction = ((double) fractionNumerator) / divisor
+				/ SCALING_DENOMINATOR;
 		return amount.getAmountWhole() +
 				fraction;
 	}
@@ -165,7 +168,7 @@ public final class FastMoney implements MonetaryAmount,
 	// }
 
 	private FastMoney(CurrencyUnit currency, long number) {
-		Objects.requireNonNull(currency,"Currency is required.");
+		Objects.requireNonNull(currency, "Currency is required.");
 		this.currency = currency;
 		this.number = number;
 	}
@@ -221,8 +224,17 @@ public final class FastMoney implements MonetaryAmount,
 	 * @param currency the target currency of the amount being created.
 	 * @return
 	 */
-	public static MonetaryAmount zero(CurrencyUnit currency) {
+	public static FastMoney ofZero(CurrencyUnit currency) {
 		return new FastMoney(currency, 0L);
+	}
+
+/**
+	 * Facory method creating a zero instance with the given {@code currency);
+	 * @param currency the target currency of the amount being created.
+	 * @return
+	 */
+	public static FastMoney ofZero(String currency) {
+		return new FastMoney(MoneyCurrency.of(currency), 0L);
 	}
 
 	/**
@@ -240,7 +252,7 @@ public final class FastMoney implements MonetaryAmount,
 	public int compareTo(FastMoney o) {
 		int compare = -1;
 		if (this.currency.equals(o.getCurrency())) {
-			if (this.number < o.number) {
+			if (this.number == o.number) {
 				compare = 0;
 			} else if (this.number < o.number) {
 				compare = -1;
@@ -363,11 +375,11 @@ public final class FastMoney implements MonetaryAmount,
 	 */
 	public FastMoney[] divideAndRemainder(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
-		double divNum = getInternalDouble(divisor);
+		BigDecimal div = Money.asNumber(divisor);
+		BigDecimal[] res = asType(BigDecimal.class).divideAndRemainder(div);
 		return new FastMoney[] {
-				new FastMoney(getCurrency(), Math.round(this.number
-						/ divNum)),
-				new FastMoney(getCurrency(), Math.round(this.number % Math.round((divNum * SCALING_DENOMINATOR)))) };
+				new FastMoney(getCurrency(), res[0]),
+				new FastMoney(getCurrency(), res[1]) };
 	}
 
 	/*
@@ -377,11 +389,11 @@ public final class FastMoney implements MonetaryAmount,
 	 */
 	public FastMoney[] divideAndRemainder(Number divisor) {
 		checkNumber(divisor);
-		double divNum = divisor.doubleValue();
+		BigDecimal div = getBigDecimal(divisor);
+		BigDecimal[] res = asType(BigDecimal.class).divideAndRemainder(div);
 		return new FastMoney[] {
-				new FastMoney(getCurrency(), Math.round(this.number
-						/ divNum)),
-				new FastMoney(getCurrency(), Math.round(this.number % Math.round((divNum * SCALING_DENOMINATOR)))) };
+				new FastMoney(getCurrency(), res[0]),
+				new FastMoney(getCurrency(), res[1]) };
 	}
 
 	/*
@@ -393,9 +405,8 @@ public final class FastMoney implements MonetaryAmount,
 	 */
 	public FastMoney divideToIntegralValue(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
-		long divisorNum = getInternalNumber(divisor);
-		return new FastMoney(getCurrency(),
-				(Number) ((this.number / divisorNum) / SCALING_DENOMINATOR));
+		BigDecimal div = Money.asNumber(divisor);
+		return new FastMoney(getCurrency(),asType(BigDecimal.class).divideToIntegralValue(div));
 	}
 
 	/*
@@ -405,12 +416,8 @@ public final class FastMoney implements MonetaryAmount,
 	 */
 	public FastMoney divideToIntegralValue(Number divisor) {
 		checkNumber(divisor);
-		long divisorNum = getInternalNumber(divisor);
-		long result = Math.round(this.number / divisor.doubleValue());
-		long remainder = result % SCALING_DENOMINATOR;
-		result -= remainder;
-		return new FastMoney(getCurrency(),
-				result);
+		BigDecimal div = getBigDecimal(divisor);
+		return new FastMoney(getCurrency(),asType(BigDecimal.class).divideToIntegralValue(div));
 	}
 
 	/*
@@ -438,9 +445,6 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#negate()
 	 */
 	public FastMoney negate() {
-		if (this.number <= 0) {
-			return this;
-		}
 		return new FastMoney(getCurrency(), this.number * -1);
 	}
 
@@ -463,6 +467,9 @@ public final class FastMoney implements MonetaryAmount,
 	 */
 	public FastMoney subtract(MonetaryAmount subtrahend) {
 		checkAmountParameter(subtrahend);
+		if (FastMoney.from(subtrahend).isZero()) {
+			return this;
+		}
 		return new FastMoney(getCurrency(), this.number
 				- FastMoney.from(subtrahend).number);
 	}
@@ -513,11 +520,7 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
 	 */
 	public FastMoney scaleByPowerOfTen(int n) {
-		long result = this.number;
-		for (int i = 0; i < n; i++) {
-			result *= 10;
-		}
-		return new FastMoney(getCurrency(), result);
+		return new FastMoney(getCurrency(), asType(BigDecimal.class).scaleByPowerOfTen(n));
 	}
 
 	/*
@@ -526,7 +529,7 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#isZero()
 	 */
 	public boolean isZero() {
-		return this.number != 0L;
+		return this.number == 0L;
 	}
 
 	/*
@@ -574,6 +577,33 @@ public final class FastMoney implements MonetaryAmount,
 		return new FastMoney(getCurrency(), getInternalNumber(number));
 	}
 
+	/**
+	 * Creates a new FastMoney instance, by just replacing the
+	 * {@link CurrencyUnit} and the numeric amount.
+	 * 
+	 * @param currency
+	 *            the currency unit to be replaced, not {@code null}
+	 * @return the new amount with the same numeric value and
+	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
+	 */
+	public FastMoney with(CurrencyUnit currency, Number amount) {
+		checkNumber(amount);
+		return new FastMoney(currency, getBigDecimal(amount));
+	}
+
+	/**
+	 * Creates a new Money instance, by just replacing the {@link CurrencyUnit}.
+	 * 
+	 * @param currency
+	 *            the currency unit to be replaced, not {@code null}
+	 * @return the new amount with the same numeric value and
+	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
+	 */
+	public FastMoney with(CurrencyUnit currency) {
+		Objects.requireNonNull(currency, "currency required");
+		return new FastMoney(currency, this.number);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -589,7 +619,10 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#getPrecision()
 	 */
 	public int getPrecision() {
-		return String.valueOf(this.number).length();
+		if(this.number<0){
+			return String.valueOf(this.number).length()-2;
+		}
+		return String.valueOf(this.number).length()-1;
 	}
 
 	public long longValue() {
@@ -639,7 +672,8 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#toEngineeringString()
 	 */
 	public String toEngineeringString() {
-		return getBigDecimal().toEngineeringString();
+		return getCurrency().getCurrencyCode() + ' '
+				+ getBigDecimal().toEngineeringString();
 	}
 
 	/*
@@ -648,7 +682,8 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#toPlainString()
 	 */
 	public String toPlainString() {
-		return getBigDecimal().toPlainString();
+		return getCurrency().getCurrencyCode() + ' '
+				+ getBigDecimal().toPlainString();
 	}
 
 	/*
@@ -863,7 +898,7 @@ public final class FastMoney implements MonetaryAmount,
 	 *             If the number is null
 	 */
 	public void checkNumber(Number number) {
-		Objects.requireNonNull(number,"Number is required.");
+		Objects.requireNonNull(number, "Number is required.");
 	}
 
 	/**
@@ -877,7 +912,7 @@ public final class FastMoney implements MonetaryAmount,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		Objects.requireNonNull(amount,"Amount must not be null.");
+		Objects.requireNonNull(amount, "Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
@@ -892,8 +927,8 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
 	 */
 	@Override
-	public MonetaryAmount with(MonetaryAdjuster adjuster) {
-		return adjuster.adjustInto(this);
+	public FastMoney with(MonetaryAdjuster adjuster) {
+		return (FastMoney) adjuster.adjustInto(this);
 	}
 
 	@Override
