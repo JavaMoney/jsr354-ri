@@ -161,7 +161,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 	 * <p>
 	 * This method matches the API of <type>java.util.Currency</type>.
 	 * 
-	 * @return the fractional digits, from 0 to 9 (normally 0, 2 or 3), or -1
+	 * @return the fractional digits, from 0 to 9 (normally 0, 2 or 3), or 0
 	 *         for pseudo-currencies.
 	 * 
 	 */

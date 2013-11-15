@@ -90,60 +90,6 @@ public class RoundedMoneyTest {
 		assertThat(result.asType(BigDecimal.class), equalTo(BigDecimal.ONE));
 	}
 
-	@Test
-	public void comparePerformance() {
-		RoundedMoney money1 = RoundedMoney.of(EURO, BigDecimal.ONE);
-		long start = System.currentTimeMillis();
-		final int NUM = 1000000;
-		for (int i = 0; i < NUM; i++) {
-			money1 = money1.add(RoundedMoney.of(EURO, 1234567.3444));
-			money1 = money1.subtract(RoundedMoney.of(EURO, 232323));
-			money1 = money1.multiply(3.4);
-			money1 = money1.divide(5.456);
-			// money1 = money1.with(MonetaryRoundings.getRounding());
-		}
-		long end = System.currentTimeMillis();
-		long duration = end - start;
-		System.out.println("Duration for 1000000 operations (RoundedMoney/BD): "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
-				+ " ns per loop) -> "
-				+ money1);
-
-		FastMoney money2 = FastMoney.of(EURO, BigDecimal.ONE);
-		start = System.currentTimeMillis();
-		for (int i = 0; i < NUM; i++) {
-			money2 = money2.add(FastMoney.of(EURO, 1234567.3444));
-			money2 = money2.subtract(FastMoney.of(EURO, 232323));
-			money2 = money2.multiply(3.4);
-			money2 = money2.divide(5.456);
-			// money2 = money1.with(MonetaryRoundings.getRounding());
-		}
-		end = System.currentTimeMillis();
-		duration = end - start;
-		System.out.println("Duration for " + NUM
-				+ " operations (IntegralMoney/long): "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
-				+ " ns per loop) -> "
-				+ money2);
-
-		FastMoney money3 = FastMoney.of(EURO, BigDecimal.ONE);
-		start = System.currentTimeMillis();
-		for (int i = 0; i < NUM; i++) {
-			money3 = money3.add(RoundedMoney.of(EURO, 1234567.3444));
-			money3 = money3.subtract(FastMoney.of(EURO, 232323));
-			money3 = money3.multiply(3.4);
-			money3 = money3.divide(5.456);
-			// money3 = money3.with(MonetaryRoundings.getRounding());
-		}
-		end = System.currentTimeMillis();
-		duration = end - start;
-		System.out.println("Duration for " + NUM
-				+ " operations (IntegralMoney/RoundedMoney mixed): "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
-				+ " ns per loop) -> "
-				+ money3);
-	}
-
 	/**
 	 * Test method for {@link org.javamoney.moneta.RoundedMoney#hashCode()}.
 	 */
@@ -188,7 +134,7 @@ public class RoundedMoneyTest {
 		RoundedMoney m2 = RoundedMoney.of(EURO, BigDecimal.valueOf(2.1));
 		assertEquals(m, m2);
 		RoundedMoney m3 = m.multiply(100);
-		assertEquals(RoundedMoney.of(EURO, 210), m3.abs());
+		assertEquals(RoundedMoney.of(EURO, 209.99), m3.abs());
 	}
 
 	/**
@@ -507,7 +453,7 @@ public class RoundedMoneyTest {
 		RoundedMoney m = RoundedMoney.of("CHF", 100);
 		assertEquals(
 				RoundedMoney.of("CHF",
-						BigDecimal.valueOf(100).divide(BigDecimal.valueOf(5))),
+						new BigDecimal("20.00")),
 				m.divide(RoundedMoney.of("CHF", 5)));
 	}
 
@@ -520,7 +466,7 @@ public class RoundedMoneyTest {
 		RoundedMoney m = RoundedMoney.of("CHF", 100);
 		assertEquals(
 				RoundedMoney.of("CHF",
-						BigDecimal.valueOf(100).divide(BigDecimal.valueOf(5))),
+						new BigDecimal("100.00").divide(BigDecimal.valueOf(5))),
 				m.divide(BigDecimal.valueOf(5)));
 	}
 
@@ -624,8 +570,8 @@ public class RoundedMoneyTest {
 	@Test
 	public void testMultiplyNumber() {
 		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		assertEquals(RoundedMoney.of("CHF", 400), m.multiply(4));
-		assertEquals(RoundedMoney.of("CHF", 200), m.multiply(2));
+		assertEquals(RoundedMoney.of("CHF", new BigDecimal("400.00")), m.multiply(4));
+		assertEquals(RoundedMoney.of("CHF", new BigDecimal("200.00")), m.multiply(2));
 		assertEquals(RoundedMoney.of("CHF", new BigDecimal("50.0")), m.multiply(0.5));
 	}
 
@@ -693,9 +639,9 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testPow() {
-		RoundedMoney m = RoundedMoney.of("CHF", 23.234);
+		RoundedMoney m = RoundedMoney.of("CHF", new BigDecimal("23.234"));
 		for (int p = 0; p < 100; p++) {
-			assertEquals(RoundedMoney.of("CHF", BigDecimal.valueOf(23.234).pow(p)),
+			assertEquals(RoundedMoney.of("CHF", m.asType(BigDecimal.class).pow(p)),
 					m.pow(p));
 		}
 	}
@@ -1304,7 +1250,7 @@ public class RoundedMoneyTest {
 		assertEquals(m.asType(Long.class), Long.valueOf(13L));
 		assertEquals(m.asType(Float.class), Float.valueOf(13.656f));
 		assertEquals(m.asType(Double.class), Double.valueOf(13.656));
-		assertEquals(m.asType(BigDecimal.class), BigDecimal.valueOf(13.656));
+		assertEquals(m.asType(BigDecimal.class).setScale(3, RoundingMode.HALF_EVEN), BigDecimal.valueOf(13.656));
 		assertEquals(m.asType(BigDecimal.class), m.asNumber());
 	}
 
@@ -1355,7 +1301,7 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testGetAmountFractionNumerator() {
-		assertEquals(23455645L, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
+		assertEquals(0, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
 				.getAmountFractionNumerator());
 		assertEquals(0, RoundedMoney.of("CHF", 1).getAmountFractionNumerator());
 		assertEquals(0, RoundedMoney.of("CHF", new BigDecimal("11.0"))
@@ -1372,14 +1318,14 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testGetAmountFractionDenominator() {
-		assertEquals(100000000L, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
+		assertEquals(1, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
 				.getAmountFractionDenominator());
-		assertEquals(1, RoundedMoney.of("CHF", 1).getAmountFractionDenominator());
-		assertEquals(10, RoundedMoney.of("CHF", new BigDecimal("11.0"))
+		assertEquals(100, RoundedMoney.of("CHF", 1).getAmountFractionDenominator());
+		assertEquals(100, RoundedMoney.of("CHF", new BigDecimal("11.0"))
 				.getAmountFractionDenominator());
-		assertEquals(10L, RoundedMoney.of("CHF", new BigDecimal("1234.1"))
+		assertEquals(100L, RoundedMoney.of("CHF", new BigDecimal("1234.1"))
 				.getAmountFractionDenominator());
-		assertEquals(10000L, RoundedMoney.of("CHF", new BigDecimal("0.0100"))
+		assertEquals(100L, RoundedMoney.of("CHF", new BigDecimal("0.0100"))
 				.getAmountFractionDenominator());
 	}
 

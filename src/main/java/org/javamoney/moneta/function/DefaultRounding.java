@@ -52,7 +52,7 @@ final class DefaultRounding implements MonetaryAdjuster {
 	 */
 	DefaultRounding(int scale, RoundingMode roundingMode) {
 		if (scale < 0) {
-			throw new IllegalArgumentException("scale < 0");
+			scale = 0;
 		}
 		if (roundingMode == null) {
 			throw new IllegalArgumentException("roundingMode missing");
