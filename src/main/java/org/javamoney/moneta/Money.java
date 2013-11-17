@@ -330,8 +330,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		int result = 1;
 		result = prime * result
 				+ ((currency == null) ? 0 : currency.hashCode());
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
-		return result;
+		return prime * result + asNumberStripped().hashCode();
 	}
 
 	/*
@@ -353,16 +352,20 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 				return false;
 		} else if (!currency.equals(other.currency))
 			return false;
-		if (number == null) {
-			if (other.number != null)
-				return false;
+		return asNumberStripped().equals(other.asNumberStripped());
+	}
+
+	/**
+	 * Method that returns BigDecimal.ZERO, if {@link #isZero()}, and #number
+	 * {@link #stripTrailingZeros()} in all other cases.
+	 * 
+	 * @return the stripped number value.
+	 */
+	public BigDecimal asNumberStripped() {
+		if (isZero()) {
+			return BigDecimal.ZERO;
 		}
-		if (number.equals(other.number)) {
-			return true;
-		}
-		else if (number.compareTo(other.number) != 0)
-			return false;
-		return true;
+		return this.number.stripTrailingZeros();
 	}
 
 	/*
@@ -433,7 +436,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money add(MonetaryAmount amount) {
 		checkAmountParameter(amount);
-		if(Money.from(amount).isZero()){
+		if (Money.from(amount).isZero()) {
 			return this;
 		}
 		return new Money(this.currency, this.number.add(
@@ -639,11 +642,24 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public Money subtract(MonetaryAmount subtrahend) {
 		checkAmountParameter(subtrahend);
-		if(Money.from(subtrahend).isZero()){
+		if (Money.from(subtrahend).isZero()) {
 			return this;
 		}
 		return new Money(this.currency, this.number.subtract(
 				Money.from(subtrahend).number));
+	}
+
+	/**
+	 * Returns an amount with all trailing zeroes stripped.
+	 * 
+	 * @see BigDecimal#stripTrailingZeros()
+	 * @return the amount with the zeroes stripped.
+	 */
+	public Money stripTrailingZeros() {
+		if (isZero()) {
+			return new Money(this.currency, BigDecimal.ZERO);
+		}
+		return new Money(this.currency, this.number.stripTrailingZeros());
 	}
 
 	/*
@@ -915,7 +931,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public boolean isEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(Money.from(amount).number) == 0;
+		return equals(Money.from(amount));
 	}
 
 	/*
@@ -925,7 +941,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public boolean isNotEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(Money.from(amount).number) != 0;
+		return !equals(Money.from(amount));
 	}
 
 	/*
@@ -985,11 +1001,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	/**
-	 * Gets the number representation of the numeric value of this item.
+	 * Gets the {@link BigDecimal} representation of the numeric value of this item.
 	 * 
-	 * @return The {@link Number} represention matching best.
+	 * @return The {@link BigDecimal} represention matching best.
 	 */
-	public Number asNumber() {
+	public BigDecimal asNumber() {
 		return this.number;
 	}
 
@@ -1081,6 +1097,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	public static BigDecimal asNumber(MonetaryAmount amt) {
+		if(amt instanceof Money){
+			return ((Money)amt).number;
+		}
 		long denom = amt.getAmountFractionDenominator();
 		for (int i = 0; i < DENOM_ARRAY.length; i++) {
 			if (denom == DENOM_ARRAY[i]) {

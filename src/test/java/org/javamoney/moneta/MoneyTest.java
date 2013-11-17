@@ -164,6 +164,28 @@ public class MoneyTest {
 		assertTrue(money2.hashCode() != money5.hashCode());
 		assertTrue(money1.hashCode() != money6.hashCode());
 		assertTrue(money2.hashCode() != money6.hashCode());
+		// Test equality for values with different scales, but same numeric
+		// values
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(0d)).hashCode()==
+				Money.of("CHF", BigDecimal.valueOf(0)).hashCode());
+		assertTrue(Money.of("CHF", BigDecimal.ZERO).hashCode()==
+				Money.of("CHF", BigDecimal.valueOf(0)).hashCode());
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).hashCode()==
+				Money.of("CHF", new BigDecimal("5.0")).hashCode());
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).hashCode()==
+				Money.of("CHF", new BigDecimal("5.00")).hashCode());
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).hashCode()==
+				Money.of("CHF", new BigDecimal("5.000")).hashCode());
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).hashCode()==
+				Money.of("CHF", new BigDecimal("5.0000")).hashCode());
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).hashCode()==
+				Money.of("CHF", new BigDecimal("-1.230")).hashCode());
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).hashCode()==
+				Money.of("CHF", new BigDecimal("-1.2300")).hashCode());
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).hashCode()==
+				Money.of("CHF", new BigDecimal("-1.23000")).hashCode());
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).hashCode()==
+				Money.of("CHF", new BigDecimal("-1.230000000000000000000")).hashCode());
 	}
 
 	/**
@@ -431,6 +453,28 @@ public class MoneyTest {
 				}
 			}
 		}
+		// Test equality for values with different scales, but same numeric
+		// values
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(0d)).equals(
+				Money.of("CHF", BigDecimal.valueOf(0))));
+		assertTrue(Money.of("CHF", BigDecimal.ZERO).equals(
+				Money.of("CHF", BigDecimal.valueOf(0))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).equals(
+				Money.of("CHF", new BigDecimal("5.0"))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).equals(
+				Money.of("CHF", new BigDecimal("5.00"))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).equals(
+				Money.of("CHF", new BigDecimal("5.000"))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).equals(
+				Money.of("CHF", new BigDecimal("5.0000"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).equals(
+				Money.of("CHF", new BigDecimal("-1.230"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).equals(
+				Money.of("CHF", new BigDecimal("-1.2300"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).equals(
+				Money.of("CHF", new BigDecimal("-1.23000"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).equals(
+				Money.of("CHF", new BigDecimal("-1.230000000000000000000"))));
 	}
 
 	/**
@@ -547,8 +591,8 @@ public class MoneyTest {
 	public void testDivideAndRemainderMonetaryAmount() {
 		Money m = Money.of("CHF", 100);
 		Money[] res = m.divideAndRemainder(FastMoney.of("CHF", 33));
-		assertEquals(Money.of("CHF", 3),res[0]);
-		assertEquals(Money.of("CHF", 1),res[1]);
+		assertEquals(Money.of("CHF", 3), res[0]);
+		assertEquals(Money.of("CHF", 1), res[1]);
 	}
 
 	/**
@@ -1246,6 +1290,27 @@ public class MoneyTest {
 				Money.of("CHF", BigDecimal.ONE)));
 		assertTrue(Money.of("CHF", new BigDecimal("1.0000")).isEqualTo(
 				Money.of("CHF", new BigDecimal("1.00"))));
+		// Test with different scales, but numeric equal values
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(0d)).isEqualTo(
+				Money.of("CHF", BigDecimal.valueOf(0))));
+		assertTrue(Money.of("CHF", BigDecimal.ZERO).isEqualTo(
+				Money.of("CHF", BigDecimal.valueOf(0))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).isEqualTo(
+				Money.of("CHF", new BigDecimal("5.0"))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).isEqualTo(
+				Money.of("CHF", new BigDecimal("5.00"))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).isEqualTo(
+				Money.of("CHF", new BigDecimal("5.000"))));
+		assertTrue(Money.of("CHF", BigDecimal.valueOf(5)).isEqualTo(
+				Money.of("CHF", new BigDecimal("5.0000"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).isEqualTo(
+				Money.of("CHF", new BigDecimal("-1.230"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).isEqualTo(
+				Money.of("CHF", new BigDecimal("-1.2300"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).isEqualTo(
+				Money.of("CHF", new BigDecimal("-1.23000"))));
+		assertTrue(Money.of("CHF", new BigDecimal("-1.23")).isEqualTo(
+				Money.of("CHF", new BigDecimal("-1.230000000000000000000"))));
 	}
 
 	/**
@@ -1300,7 +1365,8 @@ public class MoneyTest {
 				Money.of("USS", -23123213.435), Money.of("USN", -23123213),
 				Money.of("GBP", 0) };
 		for (int i = 0; i < moneys.length; i++) {
-			assertEquals((Integer)moneys[i].query(q), (Integer)moneys[i].getPrecision());
+			assertEquals((Integer) moneys[i].query(q),
+					(Integer) moneys[i].getPrecision());
 		}
 	}
 
@@ -1334,14 +1400,41 @@ public class MoneyTest {
 	}
 
 	/**
+	 * Test method for {@link org.javamoney.moneta.Money#stripTrailingZeros()}.
+	 */
+	@Test
+	public void testStripTrailingZeroes() {
+		assertEquals(BigDecimal.ZERO, Money.of("CHF", new BigDecimal("0.0"))
+				.stripTrailingZeros().asNumber());
+		assertEquals(BigDecimal.ZERO, Money.of("CHF", new BigDecimal("0.00"))
+				.stripTrailingZeros().asNumber());
+		assertEquals(BigDecimal.ZERO, Money.of("CHF", new BigDecimal("0.000"))
+				.stripTrailingZeros().asNumber());
+		assertEquals(new BigDecimal("12.123"),
+				Money.of("CHF", new BigDecimal("12.123000"))
+						.stripTrailingZeros().asNumber());
+		assertEquals(new BigDecimal("12.123"),
+				Money.of("CHF", new BigDecimal("12.12300"))
+						.stripTrailingZeros().asNumber());
+		assertEquals(new BigDecimal("12.123"),
+				Money.of("CHF", new BigDecimal("12.1230")).stripTrailingZeros()
+						.asNumber());
+		assertEquals(new BigDecimal("12.123"),
+				Money.of("CHF", new BigDecimal("12.123")).stripTrailingZeros()
+						.asNumber());
+	}
+
+	/**
 	 * Test method for {@link org.javamoney.moneta.Money#toString()}.
 	 */
 	@Test
 	public void testToString() {
-		assertEquals("XXX 1.23455645", Money.of("XXX", new BigDecimal("1.23455645"))
-				.toString());
+		assertEquals("XXX 1.23455645",
+				Money.of("XXX", new BigDecimal("1.23455645"))
+						.toString());
 		assertEquals("CHF 1234", Money.of("CHF", 1234).toString());
-		assertEquals("CHF 1234.0", Money.of("CHF", new BigDecimal("1234.0")).toString());
+		assertEquals("CHF 1234.0", Money.of("CHF", new BigDecimal("1234.0"))
+				.toString());
 		assertEquals("CHF 1234.1", Money.of("CHF", new BigDecimal("1234.1"))
 				.toString());
 		assertEquals("CHF 0.0100", Money.of("CHF", new BigDecimal("0.0100"))
@@ -1369,10 +1462,15 @@ public class MoneyTest {
 		assertEquals(23455645L, Money.of("XXX", new BigDecimal("1.23455645"))
 				.getAmountFractionNumerator());
 		assertEquals(0, Money.of("CHF", 1).getAmountFractionNumerator());
-		assertEquals(0, Money.of("CHF", new BigDecimal("11.0")).getAmountFractionNumerator());
+		assertEquals(0, Money.of("CHF", new BigDecimal("11.0"))
+				.getAmountFractionNumerator());
 		assertEquals(1L, Money.of("CHF", new BigDecimal("1234.1"))
 				.getAmountFractionNumerator());
 		assertEquals(100L, Money.of("CHF", new BigDecimal("0.0100"))
+				.getAmountFractionNumerator());
+		assertEquals(50L, Money.of("CHF", new BigDecimal("0.50"))
+				.getAmountFractionNumerator());
+		assertEquals(5L, Money.of("CHF", new BigDecimal("0.5"))
 				.getAmountFractionNumerator());
 	}
 
@@ -1385,10 +1483,15 @@ public class MoneyTest {
 		assertEquals(100000000L, Money.of("XXX", new BigDecimal("1.23455645"))
 				.getAmountFractionDenominator());
 		assertEquals(1, Money.of("CHF", 1).getAmountFractionDenominator());
-		assertEquals(10, Money.of("CHF", new BigDecimal("11.0")).getAmountFractionDenominator());
+		assertEquals(10, Money.of("CHF", new BigDecimal("11.0"))
+				.getAmountFractionDenominator());
 		assertEquals(10L, Money.of("CHF", new BigDecimal("1234.1"))
 				.getAmountFractionDenominator());
 		assertEquals(10000L, Money.of("CHF", new BigDecimal("0.0100"))
+				.getAmountFractionDenominator());
+		assertEquals(100L, Money.of("CHF", new BigDecimal("0.50"))
+				.getAmountFractionDenominator());
+		assertEquals(10L, Money.of("CHF", new BigDecimal("0.5"))
 				.getAmountFractionDenominator());
 	}
 

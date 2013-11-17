@@ -522,7 +522,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	public RoundedMoney multiply(MonetaryAmount multiplicand) {
 		checkAmountParameter(multiplicand);
 		BigDecimal dec = this.number.multiply(
-				Money.from(multiplicand).asType(BigDecimal.class),
+				Money.from(multiplicand).asNumber(),
 				this.mathContext);
 		return new RoundedMoney(this.currency, dec, this.mathContext,
 				this.rounding);
@@ -995,8 +995,7 @@ public final class RoundedMoney implements MonetaryAmount,
 		int result = 1;
 		result = prime * result
 				+ ((currency == null) ? 0 : currency.hashCode());
-		result = prime * result + ((number == null) ? 0 : number.hashCode());
-		return result;
+		return prime * result + asNumberStripped().hashCode();
 	}
 
 	/*
@@ -1018,22 +1017,17 @@ public final class RoundedMoney implements MonetaryAmount,
 				return false;
 		} else if (!currency.equals(other.currency))
 			return false;
-		if (number == null) {
-			if (other.number != null)
-				return false;
-		} else if (!number.equals(other.number))
-			return false;
-		return true;
+		return asNumberStripped().equals(other.asNumberStripped());
 	}
 
 	/*
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(RoundedMoney o) {
-		checkAmountParameter(o);
+		Objects.requireNonNull(o);
 		int compare = -1;
 		if (this.currency.equals(o.getCurrency())) {
-			compare = this.number.compareTo(o.asType(BigDecimal.class));
+			compare = asNumberStripped().compareTo(RoundedMoney.from(o).asNumberStripped());
 		} else {
 			compare = this.currency.getCurrencyCode().compareTo(
 					o.getCurrency().getCurrencyCode());
@@ -1096,7 +1090,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	public long getAmountFractionNumerator() {
 		MoneyCurrency mc = MoneyCurrency.from(currency);
 		if (mc.getDefaultFractionDigits() >= 0) {
-			return this.number.scale();
+			BigDecimal bd = this.number.remainder(BigDecimal.ONE);
+			return bd.movePointRight(mc.getDefaultFractionDigits()).longValue();
 		}
 		return 0L;
 	}
@@ -1115,6 +1110,20 @@ public final class RoundedMoney implements MonetaryAmount,
 	public Number asNumber() {
 		return this.number;
 	}
+	
+	/**
+	 * Method that returns BigDecimal.ZERO, if {@link #isZero()}, and #number
+	 * {@link #stripTrailingZeros()} in all other cases.
+	 * 
+	 * @return the stripped number value.
+	 */
+	public BigDecimal asNumberStripped() {
+		if (isZero()) {
+			return BigDecimal.ZERO;
+		}
+		return this.number.stripTrailingZeros();
+	}
+
 
 	/**
 	 * Method to check if a currency is compatible with this amount instance.

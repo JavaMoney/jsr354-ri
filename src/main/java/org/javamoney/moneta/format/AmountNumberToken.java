@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.util.Currency;
+import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
 
@@ -37,6 +37,9 @@ import org.javamoney.moneta.MoneyCurrency;
  */
 final class AmountNumberToken implements
 		FormatToken {
+
+	private static final Logger LOG = Logger.getLogger(AmountNumberToken.class
+			.getName());
 
 	private AmountStyle style;
 	private StringGrouper numberGroup;
@@ -55,23 +58,28 @@ final class AmountNumberToken implements
 	@Override
 	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
-		// Check for ISO currency format
-		String pattern = this.style.getDecimalFormat().toPattern();
-		if (pattern.contains("¤")) {
-			if (MoneyCurrency.isJavaCurrency(amount.getCurrency()
-					.getCurrencyCode())) {
-				this.style.getDecimalFormat().setCurrency(
-						Currency.getInstance(amount.getCurrency()
-								.getCurrencyCode()));
-			}
-			else {
-				this.style.getDecimalFormat().setCurrency(
-						Currency.getInstance("XXX"));
-			}
-		}
+		int digits = MoneyCurrency.from(amount.getCurrency())
+				.getDefaultFractionDigits();
+		this.style.getDecimalFormat().setMinimumFractionDigits(digits);
+		this.style.getDecimalFormat().setMaximumFractionDigits(digits);
+		MoneyCurrency cur = MoneyCurrency.from(amount.getCurrency());
 		if (this.style.getNumberGroupSizes().length == 0) {
-			appendable.append(this.style.getDecimalFormat().format(
-					Money.from(amount).asType(BigDecimal.class)));
+			switch (this.style.getCurrencyPlacement()) {
+			case OMIT:
+				appendable.append(this.style.getDecimalFormat().format(
+						Money.from(amount).asType(BigDecimal.class)));
+				break;
+			default:
+			case LEADING:
+				appendable.append(cur.getCurrencyCode()).append(" ");
+				appendable.append(this.style.getDecimalFormat().format(
+						Money.from(amount).asType(BigDecimal.class)));
+				break;
+			case TRAILING:
+				appendable.append(this.style.getDecimalFormat().format(
+						Money.from(amount).asType(BigDecimal.class)));
+				appendable.append(" ").append(cur.getCurrencyCode());
+			}
 			return;
 		}
 		this.style.getDecimalFormat().setGroupingUsed(false);
@@ -80,7 +88,19 @@ final class AmountNumberToken implements
 		String[] numberParts = splitNumberParts(this.style.getDecimalFormat(),
 				preformattedValue);
 		if (numberParts.length != 2) {
-			appendable.append(preformattedValue);
+			switch (this.style.getCurrencyPlacement()) {
+			case OMIT:
+				appendable.append(preformattedValue);
+				break;
+			default:
+			case LEADING:
+				appendable.append(cur.getCurrencyCode()).append(" ");
+				appendable.append(preformattedValue);
+				break;
+			case TRAILING:
+				appendable.append(preformattedValue);
+				appendable.append(" ").append(cur.getCurrencyCode());
+			}
 		}
 		else {
 			if (numberGroup == null) {
@@ -92,10 +112,23 @@ final class AmountNumberToken implements
 				numberGroup = new StringGrouper(groupChars,
 						style.getNumberGroupSizes());
 			}
-			appendable.append(numberGroup.group(numberParts[0])
+			preformattedValue = numberGroup.group(numberParts[0])
 					+ this.style.getDecimalFormat().getDecimalFormatSymbols()
-							.getDecimalSeparator()
-					+ numberParts[1]);
+					.getDecimalSeparator()
+			+ numberParts[1];
+			switch (this.style.getCurrencyPlacement()) {
+			case OMIT:
+				appendable.append(preformattedValue);
+				break;
+			default:
+			case LEADING:
+				appendable.append(cur.getCurrencyCode()).append(" ");
+				appendable.append(preformattedValue);
+				break;
+			case TRAILING:
+				appendable.append(preformattedValue);
+				appendable.append(" ").append(cur.getCurrencyCode());
+			}
 		}
 	}
 
@@ -113,9 +146,33 @@ final class AmountNumberToken implements
 	@Override
 	public void parse(ParseContext context) throws ParseException {
 		ParsePosition pos = new ParsePosition(0);
-		Number number = this.style.getDecimalFormat().parse(
-				context.getInput().toString(), pos);
-		context.setParsedNumber(number);
+		String token = context.lookupNextToken();
+		while (token != null && !context.isComplete()) {
+			parseToken(context, token);
+			token = context.lookupNextToken();
+		}
+	}
+
+	private void parseToken(ParseContext context, String token) {
+		try {
+			Number number = this.style.getDecimalFormat().parse(
+					token);
+			if (number != null) {
+				context.setParsedNumber(number);
+				context.consume(token);
+				return;
+			}
+		} catch (Exception e) {
+			LOG.finest("Could not parse amount from: " + token);
+		}
+		try {
+			MoneyCurrency currency = MoneyCurrency.of(token);
+			context.setParsedCurrency(currency);
+			context.consume(token);
+			return;
+		} catch (Exception e) {
+			LOG.finest("Could not parse currency from: " + token);
+		}
 	}
 
 }

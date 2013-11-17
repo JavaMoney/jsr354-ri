@@ -56,7 +56,7 @@ public final class ParseContext {
 	 * @return true, if the item is available.
 	 */
 	public boolean isComplete() {
-		return parsedNumber != null;
+		return parsedNumber != null && parsedCurrency!=null;
 	}
 
 	/**
@@ -164,7 +164,7 @@ public final class ParseContext {
 	 * @return the residual input text
 	 */
 	public CharSequence getInput() {
-		return originalInput.subSequence(index, originalInput.length() - 1);
+		return originalInput.subSequence(index, originalInput.length());
 	}
 
 	/**
@@ -247,6 +247,9 @@ public final class ParseContext {
 				}
 				return null;
 			}
+		}
+		if(start < originalInput.length()){
+			return originalInput.subSequence(start, originalInput.length()).toString();
 		}
 		return null;
 	}

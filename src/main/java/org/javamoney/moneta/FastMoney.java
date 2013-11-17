@@ -620,9 +620,9 @@ public final class FastMoney implements MonetaryAmount,
 	 */
 	public int getPrecision() {
 		if(this.number<0){
-			return String.valueOf(this.number).length()-2;
+			return String.valueOf(this.number).length()-1;
 		}
-		return String.valueOf(this.number).length()-1;
+		return String.valueOf(this.number).length();
 	}
 
 	public long longValue() {

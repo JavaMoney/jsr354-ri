@@ -59,9 +59,9 @@ public class MonetaryAmountFormatTest {
 	public void testFormat() {
 		MonetaryAmountFormat defaultFormat = new MonetaryAmountFormat.Builder(
 				Locale.GERMANY).build();
-		assertEquals("12,50 CHF"
+		assertEquals("CHF 12,50"
 				, defaultFormat.format(Money.of("CHF", 12.50)));
-		assertEquals("123.456.789.101.112,12 INR",
+		assertEquals("INR 123.456.789.101.112,12",
 				defaultFormat.format(Money.of("INR",
 						123456789101112.123456)));
 		defaultFormat = new MonetaryAmountFormat.Builder(new Locale("", "IN"))
@@ -92,12 +92,12 @@ public class MonetaryAmountFormatTest {
 		MonetaryAmountFormat defaultFormat = new MonetaryAmountFormat.Builder(
 				Locale.GERMANY).build();
 		defaultFormat.print(b, Money.of("CHF", 12.50));
-		assertEquals("12,50 CHF"
+		assertEquals("CHF 12,50"
 				, b.toString());
 		b.setLength(0);
 		defaultFormat.print(b, Money.of("INR",
 				123456789101112.123456));
-		assertEquals("123.456.789.101.112,12 INR",
+		assertEquals("INR 123.456.789.101.112,12",
 				b.toString());
 		b.setLength(0);
 		defaultFormat = new MonetaryAmountFormat.Builder(new Locale("", "IN"))
@@ -131,8 +131,8 @@ public class MonetaryAmountFormatTest {
 	public void testParse() throws ParseException {
 		MonetaryAmountFormat defaultFormat = new MonetaryAmountFormat.Builder(
 				Locale.GERMANY).build();
-		assertEquals(Money.of("CHF", new BigDecimal("12.50")),
-				defaultFormat.parse("12,50 CHF"));
+		assertEquals(Money.of("EUR", new BigDecimal("12.50")),
+				defaultFormat.parse("12,50 EUR"));
 		assertEquals(Money.of("CHF", new BigDecimal("12.50")),
 				defaultFormat.parse("CHF 12,50"));
 		defaultFormat = new MonetaryAmountFormat.Builder(new Locale("", "IN"))
