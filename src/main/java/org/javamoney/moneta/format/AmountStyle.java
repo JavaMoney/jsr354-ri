@@ -24,27 +24,16 @@ public final class AmountStyle {
 	private static final char[] EMPTY_CHAR_ARRAY = new char[0];
 	private static final int[] EMPTY_INT_ARRAY = new int[0];
 	private DecimalFormat format;
-	private CurrencyPlacement currencyPlacement = CurrencyPlacement.LEADING;
 	private MonetaryAdjuster rounding;
 	private int[] groupSizes;
 	private char[] groupChars;
 	
-	public enum CurrencyPlacement{
-		LEADING, TRAILING, OMIT
-	}
-
 	private AmountStyle(DecimalFormat format, int[] groupSizes,
-			char[] groupChars, MonetaryAdjuster rounding, CurrencyPlacement currencyPlacement) {
-		if (format == null) {
-			throw new IllegalArgumentException("DecimalFormat required.");
-		}
+			char[] groupChars, MonetaryAdjuster rounding) {
 		this.groupSizes = groupSizes;
 		this.groupChars = groupChars;
 		this.rounding = rounding;
 		this.format = format;
-		if(currencyPlacement!=null){
-			this.currencyPlacement = currencyPlacement;
-		}
 	}
 
 	public MonetaryAdjuster getMoneyRounding() {
@@ -131,7 +120,6 @@ public final class AmountStyle {
 		private MonetaryAdjuster rounding;
 		private int[] groupSizes;
 		private char[] groupChars;
-		private CurrencyPlacement currencyPlacement;
 		
 		
 		public Builder(Locale locale) {
@@ -146,10 +134,10 @@ public final class AmountStyle {
 			return this;
 		}
 		
-		public Builder withCurrencyPlacement(CurrencyPlacement currencyPlacement) {
-			this.currencyPlacement = currencyPlacement;
-			return this;
-		}
+//		public Builder withCurrencyPlacement(CurrencyPlacement currencyPlacement) {
+//			this.currencyPlacement = currencyPlacement;
+//			return this;
+//		}
 
 		public Builder withNumberGroupSizes(int... groupSizes) {
 			this.groupSizes = groupSizes;
@@ -248,7 +236,10 @@ public final class AmountStyle {
 		}
 
 		public AmountStyle build() {
-			return new AmountStyle(format, groupSizes, groupChars, rounding, currencyPlacement);
+			if (format == null) {
+				throw new IllegalArgumentException("DecimalFormat required.");
+			}
+			return new AmountStyle(format, groupSizes, groupChars, rounding);
 		}
 
 		public Builder withCurrencyFormat(Locale locale) {
@@ -263,10 +254,6 @@ public final class AmountStyle {
 
 	DecimalFormat getDecimalFormat() {
 		return this.format;
-	}
-
-	public CurrencyPlacement getCurrencyPlacement() {
-		return currencyPlacement;
 	}
 
 }

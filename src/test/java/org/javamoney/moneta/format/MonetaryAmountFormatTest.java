@@ -132,7 +132,11 @@ public class MonetaryAmountFormatTest {
 		MonetaryAmountFormat defaultFormat = new MonetaryAmountFormat.Builder(
 				Locale.GERMANY).build();
 		assertEquals(Money.of("EUR", new BigDecimal("12.50")),
-				defaultFormat.parse("12,50 EUR"));
+				defaultFormat.parse("EUR 12,50"));
+		assertEquals(Money.of("EUR", new BigDecimal("12.50")),
+				defaultFormat.parse("  \t EUR 12,50"));
+		assertEquals(Money.of("EUR", new BigDecimal("12.50")),
+				defaultFormat.parse("  \t EUR  \t\n\r 12,50"));
 		assertEquals(Money.of("CHF", new BigDecimal("12.50")),
 				defaultFormat.parse("CHF 12,50"));
 		defaultFormat = new MonetaryAmountFormat.Builder(new Locale("", "IN"))

@@ -64,22 +64,8 @@ final class AmountNumberToken implements
 		this.style.getDecimalFormat().setMaximumFractionDigits(digits);
 		MoneyCurrency cur = MoneyCurrency.from(amount.getCurrency());
 		if (this.style.getNumberGroupSizes().length == 0) {
-			switch (this.style.getCurrencyPlacement()) {
-			case OMIT:
-				appendable.append(this.style.getDecimalFormat().format(
-						Money.from(amount).asType(BigDecimal.class)));
-				break;
-			default:
-			case LEADING:
-				appendable.append(cur.getCurrencyCode()).append(" ");
-				appendable.append(this.style.getDecimalFormat().format(
-						Money.from(amount).asType(BigDecimal.class)));
-				break;
-			case TRAILING:
-				appendable.append(this.style.getDecimalFormat().format(
-						Money.from(amount).asType(BigDecimal.class)));
-				appendable.append(" ").append(cur.getCurrencyCode());
-			}
+			appendable.append(this.style.getDecimalFormat().format(
+					Money.from(amount).asType(BigDecimal.class)));
 			return;
 		}
 		this.style.getDecimalFormat().setGroupingUsed(false);
@@ -88,19 +74,7 @@ final class AmountNumberToken implements
 		String[] numberParts = splitNumberParts(this.style.getDecimalFormat(),
 				preformattedValue);
 		if (numberParts.length != 2) {
-			switch (this.style.getCurrencyPlacement()) {
-			case OMIT:
-				appendable.append(preformattedValue);
-				break;
-			default:
-			case LEADING:
-				appendable.append(cur.getCurrencyCode()).append(" ");
-				appendable.append(preformattedValue);
-				break;
-			case TRAILING:
-				appendable.append(preformattedValue);
-				appendable.append(" ").append(cur.getCurrencyCode());
-			}
+			appendable.append(preformattedValue);
 		}
 		else {
 			if (numberGroup == null) {
@@ -114,21 +88,9 @@ final class AmountNumberToken implements
 			}
 			preformattedValue = numberGroup.group(numberParts[0])
 					+ this.style.getDecimalFormat().getDecimalFormatSymbols()
-					.getDecimalSeparator()
-			+ numberParts[1];
-			switch (this.style.getCurrencyPlacement()) {
-			case OMIT:
-				appendable.append(preformattedValue);
-				break;
-			default:
-			case LEADING:
-				appendable.append(cur.getCurrencyCode()).append(" ");
-				appendable.append(preformattedValue);
-				break;
-			case TRAILING:
-				appendable.append(preformattedValue);
-				appendable.append(" ").append(cur.getCurrencyCode());
-			}
+							.getDecimalSeparator()
+					+ numberParts[1];
+			appendable.append(preformattedValue);
 		}
 	}
 
@@ -160,18 +122,9 @@ final class AmountNumberToken implements
 			if (number != null) {
 				context.setParsedNumber(number);
 				context.consume(token);
-				return;
 			}
 		} catch (Exception e) {
 			LOG.finest("Could not parse amount from: " + token);
-		}
-		try {
-			MoneyCurrency currency = MoneyCurrency.of(token);
-			context.setParsedCurrency(currency);
-			context.consume(token);
-			return;
-		} catch (Exception e) {
-			LOG.finest("Could not parse currency from: " + token);
 		}
 	}
 

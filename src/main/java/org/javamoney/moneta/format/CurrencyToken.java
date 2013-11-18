@@ -20,12 +20,13 @@ import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.MoneyCurrency;
-import org.javamoney.moneta.format.MonetaryAmountFormat.CurrencyStyle;
 
 /**
  * {@link FormatToken} that adds a localizable {@link String}, read by key from
@@ -91,7 +92,46 @@ final class CurrencyToken implements FormatToken {
 	@Override
 	public void parse(ParseContext context)
 			throws ParseException {
-		throw new UnsupportedOperationException("Not yet implemented");
+		String token = context.lookupNextToken();
+		while (token != null) {
+			if (token.trim().isEmpty()) {
+				context.consume(token);
+				token = context.lookupNextToken();
+				continue;
+			}
+			break;
+		}
+		try {
+			MoneyCurrency cur = null;
+			switch (style) {
+			case CODE:
+				cur = MoneyCurrency.of(token);
+				context.consume(token);
+				break;
+			case SYMBOL:
+				if (token.startsWith("$")) {
+					cur = MoneyCurrency.of("USD");
+					context.consume("$");
+				}
+				else if (token.startsWith("€")) {
+					cur = MoneyCurrency.of("EUR");
+					context.consume("€");
+				}
+				else if (token.startsWith("£")) {
+					cur = MoneyCurrency.of("GBP");
+					context.consume("£");
+				}
+			case NAME:
+			case NUMERIC_CODE:
+			default:
+				throw new UnsupportedOperationException("Not yet implemented");
+			}
+			if (cur != null) {
+				context.setParsedCurrency(cur);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

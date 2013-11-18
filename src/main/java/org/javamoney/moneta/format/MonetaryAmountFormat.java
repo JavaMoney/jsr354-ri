@@ -38,10 +38,6 @@ import org.javamoney.moneta.function.MonetaryRoundings;
  */
 public final class MonetaryAmountFormat {
 
-	public static enum CurrencyStyle {
-		CODE, NAME, NUMERIC_CODE, SYMBOL
-	}
-
 	/** The tokens to be used for formatting/parsing. */
 	private List<FormatToken> tokens = new ArrayList<FormatToken>();
 
@@ -331,10 +327,12 @@ public final class MonetaryAmountFormat {
 		public MonetaryAmountFormat build() {
 			if (tokens.isEmpty()) {
 				// create default JDK currency format
-				this.tokens.add(new AmountNumberToken(new AmountStyle.Builder(
+				appendCurrency(CurrencyStyle.CODE);
+				appendLiteral(" ");
+				appendAmount(new AmountStyle.Builder(
 						locale).withCurrencyFormat(locale)
 						.withNumberGroupChars(groupChars)
-						.withNumberGroupSizes(groupSizes).build()));
+						.withNumberGroupSizes(groupSizes).build());
 			}
 			return new MonetaryAmountFormat(tokens, defaultCurrency);
 		}
