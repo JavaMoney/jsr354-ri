@@ -604,10 +604,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * 
 	 * @see javax.money.MonetaryAmount#remainder(javax.money.MonetaryAmount)
 	 */
-	public RoundedMoney remainder(RoundedMoney divisor) {
+	public RoundedMoney remainder(MonetaryAmount divisor) {
 		checkAmountParameter(divisor);
 		return new RoundedMoney(this.currency, this.number.remainder(
-				divisor.asType(BigDecimal.class), this.mathContext),
+				Money.from(divisor).asType(BigDecimal.class), this.mathContext),
 				this.mathContext, this.rounding);
 	}
 

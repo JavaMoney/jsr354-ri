@@ -12,6 +12,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -1268,6 +1273,20 @@ public class FastMoneyTest {
 		m2 = FastMoney.from(fm);
 		assertFalse(m == m2);
 		assertEquals(m, m2);
+	}
+	
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		FastMoney m = FastMoney.of("XXX", new BigDecimal("1.2345"));
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(bos);
+		oos.writeObject(m);
+		oos.flush();
+		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(
+				bos.toByteArray()));
+		FastMoney m2 = (FastMoney) ois.readObject();
+		assertEquals(m, m2);
+		assertTrue(m != m2);
 	}
 
 }

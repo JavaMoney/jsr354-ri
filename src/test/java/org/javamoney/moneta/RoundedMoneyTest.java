@@ -12,6 +12,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -462,6 +467,7 @@ public class RoundedMoneyTest {
 		assertNotNull(moneyResult);
 		assertEquals(11d, moneyResult.doubleValue(), 0d);
 	}
+	
 
 	/**
 	 * Test method for
@@ -727,6 +733,41 @@ public class RoundedMoneyTest {
 					m.remainder(3));
 		}
 	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.Money#remainder(java.lang.Number)}.
+	 */
+	@Test
+	public void testRemainderAmount() {
+		RoundedMoney[] moneys = new RoundedMoney[] { RoundedMoney.of("CHF", 100),
+				RoundedMoney.of("CHF", 34242344), RoundedMoney.of("CHF", 23123213.435),
+				RoundedMoney.of("CHF", 0), RoundedMoney.of("CHF", -100),
+				RoundedMoney.of("CHF", -723527.36532) };
+		for (RoundedMoney m : moneys) {
+			assertEquals(
+					"Invalid remainder of " + 10.50,
+					m.with(m.asType(BigDecimal.class).remainder(
+							BigDecimal.valueOf(10.50))),
+					m.remainder(Money.of(m.getCurrency(), 10.50)));
+			assertEquals(
+					"Invalid remainder of " + -30.20,
+					m.with(m.asType(BigDecimal.class).remainder(
+							BigDecimal.valueOf(-30.20))),
+					m.remainder(Money.of(m.getCurrency(), -30.20)));
+			assertEquals(
+					"Invalid remainder of " + -3,
+					m.with(m.asType(BigDecimal.class).remainder(
+							BigDecimal.valueOf(-3))),
+					m.remainder(Money.of(m.getCurrency(), -3)));
+			assertEquals(
+					"Invalid remainder of " + 3,
+					m.with(m.asType(BigDecimal.class).remainder(
+							BigDecimal.valueOf(3))),
+					m.remainder(Money.of(m.getCurrency(), 3)));
+		}
+	}
+
 
 	/**
 	 * Test method for
@@ -1467,6 +1508,70 @@ public class RoundedMoneyTest {
 		m2 = RoundedMoney.from(fm);
 		assertFalse(m == m2);
 		assertEquals(m, m2);
+	}
+	
+	@Test
+	public void testSerialization() throws IOException, ClassNotFoundException {
+		RoundedMoney m = RoundedMoney.of("XXX", new BigDecimal("1.2345"));
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(bos);
+		oos.writeObject(m);
+		oos.flush();
+		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(
+				bos.toByteArray()));
+		RoundedMoney m2 = (RoundedMoney) ois.readObject();
+		assertEquals(m, m2);
+		assertTrue(m != m2);
+	}
+	
+	// Bad Cases
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * .
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testAdd_WrongCurrency() {
+		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		m1.add(m2);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * .
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testMultiply_WrongCurrency() {
+		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		m1.multiply(m2);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * .
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testSubtract_WrongCurrency() {
+		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		m1.subtract(m2);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * .
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testDivide_WrongCurrency() {
+		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		m1.subtract(m2);
 	}
 
 }

@@ -401,19 +401,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		return this.mathContext;
 	}
 
-	/**
-	 * Allows to change the {@link MathContext}. The context will used, on
-	 * subsequent operation, where feasible and also propagated to child results
-	 * of arithmetic calculations.
-	 * 
-	 * @param mathContext
-	 *            The new {@link MathContext}, not null.
-	 * @return a new {@link Money} instance, with the new {@link MathContext}.
-	 */
-	public Money withMathContext(MathContext mathContext) {
-		Objects.requireNonNull(mathContext, "MathContext required.");
-		return new Money(this.currency, this.number, mathContext);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -447,14 +434,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		if (num instanceof BigDecimal) {
 			return (BigDecimal) num;
 		}
-		if (num instanceof Long || num instanceof Integer) {
+		if (num instanceof Long || num instanceof Integer || num instanceof Byte || num instanceof AtomicLong) {
 			return BigDecimal.valueOf(num.longValue());
 		}
 		if (num instanceof Float || num instanceof Double) {
 			return new BigDecimal(num.toString());
-		}
-		if (num instanceof Byte || num instanceof AtomicLong) {
-			return BigDecimal.valueOf(num.longValue());
 		}
 		try {
 			// Avoid imprecise conversion to double value if at all possible
@@ -1001,7 +985,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	/**
-	 * Gets the {@link BigDecimal} representation of the numeric value of this item.
+	 * Gets the {@link BigDecimal} representation of the numeric value of this
+	 * item.
 	 * 
 	 * @return The {@link BigDecimal} represention matching best.
 	 */
@@ -1097,8 +1082,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	public static BigDecimal asNumber(MonetaryAmount amt) {
-		if(amt instanceof Money){
-			return ((Money)amt).number;
+		if (amt instanceof Money) {
+			return ((Money) amt).number;
 		}
 		long denom = amt.getAmountFractionDenominator();
 		for (int i = 0; i < DENOM_ARRAY.length; i++) {
@@ -1117,52 +1102,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		BigDecimal fraction = BigDecimal.valueOf(amt
 				.getAmountFractionNumerator());
 		return whole.add(fraction);
-	}
-
-	/**
-	 * Platform RI: This is an inner checker class for aspects of
-	 * {@link MonetaryAmount}. It may be used by multiple implementations
-	 * (inside the same package) to avoid code duplication.
-	 * 
-	 * This class is for internal use only.
-	 * 
-	 * @author Werner Keil
-	 */
-	static final class Checker {
-		private Checker() {
-		}
-
-		/**
-		 * Internal method to check for correct number parameter.
-		 * 
-		 * @param number
-		 * @throws IllegalArgumentException
-		 *             If the number is null
-		 */
-		static final void checkNumber(Number number) {
-			Objects.requireNonNull(number, "Number is required.");
-		}
-
-		/**
-		 * Method to check if a currency is compatible with this amount
-		 * instance.
-		 * 
-		 * @param amount
-		 *            The monetary amount to be compared to, never null.
-		 * @throws IllegalArgumentException
-		 *             If the amount is null, or the amount's currency is not
-		 *             compatible (same {@link CurrencyUnit#getNamespace()} and
-		 *             same {@link CurrencyUnit#getCurrencyCode()}).
-		 */
-		static final void checkAmountParameter(CurrencyUnit currency,
-				MonetaryAmount amount) {
-			Objects.requireNonNull(amount, "Amount must not be null.");
-			final CurrencyUnit amountCurrency = amount.getCurrency();
-			if (!(currency.getCurrencyCode().equals(amountCurrency
-					.getCurrencyCode()))) {
-				throw new CurrencyMismatchException(currency, amountCurrency);
-			}
-		}
 	}
 
 	/**

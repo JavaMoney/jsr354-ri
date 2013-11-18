@@ -16,6 +16,7 @@
 package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
@@ -38,18 +39,18 @@ final class MinorPart<T extends MonetaryAmount> implements MonetaryAdjuster {
 	}
 
 	/**
-	 * Gets the amount in major units as a {@code MonetaryAmount} with scale 0.
+	 * Gets the minor part of a {@code MonetaryAmount} with the same scale.
 	 * <p>
-	 * This returns the monetary amount in terms of the major units of the
-	 * currency, truncating the amount if necessary. For example, 'EUR 2.35'
-	 * will return 'EUR 2', and 'BHD -1.345' will return 'BHD -1'.
+	 * This returns the monetary amount in terms of the minor units of the
+	 * currency, truncating the whole part if necessary. For example, 'EUR 2.35'
+	 * will return 'EUR 0.35', and 'BHD -1.345' will return 'BHD -0.345'.
 	 * <p>
 	 * This is returned as a {@code MonetaryAmount} rather than a
-	 * {@code BigInteger} . This is to allow further calculations to be
-	 * performed on the result. Should you need a {@code BigInteger}, simply
-	 * call {@code asType(BigInteger.class)}.
+	 * {@code BigDecimal} . This is to allow further calculations to be
+	 * performed on the result. Should you need a {@code BigDecimal}, simply
+	 * call {@code asType(BigDecimal.class)}.
 	 * 
-	 * @return the major units part of the amount, never {@code null}
+	 * @return the minor units part of the amount, never {@code null}
 	 */
 	@Override
 	public MonetaryAmount adjustInto(MonetaryAmount amount) {
@@ -57,9 +58,9 @@ final class MinorPart<T extends MonetaryAmount> implements MonetaryAdjuster {
 			throw new IllegalArgumentException("Amount required.");
 		}
 		BigDecimal number = Money.from(amount).asType(BigDecimal.class);
+		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
 		return Money.of(amount.getCurrency(),
-				number.movePointRight(number.precision())
-						.longValueExact());
+				number.subtract(wholes));
 	}
 
 }
