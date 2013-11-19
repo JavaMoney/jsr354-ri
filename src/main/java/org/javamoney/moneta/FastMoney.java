@@ -110,10 +110,6 @@ public final class FastMoney implements MonetaryAmount,
 	}
 
 	private long getInternalNumber(Number number) {
-		// long whole = number.longValue();
-		// double fractions = number.doubleValue() % 1;
-		// return (whole * SCALING_DENOMINATOR)
-		// + ((long) (fractions * SCALING_DENOMINATOR));
 		BigDecimal bd = getBigDecimal(number);
 		return bd.movePointRight(SCALE).longValue();
 	}
@@ -121,26 +117,6 @@ public final class FastMoney implements MonetaryAmount,
 	private static long getInternalNumber(MonetaryAmount amount) {
 		BigDecimal bd = Money.asNumber(amount);
 		return bd.movePointRight(SCALE).longValue();
-		//
-		// long fractionNumerator = amount.getAmountFractionNumerator();
-		// long divisor = amount.getAmountFractionDenominator()
-		// * 10 / SCALING_DENOMINATOR;
-		//
-		// // Variant BD: slow!
-		// // BigDecimal fraction =
-		// BigDecimal.valueOf(fractionNumerator).divide(
-		// // BigDecimal.valueOf(divisor));
-		// // return (amount.getAmountWhole() * SCALING_DENOMINATOR) +
-		// fraction.longValue();
-		//
-		// // Variant double
-		// double fraction = ((double) fractionNumerator) / divisor;
-		// return (amount.getAmountWhole() * SCALING_DENOMINATOR) +
-		// (long)fraction;
-		//
-		// // Variant number: fastest!
-		// // return (long)(amount.asNumber().doubleValue() *
-		// SCALING_DENOMINATOR);
 	}
 
 	private static double getInternalDouble(MonetaryAmount amount) {
@@ -157,15 +133,6 @@ public final class FastMoney implements MonetaryAmount,
 		return amount.getAmountWhole() +
 				fraction;
 	}
-
-	// private static double getDoubleValue(MonetaryAmount amount) {
-	// long fraction = amount.getAmountFractionNumerator();
-	// double divisor = ((double) amount.getAmountFractionDenominator())
-	// / SCALING_DENOMINATOR;
-	// double fractionNum = (long) (fraction / divisor);
-	// return ((double) amount.getAmountWhole())
-	// + (fractionNum / SCALING_DENOMINATOR);
-	// }
 
 	private FastMoney(CurrencyUnit currency, long number) {
 		Objects.requireNonNull(currency, "Currency is required.");
@@ -202,7 +169,6 @@ public final class FastMoney implements MonetaryAmount,
 	 * @return A new instance of {@link FastMoney}.
 	 */
 	public static FastMoney of(CurrencyUnit currency, Number number) {
-		// TODO caching
 		return new FastMoney(currency, number);
 	}
 
@@ -219,7 +185,7 @@ public final class FastMoney implements MonetaryAmount,
 		return new FastMoney(MoneyCurrency.of(currencyCode), number);
 	}
 
-/**
+	/**
 	 * Facory method creating a zero instance with the given {@code currency);
 	 * @param currency the target currency of the amount being created.
 	 * @return
@@ -228,7 +194,7 @@ public final class FastMoney implements MonetaryAmount,
 		return new FastMoney(currency, 0L);
 	}
 
-/**
+	/**
 	 * Facory method creating a zero instance with the given {@code currency);
 	 * @param currency the target currency of the amount being created.
 	 * @return
