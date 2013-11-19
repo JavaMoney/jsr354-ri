@@ -16,14 +16,17 @@
 package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.MoneyCurrency;
 
 /**
- * This class allows to extract the minor part of a {@link MonetaryAmount}
+ * This class allows to extract the minor units of a {@link MonetaryAmount}
  * instance.
  * 
  * @author Anatole Tresch
@@ -52,11 +55,15 @@ final class MinorUnits implements MonetaryQuery<Long> {
 	 */
 	@Override
 	public Long queryFrom(MonetaryAmount amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException("Amount required.");
-		}
+		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = Money.from(amount).asType(BigDecimal.class);
-		return number.movePointRight(number.precision()).longValueExact();
+		MoneyCurrency cur = MoneyCurrency.from(amount.getCurrency());
+		int scale = cur.getDefaultFractionDigits();
+		if(scale<0){
+			scale = 0;
+		}
+		number = number.setScale(scale, RoundingMode.DOWN);
+		return number.movePointRight(number.scale()).longValueExact();
 	}
 
 }

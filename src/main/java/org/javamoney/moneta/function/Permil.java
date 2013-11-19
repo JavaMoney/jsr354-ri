@@ -18,6 +18,7 @@ package org.javamoney.moneta.function;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.NumberFormat;
+import java.util.Objects;
 
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;

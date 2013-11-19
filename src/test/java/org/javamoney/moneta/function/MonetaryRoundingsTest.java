@@ -1,5 +1,20 @@
-/**
+/*
+ * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil.
  * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ * 
+ * Contributors: Anatole Tresch - initial implementation Wernner Keil -
+ * extensions and adaptions.
  */
 package org.javamoney.moneta.function;
 
@@ -13,6 +28,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
 
 import org.javamoney.moneta.Money;
@@ -175,16 +191,6 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.function.MonetaryRoundings#getRounding(java.lang.String)}
-	 * .
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testGetRoundingString_Invalid() {
-		assertNull(MonetaryRoundings.getRounding("foo"));
-	}
-
-	/**
-	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryRoundings#getCustomRoundingIds()}
 	 * .
 	 */
@@ -197,6 +203,64 @@ public class MonetaryRoundingsTest {
 				.contains("minusOne"));
 		assertTrue(MonetaryRoundings.getCustomRoundingIds()
 				.contains("CHF-cash"));
+	}
+	
+	// Bad cases
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.function.MonetaryRoundings#getRounding(java.lang.String)}
+	 * .
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetRoundingString_Invalid() {
+		assertNull(MonetaryRoundings.getRounding("foo"));
+	}
+
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testGetCashRounding_Null1() {
+		MonetaryRoundings.getCashRounding(null);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testGetCashRounding_Null2() {
+		MonetaryRoundings.getCashRounding(MoneyCurrency.of("USD")).adjustInto(null);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testGetRounding_Null1() {
+		MonetaryRoundings.getRounding((CurrencyUnit)null);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testGetRounding_Null3() {
+		MonetaryRoundings.getRounding((String)null);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+	 */
+	@Test(expected=NullPointerException.class)
+	public void testGetRounding_Null2() {
+		MonetaryRoundings.getRounding(MoneyCurrency.of("USD")).adjustInto(null);
 	}
 
 }

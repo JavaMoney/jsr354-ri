@@ -17,6 +17,7 @@ package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAdjuster;
@@ -48,7 +49,6 @@ public final class MonetaryFunctions {
 	/** Shared major units instance. */
 	private static final MajorUnits MAJORUNITS = new MajorUnits();
 
-
 	/**
 	 * Private singleton constructor.
 	 */
@@ -78,7 +78,7 @@ public final class MonetaryFunctions {
 		return RECIPROCAL;
 	}
 
-	/**
+/**
 	 * Factory method creating a new instance with the given {@code BigDecimal) permil value;
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
@@ -87,7 +87,7 @@ public final class MonetaryFunctions {
 		return new Permil(decimal);
 	}
 
-	/**
+/**
 	 * Factory method creating a new instance with the given {@code Number) permil value;
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
@@ -96,7 +96,7 @@ public final class MonetaryFunctions {
 		return permil(number, DEFAULT_MATH_CONTEXT);
 	}
 
-	/**
+/**
 	 * Factory method creating a new instance with the given {@code Number) permil value;
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
@@ -114,16 +114,27 @@ public final class MonetaryFunctions {
 	 *            the {@link MathContext}
 	 * @return the {@code number} as {@link BigDecimal}
 	 */
-	private static final BigDecimal getBigDecimal(Number number,
+	private static final BigDecimal getBigDecimal(Number num,
 			MathContext mathContext) {
-		if (number instanceof BigDecimal) {
-			return (BigDecimal) number;
-		} else {
-			return new BigDecimal(number.doubleValue(), mathContext);
+		if (num instanceof BigDecimal) {
+			return (BigDecimal) num;
 		}
+		if (num instanceof Long || num instanceof Integer
+				|| num instanceof Byte || num instanceof AtomicLong) {
+			return BigDecimal.valueOf(num.longValue());
+		}
+		if (num instanceof Float || num instanceof Double) {
+			return new BigDecimal(num.toString());
+		}
+		try {
+			// Avoid imprecise conversion to double value if at all possible
+			return new BigDecimal(num.toString(),mathContext);
+		} catch (NumberFormatException e) {
+		}
+		return BigDecimal.valueOf(num.doubleValue());
 	}
 
-	/**
+/**
 	 * Factory method creating a new instance with the given {@code BigDecimal) percent value;
 	 * @param decimal the decimal value of the percent operator being created.
 	 * @return a new  {@code Percent} operator
@@ -133,7 +144,7 @@ public final class MonetaryFunctions {
 										// work.
 	}
 
-	/**
+/**
 	 * Factory method creating a new instance with the given {@code Number) percent value;
 	 * @param decimal the decimal value of the percent operator being created.
 	 * 
@@ -162,7 +173,7 @@ public final class MonetaryFunctions {
 	}
 
 	/**
-	 * Access the shared instance of {@link MinorPart} for use.
+	 * Access the shared instance of {@link MinorUnits} for use.
 	 * 
 	 * @return the shared instance, never {@code null}.
 	 */
@@ -171,13 +182,12 @@ public final class MonetaryFunctions {
 	}
 
 	/**
-	 * Access the shared instance of {@link MinorPart} for use.
+	 * Access the shared instance of {@link MajorUnits} for use.
 	 * 
 	 * @return the shared instance, never {@code null}.
 	 */
 	public static MonetaryQuery<Long> majorUnits() {
 		return MAJORUNITS;
 	}
-
 
 }

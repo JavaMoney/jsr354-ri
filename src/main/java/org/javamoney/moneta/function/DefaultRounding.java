@@ -18,6 +18,7 @@ package org.javamoney.moneta.function;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
@@ -51,11 +52,9 @@ final class DefaultRounding implements MonetaryAdjuster {
 	 *            The {@link MathContext} to be used, not {@code null}.
 	 */
 	DefaultRounding(int scale, RoundingMode roundingMode) {
+		Objects.requireNonNull(roundingMode, "RoundingMode required.");
 		if (scale < 0) {
 			scale = 0;
-		}
-		if (roundingMode == null) {
-			throw new IllegalArgumentException("roundingMode missing");
 		}
 		this.scale = scale;
 		this.roundingMode = roundingMode;

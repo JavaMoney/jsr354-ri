@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.logging.Level;
@@ -92,6 +93,7 @@ public final class MonetaryRoundings {
 	 */
 	public static MonetaryAdjuster getRounding(int scale,
 			RoundingMode roundingMode) {
+		Objects.requireNonNull(roundingMode, "RoundingMode required.");
 		return new DefaultRounding(scale, roundingMode);
 	}
 
@@ -107,6 +109,7 @@ public final class MonetaryRoundings {
 	 *         rounding, never {@code null}.
 	 */
 	public static MonetaryAdjuster getRounding(CurrencyUnit currency) {
+		Objects.requireNonNull(currency, "Currency required.");
 		for (RoundingProviderSpi prov : providerSpis) {
 			try {
 				MonetaryAdjuster op = prov.getRounding(currency);
@@ -135,6 +138,7 @@ public final class MonetaryRoundings {
 	 *         rounding, never {@code null}.
 	 */
 	public static MonetaryAdjuster getCashRounding(CurrencyUnit currency) {
+		Objects.requireNonNull(currency, "Currency required.");
 		for (RoundingProviderSpi prov : providerSpis) {
 			try {
 				MonetaryAdjuster op = prov.getCashRounding(currency);
@@ -167,6 +171,7 @@ public final class MonetaryRoundings {
 	 */
 	public static MonetaryAdjuster getRounding(CurrencyUnit currency,
 			long timestamp) {
+		Objects.requireNonNull(currency, "Currency required.");
 		for (RoundingProviderSpi prov : providerSpis) {
 			try {
 				MonetaryAdjuster op = prov.getRounding(currency, timestamp);
@@ -199,6 +204,7 @@ public final class MonetaryRoundings {
 	 */
 	public static MonetaryAdjuster getCashRounding(CurrencyUnit currency,
 			long timestamp) {
+		Objects.requireNonNull(currency, "Currency required.");
 		for (RoundingProviderSpi prov : providerSpis) {
 			try {
 				MonetaryAdjuster op = prov.getCashRounding(currency, timestamp);
@@ -228,6 +234,7 @@ public final class MonetaryRoundings {
 	 *             {@link RoundingProviderSpi} instance.
 	 */
 	public static MonetaryAdjuster getRounding(String customRoundingId) {
+		Objects.requireNonNull(customRoundingId, "CustomRoundingId required.");
 		for (RoundingProviderSpi prov : providerSpis) {
 			try {
 				MonetaryAdjuster op = prov.getCustomRounding(customRoundingId);

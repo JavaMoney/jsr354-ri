@@ -1070,6 +1070,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	public static Money from(MonetaryAmount amt) {
+		Objects.requireNonNull(amt, "Amount required.");
 		if (amt.getClass() == Money.class) {
 			return (Money) amt;
 		}
@@ -1082,6 +1083,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	public static BigDecimal asNumber(MonetaryAmount amt) {
+		Objects.requireNonNull(amt, "Amount required.");
 		if (amt instanceof Money) {
 			return ((Money) amt).number;
 		}
@@ -1115,7 +1117,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	private void checkAmountParameter(MonetaryAmount amount) {
-		Objects.requireNonNull(amount, "Amount must not be null.");
+		Objects.requireNonNull(amount, "Amount required.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {

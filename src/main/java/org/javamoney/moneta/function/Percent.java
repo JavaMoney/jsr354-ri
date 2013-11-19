@@ -37,9 +37,8 @@ import org.javamoney.moneta.Money;
  */
 final class Percent<T extends MonetaryAmount> implements MonetaryAdjuster {
 
-	private static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
 	private static final BigDecimal ONE_HUNDRED = new BigDecimal(100,
-			DEFAULT_MATH_CONTEXT);
+			Money.DEFAULT_MATH_CONTEXT);
 
 	private final BigDecimal percentValue;
 
@@ -52,17 +51,6 @@ final class Percent<T extends MonetaryAmount> implements MonetaryAdjuster {
 		percentValue = calcPercent(decimal);
 	}
 
-	/**
-	 * Get {@link MathContext} for {@link Percent} instances.
-	 * 
-	 * @return the {@link MathContext} to be used, by default
-	 *         {@link MathContext#DECIMAL64}.
-	 */
-	private static MathContext initDefaultMathContext() {
-		// TODO Initialize default, e.g. by system properties, or better:
-		// classpath properties!
-		return MathContext.DECIMAL64;
-	}
 
 	/**
 	 * Gets the percentage of the amount.
@@ -100,23 +88,6 @@ final class Percent<T extends MonetaryAmount> implements MonetaryAdjuster {
 		return getPercentInstance(locale).format(percentValue);
 	}
 
-	/**
-	 * Converts to {@link BigDecimal}, if necessary, or casts, if possible.
-	 * 
-	 * @param number
-	 *            The {@link Number}
-	 * @param mathContext
-	 *            the {@link MathContext}
-	 * @return the {@code number} as {@link BigDecimal}
-	 */
-	private static final BigDecimal getBigDecimal(Number number,
-			MathContext mathContext) {
-		if (number instanceof BigDecimal) {
-			return (BigDecimal) number;
-		} else {
-			return new BigDecimal(number.doubleValue(), mathContext);
-		}
-	}
 
 	/**
 	 * Calculate a BigDecimal value for a Percent e.g. "3" (3 percent) will
@@ -127,8 +98,7 @@ final class Percent<T extends MonetaryAmount> implements MonetaryAdjuster {
 	 *            java.math.BigDecimal
 	 */
 	private static final BigDecimal calcPercent(BigDecimal decimal) {
-		return decimal.divide(ONE_HUNDRED, DEFAULT_MATH_CONTEXT); // we now have
-																	// .03
+		return decimal.divide(ONE_HUNDRED, Money.DEFAULT_MATH_CONTEXT); // we now have
 	}
 
 }

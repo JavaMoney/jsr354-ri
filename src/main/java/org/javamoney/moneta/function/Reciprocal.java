@@ -17,6 +17,7 @@ package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Objects;
 
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
@@ -52,9 +53,7 @@ final class Reciprocal<T extends MonetaryAmount> implements MonetaryAdjuster {
 	 */
 	@Override
 	public MonetaryAmount adjustInto(MonetaryAmount amount) {
-		if (amount == null) {
-			throw new IllegalArgumentException("Amount required.");
-		}
+		Objects.requireNonNull(amount, "Amount required.");
 		return Money.of(amount.getCurrency(), BigDecimal.ONE.divide(
 				Money.from(amount).asType(BigDecimal.class),
 				MathContext.DECIMAL128));

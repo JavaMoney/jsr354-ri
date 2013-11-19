@@ -17,6 +17,7 @@ package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
@@ -55,9 +56,7 @@ final class MajorPart implements MonetaryAdjuster {
 	 */
 	@Override
 	public MonetaryAmount adjustInto(MonetaryAmount amount) {
-		if (amount == null) {
-			throw new NullPointerException("Amount required.");
-		}
+		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = Money.from(amount).asType(BigDecimal.class);
 		return Money.of(amount.getCurrency(), number.setScale(0,
 				RoundingMode.DOWN));

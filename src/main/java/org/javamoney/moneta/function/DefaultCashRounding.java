@@ -17,6 +17,7 @@ package org.javamoney.moneta.function;
 
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAdjuster;
@@ -98,10 +99,9 @@ final class DefaultCashRounding implements
 	 */
 	@Override
 	public MonetaryAmount adjustInto(MonetaryAmount value) {
+		Objects.requireNonNull(value, "Amunt required.");
 		throw new UnsupportedOperationException(
 				"Cash Rounding not yet implemented.");
-		// return value.from(value.asType(BigDecimal.class).setScale(this.scale,
-		// this.roundingMode));
 	}
 
 }

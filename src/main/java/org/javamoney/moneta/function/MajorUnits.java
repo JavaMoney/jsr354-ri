@@ -17,6 +17,7 @@ package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
@@ -54,9 +55,7 @@ final class MajorUnits implements MonetaryQuery<Long> {
 	 */
 	@Override
 	public Long queryFrom(MonetaryAmount amount) {
-		if(amount==null){
-			throw new IllegalArgumentException("Amount required.");
-		}
+		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = Money.from(amount).asType(BigDecimal.class);
 		return number.setScale(0, RoundingMode.DOWN).longValueExact();
 	}
