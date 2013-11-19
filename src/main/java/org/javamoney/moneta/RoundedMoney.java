@@ -23,15 +23,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
+import javax.money.AbstractMoney;
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryContext;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
-
-import org.javamoney.moneta.function.MonetaryRoundings;
+import javax.money.Money;
+import javax.money.MoneyCurrency;
+import javax.money.function.MonetaryRoundings;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
@@ -44,25 +47,28 @@ import org.javamoney.moneta.function.MonetaryRoundings;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public final class RoundedMoney implements MonetaryAmount,
+public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 		Comparable<RoundedMoney>,
 		Serializable {
 
-	public static final MathContext DEFAULT_MATH_CONTEXT = Money.DEFAULT_MATH_CONTEXT;
+	public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = Money.DEFAULT_MONETARY_CONTEXT;
 
 	/** The numeric part of this amount. */
 	private BigDecimal number;
 
-	/** The currency of this amount. */
-	private CurrencyUnit currency;
-
 	/** tHE DEFAULT {@link MathContext} used by this instance, e.g. on division. */
-	private MathContext mathContext = DEFAULT_MATH_CONTEXT;
+	private MonetaryContext monetaryContext = DEFAULT_MONETARY_CONTEXT;
 
 	/**
 	 * The rounding to be done.
 	 */
-	private MonetaryAdjuster rounding;
+	private MonetaryOperator rounding;
+
+	/**
+	 * Required for deserialization only.
+	 */
+	private RoundedMoney() {
+	}
 
 	/**
 	 * Creates a new instance os {@link RoundedMoney}.
@@ -73,21 +79,18 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *            the amount, not null.
 	 */
 	private RoundedMoney(CurrencyUnit currency, Number number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
-		Objects.requireNonNull(currency, "Currency is required.");
+			MonetaryContext monetaryContext, MonetaryOperator rounding) {
+		super(currency, monetaryContext);
 		Objects.requireNonNull(number, "Number is required.");
 		checkNumber(number);
 		this.currency = currency;
-		if (mathContext != null) {
-			this.mathContext = mathContext;
-		}
 		if (rounding != null) {
 			this.rounding = rounding;
 		}
 		else {
 			this.rounding = MonetaryRoundings.getRounding(currency);
 		}
-		this.number = getBigDecimal(number, mathContext);
+		this.number = getBigDecimal(number, monetaryContext);
 	}
 
 	// Static Factory Methods
@@ -102,7 +105,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number) {
-		return new RoundedMoney(currency, number, DEFAULT_MATH_CONTEXT, null);
+		return new RoundedMoney(currency, number, DEFAULT_MONETARY_CONTEXT,
+				null);
 	}
 
 	/**
@@ -118,8 +122,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MonetaryAdjuster rounding) {
-		return new RoundedMoney(currency, number, DEFAULT_MATH_CONTEXT,
+			MonetaryOperator rounding) {
+		return new RoundedMoney(currency, number, DEFAULT_MONETARY_CONTEXT,
 				rounding);
 	}
 
@@ -131,13 +135,13 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *            numeric value of the {@code Money}.
 	 * @param currency
 	 *            currency unit of the {@code Money}.
-	 * @param mathContext
+	 * @param monetaryContext
 	 *            the {@link MathContext} to be used.
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MathContext mathContext) {
-		return new RoundedMoney(currency, number, mathContext, null);
+			MonetaryContext monetaryContext) {
+		return new RoundedMoney(currency, number, monetaryContext, null);
 	}
 
 	/**
@@ -155,7 +159,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MonetaryContext mathContext, MonetaryOperator rounding) {
 		return new RoundedMoney(currency, number, mathContext, rounding);
 	}
 
@@ -170,7 +174,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number) {
-		return new RoundedMoney(currency, number, (MathContext) null, null);
+		return new RoundedMoney(currency, number, (MonetaryContext) null, null);
 	}
 
 	/**
@@ -186,8 +190,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MonetaryAdjuster rounding) {
-		return new RoundedMoney(currency, number, (MathContext) null, rounding);
+			MonetaryOperator rounding) {
+		return new RoundedMoney(currency, number, (MonetaryContext) null,
+				rounding);
 	}
 
 	/**
@@ -201,7 +206,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MathContext mathContext) {
+			MonetaryContext mathContext) {
 		return new RoundedMoney(currency, number, mathContext, null);
 	}
 
@@ -218,7 +223,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MonetaryContext mathContext, MonetaryOperator rounding) {
 		return new RoundedMoney(currency, number, mathContext, rounding);
 	}
 
@@ -234,7 +239,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public static RoundedMoney of(String currencyCode, Number number) {
 		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
-				DEFAULT_MATH_CONTEXT, null);
+				DEFAULT_MONETARY_CONTEXT, null);
 	}
 
 	/**
@@ -250,9 +255,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MonetaryAdjuster rounding) {
+			MonetaryOperator rounding) {
 		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
-				DEFAULT_MATH_CONTEXT, rounding);
+				DEFAULT_MONETARY_CONTEXT, rounding);
 	}
 
 	/**
@@ -266,7 +271,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MathContext mathContext) {
+			MonetaryContext mathContext) {
 		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
 				mathContext, null);
 	}
@@ -284,7 +289,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MonetaryContext mathContext, MonetaryOperator rounding) {
 		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
 				mathContext, rounding);
 	}
@@ -296,7 +301,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public static RoundedMoney ofZero(CurrencyUnit currency) {
 		return new RoundedMoney(currency, BigDecimal.ZERO,
-				DEFAULT_MATH_CONTEXT, null);
+				DEFAULT_MONETARY_CONTEXT, null);
 	}
 
 /**
@@ -305,9 +310,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return
 	 */
 	public static RoundedMoney ofZero(CurrencyUnit currency,
-			MonetaryAdjuster rounding) {
+			MonetaryOperator rounding) {
 		return new RoundedMoney(currency, BigDecimal.ZERO,
-				DEFAULT_MATH_CONTEXT, rounding);
+				DEFAULT_MONETARY_CONTEXT, rounding);
 	}
 
 /**
@@ -333,8 +338,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * 
 	 * @return the {@link MathContext} used, never null.
 	 */
-	public MathContext getMathContext() {
-		return this.mathContext;
+	public MonetaryContext getMonetaryContext() {
+		return this.monetaryContext;
 	}
 
 	/**
@@ -347,7 +352,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return a new {@link RoundedMoney} instance, with the new
 	 *         {@link MathContext}.
 	 */
-	public RoundedMoney setMathContext(MathContext mathContext) {
+	public RoundedMoney setMathContext(MonetaryContext mathContext) {
 		Objects.requireNonNull(mathContext, "MathContext required.");
 		return new RoundedMoney(this.currency, this.number, mathContext,
 				this.rounding);
@@ -362,81 +367,11 @@ public final class RoundedMoney implements MonetaryAmount,
 
 	// Arithmetic Operations
 
-	public RoundedMoney add(RoundedMoney amount) {
+	public RoundedMoney add(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return new RoundedMoney(this.currency, this.number.add(
-				amount.asType(BigDecimal.class)), this.mathContext,
+		return (RoundedMoney) new RoundedMoney(this.currency, this.number.add(
+				amount.getNumber(BigDecimal.class)), this.monetaryContext,
 				this.rounding).with(rounding);
-	}
-
-	private BigDecimal getBigDecimal(Number num) {
-		if (num instanceof BigDecimal) {
-			return (BigDecimal) num;
-		}
-		if (num instanceof Long || num instanceof Integer) {
-			return BigDecimal.valueOf(num.longValue());
-		}
-		if (num instanceof Float || num instanceof Double) {
-			return new BigDecimal(num.toString());
-		}
-		if (num instanceof Byte || num instanceof AtomicLong) {
-			return BigDecimal.valueOf(num.longValue());
-		}
-		try {
-			// Avoid imprecise conversion to double value if at all possible
-			return new BigDecimal(num.toString());
-		} catch (NumberFormatException e) {
-		}
-		return BigDecimal.valueOf(num.doubleValue());
-	}
-
-	private BigDecimal getBigDecimal(Number num, MathContext mathContext) {
-		if (num instanceof BigDecimal) {
-			BigDecimal bd = (BigDecimal) num;
-			if (mathContext != null) {
-				return new BigDecimal(bd.toString(), mathContext);
-			}
-			return bd;
-		}
-		if (num instanceof Long || num instanceof Integer) {
-			if (mathContext != null) {
-				return new BigDecimal(num.longValue(), mathContext);
-			}
-			return BigDecimal.valueOf(num.longValue());
-		}
-		if (num instanceof Float || num instanceof Double) {
-			if (mathContext != null) {
-				return new BigDecimal(num.doubleValue(), mathContext);
-			}
-			return new BigDecimal(num.toString());
-		}
-		if (num instanceof Byte || num instanceof AtomicLong) {
-			if (mathContext != null) {
-				return new BigDecimal(num.longValue(), mathContext);
-			}
-			return BigDecimal.valueOf(num.longValue());
-		}
-		try {
-			// Avoid imprecise conversion to double value if at all possible
-			if (mathContext != null) {
-				return new BigDecimal(num.toString(), mathContext);
-			}
-			return new BigDecimal(num.toString());
-		} catch (NumberFormatException e) {
-		}
-		if (mathContext != null) {
-			return new BigDecimal(num.doubleValue(), mathContext);
-		}
-		return BigDecimal.valueOf(num.doubleValue());
-	}
-
-	public RoundedMoney divide(RoundedMoney divisor) {
-		checkAmountParameter(divisor);
-		BigDecimal dec = this.number.divide(divisor.asType(BigDecimal.class),
-				this.mathContext);
-		return new RoundedMoney(this.currency, dec, this.mathContext,
-				this.rounding)
-				.with(rounding);
 	}
 
 	/*
@@ -445,29 +380,14 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#divide(javax.money.MonetaryAmount)
 	 */
 	public RoundedMoney divide(Number divisor) {
+
 		BigDecimal dec = this.number.divide(getBigDecimal(divisor),
-				this.mathContext);
-		return new RoundedMoney(this.currency, dec, this.mathContext,
+				this.monetaryContext.getAttribute(RoundingMode.class,
+						RoundingMode.HALF_EVEN));
+		return (RoundedMoney) new RoundedMoney(this.currency, dec,
+				this.monetaryContext,
 				this.rounding)
 				.with(rounding);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.MonetaryAmount#divideAndRemainder(javax.money.MonetaryAmount)
-	 */
-	public RoundedMoney[] divideAndRemainder(MonetaryAmount divisor) {
-		checkAmountParameter(divisor);
-		BigDecimal[] dec = this.number.divideAndRemainder(
-				Money.from(divisor).asType(BigDecimal.class), this.mathContext);
-		return new RoundedMoney[] {
-				new RoundedMoney(this.currency, dec[0], this.mathContext,
-						this.rounding),
-				new RoundedMoney(this.currency, dec[1], this.mathContext,
-						this.rounding)
-						.with(rounding) };
 	}
 
 	/*
@@ -478,28 +398,16 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney[] divideAndRemainder(Number divisor) {
 		BigDecimal[] dec = this.number.divideAndRemainder(
-				getBigDecimal(divisor), this.mathContext);
+				getBigDecimal(divisor),
+				this.monetaryContext.getAttribute(MathContext.class,
+						MathContext.DECIMAL64));
 		return new RoundedMoney[] {
-				new RoundedMoney(this.currency, dec[0], this.mathContext,
+				new RoundedMoney(this.currency, dec[0], this.monetaryContext,
 						this.rounding),
-				new RoundedMoney(this.currency, dec[1], this.mathContext,
+				(RoundedMoney) new RoundedMoney(this.currency, dec[1],
+						this.monetaryContext,
 						this.rounding)
 						.with(rounding) };
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.MonetaryAmount#divideToIntegralValue(javax.money.MonetaryAmount
-	 * )
-	 */
-	public RoundedMoney divideToIntegralValue(MonetaryAmount divisor) {
-		checkAmountParameter(divisor);
-		BigDecimal dec = this.number.divideToIntegralValue(
-				Money.from(divisor).asType(BigDecimal.class), this.mathContext);
-		return new RoundedMoney(this.currency, dec, this.mathContext,
-				this.rounding);
 	}
 
 	/*
@@ -509,22 +417,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney divideToIntegralValue(Number divisor) {
 		BigDecimal dec = this.number.divideToIntegralValue(
-				getBigDecimal(divisor), this.mathContext);
-		return new RoundedMoney(this.currency, dec, this.mathContext,
-				this.rounding);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#multiply(javax.money.MonetaryAmount)
-	 */
-	public RoundedMoney multiply(MonetaryAmount multiplicand) {
-		checkAmountParameter(multiplicand);
-		BigDecimal dec = this.number.multiply(
-				Money.from(multiplicand).asNumber(),
-				this.mathContext);
-		return new RoundedMoney(this.currency, dec, this.mathContext,
+				getBigDecimal(divisor),
+				this.monetaryContext.getAttribute(MathContext.class,
+						MathContext.DECIMAL64));
+		return new RoundedMoney(this.currency, dec, this.monetaryContext,
 				this.rounding);
 	}
 
@@ -535,8 +431,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney multiply(Number multiplicand) {
 		BigDecimal dec = this.number.multiply(getBigDecimal(multiplicand),
-				this.mathContext);
-		return new RoundedMoney(this.currency, dec, this.mathContext,
+				this.monetaryContext.getAttribute(MathContext.class,
+						MathContext.DECIMAL64));
+		return (RoundedMoney) new RoundedMoney(this.currency, dec,
+				this.monetaryContext,
 				this.rounding)
 				.with(rounding);
 	}
@@ -548,8 +446,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney negate() {
 		return new RoundedMoney(this.currency,
-				this.number.negate(this.mathContext),
-				this.mathContext, this.rounding);
+				this.number.negate(this.monetaryContext.getAttribute(
+						MathContext.class,
+						MathContext.DECIMAL64)),
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -559,8 +459,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney plus() {
 		return new RoundedMoney(this.currency,
-				this.number.plus(this.mathContext),
-				this.mathContext, this.rounding);
+				this.number.plus(this.monetaryContext.getAttribute(
+						MathContext.class,
+						MathContext.DECIMAL64)),
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -568,14 +470,16 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * 
 	 * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
 	 */
-	public RoundedMoney subtract(RoundedMoney subtrahend) {
+	public RoundedMoney subtract(MonetaryAmount<?> subtrahend) {
 		checkAmountParameter(subtrahend);
 		if (subtrahend.isZero()) {
 			return this;
 		}
 		return new RoundedMoney(this.currency, this.number.subtract(
-				subtrahend.asType(BigDecimal.class), this.mathContext),
-				this.mathContext, this.rounding);
+				subtrahend.getNumber(BigDecimal.class),
+				this.monetaryContext.getAttribute(MathContext.class,
+						MathContext.DECIMAL64)),
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -585,8 +489,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney pow(int n) {
 		return new RoundedMoney(this.currency, this.number.pow(n,
-				this.mathContext),
-				this.mathContext, this.rounding);
+				this.monetaryContext.getAttribute(MathContext.class,
+						MathContext.DECIMAL64)),
+				this.monetaryContext,
+				this.rounding);
 	}
 
 	/*
@@ -596,19 +502,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney ulp() {
 		return new RoundedMoney(this.currency, this.number.ulp(),
-				DEFAULT_MATH_CONTEXT, this.rounding);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#remainder(javax.money.MonetaryAmount)
-	 */
-	public RoundedMoney remainder(MonetaryAmount divisor) {
-		checkAmountParameter(divisor);
-		return new RoundedMoney(this.currency, this.number.remainder(
-				Money.from(divisor).asType(BigDecimal.class), this.mathContext),
-				this.mathContext, this.rounding);
+				DEFAULT_MONETARY_CONTEXT, this.rounding);
 	}
 
 	/*
@@ -618,8 +512,10 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	public RoundedMoney remainder(Number divisor) {
 		return new RoundedMoney(this.currency, this.number.remainder(
-				getBigDecimal(divisor), this.mathContext),
-				this.mathContext, this.rounding);
+				getBigDecimal(divisor),
+				this.monetaryContext.getAttribute(MathContext.class,
+						MathContext.DECIMAL64)),
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -630,7 +526,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	public RoundedMoney scaleByPowerOfTen(int n) {
 		return new RoundedMoney(this.currency,
 				this.number.scaleByPowerOfTen(n),
-				this.mathContext, this.rounding);
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -686,7 +582,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	public RoundedMoney with(Number amount) {
 		checkNumber(amount);
 		return new RoundedMoney(this.currency, getBigDecimal(amount),
-				this.mathContext, this.rounding);
+				this.monetaryContext, this.rounding);
 	}
 
 	/**
@@ -700,7 +596,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	public RoundedMoney with(CurrencyUnit currency) {
 		Objects.requireNonNull(currency, "currency required");
 		return new RoundedMoney(currency, asType(BigDecimal.class),
-				this.mathContext, this.rounding);
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -711,7 +607,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	public RoundedMoney with(CurrencyUnit currency, Number amount) {
 		checkNumber(amount);
 		return new RoundedMoney(currency, getBigDecimal(amount),
-				this.mathContext, this.rounding);
+				this.monetaryContext, this.rounding);
 	}
 
 	/*
@@ -735,34 +631,6 @@ public final class RoundedMoney implements MonetaryAmount,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.MonetaryAmount#longValue()
-	 */
-	public long longValue() {
-		return this.number.longValue();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#longValueExact()
-	 */
-	public long longValueExact() {
-		return this.number.longValueExact();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#doubleValue()
-	 */
-	public double doubleValue() {
-		// TODO round!
-		return this.number.doubleValue();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#signum()
 	 */
 
@@ -773,31 +641,11 @@ public final class RoundedMoney implements MonetaryAmount,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.MonetaryAmount#toEngineeringString()
-	 */
-	public String toEngineeringString() {
-		return this.currency.getCurrencyCode() + ' '
-				+ this.number.toEngineeringString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#toPlainString()
-	 */
-	public String toPlainString() {
-		return this.currency.getCurrencyCode() + ' '
-				+ this.number.toPlainString();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#lessThan(javax.money.MonetaryAmount)
 	 */
-	public boolean isLessThan(RoundedMoney amount) {
+	public boolean isLessThan(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(amount.number) < 0;
+		return number.compareTo(amount.getNumber(BigDecimal.class)) < 0;
 	}
 
 	/*
@@ -806,9 +654,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @see
 	 * javax.money.MonetaryAmount#lessThanOrEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isLessThanOrEqualTo(RoundedMoney amount) {
+	public boolean isLessThanOrEqualTo(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(amount.number) <= 0;
+		return number.compareTo(amount.getNumber(BigDecimal.class)) <= 0;
 	}
 
 	/*
@@ -816,9 +664,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * 
 	 * @see javax.money.MonetaryAmount#greaterThan(javax.money.MonetaryAmount)
 	 */
-	public boolean isGreaterThan(RoundedMoney amount) {
+	public boolean isGreaterThan(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(amount.number) > 0;
+		return number.compareTo(amount.getNumber(BigDecimal.class)) > 0;
 	}
 
 	/*
@@ -828,9 +676,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * javax.money.MonetaryAmount#greaterThanOrEqualTo(javax.money.MonetaryAmount
 	 * ) #see
 	 */
-	public boolean isGreaterThanOrEqualTo(RoundedMoney amount) {
+	public boolean isGreaterThanOrEqualTo(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(amount.number) >= 0;
+		return number.compareTo(amount.getNumber(BigDecimal.class)) >= 0;
 	}
 
 	/*
@@ -838,9 +686,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * 
 	 * @see javax.money.MonetaryAmount#isEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isEqualTo(RoundedMoney amount) {
+	public boolean isEqualTo(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(amount.asType(BigDecimal.class)) == 0;
+		return number.compareTo(amount.getNumber(BigDecimal.class)) == 0;
 	}
 
 	/*
@@ -848,18 +696,9 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * 
 	 * @see javax.money.MonetaryAmount#isNotEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isNotEqualTo(RoundedMoney amount) {
+	public boolean isNotEqualTo(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
-		return number.compareTo(amount.number) != 0;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#getNumberType()
-	 */
-	public Class<?> getNumberType() {
-		return BigDecimal.class;
+		return number.compareTo(amount.getNumber(BigDecimal.class)) != 0;
 	}
 
 	/*
@@ -868,8 +707,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
 	 */
 	@Override
-	public RoundedMoney with(MonetaryAdjuster operation) {
-		return RoundedMoney.from(operation.adjustInto(this));
+	public RoundedMoney with(MonetaryOperator operation) {
+		return RoundedMoney.from(operation.apply(this));
 	}
 
 	public static RoundedMoney from(MonetaryAmount amt) {
@@ -878,15 +717,17 @@ public final class RoundedMoney implements MonetaryAmount,
 		}
 		if (amt.getClass() == FastMoney.class) {
 			return RoundedMoney.of(amt.getCurrency(),
-					((FastMoney) amt).asNumber(),
-					DEFAULT_MATH_CONTEXT);
+					((FastMoney) amt).getNumber(),
+					DEFAULT_MONETARY_CONTEXT);
 		}
 		else if (amt.getClass() == Money.class) {
-			return RoundedMoney.of(amt.getCurrency(), ((Money) amt).asNumber(),
-					DEFAULT_MATH_CONTEXT);
+			return RoundedMoney.of(amt.getCurrency(),
+					amt.getNumber(BigDecimal.class),
+					DEFAULT_MONETARY_CONTEXT);
 		}
-		return RoundedMoney.of(amt.getCurrency(), Money.asNumber(amt),
-				DEFAULT_MATH_CONTEXT);
+		return RoundedMoney.of(amt.getCurrency(),
+				amt.getNumber(BigDecimal.class),
+				DEFAULT_MONETARY_CONTEXT);
 	}
 
 	/*
@@ -942,21 +783,21 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#asType(java.lang.Class,
 	 * javax.money.Rounding)
 	 */
-	public <T> T asType(Class<T> type, MonetaryAdjuster adjuster) {
-		RoundedMoney amount = (RoundedMoney) adjuster.adjustInto(this);
+	public <T> T asType(Class<T> type, MonetaryOperator adjuster) {
+		RoundedMoney amount = (RoundedMoney) adjuster.apply(this);
 		return amount.asType(type);
 	}
 
 	private void writeObject(ObjectOutputStream oos) throws IOException {
 		oos.writeObject(this.number);
-		oos.writeObject(this.mathContext);
+		oos.writeObject(this.monetaryContext);
 		oos.writeObject(this.currency);
 	}
 
 	private void readObject(ObjectInputStream ois) throws IOException,
 			ClassNotFoundException {
 		this.number = (BigDecimal) ois.readObject();
-		this.mathContext = (MathContext) ois.readObject();
+		this.monetaryContext = (MonetaryContext) ois.readObject();
 		this.currency = (CurrencyUnit) ois.readObject();
 	}
 
@@ -965,8 +806,8 @@ public final class RoundedMoney implements MonetaryAmount,
 		if (this.number == null) {
 			this.number = BigDecimal.ZERO;
 		}
-		if (this.mathContext == null) {
-			this.mathContext = DEFAULT_MATH_CONTEXT;
+		if (this.monetaryContext == null) {
+			this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
 		}
 		if (this.currency == null) {
 			this.currency = MoneyCurrency.of(
@@ -1027,7 +868,8 @@ public final class RoundedMoney implements MonetaryAmount,
 		Objects.requireNonNull(o);
 		int compare = -1;
 		if (this.currency.equals(o.getCurrency())) {
-			compare = asNumberStripped().compareTo(RoundedMoney.from(o).asNumberStripped());
+			compare = asNumberStripped().compareTo(
+					RoundedMoney.from(o).asNumberStripped());
 		} else {
 			compare = this.currency.getCurrencyCode().compareTo(
 					o.getCurrency().getCurrencyCode());
@@ -1035,82 +877,82 @@ public final class RoundedMoney implements MonetaryAmount,
 		return compare;
 	}
 
-	/**
-	 * Platform RI: This is an inner checker class for aspects of
-	 * {@link MonetaryAmount}. It may be used by multiple implementations
-	 * (inside the same package) to avoid code duplication.
-	 * 
-	 * This class is for internal use only.
-	 * 
-	 * @author Werner Keil
-	 */
-	static final class Checker {
-		private Checker() {
-		}
+	// /**
+	// * Platform RI: This is an inner checker class for aspects of
+	// * {@link MonetaryAmount}. It may be used by multiple implementations
+	// * (inside the same package) to avoid code duplication.
+	// *
+	// * This class is for internal use only.
+	// *
+	// * @author Werner Keil
+	// */
+	// static final class Checker {
+	// private Checker() {
+	// }
+	//
+	// /**
+	// * Internal method to check for correct number parameter.
+	// *
+	// * @param number
+	// * @throws IllegalArgumentException
+	// * If the number is null
+	// */
+	// static final void checkNumber(Number number) {
+	// Objects.requireNonNull(number, "Number is required.");
+	// }
+	//
+	// /**
+	// * Method to check if a currency is compatible with this amount
+	// * instance.
+	// *
+	// * @param amount
+	// * The monetary amount to be compared to, never null.
+	// * @throws IllegalArgumentException
+	// * If the amount is null, or the amount's currency is not
+	// * compatible (same {@link CurrencyUnit#getNamespace()} and
+	// * same {@link CurrencyUnit#getCurrencyCode()}).
+	// */
+	// static final void checkAmountParameter(CurrencyUnit currency,
+	// MonetaryAmount amount) {
+	// Objects.requireNonNull(amount, "Amount must not be null.");
+	// final CurrencyUnit amountCurrency = amount.getCurrency();
+	// if (!(currency.getCurrencyCode().equals(amountCurrency
+	// .getCurrencyCode()))) {
+	// throw new CurrencyMismatchException(currency, amountCurrency);
+	// }
+	// }
+	// }
+	//
+	// @Override
+	// public long getAmountWhole() {
+	// return this.number.longValue();
+	// }
+	//
+	// @Override
+	// public long getAmountFractionNumerator() {
+	// MoneyCurrency mc = MoneyCurrency.from(currency);
+	// if (mc.getDefaultFractionDigits() >= 0) {
+	// BigDecimal bd = this.number.remainder(BigDecimal.ONE);
+	// return bd.movePointRight(mc.getDefaultFractionDigits()).longValue();
+	// }
+	// return 0L;
+	// }
+	//
+	// @Override
+	// public long getAmountFractionDenominator() {
+	// MoneyCurrency mc = MoneyCurrency.from(currency);
+	// if (mc.getDefaultFractionDigits() >= 0) {
+	// return BigDecimal.valueOf(10)
+	// .pow(mc.getDefaultFractionDigits())
+	// .longValue();
+	// }
+	// return 1L;
+	// }
 
-		/**
-		 * Internal method to check for correct number parameter.
-		 * 
-		 * @param number
-		 * @throws IllegalArgumentException
-		 *             If the number is null
-		 */
-		static final void checkNumber(Number number) {
-			Objects.requireNonNull(number, "Number is required.");
-		}
-
-		/**
-		 * Method to check if a currency is compatible with this amount
-		 * instance.
-		 * 
-		 * @param amount
-		 *            The monetary amount to be compared to, never null.
-		 * @throws IllegalArgumentException
-		 *             If the amount is null, or the amount's currency is not
-		 *             compatible (same {@link CurrencyUnit#getNamespace()} and
-		 *             same {@link CurrencyUnit#getCurrencyCode()}).
-		 */
-		static final void checkAmountParameter(CurrencyUnit currency,
-				MonetaryAmount amount) {
-			Objects.requireNonNull(amount, "Amount must not be null.");
-			final CurrencyUnit amountCurrency = amount.getCurrency();
-			if (!(currency.getCurrencyCode().equals(amountCurrency
-					.getCurrencyCode()))) {
-				throw new CurrencyMismatchException(currency, amountCurrency);
-			}
-		}
-	}
-
-	@Override
-	public long getAmountWhole() {
-		return this.number.longValue();
-	}
-
-	@Override
-	public long getAmountFractionNumerator() {
-		MoneyCurrency mc = MoneyCurrency.from(currency);
-		if (mc.getDefaultFractionDigits() >= 0) {
-			BigDecimal bd = this.number.remainder(BigDecimal.ONE);
-			return bd.movePointRight(mc.getDefaultFractionDigits()).longValue();
-		}
-		return 0L;
-	}
-
-	@Override
-	public long getAmountFractionDenominator() {
-		MoneyCurrency mc = MoneyCurrency.from(currency);
-		if (mc.getDefaultFractionDigits() >= 0) {
-			return BigDecimal.valueOf(10)
-					.pow(mc.getDefaultFractionDigits())
-					.longValue();
-		}
-		return 1L;
-	}
-
-	public Number asNumber() {
+	public BigDecimal getNumber() {
 		return this.number;
 	}
-	
+
 	/**
 	 * Method that returns BigDecimal.ZERO, if {@link #isZero()}, and #number
 	 * {@link #stripTrailingZeros()} in all other cases.
@@ -1124,27 +966,6 @@ public final class RoundedMoney implements MonetaryAmount,
 		return this.number.stripTrailingZeros();
 	}
 
-
-	/**
-	 * Method to check if a currency is compatible with this amount instance.
-	 * 
-	 * @param amount
-	 *            The monetary amount to be compared to, never null.
-	 * @throws IllegalArgumentException
-	 *             If the amount is null, or the amount's currency is not
-	 *             compatible (same {@link CurrencyUnit#getNamespace()} and same
-	 *             {@link CurrencyUnit#getCurrencyCode()}).
-	 */
-	private void checkAmountParameter(MonetaryAmount amount) {
-		Objects.requireNonNull(amount, "Amount must not be null.");
-		final CurrencyUnit amountCurrency = amount.getCurrency();
-		if (!(this.currency
-				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
-			throw new IllegalArgumentException("Currency mismatch: "
-					+ this.currency + '/' + amountCurrency);
-		}
-	}
-
 	/**
 	 * Internal method to check for correct number parameter.
 	 * 
@@ -1154,5 +975,161 @@ public final class RoundedMoney implements MonetaryAmount,
 	 */
 	private void checkNumber(Number number) {
 		Objects.requireNonNull(number, "Number is required.");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Number> T getNumber(Class<T> type) {
+		if (BigDecimal.class.equals(type)) {
+			return (T) this.number;
+		}
+		if (Number.class.equals(type)) {
+			final T asType = (T) this.number;
+			return asType;
+		}
+		if (Double.class.equals(type)) {
+			return (T) Double.valueOf(this.number.doubleValue());
+		}
+		if (Float.class.equals(type)) {
+			return (T) Float.valueOf(this.number.floatValue());
+		}
+		if (Long.class.equals(type)) {
+			return (T) Long.valueOf(this.number.longValue());
+		}
+		if (Integer.class.equals(type)) {
+			return (T) Integer.valueOf(this.number.intValue());
+		}
+		if (Short.class.equals(type)) {
+			return (T) Short.valueOf(this.number.shortValue());
+		}
+		if (Byte.class.equals(type)) {
+			return (T) Byte.valueOf(this.number.byteValue());
+		}
+		if (BigInteger.class.equals(type)) {
+			return (T) this.number.toBigInteger();
+		}
+		throw new IllegalArgumentException("Unsupported representation type: "
+				+ type);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Number> T getNumberExact(Class<T> type) {
+		if (BigDecimal.class.equals(type)) {
+			return (T) this.number;
+		}
+		if (Number.class.equals(type)) {
+			return (T) this.number;
+		}
+		if (Double.class.equals(type)) {
+			Double d = Double.valueOf(this.number.doubleValue());
+			if (d.equals(Double.NEGATIVE_INFINITY)
+					|| d.equals(Double.NEGATIVE_INFINITY)) {
+				throw new ArithmeticException(this.number
+						+ " is out of range for double.");
+			}
+			return (T) d;
+		}
+		if (Float.class.equals(type)) {
+			Float f = Float.valueOf(this.number.floatValue());
+			if (f.equals(Float.NEGATIVE_INFINITY)
+					|| f.equals(Float.NEGATIVE_INFINITY)) {
+				throw new ArithmeticException(this.number
+						+ " is out of range for float.");
+			}
+			return (T) f;
+		}
+		if (Long.class.equals(type)) {
+			return (T) Long.valueOf(this.number.longValueExact());
+		}
+		if (Integer.class.equals(type)) {
+			return (T) Integer.valueOf(this.number.intValueExact());
+		}
+		if (Short.class.equals(type)) {
+			return (T) Short.valueOf(this.number.shortValueExact());
+		}
+		if (Byte.class.equals(type)) {
+			return (T) Byte.valueOf(this.number.byteValueExact());
+		}
+		if (BigInteger.class.equals(type)) {
+			return (T) this.number.toBigInteger();
+		}
+		throw new IllegalArgumentException("Unsupported representation type: "
+				+ type);
+	}
+
+	@Override
+	public RoundedMoney with(CurrencyUnit unit, long amount) {
+		return RoundedMoney.of(unit, getBigDecimal(amount),
+				this.monetaryContext);
+	}
+
+	@Override
+	public RoundedMoney with(CurrencyUnit unit, double amount) {
+		return RoundedMoney.of(unit, getBigDecimal(amount),
+				this.monetaryContext);
+	}
+
+	@Override
+	public RoundedMoney multiply(long amount) {
+		return multiply(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney multiply(double amount) {
+		return multiply(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney divide(long amount) {
+		return divide(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney divide(double amount) {
+		return divide(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney remainder(long amount) {
+		return remainder(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney remainder(double amount) {
+		return remainder(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney[] divideAndRemainder(long amount) {
+		return divideAndRemainder(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney[] divideAndRemainder(double amount) {
+		return divideAndRemainder(getBigDecimal(amount));
+	}
+
+	@Override
+	public RoundedMoney stripTrailingZeros() {
+		if (isZero()) {
+			return ofZero(getCurrency());
+		}
+		return of(getCurrency(), this.number.stripTrailingZeros());
+	}
+
+	@Override
+	public MonetaryAmount<BigDecimal> divideToIntegralValue(long divisor) {
+		return divideToIntegralValue(getBigDecimal(divisor));
+	}
+
+	@Override
+	public MonetaryAmount<BigDecimal> divideToIntegralValue(double divisor) {
+		return divideToIntegralValue(getBigDecimal(divisor));
+	}
+
+	@Override
+	protected MonetaryContext getDefaultMonetaryContext() {
+		return DEFAULT_MONETARY_CONTEXT;
 	}
 }
