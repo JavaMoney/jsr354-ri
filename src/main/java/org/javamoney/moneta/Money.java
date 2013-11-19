@@ -267,6 +267,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 *            The target currency, not null.
 	 * @param number
 	 *            The numeric part, not null.
+     * @param mathContext
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(CurrencyUnit currency, Number number,
@@ -277,7 +278,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	/**
 	 * Static factory method for creating a new instance of {@link Money}.
 	 * 
-	 * @param isoCurrencyCode
+	 * @param currencyCode
 	 *            The target currency as ISO currency code.
 	 * @param number
 	 *            The numeric part, not null.
@@ -290,10 +291,11 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	/**
 	 * Static factory method for creating a new instance of {@link Money}.
 	 * 
-	 * @param isoCurrencyCode
+	 * @param currencyCode
 	 *            The target currency as ISO currency code.
 	 * @param number
 	 *            The numeric part, not null.
+     * @param mathContext
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, Number number,
@@ -371,6 +373,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	/*
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+    @Override
 	public int compareTo(MonetaryAmount o) {
 		Objects.requireNonNull(o);
 		int compare = -1;
@@ -388,6 +391,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * 
 	 * @see javax.money.MonetaryAmount#getCurrency()
 	 */
+    @Override
 	public CurrencyUnit getCurrency() {
 		return currency;
 	}
@@ -769,6 +773,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 * 
 	 * @param currency
 	 *            the currency unit to be replaced, not {@code null}
+     * @param amount
 	 * @return the new amount with the same numeric value and
 	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
 	 */
