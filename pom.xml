@@ -14,14 +14,19 @@
 	<groupId>org.javamoney.ri</groupId>
 	<artifactId>jsr354-ri</artifactId>
 	<packaging>jar</packaging>
-
-	<version>0.7</version>
+	<version>0.8-SNAPSHOT</version>
 
 	<name>JSR 354 RI (Moneta)</name>
 	<url>http://java.net/projects/javamoney</url>
 	<inceptionYear>2012</inceptionYear>
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
 	This module impelements JSR 354.</description>
+
+	<parent>
+		<groupId>org.javamoney</groupId>
+		<artifactId>javamoney-parent</artifactId>
+		<version>0.4-SNAPSHOT</version>
+	</parent>
 
 	<organization>
 		<name>JavaMoney</name>
@@ -37,7 +42,7 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>0.7</jsr.version>
+		<jsr.version>${project.version}</jsr.version>
 		<jdkVersion>1.7</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
@@ -90,7 +95,7 @@
 			<id>vgrazi</id>
 			<name>Victor Grazi</name>
 			<roles>
-				<role>Expert Group Member</role>
+				<role>Expert Group Member (Emeritus)</role>
 			</roles>
 		</developer>
 		<developer>
@@ -358,7 +363,7 @@
 		<dependency>
 			<groupId>javax.money</groupId>
 			<artifactId>jsr354-api</artifactId>
-			<version>${project.version}</version>
+			<version>${jsr.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -800,5 +805,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
 </project>
