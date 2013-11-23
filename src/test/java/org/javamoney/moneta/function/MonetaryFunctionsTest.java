@@ -19,9 +19,6 @@
 package org.javamoney.moneta.function;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.awt.DisplayMode;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Locale;
@@ -128,7 +125,7 @@ public class MonetaryFunctionsTest {
 	@Test
 	public void testPercentToString() {
 		MonetaryAdjuster p = MonetaryFunctions.percent((short)25);
-		assertEquals("25 %", p.toString());
+		assertEquals("25%", p.toString());
 	}
 
 	/**

@@ -18,7 +18,6 @@ package org.javamoney.moneta.function;
 import static java.text.NumberFormat.getPercentInstance;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Locale;
 
 import javax.money.MonetaryAdjuster;
