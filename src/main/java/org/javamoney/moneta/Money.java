@@ -1012,19 +1012,19 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 		this.mathContext = (MathContext) ois.readObject();
 	}
 
-	private void readObjectNoData()
-			throws ObjectStreamException {
-		if (this.number == null) {
-			this.number = BigDecimal.ZERO;
-		}
-		if (this.currency == null) {
-			this.currency = MoneyCurrency.of(
-					"XXX"); // no currency
-		}
-		if (this.mathContext == null) {
-			this.mathContext = DEFAULT_MATH_CONTEXT;
-		}
-	}
+//	private void readObjectNoData()
+//			throws ObjectStreamException {
+//		if (this.number == null) {
+//			this.number = BigDecimal.ZERO;
+//		}
+//		if (this.currency == null) {
+//			this.currency = MoneyCurrency.of(
+//					"XXX"); // no currency
+//		}
+//		if (this.mathContext == null) {
+//			this.mathContext = DEFAULT_MATH_CONTEXT;
+//		}
+//	}
 
 	/*
 	 * (non-Javadoc)
