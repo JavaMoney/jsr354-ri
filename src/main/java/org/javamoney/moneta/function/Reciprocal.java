@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
 
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
@@ -30,7 +30,7 @@ import org.javamoney.moneta.Money;
  * 
  * @author Anatole Tresch
  */
-final class Reciprocal<T extends MonetaryAmount> implements MonetaryAdjuster {
+final class Reciprocal<T extends MonetaryAmount> implements MonetaryOperator {
 
 	/**
 	 * Access the shared instance of {@link Reciprocal} for use.
@@ -52,7 +52,7 @@ final class Reciprocal<T extends MonetaryAmount> implements MonetaryAdjuster {
 	 *             if the arithmetic operation failed
 	 */
 	@Override
-	public MonetaryAmount adjustInto(MonetaryAmount amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
 		return Money.of(amount.getCurrency(), BigDecimal.ONE.divide(
 				Money.from(amount).asType(BigDecimal.class),

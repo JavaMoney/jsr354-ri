@@ -20,7 +20,7 @@ import static java.text.NumberFormat.getPercentInstance;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
@@ -34,7 +34,7 @@ import org.javamoney.moneta.Money;
  * 
  * @see <a href="http://en.wikipedia.org/wiki/Percent">Wikipedia: Percentage</a>
  */
-final class Percent<T extends MonetaryAmount> implements MonetaryAdjuster {
+final class Percent<T extends MonetaryAmount> implements MonetaryOperator {
 
 	private static final BigDecimal ONE_HUNDRED = new BigDecimal(100,
 			Money.DEFAULT_MATH_CONTEXT);
@@ -62,7 +62,7 @@ final class Percent<T extends MonetaryAmount> implements MonetaryAdjuster {
 	 * @return the percent result of the amount, never {@code null}
 	 */
 	@Override
-	public MonetaryAmount adjustInto(MonetaryAmount amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		return Money.from(amount).multiply(
 				percentValue);
 	}

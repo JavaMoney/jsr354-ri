@@ -17,26 +17,26 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 
 public final class AmountStyle {
 
 	private static final char[] EMPTY_CHAR_ARRAY = new char[0];
 	private static final int[] EMPTY_INT_ARRAY = new int[0];
 	private DecimalFormat format;
-	private MonetaryAdjuster rounding;
+	private MonetaryOperator rounding;
 	private int[] groupSizes;
 	private char[] groupChars;
 	
 	private AmountStyle(DecimalFormat format, int[] groupSizes,
-			char[] groupChars, MonetaryAdjuster rounding) {
+			char[] groupChars, MonetaryOperator rounding) {
 		this.groupSizes = groupSizes;
 		this.groupChars = groupChars;
 		this.rounding = rounding;
 		this.format = format;
 	}
 
-	public MonetaryAdjuster getMoneyRounding() {
+	public MonetaryOperator getMoneyRounding() {
 		return this.rounding;
 	}
 
@@ -117,7 +117,7 @@ public final class AmountStyle {
 	public static final class Builder {
 
 		private DecimalFormat format;
-		private MonetaryAdjuster rounding;
+		private MonetaryOperator rounding;
 		private int[] groupSizes;
 		private char[] groupChars;
 		
@@ -129,7 +129,7 @@ public final class AmountStyle {
 			this.format = (DecimalFormat) DecimalFormat.getInstance(locale);
 		}
 		
-		public Builder withRounding(MonetaryAdjuster rounding) {
+		public Builder withRounding(MonetaryOperator rounding) {
 			this.rounding = rounding;
 			return this;
 		}

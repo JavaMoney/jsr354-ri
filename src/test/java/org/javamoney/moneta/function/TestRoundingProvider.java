@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
@@ -40,31 +40,31 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 		customIds.add("CHF-cash");
 	}
 
-	private MonetaryAdjuster zeroRounding = new MonetaryAdjuster() {
+	private MonetaryOperator zeroRounding = new MonetaryOperator() {
 
 		@Override
-		public MonetaryAmount adjustInto(MonetaryAmount amount) {
+		public MonetaryAmount apply(MonetaryAmount amount) {
 			return Money.ofZero(amount.getCurrency());
 		}
 
 	};
 
-	private MonetaryAdjuster minusOneRounding = new MonetaryAdjuster() {
+	private MonetaryOperator minusOneRounding = new MonetaryOperator() {
 
 		@Override
-		public MonetaryAmount adjustInto(MonetaryAmount amount) {
+		public MonetaryAmount apply(MonetaryAmount amount) {
 			return Money.of(amount.getCurrency(), -1);
 		}
 
 	};
 
-	private MonetaryAdjuster chfCashRounding = new MonetaryAdjuster() {
+	private MonetaryOperator chfCashRounding = new MonetaryOperator() {
 
-		private MonetaryAdjuster minorRounding = MonetaryRoundings.getRounding(
+		private MonetaryOperator minorRounding = MonetaryRoundings.getRounding(
 				2, RoundingMode.HALF_UP);
 
 		@Override
-		public MonetaryAmount adjustInto(MonetaryAmount amount) {
+		public MonetaryAmount apply(MonetaryAmount amount) {
 			MonetaryAmount amt = amount.with(minorRounding);
 			Money mp = Money.from(amt.with(MonetaryFunctions.minorPart()));
 			BigDecimal delta = null;
@@ -82,7 +82,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	};
 
 	@Override
-	public MonetaryAdjuster getRounding(CurrencyUnit currency) {
+	public MonetaryOperator getRounding(CurrencyUnit currency) {
 		if (currency.getCurrencyCode().equals("XXX")) {
 			return zeroRounding;
 		}
@@ -90,7 +90,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	@Override
-	public MonetaryAdjuster getRounding(CurrencyUnit currency, long timestamp) {
+	public MonetaryOperator getRounding(CurrencyUnit currency, long timestamp) {
 		if (currency.getCurrencyCode().equals("XXX")) {
 			if (timestamp > System.currentTimeMillis()) {
 				return minusOneRounding;
@@ -101,7 +101,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	@Override
-	public MonetaryAdjuster getCashRounding(CurrencyUnit currency) {
+	public MonetaryOperator getCashRounding(CurrencyUnit currency) {
 		if (currency.getCurrencyCode().equals("CHF")) {
 			return chfCashRounding;
 		}
@@ -112,7 +112,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	@Override
-	public MonetaryAdjuster getCashRounding(CurrencyUnit currency,
+	public MonetaryOperator getCashRounding(CurrencyUnit currency,
 			long timestamp) {
 		if (currency.getCurrencyCode().equals("CHF")) {
 			if (timestamp > System.currentTimeMillis()) {
@@ -124,7 +124,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	@Override
-	public MonetaryAdjuster getCustomRounding(String customRoundingId) {
+	public MonetaryOperator getCustomRounding(String customRoundingId) {
 		if ("CHF-cash".equals(customRoundingId)) {
 			return chfCashRounding;
 		}

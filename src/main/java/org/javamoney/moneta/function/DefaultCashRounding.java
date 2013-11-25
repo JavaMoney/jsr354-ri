@@ -20,13 +20,13 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.MoneyCurrency;
 
 /**
- * Implementation class providing cash rounding {@link MonetaryAdjuster}
+ * Implementation class providing cash rounding {@link MonetaryOperator}
  * instances for {@link CurrencyUnit} instances. modeling rounding based on
  * {@link CurrencyUnit#getCashRounding()}.
  * <p>
@@ -35,7 +35,7 @@ import org.javamoney.moneta.MoneyCurrency;
  * @author Anatole Tresch
  */
 final class DefaultCashRounding implements
-		MonetaryAdjuster {
+		MonetaryOperator {
 
 	/** The {@link RoundingMode} used. */
 	private final RoundingMode roundingMode;
@@ -67,7 +67,7 @@ final class DefaultCashRounding implements
 	 *            The currency, which determines the required precision. As
 	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
 	 *            is sued.
-	 * @return a new instance {@link MonetaryAdjuster} implementing the
+	 * @return a new instance {@link MonetaryOperator} implementing the
 	 *         rounding.
 	 */
 	DefaultCashRounding(CurrencyUnit currency,
@@ -77,14 +77,14 @@ final class DefaultCashRounding implements
 	}
 
 	/**
-	 * Creates an {@link MonetaryAdjuster} for rounding {@link MonetaryAmount}
+	 * Creates an {@link MonetaryOperator} for rounding {@link MonetaryAmount}
 	 * instances given a currency.
 	 * 
 	 * @param currency
 	 *            The currency, which determines the required precision. As
 	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
 	 *            is sued.
-	 * @return a new instance {@link MonetaryAdjuster} implementing the
+	 * @return a new instance {@link MonetaryOperator} implementing the
 	 *         rounding.
 	 */
 	DefaultCashRounding(CurrencyUnit currency) {
@@ -98,7 +98,7 @@ final class DefaultCashRounding implements
 	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
 	 */
 	@Override
-	public MonetaryAmount adjustInto(MonetaryAmount value) {
+	public MonetaryAmount apply(MonetaryAmount value) {
 		Objects.requireNonNull(value, "Amunt required.");
 		throw new UnsupportedOperationException(
 				"Cash Rounding not yet implemented.");

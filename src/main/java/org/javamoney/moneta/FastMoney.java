@@ -25,7 +25,7 @@ import java.math.MathContext;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
 
@@ -893,8 +893,8 @@ public final class FastMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
 	 */
 	@Override
-	public FastMoney with(MonetaryAdjuster adjuster) {
-		return (FastMoney) adjuster.adjustInto(this);
+	public FastMoney with(MonetaryOperator adjuster) {
+		return (FastMoney) adjuster.apply(this);
 	}
 
 	@Override

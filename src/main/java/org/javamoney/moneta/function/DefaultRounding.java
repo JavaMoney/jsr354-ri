@@ -21,14 +21,14 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.MoneyCurrency;
 
 /**
- * Implementation class providing rounding {@link MonetaryAdjuster} instances
+ * Implementation class providing rounding {@link MonetaryOperator} instances
  * for {@link CurrencyUnit} instances. modeling rounding based on standard JDK
  * math, a scale and {@link RoundingMode}.
  * <p>
@@ -38,7 +38,7 @@ import org.javamoney.moneta.MoneyCurrency;
  * @author Werner Keil
  * @see RoundingMode
  */
-final class DefaultRounding implements MonetaryAdjuster {
+final class DefaultRounding implements MonetaryOperator {
 
 	/** The {@link RoundingMode} used. */
 	private final RoundingMode roundingMode;
@@ -68,7 +68,7 @@ final class DefaultRounding implements MonetaryAdjuster {
 	 *            The currency, which determines the required precision. As
 	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
 	 *            is sued.
-	 * @return a new instance {@link MonetaryAdjuster} implementing the
+	 * @return a new instance {@link MonetaryOperator} implementing the
 	 *         rounding.
 	 */
 	DefaultRounding(CurrencyUnit currency,
@@ -78,14 +78,14 @@ final class DefaultRounding implements MonetaryAdjuster {
 	}
 
 	/**
-	 * Creates an {@link MonetaryAdjuster} for rounding {@link MonetaryAmount}
+	 * Creates an {@link MonetaryOperator} for rounding {@link MonetaryAmount}
 	 * instances given a currency.
 	 * 
 	 * @param currency
 	 *            The currency, which determines the required precision. As
 	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
 	 *            is sued.
-	 * @return a new instance {@link MonetaryAdjuster} implementing the
+	 * @return a new instance {@link MonetaryOperator} implementing the
 	 *         rounding.
 	 */
 	DefaultRounding(CurrencyUnit currency) {
@@ -99,7 +99,7 @@ final class DefaultRounding implements MonetaryAdjuster {
 	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
 	 */
 	@Override
-	public MonetaryAmount adjustInto(MonetaryAmount amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		return Money.of(amount.getCurrency(), Money.from(amount).asType(BigDecimal.class).setScale(
 				this.scale,
 				this.roundingMode));

@@ -20,7 +20,7 @@ import java.math.MathContext;
 import java.text.NumberFormat;
 import java.util.Objects;
 
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
@@ -34,7 +34,7 @@ import org.javamoney.moneta.Money;
  * 
  * @see <a href="http://en.wikipedia.org/wiki/Per_mil">Wikipedia: Per mil</a>
  */
-final class Permil<T extends MonetaryAmount> implements MonetaryAdjuster {
+final class Permil<T extends MonetaryAmount> implements MonetaryOperator {
 
 	private static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
 
@@ -75,7 +75,7 @@ final class Permil<T extends MonetaryAmount> implements MonetaryAdjuster {
 	 * @return the permil result of the amount, never {@code null}
 	 */
 	@Override
-	public MonetaryAmount adjustInto(MonetaryAmount amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		return Money.from(amount).multiply(
 				permilValue);
 	}

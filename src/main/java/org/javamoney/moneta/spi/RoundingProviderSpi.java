@@ -16,7 +16,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 /**
@@ -43,7 +43,7 @@ public interface RoundingProviderSpi {
 	/**
 	 * Access the current valid rounding for the given {@link CurrencyUnit}.
 	 * <p>
-	 * Instances of {@link MonetaryAdjuster} returned, must be thread safe and
+	 * Instances of {@link MonetaryOperator} returned, must be thread safe and
 	 * immutable.
 	 * 
 	 * @param currency
@@ -51,13 +51,13 @@ public interface RoundingProviderSpi {
 	 *            not {@code null}.
 	 * @return the corresponding rounding instance, or {@code null}.
 	 */
-	MonetaryAdjuster getRounding(CurrencyUnit currency);
+	MonetaryOperator getRounding(CurrencyUnit currency);
 
 	/**
 	 * Access the rounding for the given {@link CurrencyUnit}, that was valid at
 	 * the given timestamp.
 	 * <p>
-	 * Instances of {@link MonetaryAdjuster} returned, must be thread safe and
+	 * Instances of {@link MonetaryOperator} returned, must be thread safe and
 	 * immutable.
 	 * 
 	 * @param currency
@@ -67,12 +67,12 @@ public interface RoundingProviderSpi {
 	 *            the target UTC timestamp, when the rounding should be valid.
 	 * @return the corresponding rounding instance, or {@code null}.
 	 */
-	MonetaryAdjuster getRounding(CurrencyUnit currency, long timestamp);
+	MonetaryOperator getRounding(CurrencyUnit currency, long timestamp);
 
 	/**
 	 * Access the current valid rounding for the given {@link CurrencyUnit}.
 	 * <p>
-	 * Instances of {@link MonetaryAdjuster} returned, must be thread safe and
+	 * Instances of {@link MonetaryOperator} returned, must be thread safe and
 	 * immutable.
 	 * 
 	 * @param currency
@@ -80,13 +80,13 @@ public interface RoundingProviderSpi {
 	 *            not {@code null}.
 	 * @return the corresponding rounding instance, or {@code null}.
 	 */
-	MonetaryAdjuster getCashRounding(CurrencyUnit currency);
+	MonetaryOperator getCashRounding(CurrencyUnit currency);
 
 	/**
 	 * Access the cash rounding for the given {@link CurrencyUnit}, that was
 	 * valid at the given timestamp.
 	 * <p>
-	 * Instances of {@link MonetaryAdjuster} returned, must be thread safe and
+	 * Instances of {@link MonetaryOperator} returned, must be thread safe and
 	 * immutable.
 	 * 
 	 * @param currency
@@ -96,18 +96,18 @@ public interface RoundingProviderSpi {
 	 *            the target UTC timestamp, when the rounding should be valid.
 	 * @return the corresponding rounding instance, or {@code null}.
 	 */
-	MonetaryAdjuster getCashRounding(CurrencyUnit currency, long timestamp);
+	MonetaryOperator getCashRounding(CurrencyUnit currency, long timestamp);
 
 	/**
-	 * Access an {@link MonetaryAdjuster} for custom rounding
+	 * Access an {@link MonetaryOperator} for custom rounding
 	 * {@link MonetaryAmount} instances.
 	 * 
 	 * @param customRounding
 	 *            The customRounding identifier.
-	 * @return the corresponding {@link MonetaryAdjuster} implementing the
+	 * @return the corresponding {@link MonetaryOperator} implementing the
 	 *         rounding, or {@code null}.
 	 */
-	MonetaryAdjuster getCustomRounding(String customRoundingId);
+	MonetaryOperator getCustomRounding(String customRoundingId);
 
 	/**
 	 * Access the ids of the custom roundigs defined by this provider.

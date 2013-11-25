@@ -34,7 +34,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
 
@@ -1069,8 +1069,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	}
 
 	@Override
-	public Money with(MonetaryAdjuster adjuster) {
-		MonetaryAmount amt = adjuster.adjustInto(this);
+	public Money with(MonetaryOperator adjuster) {
+		MonetaryAmount amt = adjuster.apply(this);
 		return Money.from(amt);
 	}
 

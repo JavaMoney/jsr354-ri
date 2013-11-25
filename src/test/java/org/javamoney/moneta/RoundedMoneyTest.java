@@ -38,7 +38,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
 
@@ -1477,14 +1477,14 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#with(javax.money.MonetaryAdjuster)}
+	 * {@link org.javamoney.moneta.RoundedMoney#with(javax.money.MonetaryOperator)}
 	 * .
 	 */
 	@Test
-	public void testWithMonetaryAdjuster() {
-		MonetaryAdjuster adj = new MonetaryAdjuster() {
+	public void testWithMonetaryOperator() {
+		MonetaryOperator adj = new MonetaryOperator() {
 			@Override
-			public MonetaryAmount adjustInto(MonetaryAmount amount) {
+			public MonetaryAmount apply(MonetaryAmount amount) {
 				return RoundedMoney.of(amount.getCurrency(), -100);
 			}
 		};
@@ -1494,9 +1494,9 @@ public class RoundedMoneyTest {
 		assertNotSame(m, a);
 		assertEquals(m.getCurrency(), a.getCurrency());
 		assertEquals(RoundedMoney.of(m.getCurrency(), -100), a);
-		adj = new MonetaryAdjuster() {
+		adj = new MonetaryOperator() {
 			@Override
-			public MonetaryAmount adjustInto(MonetaryAmount amount) {
+			public MonetaryAmount apply(MonetaryAmount amount) {
 				return RoundedMoney.from(amount).multiply(2)
 						.with(MoneyCurrency.of("CHF"));
 			}

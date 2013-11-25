@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Locale;
 
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 
 import org.javamoney.moneta.Money;
 import org.junit.Test;
@@ -124,7 +124,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test
 	public void testPercentToString() {
-		MonetaryAdjuster p = MonetaryFunctions.percent((short)25);
+		MonetaryOperator p = MonetaryFunctions.percent((short)25);
 		assertEquals("25%", p.toString());
 	}
 
@@ -135,7 +135,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test
 	public void testPercentGetDisplayName() {
-		MonetaryAdjuster p = MonetaryFunctions.percent((byte)25);
+		MonetaryOperator p = MonetaryFunctions.percent((byte)25);
 		assertEquals("25%", ((Percent) p).getDisplayName(Locale.ENGLISH));
 	}
 
@@ -213,7 +213,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testMajorPart_Null() {
-		MonetaryFunctions.majorPart().adjustInto(null);
+		MonetaryFunctions.majorPart().apply(null);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testMinorPart_Null() {
-		MonetaryFunctions.minorPart().adjustInto(null);
+		MonetaryFunctions.minorPart().apply(null);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testPercent_Null2() {
-		MonetaryFunctions.percent(1).adjustInto(null);
+		MonetaryFunctions.percent(1).apply(null);
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testPermil_Null2() {
-		MonetaryFunctions.permil(1).adjustInto(null);
+		MonetaryFunctions.permil(1).apply(null);
 	}
 
 	/**
@@ -267,6 +267,6 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testReciprocal_Null() {
-		MonetaryFunctions.reciprocal().adjustInto(null);
+		MonetaryFunctions.reciprocal().apply(null);
 	}
 }

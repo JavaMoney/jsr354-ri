@@ -29,7 +29,7 @@ import java.math.RoundingMode;
 import java.util.Currency;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.MoneyCurrency;
@@ -48,7 +48,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetRounding() {
-		MonetaryAdjuster rounding = MonetaryRoundings.getRounding();
+		MonetaryOperator rounding = MonetaryRoundings.getRounding();
 		assertNotNull(rounding);
 		Money m = Money.of("CHF", new BigDecimal("10.123456"));
 		Money r = m.with(rounding);
@@ -77,7 +77,7 @@ public class MonetaryRoundingsTest {
 					if (roundingMode == RoundingMode.UNNECESSARY) {
 						continue;
 					}
-					MonetaryAdjuster rounding = MonetaryRoundings.getRounding(
+					MonetaryOperator rounding = MonetaryRoundings.getRounding(
 							scale, roundingMode);
 					BigDecimal dec = samples[i].asNumber();
 					BigDecimal expected = dec.setScale(scale, roundingMode);
@@ -115,7 +115,7 @@ public class MonetaryRoundingsTest {
 				else if("CHF".equals(cur.getCurrencyCode())){
 					continue;
 				}
-				MonetaryAdjuster rounding = MonetaryRoundings.getRounding(cur);
+				MonetaryOperator rounding = MonetaryRoundings.getRounding(cur);
 				BigDecimal dec = samples[i].asNumber();
 				BigDecimal expected = null;
 				if (cur.getDefaultFractionDigits() < 0) {
@@ -139,7 +139,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetCashRoundingCurrencyUnit() {
-		MonetaryAdjuster r = MonetaryRoundings.getCashRounding(MoneyCurrency
+		MonetaryOperator r = MonetaryRoundings.getCashRounding(MoneyCurrency
 				.of("GBP"));
 		assertNotNull(r);
 		r = MonetaryRoundings.getCashRounding(MoneyCurrency.of("CHF"));
@@ -155,7 +155,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetRoundingCurrencyUnitLong() {
-		MonetaryAdjuster r = MonetaryRoundings.getRounding(MoneyCurrency
+		MonetaryOperator r = MonetaryRoundings.getRounding(MoneyCurrency
 				.of("XXX"), System.currentTimeMillis()+20000L);
 		assertNotNull(r);
 		assertEquals(Money.of("XXX", -1), Money.of("XXX", 2.0234343).with(r));
@@ -168,7 +168,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetCashRoundingCurrencyUnitLong() {
-		MonetaryAdjuster r = MonetaryRoundings.getCashRounding(MoneyCurrency
+		MonetaryOperator r = MonetaryRoundings.getCashRounding(MoneyCurrency
 				.of("CHF"), System.currentTimeMillis()+20000L);
 		assertNotNull(r);
 		assertEquals(Money.of("CHF", -1), Money.of("CHF", 2.0234343).with(r));
@@ -184,7 +184,7 @@ public class MonetaryRoundingsTest {
 		assertNotNull(MonetaryRoundings.getRounding("zero"));
 		assertNotNull(MonetaryRoundings.getRounding("minusOne"));
 		assertNotNull(MonetaryRoundings.getRounding("CHF-cash"));
-		MonetaryAdjuster minusOne = MonetaryRoundings.getRounding("minusOne");
+		MonetaryOperator minusOne = MonetaryRoundings.getRounding("minusOne");
 		assertEquals(Money.of("CHF", -1), Money.of("CHF", 213873434.3463843847)
 				.with(minusOne));
 	}
@@ -233,7 +233,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test(expected=NullPointerException.class)
 	public void testGetCashRounding_Null2() {
-		MonetaryRoundings.getCashRounding(MoneyCurrency.of("USD")).adjustInto(null);
+		MonetaryRoundings.getCashRounding(MoneyCurrency.of("USD")).apply(null);
 	}
 	
 	/**
@@ -260,7 +260,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test(expected=NullPointerException.class)
 	public void testGetRounding_Null2() {
-		MonetaryRoundings.getRounding(MoneyCurrency.of("USD")).adjustInto(null);
+		MonetaryRoundings.getRounding(MoneyCurrency.of("USD")).apply(null);
 	}
 
 }

@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
@@ -30,7 +30,7 @@ import org.javamoney.moneta.Money;
  * 
  * @author Anatole Tresch
  */
-final class MinorPart<T extends MonetaryAmount> implements MonetaryAdjuster {
+final class MinorPart<T extends MonetaryAmount> implements MonetaryOperator {
 
 	/**
 	 * Private constructor, there is only one instance of this class, accessible
@@ -54,7 +54,7 @@ final class MinorPart<T extends MonetaryAmount> implements MonetaryAdjuster {
 	 * @return the minor units part of the amount, never {@code null}
 	 */
 	@Override
-	public MonetaryAmount adjustInto(MonetaryAmount amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = Money.from(amount).asType(BigDecimal.class);
 		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);

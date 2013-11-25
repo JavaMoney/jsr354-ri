@@ -20,8 +20,8 @@ import java.math.MathContext;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryAdjuster;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 
 /**
@@ -69,12 +69,12 @@ public final class MonetaryFunctions {
 	}
 
 	/**
-	 * Return a {@link MonetaryAdjuster} realizing the recorpocal value of
+	 * Return a {@link MonetaryOperator} realizing the recorpocal value of
 	 * {@code f(R) = 1/R}.
 	 * 
 	 * @return the reciprocal operator, never {@code null}
 	 */
-	public static MonetaryAdjuster reciprocal() {
+	public static MonetaryOperator reciprocal() {
 		return RECIPROCAL;
 	}
 
@@ -83,7 +83,7 @@ public final class MonetaryFunctions {
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
 	 */
-	public static MonetaryAdjuster permil(BigDecimal decimal) {
+	public static MonetaryOperator permil(BigDecimal decimal) {
 		return new Permil(decimal);
 	}
 
@@ -92,7 +92,7 @@ public final class MonetaryFunctions {
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
 	 */
-	public static MonetaryAdjuster permil(Number number) {
+	public static MonetaryOperator permil(Number number) {
 		return permil(number, DEFAULT_MATH_CONTEXT);
 	}
 
@@ -101,7 +101,7 @@ public final class MonetaryFunctions {
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
 	 */
-	public static MonetaryAdjuster permil(Number number, MathContext mathContext) {
+	public static MonetaryOperator permil(Number number, MathContext mathContext) {
 		return new Permil(getBigDecimal(number, mathContext));
 	}
 
@@ -139,7 +139,7 @@ public final class MonetaryFunctions {
 	 * @param decimal the decimal value of the percent operator being created.
 	 * @return a new  {@code Percent} operator
 	 */
-	public static MonetaryAdjuster percent(BigDecimal decimal) {
+	public static MonetaryOperator percent(BigDecimal decimal) {
 		return new Percent(decimal); // TODO caching, e.g. array for 1-100 might
 										// work.
 	}
@@ -150,7 +150,7 @@ public final class MonetaryFunctions {
 	 * 
 	 * @return a new  {@code Percent} operator
 	 */
-	public static MonetaryAdjuster percent(Number number) {
+	public static MonetaryOperator percent(Number number) {
 		return percent(getBigDecimal(number, DEFAULT_MATH_CONTEXT));
 	}
 
@@ -159,7 +159,7 @@ public final class MonetaryFunctions {
 	 * 
 	 * @return the shared instance, never {@code null}.
 	 */
-	public static MonetaryAdjuster minorPart() {
+	public static MonetaryOperator minorPart() {
 		return MINORPART;
 	}
 
@@ -168,7 +168,7 @@ public final class MonetaryFunctions {
 	 * 
 	 * @return the shared instance, never {@code null}.
 	 */
-	public static MonetaryAdjuster majorPart() {
+	public static MonetaryOperator majorPart() {
 		return MAJORPART;
 	}
 

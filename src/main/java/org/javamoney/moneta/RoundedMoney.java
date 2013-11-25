@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAdjuster;
+import javax.money.MonetaryOperator;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
 
@@ -62,7 +62,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	/**
 	 * The rounding to be done.
 	 */
-	private MonetaryAdjuster rounding;
+	private MonetaryOperator rounding;
 
 	/**
 	 * Creates a new instance os {@link RoundedMoney}.
@@ -73,7 +73,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 *            the amount, not null.
 	 */
 	private RoundedMoney(CurrencyUnit currency, Number number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MathContext mathContext, MonetaryOperator rounding) {
 		Objects.requireNonNull(currency, "Currency is required.");
 		Objects.requireNonNull(number, "Number is required.");
 		checkNumber(number);
@@ -118,7 +118,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MonetaryAdjuster rounding) {
+			MonetaryOperator rounding) {
 		return new RoundedMoney(currency, number, DEFAULT_MATH_CONTEXT,
 				rounding);
 	}
@@ -155,7 +155,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MathContext mathContext, MonetaryOperator rounding) {
 		return new RoundedMoney(currency, number, mathContext, rounding);
 	}
 
@@ -186,7 +186,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MonetaryAdjuster rounding) {
+			MonetaryOperator rounding) {
 		return new RoundedMoney(currency, number, (MathContext) null, rounding);
 	}
 
@@ -218,7 +218,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MathContext mathContext, MonetaryOperator rounding) {
 		return new RoundedMoney(currency, number, mathContext, rounding);
 	}
 
@@ -250,7 +250,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MonetaryAdjuster rounding) {
+			MonetaryOperator rounding) {
 		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
 				DEFAULT_MATH_CONTEXT, rounding);
 	}
@@ -284,7 +284,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MathContext mathContext, MonetaryAdjuster rounding) {
+			MathContext mathContext, MonetaryOperator rounding) {
 		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
 				mathContext, rounding);
 	}
@@ -305,7 +305,7 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @return
 	 */
 	public static RoundedMoney ofZero(CurrencyUnit currency,
-			MonetaryAdjuster rounding) {
+			MonetaryOperator rounding) {
 		return new RoundedMoney(currency, BigDecimal.ZERO,
 				DEFAULT_MATH_CONTEXT, rounding);
 	}
@@ -868,8 +868,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
 	 */
 	@Override
-	public RoundedMoney with(MonetaryAdjuster operation) {
-		return RoundedMoney.from(operation.adjustInto(this));
+	public RoundedMoney with(MonetaryOperator operation) {
+		return RoundedMoney.from(operation.apply(this));
 	}
 
 	public static RoundedMoney from(MonetaryAmount amt) {
@@ -942,8 +942,8 @@ public final class RoundedMoney implements MonetaryAmount,
 	 * @see javax.money.MonetaryAmount#asType(java.lang.Class,
 	 * javax.money.Rounding)
 	 */
-	public <T> T asType(Class<T> type, MonetaryAdjuster adjuster) {
-		RoundedMoney amount = (RoundedMoney) adjuster.adjustInto(this);
+	public <T> T asType(Class<T> type, MonetaryOperator adjuster) {
+		RoundedMoney amount = (RoundedMoney) adjuster.apply(this);
 		return amount.asType(type);
 	}
 
