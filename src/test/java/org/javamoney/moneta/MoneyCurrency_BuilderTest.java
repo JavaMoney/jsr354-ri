@@ -43,57 +43,57 @@ public class MoneyCurrency_BuilderTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.format.CurrencyUnitImpl.Builder#withCurrencyCode(java.lang.String)}
+	 * {@link javax.money.format.CurrencyUnitImpl.Builder#setCurrencyCode(java.lang.String)}
 	 * and {@link javax.money.format.CurrencyUnitImpl.Builder#getCurrencyCode()} .
 	 */
 	@Test
 	public void testGetSetCurrencyCode() {
 		MoneyCurrency.Builder builder = new MoneyCurrency.Builder()
-				.withCurrencyCode("code1");
+				.setCurrencyCode("code1");
 	}
 
 	/**
 	 * Test method for
-	 * {@link javax.money.format.CurrencyUnitImpl.Builder#withDefaultFractionDigits(int)}
+	 * {@link javax.money.format.CurrencyUnitImpl.Builder#setDefaultFractionDigits(int)}
 	 * and
 	 * {@link javax.money.format.CurrencyUnitImpl.Builder#getDefaultFractionDigits()}.
 	 */
 	@Test
 	public void testGetSetDefaultFractionDigits() {
 		MoneyCurrency.Builder builder = new MoneyCurrency.Builder()
-				.withDefaultFractionDigits(10);
-		builder.withDefaultFractionDigits(-1);
+				.setDefaultFractionDigits(10);
+		builder.setDefaultFractionDigits(-1);
 	}
 
 	/**
 	 * Test method for
-	 * {@link javax.money.format.CurrencyUnitImpl.Builder#withDefaultFractionDigits(int)}
+	 * {@link javax.money.format.CurrencyUnitImpl.Builder#setDefaultFractionDigits(int)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetSetDefaultFractionDigits_InvalidInput() {
-		new MoneyCurrency.Builder().withDefaultFractionDigits(-10);
+		new MoneyCurrency.Builder().setDefaultFractionDigits(-10);
 	}
 
 	/**
 	 * Test method for
-	 * {@link javax.money.format.CurrencyUnitImpl.Builder#withNumericCode(int)} and
+	 * {@link javax.money.format.CurrencyUnitImpl.Builder#setNumericCode(int)} and
 	 * {@link javax.money.format.CurrencyUnitImpl.Builder#getNumericCode()}.
 	 */
 	@Test
 	public void testGetSetNumericCode() {
 		MoneyCurrency.Builder builder = new MoneyCurrency.Builder()
-				.withNumericCode(10);
-		builder.withNumericCode(-1);
+				.setNumericCode(10);
+		builder.setNumericCode(-1);
 	}
 
 	/**
 	 * Test method for
-	 * {@link javax.money.format.CurrencyUnitImpl.Builder#withNumericCode(int)}.
+	 * {@link javax.money.format.CurrencyUnitImpl.Builder#setNumericCode(int)}.
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetSetNumericCode_InvalidInput() {
-		new MoneyCurrency.Builder().withNumericCode(-10);
+		new MoneyCurrency.Builder().setNumericCode(-10);
 	}
 
 	/**
@@ -102,9 +102,9 @@ public class MoneyCurrency_BuilderTest {
 	@Test
 	public void testBuild() {
 		MoneyCurrency.Builder builder = new MoneyCurrency.Builder()
-				.withCurrencyCode("cd")
-				.withDefaultFractionDigits(101)
-				.withNumericCode(7);
+				.setCurrencyCode("cd")
+				.setDefaultFractionDigits(101)
+				.setNumericCode(7);
 		MoneyCurrency cu = builder.build();
 		assertEquals("cd", cu.getCurrencyCode());
 		assertEquals(101, cu.getDefaultFractionDigits());
@@ -118,8 +118,8 @@ public class MoneyCurrency_BuilderTest {
 	@Test
 	public void testBuildBoolean() {
 		MoneyCurrency.Builder builder = new MoneyCurrency.Builder()
-				.withCurrencyCode("testBuildBoolean")
-				.withDefaultFractionDigits(101).withNumericCode(7);
+				.setCurrencyCode("testBuildBoolean")
+				.setDefaultFractionDigits(101).setNumericCode(7);
 		MoneyCurrency cu = builder.build(false);
 		assertEquals("testBuildBoolean", cu.getCurrencyCode());
 		assertEquals(101, cu.getDefaultFractionDigits());

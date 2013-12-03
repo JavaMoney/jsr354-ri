@@ -266,7 +266,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		 *            the currency code, not null
 		 * @return the builder, for chaining
 		 */
-		public Builder withCurrencyCode(String currencyCode) {
+		public Builder setCurrencyCode(String currencyCode) {
 			if (currencyCode == null) {
 				throw new IllegalArgumentException(
 						"currencyCode may not be null.");
@@ -282,7 +282,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		 *            the default fraction digits
 		 * @return the builder, for chaining
 		 */
-		public Builder withDefaultFractionDigits(int defaultFractionDigits) {
+		public Builder setDefaultFractionDigits(int defaultFractionDigits) {
 			if (defaultFractionDigits < -1) {
 				throw new IllegalArgumentException(
 						"Invalid value for defaultFractionDigits: "
@@ -299,7 +299,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		 *            the default fraction digits
 		 * @return the builder, for chaining
 		 */
-		public Builder withCashRounding(int cacheRounding) {
+		public Builder setCashRounding(int cacheRounding) {
 			if (cacheRounding < -1) {
 				throw new IllegalArgumentException(
 						"Invalid value for cacheRounding: " + cacheRounding);
@@ -315,7 +315,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		 *            the numeric currency code
 		 * @return the builder, for chaining
 		 */
-		public Builder withNumericCode(int numericCode) {
+		public Builder setNumericCode(int numericCode) {
 			if (numericCode < -1) {
 				throw new IllegalArgumentException(
 						"Invalid value for numericCode: " + numericCode);
