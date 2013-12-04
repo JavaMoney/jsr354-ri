@@ -29,6 +29,7 @@ import org.javamoney.moneta.Money;
  * instance.
  * 
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 final class MinorPart<T extends MonetaryAmount> implements MonetaryOperator {
 
@@ -52,6 +53,8 @@ final class MinorPart<T extends MonetaryAmount> implements MonetaryOperator {
 	 * call {@code asType(BigDecimal.class)}.
 	 * 
 	 * @return the minor units part of the amount, never {@code null}
+	 * 
+	 * TODO why do we show decimal number here, a result like "ct 35" seems more appropriate, but we need to find a way of handling subunits
 	 */
 	@Override
 	public MonetaryAmount apply(MonetaryAmount amount) {
