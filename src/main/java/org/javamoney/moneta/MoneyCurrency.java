@@ -24,10 +24,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.money.CurrencyUnit;
 
 /**
- * Platform RI: Adapter that implements the new {@link CurrencyUnit} interface
+ * RI: Adapter that implements the new {@link CurrencyUnit} interface
  * using the JDK's {@link Currency}.
  * 
- * @version 0.5.1
+ * @version 0.6
  * @author Anatole Tresch
  * @author Werner Keil
  */
@@ -50,7 +50,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 
 	private static final Map<String, MoneyCurrency> CACHED = new ConcurrentHashMap<String, MoneyCurrency>();
 
-	public static final String ISO_NAMESPACE = "IDO 4217";
+	public static final String ISO_NAMESPACE = "ISO 4217";
 
 	/**
 	 * Private constructor.
@@ -99,8 +99,6 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 	 * return a {@link Currency} when passed to
 	 * {@link Currency#getInstance(String)}.
 	 * 
-	 * @param namespace
-	 *            the target namespace.
 	 * @param currencyCode
 	 *            the ISO currency code, not null.
 	 * @return the corresponding {@link MonetaryCurrency} instance.
@@ -251,6 +249,7 @@ public final class MoneyCurrency implements CurrencyUnit, Serializable,
 		/** fraction digits, or -1. */
 		private int defaultFractionDigits = -1;
 		/** Cache rounding. */
+		@SuppressWarnings("unused")
 		private int cacheRounding = -1;
 
 		/**
