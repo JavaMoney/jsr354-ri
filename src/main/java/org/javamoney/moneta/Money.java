@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -61,7 +60,7 @@ import javax.money.MonetaryQuery;
  * # org.javamoney.moneta.Money.mathContext=DECIMAL128
  * </pre>
  * 
- * @version 0.6.1
+ * @version 0.6.2
  * @author Anatole Tresch
  * @author Werner Keil
  */
@@ -258,6 +257,19 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>,
 	 */
 	public static Money of(CurrencyUnit currency, Number number) {
 		return new Money(currency, number);
+	}
+	
+	/**
+	 * Static factory method for creating a new instance of {@link Money}.
+	 * 
+	 * @param currency
+	 *            The target currency, not null.
+	 * @param number
+	 *            The numeric part.
+	 * @return A new instance of {@link Money}.
+	 */
+	public static Money of(CurrencyUnit currency, double number) {
+		return new Money(currency, Double.valueOf(number));
 	}
 
 	/**
