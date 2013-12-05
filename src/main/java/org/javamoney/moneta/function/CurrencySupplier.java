@@ -13,8 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.format;
+package org.javamoney.moneta.function;
 
-public enum CurrencyStyle {
-	CODE, NAME, NUMERIC_CODE, SYMBOL
-}
+import javax.money.CurrencyUnit;
+
+	/**
+	 * Represents a supplier of currency units.
+	 *
+	 * <p>There is no requirement that a new or distinct result be returned each
+	 * time the supplier is invoked.
+	 *
+	 * <p>This is a <a href="package-summary.html">functional interface</a>
+	 * whose functional method is {@link #getCurrency()}.
+	 *
+	 * @author Werner Keil
+	 *
+	 */
+	//@FunctionalInterface
+	public interface CurrencySupplier {
+
+	    /**
+	     * Gets a currency.
+	     *
+	     * @return a currency
+	     */
+	    CurrencyUnit getCurrency();
+	}

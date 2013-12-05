@@ -19,8 +19,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 
@@ -31,6 +29,7 @@ import javax.money.MonetaryQuery;
  * this class.
  * 
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public final class MonetaryFunctions {
 	/** defaulkt Math context used. */
