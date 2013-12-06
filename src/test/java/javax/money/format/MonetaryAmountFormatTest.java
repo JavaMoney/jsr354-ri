@@ -28,7 +28,7 @@ import java.util.Locale;
 
 import javax.money.MonetaryAmount;
 import javax.money.Money;
-import javax.money.MoneyCurrency;
+import javax.money.Currencies;
 import javax.money.format.MonetaryAmountFormat;
 
 import org.junit.Test;
@@ -60,9 +60,9 @@ public class MonetaryAmountFormatTest {
 				Locale.GERMANY).build();
 		assertNull(defaultFormat.getDefaultCurrency());
 		defaultFormat = new MonetaryAmountFormat.Builder(
-				Locale.GERMANY).withDefaultCurrency(MoneyCurrency.of("CHF"))
+				Locale.GERMANY).withDefaultCurrency(Currencies.of("CHF"))
 				.build();
-		assertEquals(MoneyCurrency.of("CHF"),
+		assertEquals(Currencies.of("CHF"),
 				defaultFormat.getDefaultCurrency());
 	}
 

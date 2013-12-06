@@ -16,9 +16,9 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.money.Currencies;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MoneyCurrency;
 
 /**
  * Implements a {@link FormatToken} that adds a localizable {@link String}, read
@@ -83,7 +83,7 @@ final class CurrencyToken implements FormatToken {
 	protected String getToken(MonetaryAmount<?> amount) {
 		switch (style) {
 		case NUMERIC_CODE:
-			return String.valueOf(MoneyCurrency.from(amount.getCurrency())
+			return String.valueOf(amount.getCurrency()
 					.getNumericCode());
 		case NAME:
 			return getCurrencyName(amount.getCurrency());
@@ -107,11 +107,19 @@ final class CurrencyToken implements FormatToken {
 	 * @return the formatted currency name.
 	 */
 	private String getCurrencyName(CurrencyUnit currency) {
-		if (MoneyCurrency.isJavaCurrency(currency.getCurrencyCode())) {
-			Currency cur = Currency.getInstance(currency.getCurrencyCode());
-			return cur.getDisplayName(locale);
+		Currency jdkCurrency = getCurrency(currency.getCurrencyCode());
+		if (jdkCurrency != null) {
+			return jdkCurrency.getDisplayName(locale);
 		}
 		return currency.getCurrencyCode();
+	}
+
+	private Currency getCurrency(String currencyCode) {
+		try {
+			return Currency.getInstance(currencyCode);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**
@@ -126,9 +134,9 @@ final class CurrencyToken implements FormatToken {
 	 * @return the formatted currency symbol.
 	 */
 	private String getCurrencySymbol(CurrencyUnit currency) {
-		if (MoneyCurrency.isJavaCurrency(currency.getCurrencyCode())) {
-			Currency cur = Currency.getInstance(currency.getCurrencyCode());
-			return cur.getSymbol(locale);
+		Currency jdkCurrency = getCurrency(currency.getCurrencyCode());
+		if (jdkCurrency != null) {
+			return jdkCurrency.getSymbol(locale);
 		}
 		return currency.getCurrencyCode();
 	}
@@ -160,25 +168,28 @@ final class CurrencyToken implements FormatToken {
 			break;
 		}
 		try {
-			MoneyCurrency cur = null;
+			CurrencyUnit cur = null;
 			switch (style) {
 			case CODE:
-				cur = MoneyCurrency.of(token);
+				cur = Currencies.of(token);
 				context.consume(token);
 				break;
 			case SYMBOL:
 				if (token.startsWith("$")) {
-					cur = MoneyCurrency.of("USD");
+					cur = Currencies.of("USD");
 					context.consume("$");
 				}
 				else if (token.startsWith("€")) {
-					cur = MoneyCurrency.of("EUR");
+					cur = Currencies.of("EUR");
 					context.consume("€");
 				}
 				else if (token.startsWith("£")) {
-					cur = MoneyCurrency.of("GBP");
+					cur = Currencies.of("GBP");
 					context.consume("£");
 				}
+				cur = Currencies.of(token);
+				context.consume(token);
+				break;
 			case NAME:
 			case NUMERIC_CODE:
 			default:
@@ -200,17 +211,19 @@ final class CurrencyToken implements FormatToken {
 	 *             may be thrown by the {@link Appendable}
 	 */
 	@Override
-	public void print(Appendable appendable, MonetaryAmount amount)
+	public void print(Appendable appendable, MonetaryAmount<?> amount)
 			throws IOException {
 		appendable.append(getToken(amount));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "CurrencyToken [locale=" + locale + ", style=" + style + "]";
 	}
-	
+
 }

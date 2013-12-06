@@ -78,9 +78,9 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	/**
 	 * Required for deserialization only.
 	 */
-	private Money(){
+	private Money() {
 	}
-	
+
 	/**
 	 * Creates a new instance os {@link Money}.
 	 * 
@@ -95,7 +95,6 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	private Money(CurrencyUnit currency, BigDecimal number) {
 		this(currency, number, null);
 	}
-	
 
 	/**
 	 * Evaluates the default {@link MonetaryContext} to be used for
@@ -371,12 +370,10 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	@Override
 	public int compareTo(MonetaryAmount<?> o) {
 		Objects.requireNonNull(o);
-		int compare = -1;
-		if (getCurrency().equals(o.getCurrency())) {
+		int compare = getCurrency().getCurrencyCode().compareTo(
+				o.getCurrency().getCurrencyCode());
+		if (compare == 0) {
 			compare = this.number.compareTo(Money.from(o).number);
-		} else {
-			compare = getCurrency().getCurrencyCode().compareTo(
-					o.getCurrency().getCurrencyCode());
 		}
 		return compare;
 	}
@@ -1040,7 +1037,7 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, Number number) {
-		return new Money(MoneyCurrency.of(currencyCode), getBigDecimal(number));
+		return new Money(Currencies.of(currencyCode), getBigDecimal(number));
 	}
 
 	/**
@@ -1053,7 +1050,7 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, BigDecimal number) {
-		return new Money(MoneyCurrency.of(currencyCode), number);
+		return new Money(Currencies.of(currencyCode), number);
 	}
 
 	/**
@@ -1070,7 +1067,7 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	 */
 	public static Money of(String currencyCode, Number number,
 			MonetaryContext monetaryContext) {
-		return new Money(MoneyCurrency.of(currencyCode), getBigDecimal(number),
+		return new Money(Currencies.of(currencyCode), getBigDecimal(number),
 				monetaryContext);
 	}
 
@@ -1088,7 +1085,7 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	 */
 	public static Money of(String currencyCode, BigDecimal number,
 			MonetaryContext monetaryContext) {
-		return new Money(MoneyCurrency.of(currencyCode), number,
+		return new Money(Currencies.of(currencyCode), number,
 				monetaryContext);
 	}
 
@@ -1109,7 +1106,7 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	 * @return a new Money instance of zero, with a default {@link MonetaryContext}.
 	 */
 	public static Money ofZero(String currency) {
-		return ofZero(MoneyCurrency.of(currency));
+		return ofZero(Currencies.of(currency));
 	}
 
 	/**

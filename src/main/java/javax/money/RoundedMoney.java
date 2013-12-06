@@ -227,7 +227,7 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number) {
-		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
+		return new RoundedMoney(Currencies.of(currencyCode), number,
 				DEFAULT_MONETARY_CONTEXT, null);
 	}
 
@@ -245,7 +245,7 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
 			MonetaryOperator rounding) {
-		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
+		return new RoundedMoney(Currencies.of(currencyCode), number,
 				DEFAULT_MONETARY_CONTEXT, rounding);
 	}
 
@@ -261,7 +261,7 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
 			MonetaryContext mathContext) {
-		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
+		return new RoundedMoney(Currencies.of(currencyCode), number,
 				mathContext, null);
 	}
 
@@ -279,7 +279,7 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
 			MonetaryContext mathContext, MonetaryOperator rounding) {
-		return new RoundedMoney(MoneyCurrency.of(currencyCode), number,
+		return new RoundedMoney(Currencies.of(currencyCode), number,
 				mathContext, rounding);
 	}
 
@@ -310,7 +310,7 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 	 * @return
 	 */
 	public static RoundedMoney ofZero(String currency) {
-		return ofZero(MoneyCurrency.of(currency));
+		return ofZero(Currencies.of(currency));
 	}
 
 	/*
@@ -799,7 +799,7 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 			this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
 		}
 		if (this.currency == null) {
-			this.currency = MoneyCurrency.of(
+			this.currency = Currencies.of(
 					"XXX"); // no currency
 		}
 	}

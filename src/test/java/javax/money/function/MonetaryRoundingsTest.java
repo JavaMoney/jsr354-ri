@@ -32,7 +32,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryOperator;
 import javax.money.Money;
-import javax.money.MoneyCurrency;
+import javax.money.Currencies;
 import javax.money.function.MonetaryRoundings;
 
 import org.junit.Test;
@@ -110,7 +110,7 @@ public class MonetaryRoundingsTest {
 		int[] scales = new int[] { 0, 1, 2, 3, 4, 5 };
 		for (int i = 0; i < samples.length; i++) {
 			for (Currency currency : Currency.getAvailableCurrencies()) {
-				MoneyCurrency cur = MoneyCurrency
+				CurrencyUnit cur = Currencies
 						.of(currency.getCurrencyCode());
 				// Omit test roundings, which are for testing only...
 				if ("XXX".equals(cur.getCurrencyCode())) {
@@ -143,10 +143,10 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetCashRoundingCurrencyUnit() {
-		MonetaryOperator r = MonetaryRoundings.getCashRounding(MoneyCurrency
+		MonetaryOperator r = MonetaryRoundings.getCashRounding(Currencies
 				.of("GBP"));
 		assertNotNull(r);
-		r = MonetaryRoundings.getCashRounding(MoneyCurrency.of("CHF"));
+		r = MonetaryRoundings.getCashRounding(Currencies.of("CHF"));
 		assertNotNull(r);
 		assertEquals(Money.of("CHF", 2), Money.of("CHF", 2.02).with(r));
 		assertEquals(Money.of("CHF", 2.05), Money.of("CHF", 2.025).with(r));
@@ -159,7 +159,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetRoundingCurrencyUnitLong() {
-		MonetaryOperator r = MonetaryRoundings.getRounding(MoneyCurrency
+		MonetaryOperator r = MonetaryRoundings.getRounding(Currencies
 				.of("XXX"), System.currentTimeMillis() + 20000L);
 		assertNotNull(r);
 		assertEquals(Money.of("XXX", -1), Money.of("XXX", 2.0234343).with(r));
@@ -172,7 +172,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test
 	public void testGetCashRoundingCurrencyUnitLong() {
-		MonetaryOperator r = MonetaryRoundings.getCashRounding(MoneyCurrency
+		MonetaryOperator r = MonetaryRoundings.getCashRounding(Currencies
 				.of("CHF"), System.currentTimeMillis() + 20000L);
 		assertNotNull(r);
 		assertEquals(Money.of("CHF", -1), Money.of("CHF", 2.0234343).with(r));
@@ -236,7 +236,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testGetCashRounding_Null2() {
-		MonetaryRoundings.getCashRounding(MoneyCurrency.of("USD")).apply(null);
+		MonetaryRoundings.getCashRounding(Currencies.of("USD")).apply(null);
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class MonetaryRoundingsTest {
 	 */
 	@Test(expected = NullPointerException.class)
 	public void testGetRounding_Null2() {
-		MonetaryRoundings.getRounding(MoneyCurrency.of("USD")).apply(null);
+		MonetaryRoundings.getRounding(Currencies.of("USD")).apply(null);
 	}
 
 }

@@ -46,8 +46,8 @@ import org.junit.Test;
 public class RoundedMoneyTest {
 
 	private static final BigDecimal TEN = new BigDecimal(10.0d);
-	protected static final CurrencyUnit EURO = MoneyCurrency.of("EUR");
-	protected static final CurrencyUnit DOLLAR = MoneyCurrency
+	protected static final CurrencyUnit EURO = Currencies.of("EUR");
+	protected static final CurrencyUnit DOLLAR = Currencies
 			.of("USD");
 
 	/**
@@ -57,13 +57,13 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testOfCurrencyUnitBigDecimal() {
-		RoundedMoney m = RoundedMoney.of(MoneyCurrency.of("EUR"), TEN);
+		RoundedMoney m = RoundedMoney.of(Currencies.of("EUR"), TEN);
 		assertEquals(TEN, m.getNumber(BigDecimal.class));
 	}
 
 	@Test
 	public void testOfCurrencyUnitDouble() {
-		RoundedMoney m = RoundedMoney.of(MoneyCurrency.of("EUR"), 10.0d);
+		RoundedMoney m = RoundedMoney.of(Currencies.of("EUR"), 10.0d);
 		assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
 	}
 
@@ -373,9 +373,9 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testOfZeroCurrencyUnit() {
-		RoundedMoney m = RoundedMoney.ofZero(MoneyCurrency.of("USD"));
+		RoundedMoney m = RoundedMoney.ofZero(Currencies.of("USD"));
 		assertNotNull(m);
-		assertEquals(MoneyCurrency.of("USD"), m.getCurrency());
+		assertEquals(Currencies.of("USD"), m.getCurrency());
 		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
 	}
 
@@ -387,7 +387,7 @@ public class RoundedMoneyTest {
 	public void testOfZeroString() {
 		RoundedMoney m = RoundedMoney.ofZero("CHF");
 		assertNotNull(m);
-		assertEquals(MoneyCurrency.of("CHF"), m.getCurrency());
+		assertEquals(Currencies.of("CHF"), m.getCurrency());
 		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
 	}
 
@@ -872,12 +872,12 @@ public class RoundedMoneyTest {
 				RoundedMoney.of("GBP", 0) };
 		RoundedMoney s = RoundedMoney.of("XXX", 10);
 		RoundedMoney[] moneys2 = new RoundedMoney[] {
-				s.with(MoneyCurrency.of("CHF"), 100),
-				s.with(MoneyCurrency.of("USD"), 34242344),
-				s.with(MoneyCurrency.of("EUR"), new BigDecimal("23123213.435")),
-				s.with(MoneyCurrency.of("USS"), new BigDecimal("-23123213.435")),
-				s.with(MoneyCurrency.of("USN"), -23123213),
-				s.with(MoneyCurrency.of("GBP"), 0) };
+				s.with(Currencies.of("CHF"), 100),
+				s.with(Currencies.of("USD"), 34242344),
+				s.with(Currencies.of("EUR"), new BigDecimal("23123213.435")),
+				s.with(Currencies.of("USS"), new BigDecimal("-23123213.435")),
+				s.with(Currencies.of("USN"), -23123213),
+				s.with(Currencies.of("GBP"), 0) };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -1231,13 +1231,13 @@ public class RoundedMoneyTest {
 			@Override
 			public <T extends MonetaryAmount<?>> T apply(T amount) {
 				return (T) amount.multiply(2)
-						.with(MoneyCurrency.of("CHF"));
+						.with(Currencies.of("CHF"));
 			}
 		};
 		a = m.with(adj);
 		assertNotNull(a);
 		assertNotSame(m, a);
-		assertEquals(MoneyCurrency.of("CHF"), a.getCurrency());
+		assertEquals(Currencies.of("CHF"), a.getCurrency());
 		assertEquals(RoundedMoney.of(a.getCurrency(), new BigDecimal(
 				"2.47")), a);
 	}

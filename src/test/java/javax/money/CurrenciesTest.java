@@ -33,7 +33,7 @@ import org.junit.Test;
  * 
  * @author Anatole Tresch
  */
-public class MoneyCurrencyTest {
+public class CurrenciesTest {
 
 	/**
 	 * Test method for
@@ -42,7 +42,7 @@ public class MoneyCurrencyTest {
 	@Test
 	public void testGetInstanceCurrency() {
 		Currency jdkCurrency = Currency.getInstance("CHF");
-		MoneyCurrency cur = MoneyCurrency.of(jdkCurrency);
+		CurrencyUnit cur = Currencies.of("CHF");
 		assertNotNull(cur);
 		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
 		assertEquals(jdkCurrency.getNumericCode(), cur.getNumericCode());
@@ -56,7 +56,7 @@ public class MoneyCurrencyTest {
 	 */
 	@Test
 	public void testGetInstanceString() {
-		MoneyCurrency cur = MoneyCurrency.of("CHF");
+		CurrencyUnit cur = Currencies.of("CHF");
 		assertNotNull(cur);
 		Currency jdkCurrency = Currency.getInstance("CHF");
 		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
@@ -72,8 +72,8 @@ public class MoneyCurrencyTest {
 	 */
 	@Test
 	public void testGetInstanceStringString() {
-		MoneyCurrency cur = MoneyCurrency.of("USD");
-		MoneyCurrency cur2 = MoneyCurrency
+		CurrencyUnit cur = Currencies.of("USD");
+		CurrencyUnit cur2 = Currencies
 				.of("USD");
 		assertNotNull(cur2);
 		assertTrue(cur == cur2);
@@ -91,9 +91,9 @@ public class MoneyCurrencyTest {
 	 */
 	@Test
 	public void testGetCurrencyCode() {
-		CurrencyUnit cur = MoneyCurrency.of("USD");
+		CurrencyUnit cur = Currencies.of("USD");
 		assertEquals("USD", cur.getCurrencyCode());
-		cur = MoneyCurrency.of("EUR");
+		cur = Currencies.of("EUR");
 		assertEquals("EUR", cur.getCurrencyCode());
 	}
 
@@ -103,9 +103,9 @@ public class MoneyCurrencyTest {
 	 */
 	@Test
 	public void testGetNumericCode() {
-		MoneyCurrency cur = MoneyCurrency.of("USD");
+		CurrencyUnit cur = Currencies.of("USD");
 		assertEquals(840, cur.getNumericCode());
-		cur = MoneyCurrency.of("EUR");
+		cur = Currencies.of("EUR");
 		assertEquals(978, cur.getNumericCode());
 	}
 
@@ -116,9 +116,9 @@ public class MoneyCurrencyTest {
 	 */
 	@Test
 	public void testGetDefaultFractionDigits() {
-		MoneyCurrency cur = MoneyCurrency.of("USD");
+		CurrencyUnit cur = Currencies.of("USD");
 		assertEquals(2, cur.getDefaultFractionDigits());
-		cur = MoneyCurrency.of("JPY");
+		cur = Currencies.of("JPY");
 		assertEquals(0, cur.getDefaultFractionDigits());
 	}
 
@@ -130,17 +130,17 @@ public class MoneyCurrencyTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCompareTo() {
-		MoneyCurrency cur1 = MoneyCurrency.of("USD");
-		MoneyCurrency cur2 = MoneyCurrency.of("EUR");
+		CurrencyUnit cur1 = Currencies.of("USD");
+		CurrencyUnit cur2 = Currencies.of("EUR");
 		assertTrue(cur1 instanceof Comparable);
 		assertTrue(cur2 instanceof Comparable);
 		assertTrue(0 < ((Comparable<CurrencyUnit>) cur1).compareTo(cur2));
 		assertTrue(0 > ((Comparable<CurrencyUnit>) cur2).compareTo(cur1));
 		assertEquals(0, ((Comparable<CurrencyUnit>) cur1).compareTo(cur1));
 		assertEquals(0, ((Comparable<CurrencyUnit>) cur2).compareTo(cur2));
-		MoneyCurrency.Builder builder = new MoneyCurrency.Builder();
+		Currencies.Builder builder = new Currencies.Builder();
 		builder.setCurrencyCode("TEST");
-		MoneyCurrency cur3 = builder.build();
+		CurrencyUnit cur3 = builder.build();
 		assertTrue(cur3 instanceof Comparable);
 		assertTrue(0 < ((Comparable<CurrencyUnit>) cur3).compareTo(cur2));
 		assertTrue(0 > ((Comparable<CurrencyUnit>) cur3).compareTo(cur1));
@@ -155,13 +155,13 @@ public class MoneyCurrencyTest {
 	 */
 	@Test
 	public void testToString() {
-		MoneyCurrency cur1 = MoneyCurrency.of("USD");
+		CurrencyUnit cur1 = Currencies.of("USD");
 		String toString = cur1.toString();
 		assertNotNull(toString);
 		assertTrue("Does not contain currency code.", toString.contains("USD"));
-		MoneyCurrency.Builder builder = new MoneyCurrency.Builder();
+		Currencies.Builder builder = new Currencies.Builder();
 		builder.setCurrencyCode("TEST");
-		MoneyCurrency cur3 = builder.build();
+		CurrencyUnit cur3 = builder.build();
 		toString = cur3.toString();
 		assertTrue("Does not contain currency code.", toString.contains("TEST"));
 	}

@@ -14,10 +14,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryQuery;
-import javax.money.Money;
-import javax.money.MoneyCurrency;
 
 /**
  * This class allows to extract the minor units of a {@link MonetaryAmount}
@@ -48,10 +47,10 @@ final class MinorUnits implements MonetaryQuery<Long> {
 	 *             if the amount is too large for a {@code long}
 	 */
 	@Override
-	public Long queryFrom(MonetaryAmount amount) {
+	public Long queryFrom(MonetaryAmount<?> amount) {
 		Objects.requireNonNull(amount, "Amount required.");
-		BigDecimal number = Money.from(amount).getNumber(BigDecimal.class);
-		MoneyCurrency cur = MoneyCurrency.from(amount.getCurrency());
+		BigDecimal number = amount.getNumber(BigDecimal.class);
+		CurrencyUnit cur = amount.getCurrency();
 		int scale = cur.getDefaultFractionDigits();
 		if(scale<0){
 			scale = 0;

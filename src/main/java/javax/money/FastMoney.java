@@ -165,7 +165,7 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 	 * @return A new instance of {@link FastMoney}.
 	 */
 	public static FastMoney of(String currencyCode, Number number) {
-		return new FastMoney(MoneyCurrency.of(currencyCode), number);
+		return new FastMoney(Currencies.of(currencyCode), number);
 	}
 
 	/**
@@ -183,20 +183,18 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 	 * @return
 	 */
 	public static FastMoney ofZero(String currency) {
-		return new FastMoney(MoneyCurrency.of(currency), 0L);
+		return new FastMoney(Currencies.of(currency), 0L);
 	}
 
 	/*
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(FastMoney o) {
-		int compare = -1;
-		if (this.currency.equals(o.getCurrency())) {
-			if (this.number == o.number) {
-				compare = 0;
-			} else if (this.number < o.number) {
+		int compare = this.currency.getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
+		if(compare==0){
+			if (this.number < o.number) {
 				compare = -1;
-			} else {
+			} if (this.number > o.number) {
 				compare = 1;
 			}
 		}

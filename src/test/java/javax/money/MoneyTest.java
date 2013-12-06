@@ -46,8 +46,8 @@ import org.junit.Test;
 public class MoneyTest {
 
 	private static final BigDecimal TEN = new BigDecimal(10.0d);
-	protected static final CurrencyUnit EURO = MoneyCurrency.of("EUR");
-	protected static final CurrencyUnit DOLLAR = MoneyCurrency
+	protected static final CurrencyUnit EURO = Currencies.of("EUR");
+	protected static final CurrencyUnit DOLLAR = Currencies
 			.of("USD");
 
 	/**
@@ -57,13 +57,13 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testOfCurrencyUnitBigDecimal() {
-		Money m = Money.of(MoneyCurrency.of("EUR"), TEN);
+		Money m = Money.of(Currencies.of("EUR"), TEN);
 		assertEquals(TEN, m.getNumber(BigDecimal.class));
 	}
 
 	@Test
 	public void testOfCurrencyUnitDouble() {
-		Money m = Money.of(MoneyCurrency.of("EUR"), 10.0d);
+		Money m = Money.of(Currencies.of("EUR"), 10.0d);
 		assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
 	}
 
@@ -387,9 +387,9 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testOfZeroCurrencyUnit() {
-		Money m = Money.ofZero(MoneyCurrency.of("USD"));
+		Money m = Money.ofZero(Currencies.of("USD"));
 		assertNotNull(m);
-		assertEquals(MoneyCurrency.of("USD"), m.getCurrency());
+		assertEquals(Currencies.of("USD"), m.getCurrency());
 		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
 	}
 
@@ -401,7 +401,7 @@ public class MoneyTest {
 	public void testOfZeroString() {
 		Money m = Money.ofZero("CHF");
 		assertNotNull(m);
-		assertEquals(MoneyCurrency.of("CHF"), m.getCurrency());
+		assertEquals(Currencies.of("CHF"), m.getCurrency());
 		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
 	}
 
@@ -878,12 +878,12 @@ public class MoneyTest {
 				Money.of("GBP", 0) };
 		Money s = Money.of("XXX", 10);
 		Money[] moneys2 = new Money[] {
-				s.with(MoneyCurrency.of("CHF"), 100),
-				s.with(MoneyCurrency.of("USD"), 34242344),
-				s.with(MoneyCurrency.of("EUR"), new BigDecimal("23123213.435")),
-				s.with(MoneyCurrency.of("USS"), new BigDecimal("-23123213.435")),
-				s.with(MoneyCurrency.of("USN"), -23123213),
-				s.with(MoneyCurrency.of("GBP"), 0) };
+				s.with(Currencies.of("CHF"), 100),
+				s.with(Currencies.of("USD"), 34242344),
+				s.with(Currencies.of("EUR"), new BigDecimal("23123213.435")),
+				s.with(Currencies.of("USS"), new BigDecimal("-23123213.435")),
+				s.with(Currencies.of("USN"), -23123213),
+				s.with(Currencies.of("GBP"), 0) };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -1391,13 +1391,13 @@ public class MoneyTest {
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
 				return amount.multiply(2)
-						.with(MoneyCurrency.of("CHF"));
+						.with(Currencies.of("CHF"));
 			}
 		};
 		a = m.with(adj);
 		assertNotNull(a);
 		assertNotSame(m, a);
-		assertEquals(MoneyCurrency.of("CHF"), a.getCurrency());
+		assertEquals(Currencies.of("CHF"), a.getCurrency());
 		assertEquals(Money.of(a.getCurrency(), 1.23455645d * 2), a);
 	}
 

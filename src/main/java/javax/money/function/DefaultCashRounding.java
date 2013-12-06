@@ -17,7 +17,7 @@ import java.util.Objects;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
-import javax.money.MoneyCurrency;
+import javax.money.Currencies;
 
 /**
  * Implementation class providing cash rounding {@link MonetaryAdjuster}
@@ -66,7 +66,7 @@ final class DefaultCashRounding implements
 	 */
 	DefaultCashRounding(CurrencyUnit currency,
 			RoundingMode roundingMode) {
-		this(MoneyCurrency.of(currency.getCurrencyCode())
+		this(Currencies.of(currency.getCurrencyCode())
 				.getDefaultFractionDigits(), roundingMode);
 	}
 
@@ -82,7 +82,7 @@ final class DefaultCashRounding implements
 	 *         rounding.
 	 */
 	DefaultCashRounding(CurrencyUnit currency) {
-		this(MoneyCurrency.of(currency.getCurrencyCode())
+		this(Currencies.of(currency.getCurrencyCode())
 				.getDefaultFractionDigits(), RoundingMode.HALF_UP);
 	}
 

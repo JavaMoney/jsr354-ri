@@ -29,8 +29,8 @@ import org.junit.Test;
 public class PerformanceTest {
 
 	private static final BigDecimal TEN = new BigDecimal(10.0d);
-	protected static final CurrencyUnit EURO = MoneyCurrency.of("EUR");
-	protected static final CurrencyUnit DOLLAR = MoneyCurrency
+	protected static final CurrencyUnit EURO = Currencies.of("EUR");
+	protected static final CurrencyUnit DOLLAR = Currencies
 			.of("USD");
 
 

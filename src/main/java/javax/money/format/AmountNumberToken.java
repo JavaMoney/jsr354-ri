@@ -17,8 +17,9 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.logging.Logger;
 
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MoneyCurrency;
+import javax.money.Currencies;
 
 /**
  * {@link FormatToken} which allows to format a {@link Number} type.
@@ -51,11 +52,11 @@ final class AmountNumberToken implements
 	@Override
 	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
-		int digits = MoneyCurrency.from(amount.getCurrency())
+		int digits = amount.getCurrency()
 				.getDefaultFractionDigits();
 		this.style.getDecimalFormat().setMinimumFractionDigits(digits);
 		this.style.getDecimalFormat().setMaximumFractionDigits(digits);
-		MoneyCurrency cur = MoneyCurrency.from(amount.getCurrency());
+		CurrencyUnit cur = amount.getCurrency();
 		if (this.style.getNumberGroupSizes().length == 0) {
 			appendable.append(this.style.getDecimalFormat().format(
 					amount.getNumber(BigDecimal.class)));
