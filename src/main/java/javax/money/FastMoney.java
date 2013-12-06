@@ -190,13 +190,11 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(FastMoney o) {
-		int compare = -1;
-		if (this.currency.equals(o.getCurrency())) {
-			if (this.number == o.number) {
-				compare = 0;
-			} else if (this.number < o.number) {
+		int compare = this.currency.getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
+		if(compare==0){
+			if (this.number < o.number) {
 				compare = -1;
-			} else {
+			} if (this.number > o.number) {
 				compare = 1;
 			}
 		}

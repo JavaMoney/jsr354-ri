@@ -78,9 +78,9 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	/**
 	 * Required for deserialization only.
 	 */
-	private Money(){
+	private Money() {
 	}
-	
+
 	/**
 	 * Creates a new instance os {@link Money}.
 	 * 
@@ -95,7 +95,6 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	private Money(CurrencyUnit currency, BigDecimal number) {
 		this(currency, number, null);
 	}
-	
 
 	/**
 	 * Evaluates the default {@link MonetaryContext} to be used for
@@ -371,12 +370,10 @@ public final class Money extends AbstractMoney<BigDecimal> implements
 	@Override
 	public int compareTo(MonetaryAmount<?> o) {
 		Objects.requireNonNull(o);
-		int compare = -1;
-		if (getCurrency().equals(o.getCurrency())) {
+		int compare = getCurrency().getCurrencyCode().compareTo(
+				o.getCurrency().getCurrencyCode());
+		if (compare == 0) {
 			compare = this.number.compareTo(Money.from(o).number);
-		} else {
-			compare = getCurrency().getCurrencyCode().compareTo(
-					o.getCurrency().getCurrencyCode());
 		}
 		return compare;
 	}
