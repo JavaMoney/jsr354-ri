@@ -34,7 +34,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Anatole Tresch
  */
 public abstract class AbstractMoney<T> implements
-		MonetaryAmount<T> {
+		MonetaryAmount<T>, Serializable {
+
+	/**
+	 * serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** The currency of this amount. */
 	protected CurrencyUnit currency;

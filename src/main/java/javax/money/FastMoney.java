@@ -18,6 +18,10 @@
  */
 package javax.money;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -743,7 +747,7 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 	 */
 	@Override
 	public String toString() {
-		return currency.toString() + ' ' + getBigDecimal();
+		return getCurrency().toString() + ' ' + getBigDecimal();
 	}
 
 	// Internal helper methods
@@ -926,4 +930,31 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 		return MONETARY_CONTEXT;
 	}
 
+	/**
+	 * Implement serialization explicitly.
+	 */
+	private void writeObject(ObjectOutputStream oos) throws IOException {
+		oos.writeLong(this.number);
+		oos.writeObject(this.currency);
+		oos.writeObject(this.monetaryContext);
+	}
+	
+	/**
+	 * Implement deserialization explicitly.
+	 */
+	@SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream ois) throws IOException,
+			ClassNotFoundException {
+		this.number = ois.readLong();
+		this.currency = (CurrencyUnit) ois.readObject();
+		this.monetaryContext = (MonetaryContext) ois.readObject();
+	}
+
+	@SuppressWarnings("unused")
+	private void readObjectNoData()
+			throws ObjectStreamException {
+		if (this.monetaryContext == null) {
+			this.monetaryContext = MONETARY_CONTEXT;
+		}
+	}
 }

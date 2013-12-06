@@ -48,9 +48,6 @@ public final class RoundedMoney extends AbstractMoney<BigDecimal> implements
 	/** The numeric part of this amount. */
 	private BigDecimal number;
 
-	/** tHE DEFAULT {@link MathContext} used by this instance, e.g. on division. */
-	private MonetaryContext monetaryContext = DEFAULT_MONETARY_CONTEXT;
-
 	/**
 	 * The rounding to be done.
 	 */
