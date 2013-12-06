@@ -37,8 +37,6 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import org.javamoney.moneta.FastMoney;
-import org.javamoney.moneta.RoundedMoney;
 import org.junit.Test;
 
 /**
@@ -54,7 +52,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.math.BigDecimal)}
+	 * {@link javax.money.RoundedMoney#of(javax.money.CurrencyUnit, java.math.BigDecimal)}
 	 * .
 	 */
 	@Test
@@ -70,7 +68,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#getCurrency()}.
+	 * Test method for {@link javax.money.RoundedMoney#getCurrency()}.
 	 */
 	@Test
 	public void testGetCurrency() {
@@ -109,7 +107,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#hashCode()}.
+	 * Test method for {@link javax.money.RoundedMoney#hashCode()}.
 	 */
 	@Test
 	public void testHashCode() {
@@ -132,7 +130,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#getDefaultMathContext()}.
+	 * {@link javax.money.RoundedMoney#getDefaultMathContext()}.
 	 */
 	@Test
 	public void testGetDefaultMathContext() {
@@ -143,7 +141,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.math.BigDecimal, java.math.MathContext)}
+	 * {@link javax.money.RoundedMoney#of(javax.money.CurrencyUnit, java.math.BigDecimal, java.math.MathContext)}
 	 * .
 	 */
 	@Test
@@ -160,7 +158,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.lang.Number)}
+	 * {@link javax.money.RoundedMoney#of(javax.money.CurrencyUnit, java.lang.Number)}
 	 * .
 	 */
 	@Test
@@ -204,7 +202,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.lang.Number, java.math.MathContext)}
+	 * {@link javax.money.RoundedMoney#of(javax.money.CurrencyUnit, java.lang.Number, java.math.MathContext)}
 	 * .
 	 */
 	@Test
@@ -260,7 +258,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(java.lang.String, java.lang.Number)}
+	 * {@link javax.money.RoundedMoney#of(java.lang.String, java.lang.Number)}
 	 * .
 	 */
 	@Test
@@ -315,7 +313,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(java.lang.String, java.lang.Number, java.math.MathContext)}
+	 * {@link javax.money.RoundedMoney#of(java.lang.String, java.lang.Number, java.math.MathContext)}
 	 * .
 	 */
 	@Test
@@ -370,7 +368,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#ofZero(javax.money.CurrencyUnit)}
+	 * {@link javax.money.RoundedMoney#ofZero(javax.money.CurrencyUnit)}
 	 * .
 	 */
 	@Test
@@ -383,7 +381,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#ofZero(java.lang.String)}.
+	 * {@link javax.money.RoundedMoney#ofZero(java.lang.String)}.
 	 */
 	@Test
 	public void testOfZeroString() {
@@ -395,7 +393,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#equals(java.lang.Object)}.
+	 * {@link javax.money.RoundedMoney#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {
@@ -419,7 +417,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#compareTo(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#compareTo(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -444,7 +442,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#getMathContext()}.
+	 * {@link javax.money.RoundedMoney#getMathContext()}.
 	 */
 	@Test
 	public void testGetMathContext() {
@@ -458,7 +456,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#abs()}.
+	 * Test method for {@link javax.money.RoundedMoney#abs()}.
 	 */
 	@Test
 	public void testAbs() {
@@ -475,7 +473,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -489,7 +487,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#divide(java.lang.Number)}.
+	 * {@link javax.money.RoundedMoney#divide(java.lang.Number)}.
 	 */
 	@Test
 	public void testDivideNumber() {
@@ -502,7 +500,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#divideAndRemainder(java.lang.Number)}
+	 * {@link javax.money.RoundedMoney#divideAndRemainder(java.lang.Number)}
 	 * .
 	 */
 	@Test
@@ -524,7 +522,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#divideToIntegralValue(java.lang.Number)}
+	 * {@link javax.money.RoundedMoney#divideToIntegralValue(java.lang.Number)}
 	 * .
 	 */
 	@Test
@@ -546,7 +544,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#multiply(java.lang.Number)}.
+	 * {@link javax.money.RoundedMoney#multiply(java.lang.Number)}.
 	 */
 	@Test
 	public void testMultiplyNumber() {
@@ -560,7 +558,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#negate()}.
+	 * Test method for {@link javax.money.RoundedMoney#negate()}.
 	 */
 	@Test
 	public void testNegate() {
@@ -571,7 +569,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#plus()}.
+	 * Test method for {@link javax.money.RoundedMoney#plus()}.
 	 */
 	@Test
 	public void testPlus() {
@@ -583,7 +581,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#subtract(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#subtract(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -620,7 +618,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#pow(int)}.
+	 * Test method for {@link javax.money.RoundedMoney#pow(int)}.
 	 */
 	@Test
 	public void testPow() {
@@ -633,7 +631,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#ulp()}.
+	 * Test method for {@link javax.money.RoundedMoney#ulp()}.
 	 */
 	@Test
 	public void testUlp() {
@@ -651,7 +649,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#remainder(java.lang.Number)}.
+	 * {@link javax.money.RoundedMoney#remainder(java.lang.Number)}.
 	 */
 	@Test
 	public void testRemainderNumber() {
@@ -687,7 +685,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#scaleByPowerOfTen(int)} .
+	 * {@link javax.money.RoundedMoney#scaleByPowerOfTen(int)} .
 	 */
 	@Test
 	public void testScaleByPowerOfTen() {
@@ -708,7 +706,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#isZero()}.
+	 * Test method for {@link javax.money.RoundedMoney#isZero()}.
 	 */
 	@Test
 	public void testIsZero() {
@@ -731,7 +729,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#isPositive()}.
+	 * Test method for {@link javax.money.RoundedMoney#isPositive()}.
 	 */
 	@Test
 	public void testIsPositive() {
@@ -756,7 +754,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isPositiveOrZero()}.
+	 * {@link javax.money.RoundedMoney#isPositiveOrZero()}.
 	 */
 	@Test
 	public void testIsPositiveOrZero() {
@@ -782,7 +780,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#isNegative()}.
+	 * Test method for {@link javax.money.RoundedMoney#isNegative()}.
 	 */
 	@Test
 	public void testIsNegative() {
@@ -809,7 +807,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isNegativeOrZero()}.
+	 * {@link javax.money.RoundedMoney#isNegativeOrZero()}.
 	 */
 	@Test
 	public void testIsNegativeOrZero() {
@@ -836,7 +834,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#with(java.lang.Number)} .
+	 * {@link javax.money.RoundedMoney#with(java.lang.Number)} .
 	 */
 	@Test
 	public void testWithNumber() {
@@ -860,7 +858,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#with(javax.money.CurrencyUnit, java.lang.Number)}
+	 * {@link javax.money.RoundedMoney#with(javax.money.CurrencyUnit, java.lang.Number)}
 	 * .
 	 */
 	@Test
@@ -886,7 +884,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#getScale()}.
+	 * Test method for {@link javax.money.RoundedMoney#getScale()}.
 	 */
 	@Test
 	public void testGetScale() {
@@ -904,7 +902,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#getPrecision()}.
+	 * Test method for {@link javax.money.RoundedMoney#getPrecision()}.
 	 */
 	@Test
 	public void testGetPrecision() {
@@ -923,7 +921,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#signum()}.
+	 * Test method for {@link javax.money.RoundedMoney#signum()}.
 	 */
 	@Test
 	public void testSignum() {
@@ -943,7 +941,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isLessThan(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#isLessThan(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -964,7 +962,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isLessThanOrEqualTo(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#isLessThanOrEqualTo(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -987,7 +985,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isGreaterThan(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#isGreaterThan(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -1009,7 +1007,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isGreaterThanOrEqualTo(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#isGreaterThanOrEqualTo(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -1033,7 +1031,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isEqualTo(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#isEqualTo(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -1056,7 +1054,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#isNotEqualTo(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#isNotEqualTo(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -1084,7 +1082,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#query(javax.money.MonetaryQuery)}
+	 * {@link javax.money.RoundedMoney#query(javax.money.MonetaryQuery)}
 	 * .
 	 */
 	@Test
@@ -1110,7 +1108,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#asType(java.lang.Class)}.
+	 * {@link javax.money.RoundedMoney#asType(java.lang.Class)}.
 	 */
 	@Test
 	public void testgetNumberClassOfT() {
@@ -1129,7 +1127,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#asNumber()}.
+	 * Test method for {@link javax.money.RoundedMoney#asNumber()}.
 	 */
 	@Test
 	public void testGetNumber() {
@@ -1142,7 +1140,7 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#toString()}.
+	 * Test method for {@link javax.money.RoundedMoney#toString()}.
 	 */
 	@Test
 	public void testToString() {
@@ -1212,7 +1210,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#with(javax.money.MonetaryAdjuster)}
+	 * {@link javax.money.RoundedMoney#with(javax.money.MonetaryAdjuster)}
 	 * .
 	 */
 	@Test
@@ -1246,7 +1244,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#from(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#from(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test
@@ -1278,7 +1276,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -1290,7 +1288,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -1302,7 +1300,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)

@@ -20,7 +20,6 @@ package javax.money;
 
 import java.math.BigDecimal;
 
-import org.javamoney.moneta.FastMoney;
 import org.junit.Test;
 
 /**
