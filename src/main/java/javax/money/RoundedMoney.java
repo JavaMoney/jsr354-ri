@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta;
+package javax.money;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -26,14 +26,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.money.AbstractMoney;
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
-import javax.money.Money;
-import javax.money.MoneyCurrency;
 import javax.money.function.MonetaryRoundings;
 
 /**

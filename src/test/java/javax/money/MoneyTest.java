@@ -1434,7 +1434,7 @@ public class MoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -1446,7 +1446,7 @@ public class MoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -1458,7 +1458,7 @@ public class MoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
+	 * {@link javax.money.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
 	@Test(expected = IllegalArgumentException.class)

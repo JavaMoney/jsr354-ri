@@ -36,7 +36,6 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>0.8-SNAPSHOT</jsr.version>
 		<jsr.version>${project.version}</jsr.version>
 		<jdkVersion>1.7</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
@@ -90,7 +89,7 @@
 			<id>vgrazi</id>
 			<name>Victor Grazi</name>
 			<roles>
-				<role>Expert Group Member</role>
+				<role>Expert Group Member (Emeritus)</role>
 			</roles>
 		</developer>
 		<developer>
@@ -800,5 +799,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
 </project>

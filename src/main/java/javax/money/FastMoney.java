@@ -16,7 +16,7 @@
  * Contributors: Anatole Tresch - initial implementation Werner Keil -
  * extensions and adaptions.
  */
-package org.javamoney.moneta;
+package javax.money;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,14 +24,11 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Objects;
 
-import javax.money.AbstractMoney;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
-import javax.money.Money;
-import javax.money.MoneyCurrency;
 
 /**
  * <type>long</type> based implementation of {@link MonetaryAmount}. This class
@@ -167,7 +164,7 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 		return new FastMoney(MoneyCurrency.of(currencyCode), number);
 	}
 
-/**
+	/**
 	 * Facory method creating a zero instance with the given {@code currency);
 	 * @param currency the target currency of the amount being created.
 	 * @return
@@ -176,7 +173,7 @@ public final class FastMoney extends AbstractMoney<BigDecimal> implements
 		return new FastMoney(currency, 0L);
 	}
 
-/**
+	/**
 	 * Facory method creating a zero instance with the given {@code currency);
 	 * @param currency the target currency of the amount being created.
 	 * @return
