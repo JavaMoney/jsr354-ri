@@ -1,1 +1,1 @@
-javax.money.function.TestRoundingProvider
+org.javamoney.moneta.function.TestRoundingProvider
