@@ -44,8 +44,8 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	private MonetaryOperator zeroRounding = new MonetaryOperator() {
 
 		@Override
-		public MonetaryAmount apply(MonetaryAmount amount) {
-			return MonetaryAmounts.getAmountZero(amount.getCurrency());
+		public <T extends MonetaryAmount<T>> T apply(T amount) {
+			return amount.with(amount.getCurrency(), 0L);
 		}
 
 	};
@@ -54,27 +54,32 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 
 		@Override
 		public MonetaryAmount apply(MonetaryAmount amount) {
-			return MonetaryAmounts.getAmount(amount.getCurrency(), -1);
+			return amount.with(amount.getCurrency(), -1);
 		}
 
 	};
 
 	private MonetaryOperator chfCashRounding = new MonetaryOperator() {
 
-		private MonetaryOperator minorRounding = MonetaryRoundings
-				.getRounding(new MonetaryContext.Builder(Object.class)
-						.setMaxScale(2)
-						.setAttribute(RoundingMode.HALF_UP).build());
+		private MonetaryOperator minorRounding;
 
 		@Override
 		public MonetaryAmount apply(MonetaryAmount amount) {
+			if (minorRounding == null) {
+				minorRounding = MonetaryRoundings
+						.getRounding(new MonetaryContext.Builder(Object.class)
+								.setMaxScale(2)
+								.setAttribute(RoundingMode.HALF_UP).build());
+			}
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
 			BigDecimal delta = null;
-			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts.getAmount(amount.getCurrency(), 0.03))) {
+			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts.getAmount(
+					amount.getCurrency(), 0.03))) {
 				// add
 				return amt.add(
-						MonetaryAmounts.getAmount(amt.getCurrency(), new BigDecimal("0.05"))
+						MonetaryAmounts.getAmount(amt.getCurrency(),
+								new BigDecimal("0.05"))
 								.subtract(mp));
 			}
 			else {

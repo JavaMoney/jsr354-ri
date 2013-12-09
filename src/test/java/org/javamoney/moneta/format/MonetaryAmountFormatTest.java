@@ -105,8 +105,7 @@ public class MonetaryAmountFormatTest {
 		MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(
 				Locale.GERMANY);
 		defaultFormat.print(b, MonetaryAmounts.getAmount("CHF", 12.50));
-		assertEquals("CHF 12,50"
-				, b.toString());
+		assertEquals("CHF 12,50", b.toString());
 		b.setLength(0);
 		defaultFormat.print(b, MonetaryAmounts.getAmount("INR",
 				123456789101112.123456));
