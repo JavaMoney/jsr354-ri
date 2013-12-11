@@ -35,6 +35,10 @@ import javax.money.function.MonetaryRoundings;
  * Instances of this class are not thread-safe. Basically when using
  * {@link MonetaryAmountFormat} instances a new instance should be created on
  * each access.
+ * 
+ * @author Anatole Tresch
+ * @author Werner Keil
+ * 
  */
 final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
@@ -275,7 +279,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * also are responsible for implementing the opposite, parsing, of an item
 	 * from an input character sequence. Each {@link FormatToken} gets access to
 	 * the current parsing location, and the original and current character
-	 * input sequence, modeled by the {@link ParseContext}. Finall if parsing of
+	 * input sequence, modeled by the {@link ParseContext}. Finally if parsing of
 	 * a part failed, a {@link FormatToken} throws an {@link ItemParseException}
 	 * describing the problem.
 	 * <p>
@@ -303,10 +307,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 		private MonetaryContext monetaryContext = MonetaryAmounts
 				.getDefaultMonetaryContext();
-
-		private char[] groupChars;
-
-		private int[] groupSizes;
 
 		/**
 		 * Creates a new Builder.
