@@ -32,6 +32,7 @@ import org.junit.Test;
 
 /**
  * @author Anatole
+ * @author Werner
  * 
  */
 public class MonetaryFunctionsTest {
@@ -86,7 +87,7 @@ public class MonetaryFunctionsTest {
 	 */
 	@Test
 	public void testPermilNumberMathContext() {
-		MonetaryAmount m = MonetaryAmounts.getAmount("CHF", 100);
+		MonetaryAmount<?> m = MonetaryAmounts.getAmount("CHF", 100);
 		MonetaryAmount r = m.with(MonetaryFunctions.permil(25,
 				MathContext.DECIMAL64));
 		assertEquals(
@@ -131,7 +132,7 @@ public class MonetaryFunctionsTest {
 	@Test
 	public void testPercentToString() {
 		MonetaryOperator p = MonetaryFunctions.percent((short) 25);
-		assertEquals("25 %", p.toString());
+		assertEquals("25%", p.toString());
 	}
 
 	/**
