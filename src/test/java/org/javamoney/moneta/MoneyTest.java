@@ -38,6 +38,7 @@ import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
@@ -460,6 +461,20 @@ public class MoneyTest {
 				Money.of("CHF", new BigDecimal("-1.230000000000000000000"))));
 	}
 
+	/**
+	 * Test differently created MonetaryAmount or Money instances for equality
+	 * {@link org.javamoney.moneta.Money#equals(Object)}.
+	 */
+	@Test
+	public void testEqualsMonetarAmount() {
+		MonetaryAmount m = MonetaryAmounts.getAmount("CHF", 100);
+		MonetaryAmount<Money> m2 = Money.of("CHF", 100);
+		Money m3 = Money.of("CHF", 100);
+		assertTrue(m.equals(m2));
+		assertTrue(m.equals(m3));
+		assertTrue(m2.equals(m3));
+	}
+	
 	/**
 	 * Test method for
 	 * {@link org.javamoney.moneta.Money#compareTo(javax.money.MonetaryAmount)}.
