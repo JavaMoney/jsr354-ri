@@ -9,7 +9,7 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryOperator;
 import javax.money.spi.RoundingProviderSpi;
 
-public final class DefaultRoundingProvider implements
+public class DefaultRoundingProvider implements
 		RoundingProviderSpi {
 
 	@Override

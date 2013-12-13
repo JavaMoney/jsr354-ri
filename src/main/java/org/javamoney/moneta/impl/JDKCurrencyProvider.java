@@ -30,7 +30,7 @@ import javax.money.spi.CurrencyProviderSpi;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public final class JDKCurrencyProvider implements CurrencyProviderSpi {
+public class JDKCurrencyProvider implements CurrencyProviderSpi {
 
 	/** Internal shared cache of {@link MoneyCurrency} instances. */
 	private static final Map<String, CurrencyUnit> CACHED = new HashMap<String, CurrencyUnit>();
