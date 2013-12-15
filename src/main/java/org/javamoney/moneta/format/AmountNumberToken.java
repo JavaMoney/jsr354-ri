@@ -13,14 +13,11 @@ package org.javamoney.moneta.format;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
 import java.util.logging.Logger;
 
-import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.format.FormatStyle;
-import javax.money.format.ParseContext;
+import javax.money.format.AmountStyle;
+import javax.money.format.MonetaryParseException;
 
 /**
  * {@link FormatToken} which allows to format a {@link Number} type.
@@ -36,28 +33,27 @@ final class AmountNumberToken implements
 	private static final Logger LOG = Logger.getLogger(AmountNumberToken.class
 			.getName());
 
-	private FormatStyle style;
+	private AmountStyle style;
 	private StringGrouper numberGroup;
 
-	public AmountNumberToken(FormatStyle style) {
+	public AmountNumberToken(AmountStyle style) {
 		if (style == null) {
 			throw new IllegalArgumentException("style is required.");
 		}
 		this.style = style;
 	}
 
-	public FormatStyle getAmountStyle() {
+	public AmountStyle getAmountStyle() {
 		return style;
 	}
 
 	@Override
-	public void print(Appendable appendable, MonetaryAmount amount)
+	public void print(Appendable appendable, MonetaryAmount<?> amount)
 			throws IOException {
 		int digits = amount.getCurrency()
 				.getDefaultFractionDigits();
 		this.style.getDecimalFormat().setMinimumFractionDigits(digits);
 		this.style.getDecimalFormat().setMaximumFractionDigits(digits);
-		CurrencyUnit cur = amount.getCurrency();
 		if (this.style.getNumberGroupSizes().length == 0) {
 			appendable.append(this.style.getDecimalFormat().format(
 					amount.getNumber(BigDecimal.class)));
@@ -101,8 +97,7 @@ final class AmountNumberToken implements
 	}
 
 	@Override
-	public void parse(ParseContext context) throws ParseException {
-		ParsePosition pos = new ParsePosition(0);
+	public void parse(ParseContext context) throws MonetaryParseException {
 		String token = context.lookupNextToken();
 		while (token != null && !context.isComplete()) {
 			parseToken(context, token);

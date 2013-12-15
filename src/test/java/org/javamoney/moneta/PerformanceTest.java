@@ -148,4 +148,40 @@ public class PerformanceTest {
 		System.out.println();
 	}
 
+	@Test
+	public void comparePerformanceWithFastMoneyCaching() {
+		StringBuilder b = new StringBuilder();
+		b.append("PerformanceTest - Test Caching benefit FastMoney:\n");
+		b.append("=======================================---------=\n");
+		b.append("FastMoney money1 = FastMoney.of(EURO, c));\n");
+		b.append("vs\n");
+		b.append("FastMoney money1 = FastMoney.of(EURO, c++));\n");
+		System.out.println(b);
+		b.setLength(0);
+		final int NUM = 1000000;
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < NUM; i++) {
+			FastMoney.of(EURO, 1);
+		}
+		long end = System.currentTimeMillis();
+		long duration = end - start;
+		System.out.println("Duration for " + NUM
+				+ " creations of FastMoney 'EUR c=1': "
+				+ duration + " ms (" + ((duration * 1000) / NUM)
+				+ " ns per loop).");
+		System.out.println();
+		System.out.println();
+		start = System.currentTimeMillis();
+		for (int i = 0; i < NUM; i++) {
+			Money.of(EURO, i);
+		}
+		end = System.currentTimeMillis();
+		duration = end - start;
+		System.out.println("Duration for " + NUM
+				+ " creations of FastMoney 'EUR c=1,c++': "
+				+ duration + " ms (" + ((duration * 1000) / NUM)
+				+ " ns per loop).");
+		System.out.println();
+		System.out.println();
+	}
 }

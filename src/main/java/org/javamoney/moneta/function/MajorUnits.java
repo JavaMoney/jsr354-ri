@@ -28,7 +28,7 @@ import javax.money.function.MonetaryRoundings;
 final class MajorUnits implements MonetaryQuery<Long> {
 
 	private MonetaryOperator downRounding = MonetaryRoundings
-			.getRounding(new MonetaryContext.Builder(Object.class)
+			.getRounding(new MonetaryContext.Builder()
 					.setMaxScale(0).setAttribute(RoundingMode.DOWN).build());
 
 	/**

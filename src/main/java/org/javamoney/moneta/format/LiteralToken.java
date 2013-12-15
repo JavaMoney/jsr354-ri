@@ -12,10 +12,9 @@ package org.javamoney.moneta.format;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.ParseException;
 
 import javax.money.MonetaryAmount;
-import javax.money.format.ParseContext;
+import javax.money.format.MonetaryParseException;
 
 /**
  * {@link FormatToken} which adds an arbitrary literal constant value to the
@@ -56,14 +55,14 @@ final class LiteralToken implements FormatToken, Serializable {
 	/**
 	 * Parses the literal from the current {@link ParseContext}.
 	 * 
-	 * @see javax.money.format.FormatToken#parse(javax.money.format.ParseContext,
+	 * @see javax.money.format.FormatToken#parse(org.javamoney.moneta.format.ParseContext,
 	 *      java.util.Locale, javax.money.format.LocalizationStyle)
 	 */
 	@Override
 	public void parse(ParseContext context)
-			throws ParseException {
+			throws MonetaryParseException {
 		if (!context.consume(token)) {
-			throw new ParseException(context.getOriginalInput(),
+			throw new MonetaryParseException(context.getOriginalInput(),
 					context.getErrorIndex());
 		}
 	}
@@ -76,7 +75,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	 *      javax.money.format.LocalizationStyle)
 	 */
 	@Override
-	public void print(Appendable appendable, MonetaryAmount amount)
+	public void print(Appendable appendable, MonetaryAmount<?> amount)
 			throws IOException {
 		appendable.append(this.token);
 	}

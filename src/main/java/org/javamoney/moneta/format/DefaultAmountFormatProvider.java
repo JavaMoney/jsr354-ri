@@ -15,7 +15,7 @@ import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
-import javax.money.format.FormatStyle;
+import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
 
@@ -26,7 +26,7 @@ public class DefaultAmountFormatProvider implements
 
 	@Override
 	public MonetaryAmountFormat getFormat(Locale locale,
-			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
+			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
 		Objects.requireNonNull(locale, "Locale required");
 		Builder builder = new DefaultMonetaryAmountFormat.Builder(locale);
 		if(defaultCurrency!=null){
@@ -35,14 +35,14 @@ public class DefaultAmountFormatProvider implements
 		if(monetaryContext!=null){
 			builder.setMonetaryContext(monetaryContext);
 		}
-		FormatStyle style = new FormatStyle.Builder(locale).build();
+		AmountStyle style = new AmountStyle.Builder(locale).build();
 		builder.setFormatStyle(style);
 		return builder.build();
 	}
 
 	@Override
-	public MonetaryAmountFormat getFormat(FormatStyle formatStyle,
-			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
+	public MonetaryAmountFormat getFormat(AmountStyle formatStyle,
+			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
 		Objects.requireNonNull(formatStyle, "FormatStyle required");
 		Builder builder = new DefaultMonetaryAmountFormat.Builder(formatStyle.getLocale());
 		if(defaultCurrency!=null){

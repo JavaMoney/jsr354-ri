@@ -16,7 +16,6 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmounts;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
@@ -92,7 +91,7 @@ final class DefaultRounding implements MonetaryOperator {
 	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
 	 */
 	@Override
-	public MonetaryAmount apply(MonetaryAmount amount) {
+	public <T extends MonetaryAmount<T>> T apply(T amount) {
 		// return Money.of(amount.getCurrency(),
 		// Money.from(amount).asType(BigDecimal.class).setScale(
 		// this.scale,

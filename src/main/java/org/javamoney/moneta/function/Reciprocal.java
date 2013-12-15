@@ -43,7 +43,6 @@ final class Reciprocal implements MonetaryOperator {
 	 * @throws ArithmeticException
 	 *             if the arithmetic operation failed
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends MonetaryAmount<T>> T apply(T amount) {
 		Objects.requireNonNull(amount, "Amount required.");

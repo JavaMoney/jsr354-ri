@@ -48,8 +48,10 @@ import org.junit.Test;
 public class FastMoneyTest {
 
 	private static final BigDecimal TEN = new BigDecimal(10.0d);
-	protected static final CurrencyUnit EURO = MonetaryCurrencies.getCurrency("EUR");
-	protected static final CurrencyUnit DOLLAR = MonetaryCurrencies.getCurrency("USD");
+	protected static final CurrencyUnit EURO = MonetaryCurrencies
+			.getCurrency("EUR");
+	protected static final CurrencyUnit DOLLAR = MonetaryCurrencies
+			.getCurrency("USD");
 
 	/**
 	 * Test method for
@@ -64,7 +66,8 @@ public class FastMoneyTest {
 
 	@Test
 	public void testOfCurrencyUnitDouble() {
-		FastMoney m = FastMoney.of(MonetaryCurrencies.getCurrency("EUR"), 10.0d);
+		FastMoney m = FastMoney
+				.of(MonetaryCurrencies.getCurrency("EUR"), 10.0d);
 		assertTrue(TEN.doubleValue() == m.doubleValue());
 	}
 
@@ -229,7 +232,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#of(java.lang.String, java.lang.Number)} .
+	 * {@link org.javamoney.moneta.FastMoney#of(java.lang.String, java.lang.Number)}
+	 * .
 	 */
 	@Test
 	public void testOfStringNumber() {
@@ -282,7 +286,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#ofZero(java.lang.String)}.
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#ofZero(java.lang.String)}.
 	 */
 	@Test
 	public void testOfZeroString() {
@@ -293,7 +298,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#equals(java.lang.Object)}.
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {
@@ -317,7 +323,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#compareTo(javax.money.MonetaryAmount)}.
+	 * {@link org.javamoney.moneta.FastMoney#compareTo(javax.money.MonetaryAmount)}
+	 * .
 	 */
 	@Test
 	public void testCompareTo() {
@@ -369,7 +376,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
 	 */
 	@Test
 	public void testDivideNumber() {
@@ -382,7 +390,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#divideAndRemainder(java.lang.Number)}.
+	 * {@link org.javamoney.moneta.FastMoney#divideAndRemainder(java.lang.Number)}
+	 * .
 	 */
 	@Test
 	public void testDivideAndRemainderNumber() {
@@ -403,7 +412,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#divideToIntegralValue(java.lang.Number)} .
+	 * {@link org.javamoney.moneta.FastMoney#divideToIntegralValue(java.lang.Number)}
+	 * .
 	 */
 	@Test
 	public void testDivideToIntegralValueNumber() {
@@ -423,7 +433,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#multiply(java.lang.Number)}.
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#multiply(java.lang.Number)}.
 	 */
 	@Test
 	public void testMultiplyNumber() {
@@ -458,7 +469,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#subtract(javax.money.MonetaryAmount)}.
+	 * {@link org.javamoney.moneta.FastMoney#subtract(javax.money.MonetaryAmount)}
+	 * .
 	 */
 	@Test
 	public void testSubtract() {
@@ -523,8 +535,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#remainder(java.lang.Number)}
-	 * .
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#remainder(java.lang.Number)} .
 	 */
 	@Test
 	public void testRemainderNumber() {
@@ -558,7 +570,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#scaleByPowerOfTen(int)} .
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#scaleByPowerOfTen(int)} .
 	 */
 	@Test
 	public void testScaleByPowerOfTen() {
@@ -622,7 +635,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#isPositiveOrZero()}.
+	 * Test method for {@link org.javamoney.moneta.FastMoney#isPositiveOrZero()}
+	 * .
 	 */
 	@Test
 	public void testIsPositiveOrZero() {
@@ -672,7 +686,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#isNegativeOrZero()}.
+	 * Test method for {@link org.javamoney.moneta.FastMoney#isNegativeOrZero()}
+	 * .
 	 */
 	@Test
 	public void testIsNegativeOrZero() {
@@ -697,7 +712,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#with(java.lang.Number)} .
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#with(java.lang.Number)} .
 	 */
 	@Test
 	public void testWithNumber() {
@@ -904,7 +920,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#toEngineeringString()}.
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#toEngineeringString()}.
 	 */
 	@Test
 	public void testToEngineeringString() {
@@ -945,7 +962,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#isLessThan(javax.money.MonetaryAmount)} .
+	 * {@link org.javamoney.moneta.FastMoney#isLessThan(javax.money.MonetaryAmount)}
+	 * .
 	 */
 	@Test
 	public void testIsLessThan() {
@@ -988,7 +1006,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#isGreaterThan(javax.money.MonetaryAmount)} .
+	 * {@link org.javamoney.moneta.FastMoney#isGreaterThan(javax.money.MonetaryAmount)}
+	 * .
 	 */
 	@Test
 	public void testIsGreaterThan() {
@@ -1032,7 +1051,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#isEqualTo(javax.money.MonetaryAmount)}.
+	 * {@link org.javamoney.moneta.FastMoney#isEqualTo(javax.money.MonetaryAmount)}
+	 * .
 	 */
 	@Test
 	public void testIsEqualTo() {
@@ -1054,7 +1074,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#isNotEqualTo(javax.money.MonetaryAmount)} .
+	 * {@link org.javamoney.moneta.FastMoney#isNotEqualTo(javax.money.MonetaryAmount)}
+	 * .
 	 */
 	@Test
 	public void testIsNotEqualTo() {
@@ -1078,14 +1099,14 @@ public class FastMoneyTest {
 	 * Test method for {@link org.javamoney.moneta.FastMoney#getNumberType()}.
 	 */
 	@Test
-	public void testGetNumberType() {
+	public void testGetImplementationType() {
 		assertEquals(FastMoney.of("CHF", 0).getMonetaryContext()
-				.getNumberType(), Long.class);
+				.getAmountType(), FastMoney.class);
 		assertEquals(FastMoney.of("CHF", 0.34738746d).getMonetaryContext()
-				.getNumberType(),
-				Long.class);
+				.getAmountType(),
+				FastMoney.class);
 		assertEquals(FastMoney.of("CHF", 100034L).getMonetaryContext()
-				.getNumberType(), Long.class);
+				.getAmountType(), FastMoney.class);
 	}
 
 	/**
@@ -1114,7 +1135,8 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#asType(java.lang.Class)}.
+	 * Test method for
+	 * {@link org.javamoney.moneta.FastMoney#asType(java.lang.Class)}.
 	 */
 	@Test
 	public void testGetNumberClassOfT() {
@@ -1212,7 +1234,8 @@ public class FastMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.FastMoney#with(javax.money.MonetaryAdjuster)}.
+	 * {@link org.javamoney.moneta.FastMoney#with(javax.money.MonetaryAdjuster)}
+	 * .
 	 */
 	@Test
 	public void testWithMonetaryOperator() {

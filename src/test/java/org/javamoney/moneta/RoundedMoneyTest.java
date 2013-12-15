@@ -155,7 +155,7 @@ public class RoundedMoneyTest {
 	@Test
 	public void testOfCurrencyUnitBigDecimalMathContext() {
 		RoundedMoney m = RoundedMoney.of(EURO, BigDecimal.valueOf(2.15),
-				new MonetaryContext.Builder(BigDecimal.class).setPrecision(2)
+				new MonetaryContext.Builder().setPrecision(2)
 						.setAttribute(
 								RoundingMode.DOWN).build());
 		RoundedMoney m2 = RoundedMoney.of(EURO, BigDecimal.valueOf(2.1));
@@ -216,7 +216,7 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testOfCurrencyUnitNumberMonetaryContext() {
-		MonetaryContext mc = new MonetaryContext.Builder(BigDecimal.class)
+		MonetaryContext mc = new MonetaryContext.Builder()
 				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
 		RoundedMoney m = RoundedMoney.of(EURO, (byte) 2, mc);
 		assertNotNull(m);
@@ -329,7 +329,7 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testOfStringNumberMathContext() {
-		MonetaryContext mc = new MonetaryContext.Builder(BigDecimal.class)
+		MonetaryContext mc = new MonetaryContext.Builder()
 				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
 		RoundedMoney m = RoundedMoney.of("EUR", (byte) 2, mc);
 		assertNotNull(m);
@@ -462,7 +462,7 @@ public class RoundedMoneyTest {
 		RoundedMoney m = RoundedMoney.of("CHF", 10);
 		assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT,
 				m.getMonetaryContext());
-		MonetaryContext mc = new MonetaryContext.Builder(BigDecimal.class)
+		MonetaryContext mc = new MonetaryContext.Builder()
 				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
 		m = RoundedMoney.of("CHF", 10, mc);
 		assertEquals(mc, m.getMonetaryContext());

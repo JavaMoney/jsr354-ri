@@ -22,6 +22,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 // github.com/JavaMoney/jsr354-ri.git
@@ -94,9 +97,19 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	private static final long SCALING_DENOMINATOR = 100000L;
 
 	/** the {@link MonetaryContext} used by this instance, e.g. on division. */
-	private static final MonetaryContext MONETARY_CONTEXT = new MonetaryContext.Builder(
-			Long.class).setMaxScale(SCALE).setFixedScale(true)
-			.setPrecision(String.valueOf(Integer.MAX_VALUE).length()).build();
+	private static final MonetaryContext<FastMoney> MONETARY_CONTEXT = new MonetaryContext.Builder()
+			.setMaxScale(SCALE).setFixedScale(true)
+			.setPrecision(String.valueOf(Integer.MAX_VALUE).length())
+			.build(FastMoney.class);
+
+	private static final Map<String, FastMoney> CACHE = Collections
+			.synchronizedMap(new LRUMap<String, FastMoney>(1000));
+	private static final ThreadLocal<StringBuilder> builders = new ThreadLocal<StringBuilder>() {
+		@Override
+		protected StringBuilder initialValue() {
+			return new StringBuilder();
+		}
+	};
 
 	/**
 	 * Required for deserialization only.
@@ -141,7 +154,14 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * @return A new instance of {@link FastMoney}.
 	 */
 	public static FastMoney of(CurrencyUnit currency, Number number) {
-		return new FastMoney(currency, number);
+		String numString = number.toString();
+		FastMoney cached = getFromCache(currency, numString);
+		if (cached != null) {
+			return cached;
+		}
+		FastMoney fm = new FastMoney(currency, number);
+		storeInCache(currency, numString, fm);
+		return fm;
 	}
 
 	/**
@@ -154,26 +174,62 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * @return A new instance of {@link FastMoney}.
 	 */
 	public static FastMoney of(String currencyCode, Number number) {
-		return new FastMoney(MonetaryCurrencies.getCurrency(currencyCode),
+		CurrencyUnit currency = MonetaryCurrencies.getCurrency(currencyCode);
+		String numString = number.toString();
+		FastMoney cached = getFromCache(currency, numString);
+		if (cached != null) {
+			return cached;
+		}
+		FastMoney fm = new FastMoney(
+				currency,
 				number);
+		storeInCache(currency, numString, fm);
+		return fm;
 	}
 
 /**
-	 * Facory method creating a zero instance with the given {@code currency);
+	 * Factory method creating a zero instance with the given {@code currency);
 	 * @param currency the target currency of the amount being created.
 	 * @return
 	 */
 	public static FastMoney ofZero(CurrencyUnit currency) {
-		return new FastMoney(currency, 0L);
+		FastMoney cached = getFromCache(currency, "0");
+		if (cached != null) {
+			return cached;
+		}
+		FastMoney fm = new FastMoney(currency, 0L);
+		storeInCache(currency, "0", fm);
+		return fm;
 	}
 
 /**
-	 * Facory method creating a zero instance with the given {@code currency);
+	 * Factory method creating a zero instance with the given {@code currency);
 	 * @param currency the target currency of the amount being created.
 	 * @return
 	 */
-	public static FastMoney ofZero(String currency) {
-		return new FastMoney(MonetaryCurrencies.getCurrency(currency), 0L);
+	public static FastMoney ofZero(String currencyCode) {
+		CurrencyUnit unitUnit = MonetaryCurrencies.getCurrency(currencyCode);
+		FastMoney cached = getFromCache(unitUnit, "0");
+		if (cached != null) {
+			return cached;
+		}
+		FastMoney fm = new FastMoney(unitUnit, 0L);
+		storeInCache(unitUnit, "0", fm);
+		return fm;
+	}
+
+	private static FastMoney getFromCache(CurrencyUnit unit, String amt) {
+		StringBuilder builder = builders.get();
+		builder.setLength(0);
+		builder.append(unit).append('-').append(amt);
+		return CACHE.get(builder.toString());
+	}
+
+	private static void storeInCache(CurrencyUnit unit, String amt, FastMoney fm) {
+		StringBuilder builder = builders.get();
+		builder.setLength(0);
+		builder.append(unit).append('-').append(amt);
+		CACHE.put(builder.toString(), fm);
 	}
 
 	/*
@@ -650,7 +706,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#isNotEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isNotEqualTo(MonetaryAmount amount) {
+	public boolean isNotEqualTo(MonetaryAmount<?> amount) {
 		checkAmountParameter(amount);
 		return this.number != FastMoney.from(amount).number;
 	}
@@ -722,6 +778,10 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static FastMoney of(CurrencyUnit currency, BigDecimal number) {
+		FastMoney cached = getFromCache(currency, number.toString());
+		if (cached != null) {
+			return cached;
+		}
 		return new FastMoney(currency, number);
 	}
 
@@ -841,7 +901,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	}
 
 	@Override
-	public MonetaryContext getMonetaryContext() {
+	public MonetaryContext<FastMoney> getMonetaryContext() {
 		return MONETARY_CONTEXT;
 	}
 
@@ -911,8 +971,48 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	}
 
 	@Override
-	protected MonetaryContext getDefaultMonetaryContext() {
+	protected MonetaryContext<FastMoney> getDefaultMonetaryContext() {
 		return MONETARY_CONTEXT;
+	}
+
+	private static final class LRUMap<K, V> extends LinkedHashMap<K, V> {
+
+		/**
+		 * serialVersionUID.
+		 */
+		private static final long serialVersionUID = -3609851324668582780L;
+		private int cacheSize = 200;
+
+		public LRUMap(int cacheSize) {
+			super();
+			if (cacheSize < 0) {
+				throw new IllegalArgumentException(
+						"cacheSize must >= 0, 0 = unlimited");
+			}
+			this.cacheSize = cacheSize;
+		}
+
+		@Override
+		protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
+			if (cacheSize == 0) {
+				return false;
+			}
+			if (size() > cacheSize) {
+				return true;
+			}
+			return false;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "LRUMap [cacheSize=" + cacheSize + "]";
+		}
+
 	}
 
 }

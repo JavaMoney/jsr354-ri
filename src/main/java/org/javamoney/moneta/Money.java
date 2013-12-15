@@ -77,7 +77,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * The default {@link MonetaryContext} applied, if not set explicitly on
 	 * creation.
 	 */
-	public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = initDefaultMathContext();
+	public static final MonetaryContext<Money> DEFAULT_MONETARY_CONTEXT = initDefaultMathContext();
 
 	/** The numeric part of this amount. */
 	private BigDecimal number;
@@ -123,7 +123,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * 
 	 * @return default MonetaryContext, never {@code null}.
 	 */
-	private static MonetaryContext initDefaultMathContext() {
+	private static MonetaryContext<Money> initDefaultMathContext() {
 		InputStream is = null;
 		try {
 			Properties props = new Properties();
@@ -142,17 +142,16 @@ public final class Money extends AbstractMoney<Money> implements
 							.valueOf(value
 									.toUpperCase(Locale.ENGLISH))
 							: RoundingMode.HALF_UP;
-					MonetaryContext mc = new MonetaryContext.Builder(
-							BigDecimal.class).setPrecision(prec)
-							.setAttribute(rm).build();
+					MonetaryContext<Money> mc = new MonetaryContext.Builder()
+							.setPrecision(prec)
+							.setAttribute(rm).build(Money.class);
 					Logger.getLogger(Money.class.getName()).info(
 							"Using custom MathContext: precision=" + prec
 									+ ", roundingMode=" + rm);
 					return mc;
 				}
 				else {
-					MonetaryContext.Builder builder = new MonetaryContext.Builder(
-							BigDecimal.class);
+					MonetaryContext.Builder builder = new MonetaryContext.Builder();
 					value = props
 							.getProperty("org.javamoney.moneta.Money.defaults.mathContext");
 					if (value != null) {
@@ -180,23 +179,21 @@ public final class Money extends AbstractMoney<Money> implements
 							break;
 						}
 					}
-					return builder.build();
+					return builder.build(Money.class);
 				}
 			}
-			MonetaryContext.Builder builder = new MonetaryContext.Builder(
-					BigDecimal.class);
+			MonetaryContext.Builder builder = new MonetaryContext.Builder();
 			Logger.getLogger(Money.class.getName()).info(
 					"Using default MathContext.DECIMAL64");
 			builder.setAttribute(MathContext.DECIMAL64);
-			return builder.build();
+			return builder.build(Money.class);
 		} catch (Exception e) {
 			Logger.getLogger(Money.class.getName())
 					.log(Level.SEVERE,
 							"Error evaluating default NumericContext, using default (NumericContext.NUM64).",
 							e);
-			return new MonetaryContext.Builder(
-					BigDecimal.class).setAttribute(MathContext.DECIMAL64)
-					.build();
+			return new MonetaryContext.Builder().setAttribute(MathContext.DECIMAL64)
+					.build(Money.class);
 		} finally {
 			if (is != null) {
 				try {
@@ -226,7 +223,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             {@link MonetaryContext} used.
 	 */
 	private Money(CurrencyUnit currency, BigDecimal number,
-			MonetaryContext monetaryContext) {
+			MonetaryContext<Money> monetaryContext) {
 		super(currency, monetaryContext);
 		Objects.requireNonNull(number, "Number is required.");
 		if (monetaryContext != null) {
@@ -857,7 +854,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             if the number of this instance exceeds the capabilities of
 	 *             the given {@link MonetaryContext}.
 	 */
-	public Money with(MonetaryContext context) {
+	public Money with(MonetaryContext<Money> context) {
 		Objects.requireNonNull(context, "MathContext required");
 		return new Money(getCurrency(), this.number, context);
 	}
@@ -879,7 +876,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see org.javamoney.moneta.AbstractMoney#getDefaultMonetaryContext()
 	 */
 	@Override
-	protected MonetaryContext getDefaultMonetaryContext() {
+	protected MonetaryContext<Money> getDefaultMonetaryContext() {
 		return DEFAULT_MONETARY_CONTEXT;
 	}
 
@@ -929,7 +926,7 @@ public final class Money extends AbstractMoney<Money> implements
 			ClassNotFoundException {
 		this.number = (BigDecimal) ois.readObject();
 		this.currency = (CurrencyUnit) ois.readObject();
-		this.monetaryContext = (MonetaryContext) ois.readObject();
+		this.monetaryContext = (MonetaryContext<Money>) ois.readObject();
 	}
 
 	@SuppressWarnings("unused")
@@ -992,7 +989,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             {@link MonetaryContext} used.
 	 */
 	public static Money of(CurrencyUnit currency, BigDecimal number,
-			MonetaryContext monetaryContext) {
+			MonetaryContext<Money> monetaryContext) {
 		return new Money(currency, number, monetaryContext);
 	}
 
@@ -1030,7 +1027,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             {@link MonetaryContext} used.
 	 */
 	public static Money of(CurrencyUnit currency, Number number,
-			MonetaryContext monetaryContext) {
+			MonetaryContext<Money> monetaryContext) {
 		return new Money(currency, getBigDecimal(number), monetaryContext);
 	}
 
@@ -1074,7 +1071,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, Number number,
-			MonetaryContext monetaryContext) {
+			MonetaryContext<Money> monetaryContext) {
 		return new Money(MonetaryCurrencies.getCurrency(currencyCode),
 				getBigDecimal(number),
 				monetaryContext);
@@ -1093,7 +1090,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, BigDecimal number,
-			MonetaryContext monetaryContext) {
+			MonetaryContext<Money> monetaryContext) {
 		return new Money(MonetaryCurrencies.getCurrency(currencyCode), number,
 				monetaryContext);
 	}
@@ -1128,7 +1125,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *            the amount to be converted
 	 * @return an according Money instance.
 	 */
-	public static Money from(MonetaryAmount amt) {
+	public static Money from(MonetaryAmount<?> amt) {
 		if (amt.getClass() == Money.class) {
 			return (Money) amt;
 		}

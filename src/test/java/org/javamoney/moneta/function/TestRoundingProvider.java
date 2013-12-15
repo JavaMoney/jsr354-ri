@@ -67,19 +67,21 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 		public MonetaryAmount apply(MonetaryAmount amount) {
 			if (minorRounding == null) {
 				minorRounding = MonetaryRoundings
-						.getRounding(new MonetaryContext.Builder(Object.class)
+						.getRounding(new MonetaryContext.Builder()
 								.setMaxScale(2)
 								.setAttribute(RoundingMode.HALF_UP).build());
 			}
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
 			BigDecimal delta = null;
-			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts.getAmount(
-					amount.getCurrency(), 0.03))) {
+			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts.getDefaultAmountFactory()
+					.getAmount(
+							amount.getCurrency(), 0.03))) {
 				// add
 				return amt.add(
-						MonetaryAmounts.getAmount(amt.getCurrency(),
-								new BigDecimal("0.05"))
+						MonetaryAmounts.getDefaultAmountFactory()
+								.getAmount(amt.getCurrency(),
+										new BigDecimal("0.05"))
 								.subtract(mp));
 			}
 			else {
@@ -151,7 +153,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	@Override
-	public MonetaryOperator getRounding(MonetaryContext monetaryContext) {
+	public MonetaryOperator getRounding(MonetaryContext<?> monetaryContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}

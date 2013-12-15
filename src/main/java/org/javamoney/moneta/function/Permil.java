@@ -66,7 +66,6 @@ final class Permil implements MonetaryOperator {
 	 * 
 	 * @return the permil result of the amount, never {@code null}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends MonetaryAmount<T>> T apply(T amount) {
 		return amount.multiply(permilValue);

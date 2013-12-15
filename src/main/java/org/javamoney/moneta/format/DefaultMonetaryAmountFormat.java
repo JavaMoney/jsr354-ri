@@ -11,7 +11,6 @@
 package org.javamoney.moneta.format;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -21,11 +20,11 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
+import javax.money.format.AmountStyle;
 import javax.money.format.CurrencyPlacement;
 import javax.money.format.CurrencyStyle;
-import javax.money.format.FormatStyle;
 import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.ParseContext;
+import javax.money.format.MonetaryParseException;
 import javax.money.function.MonetaryRoundings;
 
 /**
@@ -48,9 +47,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * The {@link MonetaryContext} applied on creating a {@link MonetaryAmount}
 	 * based on data parsed.
 	 */
-	private MonetaryContext monetaryContext;
+	private MonetaryContext<?> monetaryContext;
 	/** The formatting style to be used. */
-	private FormatStyle numberStyle;
+	private AmountStyle numberStyle;
 	/**
 	 * The default {@link CurrencyUnit} used, if no currency can be evaluated
 	 * from the parsing input.
@@ -61,14 +60,14 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * Creates a new instance.
 	 * 
 	 * @param numberStyle
-	 *            the base {@link FormatStyle}, not {@code null}.
+	 *            the base {@link AmountStyle}, not {@code null}.
 	 * @param monetaryContext
 	 *            the {@link MonetaryContext} to be used for creating
 	 *            {@link MonetaryAmount} instances during parsing, not
 	 *            {@code null}.
 	 */
-	public DefaultMonetaryAmountFormat(FormatStyle numberStyle,
-			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
+	public DefaultMonetaryAmountFormat(AmountStyle numberStyle,
+			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
 		if (tokens == null || tokens.isEmpty()) {
 			throw new IllegalArgumentException(
 					"tokens must not be null or empty.");
@@ -83,7 +82,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * Creates a new instance.
 	 * 
 	 * @param style
-	 *            the {@link FormatStyle} to be used, not {@code null}.
+	 *            the {@link AmountStyle} to be used, not {@code null}.
 	 * @param currencyStyle
 	 *            the style defining how the {@link CurrencyUnit} should be
 	 *            formatted.
@@ -97,9 +96,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 *            The default {@link CurrencyUnit} used, when no currency
 	 *            information can be extracted from the parse input.
 	 */
-	public DefaultMonetaryAmountFormat(FormatStyle style,
+	public DefaultMonetaryAmountFormat(AmountStyle style,
 			CurrencyStyle currencyStyle, CurrencyPlacement currencyPlacement,
-			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
+			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
 
 		switch (currencyPlacement) {
 		case AFTER:
@@ -224,8 +223,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @throws ItemParseException
 	 *             if there is a problem while parsing
 	 */
-	public MonetaryAmount parse(CharSequence text)
-			throws ParseException {
+	public MonetaryAmount<?> parse(CharSequence text)
+			throws MonetaryParseException {
 		ParseContext ctx = new ParseContext(text);
 		for (FormatToken token : tokens) {
 			token.parse(ctx);
@@ -236,9 +235,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			unit = defaultCurrency;
 		}
 		if (num == null) {
-			throw new ParseException(text.toString(), -1);
+			throw new MonetaryParseException(text.toString(), -1);
 		}
-		return MonetaryAmounts.getAmount(unit, num);
+		return MonetaryAmounts.getDefaultAmountFactory().getAmount(unit, num);
 	}
 
 	/*
@@ -247,7 +246,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @see javax.money.format.MonetaryAmountFormat#getMonetaryContext()
 	 */
 	@Override
-	public MonetaryContext getMonetaryContext() {
+	public MonetaryContext<?> getMonetaryContext() {
 		return monetaryContext;
 	}
 
@@ -257,7 +256,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @see javax.money.format.MonetaryAmountFormat#getFormatStyle()
 	 */
 	@Override
-	public FormatStyle getFormatStyle() {
+	public AmountStyle getAmountStyle() {
 		return numberStyle;
 	}
 
@@ -279,9 +278,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * also are responsible for implementing the opposite, parsing, of an item
 	 * from an input character sequence. Each {@link FormatToken} gets access to
 	 * the current parsing location, and the original and current character
-	 * input sequence, modeled by the {@link ParseContext}. Finally if parsing of
-	 * a part failed, a {@link FormatToken} throws an {@link ItemParseException}
-	 * describing the problem.
+	 * input sequence, modeled by the {@link ParseContext}. Finally if parsing
+	 * of a part failed, a {@link FormatToken} throws an
+	 * {@link ItemParseException} describing the problem.
 	 * <p>
 	 * This class is not thread-safe and therefore should not be shared among
 	 * different threads.
@@ -299,13 +298,14 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		 */
 		private CurrencyUnit defaultCurrency;
 
-		private FormatStyle style;
+		private AmountStyle style;
 
 		private CurrencyStyle currencyStyle = CurrencyStyle.CODE;
 
 		private CurrencyPlacement currencyPlacement = CurrencyPlacement.BEFORE;
 
-		private MonetaryContext monetaryContext = MonetaryAmounts
+		private MonetaryContext<?> monetaryContext = MonetaryAmounts
+				.getDefaultAmountFactory()
 				.getDefaultMonetaryContext();
 
 		/**
@@ -327,7 +327,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		}
 
 		/**
-		 * Sets the default {@link FormatStyle} for the given {@link Locale}.
+		 * Sets the default {@link AmountStyle} for the given {@link Locale}.
 		 * for the {@link #locale} is used, and the number is rounded with the
 		 * currencies, default rounding as returned by
 		 * {@link MonetaryRoundings#getRounding()}.
@@ -338,19 +338,19 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		 */
 		public Builder setDefaultFormatStyle(Locale locale) {
 			Objects.requireNonNull(locale);
-			this.style = new FormatStyle.Builder(locale).setRounding(
+			this.style = new AmountStyle.Builder(locale).setFormatConversion(
 					MonetaryRoundings.getRounding()).build();
 			return this;
 		}
 
 		/**
-		 * Sets the {@link FormatStyle} used explicitly.
+		 * Sets the {@link AmountStyle} used explicitly.
 		 * 
 		 * @param style
-		 *            the {@link FormatStyle} to be used.
+		 *            the {@link AmountStyle} to be used.
 		 * @return the builder, for chaining.
 		 */
-		public Builder setFormatStyle(FormatStyle style) {
+		public Builder setFormatStyle(AmountStyle style) {
 			Objects.requireNonNull(style);
 			this.style = style;
 			return this;
@@ -388,7 +388,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		 * 
 		 * @param monetaryContext
 		 */
-		public Builder setMonetaryContext(MonetaryContext monetaryContext) {
+		public Builder setMonetaryContext(MonetaryContext<?> monetaryContext) {
 			Objects.requireNonNull(monetaryContext);
 			this.monetaryContext = monetaryContext;
 			return this;

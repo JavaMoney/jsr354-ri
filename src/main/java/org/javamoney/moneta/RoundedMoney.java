@@ -49,7 +49,13 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 		Comparable<MonetaryAmount<?>>,
 		Serializable {
 
-	public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = Money.DEFAULT_MONETARY_CONTEXT;
+	/**
+	 * serialVersionUID.
+	 */
+	private static final long serialVersionUID = 366517590511294389L;
+	/** The default {@link MonetaryContext} applied. */
+	public static final MonetaryContext<RoundedMoney> DEFAULT_MONETARY_CONTEXT = MonetaryContext
+			.from(Money.DEFAULT_MONETARY_CONTEXT, RoundedMoney.class);
 
 	/** The numeric part of this amount. */
 	private BigDecimal number;
@@ -74,7 +80,8 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 *            the amount, not null.
 	 */
 	private RoundedMoney(CurrencyUnit currency, Number number,
-			MonetaryContext monetaryContext, MonetaryOperator rounding) {
+			MonetaryContext<RoundedMoney> monetaryContext,
+			MonetaryOperator rounding) {
 		super(currency, monetaryContext);
 		Objects.requireNonNull(number, "Number is required.");
 		checkNumber(number);
@@ -135,8 +142,9 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MonetaryContext monetaryContext) {
-		return new RoundedMoney(currency, number, monetaryContext, null);
+			MonetaryContext<?> monetaryContext) {
+		return new RoundedMoney(currency, number, MonetaryContext.from(
+				monetaryContext, RoundedMoney.class), null);
 	}
 
 	/**
@@ -154,8 +162,9 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, BigDecimal number,
-			MonetaryContext mathContext, MonetaryOperator rounding) {
-		return new RoundedMoney(currency, number, mathContext, rounding);
+			MonetaryContext<?> monetaryContext, MonetaryOperator rounding) {
+		return new RoundedMoney(currency, number, MonetaryContext.from(
+				monetaryContext, RoundedMoney.class), rounding);
 	}
 
 	/**
@@ -169,7 +178,8 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number) {
-		return new RoundedMoney(currency, number, (MonetaryContext) null, null);
+		return new RoundedMoney(currency, number,
+				(MonetaryContext<RoundedMoney>) null, null);
 	}
 
 	/**
@@ -186,7 +196,8 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
 			MonetaryOperator rounding) {
-		return new RoundedMoney(currency, number, (MonetaryContext) null,
+		return new RoundedMoney(currency, number,
+				(MonetaryContext<RoundedMoney>) null,
 				rounding);
 	}
 
@@ -201,8 +212,9 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MonetaryContext mathContext) {
-		return new RoundedMoney(currency, number, mathContext, null);
+			MonetaryContext<?> monetaryContext) {
+		return new RoundedMoney(currency, number, MonetaryContext.from(
+				monetaryContext, RoundedMoney.class), null);
 	}
 
 	/**
@@ -213,13 +225,16 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 *            The target currency, not null.
 	 * @param number
 	 *            The numeric part, not null.
+	 * @param monetaryContext
+	 *            the {@link MonetaryContext} to be used.
 	 * @param rounding
 	 *            The rounding to be applied.
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(CurrencyUnit currency, Number number,
-			MonetaryContext mathContext, MonetaryOperator rounding) {
-		return new RoundedMoney(currency, number, mathContext, rounding);
+			MonetaryContext<?> monetaryContext, MonetaryOperator rounding) {
+		return new RoundedMoney(currency, number, MonetaryContext.from(
+				monetaryContext, RoundedMoney.class), rounding);
 	}
 
 	/**
@@ -270,10 +285,12 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MonetaryContext monetaryContext) {
+			MonetaryContext<?> monetaryContext) {
 		return new RoundedMoney(MonetaryCurrencies.getCurrency(currencyCode),
 				number,
-				monetaryContext, MonetaryRoundings.getRounding(monetaryContext));
+				MonetaryContext.from(
+						monetaryContext, RoundedMoney.class),
+				MonetaryRoundings.getRounding(monetaryContext));
 	}
 
 	/**
@@ -289,10 +306,11 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return A new instance of {@link RoundedMoney}.
 	 */
 	public static RoundedMoney of(String currencyCode, Number number,
-			MonetaryContext mathContext, MonetaryOperator rounding) {
+			MonetaryContext<?> monetaryContext, MonetaryOperator rounding) {
 		return new RoundedMoney(MonetaryCurrencies.getCurrency(currencyCode),
 				number,
-				mathContext, rounding);
+				MonetaryContext.from(
+						monetaryContext, RoundedMoney.class), rounding);
 	}
 
 /**
@@ -339,7 +357,7 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * 
 	 * @return the {@link MathContext} used, never null.
 	 */
-	public MonetaryContext getMonetaryContext() {
+	public MonetaryContext<RoundedMoney> getMonetaryContext() {
 		return this.monetaryContext;
 	}
 
@@ -353,9 +371,11 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	 * @return a new {@link RoundedMoney} instance, with the new
 	 *         {@link MathContext}.
 	 */
-	public RoundedMoney setMathContext(MonetaryContext mathContext) {
-		Objects.requireNonNull(mathContext, "MathContext required.");
-		return new RoundedMoney(this.currency, this.number, mathContext,
+	public RoundedMoney setMathContext(MonetaryContext<?> monetaryContext) {
+		Objects.requireNonNull(monetaryContext, "MonetaryContext required.");
+		return new RoundedMoney(this.currency, this.number,
+				MonetaryContext.from(
+						monetaryContext, RoundedMoney.class),
 				this.rounding);
 	}
 
@@ -795,13 +815,15 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 		oos.writeObject(this.currency);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream ois) throws IOException,
 			ClassNotFoundException {
 		this.number = (BigDecimal) ois.readObject();
-		this.monetaryContext = (MonetaryContext) ois.readObject();
+		this.monetaryContext = (MonetaryContext<RoundedMoney>) ois.readObject();
 		this.currency = (CurrencyUnit) ois.readObject();
 	}
 
+	@SuppressWarnings("unused")
 	private void readObjectNoData()
 			throws ObjectStreamException {
 		if (this.number == null) {
@@ -1130,7 +1152,7 @@ public final class RoundedMoney extends AbstractMoney<RoundedMoney> implements
 	}
 
 	@Override
-	protected MonetaryContext getDefaultMonetaryContext() {
+	protected MonetaryContext<RoundedMoney> getDefaultMonetaryContext() {
 		return DEFAULT_MONETARY_CONTEXT;
 	}
 }

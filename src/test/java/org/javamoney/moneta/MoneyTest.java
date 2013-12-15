@@ -180,9 +180,9 @@ public class MoneyTest {
 		Money m = Money.of(
 				EURO,
 				BigDecimal.valueOf(2.15),
-				new MonetaryContext.Builder(BigDecimal.class).setPrecision(
+				new MonetaryContext.Builder().setPrecision(
 						2).setFixedScale(true).setAttribute(
-						RoundingMode.DOWN).build());
+						RoundingMode.DOWN).build(Money.class));
 		Money m2 = Money.of(EURO, BigDecimal.valueOf(2.1));
 		assertEquals(m, m2);
 		Money m3 = m.multiply(100);
@@ -240,9 +240,10 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testOfCurrencyUnitNumberMathContext() {
-		MonetaryContext mc = new MonetaryContext.Builder(BigDecimal.class)
+		MonetaryContext<Money> mc = new MonetaryContext.Builder()
 				.setMaxScale(2345)
-				.setFixedScale(true).setAttribute(RoundingMode.CEILING).build();
+				.setFixedScale(true).setAttribute(RoundingMode.CEILING)
+				.build(Money.class);
 		Money m = Money.of(EURO, (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -341,9 +342,9 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testOfStringNumberMathContext() {
-		MonetaryContext mc = new MonetaryContext.Builder(BigDecimal.class)
+		MonetaryContext<Money> mc = new MonetaryContext.Builder()
 				.setMaxScale(2345).setFixedScale(true)
-				.setAttribute(RoundingMode.CEILING).build();
+				.setAttribute(RoundingMode.CEILING).build(Money.class);
 		Money m = Money.of("EUR", (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -467,14 +468,14 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testEqualsMonetarAmount() {
-		MonetaryAmount m = MonetaryAmounts.getAmount("CHF", 100);
+		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory().getAmount("CHF", 100);
 		MonetaryAmount<Money> m2 = Money.of("CHF", 100);
 		Money m3 = Money.of("CHF", 100);
 		assertTrue(m.equals(m2));
 		assertTrue(m.equals(m3));
 		assertTrue(m2.equals(m3));
 	}
-	
+
 	/**
 	 * Test method for
 	 * {@link org.javamoney.moneta.Money#compareTo(javax.money.MonetaryAmount)}.
@@ -507,8 +508,9 @@ public class MoneyTest {
 	public void testWithMonetaryContext() {
 		Money m = Money.of("CHF", 10);
 		assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
-		MonetaryContext mc = new MonetaryContext.Builder(BigDecimal.class)
-				.setPrecision(128).setAttribute(RoundingMode.HALF_EVEN).build();
+		MonetaryContext<Money> mc = new MonetaryContext.Builder()
+				.setPrecision(128).setAttribute(RoundingMode.HALF_EVEN)
+				.build(Money.class);
 		Money m2 = m.with(mc);
 		assertNotNull(m2);
 		assertTrue(m != m2);
@@ -1242,14 +1244,15 @@ public class MoneyTest {
 	 * Test method for {@link org.javamoney.moneta.Money#getNumberType()}.
 	 */
 	@Test
-	public void testGetNumberType() {
-		assertEquals(Money.of("CHF", 0).getMonetaryContext().getNumberType(),
-				BigDecimal.class);
+	public void testGetImplementationType() {
+		assertEquals(Money.of("CHF", 0).getMonetaryContext()
+				.getAmountType(),
+				Money.class);
 		assertEquals(Money.of("CHF", 0.34738746d).getMonetaryContext()
-				.getNumberType(),
-				BigDecimal.class);
+				.getAmountType(),
+				Money.class);
 		assertEquals(Money.of("CHF", 100034L).getMonetaryContext()
-				.getNumberType(), BigDecimal.class);
+				.getAmountType(), Money.class);
 	}
 
 	/**

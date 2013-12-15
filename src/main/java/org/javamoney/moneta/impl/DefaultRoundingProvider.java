@@ -46,7 +46,7 @@ public class DefaultRoundingProvider implements
 	}
 
 	@Override
-	public MonetaryOperator getRounding(MonetaryContext monetaryContext) {
+	public MonetaryOperator getRounding(MonetaryContext<?> monetaryContext) {
 		RoundingMode rm = monetaryContext.getAttribute(RoundingMode.class,
 				RoundingMode.HALF_EVEN);
 		return new DefaultRounding(monetaryContext.getMaxScale(), rm);

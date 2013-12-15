@@ -92,7 +92,7 @@ final class DefaultCashRounding implements
 	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
 	 */
 	@Override
-	public MonetaryAmount apply(MonetaryAmount value) {
+	public <T extends MonetaryAmount<T>> T apply(T value) {
 		Objects.requireNonNull(value, "Amunt required.");
 		throw new UnsupportedOperationException(
 				"Cash Rounding not yet implemented.");

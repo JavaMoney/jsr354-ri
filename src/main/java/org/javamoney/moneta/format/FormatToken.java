@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import javax.money.MonetaryAmount;
-import javax.money.format.ParseContext;
+import javax.money.format.MonetaryParseException;
 
 /**
  * Abstraction for a token that is part of a token stream, used for formatting
@@ -31,7 +31,7 @@ public interface FormatToken {
 	 * @throws ParseException
 	 *             if parsing fails.
 	 */
-	public void parse(ParseContext context) throws ParseException;
+	public void parse(ParseContext context) throws MonetaryParseException;
 
 	/**
 	 * Formats the given {@link MonetaryAmount} to an {@link Appendable}.
@@ -39,7 +39,7 @@ public interface FormatToken {
 	 * @param amount the {@link MonetaryAmount} to be formatted, not {@code null}.
 	 * @throws IOException thrown by the {@link Appendable} on appending.
 	 */
-	public void print(Appendable appendable, MonetaryAmount amount)
+	public void print(Appendable appendable, MonetaryAmount<?> amount)
 			throws IOException;
 
 }

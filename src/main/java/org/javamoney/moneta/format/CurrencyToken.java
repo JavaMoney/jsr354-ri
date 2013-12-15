@@ -11,7 +11,6 @@
 package org.javamoney.moneta.format;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -20,7 +19,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import javax.money.format.CurrencyStyle;
-import javax.money.format.ParseContext;
+import javax.money.format.MonetaryParseException;
 
 /**
  * Implements a {@link FormatToken} that adds a localizable {@link String}, read
@@ -82,7 +81,7 @@ final class CurrencyToken implements FormatToken {
 	 *            to be formatted.
 	 * @return the formatted currency.
 	 */
-	protected String getToken(MonetaryAmount amount) {
+	protected String getToken(MonetaryAmount<?> amount) {
 		switch (style) {
 		case NUMERIC_CODE:
 			return String.valueOf(amount.getCurrency()
@@ -159,7 +158,7 @@ final class CurrencyToken implements FormatToken {
 	 */
 	@Override
 	public void parse(ParseContext context)
-			throws ParseException {
+			throws MonetaryParseException {
 		String token = context.lookupNextToken();
 		while (token != null) {
 			if (token.trim().isEmpty()) {
@@ -213,7 +212,7 @@ final class CurrencyToken implements FormatToken {
 	 *             may be thrown by the {@link Appendable}
 	 */
 	@Override
-	public void print(Appendable appendable, MonetaryAmount amount)
+	public void print(Appendable appendable, MonetaryAmount<?> amount)
 			throws IOException {
 		appendable.append(getToken(amount));
 	}
