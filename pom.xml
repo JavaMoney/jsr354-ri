@@ -223,7 +223,7 @@
 	<distributionManagement>
 		<site>
 			<id>javamoney.java.net-site</id>
-			<url>dav:https://java.net/website/javamoney/ri/</url>
+			<url>dav:https://kenai.com/website/javamoney/api/</url>
 			<name>Java net Public SVN Site Repository</name>
 		</site>
 		<repository>

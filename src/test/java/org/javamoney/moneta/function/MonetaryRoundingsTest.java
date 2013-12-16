@@ -34,7 +34,7 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
-import javax.money.function.MonetaryRoundings;
+import javax.money.MonetaryRoundings;
 
 import org.junit.Test;
 
@@ -47,7 +47,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getRounding()}.
+	 * {@link javax.money.MonetaryRoundings#getRounding()}.
 	 */
 	@Test
 	public void testGetRounding() {
@@ -64,7 +64,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getRounding(int, java.math.RoundingMode)}
+	 * {@link javax.money.MonetaryRoundings#getRounding(int, java.math.RoundingMode)}
 	 * .
 	 */
 	@Test
@@ -111,7 +111,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getRounding(javax.money.CurrencyUnit)}
+	 * {@link javax.money.MonetaryRoundings#getRounding(javax.money.CurrencyUnit)}
 	 * .
 	 */
 	@Test
@@ -167,7 +167,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getCashRounding(javax.money.CurrencyUnit)}
+	 * {@link javax.money.MonetaryRoundings#getCashRounding(javax.money.CurrencyUnit)}
 	 * .
 	 */
 	@Test
@@ -189,7 +189,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getRounding(javax.money.CurrencyUnit, long)}
+	 * {@link javax.money.MonetaryRoundings#getRounding(javax.money.CurrencyUnit, long)}
 	 * .
 	 */
 	@Test
@@ -206,7 +206,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getCashRounding(javax.money.CurrencyUnit, long)}
+	 * {@link javax.money.MonetaryRoundings#getCashRounding(javax.money.CurrencyUnit, long)}
 	 * .
 	 */
 	@Test
@@ -223,7 +223,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getRounding(java.lang.String)}
+	 * {@link javax.money.MonetaryRoundings#getRounding(java.lang.String)}
 	 * .
 	 */
 	@Test
@@ -241,7 +241,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getCustomRoundingIds()} .
+	 * {@link javax.money.MonetaryRoundings#getCustomRoundingIds()} .
 	 */
 	@Test
 	public void testGetCustomRoundingIds() {
@@ -258,7 +258,7 @@ public class MonetaryRoundingsTest {
 
 	/**
 	 * Test method for
-	 * {@link javax.money.function.MonetaryRoundings#getRounding(java.lang.String)}
+	 * {@link javax.money.MonetaryRoundings#getRounding(java.lang.String)}
 	 * .
 	 */
 	@Test(expected = MonetaryException.class)

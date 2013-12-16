@@ -28,7 +28,7 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryOperator;
-import javax.money.function.MonetaryRoundings;
+import javax.money.MonetaryRoundings;
 import javax.money.spi.RoundingProviderSpi;
 
 public class TestRoundingProvider implements RoundingProviderSpi {

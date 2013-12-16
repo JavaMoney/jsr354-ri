@@ -20,12 +20,12 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
+import javax.money.MonetaryRoundings;
 import javax.money.format.AmountStyle;
 import javax.money.format.CurrencyPlacement;
 import javax.money.format.CurrencyStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
-import javax.money.function.MonetaryRoundings;
 
 /**
  * Formats instances of {@code MonetaryAmount} to a {@link String} or an

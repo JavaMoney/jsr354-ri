@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.function.MonetaryRoundings;
+import javax.money.MonetaryRoundings;
 
 import org.junit.Test;
 

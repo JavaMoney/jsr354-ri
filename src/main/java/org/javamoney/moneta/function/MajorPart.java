@@ -16,7 +16,7 @@ import java.util.Objects;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryOperator;
-import javax.money.function.MonetaryRoundings;
+import javax.money.MonetaryRoundings;
 
 /**
  * This class allows to extract the major part of a {@link MonetaryAmount}

@@ -32,7 +32,7 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
-import javax.money.function.MonetaryRoundings;
+import javax.money.MonetaryRoundings;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
