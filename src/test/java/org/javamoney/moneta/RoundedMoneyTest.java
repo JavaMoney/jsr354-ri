@@ -217,7 +217,7 @@ public class RoundedMoneyTest {
 	@Test
 	public void testOfCurrencyUnitNumberMonetaryContext() {
 		MonetaryContext mc = new MonetaryContext.Builder()
-				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build(RoundedMoney.class);
 		RoundedMoney m = RoundedMoney.of(EURO, (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -330,7 +330,7 @@ public class RoundedMoneyTest {
 	@Test
 	public void testOfStringNumberMathContext() {
 		MonetaryContext mc = new MonetaryContext.Builder()
-				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build(RoundedMoney.class);
 		RoundedMoney m = RoundedMoney.of("EUR", (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -463,7 +463,7 @@ public class RoundedMoneyTest {
 		assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT,
 				m.getMonetaryContext());
 		MonetaryContext mc = new MonetaryContext.Builder()
-				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build(RoundedMoney.class);
 		m = RoundedMoney.of("CHF", 10, mc);
 		assertEquals(mc, m.getMonetaryContext());
 	}
