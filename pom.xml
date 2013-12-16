@@ -15,9 +15,14 @@
 	<artifactId>jsr354-ri</artifactId>
 	<packaging>jar</packaging>
 	<version>0.8-SNAPSHOT</version>
-
+	<parent>
+		<groupId>org.javamoney</groupId>
+		<artifactId>javamoney-parent</artifactId>
+		<version>0.4-SNAPSHOT</version>
+	</parent>
+	
 	<name>JSR 354 RI (Moneta)</name>
-	<url>http://java.net/projects/javamoney</url>
+	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
 	This module impelements JSR 354.</description>
@@ -36,12 +41,8 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>${project.version}</jsr.version>
-		<jdkVersion>1.7</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<moduleDir>.</moduleDir>
 		<basedir>.</basedir>
@@ -265,12 +266,41 @@
 							-DrepositoryId=sonatype-nexus-staging -->
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+						<configuration>
+							<defaultKeyring>false</defaultKeyring>
+							<keyname>11A1E4D6</keyname>
+						</configuration>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
 								<phase>verify</phase>
 								<goals>
 									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<!-- phase>verify</phase -->
+								<goals>
+									<goal>jar</goal>
 								</goals>
 							</execution>
 						</executions>
@@ -579,7 +609,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<!-- version>2.2</version -->
 				<executions>
 					<execution>
 						<goals>
