@@ -15,11 +15,6 @@
 	<artifactId>jsr354-ri</artifactId>
 	<packaging>jar</packaging>
 	<version>0.8-SNAPSHOT</version>
-	<parent>
-		<groupId>org.javamoney</groupId>
-		<artifactId>javamoney-parent</artifactId>
-		<version>0.4-SNAPSHOT</version>
-	</parent>
 	
 	<name>JSR 354 RI (Moneta)</name>
 	<url>http://javamoney.org</url>
@@ -41,8 +36,12 @@
 	</licenses>
 
 	<properties>
+		<jsr.version>${project.version}</jsr.version>
+		<jdkVersion>1.7</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<moduleDir>.</moduleDir>
 		<basedir>.</basedir>
