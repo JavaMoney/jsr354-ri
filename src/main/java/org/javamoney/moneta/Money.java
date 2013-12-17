@@ -713,16 +713,6 @@ public final class Money extends AbstractMoney<Money> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.MonetaryAmount#pow(int)
-	 */
-	@Override
-	public Money pow(int n) {
-		return new Money(getCurrency(), this.number.pow(n));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#ulp()
 	 */
 	public Money ulp() {

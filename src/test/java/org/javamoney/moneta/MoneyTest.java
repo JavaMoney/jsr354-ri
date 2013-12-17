@@ -674,18 +674,6 @@ public class MoneyTest {
 		assertTrue(m == m.subtract(Money.of("CHF", 0)));
 	}
 
-	/**
-	 * Test method for {@link org.javamoney.moneta.Money#pow(int)}.
-	 */
-	@Test
-	public void testPow() {
-		Money m = Money.of("CHF", 23.234);
-		for (int p = 0; p < 100; p++) {
-			assertEquals(Money.of("CHF", BigDecimal.valueOf(23.234).pow(p)),
-					m.pow(p));
-		}
-	}
-
 	// /**
 	// * Test method for {@link javax.money.Money#ulp()}.
 	// */
