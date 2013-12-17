@@ -37,12 +37,12 @@ import javax.money.MonetaryQuery;
 
 /**
  * <type>long</type> based implementation of {@link MonetaryAmount}. This class
- * internally uses a single long number as numeric reporesentation, which
+ * internally uses a single long number as numeric representation, which
  * basically is interpreted as minor units.<br/>
  * It suggested to have a performance advantage of a 10-15 times faster compared
- * to {@link Money}, which interally uses {@link BigDecimal}. Nevertheless this
+ * to {@link Money}, which internally uses {@link BigDecimal}. Nevertheless this
  * comes with a price of less precision. As an example performing the following
- * calulcation one milltion times, results in slightly different results:
+ * calculation one million times, results in slightly different results:
  * 
  * <pre>
  * Money money1 = money1.add(Money.of(EURO, 1234567.3444));
@@ -66,8 +66,8 @@ import javax.money.MonetaryQuery;
  * executed one million (1000000) times results in {@code EUR 1657407.96251},
  * calculated in 179 ms, which is less than 1ns/loop.
  * <p>
- * Also note than mixxing up types my drastically change the performance
- * behaviour. E.g. replacing the code above with the following: *
+ * Also note than mixing up types my drastically change the performance
+ * behavior. E.g. replacing the code above with the following: *
  * 
  * <pre>
  * FastMoney money1 = money1.add(Money.of(EURO, 1234567.3444));
@@ -79,7 +79,7 @@ import javax.money.MonetaryQuery;
  * executed one million (1000000) times may execute significantly longer, since
  * monetary amount type conversion is involved.
  * 
- * @version 0.5
+ * @version 0.5.1
  * @author Anatole Tresch
  * @author Werner Keil
  */
