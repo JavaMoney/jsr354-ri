@@ -399,24 +399,6 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.MonetaryAmount#pow(int)
-	 */
-	public FastMoney pow(int n) {
-		return with(getNumber(BigDecimal.class).pow(n));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#ulp()
-	 */
-	public FastMoney ulp() {
-		return with(getNumber(BigDecimal.class).ulp());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#remainder(java.lang.Number)
 	 */
 	public FastMoney remainder(Number divisor) {

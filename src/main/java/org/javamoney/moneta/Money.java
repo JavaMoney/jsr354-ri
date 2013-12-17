@@ -713,15 +713,6 @@ public final class Money extends AbstractMoney<Money> implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.MonetaryAmount#ulp()
-	 */
-	public Money ulp() {
-		return new Money(getCurrency(), this.number.ulp());
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see org.javamoney.moneta.AbstractMoney#remainder(java.math.BigDecimal)
 	 */
 	@Override

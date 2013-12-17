@@ -506,35 +506,6 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#pow(int)}.
-	 */
-	@Test
-	public void testPow() {
-		FastMoney m = FastMoney.of("CHF", 23.234);
-		for (int p = 0; p < 100; p++) {
-			assertEquals(
-					FastMoney.of("CHF", BigDecimal.valueOf(23.234).pow(p)),
-					m.pow(p));
-		}
-	}
-
-	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#ulp()}.
-	 */
-	@Test
-	public void testUlp() {
-		FastMoney[] moneys = new FastMoney[] { FastMoney.of("CHF", 100),
-				FastMoney.of("CHF", 34242344),
-				FastMoney.of("CHF", 23123213.435),
-				FastMoney.of("CHF", 0), FastMoney.of("CHF", -100),
-				FastMoney.of("CHF", -723527.36532) };
-		for (FastMoney m : moneys) {
-			assertEquals("Invalid ulp.",
-					m.with(m.getNumber(BigDecimal.class).ulp()), m.ulp());
-		}
-	}
-
-	/**
 	 * Test method for
 	 * {@link org.javamoney.moneta.FastMoney#remainder(java.lang.Number)} .
 	 */
