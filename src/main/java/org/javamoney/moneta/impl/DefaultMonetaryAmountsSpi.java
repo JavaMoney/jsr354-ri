@@ -22,38 +22,38 @@ import javax.money.spi.MonetaryAmountsSpi;
 
 public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
-	private Map<Class<? extends MonetaryAmount<?>>, MonetaryAmountFactory<?>> factories = new ConcurrentHashMap<>();
+	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactory> factories = new ConcurrentHashMap<>();
 
 	public DefaultMonetaryAmountsSpi() {
-		for (MonetaryAmountFactory<?> f : Bootstrap.getServices(MonetaryAmountFactory.class)) {
+		for (MonetaryAmountFactory f : Bootstrap.getServices(MonetaryAmountFactory.class)) {
 			factories.put(f.getAmountType(), f);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount<T>> MonetaryAmountFactory<T> getAmountFactory(
-			Class<T> amountType) {
-		return (MonetaryAmountFactory<T>) factories.get(amountType);
+	public MonetaryAmountFactory getAmountFactory(
+			Class<? extends MonetaryAmount> amountType) {
+		return factories.get(amountType);
 	}
 
 	@Override
-	public Set<Class<? extends MonetaryAmount<?>>> getAmountTypes() {
+	public Set<Class<? extends MonetaryAmount>> getAmountTypes() {
 		return factories.keySet();
 	}
 
 	@Override
-	public Class<? extends MonetaryAmount<?>> getDefaultAmountType() {
-		for (MonetaryAmountFactory<?> f : Bootstrap.getServices(MonetaryAmountFactory.class)) {
+	public Class<? extends MonetaryAmount> getDefaultAmountType() {
+		for (MonetaryAmountFactory f : Bootstrap.getServices(MonetaryAmountFactory.class)) {
 			return f.getAmountType();
 		}
 		return null;
 	}
 
 	@Override
-	public Class<? extends MonetaryAmount<?>> queryAmountType(
-			MonetaryContext<?> requiredContext) {
-		for (MonetaryAmountFactory<?> f : Bootstrap.getServices(MonetaryAmountFactory.class)) {
+	public Class<? extends MonetaryAmount> queryAmountType(
+			MonetaryContext requiredContext) {
+		for (MonetaryAmountFactory f : Bootstrap.getServices(MonetaryAmountFactory.class)) {
 			return f.getAmountType();
 		}
 		return null;

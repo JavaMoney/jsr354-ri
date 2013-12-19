@@ -44,8 +44,9 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	private MonetaryOperator zeroRounding = new MonetaryOperator() {
 
 		@Override
-		public <T extends MonetaryAmount<T>> T apply(T amount) {
-			return amount.with(amount.getCurrency(), 0L);
+		public MonetaryAmount apply(MonetaryAmount amount) {
+			return amount.getFactory().with(amount.getCurrency())
+					.with(0L).create();
 		}
 
 	};
@@ -54,7 +55,8 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 
 		@Override
 		public MonetaryAmount apply(MonetaryAmount amount) {
-			return amount.with(amount.getCurrency(), -1);
+			return amount.getFactory().with(amount.getCurrency())
+					.with(-1).create();
 		}
 
 	};
@@ -74,14 +76,15 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
 			BigDecimal delta = null;
-			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts.getDefaultAmountFactory()
-					.getAmount(
-							amount.getCurrency(), 0.03))) {
+			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts
+					.getDefaultAmountFactory()
+					.with(
+							amount.getCurrency()).with(0.03).create())) {
 				// add
 				return amt.add(
 						MonetaryAmounts.getDefaultAmountFactory()
-								.getAmount(amt.getCurrency(),
-										new BigDecimal("0.05"))
+								.with(amt.getCurrency())
+								.with(new BigDecimal("0.05")).create()
 								.subtract(mp));
 			}
 			else {
@@ -153,7 +156,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	@Override
-	public MonetaryOperator getRounding(MonetaryContext<?> monetaryContext) {
+	public MonetaryOperator getRounding(MonetaryContext monetaryContext) {
 		// TODO Auto-generated method stub
 		return null;
 	}

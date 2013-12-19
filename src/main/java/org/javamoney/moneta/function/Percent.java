@@ -55,8 +55,8 @@ final class Percent implements MonetaryOperator {
 	 * @return the percent result of the amount, never {@code null}
 	 */
 	@Override
-	public <T extends MonetaryAmount<T>> T apply(T amount) {
-		return amount.multiply(percentValue);
+	public <T extends MonetaryAmount> T apply(T amount) {
+		return (T)amount.multiply(percentValue);
 	}
 
 	/*

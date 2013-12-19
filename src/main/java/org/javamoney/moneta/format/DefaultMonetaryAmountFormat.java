@@ -47,7 +47,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * The {@link MonetaryContext} applied on creating a {@link MonetaryAmount}
 	 * based on data parsed.
 	 */
-	private MonetaryContext<?> monetaryContext;
+	private MonetaryContext monetaryContext;
 	/** The formatting style to be used. */
 	private AmountStyle numberStyle;
 	/**
@@ -67,7 +67,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 *            {@code null}.
 	 */
 	public DefaultMonetaryAmountFormat(AmountStyle numberStyle,
-			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
+			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
 		if (tokens == null || tokens.isEmpty()) {
 			throw new IllegalArgumentException(
 					"tokens must not be null or empty.");
@@ -98,7 +98,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 */
 	public DefaultMonetaryAmountFormat(AmountStyle style,
 			CurrencyStyle currencyStyle, CurrencyPlacement currencyPlacement,
-			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
+			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
 
 		switch (currencyPlacement) {
 		case AFTER:
@@ -162,7 +162,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @throws UnsupportedOperationException
 	 *             if the formatter is unable to print
 	 */
-	public String format(MonetaryAmount<?> amount) {
+	public String format(MonetaryAmount amount) {
 		StringBuilder builder = new StringBuilder();
 		try {
 			print(builder, amount);
@@ -192,7 +192,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @throws IOException
 	 *             if an IO error occurs
 	 */
-	public void print(Appendable appendable, MonetaryAmount<?> amount)
+	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
 		for (FormatToken token : tokens) {
 			token.print(appendable, amount);
@@ -223,7 +223,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @throws ItemParseException
 	 *             if there is a problem while parsing
 	 */
-	public MonetaryAmount<?> parse(CharSequence text)
+	public MonetaryAmount parse(CharSequence text)
 			throws MonetaryParseException {
 		ParseContext ctx = new ParseContext(text);
 		for (FormatToken token : tokens) {
@@ -237,7 +237,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		if (num == null) {
 			throw new MonetaryParseException(text.toString(), -1);
 		}
-		return MonetaryAmounts.getDefaultAmountFactory().getAmount(unit, num);
+		return MonetaryAmounts.getDefaultAmountFactory().with(unit).with(num)
+				.create();
 	}
 
 	/*
@@ -246,7 +247,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @see javax.money.format.MonetaryAmountFormat#getMonetaryContext()
 	 */
 	@Override
-	public MonetaryContext<?> getMonetaryContext() {
+	public MonetaryContext getMonetaryContext() {
 		return monetaryContext;
 	}
 
@@ -266,7 +267,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @see javax.money.MonetaryQuery#queryFrom(javax.money.MonetaryAmount)
 	 */
 	@Override
-	public String queryFrom(MonetaryAmount<?> amount) {
+	public String queryFrom(MonetaryAmount amount) {
 		return format(amount);
 	}
 
@@ -304,7 +305,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 		private CurrencyPlacement currencyPlacement = CurrencyPlacement.BEFORE;
 
-		private MonetaryContext<?> monetaryContext = MonetaryAmounts
+		private MonetaryContext monetaryContext = MonetaryAmounts
 				.getDefaultAmountFactory()
 				.getDefaultMonetaryContext();
 
@@ -388,7 +389,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		 * 
 		 * @param monetaryContext
 		 */
-		public Builder setMonetaryContext(MonetaryContext<?> monetaryContext) {
+		public Builder setMonetaryContext(MonetaryContext monetaryContext) {
 			Objects.requireNonNull(monetaryContext);
 			this.monetaryContext = monetaryContext;
 			return this;

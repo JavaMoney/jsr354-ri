@@ -34,10 +34,13 @@ import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
+
+import org.javamoney.moneta.impl.MoneyAmountFactory;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
@@ -66,8 +69,8 @@ import javax.money.MonetaryQuery;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public final class Money extends AbstractMoney<Money> implements
-		Comparable<MonetaryAmount<?>>,
+public final class Money extends AbstractMoney implements
+		Comparable<MonetaryAmount>,
 		Serializable {
 
 	/** serialVersionUID. */
@@ -77,7 +80,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * The default {@link MonetaryContext} applied, if not set explicitly on
 	 * creation.
 	 */
-	public static final MonetaryContext<Money> DEFAULT_MONETARY_CONTEXT = initDefaultMathContext();
+	public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = initDefaultMathContext();
 
 	/** The numeric part of this amount. */
 	private BigDecimal number;
@@ -123,7 +126,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * 
 	 * @return default MonetaryContext, never {@code null}.
 	 */
-	private static MonetaryContext<Money> initDefaultMathContext() {
+	private static MonetaryContext initDefaultMathContext() {
 		InputStream is = null;
 		try {
 			Properties props = new Properties();
@@ -142,16 +145,16 @@ public final class Money extends AbstractMoney<Money> implements
 							.valueOf(value
 									.toUpperCase(Locale.ENGLISH))
 							: RoundingMode.HALF_UP;
-					MonetaryContext<Money> mc = new MonetaryContext.Builder()
+					MonetaryContext mc = new MonetaryContext.Builder()
 							.setPrecision(prec)
-							.setAttribute(rm).build(Money.class);
+							.setAttribute(rm).setAmountType(Money.class).build();
 					Logger.getLogger(Money.class.getName()).info(
 							"Using custom MathContext: precision=" + prec
 									+ ", roundingMode=" + rm);
 					return mc;
 				}
 				else {
-					MonetaryContext.Builder builder = new MonetaryContext.Builder();
+					MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
 					value = props
 							.getProperty("org.javamoney.moneta.Money.defaults.mathContext");
 					if (value != null) {
@@ -179,21 +182,22 @@ public final class Money extends AbstractMoney<Money> implements
 							break;
 						}
 					}
-					return builder.build(Money.class);
+					return builder.build();
 				}
 			}
-			MonetaryContext.Builder builder = new MonetaryContext.Builder();
+			MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
 			Logger.getLogger(Money.class.getName()).info(
 					"Using default MathContext.DECIMAL64");
 			builder.setAttribute(MathContext.DECIMAL64);
-			return builder.build(Money.class);
+			return builder.build();
 		} catch (Exception e) {
 			Logger.getLogger(Money.class.getName())
 					.log(Level.SEVERE,
 							"Error evaluating default NumericContext, using default (NumericContext.NUM64).",
 							e);
-			return new MonetaryContext.Builder().setAttribute(MathContext.DECIMAL64)
-					.build(Money.class);
+			return new MonetaryContext.Builder(Money.class).setAttribute(
+					MathContext.DECIMAL64)
+					.build();
 		} finally {
 			if (is != null) {
 				try {
@@ -223,7 +227,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             {@link MonetaryContext} used.
 	 */
 	private Money(CurrencyUnit currency, BigDecimal number,
-			MonetaryContext<Money> monetaryContext) {
+			MonetaryContext monetaryContext) {
 		super(currency, monetaryContext);
 		Objects.requireNonNull(number, "Number is required.");
 		if (monetaryContext != null) {
@@ -372,7 +376,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(MonetaryAmount<?> o) {
+	public int compareTo(MonetaryAmount o) {
 		Objects.requireNonNull(o);
 		int compare = getCurrency().getCurrencyCode().compareTo(
 				o.getCurrency().getCurrencyCode());
@@ -536,25 +540,25 @@ public final class Money extends AbstractMoney<Money> implements
 		return signum() <= 0;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit, long)
-	 */
-	@Override
-	public Money with(CurrencyUnit unit, long amount) {
-		return with(unit, BigDecimal.valueOf(amount));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit, double)
-	 */
-	@Override
-	public Money with(CurrencyUnit unit, double amount) {
-		return with(unit, new BigDecimal(String.valueOf(amount)));
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit, long)
+//	 */
+//	@Override
+//	public Money with(CurrencyUnit unit, long amount) {
+//		return with(unit, BigDecimal.valueOf(amount));
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit, double)
+//	 */
+//	@Override
+//	public Money with(CurrencyUnit unit, double amount) {
+//		return with(unit, new BigDecimal(String.valueOf(amount)));
+//	}
 
 	/*
 	 * }(non-Javadoc)
@@ -573,7 +577,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 */
 	@Override
 	public Money with(MonetaryOperator operator) {
-		return operator.apply(this);
+		return (Money)getFactory().with(operator.apply(this)).create();
 	}
 
 	/*
@@ -582,7 +586,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see javax.money.MonetaryAmount#add(javax.money.MonetaryAmount)
 	 */
 	@Override
-	public Money add(MonetaryAmount<?> amount) {
+	public Money add(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		if (amount.isZero()) {
 			return this;
@@ -688,7 +692,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
 	 */
 	@Override
-	public Money subtract(MonetaryAmount<?> subtrahend) {
+	public Money subtract(MonetaryAmount subtrahend) {
 		checkAmountParameter(subtrahend);
 		if (subtrahend.isZero()) {
 			return this;
@@ -748,7 +752,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see javax.money.MonetaryAmount#isLessThan(javax.money.MonetaryAmount)
 	 */
 	@Override
-	public boolean isLessThan(MonetaryAmount<?> amount) {
+	public boolean isLessThan(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return number.compareTo(Money.from(amount).number) < 0;
 	}
@@ -761,7 +765,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * )
 	 */
 	@Override
-	public boolean isLessThanOrEqualTo(MonetaryAmount<?> amount) {
+	public boolean isLessThanOrEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return number.compareTo(Money.from(amount).number) <= 0;
 	}
@@ -772,7 +776,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see javax.money.MonetaryAmount#isGreaterThan(javax.money.MonetaryAmount)
 	 */
 	@Override
-	public boolean isGreaterThan(MonetaryAmount<?> amount) {
+	public boolean isGreaterThan(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return number.compareTo(Money.from(amount).number) > 0;
 	}
@@ -785,7 +789,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * ) #see
 	 */
 	@Override
-	public boolean isGreaterThanOrEqualTo(MonetaryAmount<?> amount) {
+	public boolean isGreaterThanOrEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return number.compareTo(Money.from(amount).number) >= 0;
 	}
@@ -796,60 +800,60 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see javax.money.MonetaryAmount#isEqualTo(javax.money.MonetaryAmount)
 	 */
 	@Override
-	public boolean isEqualTo(MonetaryAmount<?> amount) {
+	public boolean isEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return equals(Money.from(amount));
 	}
 
-	/**
-	 * Creates a new {@link MonetaryAmount}, using the current amount as a
-	 * template, reusing the algorithmic implementation, the current
-	 * {@link MonetaryContext} and the numeric value.
-	 * <p>
-	 * This method is used for creating a new amount result after having done
-	 * calculations that are not directly mappable to the default monetary
-	 * arithmetics, e.g. currency conversion.
-	 * 
-	 * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit)
-	 * @param unit
-	 *            the new {@link CurrencyUnit} of the amount to be created.
-	 * @return the new {@link MonetaryAmount} with the given
-	 *         {@link CurrencyUnit}, but the same numeric value and
-	 *         {@link MonetaryContext}.
-	 */
-	@Override
-	public Money with(CurrencyUnit unit) {
-		return Money.of(unit, this.number, this.monetaryContext);
-	}
-
-	/**
-	 * Creates a new Money instance, hereby changing the {@link MonetaryContext}
-	 * to be used. This allows to adapt the {@link MonetaryContext}, when
-	 * required.
-	 * 
-	 * @param context
-	 *            the {@link MonetaryContext} to be replaced, not {@code null}
-	 * @return the new amount with the same numeric value and
-	 *         {@link CurrencyUnit}, but the new {@link MonetaryContext}.
-	 * @throws ArithemticException
-	 *             if the number of this instance exceeds the capabilities of
-	 *             the given {@link MonetaryContext}.
-	 */
-	public Money with(MonetaryContext<Money> context) {
-		Objects.requireNonNull(context, "MathContext required");
-		return new Money(getCurrency(), this.number, context);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.javamoney.moneta.AbstractMoney#with(javax.money.CurrencyUnit,
-	 * java.math.BigDecimal)
-	 */
-	@Override
-	public Money with(CurrencyUnit unit, Number amount) {
-		return Money.of(unit, getBigDecimal(amount), getMonetaryContext());
-	}
+//	/**
+//	 * Creates a new {@link MonetaryAmount}, using the current amount as a
+//	 * template, reusing the algorithmic implementation, the current
+//	 * {@link MonetaryContext} and the numeric value.
+//	 * <p>
+//	 * This method is used for creating a new amount result after having done
+//	 * calculations that are not directly mappable to the default monetary
+//	 * arithmetics, e.g. currency conversion.
+//	 * 
+//	 * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit)
+//	 * @param unit
+//	 *            the new {@link CurrencyUnit} of the amount to be created.
+//	 * @return the new {@link MonetaryAmount} with the given
+//	 *         {@link CurrencyUnit}, but the same numeric value and
+//	 *         {@link MonetaryContext}.
+//	 */
+//	@Override
+//	public Money with(CurrencyUnit unit) {
+//		return Money.of(unit, this.number, this.monetaryContext);
+//	}
+//
+//	/**
+//	 * Creates a new Money instance, hereby changing the {@link MonetaryContext}
+//	 * to be used. This allows to adapt the {@link MonetaryContext}, when
+//	 * required.
+//	 * 
+//	 * @param context
+//	 *            the {@link MonetaryContext} to be replaced, not {@code null}
+//	 * @return the new amount with the same numeric value and
+//	 *         {@link CurrencyUnit}, but the new {@link MonetaryContext}.
+//	 * @throws ArithemticException
+//	 *             if the number of this instance exceeds the capabilities of
+//	 *             the given {@link MonetaryContext}.
+//	 */
+//	public Money with(MonetaryContext<Money> context) {
+//		Objects.requireNonNull(context, "MathContext required");
+//		return new Money(getCurrency(), this.number, context);
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see org.javamoney.moneta.AbstractMoney#with(javax.money.CurrencyUnit,
+//	 * java.math.BigDecimal)
+//	 */
+//	@Override
+//	public Money with(CurrencyUnit unit, Number amount) {
+//		return Money.of(unit, getBigDecimal(amount), getMonetaryContext());
+//	}
 
 	/*
 	 * (non-Javadoc)
@@ -857,7 +861,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @see org.javamoney.moneta.AbstractMoney#getDefaultMonetaryContext()
 	 */
 	@Override
-	protected MonetaryContext<Money> getDefaultMonetaryContext() {
+	protected MonetaryContext getDefaultMonetaryContext() {
 		return DEFAULT_MONETARY_CONTEXT;
 	}
 
@@ -907,7 +911,7 @@ public final class Money extends AbstractMoney<Money> implements
 			ClassNotFoundException {
 		this.number = (BigDecimal) ois.readObject();
 		this.currency = (CurrencyUnit) ois.readObject();
-		this.monetaryContext = (MonetaryContext<Money>) ois.readObject();
+		this.monetaryContext = (MonetaryContext) ois.readObject();
 	}
 
 	@SuppressWarnings("unused")
@@ -970,7 +974,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             {@link MonetaryContext} used.
 	 */
 	public static Money of(CurrencyUnit currency, BigDecimal number,
-			MonetaryContext<Money> monetaryContext) {
+			MonetaryContext monetaryContext) {
 		return new Money(currency, number, monetaryContext);
 	}
 
@@ -1008,7 +1012,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 *             {@link MonetaryContext} used.
 	 */
 	public static Money of(CurrencyUnit currency, Number number,
-			MonetaryContext<Money> monetaryContext) {
+			MonetaryContext monetaryContext) {
 		return new Money(currency, getBigDecimal(number), monetaryContext);
 	}
 
@@ -1052,7 +1056,7 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, Number number,
-			MonetaryContext<Money> monetaryContext) {
+			MonetaryContext monetaryContext) {
 		return new Money(MonetaryCurrencies.getCurrency(currencyCode),
 				getBigDecimal(number),
 				monetaryContext);
@@ -1071,30 +1075,11 @@ public final class Money extends AbstractMoney<Money> implements
 	 * @return A new instance of {@link Money}.
 	 */
 	public static Money of(String currencyCode, BigDecimal number,
-			MonetaryContext<Money> monetaryContext) {
+			MonetaryContext monetaryContext) {
 		return new Money(MonetaryCurrencies.getCurrency(currencyCode), number,
 				monetaryContext);
 	}
 
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currency 
-	 * 			the target currency of the amount being created, not {@code null}.
-	 * @return a new Money instance of zero, with a default {@link MonetaryContext}.
-	 */
-	public static Money ofZero(CurrencyUnit currency) {
-		return new Money(currency, BigDecimal.ZERO, DEFAULT_MONETARY_CONTEXT);
-	}
-
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currency 
-	 * 			the target currency of the amount being created.
-	 * @return a new Money instance of zero, with a default {@link MonetaryContext}.
-	 */
-	public static Money ofZero(String currency) {
-		return ofZero(MonetaryCurrencies.getCurrency(currency));
-	}
 
 	/**
 	 * Converts (if necessary) the given {@link MonetaryAmount} to a
@@ -1106,12 +1091,16 @@ public final class Money extends AbstractMoney<Money> implements
 	 *            the amount to be converted
 	 * @return an according Money instance.
 	 */
-	public static Money from(MonetaryAmount<?> amt) {
+	public static Money from(MonetaryAmount amt) {
 		if (amt.getClass() == Money.class) {
 			return (Money) amt;
 		}
-		return Money.of(amt.getCurrency(), amt.getNumber(BigDecimal.class),
-				DEFAULT_MONETARY_CONTEXT);
+		return Money.of(amt.getCurrency(), amt.getNumber(BigDecimal.class), amt.getMonetaryContext());
+	}
+
+	@Override
+	public MonetaryAmountFactory getFactory() {
+		return new MoneyAmountFactory().with(this);
 	}
 
 }

@@ -53,9 +53,9 @@ final class MajorPart implements MonetaryOperator {
 	 * @return the major units part of the amount, never {@code null}
 	 */
 	@Override
-	public <T extends MonetaryAmount<T>> T apply(T amount) {
+	public <T extends MonetaryAmount> T apply(T amount){
 		Objects.requireNonNull(amount, "Amount required.");
-		return amount.with(downRounding);
+		return (T) amount.with(downRounding);
 	}
 
 }

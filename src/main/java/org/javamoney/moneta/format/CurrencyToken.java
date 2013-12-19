@@ -81,7 +81,7 @@ final class CurrencyToken implements FormatToken {
 	 *            to be formatted.
 	 * @return the formatted currency.
 	 */
-	protected String getToken(MonetaryAmount<?> amount) {
+	protected String getToken(MonetaryAmount amount) {
 		switch (style) {
 		case NUMERIC_CODE:
 			return String.valueOf(amount.getCurrency()
@@ -212,7 +212,7 @@ final class CurrencyToken implements FormatToken {
 	 *             may be thrown by the {@link Appendable}
 	 */
 	@Override
-	public void print(Appendable appendable, MonetaryAmount<?> amount)
+	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
 		appendable.append(getToken(amount));
 	}

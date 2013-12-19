@@ -1,6 +1,9 @@
 package org.javamoney.moneta.impl;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -8,23 +11,26 @@ import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
-import javax.money.MonetaryException;
 import javax.money.UnknownCurrencyException;
 
-public abstract class AbstractAmountFactory<T extends MonetaryAmount<T>>
-		implements MonetaryAmountFactory<T> {
+public abstract class AbstractAmountFactory
+		implements MonetaryAmountFactory {
 
 	/**
 	 * The default {@link MonetaryContext} applied, if not set explicitly on
 	 * creation.
 	 */
-	private MonetaryContext<T> DEFAULT_MONETARY_CONTEXT = loadDefaultMonetaryContext();
+	private MonetaryContext DEFAULT_MONETARY_CONTEXT = loadDefaultMonetaryContext();
 
 	/**
 	 * The default {@link MonetaryContext} applied, if not set explicitly on
 	 * creation.
 	 */
-	private MonetaryContext<T> MAX_MONETARY_CONTEXT = loadMaxMonetaryContext();
+	private MonetaryContext MAX_MONETARY_CONTEXT = loadMaxMonetaryContext();
+
+	private CurrencyUnit currency;
+	private Number number;
+	private MonetaryContext monetaryContext = DEFAULT_MONETARY_CONTEXT;
 
 	/**
 	 * Creates a new instance of {@link MonetaryAmount}, using the default
@@ -41,318 +47,96 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount<T>>
 	 *             {@link MonetaryContext} used.
 	 */
 	@Override
-	public T getAmount(CurrencyUnit currency, long number) {
-		return getAmount(currency, number, DEFAULT_MONETARY_CONTEXT);
+	public MonetaryAmount create() {
+		return create(currency, number, monetaryContext);
 	}
 
-	protected abstract MonetaryContext<T> loadDefaultMonetaryContext();
-
-	protected abstract MonetaryContext<T> loadMaxMonetaryContext();
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmount}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currency
-	 *            currency unit, not {@code null}.
-	 * @return a {@code MonetaryAmount} combining the numeric value and currency
-	 *         unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 */
-	@Override
-	public T getAmount(CurrencyUnit currency,
-			double number) {
-		return getAmount(currency, number, DEFAULT_MONETARY_CONTEXT);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmount}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currency
-	 *            currency unit, not {@code null}.
-	 * @return a {@code MonetaryAmount} combining the numeric value and currency
-	 *         unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 */
-	@Override
-	public T getAmount(CurrencyUnit currency,
-			Number number) {
-		return getAmount(currency, number, DEFAULT_MONETARY_CONTEXT);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currencyCode
-	 *            currency code, not {@code null}.
-	 * @return a {@code Money} combining the numeric value and currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
-	 */
-	@Override
-	public T getAmount(String currencyCode, long number) {
-		return getAmount(MonetaryCurrencies.getCurrency(currencyCode), number,
-				DEFAULT_MONETARY_CONTEXT);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currencyCode
-	 *            currency code, not {@code null}.
-	 * @return a {@code Money} combining the numeric value and currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
-	 */
-	@Override
-	public T getAmount(String currencyCode, double number) {
-		return getAmount(MonetaryCurrencies.getCurrency(currencyCode), number,
-				DEFAULT_MONETARY_CONTEXT);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currencyCode
-	 *            currency code, not {@code null}.
-	 * @return a {@code Money} combining the numeric value and currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
-	 */
-	@Override
-	public T getAmount(String currencyCode, Number number) {
-		return getAmount(MonetaryCurrencies.getCurrency(currencyCode), number,
-				DEFAULT_MONETARY_CONTEXT);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currency
-	 *            currency unit, not {@code null}.
-	 * @param context
-	 *            the {@link MonetaryContext} required.
-	 * @return a {@code Money} combining the numeric value and currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
-	 */
-	@Override
-	public T getAmount(String currencyCode, long number,
-			MonetaryContext<?> context) {
-		return getAmount(MonetaryCurrencies.getCurrency(currencyCode), number,
-				context);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currencyCode
-	 *            currency unit, not {@code null}.
-	 * @param context
-	 *            the {@link MonetaryContext} required.
-	 * @return a {@code Money} combining the numeric value and currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
-	 */
-	@Override
-	public T getAmount(String currencyCode,
-			double number,
-			MonetaryContext<?> context) {
-		CurrencyUnit currency = MonetaryCurrencies.getCurrency(currencyCode);
-		return getAmount(currency, number, context);
-	}
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currencyCode
-	 *            currency unit, not {@code null}.
-	 * @param context
-	 *            the {@link MonetaryContext} required.
-	 * @return a {@code Money} combining the numeric value and currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
-	 */
-	@Override
-	public T getAmount(String currencyCode,
+	protected abstract MonetaryAmount create(CurrencyUnit currency,
 			Number number,
-			MonetaryContext<?> monetaryContext) {
-		CurrencyUnit currency = MonetaryCurrencies.getCurrency(currencyCode);
-		return getAmount(currency, number, monetaryContext);
+			MonetaryContext monetaryContext);
+
+	protected abstract MonetaryContext loadDefaultMonetaryContext();
+
+	protected abstract MonetaryContext loadMaxMonetaryContext();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.money.MonetaryAmountFactory#withCurrency(javax.money.CurrencyUnit)
+	 */
+	@Override
+	public MonetaryAmountFactory with(CurrencyUnit currency) {
+		Objects.requireNonNull(currency);
+		this.currency = currency;
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.money.MonetaryAmountFactory#with(java.lang.Number)
+	 */
+	@Override
+	public MonetaryAmountFactory with(Number number) {
+		this.number = getBigDecimal(number);
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.money.MonetaryAmountFactory#withCurrency(java.lang.String)
+	 */
+	@Override
+	public MonetaryAmountFactory withCurrency(String currencyCode) {
+		this.currency = MonetaryCurrencies.getCurrency(currencyCode);
+		return this;
 	}
 
 	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using an explicit
+	 * Creates a new instance of {@link MonetaryAmounts}, using the default
 	 * {@link MonetaryContext}.
 	 * 
 	 * @param number
 	 *            numeric value, not {@code null}.
-	 * @param currency
-	 *            currency unit, not {@code null}.
-	 * @param monetaryContext
-	 *            the {@link MonetaryContext} to be used, if {@code null} the
-	 *            default {@link MonetaryContext} is used.
-	 * @return a {@code Money} instance based on the monetary context with the
-	 *         given numeric value, currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the
-	 *             {@link MonetaryContext} used.
-	 */
-	@Override
-	public abstract T getAmount(CurrencyUnit currency,
-			long number,
-			MonetaryContext<?> monetaryContext);
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using an explicit
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currency
-	 *            currency unit, not {@code null}.
-	 * @param monetaryContext
-	 *            the {@link MonetaryContext} to be used, if {@code null} the
-	 *            default {@link MonetaryContext} is used.
-	 * @return a {@code Money} instance based on the monetary context with the
-	 *         given numeric value, currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the
-	 *             {@link MonetaryContext} used.
-	 */
-	@Override
-	public abstract T getAmount(CurrencyUnit currency,
-			double number,
-			MonetaryContext<?> monetaryContext);
-
-	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using an explicit
-	 * {@link MonetaryContext}.
-	 * 
-	 * @param number
-	 *            numeric value, not {@code null}.
-	 * @param currency
-	 *            currency unit, not {@code null}.
-	 * @param monetaryContext
-	 *            the {@link MonetaryContext} to be used, if {@code null} the
-	 *            default {@link MonetaryContext} is used.
-	 * @return a {@code Money} instance based on the monetary context with the
-	 *         given numeric value, currency unit.
-	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the
-	 *             {@link MonetaryContext} used.
-	 */
-	@Override
-	public abstract T getAmount(CurrencyUnit currency,
-			Number number,
-			MonetaryContext<?> monetaryContext);
-
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currency 
-	 * 			the target {@link CurrencyUnit} of the {@link MonetaryAmount} being created, not {@code null}.
-	 * @return a new Money instance of zero, with a default {@link MonetaryContext}.
-	 */
-	@Override
-	public T getAmountZero(CurrencyUnit currency) {
-		return getAmount(currency, BigDecimal.ZERO, DEFAULT_MONETARY_CONTEXT);
-	}
-
-/**
-	 * Factory method creating a zero instance with the given {@code currencyCode);
 	 * @param currencyCode
-	 * 			the currency code to determine the {@link CurrencyUnit} of the {@link MonetaryAmount} being created.
-	 * @return a new Money instance of zero, with a default {@link MonetaryContext}.
+	 *            currency code, not {@code null}.
+	 * @return a {@code Money} combining the numeric value and currency unit.
+	 * @throws ArithmeticException
+	 *             If the number exceeds the capabilities of the default
+	 *             {@link MonetaryContext} used.
 	 * @throws UnknownCurrencyException
 	 *             if the currency code can not be resolved to
 	 *             {@link CurrencyUnit}.
 	 */
 	@Override
-	public T getAmountZero(
-			String currencyCode) {
-		return getAmount(MonetaryCurrencies.getCurrency(currencyCode),
-				BigDecimal.ZERO,
-				DEFAULT_MONETARY_CONTEXT);
+	public MonetaryAmountFactory with(double number) {
+		this.number = new BigDecimal(String.valueOf(number));
+		return this;
 	}
 
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currency 
-	 * 			the target currency of the amount being created, not {@code null}.
-	 * @return a new Money instance of zero, with a default {@link MonetaryContext}.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.money.MonetaryAmountFactory#with(long)
 	 */
 	@Override
-	public T getAmountZero(CurrencyUnit currency,
-			MonetaryContext<?> monetaryContext) {
-		return getAmount(currency, BigDecimal.ZERO, monetaryContext);
+	public MonetaryAmountFactory with(long number) {
+		this.number = BigDecimal.valueOf(number);
+		return this;
 	}
 
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currencyCode
-	 * 			the target currency code to determine the {@link CurrencyUnit} of the {@link MonetaryAmount} being created.
-	 * @return a new {@link MonetaryAmount} instance of zero, with a default {@link MonetaryContext}.
-	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.money.MonetaryAmountFactory#with(javax.money.MonetaryContext)
 	 */
 	@Override
-	public T getAmountZero(String currencyCode,
-			MonetaryContext<?> monetaryContext) {
-		return getAmount(MonetaryCurrencies.getCurrency(currencyCode),
-				BigDecimal.ZERO,
-				monetaryContext);
+	public MonetaryAmountFactory with(MonetaryContext monetaryContext) {
+		Objects.requireNonNull(monetaryContext);
+		this.monetaryContext = monetaryContext;
+		return this;
 	}
 
 	/**
@@ -362,7 +146,7 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount<T>>
 	 * @return the default {@link MonetaryContext}, never {@code null}.
 	 */
 	@Override
-	public MonetaryContext<T> getDefaultMonetaryContext() {
+	public MonetaryContext getDefaultMonetaryContext() {
 		return DEFAULT_MONETARY_CONTEXT;
 	}
 
@@ -372,7 +156,7 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount<T>>
 	 * @return the maximal {@link MonetaryContext}, never {@code null}.
 	 */
 	@Override
-	public MonetaryContext<T> getMaximalMonetaryContext() {
+	public MonetaryContext getMaximalMonetaryContext() {
 		return MAX_MONETARY_CONTEXT;
 	}
 
@@ -389,148 +173,52 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount<T>>
 	 * @return an according Money instance.
 	 */
 	@Override
-	public T getAmountFrom(
-			MonetaryAmount<?> amt,
-			MonetaryContext<?> monetaryContext) {
-		throw new MonetaryException(
-				"Unsupported MonetaryAmount requested: "
-						+ amt + "(" + monetaryContext + ")");
+	public MonetaryAmountFactory with(MonetaryAmount amt) {
+		this.currency = amt.getCurrency();
+		this.number = amt.getNumber(BigDecimal.class);
+		this.monetaryContext = new MonetaryContext.Builder(
+				amt.getMonetaryContext()).setAmountType(
+				DEFAULT_MONETARY_CONTEXT.getAmountType()).build();
+		return this;
 	}
 
-	// private methods
-
-	// /**
-	// * Loader method, executed on startup once.
-	// *
-	// * @return the {@link CurrencyProviderSpi} loaded.
-	// */
-	// private static Collection<MonetaryAmountProviderSpi>
-	// loadMonetaryAmountProviderSpis() {
-	// List<MonetaryAmountProviderSpi> spis = new
-	// ArrayList<MonetaryAmountProviderSpi>();
-	// try {
-	// for (MonetaryAmountProviderSpi spi : ServiceLoader
-	// .load(MonetaryAmountProviderSpi.class)) {
-	// spis.add(spi);
-	// }
-	// } catch (Exception e) {
-	// Logger.getLogger(MonetaryAmounts.class.getName()).log(
-	// Level.SEVERE,
-	// "Error loading CurrencyProviderSpi instances.", e);
-	// return null;
-	// }
-	// Collections.sort(spis, new PriorityComparator());
-	// return spis;
-	// }
-
-	// /**
-	// * Evaluates the default {@link MonetaryContext} to be used for the
-	// * {@link MonetaryAmounts} singleton. The default {@link MonetaryContext}
-	// * can be configured by adding a file {@code /javamoney.properties} from
-	// the
-	// * classpath with the following content:
-	// *
-	// * <pre>
-	// * # Default MathContext for Money
-	// * #-------------------------------
-	// * # Custom MathContext, overrides entries from
-	// org.javamoney.moneta.Money.mathContext
-	// * # RoundingMode hereby is optional (default = HALF_EVEN)
-	// * Money.defaults.precision=256
-	// * Money.defaults.scale=-1
-	// * Money.defaults.type=java.math.BigDecimal
-	// * Money.attributes.java.math.RoundingMode=RoundingMode.HALF_EVEN
-	// * </pre>
-	// *
-	// * @TODO implement the concept as outlined above...
-	// * @return default MonetaryContext, never {@code null}.
-	// */
-	// private static MonetaryContext<?> initDefaultMathContext() {
-	// InputStream is = null;
-	// try {
-	// Properties props = new Properties();
-	// URL url = MonetaryAmounts.class
-	// .getResource("/javamoney.properties");
-	// if (url != null) {
-	// is = url
-	// .openStream();
-	// props.load(is);
-	// String value = props
-	// .getProperty("org.javamoney.moneta.Money.defaults.precision");
-	// if (value != null) {
-	// int prec = Integer.parseInt(value);
-	// value = props
-	// .getProperty("org.javamoney.moneta.Money.defaults.roundingMode");
-	// RoundingMode rm = value != null ? RoundingMode
-	// .valueOf(value
-	// .toUpperCase(Locale.ENGLISH))
-	// : RoundingMode.HALF_UP;
-	// MonetaryContext<?> mc = new MonetaryContext.Builder().setPrecision(prec)
-	// .setAttribute(rm).build();
-	// Logger.getLogger(MonetaryAmounts.class.getName()).info(
-	// "Using custom MathContext: precision=" + prec
-	// + ", roundingMode=" + rm);
-	// return mc;
-	// }
-	// else {
-	// MonetaryContext.Builder builder = new MonetaryContext.Builder();
-	// value = props
-	// .getProperty("org.javamoney.moneta.Money.defaults.mathContext");
-	// if (value != null) {
-	// switch (value.toUpperCase(Locale.ENGLISH)) {
-	// case "DECIMAL32":
-	// Logger.getLogger(MonetaryAmounts.class.getName())
-	// .info(
-	// "Using MathContext.DECIMAL32");
-	// builder.setAttribute(MathContext.DECIMAL32);
-	// break;
-	// case "DECIMAL64":
-	// Logger.getLogger(MonetaryAmounts.class.getName())
-	// .info(
-	// "Using MathContext.DECIMAL64");
-	// builder.setAttribute(MathContext.DECIMAL64);
-	// break;
-	// case "DECIMAL128":
-	// Logger.getLogger(MonetaryAmounts.class.getName())
-	// .info(
-	// "Using MathContext.DECIMAL128");
-	// builder.setAttribute(MathContext.DECIMAL128);
-	// break;
-	// case "UNLIMITED":
-	// Logger.getLogger(MonetaryAmounts.class.getName())
-	// .info(
-	// "Using MathContext.UNLIMITED");
-	// builder.setAttribute(MathContext.UNLIMITED);
-	// break;
-	// }
-	// }
-	// return builder.build();
-	// }
-	// }
-	// MonetaryContext.Builder builder = new MonetaryContext.Builder();
-	// Logger.getLogger(MonetaryAmounts.class.getName()).info(
-	// "Using default MathContext.DECIMAL64");
-	// builder.setAttribute(MathContext.DECIMAL64);
-	// return builder.build();
-	// } catch (Exception e) {
-	// Logger.getLogger(MonetaryAmounts.class.getName())
-	// .log(Level.SEVERE,
-	// "Error evaluating default NumericContext, using default (NumericContext.NUM64).",
-	// e);
-	// return new MonetaryContext.Builder().setAttribute(MathContext.DECIMAL64)
-	// .build();
-	// } finally {
-	// if (is != null) {
-	// try {
-	// is.close();
-	// } catch (IOException e) {
-	// Logger.getLogger(MonetaryAmounts.class.getName())
-	// .log(Level.WARNING,
-	// "Error closing InputStream after evaluating default NumericContext.",
-	// e);
-	// }
-	// }
-	// }
-	// }
+	/**
+	 * Creates a {@link BigDecimal} from the given {@link Number} doing the
+	 * valid conversion depending the type given.
+	 * 
+	 * @param num
+	 *            the number type
+	 * @return the corresponding {@link BigDecimal}
+	 */
+	protected static BigDecimal getBigDecimal(Number num) {
+		// try fast equality check first (delegates to identity!)
+		if (BigDecimal.class.equals(num.getClass())) {
+			return (BigDecimal) num;
+		}
+		if (Long.class.equals(num.getClass())
+				|| Integer.class.equals(num.getClass())
+				|| Short.class.equals(num.getClass())
+				|| Byte.class.equals(num.getClass())
+				|| AtomicLong.class.equals(num.getClass())) {
+			return BigDecimal.valueOf(num.longValue());
+		}
+		if (Float.class.equals(num.getClass())
+				|| Double.class.equals(num.getClass())) {
+			return new BigDecimal(num.toString());
+		}
+		// try instance of (slower)
+		if (num instanceof BigDecimal) {
+			return (BigDecimal) num;
+		}
+		if (num instanceof BigInteger) {
+			return new BigDecimal((BigInteger) num);
+		}
+		try {
+			// Avoid imprecise conversion to double value if at all possible
+			return new BigDecimal(num.toString());
+		} catch (NumberFormatException e) {
+		}
+		return BigDecimal.valueOf(num.doubleValue());
+	}
 
 }

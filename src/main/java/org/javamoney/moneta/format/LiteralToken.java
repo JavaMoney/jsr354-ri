@@ -75,7 +75,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	 *      javax.money.format.LocalizationStyle)
 	 */
 	@Override
-	public void print(Appendable appendable, MonetaryAmount<?> amount)
+	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
 		appendable.append(this.token);
 	}

@@ -26,7 +26,7 @@ public class DefaultAmountFormatProvider implements
 
 	@Override
 	public MonetaryAmountFormat getFormat(Locale locale,
-			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
+			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
 		Objects.requireNonNull(locale, "Locale required");
 		Builder builder = new DefaultMonetaryAmountFormat.Builder(locale);
 		if(defaultCurrency!=null){
@@ -42,7 +42,7 @@ public class DefaultAmountFormatProvider implements
 
 	@Override
 	public MonetaryAmountFormat getFormat(AmountStyle formatStyle,
-			MonetaryContext<?> monetaryContext, CurrencyUnit defaultCurrency) {
+			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
 		Objects.requireNonNull(formatStyle, "FormatStyle required");
 		Builder builder = new DefaultMonetaryAmountFormat.Builder(formatStyle.getLocale());
 		if(defaultCurrency!=null){

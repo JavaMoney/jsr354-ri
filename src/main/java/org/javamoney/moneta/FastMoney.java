@@ -27,13 +27,18 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
+
 // github.com/JavaMoney/jsr354-ri.git
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
+
+import org.javamoney.moneta.impl.FastMoneyAmountFactory;
 
 /**
  * <type>long</type> based implementation of {@link MonetaryAmount}. This class
@@ -83,8 +88,8 @@ import javax.money.MonetaryQuery;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public final class FastMoney extends AbstractMoney<FastMoney> implements
-		Comparable<MonetaryAmount<?>>, Serializable {
+public final class FastMoney extends AbstractMoney implements
+		Comparable<MonetaryAmount>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -97,10 +102,10 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	private static final long SCALING_DENOMINATOR = 100000L;
 
 	/** the {@link MonetaryContext} used by this instance, e.g. on division. */
-	private static final MonetaryContext<FastMoney> MONETARY_CONTEXT = new MonetaryContext.Builder()
+	private static final MonetaryContext MONETARY_CONTEXT = new MonetaryContext.Builder(FastMoney.class)
 			.setMaxScale(SCALE).setFixedScale(true)
 			.setPrecision(String.valueOf(Integer.MAX_VALUE).length())
-			.build(FastMoney.class);
+			.build();
 
 	private static final Map<String, FastMoney> CACHE = Collections
 			.synchronizedMap(new LRUMap<String, FastMoney>(1000));
@@ -235,7 +240,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	/*
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(MonetaryAmount<?> o) {
+	public int compareTo(MonetaryAmount o) {
 		int compare = -1;
 		if (this.currency.equals(o.getCurrency())) {
 			return getNumber(BigDecimal.class).compareTo(
@@ -311,7 +316,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#add(javax.money.MonetaryAmount)
 	 */
-	public FastMoney add(MonetaryAmount<?> amount) {
+	public FastMoney add(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return new FastMoney(getCurrency(), this.number
 				+ FastMoney.from(amount).number);
@@ -387,7 +392,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
 	 */
-	public FastMoney subtract(MonetaryAmount<?> subtrahend) {
+	public FastMoney subtract(MonetaryAmount subtrahend) {
 		checkAmountParameter(subtrahend);
 		if (FastMoney.from(subtrahend).isZero()) {
 			return this;
@@ -585,7 +590,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#lessThan(javax.money.MonetaryAmount)
 	 */
-	public boolean isLessThan(MonetaryAmount<?> amount) {
+	public boolean isLessThan(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return this.number < FastMoney.from(amount).number;
 	}
@@ -606,7 +611,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * @see
 	 * javax.money.MonetaryAmount#lessThanOrEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isLessThanOrEqualTo(MonetaryAmount<?> amount) {
+	public boolean isLessThanOrEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return this.number <= FastMoney.from(amount).number;
 	}
@@ -626,7 +631,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#greaterThan(javax.money.MonetaryAmount)
 	 */
-	public boolean isGreaterThan(MonetaryAmount<?> amount) {
+	public boolean isGreaterThan(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return this.number > FastMoney.from(amount).number;
 	}
@@ -648,7 +653,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * javax.money.MonetaryAmount#greaterThanOrEqualTo(javax.money.MonetaryAmount
 	 * ) #see
 	 */
-	public boolean isGreaterThanOrEqualTo(MonetaryAmount<?> amount) {
+	public boolean isGreaterThanOrEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return this.number >= FastMoney.from(amount).number;
 	}
@@ -668,7 +673,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#isEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isEqualTo(MonetaryAmount<?> amount) {
+	public boolean isEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return this.number == FastMoney.from(amount).number;
 	}
@@ -688,7 +693,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	 * 
 	 * @see javax.money.MonetaryAmount#isNotEqualTo(javax.money.MonetaryAmount)
 	 */
-	public boolean isNotEqualTo(MonetaryAmount<?> amount) {
+	public boolean isNotEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
 		return this.number != FastMoney.from(amount).number;
 	}
@@ -805,7 +810,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 		return query.queryFrom(this);
 	}
 
-	public static FastMoney from(MonetaryAmount<?> amount) {
+	public static FastMoney from(MonetaryAmount amount) {
 		if (FastMoney.class == amount.getClass()) {
 			return (FastMoney) amount;
 		}
@@ -883,19 +888,19 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	}
 
 	@Override
-	public MonetaryContext<FastMoney> getMonetaryContext() {
+	public MonetaryContext getMonetaryContext() {
 		return MONETARY_CONTEXT;
 	}
 
-	@Override
-	public FastMoney with(CurrencyUnit unit, long amount) {
-		return of(unit, amount);
-	}
-
-	@Override
-	public FastMoney with(CurrencyUnit unit, double amount) {
-		return of(unit, new BigDecimal(String.valueOf(amount)));
-	}
+//	@Override
+//	public FastMoney with(CurrencyUnit unit, long amount) {
+//		return of(unit, amount);
+//	}
+//
+//	@Override
+//	public FastMoney with(CurrencyUnit unit, double amount) {
+//		return of(unit, new BigDecimal(String.valueOf(amount)));
+//	}
 
 	@Override
 	public FastMoney multiply(double amount) {
@@ -953,7 +958,7 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 	}
 
 	@Override
-	protected MonetaryContext<FastMoney> getDefaultMonetaryContext() {
+	protected MonetaryContext getDefaultMonetaryContext() {
 		return MONETARY_CONTEXT;
 	}
 
@@ -995,6 +1000,11 @@ public final class FastMoney extends AbstractMoney<FastMoney> implements
 			return "LRUMap [cacheSize=" + cacheSize + "]";
 		}
 
+	}
+
+	@Override
+	public MonetaryAmountFactory getFactory() {
+		return new FastMoneyAmountFactory().with(this);
 	}
 
 }

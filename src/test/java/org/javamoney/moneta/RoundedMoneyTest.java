@@ -216,8 +216,8 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testOfCurrencyUnitNumberMonetaryContext() {
-		MonetaryContext mc = new MonetaryContext.Builder()
-				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build(RoundedMoney.class);
+		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
 		RoundedMoney m = RoundedMoney.of(EURO, (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -329,8 +329,8 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testOfStringNumberMathContext() {
-		MonetaryContext mc = new MonetaryContext.Builder()
-				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build(RoundedMoney.class);
+		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
 		RoundedMoney m = RoundedMoney.of("EUR", (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -462,8 +462,8 @@ public class RoundedMoneyTest {
 		RoundedMoney m = RoundedMoney.of("CHF", 10);
 		assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT,
 				m.getMonetaryContext());
-		MonetaryContext mc = new MonetaryContext.Builder()
-				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build(RoundedMoney.class);
+		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).build();
 		m = RoundedMoney.of("CHF", 10, mc);
 		assertEquals(mc, m.getMonetaryContext());
 	}
@@ -1235,8 +1235,8 @@ public class RoundedMoneyTest {
 	public void testWithMonetaryOperator() {
 		MonetaryOperator adj = new MonetaryOperator() {
 			@Override
-			public <T extends MonetaryAmount<T>> T apply(T amount) {
-				return (T) amount.with(amount.getCurrency(), -100);
+			public MonetaryAmount apply(MonetaryAmount amount) {
+				return amount.getFactory().with(amount.getCurrency()).with(-100).create();
 			}
 		};
 		RoundedMoney m = RoundedMoney.of("USD", new BigDecimal("1.23645"));
@@ -1247,9 +1247,10 @@ public class RoundedMoneyTest {
 		assertEquals(RoundedMoney.of(m.getCurrency(), -100), a);
 		adj = new MonetaryOperator() {
 			@Override
-			public <T extends MonetaryAmount<T>> T apply(T amount) {
-				return (T) amount.multiply(2)
-						.with(MonetaryCurrencies.getCurrency("CHF"));
+			public MonetaryAmount apply(MonetaryAmount amount) {
+				return amount.multiply(2).getFactory()
+						.with(MonetaryCurrencies.getCurrency("CHF"))
+						.create();
 			}
 		};
 		a = m.with(adj);

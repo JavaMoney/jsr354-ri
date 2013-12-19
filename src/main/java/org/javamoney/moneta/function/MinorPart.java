@@ -47,11 +47,11 @@ final class MinorPart implements MonetaryOperator {
 	 * @return the minor units part of the amount, never {@code null}
 	 */
 	@Override
-	public <T extends MonetaryAmount<T>> T apply(T amount) {
+	public <T extends MonetaryAmount> T apply(T amount){
 		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = amount.getNumber(BigDecimal.class);
 		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
-		return amount.subtract(amount.with(amount.getCurrency(), wholes));
+		return (T)amount.subtract(amount.getFactory().with(wholes).create());
 	}
 
 }

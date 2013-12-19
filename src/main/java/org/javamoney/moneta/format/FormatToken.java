@@ -39,7 +39,7 @@ public interface FormatToken {
 	 * @param amount the {@link MonetaryAmount} to be formatted, not {@code null}.
 	 * @throws IOException thrown by the {@link Appendable} on appending.
 	 */
-	public void print(Appendable appendable, MonetaryAmount<?> amount)
+	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException;
 
 }

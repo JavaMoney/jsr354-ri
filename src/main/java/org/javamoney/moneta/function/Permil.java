@@ -67,8 +67,8 @@ final class Permil implements MonetaryOperator {
 	 * @return the permil result of the amount, never {@code null}
 	 */
 	@Override
-	public <T extends MonetaryAmount<T>> T apply(T amount) {
-		return amount.multiply(permilValue);
+	public <T extends MonetaryAmount> T apply(T amount) {
+		return (T)amount.multiply(permilValue);
 	}
 
 	/*

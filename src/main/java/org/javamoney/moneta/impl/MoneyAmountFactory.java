@@ -10,31 +10,12 @@ import javax.money.MonetaryContext.AmountFlavor;
 
 import org.javamoney.moneta.Money;
 
-public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
+public class MoneyAmountFactory extends AbstractAmountFactory {
 
 	@Override
-	public Money getAmount(CurrencyUnit currency, long number,
-			MonetaryContext<?> monetaryContext) {
+	protected MonetaryAmount create(CurrencyUnit currency, Number number,
+			MonetaryContext monetaryContext) {
 		return Money.of(currency, number, MonetaryContext.from(monetaryContext, Money.class));
-	}
-
-	@Override
-	public Money getAmount(CurrencyUnit currency, double number,
-			MonetaryContext<?> monetaryContext) {
-		return Money.of(currency, number, MonetaryContext.from(monetaryContext, Money.class));
-	}
-
-	@Override
-	public Money getAmount(CurrencyUnit currency, Number number,
-			MonetaryContext<?> monetaryContext) {
-		return Money.of(currency, number, MonetaryContext.from(monetaryContext, Money.class));
-	}
-
-	@Override
-	public Money getAmountFrom(MonetaryAmount<?> amt,
-			MonetaryContext<?> monetaryContext) {
-		return Money.of(amt.getCurrency(), amt.getNumber(BigDecimal.class),
-				MonetaryContext.from(monetaryContext, Money.class));
 	}
 
 	@Override
@@ -43,17 +24,17 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 	}
 
 	@Override
-	protected MonetaryContext<Money> loadDefaultMonetaryContext() {
-		return new MonetaryContext.Builder().setPrecision(64)
+	protected MonetaryContext loadDefaultMonetaryContext() {
+		return new MonetaryContext.Builder(Money.class).setPrecision(64)
 				.setMaxScale(63).setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.PRECISION).build(Money.class);
+				.setFlavor(AmountFlavor.PRECISION).build();
 	}
 
 	@Override
-	protected MonetaryContext<Money> loadMaxMonetaryContext() {
-		return new MonetaryContext.Builder().setPrecision(0)
+	protected MonetaryContext loadMaxMonetaryContext() {
+		return new MonetaryContext.Builder(Money.class).setPrecision(0)
 				.setMaxScale(-1).setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.PRECISION).build(Money.class);
+				.setFlavor(AmountFlavor.PRECISION).build();
 	}
 
 }

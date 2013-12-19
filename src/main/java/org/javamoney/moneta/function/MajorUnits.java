@@ -53,7 +53,7 @@ final class MajorUnits implements MonetaryQuery<Long> {
 	 *             if the amount is too large for a {@code long}
 	 */
 	@Override
-	public Long queryFrom(MonetaryAmount<?> amount) {
+	public Long queryFrom(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
 		return amount.with(downRounding)
 				.getNumberExact(Long.class);

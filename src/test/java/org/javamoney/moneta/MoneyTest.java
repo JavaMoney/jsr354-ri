@@ -180,9 +180,9 @@ public class MoneyTest {
 		Money m = Money.of(
 				EURO,
 				BigDecimal.valueOf(2.15),
-				new MonetaryContext.Builder().setPrecision(
+				new MonetaryContext.Builder(Money.class).setPrecision(
 						2).setFixedScale(true).setAttribute(
-						RoundingMode.DOWN).build(Money.class));
+						RoundingMode.DOWN).build());
 		Money m2 = Money.of(EURO, BigDecimal.valueOf(2.1));
 		assertEquals(m, m2);
 		Money m3 = m.multiply(100);
@@ -240,10 +240,10 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testOfCurrencyUnitNumberMathContext() {
-		MonetaryContext<Money> mc = new MonetaryContext.Builder()
+		MonetaryContext mc = new MonetaryContext.Builder(Money.class)
 				.setMaxScale(2345)
 				.setFixedScale(true).setAttribute(RoundingMode.CEILING)
-				.build(Money.class);
+				.build();
 		Money m = Money.of(EURO, (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -342,9 +342,9 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testOfStringNumberMathContext() {
-		MonetaryContext<Money> mc = new MonetaryContext.Builder()
+		MonetaryContext mc = new MonetaryContext.Builder(Money.class)
 				.setMaxScale(2345).setFixedScale(true)
-				.setAttribute(RoundingMode.CEILING).build(Money.class);
+				.setAttribute(RoundingMode.CEILING).build();
 		Money m = Money.of("EUR", (byte) 2, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -394,36 +394,12 @@ public class MoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.Money#ofZero(javax.money.CurrencyUnit)}.
-	 */
-	@Test
-	public void testOfZeroCurrencyUnit() {
-		Money m = Money.ofZero(MonetaryCurrencies.getCurrency("USD"));
-		assertNotNull(m);
-		assertEquals(MonetaryCurrencies.getCurrency("USD"), m.getCurrency());
-		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.javamoney.moneta.Money#ofZero(java.lang.String)}.
-	 */
-	@Test
-	public void testOfZeroString() {
-		Money m = Money.ofZero("CHF");
-		assertNotNull(m);
-		assertEquals(MonetaryCurrencies.getCurrency("CHF"), m.getCurrency());
-		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
-	}
-
-	/**
-	 * Test method for
 	 * {@link org.javamoney.moneta.Money#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {
 		Money[] moneys = new Money[] {
-				Money.ofZero("CHF"),
+				Money.of("CHF", 0),
 				Money.of("CHF", BigDecimal.ONE),
 				Money.of("XXX", BigDecimal.ONE),
 				Money.of("XXX", BigDecimal.ONE.negate())
@@ -468,8 +444,10 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testEqualsMonetarAmount() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory().getAmount("CHF", 100);
-		MonetaryAmount<Money> m2 = Money.of("CHF", 100);
+		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+				.withCurrency(
+						"CHF").with(100).create();
+		MonetaryAmount m2 = Money.of("CHF", 100);
 		Money m3 = Money.of("CHF", 100);
 		assertTrue(m.equals(m2));
 		assertTrue(m.equals(m3));
@@ -508,10 +486,10 @@ public class MoneyTest {
 	public void testWithMonetaryContext() {
 		Money m = Money.of("CHF", 10);
 		assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
-		MonetaryContext<Money> mc = new MonetaryContext.Builder()
+		MonetaryContext mc = new MonetaryContext.Builder(Money.class)
 				.setPrecision(128).setAttribute(RoundingMode.HALF_EVEN)
-				.build(Money.class);
-		Money m2 = m.with(mc);
+				.build();
+		MonetaryAmount m2 = m.getFactory().with(mc).create();
 		assertNotNull(m2);
 		assertTrue(m != m2);
 		assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
@@ -674,21 +652,6 @@ public class MoneyTest {
 		assertTrue(m == m.subtract(Money.of("CHF", 0)));
 	}
 
-	// /**
-	// * Test method for {@link javax.money.Money#ulp()}.
-	// */
-	// @Test
-	// public void testUlp() {
-	// Money[] moneys = new Money[] { Money.of("CHF", 100),
-	// Money.of("CHF", 34242344), Money.of("CHF", 23123213.435),
-	// Money.of("CHF", 0), Money.of("CHF", -100),
-	// Money.of("CHF", -723527.36532) };
-	// for (Money m : moneys) {
-	// assertEquals("Invalid ulp.",
-	// m.with(m.getNumber(BigDecimal.class).ulp()), m.ulp());
-	// }
-	// }
-
 	/**
 	 * Test method for
 	 * {@link org.javamoney.moneta.Money#remainder(java.lang.Number)}.
@@ -702,27 +665,33 @@ public class MoneyTest {
 		for (Money m : moneys) {
 			assertEquals(
 					"Invalid remainder of " + 10.50,
-					m.with(m.getCurrency(), m.getNumber(BigDecimal.class)
-							.remainder(
-									BigDecimal.valueOf(10.50))),
+					m.getFactory().with(m.getCurrency())
+							.with(m.getNumber(BigDecimal.class)
+									.remainder(
+											BigDecimal.valueOf(10.50)))
+							.create(),
 					m.remainder(10.50));
 			assertEquals(
 					"Invalid remainder of " + -30.20,
-					m.with(m.getCurrency(), m.getNumber(BigDecimal.class)
-							.remainder(
-									BigDecimal.valueOf(-30.20))),
+					m.getFactory().with(m.getCurrency())
+							.with(m.getNumber(BigDecimal.class)
+									.remainder(
+											BigDecimal.valueOf(-30.20)))
+							.create(),
 					m.remainder(-30.20));
 			assertEquals(
 					"Invalid remainder of " + -3,
-					m.with(m.getCurrency(), m.getNumber(BigDecimal.class)
-							.remainder(
-									BigDecimal.valueOf(-3))),
+					m.getFactory().with(m.getCurrency())
+							.with(m.getNumber(BigDecimal.class)
+									.remainder(
+											BigDecimal.valueOf(-3))).create(),
 					m.remainder(-3));
 			assertEquals(
 					"Invalid remainder of " + 3,
-					m.with(m.getCurrency(), m.getNumber(BigDecimal.class)
-							.remainder(
-									BigDecimal.valueOf(3))),
+					m.getFactory().with(m.getCurrency())
+							.with(m.getNumber(BigDecimal.class)
+									.remainder(
+											BigDecimal.valueOf(3))).create(),
 					m.remainder(3));
 		}
 	}
@@ -741,9 +710,10 @@ public class MoneyTest {
 			for (int p = -10; p < 10; p++) {
 				assertEquals(
 						"Invalid scaleByPowerOfTen.",
-						m.with(m.getCurrency(), m.getNumber(BigDecimal.class)
-								.scaleByPowerOfTen(
-										p)),
+						m.getFactory().with(m.getCurrency())
+								.with(m.getNumber(BigDecimal.class)
+										.scaleByPowerOfTen(
+												p)).create(),
 						m.scaleByPowerOfTen(p));
 			}
 		}
@@ -872,13 +842,17 @@ public class MoneyTest {
 				Money.of("CHF", -23123213),
 				Money.of("CHF", 0) };
 		Money s = Money.of("CHF", 10);
-		Money[] moneys2 = new Money[] {
-				s.with(s.getCurrency(), 100),
-				s.with(s.getCurrency(), 34242344),
-				s.with(s.getCurrency(), new BigDecimal("23123213.435")),
-				s.with(s.getCurrency(), new BigDecimal("-23123213.435")),
-				s.with(s.getCurrency(), -23123213),
-				s.with(s.getCurrency(), 0) };
+		MonetaryAmount[] moneys2 = new MonetaryAmount[] {
+				s.getFactory().with(s.getCurrency()).with(100).create(),
+				s.getFactory().with(s.getCurrency()).with(34242344)
+						.create(),
+				s.getFactory().with(s.getCurrency())
+						.with(new BigDecimal("23123213.435")).create(),
+				s.getFactory().with(s.getCurrency())
+						.with(new BigDecimal("-23123213.435")).create(),
+				s.getFactory().with(s.getCurrency()).with(-23123213)
+						.create(),
+				s.getFactory().with(s.getCurrency()).with(0).create() };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -897,15 +871,27 @@ public class MoneyTest {
 				Money.of("USS", -23123213.435), Money.of("USN", -23123213),
 				Money.of("GBP", 0) };
 		Money s = Money.of("XXX", 10);
-		Money[] moneys2 = new Money[] {
-				s.with(MonetaryCurrencies.getCurrency("CHF"), 100),
-				s.with(MonetaryCurrencies.getCurrency("USD"), 34242344),
-				s.with(MonetaryCurrencies.getCurrency("EUR"), new BigDecimal(
-						"23123213.435")),
-				s.with(MonetaryCurrencies.getCurrency("USS"), new BigDecimal(
-						"-23123213.435")),
-				s.with(MonetaryCurrencies.getCurrency("USN"), -23123213),
-				s.with(MonetaryCurrencies.getCurrency("GBP"), 0) };
+		MonetaryAmount[] moneys2 = new MonetaryAmount[] {
+				s.getFactory()
+						.with(MonetaryCurrencies.getCurrency("CHF"))
+						.with(100).create(),
+				s.getFactory()
+						.with(MonetaryCurrencies.getCurrency("USD"))
+						.with(34242344).create(),
+				s.getFactory()
+						.with(MonetaryCurrencies.getCurrency("EUR"))
+						.with(new BigDecimal(
+								"23123213.435")).create(),
+				s.getFactory()
+						.with(MonetaryCurrencies.getCurrency("USS"))
+						.with(new BigDecimal(
+								"-23123213.435")).create(),
+				s.getFactory()
+						.with(MonetaryCurrencies.getCurrency("USN"))
+						.with(-23123213).create(),
+				s.getFactory()
+						.with(MonetaryCurrencies.getCurrency("GBP"))
+						.with(0).create() };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -1340,60 +1326,6 @@ public class MoneyTest {
 				.toString());
 	}
 
-	// /**
-	// * Test method for {@link javax.money.Money#getAmountWhole()}.
-	// */
-	// @Test
-	// public void testGetAmountWhole() {
-	// assertEquals(1, Money.of("XXX", 1.23455645d).getAmountWhole());
-	// assertEquals(1, Money.of("CHF", 1).getAmountWhole());
-	// assertEquals(11, Money.of("CHF", 11.0d).getAmountWhole());
-	// assertEquals(1234, Money.of("CHF", 1234.1d).getAmountWhole());
-	// assertEquals(0, Money.of("CHF", 0.0100d).getAmountWhole());
-	// }
-	//
-	// /**
-	// * Test method for
-	// * {@link javax.money.Money#getAmountFractionNumerator()}.
-	// */
-	// @Test
-	// public void testGetAmountFractionNumerator() {
-	// assertEquals(23455645L, Money.of("XXX", new BigDecimal("1.23455645"))
-	// .getAmountFractionNumerator());
-	// assertEquals(0, Money.of("CHF", 1).getAmountFractionNumerator());
-	// assertEquals(0, Money.of("CHF", new BigDecimal("11.0"))
-	// .getAmountFractionNumerator());
-	// assertEquals(1L, Money.of("CHF", new BigDecimal("1234.1"))
-	// .getAmountFractionNumerator());
-	// assertEquals(100L, Money.of("CHF", new BigDecimal("0.0100"))
-	// .getAmountFractionNumerator());
-	// assertEquals(50L, Money.of("CHF", new BigDecimal("0.50"))
-	// .getAmountFractionNumerator());
-	// assertEquals(5L, Money.of("CHF", new BigDecimal("0.5"))
-	// .getAmountFractionNumerator());
-	// }
-	//
-	// /**
-	// * Test method for
-	// * {@link javax.money.Money#getAmountFractionDenominator()}.
-	// */
-	// @Test
-	// public void testGetAmountFractionDenominator() {
-	// assertEquals(100000000L, Money.of("XXX", new BigDecimal("1.23455645"))
-	// .getAmountFractionDenominator());
-	// assertEquals(1, Money.of("CHF", 1).getAmountFractionDenominator());
-	// assertEquals(10, Money.of("CHF", new BigDecimal("11.0"))
-	// .getAmountFractionDenominator());
-	// assertEquals(10L, Money.of("CHF", new BigDecimal("1234.1"))
-	// .getAmountFractionDenominator());
-	// assertEquals(10000L, Money.of("CHF", new BigDecimal("0.0100"))
-	// .getAmountFractionDenominator());
-	// assertEquals(100L, Money.of("CHF", new BigDecimal("0.50"))
-	// .getAmountFractionDenominator());
-	// assertEquals(10L, Money.of("CHF", new BigDecimal("0.5"))
-	// .getAmountFractionDenominator());
-	// }
-
 	/**
 	 * Test method for
 	 * {@link org.javamoney.moneta.Money#with(javax.money.MonetaryOperator)}.
@@ -1415,8 +1347,9 @@ public class MoneyTest {
 		adj = new MonetaryOperator() {
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
-				return amount.multiply(2)
-						.with(MonetaryCurrencies.getCurrency("CHF"));
+				return amount.multiply(2).getFactory()
+						.with(MonetaryCurrencies.getCurrency("CHF"))
+						.create();
 			}
 		};
 		a = m.with(adj);
@@ -1435,10 +1368,6 @@ public class MoneyTest {
 		Money m = Money.of("XXX", new BigDecimal("1.2345"));
 		Money m2 = Money.from(m);
 		assertTrue(m == m2);
-		// Money fm = Money.of("XXX", new BigDecimal("1.2345"));
-		// m2 = Money.from(fm);
-		// assertFalse(m == m2);
-		// assertEquals(m, m2);
 	}
 
 	@Test

@@ -44,10 +44,10 @@ final class Reciprocal implements MonetaryOperator {
 	 *             if the arithmetic operation failed
 	 */
 	@Override
-	public <T extends MonetaryAmount<T>> T apply(T amount) {
+	public <T extends MonetaryAmount> T apply(T amount) {
 		Objects.requireNonNull(amount, "Amount required.");
-		return amount.with(amount.getCurrency(), BigDecimal.ONE.divide(
-				amount.getNumber(BigDecimal.class)));
+		return (T)amount.getFactory().with(BigDecimal.ONE.divide(
+				amount.getNumber(BigDecimal.class))).create();
 	}
 
 }

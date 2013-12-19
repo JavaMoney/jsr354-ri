@@ -48,7 +48,7 @@ final class AmountNumberToken implements
 	}
 
 	@Override
-	public void print(Appendable appendable, MonetaryAmount<?> amount)
+	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
 		int digits = amount.getCurrency()
 				.getDefaultFractionDigits();

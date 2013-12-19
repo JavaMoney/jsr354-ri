@@ -37,8 +37,8 @@ import javax.money.MonetaryContext;
  * 
  * @author Anatole Tresch
  */
-public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
-		MonetaryAmount<T>, Serializable {
+public abstract class AbstractMoney implements
+		MonetaryAmount, Serializable {
 
 	/**
 	 * serialVersionUID.
@@ -49,7 +49,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	protected CurrencyUnit currency;
 
 	/** the {@link MonetaryContext} used by this instance, e.g. on division. */
-	protected MonetaryContext<T> monetaryContext;
+	protected MonetaryContext monetaryContext;
 
 	/**
 	 * Required for deserialization.
@@ -76,7 +76,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	 *            the {@link MonetaryContext}, not {@code null}.
 	 */
 	protected AbstractMoney(CurrencyUnit currency,
-			MonetaryContext<T> monetaryContext) {
+			MonetaryContext monetaryContext) {
 		Objects.requireNonNull(currency, "Currency is required.");
 		this.currency = currency;
 		if (monetaryContext != null) {
@@ -95,7 +95,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	 * 
 	 * @return the default {@link MonetaryContext}, never {@code null}.
 	 */
-	protected abstract MonetaryContext<T> getDefaultMonetaryContext();
+	protected abstract MonetaryContext getDefaultMonetaryContext();
 
 	/**
 	 * Returns the amount’s currency, modelled as {@link CurrencyUnit}.
@@ -117,7 +117,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	 * @see javax.money.MonetaryAmount#getMonetaryContext()
 	 */
 	@Override
-	public MonetaryContext<T> getMonetaryContext() {
+	public MonetaryContext getMonetaryContext() {
 		return this.monetaryContext;
 	}
 
@@ -197,7 +197,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	 * @return the corresponding {@link BigDecimal}
 	 */
 	protected static BigDecimal getBigDecimal(Number num,
-			MonetaryContext<?> moneyContext) {
+			MonetaryContext moneyContext) {
 		BigDecimal bd = getBigDecimal(num);
 		if (moneyContext != null) {
 			return new BigDecimal(bd.toString(),
@@ -217,7 +217,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	 * @return the corresponding {@link MathContext}
 	 */
 	protected static MathContext getMathContext(
-			MonetaryContext<?> monetaryContext,
+			MonetaryContext monetaryContext,
 			RoundingMode defaultMode) {
 		MathContext ctx = monetaryContext.getAttribute(MathContext.class);
 		if (ctx != null) {
@@ -243,7 +243,7 @@ public abstract class AbstractMoney<T extends MonetaryAmount<T>> implements
 	 *             compatible (same {@link CurrencyUnit#getNamespace()} and same
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
-	protected void checkAmountParameter(MonetaryAmount<?> amount) {
+	protected void checkAmountParameter(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount must not be null.");
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
