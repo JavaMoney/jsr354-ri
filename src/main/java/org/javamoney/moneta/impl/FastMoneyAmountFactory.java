@@ -10,7 +10,7 @@ import javax.money.MonetaryContext.AmountFlavor;
 
 import org.javamoney.moneta.FastMoney;
 
-public class FastMoneyAmountFactory extends AbstractAmountFactory{
+public class FastMoneyAmountFactory extends AbstractAmountFactory {
 
 	@Override
 	protected MonetaryAmount create(CurrencyUnit currency, Number number,
@@ -26,14 +26,16 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory{
 	@Override
 	protected MonetaryContext loadDefaultMonetaryContext() {
 		return new MonetaryContext.Builder(FastMoney.class).setPrecision(18)
-				.setMaxScale(5).setFixedScale(true).setAttribute(RoundingMode.HALF_EVEN)
+				.setMaxScale(5).setFixedScale(true)
+				.setAttribute(RoundingMode.HALF_EVEN)
 				.setFlavor(AmountFlavor.PERFORMANCE).build();
 	}
 
 	@Override
 	protected MonetaryContext loadMaxMonetaryContext() {
 		return new MonetaryContext.Builder(FastMoney.class).setPrecision(18)
-				.setMaxScale(5).setFixedScale(true).setAttribute(RoundingMode.HALF_EVEN)
+				.setMaxScale(5).setFixedScale(true)
+				.setAttribute(RoundingMode.HALF_EVEN)
 				.setFlavor(AmountFlavor.PERFORMANCE).build();
 	}
 

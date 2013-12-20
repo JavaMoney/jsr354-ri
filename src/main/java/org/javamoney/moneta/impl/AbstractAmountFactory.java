@@ -13,6 +13,8 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.UnknownCurrencyException;
 
+import org.javamoney.moneta.FastMoney;
+
 public abstract class AbstractAmountFactory
 		implements MonetaryAmountFactory {
 
@@ -49,6 +51,15 @@ public abstract class AbstractAmountFactory
 	@Override
 	public MonetaryAmount create() {
 		return create(currency, number, monetaryContext);
+	}
+	
+	@Override
+	public <T extends MonetaryAmount> T create(Class<T> type) {
+		if (getAmountType() == type) {
+			return (T) create();
+		}
+		throw new IllegalArgumentException("Invalid type, must be: "
+				+ getAmountType().getName() + ", was " + type.getName());
 	}
 
 	protected abstract MonetaryAmount create(CurrencyUnit currency,
