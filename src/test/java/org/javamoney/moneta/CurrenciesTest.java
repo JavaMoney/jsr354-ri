@@ -30,9 +30,10 @@ import javax.money.MonetaryCurrencies;
 import org.junit.Test;
 
 /**
- * Tests for the {@link CurrencyUnitImpl} class.
+ * Tests for {@link CurrencyUnit} implementation classes.
  * 
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public class CurrenciesTest {
 

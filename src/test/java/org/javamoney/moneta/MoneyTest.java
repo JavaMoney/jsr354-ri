@@ -48,10 +48,11 @@ import org.junit.Test;
 
 /**
  * @author Anatole
- * 
+ * @author Werner
  */
 public class MoneyTest {
-
+// TODO break this down into smaller test classes, 1.5k LOC seems a bit large;-)
+	
 	private static final BigDecimal TEN = new BigDecimal(10.0d);
 	protected static final CurrencyUnit EURO = MonetaryCurrencies
 			.getCurrency("EUR");
@@ -1333,6 +1334,7 @@ public class MoneyTest {
 	@Test
 	public void testWithMonetaryOperator() {
 		MonetaryOperator adj = new MonetaryOperator() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
 				return Money.of(amount.getCurrency(), -100);
@@ -1345,6 +1347,7 @@ public class MoneyTest {
 		assertEquals(m.getCurrency(), a.getCurrency());
 		assertEquals(Money.of(m.getCurrency(), -100), a);
 		adj = new MonetaryOperator() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
 				return amount.multiply(2).getFactory()

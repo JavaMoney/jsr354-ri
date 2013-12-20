@@ -1080,7 +1080,24 @@ public final class Money extends AbstractMoney implements
 				monetaryContext);
 	}
 
+	/**
+	 * Factory method creating a zero instance with the given {@code currency);
+	 * @param currency the target currency of the amount being created.
+	 * @return
+	 */
+	public static Money ofZero(CurrencyUnit currency) {
+		return of(currency, BigDecimal.ZERO);
+	}
 
+	/**
+	 * Factory method creating a zero instance with the given {@code currency code);
+	 * @param currencyCode the target currency code for the amount being created.
+	 * @return
+	 */
+	public static Money ofZero(String currencyCode) {
+		return of(currencyCode, BigDecimal.ZERO);
+	}
+	
 	/**
 	 * Converts (if necessary) the given {@link MonetaryAmount} to a
 	 * {@link Money} instance. The {@link MonetaryContext} will be adapted as
