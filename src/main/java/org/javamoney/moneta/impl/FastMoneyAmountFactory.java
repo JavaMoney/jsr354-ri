@@ -1,24 +1,28 @@
 /*
- * CREDIT SUISSE IS WILLING TO LICENSE THIS SPECIFICATION TO YOU ONLY UPON THE
- * CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT.
- * PLEASE READ THE TERMS AND CONDITIONS OF THIS AGREEMENT CAREFULLY. BY
- * DOWNLOADING THIS SPECIFICATION, YOU ACCEPT THE TERMS AND CONDITIONS OF THE
- * AGREEMENT. IF YOU ARE NOT WILLING TO BE BOUND BY IT, SELECT THE "DECLINE"
- * BUTTON AT THE BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency
- * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
- * reserved.
+ * CREDIT SUISSE IS WILLING TO LICENSE THIS SPECIFICATION TO YOU ONLY UPON THE CONDITION THAT YOU
+ * ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT. PLEASE READ THE TERMS AND CONDITIONS OF THIS
+ * AGREEMENT CAREFULLY. BY DOWNLOADING THIS SPECIFICATION, YOU ACCEPT THE TERMS AND CONDITIONS OF
+ * THE AGREEMENT. IF YOU ARE NOT WILLING TO BE BOUND BY IT, SELECT THE "DECLINE" BUTTON AT THE
+ * BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency API ("Specification") Copyright
+ * (c) 2012-2013, Credit Suisse All rights reserved.
  */
 package org.javamoney.moneta.impl;
 
 import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 
 import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
 
+/**
+ * Implementation of {@link MonetaryAmountFactory} creating instances of {@link FastMoney}.
+ * 
+ * @author Anatole Tresch
+ */
 public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
 	@Override
@@ -47,7 +51,5 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 				.setAttribute(RoundingMode.HALF_EVEN)
 				.setFlavor(AmountFlavor.PERFORMANCE).build();
 	}
-	
-	
 
 }

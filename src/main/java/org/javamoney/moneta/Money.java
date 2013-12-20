@@ -662,55 +662,14 @@ public final class Money extends AbstractMoney implements
 		return equals(Money.from(amount));
 	}
 
-	// /**
-	// * Creates a new {@link MonetaryAmount}, using the current amount as a
-	// * template, reusing the algorithmic implementation, the current
-	// * {@link MonetaryContext} and the numeric value.
-	// * <p>
-	// * This method is used for creating a new amount result after having done
-	// * calculations that are not directly mappable to the default monetary
-	// * arithmetics, e.g. currency conversion.
-	// *
-	// * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit)
-	// * @param unit
-	// * the new {@link CurrencyUnit} of the amount to be created.
-	// * @return the new {@link MonetaryAmount} with the given
-	// * {@link CurrencyUnit}, but the same numeric value and
-	// * {@link MonetaryContext}.
-	// */
-	// @Override
-	// public Money with(CurrencyUnit unit) {
-	// return Money.of(unit, this.number, this.monetaryContext);
-	// }
-	//
-	// /**
-	// * Creates a new Money instance, hereby changing the {@link MonetaryContext}
-	// * to be used. This allows to adapt the {@link MonetaryContext}, when
-	// * required.
-	// *
-	// * @param context
-	// * the {@link MonetaryContext} to be replaced, not {@code null}
-	// * @return the new amount with the same numeric value and
-	// * {@link CurrencyUnit}, but the new {@link MonetaryContext}.
-	// * @throws ArithemticException
-	// * if the number of this instance exceeds the capabilities of
-	// * the given {@link MonetaryContext}.
-	// */
-	// public Money with(MonetaryContext<Money> context) {
-	// Objects.requireNonNull(context, "MathContext required");
-	// return new Money(getCurrency(), this.number, context);
-	// }
-	//
-	// /*
-	// * (non-Javadoc)
-	// *
-	// * @see org.javamoney.moneta.AbstractMoney#with(javax.money.CurrencyUnit,
-	// * java.math.BigDecimal)
-	// */
-	// @Override
-	// public Money with(CurrencyUnit unit, Number amount) {
-	// return Money.of(unit, getBigDecimal(amount), getMonetaryContext());
-	// }
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.MonetaryAmount#getFactory()
+	 */
+	@Override
+	public MonetaryAmountFactory getFactory() {
+		return new MoneyAmountFactory().with(this);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -943,11 +902,6 @@ public final class Money extends AbstractMoney implements
 		return Money.of(amt.getCurrency(),
 				amt.getNumber().numberValue(BigDecimal.class),
 				amt.getMonetaryContext());
-	}
-
-	@Override
-	public MonetaryAmountFactory getFactory() {
-		return new MoneyAmountFactory().with(this);
 	}
 
 }
