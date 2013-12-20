@@ -56,12 +56,12 @@ final class AmountNumberToken implements
 		this.style.getDecimalFormat().setMaximumFractionDigits(digits);
 		if (this.style.getNumberGroupSizes().length == 0) {
 			appendable.append(this.style.getDecimalFormat().format(
-					amount.getNumber(BigDecimal.class)));
+					amount.getNumber().numberValue(BigDecimal.class)));
 			return;
 		}
 		this.style.getDecimalFormat().setGroupingUsed(false);
 		String preformattedValue = this.style.getDecimalFormat().format(
-				amount.getNumber(BigDecimal.class));
+				amount.getNumber().numberValue(BigDecimal.class));
 		String[] numberParts = splitNumberParts(this.style.getDecimalFormat(),
 				preformattedValue);
 		if (numberParts.length != 2) {

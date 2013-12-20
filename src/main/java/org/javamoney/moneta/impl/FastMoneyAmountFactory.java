@@ -1,19 +1,28 @@
+/*
+ * CREDIT SUISSE IS WILLING TO LICENSE THIS SPECIFICATION TO YOU ONLY UPON THE
+ * CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT.
+ * PLEASE READ THE TERMS AND CONDITIONS OF THIS AGREEMENT CAREFULLY. BY
+ * DOWNLOADING THIS SPECIFICATION, YOU ACCEPT THE TERMS AND CONDITIONS OF THE
+ * AGREEMENT. IF YOU ARE NOT WILLING TO BE BOUND BY IT, SELECT THE "DECLINE"
+ * BUTTON AT THE BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency
+ * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
+ * reserved.
+ */
 package org.javamoney.moneta.impl;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 
 import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.spi.AbstractAmountFactory;
 
-public class FastMoneyAmountFactory extends AbstractAmountFactory{
+public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
 	@Override
-	protected MonetaryAmount create(CurrencyUnit currency, Number number,
+	protected FastMoney create(CurrencyUnit currency, Number number,
 			MonetaryContext monetaryContext) {
 		return FastMoney.of(currency, number);
 	}
@@ -26,15 +35,19 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory{
 	@Override
 	protected MonetaryContext loadDefaultMonetaryContext() {
 		return new MonetaryContext.Builder(FastMoney.class).setPrecision(18)
-				.setMaxScale(5).setFixedScale(true).setAttribute(RoundingMode.HALF_EVEN)
+				.setMaxScale(5).setFixedScale(true)
+				.setAttribute(RoundingMode.HALF_EVEN)
 				.setFlavor(AmountFlavor.PERFORMANCE).build();
 	}
 
 	@Override
 	protected MonetaryContext loadMaxMonetaryContext() {
 		return new MonetaryContext.Builder(FastMoney.class).setPrecision(18)
-				.setMaxScale(5).setFixedScale(true).setAttribute(RoundingMode.HALF_EVEN)
+				.setMaxScale(5).setFixedScale(true)
+				.setAttribute(RoundingMode.HALF_EVEN)
 				.setFlavor(AmountFlavor.PERFORMANCE).build();
 	}
+	
+	
 
 }

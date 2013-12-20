@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta;
+package org.javamoney.moneta.spi;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
+import javax.money.NumberValue;
 
 /**
  * Platform RI: This base class simplifies implementing {@link MonetaryAmount},
@@ -157,6 +158,9 @@ public abstract class AbstractMoney implements
 	 */
 	protected static BigDecimal getBigDecimal(Number num) {
 		checkNumberParameter(num);
+		if(num instanceof NumberValue){
+			return ((NumberValue)num).numberValue(BigDecimal.class);
+		}
 		// try fast equality check first (delegates to identity!)
 		if (BigDecimal.class.equals(num.getClass())) {
 			return (BigDecimal) num;

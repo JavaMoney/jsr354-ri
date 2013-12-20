@@ -21,6 +21,7 @@ package org.javamoney.moneta;
 import java.math.BigDecimal;
 
 import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryRoundings;
 
@@ -39,6 +40,58 @@ public class PerformanceTest {
 			.getCurrency("USD");
 
 	@Test
+	public void comparePerformanceNoRounding() {
+		FastMoney money1 = FastMoney.of(EURO, BigDecimal.ONE);
+		long start = System.currentTimeMillis();
+		final int NUM = 1000000;
+		for (int i = 0; i < NUM; i++) {
+			money1 = money1.add(FastMoney.of(EURO, 1234567.3444));
+			money1 = money1.subtract(FastMoney.of(EURO, 232323));
+			money1 = money1.multiply(3.4);
+			money1 = money1.divide(5.456);
+		}
+		long end = System.currentTimeMillis();
+		long duration = end - start;
+		System.out.println("Duration for 1000000 operations (FastMoney/BD): "
+				+ duration + " ms (" + ((duration * 1000) / NUM)
+				+ " ns per loop) -> "
+				+ money1);
+
+		FastMoney money2 = FastMoney.of(EURO, BigDecimal.ONE);
+		start = System.currentTimeMillis();
+		for (int i = 0; i < NUM; i++) {
+			money2 = money2.add(FastMoney.of(EURO, 1234567.3444));
+			money2 = money2.subtract(FastMoney.of(EURO, 232323));
+			money2 = money2.multiply(3.4);
+			money2 = money2.divide(5.456);
+		}
+		end = System.currentTimeMillis();
+		duration = end - start;
+		System.out.println("Duration for " + NUM
+				+ " operations (IntegralMoney/long): "
+				+ duration + " ms (" + ((duration * 1000) / NUM)
+				+ " ns per loop) -> "
+				+ money2);
+
+		FastMoney money3 = FastMoney.of(EURO, BigDecimal.ONE);
+		start = System.currentTimeMillis();
+		for (int i = 0; i < NUM; i++) {
+			money3 = money3.add(FastMoney.of(EURO, 1234567.3444));
+			money3 = money3.subtract(FastMoney.of(EURO, 232323));
+			money3 = money3.multiply(3.4);
+			money3 = money3.divide(5.456);
+		}
+		end = System.currentTimeMillis();
+		duration = end - start;
+		System.out.println("Duration for " + NUM
+				+ " operations (IntegralMoney/FastMoney mixed): "
+				+ duration + " ms (" + ((duration * 1000) / NUM)
+				+ " ns per loop) -> "
+				+ money3);
+	}
+	
+	
+	@Test
 	public void comparePerformance() {
 		StringBuilder b = new StringBuilder();
 		b.append("PerformanceTest - Looping code Money,BD:\n");
@@ -53,9 +106,11 @@ public class PerformanceTest {
 		Money money1 = Money.of(EURO, BigDecimal.ONE);
 		long start = System.currentTimeMillis();
 		final int NUM = 100000;
+		MonetaryAmount adding = Money.of(EURO, 1234567.3444);
+		MonetaryAmount subtracting = Money.of(EURO, 232323);
 		for (int i = 0; i < NUM; i++) {
-			money1 = money1.add(Money.of(EURO, 1234567.3444));
-			money1 = money1.subtract(Money.of(EURO, 232323));
+			money1 = money1.add(adding);
+			money1 = money1.subtract(subtracting);
 			money1 = money1.multiply(3.4);
 			money1 = money1.divide(5.456);
 			money1 = money1.with(MonetaryRoundings.getRounding());
@@ -78,9 +133,11 @@ public class PerformanceTest {
 		b.setLength(0);
 		FastMoney money2 = FastMoney.of(EURO, BigDecimal.ONE);
 		start = System.currentTimeMillis();
+		adding = FastMoney.of(EURO, 1234567.3444);
+		subtracting = FastMoney.of(EURO, 232323);
 		for (int i = 0; i < NUM; i++) {
-			money2 = money2.add(FastMoney.of(EURO, 1234567.3444));
-			money2 = money2.subtract(FastMoney.of(EURO, 232323));
+			money2 = money2.add(adding);
+			money2 = money2.subtract(subtracting);
 			money2 = money2.multiply(3.4);
 			money2 = money2.divide(5.456);
 			money2 = money2.with(MonetaryRoundings.getRounding());
@@ -93,8 +150,9 @@ public class PerformanceTest {
 				+ " ns per loop) -> "
 				+ money2);
 		System.out.println();
-		b.append("PerformanceTest - Looping code Mixed 1, long/BD:\n");
-		b.append("================================================\n");
+		
+		b.append("PerformanceTest - Looping code Mixed 1, FastMoney/Money:\n");
+		b.append("========================================================\n");
 		b.append("FastMoney money1 = money1.add(Money.of(EURO, 1234567.3444));\n");
 		b.append("money1 = money1.subtract(Money.of(EURO, 232323));\n");
 		b.append("money1 = money1.multiply(3.4);\n");
@@ -102,11 +160,13 @@ public class PerformanceTest {
 		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
+		adding = Money.of(EURO, 1234567.3444);
+		subtracting = Money.of(EURO, 232323);
 		FastMoney money3 = FastMoney.of(EURO, BigDecimal.ONE);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
-			money3 = money3.add(Money.of(EURO, 1234567.3444));
-			money3 = money3.subtract(Money.of(EURO, 232323));
+			money3 = money3.add(adding);
+			money3 = money3.subtract(subtracting);
 			money3 = money3.multiply(3.4);
 			money3 = money3.divide(5.456);
 			money3 = money3.with(MonetaryRoundings.getRounding());
@@ -119,8 +179,8 @@ public class PerformanceTest {
 				+ " ns per loop) -> "
 				+ money3);
 		System.out.println();
-		b.append("PerformanceTest - Looping code Mixed 2, BD/long:\n");
-		b.append("================================================\n");
+		b.append("PerformanceTest - Looping code Mixed 2, Money/FastMoney:\n");
+		b.append("========================================================\n");
 		b.append("Money money1 = money1.add(FastMoney.of(EURO, 1234567.3444));\n");
 		b.append("money1 = money1.subtract(FastMoney.of(EURO, 232323));\n");
 		b.append("money1 = money1.multiply(3.4);\n");
@@ -128,6 +188,8 @@ public class PerformanceTest {
 		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
+		adding = FastMoney.of(EURO, 1234567.3444);
+		subtracting = FastMoney.of(EURO, 232323);
 		Money money4 = Money.of(EURO, BigDecimal.ONE);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
@@ -148,40 +210,4 @@ public class PerformanceTest {
 		System.out.println();
 	}
 
-	@Test
-	public void comparePerformanceWithFastMoneyCaching() {
-		StringBuilder b = new StringBuilder();
-		b.append("PerformanceTest - Test Caching benefit FastMoney:\n");
-		b.append("=======================================---------=\n");
-		b.append("FastMoney money1 = FastMoney.of(EURO, c));\n");
-		b.append("vs\n");
-		b.append("FastMoney money1 = FastMoney.of(EURO, c++));\n");
-		System.out.println(b);
-		b.setLength(0);
-		final int NUM = 1000000;
-		long start = System.currentTimeMillis();
-		for (int i = 0; i < NUM; i++) {
-			FastMoney.of(EURO, 1);
-		}
-		long end = System.currentTimeMillis();
-		long duration = end - start;
-		System.out.println("Duration for " + NUM
-				+ " creations of FastMoney 'EUR c=1': "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
-				+ " ns per loop).");
-		System.out.println();
-		System.out.println();
-		start = System.currentTimeMillis();
-		for (int i = 0; i < NUM; i++) {
-			Money.of(EURO, i);
-		}
-		end = System.currentTimeMillis();
-		duration = end - start;
-		System.out.println("Duration for " + NUM
-				+ " creations of FastMoney 'EUR c=1,c++': "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
-				+ " ns per loop).");
-		System.out.println();
-		System.out.println();
-	}
 }

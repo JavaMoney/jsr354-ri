@@ -49,7 +49,7 @@ final class MinorUnits implements MonetaryQuery<Long> {
 	@Override
 	public Long queryFrom(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
-		BigDecimal number = amount.getNumber(BigDecimal.class);
+		BigDecimal number = amount.getNumber().numberValue(BigDecimal.class);
 		CurrencyUnit cur = amount.getCurrency();
 		int scale = cur.getDefaultFractionDigits();
 		if(scale<0){

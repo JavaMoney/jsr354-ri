@@ -3,16 +3,17 @@ package org.javamoney.moneta.impl;
 import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 
 import org.javamoney.moneta.RoundedMoney;
+import org.javamoney.moneta.spi.AbstractAmountFactory;
 
-public class RoundedMoneyAmountFactory extends AbstractAmountFactory {
+public class RoundedMoneyAmountFactory extends
+		AbstractAmountFactory<RoundedMoney> {
 
 	@Override
-	protected MonetaryAmount create(CurrencyUnit currency, Number number,
+	protected RoundedMoney create(CurrencyUnit currency, Number number,
 			MonetaryContext monetaryContext) {
 		return RoundedMoney.of(currency, number);
 	}

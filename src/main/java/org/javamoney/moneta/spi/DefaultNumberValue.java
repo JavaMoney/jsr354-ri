@@ -1,0 +1,240 @@
+/*
+ * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
+ * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.javamoney.moneta.spi;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
+
+import javax.money.NumberValue;
+
+/**
+ * Default implementation of {@link NumberValue} based on {@link BigDecimal}.
+ * 
+ * @author Anatole Tresch
+ */
+public class DefaultNumberValue extends NumberValue {
+
+	/**
+	 * serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+	/** The numeric value. */
+	private Number number;
+
+	public DefaultNumberValue(Number number) {
+		Objects.requireNonNull(number, "Number required");
+		this.number = number;
+	}
+
+	@Override
+	public Class<?> getNumberType() {
+		return this.number.getClass();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getIntValue()
+	 */
+	@Override
+	public int intValue() {
+		return this.number.intValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getIntValueExact()
+	 */
+	@Override
+	public int intValueExact() {
+		return getBigDecimal(number).intValueExact();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getLongValue()
+	 */
+	@Override
+	public long longValue() {
+		return this.number.longValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getLongValueExact()
+	 */
+	@Override
+	public long longValueExact() {
+		return getBigDecimal(number).longValueExact();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getFloatValue()
+	 */
+	@Override
+	public float floatValue() {
+		return this.number.floatValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getDoubleValue()
+	 */
+	@Override
+	public double doubleValue() {
+		return this.number.doubleValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getDoubleValueExact()
+	 */
+	@Override
+	public double doubleValueExact() {
+		double d = this.number.doubleValue();
+		if (d == Double.NEGATIVE_INFINITY || d == Double.POSITIVE_INFINITY) {
+			throw new ArithmeticException("Unable to convert to double: "
+					+ this.number);
+		}
+		return d;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberBinding#getNumberValue(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Number> T numberValue(Class<T> numberType) {
+		if (BigDecimal.class == numberType) {
+			return (T) getBigDecimal(number);
+		}
+		else if (BigInteger.class == numberType) {
+			return (T) getBigDecimal(number).toBigInteger();
+		}
+		else if (Double.class == numberType) {
+			return (T) Double.valueOf(this.number.doubleValue());
+		}
+		else if (Float.class == numberType) {
+			return (T) Float.valueOf(this.number.floatValue());
+		}
+		else if (Long.class == numberType) {
+			return (T) Long.valueOf(this.number.longValue());
+		}
+		else if (Integer.class == numberType) {
+			return (T) Integer.valueOf(this.number.intValue());
+		}
+		else if (Short.class == numberType) {
+			return (T) Short.valueOf(this.number.shortValue());
+		}
+		else if (Byte.class == numberType) {
+			return (T) Byte.valueOf(this.number.byteValue());
+		}
+		throw new IllegalArgumentException("Unsupported numeric type: "
+				+ numberType);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Number> T numberValueExact(Class<T> numberType) {
+		if (BigDecimal.class == numberType) {
+			return (T) getBigDecimal(number);
+		}
+		else if (BigInteger.class == numberType) {
+			return (T) getBigDecimal(number).toBigIntegerExact();
+		}
+		else if (Double.class == numberType) {
+			double d = this.number.doubleValue();
+			if (d == Double.NEGATIVE_INFINITY || d == Double.POSITIVE_INFINITY) {
+				throw new ArithmeticException(
+						"Value not exact mappable to double: " + this.number);
+			}
+			return (T) Double.valueOf(d);
+		}
+		else if (Float.class == numberType) {
+			float f = this.number.floatValue();
+			if (f == Float.NEGATIVE_INFINITY || f == Float.POSITIVE_INFINITY) {
+				throw new ArithmeticException(
+						"Value not exact mappable to float: " + this.number);
+			}
+			return (T) Float.valueOf(f);
+		}
+		else if (Long.class == numberType) {
+			return (T) Long.valueOf(getBigDecimal(number).longValueExact());
+		}
+		else if (Integer.class == numberType) {
+			return (T) Integer.valueOf(getBigDecimal(number).intValueExact());
+		}
+		else if (Short.class == numberType) {
+			return (T) Short.valueOf(getBigDecimal(number).shortValueExact());
+		}
+		else if (Byte.class == numberType) {
+			return (T) Short.valueOf(getBigDecimal(number).byteValueExact());
+		}
+		throw new IllegalArgumentException("Unsupported numeric type: "
+				+ numberType);
+	}
+
+	public static NumberValue of(Number number) {
+		return new DefaultNumberValue(number);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.valueOf(number);
+	}
+
+	/**
+	 * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
+	 * depending the type given.
+	 * 
+	 * @param num
+	 *            the number type
+	 * @return the corresponding {@link BigDecimal}
+	 */
+	protected static BigDecimal getBigDecimal(Number num) {
+		// try fast equality check first (delegates to identity!)
+		if (BigDecimal.class.equals(num.getClass())) {
+			return (BigDecimal) num;
+		}
+		if (Long.class.equals(num.getClass())
+				|| Integer.class.equals(num.getClass())
+				|| Short.class.equals(num.getClass())
+				|| Byte.class.equals(num.getClass())
+				|| AtomicLong.class.equals(num.getClass())) {
+			return BigDecimal.valueOf(num.longValue());
+		}
+		if (Float.class.equals(num.getClass())
+				|| Double.class.equals(num.getClass())) {
+			return new BigDecimal(num.toString());
+		}
+		// try instance of (slower)
+		if (num instanceof BigDecimal) {
+			return (BigDecimal) num;
+		}
+		if (num instanceof BigInteger) {
+			return new BigDecimal((BigInteger) num);
+		}
+		try {
+			// Avoid imprecise conversion to double value if at all possible
+			return new BigDecimal(num.toString());
+		} catch (NumberFormatException e) {
+		}
+		return BigDecimal.valueOf(num.doubleValue());
+	}
+
+}

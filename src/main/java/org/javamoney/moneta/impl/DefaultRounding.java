@@ -97,7 +97,7 @@ final class DefaultRounding implements MonetaryOperator {
 		// this.scale,
 		// this.roundingMode));
 		return (T)amount.getFactory().with(amount.getCurrency()).with(
-				((BigDecimal) amount.getNumber(BigDecimal.class)).setScale(
+				((BigDecimal) amount.getNumber().numberValue(BigDecimal.class)).setScale(
 						this.scale,
 						this.roundingMode)).create();
 	}

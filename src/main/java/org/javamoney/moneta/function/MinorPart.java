@@ -49,7 +49,7 @@ final class MinorPart implements MonetaryOperator {
 	@Override
 	public <T extends MonetaryAmount> T apply(T amount){
 		Objects.requireNonNull(amount, "Amount required.");
-		BigDecimal number = amount.getNumber(BigDecimal.class);
+		BigDecimal number = amount.getNumber().numberValue(BigDecimal.class);
 		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
 		return (T)amount.subtract(amount.getFactory().with(wholes).create());
 	}

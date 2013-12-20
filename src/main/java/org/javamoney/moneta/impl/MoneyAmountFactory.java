@@ -1,19 +1,18 @@
 package org.javamoney.moneta.impl;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.spi.AbstractAmountFactory;
 
-public class MoneyAmountFactory extends AbstractAmountFactory {
+public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
 	@Override
-	protected MonetaryAmount create(CurrencyUnit currency, Number number,
+	protected Money create(CurrencyUnit currency, Number number,
 			MonetaryContext monetaryContext) {
 		return Money.of(currency, number, MonetaryContext.from(monetaryContext, Money.class));
 	}

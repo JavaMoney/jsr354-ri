@@ -1,4 +1,4 @@
-package org.javamoney.moneta.impl;
+package org.javamoney.moneta.spi;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,8 +13,8 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryCurrencies;
 import javax.money.UnknownCurrencyException;
 
-public abstract class AbstractAmountFactory
-		implements MonetaryAmountFactory {
+public abstract class AbstractAmountFactory<T extends MonetaryAmount>
+		implements MonetaryAmountFactory<T> {
 
 	/**
 	 * The default {@link MonetaryContext} applied, if not set explicitly on
@@ -47,11 +47,11 @@ public abstract class AbstractAmountFactory
 	 *             {@link MonetaryContext} used.
 	 */
 	@Override
-	public MonetaryAmount create() {
+	public T create() {
 		return create(currency, number, monetaryContext);
 	}
-
-	protected abstract MonetaryAmount create(CurrencyUnit currency,
+	
+	protected abstract T create(CurrencyUnit currency,
 			Number number,
 			MonetaryContext monetaryContext);
 
@@ -66,7 +66,7 @@ public abstract class AbstractAmountFactory
 	 * javax.money.MonetaryAmountFactory#withCurrency(javax.money.CurrencyUnit)
 	 */
 	@Override
-	public MonetaryAmountFactory with(CurrencyUnit currency) {
+	public MonetaryAmountFactory<T> with(CurrencyUnit currency) {
 		Objects.requireNonNull(currency);
 		this.currency = currency;
 		return this;
@@ -78,7 +78,7 @@ public abstract class AbstractAmountFactory
 	 * @see javax.money.MonetaryAmountFactory#with(java.lang.Number)
 	 */
 	@Override
-	public MonetaryAmountFactory with(Number number) {
+	public MonetaryAmountFactory<T> with(Number number) {
 		this.number = getBigDecimal(number);
 		return this;
 	}
@@ -89,7 +89,7 @@ public abstract class AbstractAmountFactory
 	 * @see javax.money.MonetaryAmountFactory#withCurrency(java.lang.String)
 	 */
 	@Override
-	public MonetaryAmountFactory withCurrency(String currencyCode) {
+	public MonetaryAmountFactory<T> withCurrency(String currencyCode) {
 		this.currency = MonetaryCurrencies.getCurrency(currencyCode);
 		return this;
 	}
@@ -111,7 +111,7 @@ public abstract class AbstractAmountFactory
 	 *             {@link CurrencyUnit}.
 	 */
 	@Override
-	public MonetaryAmountFactory with(double number) {
+	public MonetaryAmountFactory<T> with(double number) {
 		this.number = new BigDecimal(String.valueOf(number));
 		return this;
 	}
@@ -122,7 +122,7 @@ public abstract class AbstractAmountFactory
 	 * @see javax.money.MonetaryAmountFactory#with(long)
 	 */
 	@Override
-	public MonetaryAmountFactory with(long number) {
+	public MonetaryAmountFactory<T> with(long number) {
 		this.number = BigDecimal.valueOf(number);
 		return this;
 	}
@@ -133,7 +133,7 @@ public abstract class AbstractAmountFactory
 	 * @see javax.money.MonetaryAmountFactory#with(javax.money.MonetaryContext)
 	 */
 	@Override
-	public MonetaryAmountFactory with(MonetaryContext monetaryContext) {
+	public MonetaryAmountFactory<T> with(MonetaryContext monetaryContext) {
 		Objects.requireNonNull(monetaryContext);
 		this.monetaryContext = monetaryContext;
 		return this;
@@ -173,9 +173,9 @@ public abstract class AbstractAmountFactory
 	 * @return an according Money instance.
 	 */
 	@Override
-	public MonetaryAmountFactory with(MonetaryAmount amt) {
+	public MonetaryAmountFactory<T> with(MonetaryAmount amt) {
 		this.currency = amt.getCurrency();
-		this.number = amt.getNumber(BigDecimal.class);
+		this.number = amt.getNumber().numberValue(BigDecimal.class);
 		this.monetaryContext = new MonetaryContext.Builder(
 				amt.getMonetaryContext()).setAmountType(
 				DEFAULT_MONETARY_CONTEXT.getAmountType()).build();

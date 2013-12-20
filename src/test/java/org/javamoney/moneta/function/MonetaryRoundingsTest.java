@@ -100,7 +100,7 @@ public class MonetaryRoundingsTest {
 							.getRounding(new MonetaryContext.Builder()
 									.setMaxScale(scale)
 									.setAttribute(roundingMode).build());
-					BigDecimal dec = samples[i].getNumber(BigDecimal.class);
+					BigDecimal dec = samples[i].getNumber().numberValue(BigDecimal.class);
 					BigDecimal expected = dec.setScale(scale, roundingMode);
 					MonetaryAmount r = samples[i].with(rounding);
 					assertEquals(
@@ -153,7 +153,7 @@ public class MonetaryRoundingsTest {
 					continue;
 				}
 				MonetaryOperator rounding = MonetaryRoundings.getRounding(cur);
-				BigDecimal dec = samples[i].getNumber(BigDecimal.class);
+				BigDecimal dec = samples[i].getNumber().numberValue(BigDecimal.class);
 				BigDecimal expected = null;
 				if (cur.getDefaultFractionDigits() < 0) {
 					expected = dec.setScale(0, RoundingMode.HALF_UP);
