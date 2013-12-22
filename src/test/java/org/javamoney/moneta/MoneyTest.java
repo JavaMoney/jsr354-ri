@@ -915,41 +915,41 @@ public class MoneyTest {
 		}
 	}
 
-	/**
-	 * Test method for {@link org.javamoney.moneta.Money#getScale()}.
-	 */
-	@Test
-	public void testGetScale() {
-		Money[] moneys = new Money[] {
-				Money.of("CHF", 100),
-				Money.of("USD", 34242344), Money.of("EUR", 23123213.435),
-				Money.of("USS", -23123213.435), Money.of("USN", -23123213),
-				Money.of("GBP", 0) };
-		for (Money m : moneys) {
-			assertEquals("Scale for " + m,
-					m.getNumber().numberValue(BigDecimal.class)
-							.scale(),
-					m.getScale());
-		}
-	}
-
-	/**
-	 * Test method for {@link org.javamoney.moneta.Money#getPrecision()}.
-	 */
-	@Test
-	public void testGetPrecision() {
-		Money[] moneys = new Money[] {
-				Money.of("CHF", 100),
-				Money.of("USD", 34242344), Money.of("EUR", 23123213.435),
-				Money.of("USS", -23123213.435), Money.of("USN", -23123213),
-				Money.of("GBP", 0) };
-		for (Money m : moneys) {
-			assertEquals("Precision for " + m,
-					m.getNumber().numberValue(BigDecimal.class)
-							.precision(),
-					m.getPrecision());
-		}
-	}
+//	/**
+//	 * Test method for {@link org.javamoney.moneta.Money#getScale()}.
+//	 */
+//	@Test
+//	public void testGetScale() {
+//		Money[] moneys = new Money[] {
+//				Money.of("CHF", 100),
+//				Money.of("USD", 34242344), Money.of("EUR", 23123213.435),
+//				Money.of("USS", -23123213.435), Money.of("USN", -23123213),
+//				Money.of("GBP", 0) };
+//		for (Money m : moneys) {
+//			assertEquals("Scale for " + m,
+//					m.getNumber().numberValue(BigDecimal.class)
+//							.scale(),
+//					m.getScale());
+//		}
+//	}
+//
+//	/**
+//	 * Test method for {@link org.javamoney.moneta.Money#getPrecision()}.
+//	 */
+//	@Test
+//	public void testGetPrecision() {
+//		Money[] moneys = new Money[] {
+//				Money.of("CHF", 100),
+//				Money.of("USD", 34242344), Money.of("EUR", 23123213.435),
+//				Money.of("USS", -23123213.435), Money.of("USN", -23123213),
+//				Money.of("GBP", 0) };
+//		for (Money m : moneys) {
+//			assertEquals("Precision for " + m,
+//					m.getNumber().numberValue(BigDecimal.class)
+//							.precision(),
+//					m.getPrecision());
+//		}
+//	}
 
 	/**
 	 * Test method for {@link org.javamoney.moneta.Money#longValue()}.
@@ -1250,7 +1250,7 @@ public class MoneyTest {
 		MonetaryQuery<Integer> q = new MonetaryQuery<Integer>() {
 			@Override
 			public Integer queryFrom(MonetaryAmount amount) {
-				return Money.from(amount).getPrecision();
+				return Money.from(amount).getNumber().getPrecision();
 			}
 		};
 		Money[] moneys = new Money[] {
@@ -1260,7 +1260,7 @@ public class MoneyTest {
 				Money.of("GBP", 0) };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals((Integer) moneys[i].query(q),
-					(Integer) moneys[i].getPrecision());
+					Integer.valueOf(moneys[i].getNumber().getPrecision()));
 		}
 	}
 

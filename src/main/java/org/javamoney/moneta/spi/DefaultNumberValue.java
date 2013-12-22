@@ -9,7 +9,6 @@
  */
 package org.javamoney.moneta.spi;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
@@ -36,9 +35,31 @@ public class DefaultNumberValue extends NumberValue {
 		this.number = number;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberValue#getNumberType()
+	 */
 	@Override
 	public Class<?> getNumberType() {
 		return this.number.getClass();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberValue#getPrecision()
+	 */
+	@Override
+	public int getPrecision() {
+		return numberValue(BigDecimal.class).precision();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberValue#getScale()
+	 */
+	@Override
+	public int getScale() {
+		return numberValue(BigDecimal.class).scale();
 	}
 
 	/*
@@ -144,6 +165,10 @@ public class DefaultNumberValue extends NumberValue {
 				+ numberType);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.NumberValue#numberValueExact(java.lang.Class)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Number> T numberValueExact(Class<T> numberType) {
@@ -183,10 +208,6 @@ public class DefaultNumberValue extends NumberValue {
 		}
 		throw new IllegalArgumentException("Unsupported numeric type: "
 				+ numberType);
-	}
-
-	public static NumberValue of(Number number) {
-		return new DefaultNumberValue(number);
 	}
 
 	/*

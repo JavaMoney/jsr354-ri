@@ -238,24 +238,6 @@ public final class Money extends AbstractMoney implements
 		return new DefaultNumberValue(number);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.MonetaryAmount#getScale()
-	 */
-	@Override
-	public int getScale() {
-		return this.number.scale();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.MonetaryAmount#getPrecision()
-	 */
-	@Override
-	public int getPrecision() {
-		return this.number.precision();
-	}
-
 	/**
 	 * Method that returns BigDecimal.ZERO, if {@link #isZero()}, and {@link #number
 	 * #stripTrailingZeros()} in all other cases.
@@ -667,7 +649,7 @@ public final class Money extends AbstractMoney implements
 	 * @see javax.money.MonetaryAmount#getFactory()
 	 */
 	@Override
-	public MonetaryAmountFactory getFactory() {
+	public MonetaryAmountFactory<Money> getFactory() {
 		return new MoneyAmountFactory().with(this);
 	}
 
@@ -719,7 +701,6 @@ public final class Money extends AbstractMoney implements
 	/**
 	 * Implement deserialization explicitly.
 	 */
-	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream ois) throws IOException,
 			ClassNotFoundException {
 		this.number = (BigDecimal) ois.readObject();
