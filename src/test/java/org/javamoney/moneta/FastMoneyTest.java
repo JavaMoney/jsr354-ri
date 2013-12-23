@@ -231,34 +231,12 @@ public class FastMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#ofZero(javax.money.CurrencyUnit)}.
-	 */
-	@Test
-	public void testOfZeroCurrencyUnit() {
-		FastMoney m = FastMoney.ofZero(MonetaryCurrencies.getCurrency("USD"));
-		assertNotNull(m);
-		assertEquals(MonetaryCurrencies.getCurrency("USD"), m.getCurrency());
-		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
-	}
-
-	/**
-	 * Test method for {@link org.javamoney.moneta.FastMoney#ofZero(java.lang.String)}.
-	 */
-	@Test
-	public void testOfZeroString() {
-		FastMoney m = FastMoney.ofZero("CHF");
-		assertNotNull(m);
-		assertEquals(MonetaryCurrencies.getCurrency("CHF"), m.getCurrency());
-		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
-	}
-
-	/**
 	 * Test method for {@link org.javamoney.moneta.FastMoney#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {
 		FastMoney[] moneys = new FastMoney[] {
-				FastMoney.ofZero("CHF"),
+				FastMoney.of("CHF", BigDecimal.ZERO),
 				FastMoney.of("CHF", BigDecimal.ONE),
 				FastMoney.of("XXX", BigDecimal.ONE),
 				FastMoney.of("XXX", BigDecimal.ONE.negate())
