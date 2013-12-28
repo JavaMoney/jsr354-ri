@@ -399,35 +399,12 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#ofZero(javax.money.CurrencyUnit)} .
-	 */
-	@Test
-	public void testOfZeroCurrencyUnit() {
-		RoundedMoney m = RoundedMoney.ofZero(MonetaryCurrencies
-				.getCurrency("USD"));
-		assertNotNull(m);
-		assertEquals(MonetaryCurrencies.getCurrency("USD"), m.getCurrency());
-		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
-	}
-
-	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#ofZero(java.lang.String)} .
-	 */
-	@Test
-	public void testOfZeroString() {
-		RoundedMoney m = RoundedMoney.ofZero("CHF");
-		assertNotNull(m);
-		assertEquals(MonetaryCurrencies.getCurrency("CHF"), m.getCurrency());
-		assertEquals(m.getNumber().doubleValue(), 0d, 0d);
-	}
-
-	/**
 	 * Test method for {@link org.javamoney.moneta.RoundedMoney#equals(java.lang.Object)} .
 	 */
 	@Test
 	public void testEqualsObject() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.ofZero("CHF"),
+				RoundedMoney.of("CHF", BigDecimal.ZERO),
 				RoundedMoney.of("CHF", BigDecimal.ONE),
 				RoundedMoney.of("XXX", BigDecimal.ONE),
 				RoundedMoney.of("XXX", BigDecimal.ONE.negate())

@@ -82,7 +82,7 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
  * Basically, when mixing amount implementations, the performance of the amount, on which most of
  * the operations are operated, has the most significant impact on the overall performance behavior.
  * 
- * @version 0.5.1
+ * @version 0.5.2
  * @author Anatole Tresch
  * @author Werner Keil
  */
@@ -202,25 +202,6 @@ public final class FastMoney extends AbstractMoney implements
 	public static FastMoney of(String currencyCode, Number number) {
 		CurrencyUnit currency = MonetaryCurrencies.getCurrency(currencyCode);
 		return of(currency, number);
-	}
-
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currency the target currency of the amount being created.
-	 * @return
-	 */
-	public static FastMoney ofZero(CurrencyUnit currency) {
-		return new FastMoney(currency, 0L);
-	}
-
-/**
-	 * Factory method creating a zero instance with the given {@code currency);
-	 * @param currency the target currency of the amount being created.
-	 * @return
-	 */
-	public static FastMoney ofZero(String currencyCode) {
-		CurrencyUnit unit = MonetaryCurrencies.getCurrency(currencyCode);
-		return ofZero(unit);
 	}
 
 	/*
