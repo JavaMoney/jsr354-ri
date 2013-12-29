@@ -46,6 +46,9 @@ final class MinorPart implements MonetaryOperator {
 	 * 
 	 * @return the minor units part of the amount, never {@code null}
 	 */
+	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
+	// safe, if the operator is implemented as specified by this JSR.
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends MonetaryAmount> T apply(T amount){
 		Objects.requireNonNull(amount, "Amount required.");

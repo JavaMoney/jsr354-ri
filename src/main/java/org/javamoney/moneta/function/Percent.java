@@ -54,6 +54,9 @@ final class Percent implements MonetaryOperator {
 	 * 
 	 * @return the percent result of the amount, never {@code null}
 	 */
+	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
+	// safe, if the operator is implemented as specified by this JSR.
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends MonetaryAmount> T apply(T amount) {
 		return (T)amount.multiply(percentValue);

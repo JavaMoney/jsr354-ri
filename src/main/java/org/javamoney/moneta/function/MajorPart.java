@@ -1,12 +1,10 @@
 /*
- * CREDIT SUISSE IS WILLING TO LICENSE THIS SPECIFICATION TO YOU ONLY UPON THE
- * CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT.
- * PLEASE READ THE TERMS AND CONDITIONS OF THIS AGREEMENT CAREFULLY. BY
- * DOWNLOADING THIS SPECIFICATION, YOU ACCEPT THE TERMS AND CONDITIONS OF THE
- * AGREEMENT. IF YOU ARE NOT WILLING TO BE BOUND BY IT, SELECT THE "DECLINE"
- * BUTTON AT THE BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency
- * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
- * reserved.
+ * CREDIT SUISSE IS WILLING TO LICENSE THIS SPECIFICATION TO YOU ONLY UPON THE CONDITION THAT YOU
+ * ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT. PLEASE READ THE TERMS AND CONDITIONS OF THIS
+ * AGREEMENT CAREFULLY. BY DOWNLOADING THIS SPECIFICATION, YOU ACCEPT THE TERMS AND CONDITIONS OF
+ * THE AGREEMENT. IF YOU ARE NOT WILLING TO BE BOUND BY IT, SELECT THE "DECLINE" BUTTON AT THE
+ * BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency API ("Specification") Copyright
+ * (c) 2012-2013, Credit Suisse All rights reserved.
  */
 package org.javamoney.moneta.function;
 
@@ -19,8 +17,7 @@ import javax.money.MonetaryOperator;
 import javax.money.MonetaryRoundings;
 
 /**
- * This class allows to extract the major part of a {@link MonetaryAmount}
- * instance.
+ * This class allows to extract the major part of a {@link MonetaryAmount} instance.
  * 
  * @author Anatole Tresch
  */
@@ -41,19 +38,22 @@ final class MajorPart implements MonetaryOperator {
 	/**
 	 * Gets the amount in major units as a {@code MonetaryAmount} with scale 0.
 	 * <p>
-	 * This returns the monetary amount in terms of the major units of the
-	 * currency, truncating the amount if necessary. For example, 'EUR 2.35'
-	 * will return 'EUR 2', and 'BHD -1.345' will return 'BHD -1'.
+	 * This returns the monetary amount in terms of the major units of the currency, truncating the
+	 * amount if necessary. For example, 'EUR 2.35' will return 'EUR 2', and 'BHD -1.345' will
+	 * return 'BHD -1'.
 	 * <p>
-	 * This is returned as a {@code MonetaryAmount} rather than a
-	 * {@code BigInteger} . This is to allow further calculations to be
-	 * performed on the result. Should you need a {@code BigInteger}, simply
-	 * call {@code asType(BigInteger.class)}.
+	 * This is returned as a {@code MonetaryAmount} rather than a {@code BigInteger} . This is to
+	 * allow further calculations to be performed on the result. Should you need a
+	 * {@code BigInteger}, simply call {@code asType(BigInteger.class)}.
+	 * <p>
 	 * 
 	 * @return the major units part of the amount, never {@code null}
 	 */
+	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
+	// safe, if the operator is implemented as specified by this JSR.
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount){
+	public <T extends MonetaryAmount> T apply(T amount) {
 		Objects.requireNonNull(amount, "Amount required.");
 		return (T) amount.with(downRounding);
 	}
