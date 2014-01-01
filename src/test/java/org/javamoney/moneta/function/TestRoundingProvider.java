@@ -42,21 +42,23 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	private MonetaryOperator zeroRounding = new MonetaryOperator() {
-
+		// save cast, since type identity is required by spec
+		@SuppressWarnings("unchecked")
 		@Override
-		public MonetaryAmount apply(MonetaryAmount amount) {
-			return amount.getFactory().with(amount.getCurrency())
-					.with(0L).create();
+		public <T extends MonetaryAmount> T apply(T amount) {
+			return (T)amount.getFactory().setCurrency(amount.getCurrency())
+					.setNumber(0L).create();
 		}
 
 	};
 
 	private MonetaryOperator minusOneRounding = new MonetaryOperator() {
-
+		// save cast, since type identity is required by spec
+		@SuppressWarnings("unchecked")
 		@Override
-		public MonetaryAmount apply(MonetaryAmount amount) {
-			return amount.getFactory().with(amount.getCurrency())
-					.with(-1).create();
+		public <T extends MonetaryAmount> T apply(T amount) {
+			return (T)amount.getFactory().setCurrency(amount.getCurrency())
+					.setNumber(-1).create();
 		}
 
 	};
@@ -65,8 +67,10 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 
 		private MonetaryOperator minorRounding;
 
+		// save cast, since type identity is required by spec
+		@SuppressWarnings("unchecked")
 		@Override
-		public MonetaryAmount apply(MonetaryAmount amount) {
+		public <T extends MonetaryAmount> T apply(T amount) {
 			if (minorRounding == null) {
 				minorRounding = MonetaryRoundings
 						.getRounding(new MonetaryContext.Builder()
@@ -75,21 +79,20 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 			}
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
-			BigDecimal delta = null;
 			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts
 					.getDefaultAmountFactory()
-					.with(
-							amount.getCurrency()).with(0.03).create())) {
+					.setCurrency(
+							amount.getCurrency()).setNumber(0.03).create())) {
 				// add
-				return amt.add(
+				return (T)amt.add(
 						MonetaryAmounts.getDefaultAmountFactory()
-								.with(amt.getCurrency())
-								.with(new BigDecimal("0.05")).create()
+								.setCurrency(amt.getCurrency())
+								.setNumber(new BigDecimal("0.05")).create()
 								.subtract(mp));
 			}
 			else {
 				// subtract
-				return amt.subtract(mp);
+				return (T)amt.subtract(mp);
 			}
 		}
 	};

@@ -35,11 +35,11 @@ import org.javamoney.moneta.spi.AbstractMoney;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 
 /**
- * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
- * on {@link BigDecimal} for the numeric representation.
+ * Platform RI: Default immutable implementation of {@link MonetaryAmount} based on
+ * {@link BigDecimal} for the numeric representation.
  * <p>
- * As required by {@link MonetaryAmount} this class is final, thread-safe,
- * immutable and serializable.
+ * As required by {@link MonetaryAmount} this class is final, thread-safe, immutable and
+ * serializable.
  * 
  * @version 0.6.1
  * @author Anatole Tresch
@@ -94,8 +94,8 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	// Static Factory Methods
 	/**
-	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency
-	 * into a {@code Money}.
+	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency into a
+	 * {@code Money}.
 	 * 
 	 * @param number
 	 *            numeric value of the {@code Money}.
@@ -109,8 +109,8 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency
-	 * into a {@code Money}.
+	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency into a
+	 * {@code Money}.
 	 * 
 	 * @param number
 	 *            numeric value of the {@code Money}.
@@ -127,8 +127,8 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency
-	 * into a {@code Money}.
+	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency into a
+	 * {@code Money}.
 	 * 
 	 * @param number
 	 *            numeric value of the {@code Money}.
@@ -145,8 +145,8 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency
-	 * into a {@code Money}.
+	 * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency into a
+	 * {@code Money}.
 	 * 
 	 * @param number
 	 *            numeric value of the {@code Money}.
@@ -165,8 +165,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param currency
 	 *            The target currency, not null.
@@ -179,8 +178,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param currency
 	 *            The target currency, not null.
@@ -197,8 +195,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param currency
 	 *            The target currency, not null.
@@ -213,8 +210,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param currency
 	 *            The target currency, not null.
@@ -233,8 +229,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param isoCurrencyCode
 	 *            The target currency as ISO currency code.
@@ -250,8 +245,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param isoCurrencyCode
 	 *            The target currency as ISO currency code.
@@ -268,8 +262,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param isoCurrencyCode
 	 *            The target currency as ISO currency code.
@@ -286,8 +279,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	/**
-	 * Static factory method for creating a new instance of {@link RoundedMoney}
-	 * .
+	 * Static factory method for creating a new instance of {@link RoundedMoney} .
 	 * 
 	 * @param isoCurrencyCode
 	 *            The target currency as ISO currency code.
@@ -306,7 +298,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#getCurrency()
 	 */
 	public CurrencyUnit getCurrency() {
@@ -341,7 +332,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#divide(javax.money.MonetaryAmount)
 	 */
 	public RoundedMoney divide(Number divisor) {
@@ -355,9 +345,7 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.MonetaryAmount#divideAndRemainder(javax.money.MonetaryAmount)
+	 * @see javax.money.MonetaryAmount#divideAndRemainder(javax.money.MonetaryAmount)
 	 */
 	public RoundedMoney[] divideAndRemainder(Number divisor) {
 		BigDecimal[] dec = this.number.divideAndRemainder(
@@ -372,7 +360,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#divideToIntegralValue(Number) )D
 	 */
 	public RoundedMoney divideToIntegralValue(Number divisor) {
@@ -385,7 +372,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#multiply(Number)
 	 */
 	public RoundedMoney multiply(Number multiplicand) {
@@ -398,7 +384,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#negate()
 	 */
 	public RoundedMoney negate() {
@@ -410,7 +395,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#plus()
 	 */
 	public RoundedMoney plus() {
@@ -422,7 +406,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
 	 */
 	public RoundedMoney subtract(MonetaryAmount subtrahend) {
@@ -439,7 +422,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#pow(int)
 	 */
 	public RoundedMoney pow(int n) {
@@ -451,7 +433,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#ulp()
 	 */
 	public RoundedMoney ulp() {
@@ -461,7 +442,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#remainder(Number)
 	 */
 	public RoundedMoney remainder(Number divisor) {
@@ -473,7 +453,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
 	 */
 	public RoundedMoney scaleByPowerOfTen(int n) {
@@ -484,7 +463,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isZero()
 	 */
 	public boolean isZero() {
@@ -493,7 +471,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isPositive()
 	 */
 	public boolean isPositive() {
@@ -502,7 +479,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isPositiveOrZero()
 	 */
 	public boolean isPositiveOrZero() {
@@ -511,7 +487,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isNegative()
 	 */
 	public boolean isNegative() {
@@ -520,7 +495,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isNegativeOrZero()
 	 */
 	public boolean isNegativeOrZero() {
@@ -529,7 +503,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#with(java.lang.Number)
 	 */
 	public RoundedMoney with(Number amount) {
@@ -543,8 +516,8 @@ public final class RoundedMoney extends AbstractMoney implements
 	 * 
 	 * @param currency
 	 *            the currency unit to be replaced, not {@code null}
-	 * @return the new amount with the same numeric value and
-	 *         {@link MathContext}, but the new {@link CurrencyUnit}.
+	 * @return the new amount with the same numeric value and {@link MathContext}, but the new
+	 *         {@link CurrencyUnit}.
 	 */
 	public RoundedMoney with(CurrencyUnit currency) {
 		Objects.requireNonNull(currency, "currency required");
@@ -554,7 +527,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#with(CurrencyUnit, java.lang.Number)
 	 */
 	public RoundedMoney with(CurrencyUnit currency, Number amount) {
@@ -565,7 +537,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#getScale()
 	 */
 	public int getScale() {
@@ -574,7 +545,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#getPrecision()
 	 */
 	public int getPrecision() {
@@ -583,7 +553,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#signum()
 	 */
 
@@ -593,7 +562,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#lessThan(javax.money.MonetaryAmount)
 	 */
 	public boolean isLessThan(MonetaryAmount amount) {
@@ -604,9 +572,7 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.MonetaryAmount#lessThanOrEqualTo(javax.money.MonetaryAmount)
+	 * @see javax.money.MonetaryAmount#lessThanOrEqualTo(javax.money.MonetaryAmount)
 	 */
 	public boolean isLessThanOrEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
@@ -616,7 +582,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#greaterThan(javax.money.MonetaryAmount)
 	 */
 	public boolean isGreaterThan(MonetaryAmount amount) {
@@ -627,10 +592,7 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.MonetaryAmount#greaterThanOrEqualTo(javax.money.MonetaryAmount
-	 * ) #see
+	 * @see javax.money.MonetaryAmount#greaterThanOrEqualTo(javax.money.MonetaryAmount ) #see
 	 */
 	public boolean isGreaterThanOrEqualTo(MonetaryAmount amount) {
 		checkAmountParameter(amount);
@@ -640,7 +602,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isEqualTo(javax.money.MonetaryAmount)
 	 */
 	public boolean isEqualTo(MonetaryAmount amount) {
@@ -651,7 +612,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#isNotEqualTo(javax.money.MonetaryAmount)
 	 */
 	public boolean isNotEqualTo(MonetaryAmount amount) {
@@ -662,7 +622,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * }(non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
 	 */
 	@Override
@@ -689,7 +648,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * }(non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
 	 */
 	@Override
@@ -736,9 +694,7 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * }(non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryAmount#asType(java.lang.Class,
-	 * javax.money.Rounding)
+	 * @see javax.money.MonetaryAmount#asType(java.lang.Class, javax.money.Rounding)
 	 */
 	public <T> T asType(Class<T> type, MonetaryOperator adjuster) {
 		RoundedMoney amount = (RoundedMoney) adjuster.apply(this);
@@ -751,7 +707,6 @@ public final class RoundedMoney extends AbstractMoney implements
 		oos.writeObject(this.currency);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void readObject(ObjectInputStream ois) throws IOException,
 			ClassNotFoundException {
 		this.number = (BigDecimal) ois.readObject();
@@ -775,7 +730,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -785,7 +739,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -799,7 +752,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -837,7 +789,6 @@ public final class RoundedMoney extends AbstractMoney implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmount#getNumber()
 	 */
 	public NumberValue getNumber() {
@@ -932,7 +883,7 @@ public final class RoundedMoney extends AbstractMoney implements
 	}
 
 	@Override
-	public MonetaryAmountFactory getFactory() {
-		return new RoundedMoneyAmountFactory().with(this);
+	public MonetaryAmountFactory<RoundedMoney> getFactory() {
+		return new RoundedMoneyAmountFactory().setAmount(this);
 	}
 }

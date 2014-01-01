@@ -49,7 +49,7 @@ final class Reciprocal implements MonetaryOperator {
 	@Override
 	public <T extends MonetaryAmount> T apply(T amount) {
 		Objects.requireNonNull(amount, "Amount required.");
-		return (T)amount.getFactory().with(BigDecimal.ONE.divide(
+		return (T)amount.getFactory().setNumber(BigDecimal.ONE.divide(
 				amount.getNumber().numberValue(BigDecimal.class))).create();
 	}
 

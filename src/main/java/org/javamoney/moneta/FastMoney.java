@@ -12,16 +12,7 @@ package org.javamoney.moneta;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
-
-
-
-
-
-
 
 // github.com/JavaMoney/jsr354-ri.git
 import javax.money.CurrencyUnit;
@@ -107,15 +98,6 @@ public final class FastMoney extends AbstractMoney implements
 			.setMaxScale(SCALE).setFixedScale(true)
 			.setPrecision(String.valueOf(Integer.MAX_VALUE).length())
 			.build();
-
-	private static final Map<String, FastMoney> CACHE = Collections
-			.synchronizedMap(new LRUMap<String, FastMoney>(1000));
-	private static final ThreadLocal<StringBuilder> builders = new ThreadLocal<StringBuilder>() {
-		@Override
-		protected StringBuilder initialValue() {
-			return new StringBuilder();
-		}
-	};
 
 	/**
 	 * Required for deserialization only.
@@ -599,7 +581,7 @@ public final class FastMoney extends AbstractMoney implements
 	 */
 	@Override
 	public FastMoney with(MonetaryOperator adjuster) {
-		return (FastMoney) adjuster.apply(this);
+		return FastMoney.class.cast(adjuster.apply(this));
 	}
 
 	@Override
@@ -710,48 +692,9 @@ public final class FastMoney extends AbstractMoney implements
 		return MONETARY_CONTEXT;
 	}
 
-	private static final class LRUMap<K, V> extends LinkedHashMap<K, V> {
-
-		/**
-		 * serialVersionUID.
-		 */
-		private static final long serialVersionUID = -3609851324668582780L;
-		private int cacheSize = 200;
-
-		public LRUMap(int cacheSize) {
-			super();
-			if (cacheSize < 0) {
-				throw new IllegalArgumentException(
-						"cacheSize must >= 0, 0 = unlimited");
-			}
-			this.cacheSize = cacheSize;
-		}
-
-		@Override
-		protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
-			if (cacheSize == 0) {
-				return false;
-			}
-			if (size() > cacheSize) {
-				return true;
-			}
-			return false;
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "LRUMap [cacheSize=" + cacheSize + "]";
-		}
-
-	}
-
 	@Override
-	public MonetaryAmountFactory getFactory() {
-		return new FastMoneyAmountFactory().with(this);
+	public MonetaryAmountFactory<FastMoney> getFactory() {
+		return new FastMoneyAmountFactory().setAmount(this);
 	}
 
 }

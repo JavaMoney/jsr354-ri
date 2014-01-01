@@ -438,7 +438,7 @@ public final class Money extends AbstractMoney implements
 	 */
 	@Override
 	public Money with(MonetaryOperator operator) {
-		return (Money) getFactory().with(operator.apply(this)).create();
+		return Money.class.cast(operator.apply(this));
 	}
 
 	/*
@@ -650,7 +650,7 @@ public final class Money extends AbstractMoney implements
 	 */
 	@Override
 	public MonetaryAmountFactory<Money> getFactory() {
-		return new MoneyAmountFactory().with(this);
+		return new MoneyAmountFactory().setAmount(this);
 	}
 
 	/*

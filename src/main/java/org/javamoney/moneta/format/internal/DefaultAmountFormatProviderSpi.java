@@ -8,21 +8,16 @@
  */
 package org.javamoney.moneta.format.internal;
 
-import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
 import javax.money.format.AmountStyle;
-import javax.money.format.CurrencyStyle;
 import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.AmountFormatSymbols;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
 
 import org.javamoney.moneta.format.internal.DefaultMonetaryAmountFormat.Builder;

@@ -442,7 +442,7 @@ public class FastMoneyTest {
 			assertEquals(
 					"Invalid remainder of " + 10.50,
 					m.getFactory()
-							.with(m.getNumber().numberValue(BigDecimal.class)
+							.setNumber(m.getNumber().numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(10.50)))
 							.create(),
@@ -450,7 +450,7 @@ public class FastMoneyTest {
 			assertEquals(
 					"Invalid remainder of " + -30.20,
 					m.getFactory()
-							.with(m.getNumber().numberValue(BigDecimal.class)
+							.setNumber(m.getNumber().numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(-30.20)))
 							.create(),
@@ -458,14 +458,14 @@ public class FastMoneyTest {
 			assertEquals(
 					"Invalid remainder of " + -3,
 					m.getFactory()
-							.with(m.getNumber().numberValue(BigDecimal.class)
+							.setNumber(m.getNumber().numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(-3))).create(),
 					m.remainder(-3));
 			assertEquals(
 					"Invalid remainder of " + 3,
 					m.getFactory()
-							.with(m.getNumber().numberValue(BigDecimal.class)
+							.setNumber(m.getNumber().numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(3))).create(),
 					m.remainder(3));
@@ -487,7 +487,7 @@ public class FastMoneyTest {
 				assertEquals(
 						"Invalid scaleByPowerOfTen.",
 						m.getFactory()
-								.with(m.getNumber()
+								.setNumber(m.getNumber()
 										.numberValue(BigDecimal.class)
 										.scaleByPowerOfTen(
 												p)).create(),
@@ -628,12 +628,12 @@ public class FastMoneyTest {
 				FastMoney.of("CHF", 0) };
 		FastMoney s = FastMoney.of("CHF", 10);
 		MonetaryAmount[] moneys2 = new MonetaryAmount[] {
-				s.getFactory().with(100).create(),
-				s.getFactory().with(34242344).create(),
-				s.getFactory().with(new BigDecimal("23123213.435")).create(),
-				s.getFactory().with(new BigDecimal("-23123213.435")).create(),
-				s.getFactory().with(-23123213).create(),
-				s.getFactory().with(0).create() };
+				s.getFactory().setNumber(100).create(),
+				s.getFactory().setNumber(34242344).create(),
+				s.getFactory().setNumber(new BigDecimal("23123213.435")).create(),
+				s.getFactory().setNumber(new BigDecimal("-23123213.435")).create(),
+				s.getFactory().setNumber(-23123213).create(),
+				s.getFactory().setNumber(0).create() };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -654,14 +654,14 @@ public class FastMoneyTest {
 				FastMoney.of("GBP", 0) };
 		FastMoney s = FastMoney.of("XXX", 10);
 		MonetaryAmount[] moneys2 = new MonetaryAmount[] {
-				s.getFactory().with(MonetaryCurrencies.getCurrency("CHF")).with(100).create(),
-				s.getFactory().with(MonetaryCurrencies.getCurrency("USD")).with(34242344).create(),
-				s.getFactory().with(MonetaryCurrencies.getCurrency("EUR")).with(new BigDecimal(
+				s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).setNumber(100).create(),
+				s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USD")).setNumber(34242344).create(),
+				s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("EUR")).setNumber(new BigDecimal(
 						"23123213.435")).create(),
-				s.getFactory().with(MonetaryCurrencies.getCurrency("USS")).with(new BigDecimal(
+				s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USS")).setNumber(new BigDecimal(
 						"-23123213.435")).create(),
-				s.getFactory().with(MonetaryCurrencies.getCurrency("USN")).with(-23123213).create(),
-				s.getFactory().with(MonetaryCurrencies.getCurrency("GBP")).with(0).create() };
+				s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USN")).setNumber(-23123213).create(),
+				s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("GBP")).setNumber(0).create() };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -1067,7 +1067,7 @@ public class FastMoneyTest {
 			@Override
 			public <T extends MonetaryAmount> T apply(T amount) {
 				return (T) amount.multiply(2).getFactory()
-						.with(MonetaryCurrencies.getCurrency("CHF")).create();
+						.setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
 			}
 		};
 		a = m.with(adj);

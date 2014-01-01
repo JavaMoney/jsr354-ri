@@ -110,13 +110,13 @@ public class MonetaryAmountsRegistrationTest {
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.DECORATION).setPrecision(5).build());
+				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
 				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).build());
 		assertNotNull(type);
-		assertTrue(type == FastMoney.class);
+		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
 				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(200).build());
 		assertNotNull(type);

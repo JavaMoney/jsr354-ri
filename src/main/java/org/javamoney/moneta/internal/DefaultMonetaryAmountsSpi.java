@@ -8,9 +8,6 @@
  */
 package org.javamoney.moneta.internal;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,18 +18,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
-import javax.money.MonetaryAmounts;
+import javax.money.MonetaryAmountFactory.QueryInclusionPolicy;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountsSpi;
 
-import org.javamoney.moneta.FastMoney;
-
 public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
-	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactory> factories = new ConcurrentHashMap<>();
+	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactory<?>> factories = new ConcurrentHashMap<>();
 
 	private static final Comparator<MonetaryAmountFactory<? extends MonetaryAmount>> CONTEXT_COMPARATOR = new Comparator<MonetaryAmountFactory<? extends MonetaryAmount>>() {
 
@@ -69,17 +64,18 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	};
 
 	public DefaultMonetaryAmountsSpi() {
-		for (MonetaryAmountFactory f : Bootstrap
+		for (MonetaryAmountFactory<?> f : Bootstrap
 				.getServices(MonetaryAmountFactory.class)) {
 			factories.put(f.getAmountType(), f);
 		}
 	}
 
+	// save cast, since members are managed by this instance
 	@SuppressWarnings("unchecked")
 	@Override
-	public MonetaryAmountFactory getAmountFactory(
-			Class<? extends MonetaryAmount> amountType) {
-		return factories.get(amountType);
+	public <T extends MonetaryAmount> MonetaryAmountFactory<T> getAmountFactory(
+			Class<T> amountType) {
+		return  (MonetaryAmountFactory<T>) factories.get(amountType);
 	}
 
 	@Override
@@ -89,7 +85,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
 	@Override
 	public Class<? extends MonetaryAmount> getDefaultAmountType() {
-		for (MonetaryAmountFactory f : Bootstrap
+		for (MonetaryAmountFactory<?> f : Bootstrap
 				.getServices(MonetaryAmountFactory.class)) {
 			return f.getAmountType();
 		}
@@ -104,13 +100,16 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	@Override
 	public Class<? extends MonetaryAmount> queryAmountType(
 			MonetaryContext requiredContext) {
-		if(requiredContext==null){
+		if (requiredContext == null) {
 			return getDefaultAmountType();
 		}
 		// first check for explicit type
 		for (@SuppressWarnings("unchecked")
 		MonetaryAmountFactory<? extends MonetaryAmount> f : Bootstrap
 				.getServices(MonetaryAmountFactory.class)) {
+			if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
+				continue;
+			}
 			if (requiredContext.getAmountType() == f.getAmountType()) {
 				if (isPrecisionOK(requiredContext,
 						f.getMaximalMonetaryContext())) {
@@ -129,12 +128,15 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 		for (@SuppressWarnings("unchecked")
 		MonetaryAmountFactory<? extends MonetaryAmount> f : Bootstrap
 				.getServices(MonetaryAmountFactory.class)) {
-			if (requiredContext.getAmountFlavor() == AmountFlavor.UNDEFINED) {
-				if (f.getDefaultMonetaryContext().getAmountFlavor() != AmountFlavor.DECORATION) {
-					if (isPrecisionOK(requiredContext,
-							f.getMaximalMonetaryContext())) {
-						selection.add(f);
-					}
+			if (f.getDefaultMonetaryContext().getAmountFlavor() == AmountFlavor.UNDEFINED) {
+				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
+						||
+						f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
+					continue;
+				}
+				if (isPrecisionOK(requiredContext,
+						f.getMaximalMonetaryContext())) {
+					selection.add(f);
 				}
 			}
 			else if (requiredContext.getAmountFlavor() == f
@@ -150,9 +152,12 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 			for (@SuppressWarnings("unchecked")
 			MonetaryAmountFactory<? extends MonetaryAmount> f : Bootstrap
 					.getServices(MonetaryAmountFactory.class)) {
-				if (f.getDefaultMonetaryContext().getAmountFlavor() != AmountFlavor.DECORATION) {
-					selection.add(f);
+				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
+						||
+						f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
+					continue;
 				}
+				selection.add(f);
 			}
 		}
 		if (selection.size() == 1) {

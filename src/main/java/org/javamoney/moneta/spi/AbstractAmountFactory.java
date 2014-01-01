@@ -17,14 +17,12 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 		implements MonetaryAmountFactory<T> {
 
 	/**
-	 * The default {@link MonetaryContext} applied, if not set explicitly on
-	 * creation.
+	 * The default {@link MonetaryContext} applied, if not set explicitly on creation.
 	 */
 	private MonetaryContext DEFAULT_MONETARY_CONTEXT = loadDefaultMonetaryContext();
 
 	/**
-	 * The default {@link MonetaryContext} applied, if not set explicitly on
-	 * creation.
+	 * The default {@link MonetaryContext} applied, if not set explicitly on creation.
 	 */
 	private MonetaryContext MAX_MONETARY_CONTEXT = loadMaxMonetaryContext();
 
@@ -33,24 +31,22 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 	private MonetaryContext monetaryContext = DEFAULT_MONETARY_CONTEXT;
 
 	/**
-	 * Creates a new instance of {@link MonetaryAmount}, using the default
-	 * {@link MonetaryContext}.
+	 * Creates a new instance of {@link MonetaryAmount}, using the default {@link MonetaryContext}.
 	 * 
 	 * @param number
 	 *            numeric value, not {@code null}.
 	 * @param currency
 	 *            currency unit, not {@code null}.
-	 * @return a {@code MonetaryAmount} combining the numeric value and currency
-	 *         unit.
+	 * @return a {@code MonetaryAmount} combining the numeric value and currency unit.
 	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
+	 *             If the number exceeds the capabilities of the default {@link MonetaryContext}
+	 *             used.
 	 */
 	@Override
 	public T create() {
 		return create(currency, number, monetaryContext);
 	}
-	
+
 	protected abstract T create(CurrencyUnit currency,
 			Number number,
 			MonetaryContext monetaryContext);
@@ -58,15 +54,22 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 	protected abstract MonetaryContext loadDefaultMonetaryContext();
 
 	protected abstract MonetaryContext loadMaxMonetaryContext();
+	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.MonetaryAmountFactory#getQueryInclusionPolicy()
+	 */
+	@Override
+	public QueryInclusionPolicy getQueryInclusionPolicy() {
+		return QueryInclusionPolicy.ALWAYS;
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.MonetaryAmountFactory#withCurrency(javax.money.CurrencyUnit)
+	 * @see javax.money.MonetaryAmountFactory#withCurrency(javax.money.CurrencyUnit)
 	 */
 	@Override
-	public MonetaryAmountFactory<T> with(CurrencyUnit currency) {
+	public MonetaryAmountFactory<T> setCurrency(CurrencyUnit currency) {
 		Objects.requireNonNull(currency);
 		this.currency = currency;
 		return this;
@@ -74,29 +77,26 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmountFactory#with(java.lang.Number)
 	 */
 	@Override
-	public MonetaryAmountFactory<T> with(Number number) {
+	public MonetaryAmountFactory<T> setNumber(Number number) {
 		this.number = getBigDecimal(number);
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmountFactory#withCurrency(java.lang.String)
 	 */
 	@Override
-	public MonetaryAmountFactory<T> withCurrency(String currencyCode) {
+	public MonetaryAmountFactory<T> setCurrency(String currencyCode) {
 		this.currency = MonetaryCurrencies.getCurrency(currencyCode);
 		return this;
 	}
 
 	/**
-	 * Creates a new instance of {@link MonetaryAmounts}, using the default
-	 * {@link MonetaryContext}.
+	 * Creates a new instance of {@link MonetaryAmounts}, using the default {@link MonetaryContext}.
 	 * 
 	 * @param number
 	 *            numeric value, not {@code null}.
@@ -104,44 +104,41 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 	 *            currency code, not {@code null}.
 	 * @return a {@code Money} combining the numeric value and currency unit.
 	 * @throws ArithmeticException
-	 *             If the number exceeds the capabilities of the default
-	 *             {@link MonetaryContext} used.
+	 *             If the number exceeds the capabilities of the default {@link MonetaryContext}
+	 *             used.
 	 * @throws UnknownCurrencyException
-	 *             if the currency code can not be resolved to
-	 *             {@link CurrencyUnit}.
+	 *             if the currency code can not be resolved to {@link CurrencyUnit}.
 	 */
 	@Override
-	public MonetaryAmountFactory<T> with(double number) {
+	public MonetaryAmountFactory<T> setNumber(double number) {
 		this.number = new BigDecimal(String.valueOf(number));
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmountFactory#with(long)
 	 */
 	@Override
-	public MonetaryAmountFactory<T> with(long number) {
+	public MonetaryAmountFactory<T> setNumber(long number) {
 		this.number = BigDecimal.valueOf(number);
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryAmountFactory#with(javax.money.MonetaryContext)
 	 */
 	@Override
-	public MonetaryAmountFactory<T> with(MonetaryContext monetaryContext) {
+	public MonetaryAmountFactory<T> setContext(MonetaryContext monetaryContext) {
 		Objects.requireNonNull(monetaryContext);
 		this.monetaryContext = monetaryContext;
 		return this;
 	}
 
 	/**
-	 * Returns the default {@link MonetaryContext} used, when no
-	 * {@link MonetaryContext} is provided.
+	 * Returns the default {@link MonetaryContext} used, when no {@link MonetaryContext} is
+	 * provided.
 	 * 
 	 * @return the default {@link MonetaryContext}, never {@code null}.
 	 */
@@ -161,19 +158,18 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 	}
 
 	/**
-	 * Converts (if necessary) the given {@link MonetaryAmount} to a new
-	 * {@link MonetaryAmount} instance, hereby supporting the
-	 * {@link MonetaryContext} given.
+	 * Converts (if necessary) the given {@link MonetaryAmount} to a new {@link MonetaryAmount}
+	 * instance, hereby supporting the {@link MonetaryContext} given.
 	 * 
 	 * @param amt
 	 *            the amount to be converted, if necessary.
 	 * @param monetaryContext
-	 *            the {@link MonetaryContext} to be used, if {@code null} the
-	 *            default {@link MonetaryContext} is used.
+	 *            the {@link MonetaryContext} to be used, if {@code null} the default
+	 *            {@link MonetaryContext} is used.
 	 * @return an according Money instance.
 	 */
 	@Override
-	public MonetaryAmountFactory<T> with(MonetaryAmount amt) {
+	public MonetaryAmountFactory<T> setAmount(MonetaryAmount amt) {
 		this.currency = amt.getCurrency();
 		this.number = amt.getNumber().numberValue(BigDecimal.class);
 		this.monetaryContext = new MonetaryContext.Builder(
@@ -183,8 +179,8 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 	}
 
 	/**
-	 * Creates a {@link BigDecimal} from the given {@link Number} doing the
-	 * valid conversion depending the type given.
+	 * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
+	 * depending the type given.
 	 * 
 	 * @param num
 	 *            the number type

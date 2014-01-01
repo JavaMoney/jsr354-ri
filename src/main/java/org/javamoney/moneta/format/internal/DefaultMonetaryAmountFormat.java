@@ -22,7 +22,6 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryRoundings;
 import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.MonetaryFormats;
 import javax.money.format.MonetaryParseException;
 
 /**
@@ -51,8 +50,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * parsed.
 	 */
 	private MonetaryContext monetaryContext;
-	/** The formatting style to be used. */
-	private AmountStyle numberStyle;
 	/** Currency used, when no currency was on the input parsed. */
 	private CurrencyUnit defaultCurrency;
 
@@ -74,6 +71,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 *            extracted from the parse input.
 	 */
 	private DefaultMonetaryAmountFormat(Builder builder) {
+		this.defaultCurrency = builder.defaultCurrency;
 		String pattern = builder.style.getPattern();
 		if (pattern.indexOf(CURRENCY_SIGN) < 0) {
 			this.positiveTokens.add(new AmountNumberToken(builder.style,
@@ -265,7 +263,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			// TODO log default fallback here
 			type = MonetaryAmounts.getDefaultAmountType();
 		}
-		return MonetaryAmounts.getAmountFactory(type).with(unit).with(num)
+		return MonetaryAmounts.getAmountFactory(type).setCurrency(unit).setNumber(num)
 				.create();
 	}
 

@@ -1140,7 +1140,8 @@ public class RoundedMoneyTest {
 				RoundedMoney.of("CHF", 100034L)
 						.getNumber().numberValue(BigDecimal.class));
 		assertEquals(new BigDecimal("0.34738746"), RoundedMoney
-				.of("CHF", new BigDecimal("0.34738746")).getNumber().numberValue(BigDecimal.class));
+				.of("CHF", new BigDecimal("0.34738746")).getNumber()
+				.numberValue(BigDecimal.class));
 	}
 
 	/**
@@ -1221,8 +1222,8 @@ public class RoundedMoneyTest {
 		MonetaryOperator adj = new MonetaryOperator() {
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
-				return amount.getFactory().with(amount.getCurrency())
-						.with(-100).create();
+				return amount.getFactory().setCurrency(amount.getCurrency())
+						.setNumber(-100).create();
 			}
 		};
 		RoundedMoney m = RoundedMoney.of("USD", new BigDecimal("1.23645"));
@@ -1235,7 +1236,7 @@ public class RoundedMoneyTest {
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
 				return amount.multiply(2).getFactory()
-						.with(MonetaryCurrencies.getCurrency("CHF"))
+						.setCurrency(MonetaryCurrencies.getCurrency("CHF"))
 						.create();
 			}
 		};

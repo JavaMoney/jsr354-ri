@@ -465,8 +465,8 @@ public class MoneyTest {
 	@Test
 	public void testEqualsMonetarAmount() {
 		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
-				.withCurrency(
-						"CHF").with(100).create();
+				.setCurrency(
+						"CHF").setNumber(100).create();
 		MonetaryAmount m2 = Money.of("CHF", 100);
 		Money m3 = Money.of("CHF", 100);
 		assertTrue(m.equals(m2));
@@ -507,7 +507,7 @@ public class MoneyTest {
 		MonetaryContext mc = new MonetaryContext.Builder(Money.class)
 				.setPrecision(128).setAttribute(RoundingMode.HALF_EVEN)
 				.build();
-		MonetaryAmount m2 = m.getFactory().with(mc).create();
+		MonetaryAmount m2 = m.getFactory().setContext(mc).create();
 		assertNotNull(m2);
 		assertTrue(m != m2);
 		assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
@@ -677,8 +677,8 @@ public class MoneyTest {
 			assertEquals(
 					"Invalid remainder of " + 10.50,
 					m.getFactory()
-							.with(m.getCurrency())
-							.with(m.getNumber()
+							.setCurrency(m.getCurrency())
+							.setNumber(m.getNumber()
 									.numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(10.50)))
@@ -687,8 +687,8 @@ public class MoneyTest {
 			assertEquals(
 					"Invalid remainder of " + -30.20,
 					m.getFactory()
-							.with(m.getCurrency())
-							.with(m.getNumber()
+							.setCurrency(m.getCurrency())
+							.setNumber(m.getNumber()
 									.numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(-30.20)))
@@ -697,8 +697,8 @@ public class MoneyTest {
 			assertEquals(
 					"Invalid remainder of " + -3,
 					m.getFactory()
-							.with(m.getCurrency())
-							.with(m.getNumber()
+							.setCurrency(m.getCurrency())
+							.setNumber(m.getNumber()
 									.numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(-3))).create(),
@@ -706,8 +706,8 @@ public class MoneyTest {
 			assertEquals(
 					"Invalid remainder of " + 3,
 					m.getFactory()
-							.with(m.getCurrency())
-							.with(m.getNumber()
+							.setCurrency(m.getCurrency())
+							.setNumber(m.getNumber()
 									.numberValue(BigDecimal.class)
 									.remainder(
 											BigDecimal.valueOf(3))).create(),
@@ -729,8 +729,8 @@ public class MoneyTest {
 				assertEquals(
 						"Invalid scaleByPowerOfTen.",
 						m.getFactory()
-								.with(m.getCurrency())
-								.with(m.getNumber()
+								.setCurrency(m.getCurrency())
+								.setNumber(m.getNumber()
 										.numberValue(BigDecimal.class)
 										.scaleByPowerOfTen(
 												p)).create(),
@@ -862,16 +862,16 @@ public class MoneyTest {
 				Money.of("CHF", 0) };
 		Money s = Money.of("CHF", 10);
 		MonetaryAmount[] moneys2 = new MonetaryAmount[] {
-				s.getFactory().with(s.getCurrency()).with(100).create(),
-				s.getFactory().with(s.getCurrency()).with(34242344)
+				s.getFactory().setCurrency(s.getCurrency()).setNumber(100).create(),
+				s.getFactory().setCurrency(s.getCurrency()).setNumber(34242344)
 						.create(),
-				s.getFactory().with(s.getCurrency())
-						.with(new BigDecimal("23123213.435")).create(),
-				s.getFactory().with(s.getCurrency())
-						.with(new BigDecimal("-23123213.435")).create(),
-				s.getFactory().with(s.getCurrency()).with(-23123213)
+				s.getFactory().setCurrency(s.getCurrency())
+						.setNumber(new BigDecimal("23123213.435")).create(),
+				s.getFactory().setCurrency(s.getCurrency())
+						.setNumber(new BigDecimal("-23123213.435")).create(),
+				s.getFactory().setCurrency(s.getCurrency()).setNumber(-23123213)
 						.create(),
-				s.getFactory().with(s.getCurrency()).with(0).create() };
+				s.getFactory().setCurrency(s.getCurrency()).setNumber(0).create() };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -891,25 +891,25 @@ public class MoneyTest {
 		Money s = Money.of("XXX", 10);
 		MonetaryAmount[] moneys2 = new MonetaryAmount[] {
 				s.getFactory()
-						.with(MonetaryCurrencies.getCurrency("CHF"))
-						.with(100).create(),
+						.setCurrency(MonetaryCurrencies.getCurrency("CHF"))
+						.setNumber(100).create(),
 				s.getFactory()
-						.with(MonetaryCurrencies.getCurrency("USD"))
-						.with(34242344).create(),
+						.setCurrency(MonetaryCurrencies.getCurrency("USD"))
+						.setNumber(34242344).create(),
 				s.getFactory()
-						.with(MonetaryCurrencies.getCurrency("EUR"))
-						.with(new BigDecimal(
+						.setCurrency(MonetaryCurrencies.getCurrency("EUR"))
+						.setNumber(new BigDecimal(
 								"23123213.435")).create(),
 				s.getFactory()
-						.with(MonetaryCurrencies.getCurrency("USS"))
-						.with(new BigDecimal(
+						.setCurrency(MonetaryCurrencies.getCurrency("USS"))
+						.setNumber(new BigDecimal(
 								"-23123213.435")).create(),
 				s.getFactory()
-						.with(MonetaryCurrencies.getCurrency("USN"))
-						.with(-23123213).create(),
+						.setCurrency(MonetaryCurrencies.getCurrency("USN"))
+						.setNumber(-23123213).create(),
 				s.getFactory()
-						.with(MonetaryCurrencies.getCurrency("GBP"))
-						.with(0).create() };
+						.setCurrency(MonetaryCurrencies.getCurrency("GBP"))
+						.setNumber(0).create() };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
 		}
@@ -1355,7 +1355,7 @@ public class MoneyTest {
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
 				return amount.multiply(2).getFactory()
-						.with(MonetaryCurrencies.getCurrency("CHF"))
+						.setCurrency(MonetaryCurrencies.getCurrency("CHF"))
 						.create();
 			}
 		};

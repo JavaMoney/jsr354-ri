@@ -95,7 +95,7 @@ final class DefaultRounding implements MonetaryOperator {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends MonetaryAmount> T apply(T amount){
-		return (T)amount.getFactory().with(amount.getCurrency()).with(
+		return (T)amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
 				((BigDecimal) amount.getNumber().numberValue(BigDecimal.class)).setScale(
 						this.scale,
 						this.roundingMode)).create();
