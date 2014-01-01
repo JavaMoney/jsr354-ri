@@ -8,9 +8,8 @@
  * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
  * reserved.
  */
-package org.javamoney.moneta.impl;
+package org.javamoney.moneta.internal;
 
-import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -21,17 +20,16 @@ import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
 
 /**
- * Implementation class providing rounding {@link MonetaryAdjuster} instances
- * for {@link CurrencyUnit} instances. modeling rounding based on standard JDK
- * math, a scale and {@link RoundingMode}.
+ * Implementation class providing cash rounding {@link MonetaryAdjuster}
+ * instances for {@link CurrencyUnit} instances. modeling rounding based on
+ * {@link CurrencyUnit#getCashRounding()}.
  * <p>
  * This class is thread safe.
  * 
  * @author Anatole Tresch
- * @author Werner Keil
- * @see RoundingMode
  */
-final class DefaultRounding implements MonetaryOperator {
+final class DefaultCashRounding implements
+		MonetaryOperator {
 
 	/** The {@link RoundingMode} used. */
 	private final RoundingMode roundingMode;
@@ -44,18 +42,20 @@ final class DefaultRounding implements MonetaryOperator {
 	 * @param mathContext
 	 *            The {@link MathContext} to be used, not {@code null}.
 	 */
-	DefaultRounding(int scale, RoundingMode roundingMode) {
-		Objects.requireNonNull(roundingMode, "RoundingMode required.");
+	DefaultCashRounding(int scale, RoundingMode roundingMode) {
 		if (scale < 0) {
-			scale = 0;
+			throw new IllegalArgumentException("scale < 0");
+		}
+		if (roundingMode == null) {
+			throw new IllegalArgumentException("roundingMode missing");
 		}
 		this.scale = scale;
 		this.roundingMode = roundingMode;
 	}
 
 	/**
-	 * Creates an {@link DefaultRounding} for rounding {@link MonetaryAmount}
-	 * instances given a currency.
+	 * Creates an {@link DefaultCashRounding} for rounding
+	 * {@link MonetaryAmount} instances given a currency.
 	 * 
 	 * @param currency
 	 *            The currency, which determines the required precision. As
@@ -64,9 +64,10 @@ final class DefaultRounding implements MonetaryOperator {
 	 * @return a new instance {@link MonetaryAdjuster} implementing the
 	 *         rounding.
 	 */
-	DefaultRounding(CurrencyUnit currency,
+	DefaultCashRounding(CurrencyUnit currency,
 			RoundingMode roundingMode) {
-		this(currency.getDefaultFractionDigits(), roundingMode);
+		this(MonetaryCurrencies.getCurrency(currency.getCurrencyCode())
+				.getDefaultFractionDigits(), roundingMode);
 	}
 
 	/**
@@ -80,7 +81,7 @@ final class DefaultRounding implements MonetaryOperator {
 	 * @return a new instance {@link MonetaryAdjuster} implementing the
 	 *         rounding.
 	 */
-	DefaultRounding(CurrencyUnit currency) {
+	DefaultCashRounding(CurrencyUnit currency) {
 		this(MonetaryCurrencies.getCurrency(currency.getCurrencyCode())
 				.getDefaultFractionDigits(), RoundingMode.HALF_UP);
 	}
@@ -90,15 +91,11 @@ final class DefaultRounding implements MonetaryOperator {
 	 * 
 	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
 	 */
-	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
-	// safe, if the operator is implemented as specified by this JSR.
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount){
-		return (T)amount.getFactory().with(amount.getCurrency()).with(
-				((BigDecimal) amount.getNumber().numberValue(BigDecimal.class)).setScale(
-						this.scale,
-						this.roundingMode)).create();
+	public <T extends MonetaryAmount> T apply(T value){
+		Objects.requireNonNull(value, "Amunt required.");
+		throw new UnsupportedOperationException(
+				"Cash Rounding not yet implemented.");
 	}
 
 }

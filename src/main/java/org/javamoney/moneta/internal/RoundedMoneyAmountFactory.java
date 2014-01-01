@@ -1,4 +1,4 @@
-package org.javamoney.moneta.impl;
+package org.javamoney.moneta.internal;
 
 import java.math.RoundingMode;
 
@@ -27,6 +27,7 @@ public class RoundedMoneyAmountFactory extends
 	protected MonetaryContext loadDefaultMonetaryContext() {
 		return new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0)
 				.setAttribute(RoundingMode.HALF_EVEN)
+				.setFlavor(AmountFlavor.DECORATION)
 				.setFlavor(AmountFlavor.UNDEFINED).build();
 	}
 
@@ -34,6 +35,7 @@ public class RoundedMoneyAmountFactory extends
 	protected MonetaryContext loadMaxMonetaryContext() {
 		return new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0)
 				.setAttribute(RoundingMode.HALF_EVEN)
+				.setFlavor(AmountFlavor.DECORATION)
 				.setFlavor(AmountFlavor.UNDEFINED).build();
 	}
 

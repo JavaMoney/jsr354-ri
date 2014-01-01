@@ -30,7 +30,7 @@ import javax.money.MonetaryQuery;
 import javax.money.MonetaryRoundings;
 import javax.money.NumberValue;
 
-import org.javamoney.moneta.impl.RoundedMoneyAmountFactory;
+import org.javamoney.moneta.internal.RoundedMoneyAmountFactory;
 import org.javamoney.moneta.spi.AbstractMoney;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 

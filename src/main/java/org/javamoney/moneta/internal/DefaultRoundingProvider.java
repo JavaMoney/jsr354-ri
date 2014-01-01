@@ -1,4 +1,4 @@
-package org.javamoney.moneta.impl;
+package org.javamoney.moneta.internal;
 
 import java.math.RoundingMode;
 import java.util.Collections;

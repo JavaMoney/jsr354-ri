@@ -1,1 +1,1 @@
-org.javamoney.moneta.impl.DefaultAmountProvider
+org.javamoney.moneta.internal.DefaultAmountProvider

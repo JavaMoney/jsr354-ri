@@ -34,7 +34,7 @@ import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 import javax.money.NumberValue;
 
-import org.javamoney.moneta.impl.MoneyAmountFactory;
+import org.javamoney.moneta.internal.MoneyAmountFactory;
 import org.javamoney.moneta.spi.AbstractMoney;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 

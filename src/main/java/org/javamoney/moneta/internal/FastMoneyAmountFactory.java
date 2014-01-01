@@ -6,7 +6,7 @@
  * BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency API ("Specification") Copyright
  * (c) 2012-2013, Credit Suisse All rights reserved.
  */
-package org.javamoney.moneta.impl;
+package org.javamoney.moneta.internal;
 
 import java.math.RoundingMode;
 

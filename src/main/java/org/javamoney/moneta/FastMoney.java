@@ -22,6 +22,7 @@ import java.util.Objects;
 
 
 
+
 // github.com/JavaMoney/jsr354-ri.git
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -32,7 +33,7 @@ import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 import javax.money.NumberValue;
 
-import org.javamoney.moneta.impl.FastMoneyAmountFactory;
+import org.javamoney.moneta.internal.FastMoneyAmountFactory;
 import org.javamoney.moneta.spi.AbstractMoney;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 

@@ -1,1 +1,1 @@
-org.javamoney.moneta.impl.DefaultMonetaryAmountsSpi
+org.javamoney.moneta.internal.DefaultMonetaryAmountsSpi

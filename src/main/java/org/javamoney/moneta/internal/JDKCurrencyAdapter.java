@@ -10,7 +10,7 @@
  * 
  * Copyright (c) 2012-2013, Credit Suisse All rights reserved.
  */
-package org.javamoney.moneta.impl;
+package org.javamoney.moneta.internal;
 
 import java.io.Serializable;
 import java.util.Currency;

@@ -20,6 +20,8 @@ import java.util.Locale;
 
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryCurrencies;
+import javax.money.format.AmountFormatSymbols;
+import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
@@ -47,11 +49,12 @@ public class MonetaryAmountFormatTest {
 	public void testGetDefaultCurrency() {
 		MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(
 				Locale.GERMANY);
-//		assertNull(defaultFormat.getDefaultCurrency());
-		defaultFormat = new MonetaryFormats.Builder(Locale.GERMANY).setDefaultCurrency(
-				MonetaryCurrencies.getCurrency("CHF")).create();
-//		assertEquals(MonetaryCurrencies.getCurrency("CHF"),
-//				defaultFormat.getDefaultCurrency());
+		// assertNull(defaultFormat.getDefaultCurrency());
+		defaultFormat = new MonetaryFormats.Builder(Locale.GERMANY)
+				.setDefaultCurrency(
+						MonetaryCurrencies.getCurrency("CHF")).create();
+		// assertEquals(MonetaryCurrencies.getCurrency("CHF"),
+		// defaultFormat.getDefaultCurrency());
 	}
 
 	/**
@@ -180,5 +183,14 @@ public class MonetaryAmountFormatTest {
 		// assertEquals(MonetaryAmounts.getAmount("INR", new BigDecimal(
 		// "123456789101112.12")),
 		// defaultFormat.parse("INR 12,34,56,78,91,01,112.12"));
+	}
+
+	@Test
+	public void test() {
+		System.out.println("AmountFormatSymbols: "
+				+ AmountFormatSymbols.getAvailableLocales());
+		System.out.println("AmountStyle: " + AmountStyle.getAvailableLocales());
+		System.out.println("MonetaryFormats: "
+				+ MonetaryFormats.getAvailableLocales());
 	}
 }

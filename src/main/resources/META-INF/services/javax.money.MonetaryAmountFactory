@@ -1,3 +1,3 @@
-org.javamoney.moneta.impl.MoneyAmountFactory
-org.javamoney.moneta.impl.FastMoneyAmountFactory
-#org.javamoney.moneta.impl.RoundedMoneyAmountFactory
+org.javamoney.moneta.internal.MoneyAmountFactory
+org.javamoney.moneta.internal.FastMoneyAmountFactory
+org.javamoney.moneta.internal.RoundedMoneyAmountFactory
