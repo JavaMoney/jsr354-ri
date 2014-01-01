@@ -8,7 +8,7 @@
  * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
  * reserved.
  */
-package org.javamoney.moneta.format;
+package org.javamoney.moneta.format.internal;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -55,7 +55,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	/**
 	 * Parses the literal from the current {@link ParseContext}.
 	 * 
-	 * @see javax.money.format.FormatToken#parse(org.javamoney.moneta.format.ParseContext,
+	 * @see org.javamoney.moneta.format.internal.FormatToken#parse(org.javamoney.moneta.format.internal.ParseContext,
 	 *      java.util.Locale, javax.money.format.LocalizationStyle)
 	 */
 	@Override
@@ -70,7 +70,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	/**
 	 * Prints the amount to the {@link Appendable} given.
 	 * 
-	 * @see javax.money.format.FormatToken#print(java.lang.Appendable,
+	 * @see org.javamoney.moneta.format.internal.FormatToken#print(java.lang.Appendable,
 	 *      java.lang.Object, java.util.Locale,
 	 *      javax.money.format.LocalizationStyle)
 	 */

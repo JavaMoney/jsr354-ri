@@ -8,7 +8,7 @@
  * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
  * reserved.
  */
-package org.javamoney.moneta.format;
+package org.javamoney.moneta.format.internal;
 
 import java.io.IOException;
 import java.util.Currency;
