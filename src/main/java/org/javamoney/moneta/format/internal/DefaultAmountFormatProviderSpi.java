@@ -8,19 +8,11 @@
  */
 package org.javamoney.moneta.format.internal;
 
-import java.text.DecimalFormatSymbols;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
 import java.util.Objects;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryContext;
 import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
-
-import org.javamoney.moneta.format.internal.DefaultMonetaryAmountFormat.Builder;
 
 /**
  * Default format provider, which mainly maps the existing JDK functionality into the JSR 354 logic.
@@ -29,53 +21,16 @@ import org.javamoney.moneta.format.internal.DefaultMonetaryAmountFormat.Builder;
  */
 public class DefaultAmountFormatProviderSpi implements
 		MonetaryAmountFormatProviderSpi {
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(java.util.Locale,
-	 * javax.money.MonetaryContext, javax.money.CurrencyUnit)
-	 */
-	@Override
-	public MonetaryAmountFormat getFormat(Locale locale,
-			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
-		Objects.requireNonNull(locale, "Locale required");
-		Builder builder = new DefaultMonetaryAmountFormat.Builder(locale);
-		if (defaultCurrency != null) {
-			builder.setDefaultCurrency(defaultCurrency);
-		}
-		if (monetaryContext != null) {
-			builder.setMonetaryContext(monetaryContext);
-		}
-		AmountStyle style = new AmountStyle.Builder(locale).build();
-		builder.setStyle(style);
-		return builder.build();
-	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see
-	 * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountStyle,
-	 * javax.money.MonetaryContext, javax.money.CurrencyUnit)
+	 * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountStyle)
 	 */
 	@Override
-	public MonetaryAmountFormat getFormat(AmountStyle formatStyle,
-			MonetaryContext monetaryContext, CurrencyUnit defaultCurrency) {
-		Objects.requireNonNull(formatStyle, "FormatStyle required");
-		Builder builder = new DefaultMonetaryAmountFormat.Builder(
-				formatStyle.getLocale());
-		if (defaultCurrency != null) {
-			builder.setDefaultCurrency(defaultCurrency);
-		}
-		if (monetaryContext != null) {
-			builder.setMonetaryContext(monetaryContext);
-		}
-		builder.setStyle(formatStyle);
-		return builder.build();
+	public MonetaryAmountFormat getFormat(AmountStyle style) {
+		Objects.requireNonNull(style, "AmountStyle required");
+		return new DefaultMonetaryAmountFormat(style);
 	}
-
-	@Override
-	public Collection<Locale> getSupportedLocales() {
-		return Arrays.asList(DecimalFormatSymbols.getAvailableLocales());
-	}
-
 
 }

@@ -90,7 +90,7 @@ final class AmountNumberToken implements FormatToken {
 				.getDefaultFractionDigits();
 		this.decimalFormat.setMinimumFractionDigits(digits);
 		this.decimalFormat.setMaximumFractionDigits(digits);
-		if (this.style.getNumberGroupSizes().length == 0) {
+		if (this.style.getGroupingSizes().length == 0) {
 			appendable.append(this.decimalFormat.format(
 					amount.getNumber().numberValue(BigDecimal.class)));
 			return;
@@ -111,7 +111,7 @@ final class AmountNumberToken implements FormatToken {
 							.getDecimalFormatSymbols().getGroupingSeparator() };
 				}
 				numberGroup = new StringGrouper(groupChars,
-						style.getNumberGroupSizes());
+						style.getGroupingSizes());
 			}
 			preformattedValue = numberGroup.group(numberParts[0])
 					+ this.decimalFormat.getDecimalFormatSymbols()

@@ -9,7 +9,6 @@
 package org.javamoney.moneta.format.internal;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -19,10 +18,11 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
-import javax.money.MonetaryRoundings;
 import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
+import javax.money.spi.Bootstrap;
+import javax.money.spi.MonetaryLogger;
 
 /**
  * Formats instances of {@code MonetaryAmount} to a {@link String} or an {@link Appendable}.
@@ -40,18 +40,24 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	private static final char CURRENCY_SIGN = '\u00A4';
 
 	/** The tokens to be used for formatting/parsing of positive and zero numbers. */
-	private List<FormatToken> positiveTokens = new ArrayList<FormatToken>();
+	private List<FormatToken> positiveTokens;
 
 	/** The tokens to be used for formatting/parsing of positive and zero numbers. */
-	private List<FormatToken> negativeTokens = new ArrayList<FormatToken>();
+	private List<FormatToken> negativeTokens;
 
 	/**
 	 * The {@link MonetaryContext} applied on creating a {@link MonetaryAmount} based on data
 	 * parsed.
 	 */
-	private MonetaryContext monetaryContext;
+	private MonetaryContext monetaryContext = MonetaryAmounts
+			.getDefaultAmountFactory()
+			.getDefaultMonetaryContext();
+
 	/** Currency used, when no currency was on the input parsed. */
 	private CurrencyUnit defaultCurrency;
+
+	/** The current {@link AmountStyle}, never null. */
+	private AmountStyle amountStyle;
 
 	/**
 	 * Creates a new instance.
@@ -70,33 +76,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 *            The default {@link CurrencyUnit} used, when no currency information can be
 	 *            extracted from the parse input.
 	 */
-	private DefaultMonetaryAmountFormat(Builder builder) {
-		this.defaultCurrency = builder.defaultCurrency;
-		String pattern = builder.style.getPattern();
-		if (pattern.indexOf(CURRENCY_SIGN) < 0) {
-			this.positiveTokens.add(new AmountNumberToken(builder.style,
-					pattern));
-			this.negativeTokens = positiveTokens;
-		}
-		else {
-			// split into (potential) plus, minus patterns
-			char patternSeparator = ';';
-			if (builder.style.getSymbols() != null) {
-				patternSeparator = builder.style.getSymbols()
-						.getPatternSeparator();
-			}
-			String[] plusMinusPatterns = pattern.split("'" + patternSeparator
-					+ "'");
-			initPattern(plusMinusPatterns[0], this.positiveTokens,
-					builder.style);
-			if (plusMinusPatterns.length > 1) {
-				initPattern(plusMinusPatterns[1], this.negativeTokens,
-						builder.style);
-			}
-			else {
-				this.negativeTokens = this.positiveTokens;
-			}
-		}
+	DefaultMonetaryAmountFormat(AmountStyle style) {
+		setAmountStyle(style);
 	}
 
 	private void initPattern(String pattern, List<FormatToken> tokens,
@@ -244,7 +225,12 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			}
 		} catch (Exception e) {
 			// try parsing negative...
-			// TODO log exception here
+			MonetaryLogger log = Bootstrap.getService(MonetaryLogger.class);
+			if (log.isDebugEnabled()) {
+				log.logDebug(
+						"Failed to parse positive pattern, trying negative for: "
+								+ text, e);
+			}
 			for (FormatToken token : this.negativeTokens) {
 				token.parse(ctx);
 			}
@@ -260,10 +246,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		Class<? extends MonetaryAmount> type = MonetaryAmounts
 				.queryAmountType(this.monetaryContext);
 		if (type == null) {
-			// TODO log default fallback here
+			MonetaryLogger log = Bootstrap.getService(MonetaryLogger.class);
+			if (log.isWarningEnabled()) {
+				log.logWarning("Required moneterayContext was not resolvable, using default, required="
+						+ this.monetaryContext);
+			}
 			type = MonetaryAmounts.getDefaultAmountType();
 		}
-		return MonetaryAmounts.getAmountFactory(type).setCurrency(unit).setNumber(num)
+		return MonetaryAmounts.getAmountFactory(type).setCurrency(unit)
+				.setNumber(num)
 				.create();
 	}
 
@@ -285,119 +276,59 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		return format(amount);
 	}
 
-	/**
-	 * This class implements a builder that allows creating of {@link MonetaryAmountFormat}
-	 * instances programmatically using a fluent API. The formatting hereby is modeled by a
-	 * concatenation of {@link FormatToken} instances. The same {@link FormatToken} instances also
-	 * are responsible for implementing the opposite, parsing, of an item from an input character
-	 * sequence. Each {@link FormatToken} gets access to the current parsing location, and the
-	 * original and current character input sequence, modeled by the {@link ParseContext}. Finally
-	 * if parsing of a part failed, a {@link FormatToken} throws an {@link ItemParseException}
-	 * describing the problem.
-	 * <p>
-	 * This class is not thread-safe and therefore should not be shared among different threads.
-	 * 
-	 * @author Anatole Tresch
-	 * 
-	 * @param <T>
-	 *            the target type.
-	 */
-	public static final class Builder {
-
-		/**
-		 * The default currency, used, when parsing amounts, where no currency is available.
-		 */
-		private CurrencyUnit defaultCurrency;
-
-		private AmountStyle style;
-
-		private MonetaryContext monetaryContext = MonetaryAmounts
-				.getDefaultAmountFactory()
-				.getDefaultMonetaryContext();
-
-		/**
-		 * Creates a new Builder.
-		 * 
-		 * @param targetType
-		 *            the target class.
-		 */
-		public Builder(Locale locale) {
-			if (locale == null) {
-				throw new IllegalArgumentException("Locale required.");
-			}
-			setDefaultStyle(locale);
-		}
-
-		public Builder setDefaultCurrency(CurrencyUnit currency) {
-			this.defaultCurrency = currency;
-			return this;
-		}
-
-		/**
-		 * Sets the default {@link AmountStyle} for the given {@link Locale}. for the
-		 * {@link #locale} is used, and the number is rounded with the currencies, default rounding
-		 * as returned by {@link MonetaryRoundings#getRounding()}.
-		 * 
-		 * @param locale
-		 *            the {@link Locale} to set.
-		 * @return the builder, for chaining.
-		 */
-		public Builder setDefaultStyle(Locale locale) {
-			Objects.requireNonNull(locale);
-			this.style = AmountStyle.getInstance(locale);
-			return this;
-		}
-
-		/**
-		 * Sets the {@link AmountStyle} used explicitly.
-		 * 
-		 * @param style
-		 *            the {@link AmountStyle} to be used.
-		 * @return the builder, for chaining.
-		 */
-		public Builder setStyle(AmountStyle style) {
-			Objects.requireNonNull(style);
-			this.style = style;
-			return this;
-		}
-
-		/**
-		 * Set the {@link MonetaryContext} class
-		 * 
-		 * @param monetaryContext
-		 */
-		public Builder setMonetaryContext(MonetaryContext monetaryContext) {
-			Objects.requireNonNull(monetaryContext);
-			this.monetaryContext = monetaryContext;
-			return this;
-		}
-
-		/**
-		 * This method creates an {@link MonetaryAmountFormat} based on this instance, hereby using
-		 * the given a {@link ItemFactory} to extract the item to be returned from the
-		 * {@link ParseContext}'s results.
-		 * 
-		 * @return the {@link MonetaryAmountFormat} instance, never null.
-		 */
-		public MonetaryAmountFormat build() {
-			return new DefaultMonetaryAmountFormat(this);
-		}
-
-		/*
-		 * (non-Javadoc)
-		 * @see java.lang.Object#toString()
-		 */
-		@Override
-		public String toString() {
-			return "MonetaryAmountFormat.Builder [style=" + style
-					+ ", monetaryContext=" + monetaryContext + "]";
-		}
-
+	@Override
+	public CurrencyUnit getDefaultCurrency() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public static void main(String[] args) {
-		DecimalFormat df = new DecimalFormat("bla {{CUR}} bla ###0.00");
-		System.out.println(df.format(10.12345).replace("{{CUR}}", "CHF"));
+	@Override
+	public void setDefaultCurrency(CurrencyUnit currency) {
+		this.defaultCurrency = currency;
+	}
+
+	@Override
+	public AmountStyle getAmountStyle() {
+		return this.amountStyle;
+	}
+
+	@Override
+	public void setAmountStyle(AmountStyle style) {
+		Objects.requireNonNull(style);
+		this.amountStyle = style;
+		this.positiveTokens = new ArrayList<>();
+		this.negativeTokens = new ArrayList<>();
+		String pattern = style.getPattern();
+		if (pattern.indexOf(CURRENCY_SIGN) < 0) {
+			this.positiveTokens.add(new AmountNumberToken(style,
+					pattern));
+			this.negativeTokens = positiveTokens;
+		}
+		else {
+			// split into (potential) plus, minus patterns
+			char patternSeparator = ';';
+			if (style.getSymbols() != null) {
+				patternSeparator = style.getSymbols()
+						.getPatternSeparator();
+			}
+			String[] plusMinusPatterns = pattern.split("'" + patternSeparator
+					+ "'");
+			initPattern(plusMinusPatterns[0], this.positiveTokens,
+					style);
+			if (plusMinusPatterns.length > 1) {
+				initPattern(plusMinusPatterns[1], this.negativeTokens,
+						style);
+			}
+			else {
+				this.negativeTokens = this.positiveTokens;
+			}
+		}
+	}
+
+	@Override
+	public void setMonetaryContext(MonetaryContext context) {
+		Objects.requireNonNull(context);
+		this.monetaryContext = context;
 	}
 
 }
