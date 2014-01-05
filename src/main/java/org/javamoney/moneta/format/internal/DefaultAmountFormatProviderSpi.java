@@ -28,7 +28,7 @@ public class DefaultAmountFormatProviderSpi implements
 	 * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountStyle)
 	 */
 	@Override
-	public MonetaryAmountFormat getFormat(AmountStyle style) {
+	public MonetaryAmountFormat getAmountFormat(AmountStyle style) {
 		Objects.requireNonNull(style, "AmountStyle required");
 		return new DefaultMonetaryAmountFormat(style);
 	}
