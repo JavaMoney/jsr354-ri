@@ -80,12 +80,12 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
 			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts
-					.getDefaultAmountFactory()
+					.getAmountFactory()
 					.setCurrency(
 							amount.getCurrency()).setNumber(0.03).create())) {
 				// add
 				return (T)amt.add(
-						MonetaryAmounts.getDefaultAmountFactory()
+						MonetaryAmounts.getAmountFactory()
 								.setCurrency(amt.getCurrency())
 								.setNumber(new BigDecimal("0.05")).create()
 								.subtract(mp));

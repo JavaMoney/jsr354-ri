@@ -12,14 +12,14 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
 public class RoundedMoneyAmountFactory extends
 		AbstractAmountFactory<RoundedMoney> {
 
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.MonetaryAmountFactory#getQueryInclusionPolicy()
-	 */
-	@Override
-	public QueryInclusionPolicy getQueryInclusionPolicy() {
-		return QueryInclusionPolicy.DIRECT_REFERENCE_ONLY;
-	}
+	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
+			RoundedMoney.class).setPrecision(0)
+			.setAttribute(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.UNDEFINED).build();
+	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
+			RoundedMoney.class).setPrecision(0)
+			.setAttribute(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.UNDEFINED).build();
 
 	/*
 	 * (non-Javadoc)
@@ -47,9 +47,7 @@ public class RoundedMoneyAmountFactory extends
 	 */
 	@Override
 	protected MonetaryContext loadDefaultMonetaryContext() {
-		return new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0)
-				.setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.UNDEFINED).build();
+		return DEFAULT_CONTEXT;
 	}
 
 	/*
@@ -58,9 +56,7 @@ public class RoundedMoneyAmountFactory extends
 	 */
 	@Override
 	protected MonetaryContext loadMaxMonetaryContext() {
-		return new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0)
-				.setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.UNDEFINED).build();
+		return MAX_CONTEXT;
 	}
 
 }

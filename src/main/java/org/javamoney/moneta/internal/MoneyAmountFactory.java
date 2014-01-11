@@ -11,10 +11,20 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
 
 public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
+	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
+			Money.class).setPrecision(64)
+			.setMaxScale(63).setAttribute(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.PRECISION).build();
+	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
+			Money.class).setPrecision(0)
+			.setMaxScale(-1).setAttribute(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.PRECISION).build();
+
 	@Override
 	protected Money create(CurrencyUnit currency, Number number,
 			MonetaryContext monetaryContext) {
-		return Money.of(currency, number, MonetaryContext.from(monetaryContext, Money.class));
+		return Money.of(currency, number,
+				MonetaryContext.from(monetaryContext, Money.class));
 	}
 
 	@Override
@@ -24,16 +34,12 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
 	@Override
 	protected MonetaryContext loadDefaultMonetaryContext() {
-		return new MonetaryContext.Builder(Money.class).setPrecision(64)
-				.setMaxScale(63).setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.PRECISION).build();
+		return DEFAULT_CONTEXT;
 	}
 
 	@Override
 	protected MonetaryContext loadMaxMonetaryContext() {
-		return new MonetaryContext.Builder(Money.class).setPrecision(0)
-				.setMaxScale(-1).setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.PRECISION).build();
+		return MAX_CONTEXT;
 	}
 
 }

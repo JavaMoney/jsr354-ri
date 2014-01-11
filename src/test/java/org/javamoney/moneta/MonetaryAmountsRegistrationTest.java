@@ -31,11 +31,11 @@ public class MonetaryAmountsRegistrationTest {
 	 */
 	@Test
 	public void testGetFactory() {
-		assertNotNull(MonetaryAmounts.getDefaultAmountFactory());
+		assertNotNull(MonetaryAmounts.getAmountFactory());
 		assertNotNull(MonetaryAmounts.getAmountFactory(FastMoney.class));
 		assertNotNull(MonetaryAmounts.getAmountFactory(Money.class));
-		assertTrue(MonetaryAmounts.getDefaultAmountFactory() == MonetaryAmounts
-				.getAmountFactory(Money.class));
+		assertTrue(MonetaryAmounts.getAmountFactory().getClass() == MonetaryAmounts
+				.getAmountFactory(Money.class).getClass());
 	}
 
 	/**

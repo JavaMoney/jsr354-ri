@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
 import javax.money.format.AmountStyle;
@@ -50,7 +51,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * parsed.
 	 */
 	private MonetaryContext monetaryContext = MonetaryAmounts
-			.getDefaultAmountFactory()
+			.getAmountFactory()
 			.getDefaultMonetaryContext();
 
 	/** Currency used, when no currency was on the input parsed. */
@@ -253,7 +254,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			}
 			type = MonetaryAmounts.getDefaultAmountType();
 		}
-		return MonetaryAmounts.getAmountFactory(type).setCurrency(unit)
+		return MonetaryAmounts.getAmountFactory(type)
+				.setContext(monetaryContext).setCurrency(unit)
 				.setNumber(num)
 				.create();
 	}

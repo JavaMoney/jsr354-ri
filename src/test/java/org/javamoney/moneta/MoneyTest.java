@@ -464,7 +464,7 @@ public class MoneyTest {
 	 */
 	@Test
 	public void testEqualsMonetarAmount() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = MonetaryAmounts.getAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(100).create();
 		MonetaryAmount m2 = Money.of("CHF", 100);

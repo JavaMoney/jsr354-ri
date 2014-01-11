@@ -1,0 +1,3 @@
+org.javamoney.moneta.internal.MoneyAmountFactoryProvider
+org.javamoney.moneta.internal.FastMoneyAmountFactoryProvider
+org.javamoney.moneta.internal.RoundedMoneyAmountFactoryProvider

@@ -55,14 +55,6 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 
 	protected abstract MonetaryContext loadMaxMonetaryContext();
 	
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.MonetaryAmountFactory#getQueryInclusionPolicy()
-	 */
-	@Override
-	public QueryInclusionPolicy getQueryInclusionPolicy() {
-		return QueryInclusionPolicy.ALWAYS;
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -8,32 +8,40 @@
  */
 package org.javamoney.moneta.internal;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
-import javax.money.MonetaryAmountFactory.QueryInclusionPolicy;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
+import javax.money.spi.MonetaryAmountFactoryProviderSpi;
+import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSpi;
+import javax.money.spi.MonetaryLogger;
 
 public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
-	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactory<?>> factories = new ConcurrentHashMap<>();
+	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactoryProviderSpi<?>> factories = new ConcurrentHashMap<>();
 
-	private static final Comparator<MonetaryAmountFactory<? extends MonetaryAmount>> CONTEXT_COMPARATOR = new Comparator<MonetaryAmountFactory<? extends MonetaryAmount>>() {
+	private Class<? extends MonetaryAmount> configuredDefaultAmountType = loadDefaultAmountType();
+
+	private static final Comparator<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>> CONTEXT_COMPARATOR = new Comparator<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>>() {
 
 		@Override
-		public int compare(MonetaryAmountFactory<? extends MonetaryAmount> f1,
-				MonetaryAmountFactory<? extends MonetaryAmount> f2) {
+		public int compare(
+				MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f1,
+				MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f2) {
 			int compare = 0;
 			MonetaryContext c1 = f1.getMaximalMonetaryContext();
 			MonetaryContext c2 = f2.getMaximalMonetaryContext();
@@ -64,10 +72,76 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	};
 
 	public DefaultMonetaryAmountsSpi() {
-		for (MonetaryAmountFactory<?> f : Bootstrap
-				.getServices(MonetaryAmountFactory.class)) {
-			factories.put(f.getAmountType(), f);
+		for (MonetaryAmountFactoryProviderSpi<?> f : Bootstrap
+				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
+			MonetaryAmountFactoryProviderSpi<?> existing = factories.put(
+					f.getAmountType(), f);
+			if (existing != null) {
+				int compare = Bootstrap.comparePriority(existing, f);
+				if (compare < 0) {
+					Bootstrap.getService(MonetaryLogger.class).logWarning(
+							"MonetaryAmountFactoryProviderSpi with lower prio ignored: "
+									+ f);
+					factories.put(f.getAmountType(), existing);
+				}
+				else if (compare == 0) {
+					throw new IllegalStateException(
+							"Ambigous MonetaryAmountFactoryProviderSpi found for "
+									+ f.getAmountType() + ": "
+									+ f.getClass().getName() + '/'
+									+ existing.getClass().getName());
+				}
+			}
 		}
+	}
+
+	/**
+	 * Tries to load the default {@link MonetaryAmount} class from {@code javamoney.properties} with
+	 * contents as follows:<br/>
+	 * <code>
+	 * javax.money.defaults.amount.class=my.fully.qualified.ClassName
+	 * </code>
+	 * 
+	 * @return the loaded default class, or {@code null}
+	 */
+	// type check should be safe, exception will be logged if not.
+	@SuppressWarnings("unchecked")
+	private Class<? extends MonetaryAmount> loadDefaultAmountType() {
+		URL res = getClass().getResource("javamoney.properties");
+		if (res != null) {
+			try (InputStream is = res.openStream()) {
+				Properties props = new Properties();
+				props.load(is);
+				String defaultClass = props
+						.getProperty("javax.money.defaults.amount.class");
+				if (defaultClass != null) {
+					return (Class<? extends MonetaryAmount>) Class
+							.forName(defaultClass, true,
+									getClassLoader());
+				}
+			} catch (Exception e) {
+				Bootstrap
+						.getService(MonetaryLogger.class)
+						.logError(
+								"Failed to initialize default MonetaryAmount type from javamoney.properties.",
+								e);
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Evaluates the {@link ClassLoader} to use, uses by default the current context
+	 * {@link ClassLoader}, following by the loader of this class itself.
+	 * 
+	 * @return the {@link ClassLoader} for loading.
+	 */
+	private ClassLoader getClassLoader() {
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		if (cl == null) {
+			cl = getClass().getClassLoader();
+		}
+		return cl;
 	}
 
 	// save cast, since members are managed by this instance
@@ -75,7 +149,15 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	@Override
 	public <T extends MonetaryAmount> MonetaryAmountFactory<T> getAmountFactory(
 			Class<T> amountType) {
-		return  (MonetaryAmountFactory<T>) factories.get(amountType);
+		MonetaryAmountFactoryProviderSpi<T> f = MonetaryAmountFactoryProviderSpi.class
+				.cast(factories
+						.get(amountType));
+		if (f != null) {
+			return f.createMonetaryAmountFactory();
+		}
+		throw new MonetaryException(
+				"No matching MonetaryAmountFactory found, type="
+						+ amountType.getName());
 	}
 
 	@Override
@@ -83,13 +165,24 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 		return factories.keySet();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.spi.MonetaryAmountsSpi#getDefaultAmountType()
+	 */
 	@Override
 	public Class<? extends MonetaryAmount> getDefaultAmountType() {
-		for (MonetaryAmountFactory<?> f : Bootstrap
-				.getServices(MonetaryAmountFactory.class)) {
-			return f.getAmountType();
+		if (configuredDefaultAmountType == null) {
+			for (MonetaryAmountFactoryProviderSpi<?> f : Bootstrap
+					.getServices(MonetaryAmountFactoryProviderSpi.class)) {
+				configuredDefaultAmountType = f.getAmountType();
+				break;
+			}
 		}
-		return null;
+		if (configuredDefaultAmountType == null) {
+			throw new MonetaryException(
+					"No MonetaryAmountFactoryProviderSpi registered.");
+		}
+		return configuredDefaultAmountType;
 	}
 
 	/**
@@ -105,8 +198,8 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 		}
 		// first check for explicit type
 		for (@SuppressWarnings("unchecked")
-		MonetaryAmountFactory<? extends MonetaryAmount> f : Bootstrap
-				.getServices(MonetaryAmountFactory.class)) {
+		MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
+				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 			if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
 				continue;
 			}
@@ -124,10 +217,10 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 			}
 		}
 		// Select on required flavor
-		List<MonetaryAmountFactory<? extends MonetaryAmount>> selection = new ArrayList<>();
+		List<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>> selection = new ArrayList<>();
 		for (@SuppressWarnings("unchecked")
-		MonetaryAmountFactory<? extends MonetaryAmount> f : Bootstrap
-				.getServices(MonetaryAmountFactory.class)) {
+		MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
+				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 			if (f.getDefaultMonetaryContext().getAmountFlavor() == AmountFlavor.UNDEFINED) {
 				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
 						||
@@ -150,8 +243,8 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 		if (selection.isEmpty()) {
 			// fall back, add all selections, ignore flavor
 			for (@SuppressWarnings("unchecked")
-			MonetaryAmountFactory<? extends MonetaryAmount> f : Bootstrap
-					.getServices(MonetaryAmountFactory.class)) {
+			MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
+					.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
 						||
 						f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {

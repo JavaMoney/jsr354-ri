@@ -25,6 +25,17 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
  */
 public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
+	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
+			FastMoney.class).setPrecision(18)
+			.setMaxScale(5).setFixedScale(true)
+			.setAttribute(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.PERFORMANCE).build();
+	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
+			FastMoney.class).setPrecision(18)
+			.setMaxScale(5).setFixedScale(true)
+			.setAttribute(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.PERFORMANCE).build();
+
 	@Override
 	protected FastMoney create(CurrencyUnit currency, Number number,
 			MonetaryContext monetaryContext) {
@@ -38,18 +49,12 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
 	@Override
 	protected MonetaryContext loadDefaultMonetaryContext() {
-		return new MonetaryContext.Builder(FastMoney.class).setPrecision(18)
-				.setMaxScale(5).setFixedScale(true)
-				.setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.PERFORMANCE).build();
+		return DEFAULT_CONTEXT;
 	}
 
 	@Override
 	protected MonetaryContext loadMaxMonetaryContext() {
-		return new MonetaryContext.Builder(FastMoney.class).setPrecision(18)
-				.setMaxScale(5).setFixedScale(true)
-				.setAttribute(RoundingMode.HALF_EVEN)
-				.setFlavor(AmountFlavor.PERFORMANCE).build();
+		return MAX_CONTEXT;
 	}
 
 }
