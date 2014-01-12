@@ -18,11 +18,11 @@
 	</parent>
 
 	<groupId>org.javamoney</groupId>
-	<artifactId>jsr354-ri</artifactId>
+	<artifactId>moneta</artifactId>
 	<packaging>jar</packaging>
 	<version>0.8-SNAPSHOT</version>
 
-	<name>JSR 354 RI (Moneta)</name>
+	<name>Moneta ()JSR 354 RI)</name>
 	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
@@ -389,7 +389,7 @@
 		</dependency>
 		<dependency>
 			<groupId>javax.money</groupId>
-			<artifactId>jsr354-api</artifactId>
+			<artifactId>money-api</artifactId>
 			<version>${jsr.version}</version>
 		</dependency>
 	</dependencies>
