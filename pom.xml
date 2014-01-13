@@ -17,16 +17,15 @@
 		<version>0.4-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.javamoney</groupId>
 	<artifactId>moneta</artifactId>
 	<packaging>jar</packaging>
 	<version>0.8-SNAPSHOT</version>
 
-	<name>Moneta ()JSR 354 RI)</name>
+	<name>Moneta (JSR 354 RI)</name>
 	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
-	This module impelements JSR 354.</description>
+	This module implements JSR 354.</description>
 
 	<organization>
 		<name>JavaMoney</name>
@@ -49,8 +48,6 @@
 
 		<moduleDir>.</moduleDir>
 		<basedir>.</basedir>
-		<!-- Dependency versions -->
-		<junit.version>4.8.2</junit.version>
 
 		<license.licenseName>jcp_spec</license.licenseName>
 		<license.licenseResolver>src/license</license.licenseResolver>
@@ -252,15 +249,6 @@
 				</property>
 			</activation>
 			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-gpg-plugin</artifactId>
-							<version>1.4</version>
-						</plugin>
-					</plugins>
-				</pluginManagement>
 				<plugins>
 					<plugin>
 						<!-- Usage: mvn clean deploy -Dgpg.passphrase=yourpassphrase ; Or sign 
@@ -321,37 +309,6 @@
 				</property>
 			</activation>
 			<build>
-				<pluginManagement>
-					<plugins>
-						<!-- ======================================================= -->
-						<!-- License -->
-						<!-- ======================================================= -->
-						<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>license-maven-plugin</artifactId> 
-							<version>1.4</version> </plugin> -->
-						<plugin>
-							<groupId>com.google.code.maven-license-plugin</groupId>
-							<artifactId>maven-license-plugin</artifactId>
-							<version>1.4.0</version>
-							<configuration>
-								<basedir>${basedir}</basedir>
-								<header>${basedir}/src/etc/header.txt</header>
-								<quiet>false</quiet>
-								<failIfMissing>true</failIfMissing>
-								<aggregate>false</aggregate>
-								<encoding>UTF-8</encoding>
-								<excludes>
-									<exclude>target/**</exclude>
-									<exclude>LICENSE*.html</exclude>
-									<exclude>README.*</exclude>
-									<exclude>checkstyle*.*</exclude>
-									<exclude>*.css</exclude>
-								</excludes>
-							</configuration>
-						</plugin>
-						<!-- TODO enable this only for major upgrades (ensure to copy LICENSE.txt 
-							to LICENSE.bak first) -->
-					</plugins>
-				</pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>com.google.code.maven-license-plugin</groupId>
@@ -411,151 +368,6 @@
 			</extension>
 		</extensions>
 
-		<pluginManagement>
-			<plugins>
-				<!-- ======================================================= -->
-				<!-- Packaging (OSGi bundle) -->
-				<!-- ======================================================= -->
-				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>2.3.5</version>
-					<extensions>true</extensions>
-					<configuration>
-						<instructions>
-							<Export-Package>javax.money.*</Export-Package>
-							<Private-Package>!*</Private-Package>
-						</instructions>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.5</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.7</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.15</version>
-					<configuration>
-						<useSystemClassLoader>true</useSystemClassLoader>
-						<skipTests>false</skipTests>
-						<trimStackTrace>false</trimStackTrace>
-						<forkMode>once</forkMode>
-						<includes>
-							<include>**/*Test.java</include>
-						</includes>
-						<excludes>
-							<exclude>**/Abstract*.java</exclude>
-						</excludes>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<debug>true</debug>
-						<optimize>true</optimize>
-						<verbose>true</verbose>
-						<source>${maven.compile.sourceLevel}</source>
-						<target>${maven.compile.targetLevel}</target>
-						<compilerArgument>-g</compilerArgument>
-						<encoding>${project.build.sourceEncoding}</encoding>
-						<charset>${project.build.sourceEncoding}</charset>
-						<showDeprecations>true</showDeprecations>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-install-plugin</artifactId>
-					<version>2.4</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>install</goal>
-							</goals>
-							<configuration>
-								<createChecksum>true</createChecksum>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.8</version>
-				</plugin>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<detectLinks>true</detectLinks>
-						<!-- excludePackageNames>blabla</excludePackageNames -->
-						<keywords>true</keywords>
-						<linksource>true</linksource>
-						<!-- overview>${basedir}/overview.html</overview -->
-						<source>${project.build.sourceCompilerLevel}</source>
-						<!-- stylesheetfile>${basedir}/src/site/css/money-jdoc.css</stylesheetfile -->
-						<verbose>true</verbose>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-source-plugin</artifactId>
-					<groupId>org.apache.maven.plugins</groupId>
-					<version>2.2.1</version>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>package</phase>
-							<goals>
-								<goal>jar-no-fork</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>versions-maven-plugin</artifactId>
-					<version>2.1</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -563,17 +375,12 @@
 				<configuration></configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.4.1</version>
-				<configuration>
-					<!-- Workaround for MGPG-9 and MRELEASE-424, MRELEASE-263 -->
-					<mavenExecutorId>forked-path</mavenExecutorId>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.3.1</version>
 				<executions>
 					<execution>
 						<id>enforce-versions</id>
@@ -623,7 +430,6 @@
 		</plugins>
 	</build>
 
-
 	<reporting>
 		<plugins>
 			<plugin>
@@ -670,16 +476,30 @@
 				</reportSets>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jdepend-maven-plugin</artifactId>
+				<version>2.0-beta-2</version>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.3</version>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.15</version>
 				<configuration>
 					<aggregate>true</aggregate>
-					<linkJavadoc>true</linkJavadoc>
+					<xrefLocation>${project.reporting.outputDirectory}/../xref-test</xrefLocation>
+					<linkXRef>true</linkXRef>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<targetJdk>${maven.compile.targetLevel}</targetJdk>
+					<format>xml</format>
+					<linkXref>true</linkXref>
 					<aggregate>true</aggregate>
-					<javadocDir>${project.name}/apidocs</javadocDir>
-					<!-- stylesheet>${basedir}/src/site/css/javamoneys-jdoc.css</stylesheet -->
-					<windowTitle>JSR 354 - Java Money Sources</windowTitle>
+					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -692,7 +512,8 @@
 					<tagListOptions>
 						<tagClasses>
 							<tagClass>
-								<displayName>Important fixes that have to be done until the next
+								<displayName>Important fixes that have to be done until the
+									next
 									release</displayName>
 								<tags>
 									<tag>
@@ -733,33 +554,22 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.0.1</version>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
 				<configuration>
-					<targetJdk>${maven.compile.targetLevel}</targetJdk>
-					<format>xml</format>
-					<linkXref>true</linkXref>
 					<aggregate>true</aggregate>
-					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+					<linkJavadoc>true</linkJavadoc>
+					<aggregate>true</aggregate>
+					<javadocDir>${project.name}/apidocs</javadocDir>
+					<!-- stylesheet>${basedir}/src/site/css/javamoneys-jdoc.css</stylesheet -->
+					<windowTitle>JSR 354 - Java Money Sources</windowTitle>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.15</version>
-				<configuration>
-					<aggregate>true</aggregate>
-					<xrefLocation>${project.reporting.outputDirectory}/../xref-test</xrefLocation>
-					<linkXRef>true</linkXRef>
-				</configuration>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
 			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jdepend-maven-plugin</artifactId>
-				<version>2.0-beta-2</version>
-			</plugin>
-
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -769,7 +579,6 @@
 					<datafile>${basedir}/target/coverage-reports/jacoco-unit.exec</datafile>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
@@ -791,43 +600,26 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.7</version>
-				<reportSets>
-					<reportSet>
-						<inherited>true</inherited>
-						<reports>
-							<report>index</report>
-							<report>scm</report>
-							<report>plugin-management</report>
-							<report>plugins</report>
-							<report>summary</report>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>dependency-management</report>
-						</reports>
-					</reportSet>
-					<reportSet>
-						<inherited>false</inherited>
-						<reports>
-							<report>project-team</report>
-							<report>issue-tracking</report>
-							<report>license</report>
-							<report>mailing-list</report>
-							<report>cim</report>
-						</reports>
-					</reportSet>
-				</reportSets>
 			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>dashboard-maven-plugin</artifactId>
-				<version>1.0.0-beta-1</version>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<xrefLocation>${project.reporting.outputDirectory}/../xref</xrefLocation>
+					<xmlOutput>true</xmlOutput>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<failOnError>false</failOnError>
+					<findbugsXmlOutput>true</findbugsXmlOutput>
+					<findbugsXmlOutputDirectory>target/site</findbugsXmlOutputDirectory>
+					<srcHtml>xref/</srcHtml>
+					<srcHtmlType>JXR</srcHtmlType>
+				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.1</version>
 			</plugin>
 		</plugins>
 	</reporting>
