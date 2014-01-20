@@ -30,6 +30,8 @@ import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSpi;
 import javax.money.spi.MonetaryLogger;
 
+import org.javamoney.moneta.ServicePriority;
+
 public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
 	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactoryProviderSpi<?>> factories = new ConcurrentHashMap<>();
@@ -77,7 +79,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 			MonetaryAmountFactoryProviderSpi<?> existing = factories.put(
 					f.getAmountType(), f);
 			if (existing != null) {
-				int compare = Bootstrap.comparePriority(existing, f);
+				int compare = comparePriority(existing, f);
 				if (compare < 0) {
 					Bootstrap.getService(MonetaryLogger.class).logWarning(
 							"MonetaryAmountFactoryProviderSpi with lower prio ignored: "
@@ -93,6 +95,55 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Comparator used for ordering the services provided.
+	 * 
+	 * @author Anatole Tresch
+	 */
+	public static final class ProviderComparator implements
+			Comparator<Object> {
+		@Override
+		public int compare(Object p1, Object p2) {
+			return comparePriority(p1, p2);
+		}
+	}
+
+	/**
+	 * Evaluates the service priority. Uses a {@link ServicePriority}, if present.
+	 * 
+	 * @param service
+	 *            the service, not null.
+	 * @return the priority from {@link ServicePriority}, or 0.
+	 */
+	private static int getServicePriority(Object service) {
+		if (service == null) {
+			return Integer.MIN_VALUE;
+		}
+		ServicePriority prio = service.getClass().getAnnotation(
+				ServicePriority.class);
+		if (prio != null) {
+			return prio.value();
+		}
+		return 0;
+	}
+
+	/**
+	 * Compare two service priorities given the same service interface.
+	 * 
+	 * @param service1
+	 *            first service, not null.
+	 * @param service2
+	 *            second service, not null.
+	 * @param <T>
+	 *            the interface type
+	 * @return the comparison result.
+	 */
+	public static <T> int comparePriority(
+			T service1,
+			T service2) {
+		return getServicePriority(service2) - getServicePriority(service1);
 	}
 
 	/**

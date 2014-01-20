@@ -11,9 +11,9 @@ package org.javamoney.moneta.internal;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
-import javax.money.spi.ServicePriority;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.ServicePriority;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
