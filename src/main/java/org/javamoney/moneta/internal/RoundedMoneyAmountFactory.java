@@ -14,12 +14,12 @@ public class RoundedMoneyAmountFactory extends
 
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
 			RoundedMoney.class).setPrecision(0)
-			.setAttribute(RoundingMode.HALF_EVEN)
-			.setFlavor(AmountFlavor.UNDEFINED).build();
+			.set(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.UNDEFINED).create();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
 			RoundedMoney.class).setPrecision(0)
-			.setAttribute(RoundingMode.HALF_EVEN)
-			.setFlavor(AmountFlavor.UNDEFINED).build();
+			.set(RoundingMode.HALF_EVEN)
+			.setFlavor(AmountFlavor.UNDEFINED).create();
 
 	/*
 	 * (non-Javadoc)

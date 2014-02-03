@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
@@ -25,10 +27,10 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
+import javax.money.spi.JavaMoneyConfig;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSpi;
-import javax.money.spi.MonetaryLogger;
 
 import org.javamoney.moneta.ServicePriority;
 
@@ -81,12 +83,11 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 			if (existing != null) {
 				int compare = comparePriority(existing, f);
 				if (compare < 0) {
-					Bootstrap.getService(MonetaryLogger.class).logWarning(
+					Logger.getLogger(getClass().getName()).warning(
 							"MonetaryAmountFactoryProviderSpi with lower prio ignored: "
 									+ f);
 					factories.put(f.getAmountType(), existing);
-				}
-				else if (compare == 0) {
+				} else if (compare == 0) {
 					throw new IllegalStateException(
 							"Ambigous MonetaryAmountFactoryProviderSpi found for "
 									+ f.getAmountType() + ": "
@@ -102,8 +103,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	 * 
 	 * @author Anatole Tresch
 	 */
-	public static final class ProviderComparator implements
-			Comparator<Object> {
+	public static final class ProviderComparator implements Comparator<Object> {
 		@Override
 		public int compare(Object p1, Object p2) {
 			return comparePriority(p1, p2);
@@ -111,7 +111,8 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	}
 
 	/**
-	 * Evaluates the service priority. Uses a {@link ServicePriority}, if present.
+	 * Evaluates the service priority. Uses a {@link ServicePriority}, if
+	 * present.
 	 * 
 	 * @param service
 	 *            the service, not null.
@@ -140,15 +141,13 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	 *            the interface type
 	 * @return the comparison result.
 	 */
-	public static <T> int comparePriority(
-			T service1,
-			T service2) {
+	public static <T> int comparePriority(T service1, T service2) {
 		return getServicePriority(service2) - getServicePriority(service1);
 	}
 
 	/**
-	 * Tries to load the default {@link MonetaryAmount} class from {@code javamoney.properties} with
-	 * contents as follows:<br/>
+	 * Tries to load the default {@link MonetaryAmount} class from
+	 * {@code javamoney.properties} with contents as follows:<br/>
 	 * <code>
 	 * javax.money.defaults.amount.class=my.fully.qualified.ClassName
 	 * </code>
@@ -158,32 +157,24 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	// type check should be safe, exception will be logged if not.
 	@SuppressWarnings("unchecked")
 	private Class<? extends MonetaryAmount> loadDefaultAmountType() {
-		URL res = getClass().getResource("javamoney.properties");
-		if (res != null) {
-			try (InputStream is = res.openStream()) {
-				Properties props = new Properties();
-				props.load(is);
-				String defaultClass = props
-						.getProperty("javax.money.defaults.amount.class");
-				if (defaultClass != null) {
-					return (Class<? extends MonetaryAmount>) Class
-							.forName(defaultClass, true,
-									getClassLoader());
-				}
-			} catch (Exception e) {
-				Bootstrap
-						.getService(MonetaryLogger.class)
-						.logError(
-								"Failed to initialize default MonetaryAmount type from javamoney.properties.",
-								e);
+		Map<String, String> config = JavaMoneyConfig.getConfig();
+		String defaultClass = config.get("javax.money.defaults.amount.class");
+		if (defaultClass != null) {
+			try {
+				return (Class<? extends MonetaryAmount>) Class.forName(
+						defaultClass, true, getClassLoader());
+			} catch (ClassNotFoundException e) {
+				Logger log = Logger.getLogger(getClass().getName());
+				log.log(Level.SEVERE, "Error loading default amount types.", e);
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * Evaluates the {@link ClassLoader} to use, uses by default the current context
-	 * {@link ClassLoader}, following by the loader of this class itself.
+	 * Evaluates the {@link ClassLoader} to use, uses by default the current
+	 * context {@link ClassLoader}, following by the loader of this class
+	 * itself.
 	 * 
 	 * @return the {@link ClassLoader} for loading.
 	 */
@@ -201,8 +192,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	public <T extends MonetaryAmount> MonetaryAmountFactory<T> getAmountFactory(
 			Class<T> amountType) {
 		MonetaryAmountFactoryProviderSpi<T> f = MonetaryAmountFactoryProviderSpi.class
-				.cast(factories
-						.get(amountType));
+				.cast(factories.get(amountType));
 		if (f != null) {
 			return f.createMonetaryAmountFactory();
 		}
@@ -218,6 +208,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.money.spi.MonetaryAmountsSpi#getDefaultAmountType()
 	 */
 	@Override
@@ -258,8 +249,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 				if (isPrecisionOK(requiredContext,
 						f.getMaximalMonetaryContext())) {
 					return f.getAmountType();
-				}
-				else {
+				} else {
 					throw new MonetaryException(
 							"Incompatible context required=" + requiredContext
 									+ ", maximal="
@@ -274,16 +264,14 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 			if (f.getDefaultMonetaryContext().getAmountFlavor() == AmountFlavor.UNDEFINED) {
 				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
-						||
-						f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
+						|| f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
 					continue;
 				}
 				if (isPrecisionOK(requiredContext,
 						f.getMaximalMonetaryContext())) {
 					selection.add(f);
 				}
-			}
-			else if (requiredContext.getAmountFlavor() == f
+			} else if (requiredContext.getAmountFlavor() == f
 					.getDefaultMonetaryContext().getAmountFlavor()) {
 				if (isPrecisionOK(requiredContext,
 						f.getMaximalMonetaryContext())) {
@@ -297,15 +285,26 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 			MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
 					.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
-						||
-						f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
+						|| f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
 					continue;
 				}
-				selection.add(f);
+				if (isPrecisionOK(requiredContext,
+						f.getMaximalMonetaryContext())) {
+					selection.add(f);
+				}
 			}
 		}
 		if (selection.size() == 1) {
 			return selection.get(0).getAmountType();
+		} else {
+			// several matches, check for required flavor
+			for (@SuppressWarnings("unchecked")
+			MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : selection) {
+				if (f.getDefaultMonetaryContext().getAmountFlavor()
+						.equals(requiredContext.getAmountFlavor())) {
+					return f.getAmountType();
+				}
+			}
 		}
 		Collections.sort(selection, CONTEXT_COMPARATOR);
 		return selection.get(0).getAmountType();
@@ -313,6 +312,9 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
 	private boolean isPrecisionOK(MonetaryContext requiredContext,
 			MonetaryContext maximalMonetaryContext) {
+		if (maximalMonetaryContext.getPrecision() == 0) {
+			return true;
+		}
 		if (requiredContext.getPrecision() == 0
 				&& maximalMonetaryContext.getPrecision() != 0) {
 			return false;

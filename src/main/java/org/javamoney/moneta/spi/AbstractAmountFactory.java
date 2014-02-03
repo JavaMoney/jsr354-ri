@@ -166,7 +166,7 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount>
 		this.number = amt.getNumber().numberValue(BigDecimal.class);
 		this.monetaryContext = new MonetaryContext.Builder(
 				amt.getMonetaryContext()).setAmountType(
-				DEFAULT_MONETARY_CONTEXT.getAmountType()).build();
+				DEFAULT_MONETARY_CONTEXT.getAmountType()).create();
 		return this;
 	}
 

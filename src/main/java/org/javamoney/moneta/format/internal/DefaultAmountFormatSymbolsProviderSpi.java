@@ -12,15 +12,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.money.format.AmountFormatSymbols;
 import javax.money.spi.AmountFormatSymbolsProviderSpi;
-import javax.money.spi.Bootstrap;
-import javax.money.spi.MonetaryLogger;
 
 /**
- * Implementation of {@link AmountFormatSymbolsProviderSpi} providing the symbols as defined by
- * {@link DecimalFormatSymbols}.
+ * Implementation of {@link AmountFormatSymbolsProviderSpi} providing the
+ * symbols as defined by {@link DecimalFormatSymbols}.
  * 
  * @author Anatole Tresch
  */
@@ -42,7 +41,7 @@ public class DefaultAmountFormatSymbolsProviderSpi implements
 					.setZeroDigit(syms.getZeroDigit()).create();
 		} catch (Exception e) {
 			// not supported, ignore exception
-			Bootstrap.getService(MonetaryLogger.class).logWarning(
+			Logger.getLogger(getClass().getName()).warning(
 					"Unsupported format locale: " + locale);
 			return null;
 		}

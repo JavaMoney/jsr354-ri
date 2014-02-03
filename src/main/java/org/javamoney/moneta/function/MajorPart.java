@@ -25,7 +25,7 @@ final class MajorPart implements MonetaryOperator {
 
 	private MonetaryOperator downRounding = MonetaryRoundings
 			.getRounding(new MonetaryContext.Builder()
-					.setMaxScale(0).setAttribute(RoundingMode.DOWN).build());
+					.setMaxScale(0).set(RoundingMode.DOWN).create());
 
 	/**
 	 * Access the shared instance of {@link MajorPart} for use.

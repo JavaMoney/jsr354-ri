@@ -97,7 +97,7 @@ public final class FastMoney extends AbstractMoney implements
 			FastMoney.class)
 			.setMaxScale(SCALE).setFixedScale(true)
 			.setPrecision(String.valueOf(Integer.MAX_VALUE).length())
-			.build();
+			.create();
 
 	/**
 	 * Required for deserialization only.

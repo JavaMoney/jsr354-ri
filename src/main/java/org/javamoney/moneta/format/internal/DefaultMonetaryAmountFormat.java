@@ -13,23 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
 import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
-import javax.money.spi.Bootstrap;
-import javax.money.spi.MonetaryLogger;
 
 /**
- * Formats instances of {@code MonetaryAmount} to a {@link String} or an {@link Appendable}.
+ * Formats instances of {@code MonetaryAmount} to a {@link String} or an
+ * {@link Appendable}.
  * <p>
- * Instances of this class are not thread-safe. Basically when using {@link MonetaryAmountFormat}
- * instances a new instance should be created on each access.
+ * Instances of this class are not thread-safe. Basically when using
+ * {@link MonetaryAmountFormat} instances a new instance should be created on
+ * each access.
  * 
  * @author Anatole Tresch
  * @author Werner Keil
@@ -40,19 +41,24 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	/** The international Unicode currency sign. */
 	private static final char CURRENCY_SIGN = '\u00A4';
 
-	/** The tokens to be used for formatting/parsing of positive and zero numbers. */
+	/**
+	 * The tokens to be used for formatting/parsing of positive and zero
+	 * numbers.
+	 */
 	private List<FormatToken> positiveTokens;
 
-	/** The tokens to be used for formatting/parsing of positive and zero numbers. */
+	/**
+	 * The tokens to be used for formatting/parsing of positive and zero
+	 * numbers.
+	 */
 	private List<FormatToken> negativeTokens;
 
 	/**
-	 * The {@link MonetaryContext} applied on creating a {@link MonetaryAmount} based on data
-	 * parsed.
+	 * The {@link MonetaryContext} applied on creating a {@link MonetaryAmount}
+	 * based on data parsed.
 	 */
 	private MonetaryContext monetaryContext = MonetaryAmounts
-			.getAmountFactory()
-			.getDefaultMonetaryContext();
+			.getAmountFactory().getDefaultMonetaryContext();
 
 	/** Currency used, when no currency was on the input parsed. */
 	private CurrencyUnit defaultCurrency;
@@ -66,16 +72,17 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * @param style
 	 *            the {@link AmountStyle} to be used, not {@code null}.
 	 * @param currencyStyle
-	 *            the style defining how the {@link CurrencyUnit} should be formatted.
+	 *            the style defining how the {@link CurrencyUnit} should be
+	 *            formatted.
 	 * @param currencyPlacement
-	 *            Defines how where the {@link CurrencyUnit} should be placed in relation to the
-	 *            numeric part or the {@link MonetaryAmount}.
+	 *            Defines how where the {@link CurrencyUnit} should be placed in
+	 *            relation to the numeric part or the {@link MonetaryAmount}.
 	 * @param monetaryContext
-	 *            The {@link MonetaryContext} used for creating of {@link MonetaryAmount} instances
-	 *            during parsing.
+	 *            The {@link MonetaryContext} used for creating of
+	 *            {@link MonetaryAmount} instances during parsing.
 	 * @param defaultCurrency
-	 *            The default {@link CurrencyUnit} used, when no currency information can be
-	 *            extracted from the parse input.
+	 *            The default {@link CurrencyUnit} used, when no currency
+	 *            information can be extracted from the parse input.
 	 */
 	DefaultMonetaryAmountFormat(AmountStyle style) {
 		setAmountStyle(style);
@@ -91,8 +98,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 				tokens.add(new LiteralToken(p1));
 				tokens.add(new CurrencyToken(style.getCurrencyStyle(), style
 						.getLocale()));
-			}
-			else {
+			} else {
 				tokens.add(new AmountNumberToken(style, p1));
 				tokens.add(new CurrencyToken(style.getCurrencyStyle(), style
 						.getLocale()));
@@ -100,18 +106,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			if (!p2.isEmpty()) {
 				if (isLiteralPattern(p2, style)) {
 					tokens.add(new LiteralToken(p2));
-				}
-				else {
+				} else {
 					tokens.add(new AmountNumberToken(style, p2));
 				}
 			}
-		}
-		else if (index == 0) { // currency placement before
+		} else if (index == 0) { // currency placement before
 			tokens.add(new CurrencyToken(style.getCurrencyStyle(), style
 					.getLocale()));
 			tokens.add(new AmountNumberToken(style, pattern.substring(1)));
-		}
-		else { // no currency
+		} else { // no currency
 			tokens.add(new AmountNumberToken(style, pattern));
 		}
 	}
@@ -125,25 +128,28 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	}
 
 	/**
-	 * Formats a value of {@code T} to a {@code String}. The {@link Locale} passed defines the
-	 * overall target {@link Locale}, whereas the {@link LocalizationStyle} attached with the
-	 * instances configures, how the {@link MonetaryAmountFormat} should generally behave. The
-	 * {@link LocalizationStyle} allows to configure the formatting and parsing in arbitrary
-	 * details. The attributes that are supported are determined by the according
-	 * {@link MonetaryAmountFormat} implementation:
+	 * Formats a value of {@code T} to a {@code String}. The {@link Locale}
+	 * passed defines the overall target {@link Locale}, whereas the
+	 * {@link LocalizationStyle} attached with the instances configures, how the
+	 * {@link MonetaryAmountFormat} should generally behave. The
+	 * {@link LocalizationStyle} allows to configure the formatting and parsing
+	 * in arbitrary details. The attributes that are supported are determined by
+	 * the according {@link MonetaryAmountFormat} implementation:
 	 * <ul>
-	 * <li>When the {@link MonetaryAmountFormat} was created using the {@link Builder} , all the
-	 * {@link FormatToken}, that model the overall format, and the {@link ItemFactory}, that is
-	 * responsible for extracting the final parsing result, returned from a parsing call, are all
-	 * possible recipients for attributes of the configuring {@link LocalizationStyle}.
+	 * <li>When the {@link MonetaryAmountFormat} was created using the
+	 * {@link Builder} , all the {@link FormatToken}, that model the overall
+	 * format, and the {@link ItemFactory}, that is responsible for extracting
+	 * the final parsing result, returned from a parsing call, are all possible
+	 * recipients for attributes of the configuring {@link LocalizationStyle}.
 	 * <li>When the {@link MonetaryAmountFormat} was provided by an instance of
-	 * {@link ItemFormatFactorySpi} the {@link MonetaryAmountFormat} returned determines the
-	 * capabilities that can be configured.
+	 * {@link ItemFormatFactorySpi} the {@link MonetaryAmountFormat} returned
+	 * determines the capabilities that can be configured.
 	 * </ul>
 	 * 
-	 * So, regardless if an {@link MonetaryAmountFormat} is created using the fluent style
-	 * {@link Builder} pattern, or provided as preconfigured implementation,
-	 * {@link LocalizationStyle}s allow to configure them both effectively.
+	 * So, regardless if an {@link MonetaryAmountFormat} is created using the
+	 * fluent style {@link Builder} pattern, or provided as preconfigured
+	 * implementation, {@link LocalizationStyle}s allow to configure them both
+	 * effectively.
 	 * 
 	 * @param amount
 	 *            the amount to print, not {@code null}
@@ -164,9 +170,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	/**
 	 * Prints a item value to an {@code Appendable}.
 	 * <p>
-	 * Example implementations of {@code Appendable} are {@code StringBuilder}, {@code StringBuffer}
-	 * or {@code Writer}. Note that {@code StringBuilder} and {@code StringBuffer} never throw an
-	 * {@code IOException}.
+	 * Example implementations of {@code Appendable} are {@code StringBuilder},
+	 * {@code StringBuffer} or {@code Writer}. Note that {@code StringBuilder}
+	 * and {@code StringBuffer} never throw an {@code IOException}.
 	 * 
 	 * @param appendable
 	 *            the appendable to add to, not null
@@ -187,8 +193,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			for (FormatToken token : negativeTokens) {
 				token.print(appendable, amount);
 			}
-		}
-		else {
+		} else {
 			for (FormatToken token : positiveTokens) {
 				token.print(appendable, amount);
 			}
@@ -198,14 +203,16 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	/**
 	 * Fully parses the text into an instance of {@code T}.
 	 * <p>
-	 * The parse must complete normally and parse the entire text. If the parse completes without
-	 * reading the entire length of the text, an exception is thrown. If any other problem occurs
-	 * during parsing, an exception is thrown.
+	 * The parse must complete normally and parse the entire text. If the parse
+	 * completes without reading the entire length of the text, an exception is
+	 * thrown. If any other problem occurs during parsing, an exception is
+	 * thrown.
 	 * <p>
 	 * This method uses a {@link Locale} as an input parameter. Additionally the
-	 * {@link ItemFormatException} instance is configured by a {@link LocalizationStyle}.
-	 * {@link LocalizationStyle}s allows to configure formatting input in detail. This allows to
-	 * implement complex formatting requirements using this interface.
+	 * {@link ItemFormatException} instance is configured by a
+	 * {@link LocalizationStyle}. {@link LocalizationStyle}s allows to configure
+	 * formatting input in detail. This allows to implement complex formatting
+	 * requirements using this interface.
 	 * 
 	 * @param text
 	 *            the text to parse, not null
@@ -226,9 +233,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			}
 		} catch (Exception e) {
 			// try parsing negative...
-			MonetaryLogger log = Bootstrap.getService(MonetaryLogger.class);
-			if (log.isDebugEnabled()) {
-				log.logDebug(
+			Logger log = Logger.getLogger(getClass().getName());
+			if (log.isLoggable(Level.FINEST)){
+				log.log(Level.FINEST,
 						"Failed to parse positive pattern, trying negative for: "
 								+ text, e);
 			}
@@ -247,9 +254,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		Class<? extends MonetaryAmount> type = MonetaryAmounts
 				.queryAmountType(this.monetaryContext);
 		if (type == null) {
-			MonetaryLogger log = Bootstrap.getService(MonetaryLogger.class);
-			if (log.isWarningEnabled()) {
-				log.logWarning("Required moneterayContext was not resolvable, using default, required="
+			Logger log = Logger.getLogger(getClass().getName());
+			if (log.isLoggable(Level.WARNING)){
+				log.warning("Required moneterayContext was not resolvable, using default, required="
 						+ this.monetaryContext);
 			}
 			type = MonetaryAmounts.getDefaultAmountType();
@@ -262,6 +269,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.money.format.MonetaryAmountFormat#getMonetaryContext()
 	 */
 	@Override
@@ -271,6 +279,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see javax.money.MonetaryQuery#queryFrom(javax.money.MonetaryAmount)
 	 */
 	@Override
@@ -280,8 +289,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 	@Override
 	public CurrencyUnit getDefaultCurrency() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.defaultCurrency;
 	}
 
 	@Override
@@ -302,26 +310,20 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		this.negativeTokens = new ArrayList<>();
 		String pattern = style.getPattern();
 		if (pattern.indexOf(CURRENCY_SIGN) < 0) {
-			this.positiveTokens.add(new AmountNumberToken(style,
-					pattern));
+			this.positiveTokens.add(new AmountNumberToken(style, pattern));
 			this.negativeTokens = positiveTokens;
-		}
-		else {
+		} else {
 			// split into (potential) plus, minus patterns
 			char patternSeparator = ';';
 			if (style.getSymbols() != null) {
-				patternSeparator = style.getSymbols()
-						.getPatternSeparator();
+				patternSeparator = style.getSymbols().getPatternSeparator();
 			}
 			String[] plusMinusPatterns = pattern.split("'" + patternSeparator
 					+ "'");
-			initPattern(plusMinusPatterns[0], this.positiveTokens,
-					style);
+			initPattern(plusMinusPatterns[0], this.positiveTokens, style);
 			if (plusMinusPatterns.length > 1) {
-				initPattern(plusMinusPatterns[1], this.negativeTokens,
-						style);
-			}
-			else {
+				initPattern(plusMinusPatterns[1], this.negativeTokens, style);
+			} else {
 				this.negativeTokens = this.positiveTokens;
 			}
 		}
