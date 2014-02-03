@@ -134,7 +134,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
 			return this;
 		}
 
-		public BuildableCurrencyUnit build() {
+		public BuildableCurrencyUnit create() {
 			return build(false);
 		}
 		
