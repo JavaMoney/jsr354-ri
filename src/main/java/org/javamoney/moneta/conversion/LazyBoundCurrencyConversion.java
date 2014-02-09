@@ -51,6 +51,18 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see
+	 * org.javamoney.moneta.conversion.AbstractCurrencyConversion#with(javax
+	 * .money.convert.ConversionContext)
+	 */
+	public CurrencyConversion with(ConversionContext conversionContext) {
+		return new LazyBoundCurrencyConversion(getTermCurrency(), rateProvider,
+				conversionContext);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

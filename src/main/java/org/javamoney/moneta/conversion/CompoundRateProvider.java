@@ -22,10 +22,11 @@ import java.util.List;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ConversionContext;
-import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
+
+import org.javamoney.moneta.conversion.internal.AbstractRateProvider;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to
@@ -33,11 +34,9 @@ import javax.money.convert.ProviderContext;
  * 
  * @author Anatole Tresch
  */
-public class CompoundRateProvider implements ExchangeRateProvider {
+public class CompoundRateProvider extends AbstractRateProvider {
 	/** The {@link ExchangeRateProvider} instances. */
 	private final List<ExchangeRateProvider> providers = new ArrayList<ExchangeRateProvider>();
-
-	private ProviderContext providerContext;
 
 	/**
 	 * Constructor.
@@ -48,6 +47,14 @@ public class CompoundRateProvider implements ExchangeRateProvider {
 	 *            {@link ProviderContext#getProviderName()}.
 	 */
 	public CompoundRateProvider(Iterable<ExchangeRateProvider> providers) {
+		super(createContext(providers));
+		for (ExchangeRateProvider exchangeRateProvider : providers) {
+			addProvider(exchangeRateProvider);
+		}
+	}
+
+	private static ProviderContext createContext(
+			Iterable<ExchangeRateProvider> providers) {
 		StringBuilder providerName = new StringBuilder("Compound: ");
 		for (ExchangeRateProvider exchangeRateProvider : providers) {
 			providerName.append(exchangeRateProvider.getProviderContext()
@@ -55,11 +62,7 @@ public class CompoundRateProvider implements ExchangeRateProvider {
 			providerName.append(',');
 		}
 		providerName.setLength(providerName.length() - 1);
-		ProviderContext.Builder b = new ProviderContext.Builder(
-				providerName.toString());
-		for (ExchangeRateProvider exchangeRateProvider : providers) {
-			addProvider(exchangeRateProvider);
-		}
+		return new ProviderContext.Builder(providerName.toString()).create();
 	}
 
 	/**
@@ -85,59 +88,14 @@ public class CompoundRateProvider implements ExchangeRateProvider {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.convert.ExchangeRateProvider#getProviderContext()
-	 */
-	@Override
-	public ProviderContext getProviderContext() {
-		return providerContext;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.convert.ExchangeRateProvider#isAvailable(javax.money.CurrencyUnit
-	 * , javax.money.CurrencyUnit)
-	 */
-	@Override
-	public boolean isAvailable(CurrencyUnit base, CurrencyUnit term) {
-		for (ExchangeRateProvider prov : this.providers) {
-			if (prov.isAvailable(base, term)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.convert.ExchangeRateProvider#isAvailable(javax.money.CurrencyUnit
-	 * , javax.money.CurrencyUnit, javax.money.convert.ConversionContext)
-	 */
-	@Override
-	public boolean isAvailable(CurrencyUnit base, CurrencyUnit term,
-			ConversionContext context) {
-		for (ExchangeRateProvider prov : this.providers) {
-			if (prov.isAvailable(base, term, context)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * javax.money.convert.ExchangeRateProvider#getExchangeRate(javax.money.
 	 * CurrencyUnit, javax.money.CurrencyUnit,
 	 * javax.money.convert.ConversionContext)
 	 */
 	@Override
-	public ExchangeRate getExchangeRate(CurrencyUnit base, CurrencyUnit term,
-			ConversionContext context) {
+	protected ExchangeRate getExchangeRateInternal(CurrencyUnit base,
+			CurrencyUnit term, ConversionContext context) {
 		for (ExchangeRateProvider prov : this.providers) {
 			if (prov.isAvailable(base, term, context)) {
 				ExchangeRate rate = prov.getExchangeRate(base, term, context);
@@ -147,54 +105,6 @@ public class CompoundRateProvider implements ExchangeRateProvider {
 			}
 		}
 		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.convert.ExchangeRateProvider#getExchangeRate(javax.money.
-	 * CurrencyUnit, javax.money.CurrencyUnit)
-	 */
-	@Override
-	public ExchangeRate getExchangeRate(CurrencyUnit base, CurrencyUnit term) {
-		for (ExchangeRateProvider prov : this.providers) {
-			ExchangeRate rate = prov.getExchangeRate(base, term);
-			if (rate != null) {
-				return rate;
-			}
-		}
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.convert.ExchangeRateProvider#getReversed(javax.money.convert
-	 * .ExchangeRate)
-	 */
-	@Override
-	public ExchangeRate getReversed(ExchangeRate rate) {
-		for (ExchangeRateProvider prov : this.providers) {
-			ExchangeRate revRate = prov.getReversed(rate);
-			if (revRate != null) {
-				return revRate;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public CurrencyConversion getCurrencyConversion(CurrencyUnit termCurrency) {
-		return new LazyBoundCurrencyConversion(termCurrency, this, ConversionContext.of());
-	}
-
-	@Override
-	public CurrencyConversion getCurrencyConversion(CurrencyUnit termCurrency,
-			ConversionContext conversionContext) {
-		return new LazyBoundCurrencyConversion(termCurrency, this,
-				conversionContext);
 	}
 
 }

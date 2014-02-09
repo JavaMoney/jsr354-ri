@@ -40,12 +40,13 @@ public class MonetaryConversionTest {
 	}
 
 	@Test
-	public void testGetExchangeRateProvider_Chained() {
+	public void testGetExchangeRateProvider_Chained() throws InterruptedException {
 		ExchangeRateProvider prov = MonetaryConversions
 				.getExchangeRateProvider("EZB", "IMF");
 		assertTrue(prov != null);
 		assertEquals(CompoundRateProvider.class, prov.getClass());
 		// Test rate provided by IMF (derived)
+		Thread.sleep(1000L); // wait for provider to load...
 		ExchangeRate r = prov.getExchangeRate(
 				MonetaryCurrencies.getCurrency("USD"),
 				MonetaryCurrencies.getCurrency("INR"));
@@ -60,7 +61,7 @@ public class MonetaryConversionTest {
 
 	@Test
 	public void testGetSupportedProviderContexts() {
-		Collection<String> types = MonetaryConversions.getProvidersNames();
+		Collection<String> types = MonetaryConversions.getProviderNames();
 		assertNotNull(types);
 		assertTrue(types.size() >= 1);
 		assertTrue(types.contains("IMF"));

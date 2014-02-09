@@ -21,6 +21,8 @@ import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 
+import org.javamoney.moneta.BuildableCurrencyUnit;
+
 /**
  * Abstract base class used for implementing currency conversion.
  * 
@@ -69,6 +71,12 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 	 */
 	@Override
 	public abstract ExchangeRate getExchangeRate(MonetaryAmount amount);
+	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.money.convert.CurrencyConversion#with(javax.money.convert.ConversionContext)
+	 */
+	public abstract CurrencyConversion with(ConversionContext conversionContext);
 
 	/**
 	 * Method that converts the source {@link MonetaryAmount} to an
@@ -99,6 +107,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 								.numberValue(BigDecimal.class)).create();
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 

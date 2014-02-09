@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -35,12 +34,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContext;
-import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
@@ -48,7 +45,6 @@ import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 
 import org.javamoney.moneta.BuildableCurrencyUnit;
-import org.javamoney.moneta.conversion.LazyBoundCurrencyConversion;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 
@@ -60,10 +56,9 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class IMFRateProvider implements ExchangeRateProvider, LoaderListener {
+public class IMFRateProvider extends AbstractRateProvider implements
+		LoaderListener {
 
-	private static final Logger LOGGER = Logger.getLogger(IMFRateProvider.class
-			.getName());
 	/** The data id used for the LoaderService. */
 	private static final String DATA_ID = IMFRateProvider.class.getSimpleName();
 	/** The {@link ConversionContext} of this provider. */
@@ -123,11 +118,11 @@ public class IMFRateProvider implements ExchangeRateProvider, LoaderListener {
 	}
 
 	public IMFRateProvider() throws MalformedURLException {
+		super(CONTEXT);
 		LoaderService loader = Bootstrap.getService(LoaderService.class);
 		loader.addLoaderListener(this, DATA_ID);
 		loader.loadDataAsynch(DATA_ID);
 	}
-
 
 	@Override
 	public void newDataLoaded(String data, InputStream is) {
@@ -261,9 +256,11 @@ public class IMFRateProvider implements ExchangeRateProvider, LoaderListener {
 	}
 
 	protected ExchangeRate getExchangeRateInternal(CurrencyUnit base,
-			CurrencyUnit term, Long timestamp) {
-		ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), timestamp);
-		ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), timestamp);
+			CurrencyUnit term, ConversionContext context) {
+		ExchangeRate rate1 = lookupRate(currencyToSdr.get(base),
+				context.getTimestamp());
+		ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term),
+				context.getTimestamp());
 		if (base.equals(SDR)) {
 			return rate2;
 		} else if (term.equals(SDR)) {
@@ -299,54 +296,6 @@ public class IMFRateProvider implements ExchangeRateProvider, LoaderListener {
 			}
 		}
 		return found;
-	}
-
-	@Override
-	public ProviderContext getProviderContext() {
-		return CONTEXT;
-	}
-
-	@Override
-	public boolean isAvailable(CurrencyUnit src, CurrencyUnit target) {
-		return getExchangeRateInternal(src, target, null) != null;
-	}
-
-	@Override
-	public ExchangeRate getExchangeRate(CurrencyUnit source, CurrencyUnit target) {
-		return getExchangeRateInternal(source, target, null);
-	}
-
-	@Override
-	public ExchangeRate getReversed(ExchangeRate rate) {
-		return getExchangeRateInternal(rate.getTerm(), rate.getBase(), rate
-				.getConversionContext().getTimestamp());
-	}
-
-	@Override
-	public CurrencyConversion getCurrencyConversion(CurrencyUnit termCurrency) {
-		return new LazyBoundCurrencyConversion(termCurrency, this,
-				ConversionContext.of());
-	}
-
-	@Override
-	public boolean isAvailable(CurrencyUnit base, CurrencyUnit term,
-			ConversionContext conversionContext) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ExchangeRate getExchangeRate(CurrencyUnit base, CurrencyUnit term,
-			ConversionContext conversionContext) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CurrencyConversion getCurrencyConversion(CurrencyUnit term,
-			ConversionContext conversionContext) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

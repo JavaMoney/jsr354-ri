@@ -95,21 +95,51 @@ public class TestMonetaryConversionSpi implements MonetaryConversionsSpi {
 		@Override
 		public boolean isAvailable(CurrencyUnit base, CurrencyUnit term,
 				ConversionContext conversionContext) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public ExchangeRate getExchangeRate(CurrencyUnit base,
 				CurrencyUnit term, ConversionContext conversionContext) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public CurrencyConversion getCurrencyConversion(CurrencyUnit term,
 				ConversionContext conversionContext) {
-			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public boolean isAvailable(String baseCode, String termCode) {
+			return false;
+		}
+
+		@Override
+		public boolean isAvailable(String baseCode, String termCode,
+				ConversionContext conversionContext) {
+			return false;
+		}
+
+		@Override
+		public ExchangeRate getExchangeRate(String baseCode, String termCode) {
+			return null;
+		}
+
+		@Override
+		public ExchangeRate getExchangeRate(String baseCode, String termCode,
+				ConversionContext conversionContext) {
+			return null;
+		}
+
+		@Override
+		public CurrencyConversion getCurrencyConversion(String termCode) {
+			return null;
+		}
+
+		@Override
+		public CurrencyConversion getCurrencyConversion(String termCode,
+				ConversionContext conversionContext) {
 			return null;
 		}
 
@@ -135,6 +165,11 @@ public class TestMonetaryConversionSpi implements MonetaryConversionsSpi {
 		@Override
 		public ExchangeRate getExchangeRate(MonetaryAmount sourceAmount) {
 			return null;
+		}
+
+		@Override
+		public CurrencyConversion with(ConversionContext conversionContext) {
+			return this;
 		}
 
 	}

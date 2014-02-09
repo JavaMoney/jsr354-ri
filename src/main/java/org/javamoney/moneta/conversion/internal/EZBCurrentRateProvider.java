@@ -12,9 +12,7 @@ package org.javamoney.moneta.conversion.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,14 +20,11 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContext;
-import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRate;
-import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
@@ -37,7 +32,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.javamoney.moneta.conversion.LazyBoundCurrencyConversion;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 import org.xml.sax.Attributes;
@@ -54,18 +48,16 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class EZBCurrentRateProvider implements ExchangeRateProvider,
+public class EZBCurrentRateProvider extends AbstractRateProvider implements
 		LoaderListener {
 
 	private static final String BASE_CURRENCY_CODE = "EUR";
 	/** Base currency of the loaded rates is always EUR. */
 	public static final CurrencyUnit BASE_CURRENCY = MonetaryCurrencies
 			.getCurrency(BASE_CURRENCY_CODE);
-	/** The logger used. */
-	private static final Logger LOGGER = Logger
-			.getLogger(EZBCurrentRateProvider.class.getName());
 	/** The data id used for the LoaderService. */
-	private static final String DATA_ID = EZBCurrentRateProvider.class.getSimpleName();
+	private static final String DATA_ID = EZBCurrentRateProvider.class
+			.getSimpleName();
 
 	/** Current exchange rates. */
 	private Map<String, ExchangeRate> currentRates = new ConcurrentHashMap<String, ExchangeRate>();
@@ -74,8 +66,8 @@ public class EZBCurrentRateProvider implements ExchangeRateProvider,
 	/** The {@link ConversionContext} of this provider. */
 	private static final ProviderContext CONTEXT = new ProviderContext.Builder(
 			"EZB").setRateTypes(RateType.DEFERRED)
-			.set("European Central Bank", "providerDescription")
-			.set(1, "days").create();
+			.set("European Central Bank", "providerDescription").set(1, "days")
+			.create();
 
 	/**
 	 * Constructor, also loads initial data.
@@ -83,6 +75,7 @@ public class EZBCurrentRateProvider implements ExchangeRateProvider,
 	 * @throws MalformedURLException
 	 */
 	public EZBCurrentRateProvider() throws MalformedURLException {
+		super(CONTEXT);
 		saxParserFactory.setNamespaceAware(false);
 		saxParserFactory.setValidating(false);
 		LoaderService loader = Bootstrap.getService(LoaderService.class);
@@ -93,7 +86,6 @@ public class EZBCurrentRateProvider implements ExchangeRateProvider,
 			LOGGER.log(Level.SEVERE, "Error loading EZB data.", e);
 		}
 	}
-
 
 	/**
 	 * (Re)load the given data feed.
@@ -114,81 +106,48 @@ public class EZBCurrentRateProvider implements ExchangeRateProvider,
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.convert.spi.ExchangeRateProviderSpi#getExchangeRateType
-	 * ()
-	 */
-	@Override
-	public ProviderContext getProviderContext() {
-		return CONTEXT;
-	}
-
 	protected ExchangeRate getExchangeRateInternal(CurrencyUnit base,
-			CurrencyUnit term, Long timestamp) {
-		if (timestamp != null) {
+			CurrencyUnit term, ConversionContext context) {
+		if (context.getTimestamp() != null) {
 			return null;
 		}
 		ExchangeRate.Builder builder = new ExchangeRate.Builder(
 				ConversionContext.of(CONTEXT.getProviderName(),
-						RateType.DEFERRED, timestamp));
+						RateType.DEFERRED, context.getTimestamp()));
 		builder.setBase(base);
 		builder.setTerm(term);
 		ExchangeRate sourceRate = null;
 		ExchangeRate target = null;
-		if (timestamp == null) {
-			if (currentRates.isEmpty()) {
+		if (currentRates.isEmpty()) {
+			return null;
+		}
+		sourceRate = currentRates.get(base.getCurrencyCode());
+		target = currentRates.get(term.getCurrencyCode());
+		if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())
+				&& BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
+			builder.setFactor(BigDecimal.ONE);
+			return builder.create();
+		} else if (BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
+			if (sourceRate == null) {
 				return null;
 			}
-			sourceRate = currentRates.get(base.getCurrencyCode());
-			target = currentRates.get(term.getCurrencyCode());
-			if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())
-					&& BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
-				builder.setFactor(BigDecimal.ONE);
+			return getReversed(sourceRate);
+		} else if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())) {
+			return target;
+		} else {
+			// Get Conversion base as derived rate: base -> EUR -> term
+			ExchangeRate rate1 = getExchangeRateInternal(base,
+					MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), context);
+			ExchangeRate rate2 = getExchangeRateInternal(
+					MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), term,
+					context);
+			if (rate1 != null && rate2 != null) {
+				builder.setFactor(rate1.getFactor().multiply(rate2.getFactor()));
+				builder.setRateChain(rate1, rate2);
 				return builder.create();
-			} else if (BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
-				if (sourceRate == null) {
-					return null;
-				}
-				return reverse(sourceRate);
-			} else if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())) {
-				return target;
-			} else {
-				// Get Conversion base as derived rate: base -> EUR -> term
-				ExchangeRate rate1 = getExchangeRateInternal(base,
-						MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE),
-						timestamp);
-				ExchangeRate rate2 = getExchangeRateInternal(
-						MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE),
-						term, timestamp);
-				if (rate1 != null || rate2 != null) {
-					builder.setFactor(rate1.getFactor().multiply(
-							rate2.getFactor()));
-					builder.setRateChain(rate1, rate2);
-					return builder.create();
-				}
-				// sourceRate = reverse(sourceRate);
-				// builder.setExchangeRateChain(sourceRate, target);
-				// builder.setSourceLeadingFactor(sourceRate.getFactor().doubleValue()
-				// * target.getFactor().doubleValue());
-				// return builder.build();
 			}
 		}
 		return null;
-	}
-
-	private static ExchangeRate reverse(ExchangeRate rate) {
-		if (rate == null) {
-			throw new IllegalArgumentException("Rate null is not reversable.");
-		}
-		return rate
-				.toBuilder()
-				.setBase(rate.getTerm())
-				.setTerm(rate.getBase())
-				.setFactor(
-						BigDecimal.ONE.divide(rate.getFactor(),
-								MathContext.DECIMAL64)).create();
 	}
 
 	/**
@@ -214,9 +173,6 @@ public class EZBCurrentRateProvider implements ExchangeRateProvider,
 		private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		/** Current timestamp for the given section. */
 		private Long timestamp;
-
-		/** Flag, if current or historic data is loaded. */
-		// private boolean loadCurrent;
 
 		/**
 		 * Creates a new parser.
@@ -284,47 +240,5 @@ public class EZBCurrentRateProvider implements ExchangeRateProvider,
 		this.currentRates.put(term.getCurrencyCode(), builder.create());
 	}
 
-	@Override
-	public boolean isAvailable(CurrencyUnit src, CurrencyUnit target) {
-		return getExchangeRate(src, target) != null;
-	}
-
-	@Override
-	public ExchangeRate getExchangeRate(CurrencyUnit source, CurrencyUnit target) {
-		return getExchangeRateInternal(source, target, null);
-	}
-
-	@Override
-	public ExchangeRate getReversed(ExchangeRate rate) {
-		return getExchangeRateInternal(rate.getTerm(), rate.getBase(), rate
-				.getConversionContext().getTimestamp());
-	}
-
-	@Override
-	public CurrencyConversion getCurrencyConversion(CurrencyUnit termCurrency) {
-		return new LazyBoundCurrencyConversion(termCurrency, this,
-				ConversionContext.of());
-	}
-
-	@Override
-	public boolean isAvailable(CurrencyUnit base, CurrencyUnit term,
-			ConversionContext conversionContext) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ExchangeRate getExchangeRate(CurrencyUnit base, CurrencyUnit term,
-			ConversionContext conversionContext) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public CurrencyConversion getCurrencyConversion(CurrencyUnit term,
-			ConversionContext conversionContext) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
