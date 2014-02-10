@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.conversion;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ConversionContext;
@@ -63,9 +63,16 @@ public class CurrencyConversionExceptionTest {
 		Exception cause = new Exception("cause");
 		CurrencyConversionException ex = new CurrencyConversionException(base,
 				term, CONTEXT100, "blabla", cause);
-		assertEquals(
-				"CurrencyConversionException [base=CHF, term=EUR, conversionContext=ConversionContext [attributes={class java.lang.String={PROVIDER=test}, class java.lang.Long={TIMESTAMP=100}}]]: Cannot convert CHF into EUR: blabla",
-				ex.toString());
+		String toString = ex.toString();
+		assertNotNull(toString);
+		assertTrue(toString.contains("CurrencyConversionException"));
+		assertTrue(toString.contains("base=CHF"));
+		assertTrue(toString.contains("term=EUR"));
+		assertTrue(toString.contains("conversionContext=ConversionContext"));
+		assertTrue(toString.contains("PROVIDER=test"));
+		assertTrue(toString.contains("TIMESTAMP=100"));
+		assertTrue(toString.contains("Cannot convert CHF into EUR"));
+		assertTrue(toString.contains("blabla"));
 	}
 
 }
