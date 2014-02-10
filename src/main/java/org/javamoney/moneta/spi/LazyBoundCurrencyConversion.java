@@ -7,7 +7,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.conversion;
+package org.javamoney.moneta.spi;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;

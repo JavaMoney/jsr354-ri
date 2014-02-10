@@ -31,7 +31,7 @@ import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
 import javax.money.spi.MonetaryConversionsSpi;
 
-import org.javamoney.moneta.conversion.CompoundRateProvider;
+import org.javamoney.moneta.spi.CompoundRateProvider;
 
 public class DefaultMonetaryConversionsSpi implements MonetaryConversionsSpi {
 

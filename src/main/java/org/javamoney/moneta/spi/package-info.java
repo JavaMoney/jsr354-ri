@@ -15,6 +15,6 @@
  */
 
 /**
- * Defines the monetary currency conversion API.
+ * Defines common base classes used for implementing SPIs and the {@link org.javamoney.moneta.spi.LoaderService}.
  */
-package org.javamoney.moneta.conversion;
+package org.javamoney.moneta.spi;

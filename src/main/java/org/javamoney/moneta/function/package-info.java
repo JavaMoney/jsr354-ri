@@ -10,6 +10,6 @@
  */
 
 /**
- * Platform RI: Defines predicates, and functions aspects.
+ * Contains additional functional extensions.
  */
 package org.javamoney.moneta.function;

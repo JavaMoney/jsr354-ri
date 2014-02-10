@@ -15,7 +15,7 @@
  * 
  * Contributors: Anatole Tresch - initial implementation.
  */
-package org.javamoney.moneta.conversion;
+package org.javamoney.moneta.spi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,6 @@ import javax.money.convert.ConversionContext;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
-
-import org.javamoney.moneta.conversion.internal.AbstractRateProvider;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to

@@ -1,4 +1,4 @@
-package org.javamoney.moneta.conversion.internal;
+package org.javamoney.moneta.spi;
 
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -11,8 +11,6 @@ import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
-
-import org.javamoney.moneta.conversion.LazyBoundCurrencyConversion;
 
 public abstract class AbstractRateProvider implements ExchangeRateProvider {
 
