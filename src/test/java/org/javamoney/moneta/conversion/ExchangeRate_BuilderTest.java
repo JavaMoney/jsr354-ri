@@ -70,7 +70,7 @@ public class ExchangeRate_BuilderTest {
 		ExchangeRate rate = b.setFactor(DefaultNumberValue.of(9))
 				.setContext(ConversionContext.of("test",  RateType.DEFERRED))
 				.create();
-		assertEquals(rate.getFactor(), BigDecimal.valueOf(9.0d));
+		assertEquals(rate.getFactor().numberValue(BigDecimal.class), BigDecimal.valueOf(9));
 		assertEquals(rate.getExchangeRateChain(),
 				Arrays.asList(new ExchangeRate[] { rate1, rate2 }));
 	}
@@ -86,7 +86,7 @@ public class ExchangeRate_BuilderTest {
 		ExchangeRate rate = b.setBase(base)
 				.setContext(ConversionContext.of("test",  RateType.DEFERRED))
 				.setTerm(term).create();
-		assertEquals(BigDecimal.valueOf(100.0), rate.getFactor());
+		assertEquals(BigDecimal.valueOf(100L), rate.getFactor().numberValue(BigDecimal.class));
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class ExchangeRate_BuilderTest {
 		assertEquals(rate.getConversionContext(), ConversionContext.of("bla",  RateType.DEFERRED));
 		assertEquals(base, rate.getBase());
 		assertEquals(term, rate.getTerm());
-		assertEquals(BigDecimal.valueOf(2.2d), rate.getFactor());
+		assertEquals(BigDecimal.valueOf(2.2d), rate.getFactor().numberValue(BigDecimal.class));
 
 		b = new ExchangeRate.Builder("test",  RateType.DEFERRED);
 		b.setBase(TestCurrency.of("CHF"));
@@ -139,6 +139,6 @@ public class ExchangeRate_BuilderTest {
 		assertEquals(rate.getConversionContext(), ConversionContext.of("test",  RateType.DEFERRED));
 		assertEquals(TestCurrency.of("CHF"), rate.getBase());
 		assertEquals(TestCurrency.of("USD"), rate.getTerm());
-		assertEquals(BigDecimal.valueOf(2.0), rate.getFactor());
+		assertEquals(BigDecimal.valueOf(2.0), rate.getFactor().numberValue(BigDecimal.class));
 	}
 }
