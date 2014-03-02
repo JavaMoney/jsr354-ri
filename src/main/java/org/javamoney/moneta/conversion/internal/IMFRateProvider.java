@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil.
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -46,6 +46,7 @@ import javax.money.spi.Bootstrap;
 
 import org.javamoney.moneta.BuildableCurrencyUnit;
 import org.javamoney.moneta.spi.AbstractRateProvider;
+import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 
@@ -204,7 +205,7 @@ public class IMFRateProvider extends AbstractRateProvider implements
 					ExchangeRate rate = new ExchangeRate.Builder(
 							ConversionContext.of(CONTEXT.getProviderName(),
 									rateType, toTS)).setBase(currency)
-							.setTerm(SDR).setFactor(values[i]).create();
+							.setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).create();
 					rates.add(rate);
 				} else { // SDR -> Currency
 					List<ExchangeRate> rates = this.sdrToCurrency.get(currency);
@@ -215,7 +216,7 @@ public class IMFRateProvider extends AbstractRateProvider implements
 					ExchangeRate rate = new ExchangeRate.Builder(
 							ConversionContext.of(CONTEXT.getProviderName(),
 									rateType, fromTS)).setBase(SDR)
-							.setTerm(currency).setFactor(values[i]).create();
+							.setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).create();
 					rates.add(rate);
 				}
 			}
@@ -275,7 +276,7 @@ public class IMFRateProvider extends AbstractRateProvider implements
 						RateType.HISTORIC));
 		builder.setBase(base);
 		builder.setTerm(term);
-		builder.setFactor(rate1.getFactor().multiply(rate2.getFactor()));
+		builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
 		builder.setRateChain(rate1, rate2);
 		return builder.create();
 	}

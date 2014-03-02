@@ -1,10 +1,22 @@
+/*
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
+ * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.javamoney.moneta.spi;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
+import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.CurrencyConversionException;
@@ -12,6 +24,13 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
 
+/**
+ * Abstract base class for {@link ExchangeRateProvider} implementations.
+ * 
+ * @author Anatole Tresch
+ * @author Werner Keil
+ *
+ */
 public abstract class AbstractRateProvider implements ExchangeRateProvider {
 
 	/** The logger used. */
@@ -227,5 +246,65 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
 		}
 		return rate;
 	}
-
+	
+	/**
+	 * A protected helper method to multiply 2 {@link NumberValue} types.<br>
+	 * If either of the values is <code>null</code> an {@link ArithmeticException} is thrown.
+	 * 
+	 * @param multiplicand the first value to be multiplied
+	 * @param multiplier the second value to be multiplied
+	 * @return the result of the multiplication as {@link NumberValue}
+	 */
+	protected static final NumberValue multiply(NumberValue multiplicand, NumberValue multiplier) {
+		if (multiplicand == null) {
+			throw new ArithmeticException("The multiplicand cannot be null");
+		}
+		if (multiplier == null) {
+			throw new ArithmeticException("The multiplier cannot be null");
+		}
+		return new DefaultNumberValue(
+				multiplicand.numberValue(BigDecimal.class).multiply(
+						multiplier.numberValue(BigDecimal.class))); // TODO should we use numberValueExact?
+	}
+	
+	/**
+	 * A protected helper method to divide 2 {@link NumberValue} types.<br>
+	 * If either of the values is <code>null</code> an {@link ArithmeticException} is thrown.
+	 * 
+	 * @param dividend the first value to be divided
+	 * @param divisor the value to be divided by
+	 * @return the result of the division as {@link NumberValue}
+	 */
+	protected static final NumberValue divide(NumberValue dividend, NumberValue divisor) {
+		if (dividend == null) {
+			throw new ArithmeticException("The dividend cannot be null");
+		}
+		if (divisor == null) {
+			throw new ArithmeticException("The divisor cannot be null");
+		}
+		return new DefaultNumberValue(
+				dividend.numberValue(BigDecimal.class).divide(
+						divisor.numberValue(BigDecimal.class))); // TODO should we use numberValueExact?
+	}
+	
+	/**
+	 * A protected helper method to divide 2 {@link NumberValue} types.<br>
+	 * If either of the values is <code>null</code> an {@link ArithmeticException} is thrown.
+	 * 
+	 * @param dividend the first value to be divided
+	 * @param divisor the value to be divided by
+	 * @param context the {@link MathContext} to use
+	 * @return the result of the division as {@link NumberValue}
+	 */
+	protected static final NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context) {
+		if (dividend == null) {
+			throw new ArithmeticException("The dividend cannot be null");
+		}
+		if (divisor == null) {
+			throw new ArithmeticException("The divisor cannot be null");
+		}
+		return new DefaultNumberValue(
+				dividend.numberValue(BigDecimal.class).divide(
+						divisor.numberValue(BigDecimal.class), context)); // TODO should we use numberValueExact?
+	}
 }

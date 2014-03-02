@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
  * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software distributed under the License
@@ -33,6 +33,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.javamoney.moneta.spi.AbstractRateProvider;
+import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 import org.xml.sax.Attributes;
@@ -126,7 +127,7 @@ public class EZBCurrentRateProvider extends AbstractRateProvider implements
 		target = currentRates.get(term.getCurrencyCode());
 		if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())
 				&& BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
-			builder.setFactor(BigDecimal.ONE);
+			builder.setFactor(DefaultNumberValue.ONE);
 			return builder.create();
 		} else if (BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
 			if (sourceRate == null) {
@@ -143,7 +144,7 @@ public class EZBCurrentRateProvider extends AbstractRateProvider implements
 					MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), term,
 					context);
 			if (rate1 != null && rate2 != null) {
-				builder.setFactor(rate1.getFactor().multiply(rate2.getFactor()));
+				builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
 				builder.setRateChain(rate1, rate2);
 				return builder.create();
 			}
@@ -231,15 +232,14 @@ public class EZBCurrentRateProvider extends AbstractRateProvider implements
 	 * @param loadCurrent
 	 *            Flag, if current or historic data is loaded.
 	 */
-	void addRate(CurrencyUnit term, Long timestamp, BigDecimal factor) {
+	void addRate(CurrencyUnit term, Long timestamp, Number factor) {
 		ExchangeRate.Builder builder = new ExchangeRate.Builder(
 				ConversionContext.of(CONTEXT.getProviderName(),
 						RateType.DEFERRED, timestamp));
 		builder.setBase(BASE_CURRENCY);
 		builder.setTerm(term);
-		builder.setFactor(factor);
+		builder.setFactor(new DefaultNumberValue(factor));
 		this.currentRates.put(term.getCurrencyCode(), builder.create());
 	}
-
 
 }

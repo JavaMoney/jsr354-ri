@@ -42,6 +42,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.javamoney.moneta.spi.AbstractRateProvider;
+import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 import org.xml.sax.Attributes;
@@ -148,7 +149,7 @@ public class EZBHistoricRateProvider extends AbstractRateProvider implements
 		target = targets.get(term.getCurrencyCode());
 		if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())
 				&& BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
-			builder.setFactor(BigDecimal.ONE);
+			builder.setFactor(DefaultNumberValue.ONE);
 			return builder.create();
 		} else if (BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
 			if (sourceRate == null) {
@@ -165,7 +166,7 @@ public class EZBHistoricRateProvider extends AbstractRateProvider implements
 					MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), term,
 					context);
 			if (rate1 != null || rate2 != null) {
-				builder.setFactor(rate1.getFactor().multiply(rate2.getFactor()));
+				builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
 				builder.setRateChain(rate1, rate2);
 				return builder.create();
 			}
@@ -182,8 +183,7 @@ public class EZBHistoricRateProvider extends AbstractRateProvider implements
 				.setRate(rate)
 				.setBase(rate.getTerm())
 				.setTerm(rate.getBase())
-				.setFactor(
-						BigDecimal.ONE.divide(rate.getFactor(),
+				.setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(),
 								MathContext.DECIMAL64)).create();
 	}
 
@@ -270,7 +270,7 @@ public class EZBHistoricRateProvider extends AbstractRateProvider implements
 	 * @param loadCurrent
 	 *            Flag, if current or historic data is loaded.
 	 */
-	void addRate(CurrencyUnit term, Long timestamp, BigDecimal rate) {
+	void addRate(CurrencyUnit term, Long timestamp, Number rate) {
 		ExchangeRate.Builder builder = null;
 		RateType rateType = RateType.HISTORIC;
 		if (timestamp != null) {
@@ -285,7 +285,7 @@ public class EZBHistoricRateProvider extends AbstractRateProvider implements
 		}
 		builder.setBase(BASE_CURRENCY);
 		builder.setTerm(term);
-		builder.setFactor(rate);
+		builder.setFactor(DefaultNumberValue.of(rate));
 		ExchangeRate exchangeRate = builder.create();
 		Map<String, ExchangeRate> rateMap = this.historicRates.get(timestamp);
 		if (rateMap == null) {

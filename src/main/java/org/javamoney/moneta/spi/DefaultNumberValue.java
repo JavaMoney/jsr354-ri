@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
  * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software distributed under the License
@@ -14,25 +14,48 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.money.MonetaryContext;
 import javax.money.NumberValue;
+
+import org.javamoney.moneta.Money;
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.
  * 
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public class DefaultNumberValue extends NumberValue {
-
+	
 	/**
 	 * serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
 	/** The numeric value. */
-	private Number number;
+	private final Number number;
 
+    /**
+     * The value 1, with a scale of 0.<br>
+     * Backed by {@link BigDecimal#ONE}
+     *
+     * @since  0.8
+     */
+	public static final NumberValue ONE = new DefaultNumberValue(BigDecimal.ONE);
+	
 	public DefaultNumberValue(Number number) {
 		Objects.requireNonNull(number, "Number required");
 		this.number = number;
+	}
+	
+	/**
+	 * Creates a new instance of {@link NumberValue}, using the given number.
+	 * 
+	 * @param number
+	 *            The numeric part, not null.
+	 * @return A new instance of {@link NumberValue}.
+	 */
+	public static NumberValue of(Number number) {
+		return new DefaultNumberValue(number);
 	}
 
 	/*
