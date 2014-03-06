@@ -8,6 +8,8 @@
  */
 package org.javamoney.moneta.format.internal;
 
+import org.javamoney.moneta.BuildableCurrencyUnit;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,18 +73,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * 
 	 * @param style
 	 *            the {@link AmountStyle} to be used, not {@code null}.
-	 * @param currencyStyle
+	 * @param style
 	 *            the style defining how the {@link CurrencyUnit} should be
 	 *            formatted.
-	 * @param currencyPlacement
-	 *            Defines how where the {@link CurrencyUnit} should be placed in
-	 *            relation to the numeric part or the {@link MonetaryAmount}.
-	 * @param monetaryContext
-	 *            The {@link MonetaryContext} used for creating of
-	 *            {@link MonetaryAmount} instances during parsing.
-	 * @param defaultCurrency
-	 *            The default {@link CurrencyUnit} used, when no currency
-	 *            information can be extracted from the parse input.
 	 */
 	DefaultMonetaryAmountFormat(AmountStyle style) {
 		setAmountStyle(style);
@@ -128,29 +121,13 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	}
 
 	/**
-	 * Formats a value of {@code T} to a {@code String}. The {@link Locale}
-	 * passed defines the overall target {@link Locale}, whereas the
-	 * {@link LocalizationStyle} attached with the instances configures, how the
+	 * Formats a value of {@code T} to a {@code String}. {@link java.util.Locale}
+     * passed defines the overall target {@link Locale}. This locale state, how the
 	 * {@link MonetaryAmountFormat} should generally behave. The
-	 * {@link LocalizationStyle} allows to configure the formatting and parsing
+	 * {@link java.util.Locale} allows to configure the formatting and parsing
 	 * in arbitrary details. The attributes that are supported are determined by
 	 * the according {@link MonetaryAmountFormat} implementation:
-	 * <ul>
-	 * <li>When the {@link MonetaryAmountFormat} was created using the
-	 * {@link Builder} , all the {@link FormatToken}, that model the overall
-	 * format, and the {@link ItemFactory}, that is responsible for extracting
-	 * the final parsing result, returned from a parsing call, are all possible
-	 * recipients for attributes of the configuring {@link LocalizationStyle}.
-	 * <li>When the {@link MonetaryAmountFormat} was provided by an instance of
-	 * {@link ItemFormatFactorySpi} the {@link MonetaryAmountFormat} returned
-	 * determines the capabilities that can be configured.
-	 * </ul>
-	 * 
-	 * So, regardless if an {@link MonetaryAmountFormat} is created using the
-	 * fluent style {@link Builder} pattern, or provided as preconfigured
-	 * implementation, {@link LocalizationStyle}s allow to configure them both
-	 * effectively.
-	 * 
+	 *
 	 * @param amount
 	 *            the amount to print, not {@code null}
 	 * @return the string printed using the settings of this formatter
@@ -176,14 +153,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 * 
 	 * @param appendable
 	 *            the appendable to add to, not null
-	 * @param item
-	 *            the item to print, not null
-	 * @param locale
-	 *            the main target {@link Locale} to be used, not {@code null}
-	 * @throws UnsupportedOperationException
-	 *             if the formatter is unable to print
-	 * @throws ItemFormatException
-	 *             if there is a problem while printing
+	 * @param amount
+	 *            the amount to print, not null
 	 * @throws IOException
 	 *             if an IO error occurs
 	 */
@@ -201,27 +172,19 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	}
 
 	/**
-	 * Fully parses the text into an instance of {@code T}.
+	 * Fully parses the text into an instance of {@code MonetaryAmount}.
 	 * <p>
 	 * The parse must complete normally and parse the entire text. If the parse
 	 * completes without reading the entire length of the text, an exception is
 	 * thrown. If any other problem occurs during parsing, an exception is
 	 * thrown.
-	 * <p>
-	 * This method uses a {@link Locale} as an input parameter. Additionally the
-	 * {@link ItemFormatException} instance is configured by a
-	 * {@link LocalizationStyle}. {@link LocalizationStyle}s allows to configure
-	 * formatting input in detail. This allows to implement complex formatting
-	 * requirements using this interface.
-	 * 
+	 *
 	 * @param text
 	 *            the text to parse, not null
-	 * @param locale
-	 *            the main target {@link Locale} to be used, not {@code null}
 	 * @return the parsed value, never {@code null}
 	 * @throws UnsupportedOperationException
 	 *             if the formatter is unable to parse
-	 * @throws ItemParseException
+	 * @throws javax.money.format.MonetaryParseException
 	 *             if there is a problem while parsing
 	 */
 	public MonetaryAmount parse(CharSequence text)

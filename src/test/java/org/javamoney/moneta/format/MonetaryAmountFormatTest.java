@@ -11,6 +11,8 @@
 package org.javamoney.moneta.format;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -24,6 +26,7 @@ import javax.money.format.AmountStyle;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
+import org.javamoney.moneta.TestCurrency;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -45,16 +48,10 @@ public class MonetaryAmountFormatTest {
 	 * Test method for {@link javax.money.format.MonetaryAmountFormat#getDefaultCurrency()} .
 	 */
 	@Test
-	@Ignore
 	public void testGetDefaultCurrency() {
-//		MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(
-//				Locale.GERMANY);
-		// assertNull(defaultFormat.getDefaultCurrency());
-		// defaultFormat = new MonetaryFormats.Builder(Locale.GERMANY)
-		// .setDefaultCurrency(
-		//		MonetaryCurrencies.getCurrency("CHF")).create();
-		// assertEquals(MonetaryCurrencies.getCurrency("CHF"),
-		// defaultFormat.getDefaultCurrency());
+		MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(
+				Locale.ENGLISH);
+		assertNull(defaultFormat.getDefaultCurrency());
 	}
 
 	/**
