@@ -8,14 +8,11 @@
  */
 package org.javamoney.moneta.internal;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -27,7 +24,6 @@ import javax.money.MonetaryContext;
 import javax.money.MonetaryContext.AmountFlavor;
 import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
-import javax.money.spi.JavaMoneyConfig;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSpi;
@@ -157,17 +153,6 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 	// type check should be safe, exception will be logged if not.
 	@SuppressWarnings("unchecked")
 	private Class<? extends MonetaryAmount> loadDefaultAmountType() {
-		Map<String, String> config = JavaMoneyConfig.getConfig();
-		String defaultClass = config.get("javax.money.defaults.amount.class");
-		if (defaultClass != null) {
-			try {
-				return (Class<? extends MonetaryAmount>) Class.forName(
-						defaultClass, true, getClassLoader());
-			} catch (ClassNotFoundException e) {
-				Logger log = Logger.getLogger(getClass().getName());
-				log.log(Level.SEVERE, "Error loading default amount types.", e);
-			}
-		}
 		return null;
 	}
 

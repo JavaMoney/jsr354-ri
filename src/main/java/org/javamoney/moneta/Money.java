@@ -32,7 +32,7 @@ import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 import javax.money.NumberValue;
-import javax.money.spi.JavaMoneyConfig;
+import javax.money.spi.MonetaryConfig;
 
 import org.javamoney.moneta.internal.MoneyAmountFactory;
 import org.javamoney.moneta.spi.AbstractMoney;
@@ -124,7 +124,7 @@ public final class Money extends AbstractMoney implements
 	private static MonetaryContext initDefaultMathContext() {
 		InputStream is = null;
 		try {
-			Map<String, String> config = JavaMoneyConfig.getConfig();
+			Map<String, String> config = MonetaryConfig.getConfig();
 			String value = config
 					.get("org.javamoney.moneta.Money.defaults.precision");
 			if (value != null) {

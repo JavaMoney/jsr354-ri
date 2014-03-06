@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.money.spi.JavaMoneyConfig;
+import javax.money.spi.MonetaryConfig;
 
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.UpdatePolicy;
@@ -49,7 +49,7 @@ class LoaderConfigurator {
 	}
 
 	public void load() {
-		Map<String, String> config = JavaMoneyConfig.getConfig();
+		Map<String, String> config = MonetaryConfig.getConfig();
 		// collect loads
 		Set<String> loads = new HashSet<>();
 		for (String key : config.keySet()) {
