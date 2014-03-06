@@ -156,20 +156,6 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 		return null;
 	}
 
-	/**
-	 * Evaluates the {@link ClassLoader} to use, uses by default the current
-	 * context {@link ClassLoader}, following by the loader of this class
-	 * itself.
-	 * 
-	 * @return the {@link ClassLoader} for loading.
-	 */
-	private ClassLoader getClassLoader() {
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		if (cl == null) {
-			cl = getClass().getClassLoader();
-		}
-		return cl;
-	}
 
 	// save cast, since members are managed by this instance
 	@SuppressWarnings("unchecked")

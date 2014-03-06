@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.money.spi.MonetaryConfig;
+import org.javamoney.moneta.spi.MonetaryConfig;
 
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.UpdatePolicy;
