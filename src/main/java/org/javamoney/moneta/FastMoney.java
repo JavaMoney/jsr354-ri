@@ -35,45 +35,45 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
  * which internally uses {@link BigDecimal}. Nevertheless this comes with a price of less precision.
  * As an example performing the following calculation one million times, results in slightly
  * different results:
- * 
+ *
  * <pre>
  * Money money1 = money1.add(Money.of(EURO, 1234567.3444));
  * money1 = money1.subtract(Money.of(EURO, 232323));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </pre>
- * 
+ *
  * Executed one million (1000000) times this results in {@code EUR 1657407.962529182}, calculated in
  * 3680 ms, or roughly 3ns/loop.
  * <p>
  * whrereas
- * 
+ *
  * <pre>
  * FastMoney money1 = money1.add(FastMoney.of(EURO, 1234567.3444));
  * money1 = money1.subtract(FastMoney.of(EURO, 232323));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </pre>
- * 
+ *
  * executed one million (1000000) times results in {@code EUR 1657407.96251}, calculated in 179 ms,
  * which is less than 1ns/loop.
  * <p>
  * Also note than mixing up types my drastically change the performance behavior. E.g. replacing the
  * code above with the following: *
- * 
+ *
  * <pre>
  * FastMoney money1 = money1.add(Money.of(EURO, 1234567.3444));
  * money1 = money1.subtract(FastMoney.of(EURO, 232323));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </pre>
- * 
+ *
  * executed one million (1000000) times may execute significantly longer, since monetary amount type
  * conversion is involved.
  * <p>
  * Basically, when mixing amount implementations, the performance of the amount, on which most of
  * the operations are operated, has the most significant impact on the overall performance behavior.
- * 
+ *
  * @version 0.5.2
  * @author Anatole Tresch
  * @author Werner Keil
@@ -107,7 +107,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Creates a new instance os {@link FastMoney}.
-	 * 
+	 *
 	 * @param currency
 	 *            the currency, not null.
 	 * @param number
@@ -122,7 +122,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Creates a new instance os {@link FastMoney}.
-	 * 
+	 *
 	 * @param currency
 	 *            the currency, not null.
 	 * @param number
@@ -149,7 +149,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Static factory method for creating a new instance of {@link FastMoney}.
-	 * 
+	 *
 	 * @param currency
 	 *            The target currency, not null.
 	 * @param numberBinding
@@ -162,7 +162,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Static factory method for creating a new instance of {@link FastMoney}.
-	 * 
+	 *
 	 * @param currency
 	 *            The target currency, not null.
 	 * @param number
@@ -175,7 +175,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Static factory method for creating a new instance of {@link FastMoney}.
-	 * 
+	 *
 	 * @param currencyCode
 	 *            The target currency as currency code.
 	 * @param number
@@ -191,9 +191,10 @@ public final class FastMoney extends AbstractMoney implements
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(MonetaryAmount o) {
-		int compare = -1;
-		if (this.currency.equals(o.getCurrency())) {
-			return getNumber().numberValue(BigDecimal.class).compareTo(
+        int compare = getCurrency().getCurrencyCode().compareTo(
+                o.getCurrency().getCurrencyCode());
+		if (compare == 0) {
+            compare = getNumber().numberValue(BigDecimal.class).compareTo(
 					o.getNumber().numberValue(BigDecimal.class));
 		}
 		return compare;
@@ -540,7 +541,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Gets the number representation of the numeric value of this item.
-	 * 
+	 *
 	 * @return The {@link Number} represention matching best.
 	 */
 	@Override
@@ -566,7 +567,7 @@ public final class FastMoney extends AbstractMoney implements
 
 	/**
 	 * Internal method to check for correct number parameter.
-	 * 
+	 *
 	 * @param number
 	 * @throws IllegalArgumentException
 	 *             If the number is null
