@@ -23,7 +23,11 @@ import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.money.*;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryContext;
+import javax.money.NumberValue;
+import javax.money.MonetaryException;
 
 /**
  * Platform RI: This base class simplifies implementing {@link MonetaryAmount},
