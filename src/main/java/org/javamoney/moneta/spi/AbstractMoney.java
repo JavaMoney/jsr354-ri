@@ -27,6 +27,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.NumberValue;
+import javax.money.MonetaryException;
 
 /**
  * Platform RI: This base class simplifies implementing {@link MonetaryAmount},
@@ -242,7 +243,7 @@ public abstract class AbstractMoney implements
 	 * 
 	 * @param amount
 	 *            The monetary amount to be compared to, never null.
-	 * @throws IllegalArgumentException
+	 * @throws MonetaryException
 	 *             If the amount is null, or the amount's currency is not
 	 *             compatible (same {@link CurrencyUnit#getNamespace()} and same
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
@@ -252,7 +253,7 @@ public abstract class AbstractMoney implements
 		final CurrencyUnit amountCurrency = amount.getCurrency();
 		if (!(this.currency
 				.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
-			throw new IllegalArgumentException("Currency mismatch: "
+			throw new MonetaryException("Currency mismatch: "
 					+ this.currency + '/' + amountCurrency);
 		}
 	}
