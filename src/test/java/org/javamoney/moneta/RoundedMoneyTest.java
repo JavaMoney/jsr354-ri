@@ -27,12 +27,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryCurrencies;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
+import javax.money.*;
 
 import org.junit.Test;
 
@@ -1253,7 +1248,7 @@ public class RoundedMoneyTest {
 	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = MonetaryException.class)
 	public void testAdd_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
 		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
@@ -1265,7 +1260,7 @@ public class RoundedMoneyTest {
 	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = MonetaryException.class)
 	public void testSubtract_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
 		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
@@ -1277,7 +1272,7 @@ public class RoundedMoneyTest {
 	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = MonetaryException.class)
 	public void testDivide_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
 		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
