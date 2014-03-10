@@ -426,7 +426,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
             return Money.class.cast(operator.apply(this));
         }
         catch(Exception e){
-            throw new MonetaryException("Adjuster failed: " + adjuster, e);
+            throw new MonetaryException("Operator failed: " + operator, e);
         }
     }
 

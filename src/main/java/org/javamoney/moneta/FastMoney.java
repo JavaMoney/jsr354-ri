@@ -120,7 +120,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * Creates a new instance os {@link FastMoney}.
      *
      * @param currency the currency, not null.
-     * @param number   the amount, not null.
+     * @param numberBinding   the amount, not null.
      */
     private FastMoney(CurrencyUnit currency, NumberValue numberBinding){
         super(currency, MONETARY_CONTEXT);
@@ -555,12 +555,12 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
      */
     @Override
-    public FastMoney with(MonetaryOperator adjuster){
+    public FastMoney with(MonetaryOperator operator){
         try{
-            return FastMoney.class.cast(adjuster.apply(this));
+            return FastMoney.class.cast(operator.apply(this));
         }
         catch(Exception e){
-            throw new MonetaryException("Adjuster failed: " + adjuster, e);
+            throw new MonetaryException("Operator failed: " + operator, e);
         }
     }
 
