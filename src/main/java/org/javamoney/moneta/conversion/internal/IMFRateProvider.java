@@ -123,7 +123,7 @@ public class IMFRateProvider extends AbstractRateProvider implements
 		super(CONTEXT);
 		LoaderService loader = Bootstrap.getService(LoaderService.class);
 		loader.addLoaderListener(this, DATA_ID);
-		loader.loadDataAsynch(DATA_ID);
+		loader.loadDataAsync(DATA_ID);
 	}
 
 	@Override

@@ -141,7 +141,7 @@ public class DefaultLoaderService implements LoaderService {
 			loadDataLocal(resourceId);
 			break;
 		case ONSTARTUP:
-			loadDataAsynch(resourceId);
+			loadDataAsync(resourceId);
 			break;
 		case SCHEDULED:
 			addScheduledLoad(res);
@@ -172,20 +172,20 @@ public class DefaultLoaderService implements LoaderService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.javamoney.moneta.spi.LoaderService#isDataRegistered(java.lang.String)
+	 * org.javamoney.moneta.spi.LoaderService#isResourceRegistered(java.lang.String)
 	 */
 	@Override
-	public boolean isDataRegistered(String dataId) {
+	public boolean isResourceRegistered(String dataId) {
 		return this.resources.containsKey(dataId);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.javamoney.moneta.spi.LoaderService#getDataIds()
+	 * @see org.javamoney.moneta.spi.LoaderService#getResourceIds()
 	 */
 	@Override
-	public Set<String> getDataIds() {
+	public Set<String> getResourceIds() {
 		return this.resources.keySet();
 	}
 
@@ -217,10 +217,10 @@ public class DefaultLoaderService implements LoaderService {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.javamoney.moneta.spi.LoaderService#loadDataAsynch(java.lang.String)
+	 * org.javamoney.moneta.spi.LoaderService#loadDataAsync(java.lang.String)
 	 */
 	@Override
-	public Future<Boolean> loadDataAsynch(final String resourceId) {
+	public Future<Boolean> loadDataAsync(final String resourceId) {
 		return executors.submit(new Callable<Boolean>() {
 			@Override
 			public Boolean call() {

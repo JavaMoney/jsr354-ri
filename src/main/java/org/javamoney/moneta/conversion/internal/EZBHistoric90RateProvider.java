@@ -92,7 +92,7 @@ public class EZBHistoric90RateProvider extends AbstractRateProvider implements
 		saxParserFactory.setValidating(false);
 		LoaderService loader = Bootstrap.getService(LoaderService.class);
 		loader.addLoaderListener(this, DATA_ID);
-		loader.loadDataAsynch(DATA_ID);
+		loader.loadDataAsync(DATA_ID);
 	}
 
 	/**
