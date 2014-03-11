@@ -35,7 +35,7 @@ public class MonetaryConversionTest {
 	@Test
 	public void testGetExchangeRateProvider() {
 		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider("EZB");
+				.getExchangeRateProvider("ECB");
 		assertTrue(prov != null);
 		assertEquals(CompoundRateProvider.class, prov.getClass());
 	}
@@ -43,7 +43,7 @@ public class MonetaryConversionTest {
 	@Test
 	public void testGetExchangeRateProvider_Chained() throws InterruptedException {
 		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider("EZB", "IMF");
+				.getExchangeRateProvider("ECB", "IMF");
 		assertTrue(prov != null);
 		assertEquals(CompoundRateProvider.class, prov.getClass());
 		// Test rate provided by IMF (derived)
@@ -66,7 +66,7 @@ public class MonetaryConversionTest {
 		assertNotNull(types);
 		assertTrue(types.size() >= 1);
 		assertTrue(types.contains("IMF"));
-		assertTrue(types.contains("EZB"));
+		assertTrue(types.contains("ECB"));
 	}
 
 	@Test
