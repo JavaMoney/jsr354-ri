@@ -15,7 +15,7 @@
  * 
  * Contributors: Anatole Tresch - initial implementation.
  */
-package org.javamoney.moneta.conversion.internal;
+package org.javamoney.moneta.convert.internal;
 
 import java.util.ArrayList;
 import java.util.List;

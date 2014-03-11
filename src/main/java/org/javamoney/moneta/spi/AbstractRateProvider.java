@@ -217,7 +217,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.javamoney.moneta.conversion.internal.AbstractRateProvider#isAvailable
+	 * org.javamoney.moneta.convert.internal.AbstractRateProvider#isAvailable
 	 * (javax.money.CurrencyUnit, javax.money.CurrencyUnit,
 	 * javax.money.convert.ConversionContext)
 	 */
@@ -232,7 +232,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.javamoney.moneta.conversion.internal.AbstractRateProvider#getExchangeRate
+	 * org.javamoney.moneta.convert.internal.AbstractRateProvider#getExchangeRate
 	 * (javax.money.CurrencyUnit, javax.money.CurrencyUnit,
 	 * javax.money.convert.ConversionContext)
 	 */

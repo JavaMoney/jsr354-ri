@@ -15,7 +15,7 @@
  * 
  * Contributors: Anatole Tresch - initial implementation.
  */
-package org.javamoney.moneta.conversion.internal;
+package org.javamoney.moneta.convert.internal;
 
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
@@ -32,11 +32,12 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,12 +54,12 @@ import java.util.logging.Level;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class ECBHistoricRateProvider extends AbstractRateProvider implements LoaderListener{
-
+public class ECBHistoric90RateProvider extends AbstractRateProvider implements LoaderListener{
     /**
      * The data id used for the LoaderService.
      */
-    private static final String DATA_ID = ECBHistoricRateProvider.class.getSimpleName();
+    private static final String DATA_ID = ECBHistoric90RateProvider.class.getSimpleName();
+
     private static final String BASE_CURRENCY_CODE = "EUR";
     /**
      * Base currency of the loaded rates is always EUR.
@@ -68,7 +69,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-    private final Map<Long,Map<String,ExchangeRate>> historicRates = new ConcurrentHashMap<Long,Map<String,ExchangeRate>>();
+    private Map<Long,Map<String,ExchangeRate>> rates = new ConcurrentHashMap<Long,Map<String,ExchangeRate>>();
     /**
      * Parser factory.
      */
@@ -77,15 +78,15 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContext.Builder("ECB-HIST").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
-                    .set("European Central Bank", "providerDescription").set(1500, "days").create();
+            new ProviderContext.Builder("ECB-HIST90").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
+                    .set("European Central Bank (last 90 days)", "providerDescription").set(90, "days").create();
 
     /**
      * Constructor, also loads initial data.
      *
      * @throws MalformedURLException
      */
-    public ECBHistoricRateProvider() throws MalformedURLException{
+    public ECBHistoric90RateProvider() throws MalformedURLException{
         super(CONTEXT);
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
@@ -94,9 +95,16 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         loader.loadDataAsync(DATA_ID);
     }
 
+    /**
+     * (Re)load the given data feed.
+     *
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     */
     @Override
     public void newDataLoaded(String data, InputStream is){
-        final int oldSize = this.historicRates.size();
+        final int oldSize = this.rates.size();
         try{
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new RateReadingHandler());
@@ -104,32 +112,19 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         catch(Exception e){
             LOGGER.log(Level.FINEST, "Error during data load.", e);
         }
-        int newSize = this.historicRates.size();
+        int newSize = this.rates.size();
         LOGGER.info("Loaded " + DATA_ID + " exchange rates for days:" + (newSize - oldSize));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see javax.money.convert.spi.ExchangeRateProviderSpi#getExchangeRateType
-     * ()
-     */
-    @Override
-    public ProviderContext getProviderContext(){
-        return CONTEXT;
-    }
-
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
+        ExchangeRate sourceRate = null;
+        ExchangeRate target = null;
         if(context.getTimestamp() == null){
             return null;
         }
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
                 ConversionContext.of(CONTEXT.getProviderName(), RateType.HISTORIC, context.getTimestamp()));
-        builder.setBase(base);
-        builder.setTerm(term);
-        ExchangeRate sourceRate = null;
-        ExchangeRate target = null;
-        if(historicRates.isEmpty()){
+        if(rates.isEmpty()){
             return null;
         }
         final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
@@ -139,7 +134,10 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Long targetTS = Long.valueOf(cal.getTimeInMillis());
-        Map<String,ExchangeRate> targets = this.historicRates.get(targetTS);
+
+        builder.setBase(base);
+        builder.setTerm(term);
+        Map<String,ExchangeRate> targets = this.rates.get(targetTS);
         if(targets == null){
             return null;
         }
@@ -152,7 +150,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             if(sourceRate == null){
                 return null;
             }
-            return reverse(sourceRate);
+            return getReversed(sourceRate);
         }else if(BASE_CURRENCY_CODE.equals(base.getCurrencyCode())){
             return target;
         }else{
@@ -168,14 +166,6 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             }
             return null;
         }
-    }
-
-    private static ExchangeRate reverse(ExchangeRate rate){
-        if(rate == null){
-            throw new IllegalArgumentException("Rate null is not reversable.");
-        }
-        return rate.toBuilder().setRate(rate).setBase(rate.getTerm()).setTerm(rate.getBase())
-                .setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(), MathContext.DECIMAL64)).create();
     }
 
     /**
@@ -249,13 +239,13 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     /**
      * Method to add a currency exchange rate.
      *
-     * @param term        the term (target) currency, mapped from EUR.
-     * @param timestamp   The target day.
-     * @param rate        The rate.
+     * @param term      the term (target) currency, mapped from EUR.
+     * @param timestamp The target day.
+     * @param rate      The rate.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
-        RateType rateType = RateType.HISTORIC;
         ExchangeRate.Builder builder = null;
+        RateType rateType = RateType.HISTORIC;
         if(timestamp != null){
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
@@ -266,15 +256,15 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
-        builder.setFactor(DefaultNumberValue.of(rate));
+        builder.setFactor(new DefaultNumberValue(rate));
         ExchangeRate exchangeRate = builder.create();
-        Map<String,ExchangeRate> rateMap = this.historicRates.get(timestamp);
+        Map<String,ExchangeRate> rateMap = this.rates.get(timestamp);
         if(rateMap == null){
-            synchronized(this.historicRates){
-                rateMap = this.historicRates.get(timestamp);
+            synchronized(this.rates){
+                rateMap = this.rates.get(timestamp);
                 if(rateMap == null){
-                    rateMap = new ConcurrentHashMap<>();
-                    this.historicRates.put(timestamp, rateMap);
+                    rateMap = new ConcurrentHashMap<String,ExchangeRate>();
+                    this.rates.put(timestamp, rateMap);
                 }
             }
         }

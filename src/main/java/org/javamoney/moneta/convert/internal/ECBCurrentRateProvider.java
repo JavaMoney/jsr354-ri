@@ -7,7 +7,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License. Contributors: Anatole Tresch - initial implementation.
  */
-package org.javamoney.moneta.conversion.internal;
+package org.javamoney.moneta.convert.internal;
 
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;

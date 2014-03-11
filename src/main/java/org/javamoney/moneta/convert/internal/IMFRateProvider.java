@@ -15,7 +15,7 @@
  * 
  * Contributors: Anatole Tresch - initial implementation.
  */
-package org.javamoney.moneta.conversion.internal;
+package org.javamoney.moneta.convert.internal;
 
 import org.javamoney.moneta.BuildableCurrencyUnit;
 import org.javamoney.moneta.spi.AbstractRateProvider;
