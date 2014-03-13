@@ -11,6 +11,7 @@
 package org.javamoney.moneta.format.internal;
 
 import java.text.ParsePosition;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -36,6 +37,8 @@ public final class ParseContext {
 	private CurrencyUnit parsedCurrency;
 	/** The numeric part of the {@link MonetaryAmount} parsed. */
 	private Number parsedNumber;
+    /** The parse error message. */
+    private String errorMessage;
 
 	/**
 	 * Creates a new {@link ParseContext} with the given input.
@@ -66,9 +69,6 @@ public final class ParseContext {
 	 * @return the item parsed.
 	 */
 	public Number getParsedNumber() {
-		if (!isComplete()) {
-			throw new IllegalStateException("Parsing is not yet complete.");
-		}
 		return parsedNumber;
 	}
 
@@ -143,6 +143,14 @@ public final class ParseContext {
 		this.errorIndex = index;
 	}
 
+    /**
+     * Get the stored error message.
+     * @return the stored error message, or null.
+     */
+    public String getErrorMessage(){
+        return this.errorMessage;
+    }
+
 	/**
 	 * Sets the error index from the current index.
 	 */
@@ -189,24 +197,20 @@ public final class ParseContext {
 	}
 
 	/**
-	 * Add a result to the results of this context.
+	 * Sets the parsed numeric value into the context.
 	 * 
-	 * @param key
-	 *            The result key
-	 * @param value
-	 *            The result value
+	 * @param number
+	 *            The result number
 	 */
 	public void setParsedNumber(Number number) {
 		this.parsedNumber = number;
 	}
 
 	/**
-	 * Add a result to the results of this context.
+	 * Set the parsed currency into the context.
 	 * 
-	 * @param key
-	 *            The result key
-	 * @param value
-	 *            The result value
+	 * @param currency
+	 *            The parsed currency
 	 */
 	public void setParsedCurrency(CurrencyUnit currency) {
 		this.parsedCurrency = currency;
@@ -217,7 +221,7 @@ public final class ParseContext {
 	 * 
 	 * @return whether a parse error has occurred
 	 */
-	public boolean isError() {
+	public boolean hasError() {
 		return errorIndex >= 0;
 	}
 
@@ -282,4 +286,8 @@ public final class ParseContext {
 		return parsedCurrency;
 	}
 
+    public void setErrorMessage(String message){
+        Objects.requireNonNull(message);
+        this.errorMessage = message;
+    }
 }

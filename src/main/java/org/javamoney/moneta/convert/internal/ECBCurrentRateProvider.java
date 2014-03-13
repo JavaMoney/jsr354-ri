@@ -89,7 +89,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             loader.loadData(DATA_ID);
         }
         catch(IOException e){
-            LOGGER.log(Level.SEVERE, "Error loading EZB data.", e);
+            LOGGER.log(Level.SEVERE, "Error loading ECB data.", e);
         }
     }
 
@@ -108,7 +108,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             LOGGER.info("Loaded current " + DATA_ID + " exchange rates.");
         }
         catch(Exception e){
-            LOGGER.log(Level.SEVERE, "Error reading resource for EZB currencies: ", e);
+            LOGGER.log(Level.SEVERE, "Error reading resource for ECB currencies: ", e);
         }
     }
 

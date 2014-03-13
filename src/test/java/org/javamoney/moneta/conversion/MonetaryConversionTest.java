@@ -47,13 +47,13 @@ public class MonetaryConversionTest {
 		assertTrue(prov != null);
 		assertEquals(CompoundRateProvider.class, prov.getClass());
 		// Test rate provided by IMF (derived)
-		Thread.sleep(1000L); // wait for provider to load...
+		Thread.sleep(5000L); // wait for provider to load...
 		ExchangeRate r = prov.getExchangeRate(
 				MonetaryCurrencies.getCurrency("USD"),
 				MonetaryCurrencies.getCurrency("INR"));
 		assertTrue(r != null);
 		assertTrue(r.isDerived());
-		// Test rate provided by EZB
+		// Test rate provided by ECB
 		r = prov.getExchangeRate(MonetaryCurrencies.getCurrency("EUR"),
 				MonetaryCurrencies.getCurrency("CHF"));
 		assertTrue(r != null);

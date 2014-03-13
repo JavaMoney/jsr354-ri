@@ -407,6 +407,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public <R> R query(MonetaryQuery<R> query){
+        Objects.requireNonNull(query);
         try{
             return query.queryFrom(this);
         }
@@ -422,6 +423,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public Money with(MonetaryOperator operator){
+        Objects.requireNonNull(operator);
         try{
             return Money.class.cast(operator.apply(this));
         }

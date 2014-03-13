@@ -25,6 +25,7 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryRoundings;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -40,6 +41,7 @@ public class PerformanceTest {
 			.getCurrency("USD");
 
 	@Test
+    @Ignore
 	public void comparePerformanceNoRounding() {
 		FastMoney money1 = FastMoney.of(EURO, BigDecimal.ONE);
 		long start = System.currentTimeMillis();
@@ -92,6 +94,7 @@ public class PerformanceTest {
 	
 	
 	@Test
+    @Ignore
 	public void comparePerformance() {
 		StringBuilder b = new StringBuilder();
 		b.append("PerformanceTest - Looping code Money,BD:\n");

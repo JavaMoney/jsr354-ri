@@ -23,15 +23,13 @@ import javax.money.format.MonetaryParseException;
  * {@link FormatToken} which allows to format a {@link Number} type.
  * 
  * @author Anatole Tresch
- * 
- * @param <T>
- *            The item type.
  */
 final class AmountNumberToken implements FormatToken {
 
 	private AmountStyle style;
 	private String partialNumberPattern;
-	private DecimalFormat decimalFormat;
+	private DecimalFormat parseFormat;
+    private DecimalFormat formatFormat;
 	private StringGrouper numberGroup;
 
 	public AmountNumberToken(AmountStyle style, String partialNumberPattern) {
@@ -40,13 +38,15 @@ final class AmountNumberToken implements FormatToken {
 		}
 		this.style = style;
 		this.partialNumberPattern = partialNumberPattern;
-		this.decimalFormat = createDecimalFormat();
+		initDecimalFormats();
 	}
 
-	private DecimalFormat createDecimalFormat() {
-		DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(style
+	private void initDecimalFormats() {
+        formatFormat = (DecimalFormat) DecimalFormat.getInstance(style
 				.getLocale());
-		DecimalFormatSymbols symbols = df.getDecimalFormatSymbols();
+        parseFormat = (DecimalFormat) DecimalFormat.getInstance(style
+                                                                         .getLocale());
+		DecimalFormatSymbols symbols = formatFormat.getDecimalFormatSymbols();
 		AmountFormatSymbols syms = style.getSymbols();
 		if (syms != null) {
 			symbols.setDecimalSeparator(syms.getDecimalSeparator());
@@ -55,10 +55,11 @@ final class AmountNumberToken implements FormatToken {
 			symbols.setMinusSign(syms.getMinusSign());
 			symbols.setPatternSeparator(syms.getPatternSeparator());
 			symbols.setZeroDigit(syms.getZeroDigit());
-			df.setDecimalFormatSymbols(symbols);
+            formatFormat.setDecimalFormatSymbols(symbols);
+            parseFormat.setDecimalFormatSymbols(symbols);
 		}
-		df.applyPattern(this.partialNumberPattern);
-		return df;
+        formatFormat.applyPattern(this.partialNumberPattern);
+        parseFormat.applyPattern(this.partialNumberPattern.trim());
 	}
 
 	/**
@@ -87,17 +88,17 @@ final class AmountNumberToken implements FormatToken {
 	public void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException {
 		int digits = amount.getCurrency().getDefaultFractionDigits();
-		this.decimalFormat.setMinimumFractionDigits(digits);
-		this.decimalFormat.setMaximumFractionDigits(digits);
+		this.formatFormat.setMinimumFractionDigits(digits);
+		this.formatFormat.setMaximumFractionDigits(digits);
 		if (this.style.getGroupingSizes().length == 0) {
-			appendable.append(this.decimalFormat.format(amount.getNumber()
+			appendable.append(this.formatFormat.format(amount.getNumber()
 					.numberValue(BigDecimal.class)));
 			return;
 		}
-		this.decimalFormat.setGroupingUsed(false);
-		String preformattedValue = this.decimalFormat.format(amount.getNumber()
+		this.formatFormat.setGroupingUsed(false);
+		String preformattedValue = this.formatFormat.format(amount.getNumber()
 				.numberValue(BigDecimal.class));
-		String[] numberParts = splitNumberParts(this.decimalFormat,
+		String[] numberParts = splitNumberParts(this.formatFormat,
 				preformattedValue);
 		if (numberParts.length != 2) {
 			appendable.append(preformattedValue);
@@ -105,14 +106,14 @@ final class AmountNumberToken implements FormatToken {
 			if (numberGroup == null) {
 				char[] groupChars = style.getSymbols().getGroupingSeparators();
 				if (groupChars.length == 0) {
-					groupChars = new char[] { this.decimalFormat
+					groupChars = new char[] { this.formatFormat
 							.getDecimalFormatSymbols().getGroupingSeparator() };
 				}
 				numberGroup = new StringGrouper(groupChars,
 						style.getGroupingSizes());
 			}
 			preformattedValue = numberGroup.group(numberParts[0])
-					+ this.decimalFormat.getDecimalFormatSymbols()
+					+ this.formatFormat.getDecimalFormatSymbols()
 							.getDecimalSeparator() + numberParts[1];
 			appendable.append(preformattedValue);
 		}
@@ -132,15 +133,21 @@ final class AmountNumberToken implements FormatToken {
 	@Override
 	public void parse(ParseContext context) throws MonetaryParseException {
 		String token = context.lookupNextToken();
-		while (token != null && !context.isComplete()) {
+		if(token != null && !context.isComplete()) {
 			parseToken(context, token);
-			token = context.lookupNextToken();
+            if(context.hasError()){
+                throw new MonetaryParseException(context.getErrorMessage(), context.getInput(), context.getIndex());
+            }
 		}
+        else{
+            context.setError();
+            context.setErrorMessage("Number expected.");
+        }
 	}
 
 	private void parseToken(ParseContext context, String token) {
 		try {
-			Number number = this.decimalFormat.parse(token);
+			Number number = this.parseFormat.parse(token);
 			if (number != null) {
 				context.setParsedNumber(number);
 				context.consume(token);
@@ -148,6 +155,8 @@ final class AmountNumberToken implements FormatToken {
 		} catch (Exception e) {
 			Logger.getLogger(getClass().getName()).finest(
 					"Could not parse amount from: " + token);
+            context.setError();
+            context.setErrorMessage(e.getMessage());
 		}
 	}
 

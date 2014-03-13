@@ -114,7 +114,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 	private boolean isLiteralPattern(String pattern, AmountStyle style) {
 		// TODO implement better here
-		if (pattern.contains("#")) {
+		if (pattern.contains("#") || pattern.contains("0")) {
 			return false;
 		}
 		return true;

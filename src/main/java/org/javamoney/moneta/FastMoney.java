@@ -556,6 +556,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     @Override
     public FastMoney with(MonetaryOperator operator){
+        Objects.requireNonNull(operator);
         try{
             return FastMoney.class.cast(operator.apply(this));
         }
@@ -566,6 +567,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
 
     @Override
     public <R> R query(MonetaryQuery<R> query){
+        Objects.requireNonNull(query);
         try{
             return query.queryFrom(this);
         }
