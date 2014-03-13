@@ -281,8 +281,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 			if (style.getSymbols() != null) {
 				patternSeparator = style.getSymbols().getPatternSeparator();
 			}
-			String[] plusMinusPatterns = pattern.split("'" + patternSeparator
-					+ "'");
+			String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));
 			initPattern(plusMinusPatterns[0], this.positiveTokens, style);
 			if (plusMinusPatterns.length > 1) {
 				initPattern(plusMinusPatterns[1], this.negativeTokens, style);
