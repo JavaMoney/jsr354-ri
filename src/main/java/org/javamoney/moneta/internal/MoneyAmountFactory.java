@@ -9,6 +9,11 @@ import javax.money.MonetaryContext.AmountFlavor;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
 
+/**
+ * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link Money}.
+ *
+ * @author Anatole Tresch
+ */
 public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(

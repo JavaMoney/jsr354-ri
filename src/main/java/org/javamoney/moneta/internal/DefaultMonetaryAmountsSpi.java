@@ -30,6 +30,10 @@ import javax.money.spi.MonetaryAmountsSpi;
 
 import org.javamoney.moneta.ServicePriority;
 
+/**
+ * Default implementation ot {@link javax.money.spi.MonetaryAmountsSpi} loading the SPIs on startup initially once, using the
+ * JSR's {@link javax.money.spi.Bootstrap} mechanism.
+ */
 public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 
 	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactoryProviderSpi<?>> factories = new ConcurrentHashMap<>();

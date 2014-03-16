@@ -29,22 +29,33 @@ import javax.money.convert.ConversionContext;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
+import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryConversionsSpi;
 
 import org.javamoney.moneta.spi.CompoundRateProvider;
 
+/**
+ * This is the default implementation of the {@link javax.money.spi.MonetaryConversionsSpi} interface, backing
+ * up the {@link javax.money.convert.MonetaryConversions} singleton.
+ */
 public class DefaultMonetaryConversionsSpi implements MonetaryConversionsSpi {
-
+    /** The providers loaded. */
 	private Map<String, ExchangeRateProvider> conversionProviders = new ConcurrentHashMap<>();
 
+    /**
+     * Constructors, loads the providers from the {@link javax.money.spi.Bootstrap} component.
+     */
 	public DefaultMonetaryConversionsSpi() {
 		reload();
 	}
 
+    /**
+     * Reloads/reinitializes the providers found.
+     */
 	public void reload() {
 		Map<String, ExchangeRateProvider> newProviders = new ConcurrentHashMap<>();
-		for (ExchangeRateProvider prov : ServiceLoader
-				.load(ExchangeRateProvider.class)) {
+		for (ExchangeRateProvider prov : Bootstrap
+				.getServices(ExchangeRateProvider.class)) {
 			newProviders.put(prov.getProviderContext().getProviderName(), prov);
 		}
 		this.conversionProviders = newProviders;
