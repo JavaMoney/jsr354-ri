@@ -14,12 +14,12 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>0.4-SNAPSHOT</version>
+		<version>0.4</version>
 	</parent>
 
 	<artifactId>moneta</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8-SNAPSHOT</version>
+	<version>0.8</version>
 
 	<name>Moneta (JSR 354 RI)</name>
 	<url>http://javamoney.org</url>
