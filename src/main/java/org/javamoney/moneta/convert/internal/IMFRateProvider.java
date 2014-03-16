@@ -60,7 +60,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             .set("Internation Monetary Fond", "providerDescription").set(1, "days").create();
 
     private static final CurrencyUnit SDR =
-            new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).build(true);
+            new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).create(true);
 
     private Map<CurrencyUnit,List<ExchangeRate>> currencyToSdr = new HashMap<CurrencyUnit,List<ExchangeRate>>();
 
