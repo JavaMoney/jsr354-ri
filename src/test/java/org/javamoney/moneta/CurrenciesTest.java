@@ -140,7 +140,7 @@ public class CurrenciesTest {
 		assertEquals(0, ((Comparable<CurrencyUnit>) cur2).compareTo(cur2));
 		// Currencies.Builder builder = new Currencies.Builder();
 		// builder.setCurrencyCode("TEST");
-		// CurrencyUnit cur3 = builder.build();
+		// CurrencyUnit cur3 = builder.create();
 		// assertTrue(cur3 instanceof Comparable);
 		// assertTrue(0 < ((Comparable<CurrencyUnit>) cur3).compareTo(cur2));
 		// assertTrue(0 > ((Comparable<CurrencyUnit>) cur3).compareTo(cur1));
@@ -161,7 +161,7 @@ public class CurrenciesTest {
 		assertTrue("Does not contain currency code.", toString.contains("USD"));
 		// Currencies.Builder builder = new Currencies.Builder();
 		// builder.setCurrencyCode("TEST");
-		// CurrencyUnit cur3 = builder.build();
+		// CurrencyUnit cur3 = builder.create();
 		// toString = cur3.toString();
 		// assertTrue("Does not contain currency code.",
 		// toString.contains("TEST"));

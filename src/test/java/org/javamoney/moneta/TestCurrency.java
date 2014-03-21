@@ -185,7 +185,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 		public CurrencyUnit build(boolean cache) {
 			if (currencyCode == null || currencyCode.isEmpty()) {
 				throw new IllegalStateException(
-						"Can not build TestCurrencyUnit.");
+						"Can not create TestCurrencyUnit.");
 			}
 			if (cache) {
 				String key = currencyCode;

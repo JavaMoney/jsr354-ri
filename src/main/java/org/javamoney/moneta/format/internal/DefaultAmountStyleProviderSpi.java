@@ -40,7 +40,7 @@ public class DefaultAmountStyleProviderSpi implements
 				.setPattern(df.toPattern())
 				.setCurrencyStyle(CurrencyStyle.CODE)
 				.setSymbols(AmountFormatSymbols.of(locale))
-				.build();
+				.create();
 	}
 
 	/*

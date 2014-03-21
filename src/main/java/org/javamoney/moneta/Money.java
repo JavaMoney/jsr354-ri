@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  * @author Werner Keil
  * @version 0.6.1
  */
-public final class Money extends AbstractMoney implements Comparable<MonetaryAmount>, Serializable{
+public final class Money extends AbstractMoney implements Serializable{
 
     /**
      * serialVersionUID.

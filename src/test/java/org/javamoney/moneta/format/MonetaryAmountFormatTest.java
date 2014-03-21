@@ -89,7 +89,7 @@ public class MonetaryAmountFormatTest {
 								123456789101112.123456).create()));
 		// Locale india = new Locale("", "IN");
 		// defaultFormat = MonetaryFormats.getAmountFormatBuilder(india)
-		// .setNumberGroupSizes(3, 2).build();
+		// .setNumberGroupSizes(3, 2).create();
 		// assertEquals("INR 12,34,56,78,91,01,112.12",
 		// defaultFormat.format(MonetaryAmounts.getAmount("INR",
 		// 123456789101112.123456)));
@@ -136,7 +136,7 @@ public class MonetaryAmountFormatTest {
 		b.setLength(0);
 		// Locale india = new Locale("", "IN");
 		// defaultFormat = MonetaryFormats.getAmountFormat(india)
-		// .setNumberGroupSizes(3, 2).build();
+		// .setNumberGroupSizes(3, 2).create();
 		// defaultFormat.print(b, MonetaryAmounts.getAmount("INR",
 		// 123456789101112.123456));
 		// assertEquals("INR 12,34,56,78,91,01,112.12",
