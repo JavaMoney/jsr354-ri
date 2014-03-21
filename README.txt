@@ -2,7 +2,7 @@ JSR 354: Money and Currency Reference Implementation
 =========
 JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
 See the home page for more details:
-http://jcp.org/en/jsr/detail?id=354
+http://jcp.org/en/jsr/detail?name=354
 
 Or the GitHub page:
 http://javamoney.github.io/ri.html

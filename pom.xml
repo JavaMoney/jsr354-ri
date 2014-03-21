@@ -19,7 +19,7 @@
 
 	<artifactId>moneta</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8</version>
+	<version>0.9-SNAPSHOT</version>
 
 	<name>Moneta (JSR 354 RI)</name>
 	<url>http://javamoney.org</url>
