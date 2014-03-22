@@ -31,6 +31,7 @@
 		<name>JavaMoney</name>
 		<url>http://javamoney.org</url>
 	</organization>
+
 	<licenses>
 		<license>
 			<name>Apache 2 License</name>
@@ -70,27 +71,12 @@
 			</roles>
 		</developer>
 		<developer>
-			<id>dunnschtig</id>
-			<name>Sascha Freitag</name>
-			<organization>Credit Suisse</organization>
-			<roles>
-				<role>Expert Group Member (until EDR)</role>
-			</roles>
-		</developer>
-		<developer>
 			<id>tom-huesler</id>
 			<name>Thomas Hüsler</name>
 			<organization>Espalier Technologies</organization>
 			<timezone>GMT+1</timezone>
 			<roles>
 				<role>Expert Group Member</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>vgrazi</id>
-			<name>Victor Grazi</name>
-			<roles>
-				<role>Expert Group Member (Emeritus)</role>
 			</roles>
 		</developer>
 		<developer>
@@ -108,13 +94,6 @@
 			</roles>
 		</developer>
 		<developer>
-			<id>crazybob</id>
-			<name>Bob Lee</name>
-			<roles>
-				<role>Expert Group Member</role>
-			</roles>
-		</developer>
-		<developer>
 			<id>jeffprestes</id>
 			<name>Jefferson Prestes</name>
 			<roles>
@@ -124,14 +103,6 @@
 		<developer>
 			<id>jezdavies</id>
 			<name>Jeremy Davies</name>
-			<roles>
-				<role>Expert Group Member</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>-</id>
-			<name>Mathias Bücker</name>
-			<organization>Credit Suisse</organization>
 			<roles>
 				<role>Expert Group Member</role>
 			</roles>
@@ -160,20 +131,6 @@
 		<developer>
 			<id>-</id>
 			<name>Tony Jewell</name>
-			<roles>
-				<role>Expert Group Member</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>-</id>
-			<name>Arumugam Swaminathan</name>
-			<roles>
-				<role>Expert Group Member</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>-</id>
-			<name>Sanjay Nagpal</name>
 			<roles>
 				<role>Expert Group Member</role>
 			</roles>
