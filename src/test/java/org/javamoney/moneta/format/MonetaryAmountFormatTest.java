@@ -21,10 +21,7 @@ import java.util.Locale;
 
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryCurrencies;
-import javax.money.format.AmountFormatSymbols;
-import javax.money.format.AmountStyle;
-import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.MonetaryFormats;
+import javax.money.format.*;
 
 import org.javamoney.moneta.TestCurrency;
 import org.junit.Ignore;
@@ -94,6 +91,37 @@ public class MonetaryAmountFormatTest {
 		// defaultFormat.format(MonetaryAmounts.getAmount("INR",
 		// 123456789101112.123456)));
 	}
+
+    /**
+     * Test method for
+     * {@link javax.money.format.MonetaryAmountFormat#format(javax.money.MonetaryAmount)} .
+     */
+    @Test
+    public void testFormatWithBuilder() {
+        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountStyle.Builder(Locale.ENGLISH).create());
+        assertEquals(
+                "CHF 12,50"
+                ,
+                defaultFormat.format(MonetaryAmounts.getAmountFactory()
+                                             .setCurrency(
+                                                     "CHF").setNumber(12.50).create()));
+    }
+
+    /**
+     * Test method for
+     * {@link javax.money.format.MonetaryAmountFormat#format(javax.money.MonetaryAmount)} .
+     */
+    @Test
+    public void testFormatWithBuilder2() {
+        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(
+                new AmountStyle.Builder(Locale.ENGLISH).setCurrencyStyle(CurrencyStyle.NUMERIC_CODE).create());
+        assertEquals(
+                "10 12,50"
+                ,
+                defaultFormat.format(MonetaryAmounts.getAmountFactory()
+                                             .setCurrency(
+                                                     "CHF").setNumber(12.50).create()));
+    }
 
 	/**
 	 * Test method for

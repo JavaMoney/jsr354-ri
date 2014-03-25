@@ -12,6 +12,7 @@ package org.javamoney.moneta.internal;
 
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -35,6 +36,11 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
     @Override
     public CurrencyUnit getCurrencyUnit(Locale locale){
         return currencyUnitsByLocale.get(locale);
+    }
+
+    @Override
+    public Collection<CurrencyUnit> getCurrencies(){
+        return currencyUnits.values();
     }
 
     /**

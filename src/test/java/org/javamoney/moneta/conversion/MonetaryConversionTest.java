@@ -32,6 +32,15 @@ import org.junit.Test;
 
 public class MonetaryConversionTest {
 
+    @Test
+    public void testGetExchangeRateDefault() {
+        ExchangeRateProvider prov = MonetaryConversions
+                .getExchangeRateProvider();
+        assertTrue(prov != null);
+        ExchangeRate rate = prov.getExchangeRate("CHF", "EUR");
+        assertNotNull(rate);
+    }
+
 	@Test
 	public void testGetExchangeRateProvider() {
 		ExchangeRateProvider prov = MonetaryConversions

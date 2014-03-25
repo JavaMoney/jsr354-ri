@@ -30,6 +30,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,10 +128,10 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
         }
         sourceRate = currentRates.get(base.getCurrencyCode());
         target = currentRates.get(term.getCurrencyCode());
-        if(BASE_CURRENCY_CODE.equals(base.getCurrencyCode()) && BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
-            builder.setFactor(DefaultNumberValue.ONE);
-            return builder.create();
-        }else if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
+        if(base.getCurrencyCode().equals(term.getCurrencyCode())){
+            return null;
+        }
+        if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
             if(sourceRate == null){
                 return null;
             }
@@ -148,6 +149,24 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
                 builder.setRateChain(rate1, rate2);
                 return builder.create();
             }
+        }
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+	 *
+	 * @see
+	 * javax.money.convert.ExchangeRateProvider#getReversed(javax.money.convert
+	 * .ExchangeRate)
+	 */
+    @Override
+    public ExchangeRate getReversed(ExchangeRate rate){
+        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProviderName())){
+            return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
+                    .setFactor(new DefaultNumberValue(
+                            BigDecimal.ONE.divide(rate.getFactor().numberValue(BigDecimal.class), MathContext.DECIMAL64)))
+                    .create();
         }
         return null;
     }
@@ -220,10 +239,9 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     /**
      * Method to add a currency exchange rate.
      *
-     * @param term        the term (target) currency, mapped from EUR.
-     * @param timestamp   The target day.
-     * @param factor      The conversion factor.
-     * @param loadCurrent Flag, if current or historic data is loaded.
+     * @param term      the term (target) currency, mapped from EUR.
+     * @param timestamp The target day.
+     * @param factor    The conversion factor.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
         ExchangeRate.Builder builder =

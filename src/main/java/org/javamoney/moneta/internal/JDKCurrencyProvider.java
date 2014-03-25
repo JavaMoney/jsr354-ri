@@ -12,10 +12,7 @@
  */
 package org.javamoney.moneta.internal;
 
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,5 +60,10 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
 		}
 		return null;
 	}
+
+    @Override
+    public Collection<CurrencyUnit> getCurrencies(){
+        return CACHED.values();
+    }
 
 }

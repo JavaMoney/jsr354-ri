@@ -1,3 +1,4 @@
 org.javamoney.moneta.convert.internal.ECBCurrentRateProvider
 org.javamoney.moneta.convert.internal.ECBHistoricRateProvider
 org.javamoney.moneta.convert.internal.IMFRateProvider
+org.javamoney.moneta.convert.internal.IdentityRateProvider
