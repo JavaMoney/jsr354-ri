@@ -121,7 +121,7 @@ public final class Money extends AbstractMoney implements Serializable{
                 MonetaryContext mc =
                         new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class).create();
                 Logger.getLogger(Money.class.getName())
-                        .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm);
+                        .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm); // TODO why info?
                 return mc;
             }else{
                 MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
@@ -129,24 +129,24 @@ public final class Money extends AbstractMoney implements Serializable{
                 if(value != null){
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL32);
                             break;
                         case "DECIMAL64":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL64);
                             break;
                         case "DECIMAL128":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL128);
                             break;
                         case "UNLIMITED":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.UNLIMITED");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.UNLIMITED"); // TODO why info?
                             builder.setAttribute(MathContext.UNLIMITED);
                             break;
                     }
                 }else{
-                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64");
+                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64"); // TODO why info?
                     builder.setAttribute(MathContext.DECIMAL64);
                 }
                 return builder.create();
