@@ -98,10 +98,9 @@ public class MonetaryAmountFormatTest {
      */
     @Test
     public void testFormatWithBuilder() {
-        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountStyle.Builder(Locale.ENGLISH).create());
+        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountStyle.Builder(Locale.JAPANESE).create());
         assertEquals(
-                "CHF 12,50"
-                ,
+                "CHF 12.50",
                 defaultFormat.format(MonetaryAmounts.getAmountFactory()
                                              .setCurrency(
                                                      "CHF").setNumber(12.50).create()));
@@ -113,14 +112,22 @@ public class MonetaryAmountFormatTest {
      */
     @Test
     public void testFormatWithBuilder2() {
-        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(
-                new AmountStyle.Builder(Locale.ENGLISH).setCurrencyStyle(CurrencyStyle.NUMERIC_CODE).create());
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
+                new AmountStyle.Builder(Locale.GERMANY).setCurrencyStyle(CurrencyStyle.NUMERIC_CODE).create());
         assertEquals(
-                "10 12,50"
+                "12,50 756"
                 ,
-                defaultFormat.format(MonetaryAmounts.getAmountFactory()
+                format.format(MonetaryAmounts.getAmountFactory()
                                              .setCurrency(
                                                      "CHF").setNumber(12.50).create()));
+        format = MonetaryFormats.getAmountFormat(
+                new AmountStyle.Builder(Locale.US).setCurrencyStyle(CurrencyStyle.SYMBOL).create());
+        assertEquals(
+                "$123,456.56"
+                ,
+                format.format(MonetaryAmounts.getAmountFactory()
+                                      .setCurrency(
+                                              "USD").setNumber(123456.561).create()));
     }
 
 	/**
