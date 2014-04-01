@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 
 /**
  * Default immutable implementation of {@link MonetaryAmount} based
- * on {@link BigDecimal} for the numeric representation.
+ * on {@link BigDecimal} as numeric representation.
  * <p/>
  * As required by {@link MonetaryAmount} this class is final, thread-safe,
  * immutable and serializable.
@@ -121,7 +121,7 @@ public final class Money extends AbstractMoney implements Serializable{
                 MonetaryContext mc =
                         new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class).create();
                 Logger.getLogger(Money.class.getName())
-                        .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm); // TODO why info?
+                        .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm);
                 return mc;
             }else{
                 MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
@@ -129,15 +129,15 @@ public final class Money extends AbstractMoney implements Serializable{
                 if(value != null){
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32"); // TODO why info?
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32");
                             builder.setAttribute(MathContext.DECIMAL32);
                             break;
                         case "DECIMAL64":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64"); // TODO why info?
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64");
                             builder.setAttribute(MathContext.DECIMAL64);
                             break;
                         case "DECIMAL128":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128"); // TODO why info?
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128");
                             builder.setAttribute(MathContext.DECIMAL128);
                             break;
                         case "UNLIMITED":
@@ -146,7 +146,7 @@ public final class Money extends AbstractMoney implements Serializable{
                             break;
                     }
                 }else{
-                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64"); // TODO why info?
+                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64");
                     builder.setAttribute(MathContext.DECIMAL64);
                 }
                 return builder.create();
