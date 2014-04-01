@@ -13,6 +13,7 @@ package org.javamoney.moneta.format.internal;
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.money.CurrencyUnit;
@@ -46,7 +47,11 @@ final class CurrencyToken implements FormatToken {
 	 *            The target locale, not {@code null}.
 	 */
 	public CurrencyToken(CurrencyStyle style, Locale locale) {
-		this.locale = locale;
+        Objects.requireNonNull(locale, "Locale null");
+        this.locale = locale;
+        if(style!=null){
+            this.style = style;
+        }
 	}
 
 	/**
@@ -56,11 +61,9 @@ final class CurrencyToken implements FormatToken {
 	 *            the {@link CurrencyStyle}, not {@code null}.
 	 * @return this token instance, for chaining.
 	 */
-	public CurrencyToken setCurrencyStyle(CurrencyStyle displayType) {
-		if (displayType == null) {
-			throw new IllegalArgumentException("Display type null.");
-		}
-		this.style = displayType;
+	public CurrencyToken setCurrencyStyle(CurrencyStyle style) {
+		Objects.requireNonNull(style, "CurrencyStyle null");
+		this.style = style;
 		return this;
 	}
 
