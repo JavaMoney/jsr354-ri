@@ -18,18 +18,18 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
 			Money.class).setPrecision(64)
-			.setMaxScale(63).set(RoundingMode.HALF_EVEN)
+			.setMaxScale(63).setAttribute(RoundingMode.HALF_EVEN)
 			.setFlavor(AmountFlavor.PRECISION).create();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
 			Money.class).setPrecision(0)
-			.setMaxScale(-1).set(RoundingMode.HALF_EVEN)
+			.setMaxScale(-1).setAttribute(RoundingMode.HALF_EVEN)
 			.setFlavor(AmountFlavor.PRECISION).create();
 
 	@Override
-	protected Money create(CurrencyUnit currency, Number number,
-			MonetaryContext monetaryContext) {
-		return Money.of(currency, number,
-				MonetaryContext.from(monetaryContext, Money.class));
+	protected Money create(Number number, CurrencyUnit currency,
+                           MonetaryContext monetaryContext) {
+		return Money.of(number, currency,
+                        MonetaryContext.from(monetaryContext, Money.class));
 	}
 
 	@Override

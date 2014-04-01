@@ -46,7 +46,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
      * The {@link javax.money.convert.ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("IDENT").setRateTypes(RateType.OTHER)
-            .set("Identitiy Provider", "providerDescription").create();
+            .setAttribute("providerDescription", "Identitiy Provider").create();
 
     /**
      * Constructor, also loads initial data.

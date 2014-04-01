@@ -29,7 +29,7 @@ final class MajorUnits implements MonetaryQuery<Long> {
 
 	private MonetaryOperator downRounding = MonetaryRoundings
 			.getRounding(new MonetaryContext.Builder()
-					.setMaxScale(0).set(RoundingMode.DOWN).create());
+					.setMaxScale(0).setAttribute(RoundingMode.DOWN).create());
 
 	/**
 	 * Access the shared instance of {@link MajorUnits} for use.

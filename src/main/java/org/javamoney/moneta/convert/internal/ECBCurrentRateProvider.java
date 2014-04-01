@@ -73,7 +73,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("ECB").setRateTypes(RateType.DEFERRED)
-            .set("European Central Bank", "providerDescription").set(1, "days").create();
+            .setAttribute("providerDescription", "European Central Bank").setAttribute("days", 1).create();
 
     /**
      * Constructor, also loads initial data.

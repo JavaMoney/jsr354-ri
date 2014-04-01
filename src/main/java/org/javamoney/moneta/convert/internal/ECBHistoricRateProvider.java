@@ -78,7 +78,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      */
     private static final ProviderContext CONTEXT =
             new ProviderContext.Builder("ECB-HIST").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
-                    .set("European Central Bank", "providerDescription").set(1500, "days").create();
+                    .setAttribute("providerDescription", "European Central Bank").setAttribute("days", 1500).create();
 
     /**
      * Constructor, also loads initial data.

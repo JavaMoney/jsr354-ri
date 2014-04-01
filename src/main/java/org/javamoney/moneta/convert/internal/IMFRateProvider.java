@@ -57,7 +57,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("IMF").setRateTypes(RateType.DEFERRED)
-            .set("Internation Monetary Fond", "providerDescription").set(1, "days").create();
+            .setAttribute("providerDescription", "Internation Monetary Fond").setAttribute("days", 1).create();
 
     private static final CurrencyUnit SDR =
             new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).create(true);

@@ -66,7 +66,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @param currency the currency, not null.
      * @param number   the amount, not null.
      */
-    private RoundedMoney(CurrencyUnit currency, Number number, MonetaryContext monetaryContext,
+    private RoundedMoney(Number number, CurrencyUnit currency, MonetaryContext monetaryContext,
                          MonetaryOperator rounding){
         super(currency, monetaryContext);
         Objects.requireNonNull(number, "Number is required.");
@@ -91,7 +91,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @return a {@code Money} combining the numeric value and currency unit.
      */
     public static RoundedMoney of(CurrencyUnit currency, BigDecimal number){
-        return new RoundedMoney(currency, number, DEFAULT_MONETARY_CONTEXT, null);
+        return new RoundedMoney(number, currency, DEFAULT_MONETARY_CONTEXT, null);
     }
 
     /**
@@ -104,7 +104,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @return a {@code Money} combining the numeric value and currency unit.
      */
     public static RoundedMoney of(CurrencyUnit currency, BigDecimal number, MonetaryOperator rounding){
-        return new RoundedMoney(currency, number, DEFAULT_MONETARY_CONTEXT, rounding);
+        return new RoundedMoney(number, currency, DEFAULT_MONETARY_CONTEXT, rounding);
     }
 
     /**
@@ -116,8 +116,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @param monetaryContext the {@link MathContext} to be used.
      * @return a {@code Money} combining the numeric value and currency unit.
      */
-    public static RoundedMoney of(CurrencyUnit currency, BigDecimal number, MonetaryContext monetaryContext){
-        return new RoundedMoney(currency, number, MonetaryContext.from(monetaryContext, RoundedMoney.class), null);
+    public static RoundedMoney of(BigDecimal number, CurrencyUnit currency, MonetaryContext monetaryContext){
+        return new RoundedMoney(number, currency, MonetaryContext.from(monetaryContext, RoundedMoney.class), null);
     }
 
     /**
@@ -126,13 +126,12 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      *
      * @param number      numeric value of the {@code Money}.
      * @param currency    currency unit of the {@code Money}.
-     * @param mathContext the {@link MathContext} to be used.
      * @param rounding    The rounding to be applied.
      * @return a {@code Money} combining the numeric value and currency unit.
      */
-    public static RoundedMoney of(CurrencyUnit currency, BigDecimal number, MonetaryContext monetaryContext,
+    public static RoundedMoney of(BigDecimal number, CurrencyUnit currency, MonetaryContext monetaryContext,
                                   MonetaryOperator rounding){
-        return new RoundedMoney(currency, number, MonetaryContext.from(monetaryContext, RoundedMoney.class), rounding);
+        return new RoundedMoney(number, currency, MonetaryContext.from(monetaryContext, RoundedMoney.class), rounding);
     }
 
     /**
@@ -142,8 +141,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @param number   The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    public static RoundedMoney of(CurrencyUnit currency, Number number){
-        return new RoundedMoney(currency, number, (MonetaryContext) null, null);
+    public static RoundedMoney of(Number number, CurrencyUnit currency){
+        return new RoundedMoney(number, currency, (MonetaryContext) null, null);
     }
 
     /**
@@ -154,8 +153,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @param rounding The rounding to be applied.
      * @return A new instance of {@link RoundedMoney}.
      */
-    public static RoundedMoney of(CurrencyUnit currency, Number number, MonetaryOperator rounding){
-        return new RoundedMoney(currency, number, (MonetaryContext) null, rounding);
+    public static RoundedMoney of(Number number, CurrencyUnit currency, MonetaryOperator rounding){
+        return new RoundedMoney(number, currency, (MonetaryContext) null, rounding);
     }
 
     /**
@@ -165,8 +164,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @param number   The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    public static RoundedMoney of(CurrencyUnit currency, Number number, MonetaryContext monetaryContext){
-        return new RoundedMoney(currency, number, MonetaryContext.from(monetaryContext, RoundedMoney.class), null);
+    public static RoundedMoney of(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
+        return new RoundedMoney(number, currency, MonetaryContext.from(monetaryContext, RoundedMoney.class), null);
     }
 
     /**
@@ -180,43 +179,43 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      */
     public static RoundedMoney of(CurrencyUnit currency, Number number, MonetaryContext monetaryContext,
                                   MonetaryOperator rounding){
-        return new RoundedMoney(currency, number, MonetaryContext.from(monetaryContext, RoundedMoney.class), rounding);
+        return new RoundedMoney(number, currency, MonetaryContext.from(monetaryContext, RoundedMoney.class), rounding);
     }
 
     /**
      * Static factory method for creating a new instance of {@link RoundedMoney} .
      *
-     * @param isoCurrencyCode The target currency as ISO currency code.
+     * @param currencyCode The target currency as ISO currency code.
      * @param number          The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    public static RoundedMoney of(String currencyCode, Number number){
-        return new RoundedMoney(MonetaryCurrencies.getCurrency(currencyCode), number, DEFAULT_MONETARY_CONTEXT,
+    public static RoundedMoney of(Number number, String currencyCode){
+        return new RoundedMoney(number, MonetaryCurrencies.getCurrency(currencyCode), DEFAULT_MONETARY_CONTEXT,
                                 MonetaryRoundings.getRounding(MonetaryCurrencies.getCurrency(currencyCode)));
     }
 
     /**
      * Static factory method for creating a new instance of {@link RoundedMoney} .
      *
-     * @param isoCurrencyCode The target currency as ISO currency code.
+     * @param currencyCode The target currency as ISO currency code.
      * @param number          The numeric part, not null.
      * @param rounding        The rounding to be applied.
      * @return A new instance of {@link RoundedMoney}.
      */
-    public static RoundedMoney of(String currencyCode, Number number, MonetaryOperator rounding){
-        return new RoundedMoney(MonetaryCurrencies.getCurrency(currencyCode), number, DEFAULT_MONETARY_CONTEXT,
+    public static RoundedMoney of(Number number, String currencyCode, MonetaryOperator rounding){
+        return new RoundedMoney(number, MonetaryCurrencies.getCurrency(currencyCode), DEFAULT_MONETARY_CONTEXT,
                                 rounding);
     }
 
     /**
      * Static factory method for creating a new instance of {@link RoundedMoney} .
      *
-     * @param isoCurrencyCode The target currency as ISO currency code.
+     * @param currencyCode The target currency as ISO currency code.
      * @param number          The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    public static RoundedMoney of(String currencyCode, Number number, MonetaryContext monetaryContext){
-        return new RoundedMoney(MonetaryCurrencies.getCurrency(currencyCode), number,
+    public static RoundedMoney of(Number number, String currencyCode, MonetaryContext monetaryContext){
+        return new RoundedMoney(number,MonetaryCurrencies.getCurrency(currencyCode),
                                 MonetaryContext.from(monetaryContext, RoundedMoney.class),
                                 MonetaryRoundings.getRounding(monetaryContext));
     }
@@ -224,14 +223,14 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
     /**
      * Static factory method for creating a new instance of {@link RoundedMoney} .
      *
-     * @param isoCurrencyCode The target currency as ISO currency code.
+     * @param currencyCode The target currency as ISO currency code.
      * @param number          The numeric part, not null.
      * @param rounding        The rounding to be applied.
      * @return A new instance of {@link RoundedMoney}.
      */
     public static RoundedMoney of(String currencyCode, Number number, MonetaryContext monetaryContext,
                                   MonetaryOperator rounding){
-        return new RoundedMoney(MonetaryCurrencies.getCurrency(currencyCode), number,
+        return new RoundedMoney(number,MonetaryCurrencies.getCurrency(currencyCode),
                                 MonetaryContext.from(monetaryContext, RoundedMoney.class), rounding);
     }
 
@@ -263,8 +262,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
 
     public RoundedMoney add(MonetaryAmount amount){
         checkAmountParameter(amount);
-        return (RoundedMoney) new RoundedMoney(this.currency,
-                                               this.number.add(amount.getNumber().numberValue(BigDecimal.class)),
+        return (RoundedMoney) new RoundedMoney(
+                                               this.number.add(amount.getNumber().numberValue(BigDecimal.class)),this.currency,
                                                this.monetaryContext, this.rounding).with(rounding);
     }
 
@@ -276,7 +275,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
 
         BigDecimal dec = this.number.divide(getBigDecimal(divisor), this.monetaryContext
                 .getAttribute(RoundingMode.class, RoundingMode.HALF_EVEN));
-        return (RoundedMoney) new RoundedMoney(this.currency, dec, this.monetaryContext, this.rounding).with(rounding);
+        return (RoundedMoney) new RoundedMoney(dec, this.currency, this.monetaryContext, this.rounding).with(rounding);
     }
 
     /*
@@ -286,8 +285,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
     public RoundedMoney[] divideAndRemainder(Number divisor){
         BigDecimal[] dec = this.number.divideAndRemainder(getBigDecimal(divisor), this.monetaryContext
                 .getAttribute(MathContext.class, MathContext.DECIMAL64));
-        return new RoundedMoney[]{new RoundedMoney(this.currency, dec[0], this.monetaryContext, this.rounding),
-                (RoundedMoney) new RoundedMoney(this.currency, dec[1], this.monetaryContext, this.rounding)
+        return new RoundedMoney[]{new RoundedMoney(dec[0], this.currency, this.monetaryContext, this.rounding),
+                (RoundedMoney) new RoundedMoney(dec[1], this.currency, this.monetaryContext, this.rounding)
                         .with(rounding)};
     }
 
@@ -298,7 +297,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
     public RoundedMoney divideToIntegralValue(Number divisor){
         BigDecimal dec = this.number.divideToIntegralValue(getBigDecimal(divisor), this.monetaryContext
                 .getAttribute(MathContext.class, MathContext.DECIMAL64));
-        return new RoundedMoney(this.currency, dec, this.monetaryContext, this.rounding);
+        return new RoundedMoney(dec, this.currency, this.monetaryContext, this.rounding);
     }
 
     /*
@@ -308,7 +307,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
     public RoundedMoney multiply(Number multiplicand){
         BigDecimal dec = this.number.multiply(getBigDecimal(multiplicand), this.monetaryContext
                 .getAttribute(MathContext.class, MathContext.DECIMAL64));
-        return (RoundedMoney) new RoundedMoney(this.currency, dec, this.monetaryContext, this.rounding).with(rounding);
+        return (RoundedMoney) new RoundedMoney(dec, this.currency, this.monetaryContext, this.rounding).with(rounding);
     }
 
     /*
@@ -316,8 +315,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @see javax.money.MonetaryAmount#negate()
      */
     public RoundedMoney negate(){
-        return new RoundedMoney(this.currency, this.number
-                .negate(this.monetaryContext.getAttribute(MathContext.class, MathContext.DECIMAL64)),
+        return new RoundedMoney(this.number
+                .negate(this.monetaryContext.getAttribute(MathContext.class, MathContext.DECIMAL64)), this.currency,
                                 this.monetaryContext, this.rounding);
     }
 
@@ -326,8 +325,9 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @see javax.money.MonetaryAmount#plus()
      */
     public RoundedMoney plus(){
-        return new RoundedMoney(this.currency, this.number
+        return new RoundedMoney(this.number
                 .plus(this.monetaryContext.getAttribute(MathContext.class, MathContext.DECIMAL64)),
+                                this.currency,
                                 this.monetaryContext, this.rounding);
     }
 
@@ -340,9 +340,10 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         if(subtrahend.isZero()){
             return this;
         }
-        return new RoundedMoney(this.currency, this.number
+        return new RoundedMoney(this.number
                 .subtract(subtrahend.getNumber().numberValue(BigDecimal.class),
                           this.monetaryContext.getAttribute(MathContext.class, MathContext.DECIMAL64)),
+                                this.currency,
                                 this.monetaryContext, this.rounding);
     }
 
@@ -351,8 +352,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @see javax.money.MonetaryAmount#pow(int)
      */
     public RoundedMoney pow(int n){
-        return new RoundedMoney(this.currency, this.number
-                .pow(n, this.monetaryContext.getAttribute(MathContext.class, MathContext.DECIMAL64)),
+        return new RoundedMoney(this.number
+                .pow(n, this.monetaryContext.getAttribute(MathContext.class, MathContext.DECIMAL64)),this.currency,
                                 this.monetaryContext, this.rounding).with(rounding);
     }
 
@@ -361,7 +362,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @see javax.money.MonetaryAmount#ulp()
      */
     public RoundedMoney ulp(){
-        return new RoundedMoney(this.currency, this.number.ulp(), DEFAULT_MONETARY_CONTEXT, this.rounding);
+        return new RoundedMoney(this.number.ulp(), this.currency, DEFAULT_MONETARY_CONTEXT, this.rounding);
     }
 
     /*
@@ -369,8 +370,8 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @see javax.money.MonetaryAmount#remainder(Number)
      */
     public RoundedMoney remainder(Number divisor){
-        return new RoundedMoney(this.currency, this.number.remainder(getBigDecimal(divisor), this.monetaryContext
-                .getAttribute(MathContext.class, MathContext.DECIMAL64)), this.monetaryContext, this.rounding);
+        return new RoundedMoney(this.number.remainder(getBigDecimal(divisor), this.monetaryContext
+                .getAttribute(MathContext.class, MathContext.DECIMAL64)), this.currency, this.monetaryContext, this.rounding);
     }
 
     /*
@@ -378,7 +379,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
      */
     public RoundedMoney scaleByPowerOfTen(int n){
-        return new RoundedMoney(this.currency, this.number.scaleByPowerOfTen(n), this.monetaryContext, this.rounding);
+        return new RoundedMoney(this.number.scaleByPowerOfTen(n), this.currency, this.monetaryContext, this.rounding);
     }
 
     /*
@@ -427,7 +428,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      */
     public RoundedMoney with(Number amount){
         checkNumber(amount);
-        return new RoundedMoney(this.currency, getBigDecimal(amount), this.monetaryContext, this.rounding);
+        return new RoundedMoney(getBigDecimal(amount), this.currency, this.monetaryContext, this.rounding);
     }
 
     /**
@@ -439,7 +440,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      */
     public RoundedMoney with(CurrencyUnit currency){
         Objects.requireNonNull(currency, "currency required");
-        return new RoundedMoney(currency, asType(BigDecimal.class), this.monetaryContext, this.rounding);
+        return new RoundedMoney(asType(BigDecimal.class), currency, this.monetaryContext, this.rounding);
     }
 
     /*
@@ -448,7 +449,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      */
     public RoundedMoney with(CurrencyUnit currency, Number amount){
         checkNumber(amount);
-        return new RoundedMoney(currency, getBigDecimal(amount), this.monetaryContext, this.rounding);
+        return new RoundedMoney(getBigDecimal(amount), currency, this.monetaryContext, this.rounding);
     }
 
     /*
@@ -550,14 +551,14 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
             return (RoundedMoney) amt;
         }
         if(amt.getClass() == FastMoney.class){
-            return RoundedMoney.of(amt.getCurrency(), ((FastMoney) amt).getNumber().numberValue(BigDecimal.class),
+            return RoundedMoney.of(((FastMoney) amt).getNumber().numberValue(BigDecimal.class), amt.getCurrency(),
                                    DEFAULT_MONETARY_CONTEXT);
         }else if(amt.getClass() == Money.class){
             return RoundedMoney
-                    .of(amt.getCurrency(), amt.getNumber().numberValue(BigDecimal.class), DEFAULT_MONETARY_CONTEXT);
+                    .of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), DEFAULT_MONETARY_CONTEXT);
         }
         return RoundedMoney
-                .of(amt.getCurrency(), amt.getNumber().numberValue(BigDecimal.class), DEFAULT_MONETARY_CONTEXT);
+                .of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), DEFAULT_MONETARY_CONTEXT);
     }
 
     /*

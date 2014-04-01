@@ -57,8 +57,8 @@ public class RoundedMoneyTest {
 
 	@Test
 	public void testOfCurrencyUnitDouble() {
-		RoundedMoney m = RoundedMoney.of(MonetaryCurrencies.getCurrency("EUR"),
-				10.0d);
+		RoundedMoney m = RoundedMoney.of(
+				10.0d,MonetaryCurrencies.getCurrency("EUR"));
 		assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
 	}
 
@@ -111,14 +111,14 @@ public class RoundedMoneyTest {
 		RoundedMoney money1 = RoundedMoney.of(EURO, BigDecimal.ONE);
 		RoundedMoney money2 = RoundedMoney.of(EURO, new BigDecimal("1"));
 		assertEquals(money1.hashCode(), money2.hashCode());
-		RoundedMoney money3 = RoundedMoney.of(DOLLAR, 1.0);
+		RoundedMoney money3 = RoundedMoney.of(1.0,DOLLAR);
 		assertTrue(money1.hashCode() != money3.hashCode());
 		assertTrue(money2.hashCode() != money3.hashCode());
-		RoundedMoney money4 = RoundedMoney.of(DOLLAR, BigDecimal.ONE);
+		RoundedMoney money4 = RoundedMoney.of(BigDecimal.ONE,DOLLAR);
 		assertTrue(money1.hashCode() != money4.hashCode());
 		assertTrue(money2.hashCode() != money4.hashCode());
-		RoundedMoney money5 = RoundedMoney.of(DOLLAR, BigDecimal.ONE);
-		RoundedMoney money6 = RoundedMoney.of(DOLLAR, 1.0);
+		RoundedMoney money5 = RoundedMoney.of( BigDecimal.ONE,DOLLAR);
+		RoundedMoney money6 = RoundedMoney.of(1.0,DOLLAR);
 		assertTrue(money1.hashCode() != money5.hashCode());
 		assertTrue(money2.hashCode() != money5.hashCode());
 		assertTrue(money1.hashCode() != money6.hashCode());
@@ -127,7 +127,7 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#getDefaultMathContext()}.
+	 * {@link RoundedMoney#getFactory()#testGetDefaultMathContext()} .
 	 */
 	@Test
 	public void testGetDefaultMathContext() {
@@ -138,66 +138,66 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.math.BigDecimal, java.math.MathContext)}
+	 * {@link org.javamoney.moneta.RoundedMoney#of(Number, javax.money.CurrencyUnit, javax.money.MonetaryOperator)}
 	 * .
 	 */
 	@Test
 	public void testOfCurrencyUnitBigDecimalMathContext() {
 		RoundedMoney m = RoundedMoney.of(
-				EURO,
 				BigDecimal.valueOf(2.15),
+                EURO,
 				new MonetaryContext.Builder().setPrecision(2)
-						.set(RoundingMode.DOWN).create());
+						.setAttribute(RoundingMode.DOWN).create());
 		RoundedMoney m2 = RoundedMoney.of(EURO, BigDecimal.valueOf(2.1));
 		assertEquals(m, m2);
 		RoundedMoney m3 = m.multiply(100);
-		assertEquals(RoundedMoney.of(EURO, 210), m3.abs());
+		assertEquals(RoundedMoney.of(210, EURO), m3.abs());
 	}
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.lang.Number)}
+	 * {@link org.javamoney.moneta.RoundedMoney#of(Number, javax.money.CurrencyUnit)}
 	 * .
 	 */
 	@Test
 	public void testOfCurrencyUnitNumber() {
-		RoundedMoney m = RoundedMoney.of(EURO, (byte) 2);
+		RoundedMoney m = RoundedMoney.of((byte) 2,EURO);
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Byte.valueOf((byte) 2),
 				m.getNumber().numberValue(Byte.class));
-		m = RoundedMoney.of(DOLLAR, (short) -2);
+		m = RoundedMoney.of((short) -2, DOLLAR);
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Short.valueOf((short) -2),
 				m.getNumber().numberValue(Short.class));
-		m = RoundedMoney.of(EURO, (int) -12);
+		m = RoundedMoney.of((int) -12, EURO);
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Integer.valueOf((int) -12),
 				m.getNumber().numberValue(Integer.class));
-		m = RoundedMoney.of(DOLLAR, (long) 12);
+		m = RoundedMoney.of( (long) 12, DOLLAR);
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Long.valueOf((long) 12),
 				m.getNumber().numberValue(Long.class));
-		m = RoundedMoney.of(EURO, (float) 12.23);
+		m = RoundedMoney.of((float) 12.23, EURO);
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Float.valueOf((float) 12.23),
 				m.getNumber().numberValue(Float.class));
-		m = RoundedMoney.of(DOLLAR, (double) -12.23);
+		m = RoundedMoney.of((double) -12.23,DOLLAR);
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Double.valueOf((double) -12.23), m.getNumber()
 				.numberValue(Double.class));
-		m = RoundedMoney.of(EURO, (Number) BigDecimal.valueOf(234.2345));
+		m = RoundedMoney.of( (Number) BigDecimal.valueOf(234.2345),EURO);
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(BigDecimal.valueOf(234.2345),
 				m.getNumber().numberValue(BigDecimal.class));
-		m = RoundedMoney.of(DOLLAR,
-				(Number) BigInteger.valueOf(23232312321432432L));
+		m = RoundedMoney.of(
+				(Number) BigInteger.valueOf(23232312321432432L),DOLLAR);
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Long.valueOf(23232312321432432L), m.getNumber()
@@ -208,58 +208,58 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(javax.money.CurrencyUnit, java.lang.Number, java.math.MathContext)}
+	 * {@link org.javamoney.moneta.RoundedMoney#of(Number, javax.money.CurrencyUnit, javax.money.MonetaryContext)}
 	 * .
 	 */
 	@Test
 	public void testOfCurrencyUnitNumberMonetaryContext() {
 		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
-				.setPrecision(2345).set(RoundingMode.CEILING).create();
-		RoundedMoney m = RoundedMoney.of(EURO, (byte) 2, mc);
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).create();
+		RoundedMoney m = RoundedMoney.of((byte) 2, EURO, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Byte.valueOf((byte) 2),
 				m.getNumber().numberValue(Byte.class));
-		m = RoundedMoney.of(DOLLAR, (short) -2, mc);
+		m = RoundedMoney.of((short) -2,DOLLAR,  mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Short.valueOf((short) -2),
 				m.getNumber().numberValue(Short.class));
-		m = RoundedMoney.of(EURO, (int) -12, mc);
+		m = RoundedMoney.of( (int) -12,EURO, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Integer.valueOf((int) -12),
 				m.getNumber().numberValue(Integer.class));
-		m = RoundedMoney.of(DOLLAR, (long) 12, mc);
+		m = RoundedMoney.of((long) 12,DOLLAR,  mc);
 		assertEquals(mc, m.getMonetaryContext());
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Long.valueOf((long) 12),
 				m.getNumber().numberValue(Long.class));
-		m = RoundedMoney.of(EURO, (float) 12.23, mc);
+		m = RoundedMoney.of((float) 12.23, EURO, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Float.valueOf((float) 12.23),
 				m.getNumber().numberValue(Float.class));
-		m = RoundedMoney.of(DOLLAR, (double) -12.23, mc);
+		m = RoundedMoney.of( (double) -12.23, DOLLAR,mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(Double.valueOf((double) -12.23), m.getNumber()
 				.numberValue(Double.class));
-		m = RoundedMoney.of(EURO, (Number) BigDecimal.valueOf(234.2345), mc);
+		m = RoundedMoney.of((Number) BigDecimal.valueOf(234.2345),EURO,  mc);
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(BigDecimal.valueOf(234.2345),
 				m.getNumber().numberValue(BigDecimal.class));
-		m = RoundedMoney.of(DOLLAR,
-				(Number) BigInteger.valueOf(23232312321432432L), mc);
+		m = RoundedMoney.of(
+				(Number) BigInteger.valueOf(23232312321432432L), DOLLAR,mc);
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(mc, m.getMonetaryContext());
@@ -271,48 +271,48 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(java.lang.String, java.lang.Number)}
+	 * {@link org.javamoney.moneta.RoundedMoney#of(java.lang.Number, java.lang.String)}
 	 * .
 	 */
 	@Test
 	public void testOfStringNumber() {
-		RoundedMoney m = RoundedMoney.of("EUR", (byte) 2);
+		RoundedMoney m = RoundedMoney.of( (byte) 2, "EUR");
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Byte.valueOf((byte) 2),
 				m.getNumber().numberValue(Byte.class));
-		m = RoundedMoney.of("USD", (short) -2);
+		m = RoundedMoney.of( (short) -2, "USD");
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Short.valueOf((short) -2),
 				m.getNumber().numberValue(Short.class));
-		m = RoundedMoney.of("EUR", (int) -12);
+		m = RoundedMoney.of( (int) -12, "EUR");
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Integer.valueOf((int) -12),
 				m.getNumber().numberValue(Integer.class));
-		m = RoundedMoney.of("USD", (long) 12);
+		m = RoundedMoney.of( (long) 12, "USD");
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Long.valueOf((long) 12),
 				m.getNumber().numberValue(Long.class));
-		m = RoundedMoney.of("EUR", (float) 12.23);
+		m = RoundedMoney.of((float) 12.23,"EUR");
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Float.valueOf((float) 12.23),
 				m.getNumber().numberValue(Float.class));
-		m = RoundedMoney.of("USD", (double) -12.23);
+		m = RoundedMoney.of( (double) -12.23,"USD");
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Double.valueOf((double) -12.23), m.getNumber()
 				.numberValue(Double.class));
-		m = RoundedMoney.of("EUR", (Number) BigDecimal.valueOf(234.2345));
+		m = RoundedMoney.of( (Number) BigDecimal.valueOf(234.2345),"EUR");
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(BigDecimal.valueOf(234.2345),
 				m.getNumber().numberValue(BigDecimal.class));
-		m = RoundedMoney.of("USD",
-				(Number) BigInteger.valueOf(23232312321432432L));
+		m = RoundedMoney.of(
+				(Number) BigInteger.valueOf(23232312321432432L),"USD");
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Long.valueOf(23232312321432432L), m.getNumber()
@@ -326,7 +326,7 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testRoundtrip() {
-		RoundedMoney m = RoundedMoney.of("USD", new BigDecimal("0.5"));
+		RoundedMoney m = RoundedMoney.of(new BigDecimal("0.5"),"USD");
 		Money mm = Money.from(m);
 		RoundedMoney m2 = RoundedMoney.from(mm);
 		assertEquals(m, m2);
@@ -334,58 +334,58 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#of(java.lang.String, java.lang.Number, java.math.MathContext)}
+	 * {@link org.javamoney.moneta.RoundedMoney#of(java.lang.Number, java.lang.String, javax.money.MonetaryContext}
 	 * .
 	 */
 	@Test
 	public void testOfStringNumberMathContext() {
 		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
-				.setPrecision(2345).set(RoundingMode.CEILING).create();
-		RoundedMoney m = RoundedMoney.of("EUR", (byte) 2, mc);
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).create();
+		RoundedMoney m = RoundedMoney.of( (byte) 2,"EUR", mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Byte.valueOf((byte) 2),
 				m.getNumber().numberValue(Byte.class));
-		m = RoundedMoney.of("USD", (short) -2, mc);
+		m = RoundedMoney.of( (short) -2, "USD",mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Short.valueOf((short) -2),
 				m.getNumber().numberValue(Short.class));
-		m = RoundedMoney.of("EUR", (int) -12, mc);
+		m = RoundedMoney.of( (int) -12,"EUR", mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Integer.valueOf((int) -12),
 				m.getNumber().numberValue(Integer.class));
-		m = RoundedMoney.of("USD", (long) 12, mc);
+		m = RoundedMoney.of( (long) 12, "USD",mc);
 		assertEquals(mc, m.getMonetaryContext());
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(Long.valueOf((long) 12),
 				m.getNumber().numberValue(Long.class));
-		m = RoundedMoney.of("EUR", (float) 12.23, mc);
+		m = RoundedMoney.of((float) 12.23, "EUR", mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(Float.valueOf((float) 12.23),
 				m.getNumber().numberValue(Float.class));
-		m = RoundedMoney.of("USD", (double) -12.23, mc);
+		m = RoundedMoney.of( (double) -12.23, "USD",mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(Double.valueOf((double) -12.23), m.getNumber()
 				.numberValue(Double.class));
-		m = RoundedMoney.of("EUR", (Number) BigDecimal.valueOf(234.2345), mc);
+		m = RoundedMoney.of( (Number) BigDecimal.valueOf(234.2345),"EUR",  mc);
 		assertNotNull(m);
 		assertEquals(EURO, m.getCurrency());
 		assertEquals(mc, m.getMonetaryContext());
 		assertEquals(BigDecimal.valueOf(234.2345),
 				m.getNumber().numberValue(BigDecimal.class));
-		m = RoundedMoney.of("USD",
-				(Number) BigInteger.valueOf(23232312321432432L), mc);
+		m = RoundedMoney.of(
+				(Number) BigInteger.valueOf(23232312321432432L), "USD",mc);
 		assertNotNull(m);
 		assertEquals(DOLLAR, m.getCurrency());
 		assertEquals(mc, m.getMonetaryContext());
@@ -402,10 +402,10 @@ public class RoundedMoneyTest {
 	@Test
 	public void testEqualsObject() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", BigDecimal.ZERO),
-				RoundedMoney.of("CHF", BigDecimal.ONE),
-				RoundedMoney.of("XXX", BigDecimal.ONE),
-				RoundedMoney.of("XXX", BigDecimal.ONE.negate()) };
+				RoundedMoney.of( BigDecimal.ZERO,"CHF"),
+				RoundedMoney.of( BigDecimal.ONE,"CHF"),
+				RoundedMoney.of( BigDecimal.ONE,"XXX"),
+				RoundedMoney.of( BigDecimal.ONE.negate(),"XXX") };
 		for (int i = 0; i < moneys.length; i++) {
 			for (int j = 0; j < moneys.length; j++) {
 				if (i == j) {
@@ -424,10 +424,12 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testCompareTo() {
-		RoundedMoney m1 = RoundedMoney.of("CHF", -2);
-		RoundedMoney m2 = RoundedMoney.of("CHF", 0);
-		RoundedMoney m3 = RoundedMoney.of("CHF", -0);
-		RoundedMoney m4 = RoundedMoney.of("CHF", 2);
+		RoundedMoney m1 = RoundedMoney.of( -2,"CHF"
+                                           );
+		RoundedMoney m2 = RoundedMoney.of( 0,"CHF"
+                                           );
+		RoundedMoney m3 = RoundedMoney.of( -0,"CHF");
+		RoundedMoney m4 = RoundedMoney.of( 2,"CHF");
 		assertEquals(0, m2.compareTo(m3));
 		assertEquals(0, m2.compareTo(m2));
 		assertEquals(0, m3.compareTo(m3));
@@ -444,16 +446,16 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#getMathContext()}.
+	 * {@link RoundedMoney#getMonetaryContext()} .
 	 */
 	@Test
 	public void testGetMonetaryContext() {
-		RoundedMoney m = RoundedMoney.of("CHF", 10);
+		RoundedMoney m = RoundedMoney.of( 10,"CHF");
 		assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT,
 				m.getMonetaryContext());
 		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
-				.setPrecision(2345).set(RoundingMode.CEILING).create();
-		m = RoundedMoney.of("CHF", 10, mc);
+				.setPrecision(2345).setAttribute(RoundingMode.CEILING).create();
+		m = RoundedMoney.of( 10, "CHF",mc);
 		assertEquals(mc, m.getMonetaryContext());
 	}
 
@@ -462,13 +464,13 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testAbs() {
-		RoundedMoney m = RoundedMoney.of("CHF", 10);
+		RoundedMoney m = RoundedMoney.of( 10,"CHF");
 		assertEquals(m, m.abs());
 		assertTrue(m == m.abs());
-		m = RoundedMoney.of("CHF", 0);
+		m = RoundedMoney.of( 0,"CHF");
 		assertEquals(m, m.abs());
 		assertTrue(m == m.abs());
-		m = RoundedMoney.of("CHF", -10);
+		m = RoundedMoney.of( -10,"CHF");
 		assertEquals(m.negate(), m.abs());
 		assertTrue(m != m.abs());
 	}
@@ -493,10 +495,10 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testDivideNumber() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
 		assertEquals(
-				RoundedMoney.of("CHF",
-						new BigDecimal("100.00").divide(BigDecimal.valueOf(5))),
+				RoundedMoney.of(
+						new BigDecimal("100.00").divide(BigDecimal.valueOf(5)),"CHF"),
 				m.divide(BigDecimal.valueOf(5)));
 	}
 
@@ -507,10 +509,10 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testDivideAndRemainderNumber() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		assertEquals(RoundedMoney.of("CHF", BigDecimal.valueOf(33)),
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
+		assertEquals(RoundedMoney.of( BigDecimal.valueOf(33),"CHF"),
 				m.divideAndRemainder(BigDecimal.valueOf(3))[0]);
-		assertEquals(RoundedMoney.of("CHF", BigDecimal.valueOf(1)),
+		assertEquals(RoundedMoney.of( BigDecimal.valueOf(1),"CHF"),
 				m.divideAndRemainder(BigDecimal.valueOf(3))[1]);
 	}
 
@@ -521,10 +523,10 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testDivideToIntegralValueNumber() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		assertEquals(RoundedMoney.of("CHF", BigDecimal.valueOf(5)),
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
+		assertEquals(RoundedMoney.of( BigDecimal.valueOf(5),"CHF"),
 				m.divideToIntegralValue(BigDecimal.valueOf(20)));
-		assertEquals(RoundedMoney.of("CHF", BigDecimal.valueOf(33)),
+		assertEquals(RoundedMoney.of( BigDecimal.valueOf(33),"CHF"),
 				m.divideToIntegralValue(BigDecimal.valueOf(3)));
 	}
 
@@ -534,12 +536,12 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testMultiplyNumber() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("400.00")),
+		RoundedMoney m = RoundedMoney.of( 100, "CHF");
+		assertEquals(RoundedMoney.of( new BigDecimal("400.00"),"CHF"),
 				m.multiply(4));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("200.00")),
+		assertEquals(RoundedMoney.of( new BigDecimal("200.00"),"CHF"),
 				m.multiply(2));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("50.0")),
+		assertEquals(RoundedMoney.of( new BigDecimal("50.0"),"CHF"),
 				m.multiply(new BigDecimal("0.5")));
 	}
 
@@ -548,10 +550,10 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testNegate() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		assertEquals(RoundedMoney.of("CHF", -100), m.negate());
-		m = RoundedMoney.of("CHF", -123.234);
-		assertEquals(RoundedMoney.of("CHF", 123.234), m.negate());
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
+		assertEquals(RoundedMoney.of( -100,"CHF"), m.negate());
+		m = RoundedMoney.of( -123.234,"CHF");
+		assertEquals(RoundedMoney.of( 123.234,"CHF"), m.negate());
 	}
 
 	/**
@@ -559,10 +561,10 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testPlus() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		assertEquals(RoundedMoney.of("CHF", 100), m.plus());
-		m = RoundedMoney.of("CHF", 123.234);
-		assertEquals(RoundedMoney.of("CHF", 123.234), m.plus());
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
+		assertEquals(RoundedMoney.of( 100,"CHF"), m.plus());
+		m = RoundedMoney.of( 123.234,"CHF");
+		assertEquals(RoundedMoney.of( 123.234,"CHF"), m.plus());
 	}
 
 	/**
@@ -572,34 +574,34 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testSubtract() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
-		RoundedMoney s1 = RoundedMoney.of("CHF", 100);
-		RoundedMoney s2 = RoundedMoney.of("CHF", 200);
-		RoundedMoney s3 = RoundedMoney.of("CHF", 0);
-		assertEquals(RoundedMoney.of("CHF", 0), m.subtract(s1));
-		assertEquals(RoundedMoney.of("CHF", -100), m.subtract(s2));
-		assertEquals(RoundedMoney.of("CHF", 100), m.subtract(s3));
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
+		RoundedMoney s1 = RoundedMoney.of( 100,"CHF");
+		RoundedMoney s2 = RoundedMoney.of( 200,"CHF");
+		RoundedMoney s3 = RoundedMoney.of( 0,"CHF");
+		assertEquals(RoundedMoney.of( 0,"CHF"), m.subtract(s1));
+		assertEquals(RoundedMoney.of( -100,"CHF"), m.subtract(s2));
+		assertEquals(RoundedMoney.of( 100,"CHF"), m.subtract(s3));
 		assertTrue(m == m.subtract(s3));
-		m = RoundedMoney.of("CHF", new BigDecimal("-123.234"));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("-223.234")),
+		m = RoundedMoney.of( new BigDecimal("-123.234"),"CHF");
+		assertEquals(RoundedMoney.of( new BigDecimal("-223.234"),"CHF"),
 				m.subtract(s1));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("-323.234")),
+		assertEquals(RoundedMoney.of( new BigDecimal("-323.234"),"CHF"),
 				m.subtract(s2));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("-123.234")),
+		assertEquals(RoundedMoney.of( new BigDecimal("-123.234"),"CHF"),
 				m.subtract(s3));
 		assertTrue(m == m.subtract(s3));
-		m = RoundedMoney.of("CHF", new BigDecimal("12.402345534"));
-		s1 = RoundedMoney.of("CHF", new BigDecimal("2343.45"));
-		s2 = RoundedMoney.of("CHF", new BigDecimal("12.402345534"));
-		s3 = RoundedMoney.of("CHF", new BigDecimal("-2343.45"));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("12.402345534")
-				.subtract(new BigDecimal("2343.45"))), m.subtract(s1));
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("12.402345534")
-				.subtract(new BigDecimal("12.402345534"))), m.subtract(s2));
+		m = RoundedMoney.of( new BigDecimal("12.402345534"),"CHF");
+		s1 = RoundedMoney.of( new BigDecimal("2343.45"),"CHF");
+		s2 = RoundedMoney.of( new BigDecimal("12.402345534"),"CHF");
+		s3 = RoundedMoney.of( new BigDecimal("-2343.45"),"CHF");
+		assertEquals(RoundedMoney.of( new BigDecimal("12.402345534")
+				.subtract(new BigDecimal("2343.45")),"CHF"), m.subtract(s1));
+		assertEquals(RoundedMoney.of( new BigDecimal("12.402345534")
+				.subtract(new BigDecimal("12.402345534")),"CHF"), m.subtract(s2));
 		assertTrue(m.subtract(s2).isZero());
-		assertEquals(RoundedMoney.of("CHF", new BigDecimal("2355.852345534")),
+		assertEquals(RoundedMoney.of( new BigDecimal("2355.852345534"),"CHF"),
 				m.subtract(s3));
-		assertTrue(m == m.subtract(RoundedMoney.of("CHF", 0)));
+		assertTrue(m == m.subtract(RoundedMoney.of( 0,"CHF")));
 	}
 
 	/**
@@ -607,12 +609,12 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testPow() {
-		RoundedMoney m = RoundedMoney.of("CHF", new BigDecimal("23.23"));
+		RoundedMoney m = RoundedMoney.of( new BigDecimal("23.23"),"CHF");
 		for (int p = 0; p < 10; p++) {
 			assertEquals(
-					RoundedMoney.of("CHF",
+					RoundedMoney.of(
 							m.getNumber().numberValue(BigDecimal.class).pow(p)
-									.setScale(2, RoundingMode.HALF_EVEN)),
+									.setScale(2, RoundingMode.HALF_EVEN),"CHF"),
 					m.pow(p));
 		}
 	}
@@ -623,10 +625,10 @@ public class RoundedMoneyTest {
 	@Test
 	public void testUlp() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435),
-				RoundedMoney.of("CHF", 0), RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -723527.36532) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF"),
+				RoundedMoney.of( 0,"CHF"), RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -723527.36532,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertEquals("Invalid ulp.",
 					m.with(m.getNumber().numberValue(BigDecimal.class).ulp()),
@@ -641,10 +643,10 @@ public class RoundedMoneyTest {
 	@Test
 	public void testRemainderNumber() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435),
-				RoundedMoney.of("CHF", 0), RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -723527.36532) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF"),
+				RoundedMoney.of( 0,"CHF"), RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -723527.36532,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertEquals(
 					"Invalid remainder of " + 10.50,
@@ -675,10 +677,10 @@ public class RoundedMoneyTest {
 	@Test
 	public void testScaleByPowerOfTen() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435),
-				RoundedMoney.of("CHF", 0), RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -723527.36532) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF"),
+				RoundedMoney.of( 0,"CHF"), RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -723527.36532,"CHF") };
 		for (RoundedMoney m : moneys) {
 			for (int p = -10; p < 10; p++) {
 				assertEquals(
@@ -695,17 +697,17 @@ public class RoundedMoneyTest {
 	@Test
 	public void testIsZero() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435),
-				RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -723527.36532) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF"),
+				RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -723527.36532,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertFalse(m.isZero());
 		}
-		moneys = new RoundedMoney[] { RoundedMoney.of("CHF", 0),
-				RoundedMoney.of("CHF", 0.0),
-				RoundedMoney.of("CHF", BigDecimal.ZERO),
-				RoundedMoney.of("CHF", new BigDecimal("0.00000000000000000")) };
+		moneys = new RoundedMoney[] { RoundedMoney.of( 0,"CHF"),
+				RoundedMoney.of( 0.0,"CHF"),
+				RoundedMoney.of( BigDecimal.ZERO,"CHF"),
+				RoundedMoney.of( new BigDecimal("0.00000000000000000"),"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertTrue(m.isZero());
 		}
@@ -717,18 +719,18 @@ public class RoundedMoneyTest {
 	@Test
 	public void testIsPositive() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertTrue(m.isPositive());
 		}
-		moneys = new RoundedMoney[] { RoundedMoney.of("CHF", 0),
-				RoundedMoney.of("CHF", 0.0),
-				RoundedMoney.of("CHF", BigDecimal.ZERO),
-				RoundedMoney.of("CHF", new BigDecimal("0.00000000000000000")),
-				RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -34242344),
-				RoundedMoney.of("CHF", -23123213.435) };
+		moneys = new RoundedMoney[] { RoundedMoney.of( 0,"CHF"),
+				RoundedMoney.of( 0.0,"CHF"),
+				RoundedMoney.of( BigDecimal.ZERO,"CHF"),
+				RoundedMoney.of( new BigDecimal("0.00000000000000000"),"CHF"),
+				RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -34242344,"CHF"),
+				RoundedMoney.of( -23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertFalse(m.isPositive());
 		}
@@ -740,19 +742,19 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsPositiveOrZero() {
-		RoundedMoney[] moneys = new RoundedMoney[] { RoundedMoney.of("CHF", 0),
-				RoundedMoney.of("CHF", 0.0),
-				RoundedMoney.of("CHF", BigDecimal.ZERO),
-				RoundedMoney.of("CHF", new BigDecimal("0.00000000000000000")),
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435) };
+		RoundedMoney[] moneys = new RoundedMoney[] { RoundedMoney.of( 0,"CHF"),
+				RoundedMoney.of( 0.0,"CHF"),
+				RoundedMoney.of( BigDecimal.ZERO,"CHF"),
+				RoundedMoney.of( new BigDecimal("0.00000000000000000"),"CHF"),
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertTrue("Invalid positiveOrZero (expected true): " + m,
 					m.isPositiveOrZero());
 		}
-		moneys = new RoundedMoney[] { RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -34242344),
-				RoundedMoney.of("CHF", -23123213.435) };
+		moneys = new RoundedMoney[] { RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -34242344,"CHF"),
+				RoundedMoney.of( -23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertFalse("Invalid positiveOrZero (expected false): " + m,
 					m.isPositiveOrZero());
@@ -764,19 +766,19 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsNegative() {
-		RoundedMoney[] moneys = new RoundedMoney[] { RoundedMoney.of("CHF", 0),
-				RoundedMoney.of("CHF", 0.0),
-				RoundedMoney.of("CHF", BigDecimal.ZERO),
-				RoundedMoney.of("CHF", new BigDecimal("0.00000000000000000")),
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435) };
+		RoundedMoney[] moneys = new RoundedMoney[] { RoundedMoney.of( 0,"CHF"),
+				RoundedMoney.of( 0.0,"CHF"),
+				RoundedMoney.of( BigDecimal.ZERO,"CHF"),
+				RoundedMoney.of( new BigDecimal("0.00000000000000000"),"CHF"),
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertFalse("Invalid isNegative (expected false): " + m,
 					m.isNegative());
 		}
-		moneys = new RoundedMoney[] { RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -34242344),
-				RoundedMoney.of("CHF", -23123213.435) };
+		moneys = new RoundedMoney[] { RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -34242344,"CHF"),
+				RoundedMoney.of( -23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertTrue("Invalid isNegative (expected true): " + m,
 					m.isNegative());
@@ -790,19 +792,19 @@ public class RoundedMoneyTest {
 	@Test
 	public void testIsNegativeOrZero() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", 23123213.435) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( 23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertFalse("Invalid negativeOrZero (expected false): " + m,
 					m.isNegativeOrZero());
 		}
-		moneys = new RoundedMoney[] { RoundedMoney.of("CHF", 0),
-				RoundedMoney.of("CHF", 0.0),
-				RoundedMoney.of("CHF", BigDecimal.ZERO),
-				RoundedMoney.of("CHF", new BigDecimal("0.00000000000000000")),
-				RoundedMoney.of("CHF", -100),
-				RoundedMoney.of("CHF", -34242344),
-				RoundedMoney.of("CHF", -23123213.435) };
+		moneys = new RoundedMoney[] { RoundedMoney.of( 0,"CHF"),
+				RoundedMoney.of( 0.0,"CHF"),
+				RoundedMoney.of( BigDecimal.ZERO,"CHF"),
+				RoundedMoney.of( new BigDecimal("0.00000000000000000"),"CHF"),
+				RoundedMoney.of( -100,"CHF"),
+				RoundedMoney.of( -34242344,"CHF"),
+				RoundedMoney.of( -23123213.435,"CHF") };
 		for (RoundedMoney m : moneys) {
 			assertTrue("Invalid negativeOrZero (expected true): " + m,
 					m.isNegativeOrZero());
@@ -816,11 +818,11 @@ public class RoundedMoneyTest {
 	@Test
 	public void testWithNumber() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("CHF", 34242344),
-				RoundedMoney.of("CHF", new BigDecimal("23123213.435")),
-				RoundedMoney.of("CHF", new BigDecimal("-23123213.435")),
-				RoundedMoney.of("CHF", -23123213), RoundedMoney.of("CHF", 0) };
-		RoundedMoney s = RoundedMoney.of("CHF", 10);
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"CHF"),
+				RoundedMoney.of( new BigDecimal("23123213.435"),"CHF"),
+				RoundedMoney.of( new BigDecimal("-23123213.435"),"CHF"),
+				RoundedMoney.of( -23123213,"CHF"), RoundedMoney.of( 0,"CHF") };
+		RoundedMoney s = RoundedMoney.of( 10,"CHF");
 		RoundedMoney[] moneys2 = new RoundedMoney[] { s.with(100),
 				s.with(34242344), s.with(new BigDecimal("23123213.435")),
 				s.with(new BigDecimal("-23123213.435")), s.with(-23123213),
@@ -838,11 +840,11 @@ public class RoundedMoneyTest {
 	@Test
 	public void testWithCurrencyUnitNumber() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("USD", 34242344),
-				RoundedMoney.of("EUR", new BigDecimal("23123213.435")),
-				RoundedMoney.of("USS", new BigDecimal("-23123213.435")),
-				RoundedMoney.of("USN", -23123213), RoundedMoney.of("GBP", 0) };
-		RoundedMoney s = RoundedMoney.of("XXX", 10);
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of(34242344,"USD"),
+				RoundedMoney.of( new BigDecimal("23123213.435"),"EUR"),
+				RoundedMoney.of( new BigDecimal("-23123213.435"),"USS"),
+				RoundedMoney.of( -23123213,"USN"), RoundedMoney.of(0,"GBP") };
+		RoundedMoney s = RoundedMoney.of( 10,"XXX");
 		RoundedMoney[] moneys2 = new RoundedMoney[] {
 				s.with(MonetaryCurrencies.getCurrency("CHF"), 100),
 				s.with(MonetaryCurrencies.getCurrency("USD"), 34242344),
@@ -863,10 +865,10 @@ public class RoundedMoneyTest {
 	@Test
 	public void testGetScale() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("USD", 34242344),
-				RoundedMoney.of("EUR", 23123213.435),
-				RoundedMoney.of("USS", -23123213.435),
-				RoundedMoney.of("USN", -23123213), RoundedMoney.of("GBP", 0) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"USD"),
+				RoundedMoney.of( 23123213.435,"EUR"),
+				RoundedMoney.of( -23123213.435,"USS"),
+				RoundedMoney.of( -23123213,"USN"), RoundedMoney.of( 0,"GBP") };
 		for (RoundedMoney m : moneys) {
 			assertEquals("Scale for " + m,
 					m.getNumber().numberValue(BigDecimal.class).scale(),
@@ -880,10 +882,10 @@ public class RoundedMoneyTest {
 	@Test
 	public void testGetPrecision() {
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("USD", 34242344),
-				RoundedMoney.of("EUR", 23123213.435),
-				RoundedMoney.of("USS", -23123213.435),
-				RoundedMoney.of("USN", -23123213), RoundedMoney.of("GBP", 0) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"USD"),
+				RoundedMoney.of( 23123213.435,"EUR"),
+				RoundedMoney.of(-23123213.435,"USS"),
+				RoundedMoney.of(-23123213,"USN"), RoundedMoney.of( 0,"GBP") };
 		for (RoundedMoney m : moneys) {
 			assertEquals("Precision for " + m,
 					m.getNumber().numberValue(BigDecimal.class).precision(),
@@ -896,17 +898,17 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testSignum() {
-		RoundedMoney m = RoundedMoney.of("CHF", 100);
+		RoundedMoney m = RoundedMoney.of( 100,"CHF");
 		assertEquals("signum of " + m, 1, m.signum());
-		m = RoundedMoney.of("CHF", -100);
+		m = RoundedMoney.of( -100,"CHF");
 		assertEquals("signum of " + m, -1, m.signum());
-		m = RoundedMoney.of("CHF", 100.3435);
+		m = RoundedMoney.of( 100.3435,"CHF");
 		assertEquals("signum of " + m, 1, m.signum());
-		m = RoundedMoney.of("CHF", -100.3435);
+		m = RoundedMoney.of( -100.3435,"CHF");
 		assertEquals("signum of " + m, -1, m.signum());
-		m = RoundedMoney.of("CHF", 0);
+		m = RoundedMoney.of( 0,"CHF");
 		assertEquals("signum of " + m, 0, m.signum());
-		m = RoundedMoney.of("CHF", -0);
+		m = RoundedMoney.of( -0,"CHF");
 		assertEquals("signum of " + m, 0, m.signum());
 	}
 
@@ -917,18 +919,18 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsLessThan() {
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(0d)).isLessThan(
-				RoundedMoney.of("CHF", BigDecimal.valueOf(0))));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(0.00000000001d))
-				.isLessThan(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))));
-		assertFalse(RoundedMoney.of("CHF", 15).isLessThan(
-				RoundedMoney.of("CHF", 10)));
-		assertFalse(RoundedMoney.of("CHF", 15.546).isLessThan(
-				RoundedMoney.of("CHF", 10.34)));
-		assertTrue(RoundedMoney.of("CHF", 5).isLessThan(
-				RoundedMoney.of("CHF", 10)));
-		assertTrue(RoundedMoney.of("CHF", 5.546).isLessThan(
-				RoundedMoney.of("CHF", 10.34)));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF").isLessThan(
+				RoundedMoney.of( BigDecimal.valueOf(0),"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(0.00000000001d),"CHF")
+				.isLessThan(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")));
+		assertFalse(RoundedMoney.of( 15,"CHF").isLessThan(
+				RoundedMoney.of( 10,"CHF")));
+		assertFalse(RoundedMoney.of( 15.546,"CHF").isLessThan(
+				RoundedMoney.of( 10.34,"CHF")));
+		assertTrue(RoundedMoney.of( 5,"CHF").isLessThan(
+				RoundedMoney.of( 10,"CHF")));
+		assertTrue(RoundedMoney.of( 5.546,"CHF").isLessThan(
+				RoundedMoney.of( 10.34,"CHF")));
 	}
 
 	/**
@@ -938,20 +940,20 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsLessThanOrEqualTo() {
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")
 				.isLessThanOrEqualTo(
-						RoundedMoney.of("CHF", BigDecimal.valueOf(0))));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(0.00000000001d))
+						RoundedMoney.of( BigDecimal.valueOf(0),"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(0.00000000001d),"CHF")
 				.isLessThanOrEqualTo(
-						RoundedMoney.of("CHF", BigDecimal.valueOf(0d))));
-		assertFalse(RoundedMoney.of("CHF", 15).isLessThanOrEqualTo(
-				RoundedMoney.of("CHF", 10)));
-		assertFalse(RoundedMoney.of("CHF", 15.546).isLessThan(
-				RoundedMoney.of("CHF", 10.34)));
-		assertTrue(RoundedMoney.of("CHF", 5).isLessThanOrEqualTo(
-				RoundedMoney.of("CHF", 10)));
-		assertTrue(RoundedMoney.of("CHF", 5.546).isLessThanOrEqualTo(
-				RoundedMoney.of("CHF", 10.34)));
+						RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")));
+		assertFalse(RoundedMoney.of( 15,"CHF").isLessThanOrEqualTo(
+				RoundedMoney.of( 10,"CHF")));
+		assertFalse(RoundedMoney.of( 15.546,"CHF").isLessThan(
+				RoundedMoney.of( 10.34,"CHF")));
+		assertTrue(RoundedMoney.of( 5,"CHF").isLessThanOrEqualTo(
+				RoundedMoney.of( 10,"CHF")));
+		assertTrue(RoundedMoney.of( 5.546,"CHF").isLessThanOrEqualTo(
+				RoundedMoney.of( 10.34,"CHF")));
 	}
 
 	/**
@@ -961,18 +963,18 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsGreaterThan() {
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))
-				.isGreaterThan(RoundedMoney.of("CHF", BigDecimal.valueOf(0))));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(0.00000000001d))
-				.isGreaterThan(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))));
-		assertTrue(RoundedMoney.of("CHF", 15).isGreaterThan(
-				RoundedMoney.of("CHF", 10)));
-		assertTrue(RoundedMoney.of("CHF", 15.546).isGreaterThan(
-				RoundedMoney.of("CHF", 10.34)));
-		assertFalse(RoundedMoney.of("CHF", 5).isGreaterThan(
-				RoundedMoney.of("CHF", 10)));
-		assertFalse(RoundedMoney.of("CHF", 5.546).isGreaterThan(
-				RoundedMoney.of("CHF", 10.34)));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")
+				.isGreaterThan(RoundedMoney.of( BigDecimal.valueOf(0),"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(0.00000000001d),"CHF")
+				.isGreaterThan(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")));
+		assertTrue(RoundedMoney.of( 15,"CHF").isGreaterThan(
+				RoundedMoney.of( 10,"CHF")));
+		assertTrue(RoundedMoney.of( 15.546,"CHF").isGreaterThan(
+				RoundedMoney.of( 10.34,"CHF")));
+		assertFalse(RoundedMoney.of( 5,"CHF").isGreaterThan(
+				RoundedMoney.of( 10,"CHF")));
+		assertFalse(RoundedMoney.of( 5.546,"CHF").isGreaterThan(
+				RoundedMoney.of( 10.34,"CHF")));
 	}
 
 	/**
@@ -982,20 +984,20 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsGreaterThanOrEqualTo() {
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")
 				.isGreaterThanOrEqualTo(
-						RoundedMoney.of("CHF", BigDecimal.valueOf(0))));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(0.00000000001d))
+						RoundedMoney.of( BigDecimal.valueOf(0),"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(0.00000000001d),"CHF")
 				.isGreaterThanOrEqualTo(
-						RoundedMoney.of("CHF", BigDecimal.valueOf(0d))));
-		assertTrue(RoundedMoney.of("CHF", 15).isGreaterThanOrEqualTo(
-				RoundedMoney.of("CHF", 10)));
-		assertTrue(RoundedMoney.of("CHF", 15.546).isGreaterThanOrEqualTo(
-				RoundedMoney.of("CHF", 10.34)));
-		assertFalse(RoundedMoney.of("CHF", 5).isGreaterThanOrEqualTo(
-				RoundedMoney.of("CHF", 10)));
-		assertFalse(RoundedMoney.of("CHF", 5.546).isGreaterThanOrEqualTo(
-				RoundedMoney.of("CHF", 10.34)));
+						RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")));
+		assertTrue(RoundedMoney.of( 15,"CHF").isGreaterThanOrEqualTo(
+				RoundedMoney.of( 10,"CHF")));
+		assertTrue(RoundedMoney.of( 15.546,"CHF").isGreaterThanOrEqualTo(
+				RoundedMoney.of( 10.34,"CHF")));
+		assertFalse(RoundedMoney.of( 5,"CHF").isGreaterThanOrEqualTo(
+				RoundedMoney.of( 10,"CHF")));
+		assertFalse(RoundedMoney.of( 5.546,"CHF").isGreaterThanOrEqualTo(
+				RoundedMoney.of( 10.34,"CHF")));
 	}
 
 	/**
@@ -1005,20 +1007,20 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsEqualTo() {
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(0d)).isEqualTo(
-				RoundedMoney.of("CHF", BigDecimal.valueOf(0))));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(0.00000000001d))
-				.isEqualTo(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(5d)).isEqualTo(
-				RoundedMoney.of("CHF", BigDecimal.valueOf(5))));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(1d)).isEqualTo(
-				RoundedMoney.of("CHF", BigDecimal.valueOf(1.00))));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(1d)).isEqualTo(
-				RoundedMoney.of("CHF", BigDecimal.ONE)));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(1)).isEqualTo(
-				RoundedMoney.of("CHF", BigDecimal.ONE)));
-		assertTrue(RoundedMoney.of("CHF", new BigDecimal("1.0000")).isEqualTo(
-				RoundedMoney.of("CHF", new BigDecimal("1.00"))));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF").isEqualTo(
+				RoundedMoney.of( BigDecimal.valueOf(0),"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(0.00000000001d),"CHF")
+				.isEqualTo(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(5d),"CHF").isEqualTo(
+				RoundedMoney.of( BigDecimal.valueOf(5),"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(1d),"CHF").isEqualTo(
+				RoundedMoney.of( BigDecimal.valueOf(1.00),"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(1d),"CHF").isEqualTo(
+				RoundedMoney.of( BigDecimal.ONE,"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(1),"CHF").isEqualTo(
+				RoundedMoney.of( BigDecimal.ONE,"CHF")));
+		assertTrue(RoundedMoney.of( new BigDecimal("1.0000"),"CHF").isEqualTo(
+				RoundedMoney.of( new BigDecimal("1.00"),"CHF")));
 	}
 
 	/**
@@ -1028,20 +1030,20 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testIsNotEqualTo() {
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))
-				.isNotEqualTo(RoundedMoney.of("CHF", BigDecimal.valueOf(0))));
-		assertTrue(RoundedMoney.of("CHF", BigDecimal.valueOf(0.00000000001d))
-				.isNotEqualTo(RoundedMoney.of("CHF", BigDecimal.valueOf(0d))));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(5d))
-				.isNotEqualTo(RoundedMoney.of("CHF", BigDecimal.valueOf(5))));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(1d))
-				.isNotEqualTo(RoundedMoney.of("CHF", BigDecimal.valueOf(1.00))));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(1d))
-				.isNotEqualTo(RoundedMoney.of("CHF", BigDecimal.ONE)));
-		assertFalse(RoundedMoney.of("CHF", BigDecimal.valueOf(1)).isNotEqualTo(
-				RoundedMoney.of("CHF", BigDecimal.ONE)));
-		assertFalse(RoundedMoney.of("CHF", new BigDecimal("1.0000"))
-				.isNotEqualTo(RoundedMoney.of("CHF", new BigDecimal("1.00"))));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")
+				.isNotEqualTo(RoundedMoney.of( BigDecimal.valueOf(0),"CHF")));
+		assertTrue(RoundedMoney.of( BigDecimal.valueOf(0.00000000001d),"CHF")
+				.isNotEqualTo(RoundedMoney.of( BigDecimal.valueOf(0d),"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(5d),"CHF")
+				.isNotEqualTo(RoundedMoney.of( BigDecimal.valueOf(5),"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(1d),"CHF")
+				.isNotEqualTo(RoundedMoney.of( BigDecimal.valueOf(1.00),"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(1d),"CHF")
+				.isNotEqualTo(RoundedMoney.of( BigDecimal.ONE,"CHF")));
+		assertFalse(RoundedMoney.of( BigDecimal.valueOf(1),"CHF").isNotEqualTo(
+				RoundedMoney.of( BigDecimal.ONE,"CHF")));
+		assertFalse(RoundedMoney.of( new BigDecimal("1.0000"),"CHF")
+				.isNotEqualTo(RoundedMoney.of( new BigDecimal("1.00"),"CHF")));
 	}
 
 	/**
@@ -1058,10 +1060,10 @@ public class RoundedMoneyTest {
 			}
 		};
 		RoundedMoney[] moneys = new RoundedMoney[] {
-				RoundedMoney.of("CHF", 100), RoundedMoney.of("USD", 34242344),
-				RoundedMoney.of("EUR", 23123213.435),
-				RoundedMoney.of("USS", -23123213.435),
-				RoundedMoney.of("USN", -23123213), RoundedMoney.of("GBP", 0) };
+				RoundedMoney.of( 100,"CHF"), RoundedMoney.of( 34242344,"USD"),
+				RoundedMoney.of( 23123213.435,"EUR"),
+				RoundedMoney.of( -23123213.435,"USS"),
+				RoundedMoney.of( -23123213,"USN"), RoundedMoney.of( 0,"GBP") };
 		for (int i = 0; i < moneys.length; i++) {
 			assertEquals((Integer) moneys[i].query(q),
 					(Integer) moneys[i].getPrecision());
@@ -1070,11 +1072,11 @@ public class RoundedMoneyTest {
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#getNumber(java.lang.Class)}.
+	 * {@link org.javamoney.moneta.RoundedMoney#getNumber()}.
 	 */
 	@Test
 	public void testgetNumberClassOfT() {
-		RoundedMoney m = RoundedMoney.of("CHF", 13.656);
+		RoundedMoney m = RoundedMoney.of( 13.656, "CHF");
 		assertEquals(m.getNumber().numberValue(Byte.class),
 				Byte.valueOf((byte) 13));
 		assertEquals(m.getNumber().numberValue(Short.class),
@@ -1095,18 +1097,18 @@ public class RoundedMoneyTest {
 	}
 
 	/**
-	 * Test method for {@link org.javamoney.moneta.RoundedMoney#asNumber()}.
+	 * Test method for {@link org.javamoney.moneta.RoundedMoney#getNumber()#asNumber()}.
 	 */
 	@Test
 	public void testGetNumber() {
-		assertEquals(BigDecimal.ZERO, RoundedMoney.of("CHF", 0).getNumber()
+		assertEquals(BigDecimal.ZERO, RoundedMoney.of( 0,"CHF").getNumber()
 				.numberValue(BigDecimal.class));
 		assertEquals(
 				BigDecimal.valueOf(100034L),
-				RoundedMoney.of("CHF", 100034L).getNumber()
+				RoundedMoney.of( 100034L,"CHF").getNumber()
 						.numberValue(BigDecimal.class));
 		assertEquals(new BigDecimal("0.34738746"),
-				RoundedMoney.of("CHF", new BigDecimal("0.34738746"))
+				RoundedMoney.of( new BigDecimal("0.34738746"),"CHF")
 						.getNumber().numberValue(BigDecimal.class));
 	}
 
@@ -1116,14 +1118,14 @@ public class RoundedMoneyTest {
 	@Test
 	public void testToString() {
 		assertEquals("XXX 1.23455645",
-				RoundedMoney.of("XXX", new BigDecimal("1.23455645")).toString());
-		assertEquals("CHF 1234", RoundedMoney.of("CHF", 1234).toString());
+				RoundedMoney.of(new BigDecimal("1.23455645"),"XXX").toString());
+		assertEquals("CHF 1234", RoundedMoney.of( 1234,"CHF").toString());
 		assertEquals("CHF 1234.0",
-				RoundedMoney.of("CHF", new BigDecimal("1234.0")).toString());
+				RoundedMoney.of( new BigDecimal("1234.0"),"CHF").toString());
 		assertEquals("CHF 1234.1",
-				RoundedMoney.of("CHF", new BigDecimal("1234.1")).toString());
+				RoundedMoney.of( new BigDecimal("1234.1"),"CHF").toString());
 		assertEquals("CHF 0.0100",
-				RoundedMoney.of("CHF", new BigDecimal("0.0100")).toString());
+				RoundedMoney.of( new BigDecimal("0.0100"),"CHF").toString());
 	}
 
 	// /**
@@ -1133,10 +1135,10 @@ public class RoundedMoneyTest {
 	// @Test
 	// public void testGetAmountWhole() {
 	// assertEquals(1, RoundedMoney.of("XXX", 1.23455645d).getAmountWhole());
-	// assertEquals(1, RoundedMoney.of("CHF", 1).getAmountWhole());
-	// assertEquals(11, RoundedMoney.of("CHF", 11.0d).getAmountWhole());
-	// assertEquals(1234, RoundedMoney.of("CHF", 1234.1d).getAmountWhole());
-	// assertEquals(0, RoundedMoney.of("CHF", 0.0100d).getAmountWhole());
+	// assertEquals(1, RoundedMoney.of( 1).getAmountWhole());
+	// assertEquals(11, RoundedMoney.of( 11.0d).getAmountWhole());
+	// assertEquals(1234, RoundedMoney.of( 1234.1d).getAmountWhole());
+	// assertEquals(0, RoundedMoney.of( 0.0100d).getAmountWhole());
 	// }
 	//
 	// /**
@@ -1147,12 +1149,12 @@ public class RoundedMoneyTest {
 	// public void testGetAmountFractionNumerator() {
 	// assertEquals(0, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
 	// .getAmountFractionNumerator());
-	// assertEquals(0, RoundedMoney.of("CHF", 1).getAmountFractionNumerator());
-	// assertEquals(0, RoundedMoney.of("CHF", new BigDecimal("11.0"))
+	// assertEquals(0, RoundedMoney.of( 1).getAmountFractionNumerator());
+	// assertEquals(0, RoundedMoney.of( new BigDecimal("11.0"))
 	// .getAmountFractionNumerator());
-	// assertEquals(10L, RoundedMoney.of("CHF", new BigDecimal("1234.1"))
+	// assertEquals(10L, RoundedMoney.of( new BigDecimal("1234.1"))
 	// .getAmountFractionNumerator());
-	// assertEquals(1L, RoundedMoney.of("CHF", new BigDecimal("0.0100"))
+	// assertEquals(1L, RoundedMoney.of( new BigDecimal("0.0100"))
 	// .getAmountFractionNumerator());
 	// }
 	//
@@ -1165,19 +1167,19 @@ public class RoundedMoneyTest {
 	// public void testGetAmountFractionDenominator() {
 	// assertEquals(1, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
 	// .getAmountFractionDenominator());
-	// assertEquals(100, RoundedMoney.of("CHF", 1)
+	// assertEquals(100, RoundedMoney.of( 1)
 	// .getAmountFractionDenominator());
-	// assertEquals(100, RoundedMoney.of("CHF", new BigDecimal("11.0"))
+	// assertEquals(100, RoundedMoney.of( new BigDecimal("11.0"))
 	// .getAmountFractionDenominator());
-	// assertEquals(100L, RoundedMoney.of("CHF", new BigDecimal("1234.1"))
+	// assertEquals(100L, RoundedMoney.of( new BigDecimal("1234.1"))
 	// .getAmountFractionDenominator());
-	// assertEquals(100L, RoundedMoney.of("CHF", new BigDecimal("0.0100"))
+	// assertEquals(100L, RoundedMoney.of( new BigDecimal("0.0100"))
 	// .getAmountFractionDenominator());
 	// }
 
 	/**
 	 * Test method for
-	 * {@link org.javamoney.moneta.RoundedMoney#with(javax.money.MonetaryAdjuster)}
+	 * {@link org.javamoney.moneta.RoundedMoney#with(javax.money.MonetaryOperator)}
 	 * .
 	 */
 	@Test
@@ -1189,12 +1191,12 @@ public class RoundedMoneyTest {
 						.setNumber(-100).create();
 			}
 		};
-		RoundedMoney m = RoundedMoney.of("USD", new BigDecimal("1.23645"));
+		RoundedMoney m = RoundedMoney.of( new BigDecimal("1.23645"),"USD");
 		RoundedMoney a = m.with(adj);
 		assertNotNull(a);
 		assertNotSame(m, a);
 		assertEquals(m.getCurrency(), a.getCurrency());
-		assertEquals(RoundedMoney.of(m.getCurrency(), -100), a);
+		assertEquals(RoundedMoney.of( -100,m.getCurrency()), a);
 		adj = new MonetaryOperator() {
 			@Override
 			public MonetaryAmount apply(MonetaryAmount amount) {
@@ -1218,10 +1220,10 @@ public class RoundedMoneyTest {
 	 */
 	@Test
 	public void testFrom() {
-		RoundedMoney m = RoundedMoney.of("XXX", new BigDecimal("1.2345"));
+		RoundedMoney m = RoundedMoney.of( new BigDecimal("1.2345"),"XXX");
 		RoundedMoney m2 = RoundedMoney.from(m);
 		assertTrue(m == m2);
-		FastMoney fm = FastMoney.of("XXX", new BigDecimal("1.2345"));
+		FastMoney fm = FastMoney.of( new BigDecimal("1.2345"),"XXX");
 		m2 = RoundedMoney.from(fm);
 		assertFalse(m == m2);
 		assertEquals(m, m2);
@@ -1229,7 +1231,7 @@ public class RoundedMoneyTest {
 
 	@Test
 	public void testSerialization() throws IOException, ClassNotFoundException {
-		RoundedMoney m = RoundedMoney.of("XXX", new BigDecimal("1.2345"));
+		RoundedMoney m = RoundedMoney.of( new BigDecimal("1.2345"),"XXX");
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
 		oos.writeObject(m);
@@ -1251,7 +1253,7 @@ public class RoundedMoneyTest {
 	@Test(expected = MonetaryException.class)
 	public void testAdd_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
-		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of( BigDecimal.TEN,"CHF");
 		m1.add(m2);
 	}
 
@@ -1263,7 +1265,7 @@ public class RoundedMoneyTest {
 	@Test(expected = MonetaryException.class)
 	public void testSubtract_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
-		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of( BigDecimal.TEN,"CHF");
 		m1.subtract(m2);
 	}
 
@@ -1275,7 +1277,7 @@ public class RoundedMoneyTest {
 	@Test(expected = MonetaryException.class)
 	public void testDivide_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
-		RoundedMoney m2 = RoundedMoney.of("CHF", BigDecimal.TEN);
+		RoundedMoney m2 = RoundedMoney.of( BigDecimal.TEN,"CHF");
 		m1.subtract(m2);
 	}
 

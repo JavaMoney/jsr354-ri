@@ -43,12 +43,12 @@ public class PerformanceTest {
 	@Test
     @Ignore
 	public void comparePerformanceNoRounding() {
-		FastMoney money1 = FastMoney.of(EURO, BigDecimal.ONE);
+		FastMoney money1 = FastMoney.of(BigDecimal.ONE,EURO);
 		long start = System.currentTimeMillis();
 		final int NUM = 1000000;
 		for (int i = 0; i < NUM; i++) {
-			money1 = money1.add(FastMoney.of(EURO, 1234567.3444));
-			money1 = money1.subtract(FastMoney.of(EURO, 232323));
+			money1 = money1.add(FastMoney.of(1234567.3444,EURO));
+			money1 = money1.subtract(FastMoney.of(232323,EURO));
 			money1 = money1.multiply(3.4);
 			money1 = money1.divide(5.456);
 		}
@@ -59,11 +59,11 @@ public class PerformanceTest {
 				+ " ns per loop) -> "
 				+ money1);
 
-		FastMoney money2 = FastMoney.of(EURO, BigDecimal.ONE);
+		FastMoney money2 = FastMoney.of( BigDecimal.ONE,EURO);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
-			money2 = money2.add(FastMoney.of(EURO, 1234567.3444));
-			money2 = money2.subtract(FastMoney.of(EURO, 232323));
+			money2 = money2.add(FastMoney.of( 1234567.3444,EURO));
+			money2 = money2.subtract(FastMoney.of( 232323,EURO));
 			money2 = money2.multiply(3.4);
 			money2 = money2.divide(5.456);
 		}
@@ -75,11 +75,11 @@ public class PerformanceTest {
 				+ " ns per loop) -> "
 				+ money2);
 
-		FastMoney money3 = FastMoney.of(EURO, BigDecimal.ONE);
+		FastMoney money3 = FastMoney.of(BigDecimal.ONE,EURO);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
-			money3 = money3.add(FastMoney.of(EURO, 1234567.3444));
-			money3 = money3.subtract(FastMoney.of(EURO, 232323));
+			money3 = money3.add(FastMoney.of(1234567.3444,EURO));
+			money3 = money3.subtract(FastMoney.of( 232323,EURO));
 			money3 = money3.multiply(3.4);
 			money3 = money3.divide(5.456);
 		}
@@ -106,11 +106,11 @@ public class PerformanceTest {
 		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
-		Money money1 = Money.of(EURO, BigDecimal.ONE);
+		Money money1 = Money.of(BigDecimal.ONE,EURO);
 		long start = System.currentTimeMillis();
 		final int NUM = 100000;
-		MonetaryAmount adding = Money.of(EURO, 1234567.3444);
-		MonetaryAmount subtracting = Money.of(EURO, 232323);
+		MonetaryAmount adding = Money.of( 1234567.3444,EURO);
+		MonetaryAmount subtracting = Money.of( 232323,EURO);
 		for (int i = 0; i < NUM; i++) {
 			money1 = money1.add(adding);
 			money1 = money1.subtract(subtracting);
@@ -134,10 +134,10 @@ public class PerformanceTest {
 		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
-		FastMoney money2 = FastMoney.of(EURO, BigDecimal.ONE);
+		FastMoney money2 = FastMoney.of( BigDecimal.ONE,EURO);
 		start = System.currentTimeMillis();
-		adding = FastMoney.of(EURO, 1234567.3444);
-		subtracting = FastMoney.of(EURO, 232323);
+		adding = FastMoney.of( 1234567.3444,EURO);
+		subtracting = FastMoney.of( 232323,EURO);
 		for (int i = 0; i < NUM; i++) {
 			money2 = money2.add(adding);
 			money2 = money2.subtract(subtracting);
@@ -163,9 +163,9 @@ public class PerformanceTest {
 		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
-		adding = Money.of(EURO, 1234567.3444);
-		subtracting = Money.of(EURO, 232323);
-		FastMoney money3 = FastMoney.of(EURO, BigDecimal.ONE);
+		adding = Money.of( 1234567.3444,EURO);
+		subtracting = Money.of( 232323,EURO);
+		FastMoney money3 = FastMoney.of( BigDecimal.ONE,EURO);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
 			money3 = money3.add(adding);
@@ -191,13 +191,13 @@ public class PerformanceTest {
 		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
-		adding = FastMoney.of(EURO, 1234567.3444);
-		subtracting = FastMoney.of(EURO, 232323);
-		Money money4 = Money.of(EURO, BigDecimal.ONE);
+		adding = FastMoney.of( 1234567.3444,EURO);
+		subtracting = FastMoney.of( 232323,EURO);
+		Money money4 = Money.of( BigDecimal.ONE,EURO);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
-			money4 = money4.add(FastMoney.of(EURO, 1234567.3444));
-			money4 = money4.subtract(Money.of(EURO, 232323));
+			money4 = money4.add(FastMoney.of( 1234567.3444,EURO));
+			money4 = money4.subtract(Money.of( 232323,EURO));
 			money4 = money4.multiply(3.4);
 			money4 = money4.divide(5.456);
 			money4 = money4.with(MonetaryRoundings.getRounding());

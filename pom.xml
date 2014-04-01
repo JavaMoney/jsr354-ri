@@ -174,16 +174,8 @@
 		<developerConnection>scm:git:https://github.com/JavaMoney/jsr354-ri.git</developerConnection>
 		<url>https://github.com/JavaMoney/jsr354-ri</url>
 	</scm>
-	<!-- <scm> <connection>scm:git:git@github.com:JavaMoney/javamoney.git</connection> 
-		<tag>master</tag> <developerConnection>scm:git:git@github.com:JavaMoney/javamoney.git</developerConnection> 
-		<url>scm:git:git@github.com:JavaMoney/javamoney.git</url> </scm> -->
 
 	<distributionManagement>
-		<site>
-			<id>javamoney.java.net-site</id>
-			<url>dav:https://kenai.com/website/javamoney/api/</url>
-			<name>Java net Public SVN Site Repository</name>
-		</site>
 		<repository>
 			<id>sonatype-nexus-staging</id>
 			<url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>

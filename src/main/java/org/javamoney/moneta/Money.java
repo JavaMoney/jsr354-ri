@@ -84,8 +84,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @throws ArithmeticException If the number exceeds the capabilities of the default
      *                             {@link MonetaryContext}.
      */
-    private Money(CurrencyUnit currency, BigDecimal number){
-        this(currency, number, null);
+    private Money(BigDecimal number, CurrencyUnit currency){
+        this(number, currency, null);
     }
 
     /**
@@ -119,7 +119,7 @@ public final class Money extends AbstractMoney implements Serializable{
                 RoundingMode rm =
                         value != null ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
                 MonetaryContext mc =
-                        new MonetaryContext.Builder().setPrecision(prec).set(rm).setAmountType(Money.class).create();
+                        new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class).create();
                 Logger.getLogger(Money.class.getName())
                         .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm);
                 return mc;
@@ -130,24 +130,24 @@ public final class Money extends AbstractMoney implements Serializable{
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
                             Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32");
-                            builder.set(MathContext.DECIMAL32);
+                            builder.setAttribute(MathContext.DECIMAL32);
                             break;
                         case "DECIMAL64":
                             Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64");
-                            builder.set(MathContext.DECIMAL64);
+                            builder.setAttribute(MathContext.DECIMAL64);
                             break;
                         case "DECIMAL128":
                             Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128");
-                            builder.set(MathContext.DECIMAL128);
+                            builder.setAttribute(MathContext.DECIMAL128);
                             break;
                         case "UNLIMITED":
                             Logger.getLogger(Money.class.getName()).info("Using MathContext.UNLIMITED");
-                            builder.set(MathContext.UNLIMITED);
+                            builder.setAttribute(MathContext.UNLIMITED);
                             break;
                     }
                 }else{
                     Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64");
-                    builder.set(MathContext.DECIMAL64);
+                    builder.setAttribute(MathContext.DECIMAL64);
                 }
                 return builder.create();
             }
@@ -156,7 +156,7 @@ public final class Money extends AbstractMoney implements Serializable{
             Logger.getLogger(Money.class.getName())
                     .log(Level.SEVERE, "Error evaluating default NumericContext, using default (NumericContext.NUM64).",
                          e);
-            return new MonetaryContext.Builder(Money.class).set(MathContext.DECIMAL64).create();
+            return new MonetaryContext.Builder(Money.class).setAttribute(MathContext.DECIMAL64).create();
         }
         finally{
             if(is != null){
@@ -182,7 +182,7 @@ public final class Money extends AbstractMoney implements Serializable{
      * @throws ArithmeticException If the number exceeds the capabilities of the
      *                             {@link MonetaryContext} used.
      */
-    private Money(CurrencyUnit currency, BigDecimal number, MonetaryContext monetaryContext){
+    private Money(BigDecimal number, CurrencyUnit currency, MonetaryContext monetaryContext){
         super(currency, monetaryContext);
         Objects.requireNonNull(number, "Number is required.");
         if(monetaryContext != null){
@@ -380,25 +380,6 @@ public final class Money extends AbstractMoney implements Serializable{
         return signum() <= 0;
     }
 
-    // /*
-    // * (non-Javadoc)
-    // *
-    // * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit, long)
-    // */
-    // @Override
-    // public Money with(CurrencyUnit unit, long amount) {
-    // return with(unit, BigDecimal.valueOf(amount));
-    // }
-    //
-    // /*
-    // * (non-Javadoc)
-    // *
-    // * @see javax.money.MonetaryAmount#with(javax.money.CurrencyUnit, double)
-    // */
-    // @Override
-    // public Money with(CurrencyUnit unit, double amount) {
-    // return with(unit, new BigDecimal(String.valueOf(amount)));
-    // }
 
     /*
      * }(non-Javadoc)
@@ -443,7 +424,7 @@ public final class Money extends AbstractMoney implements Serializable{
         if(amount.isZero()){
             return this;
         }
-        return new Money(getCurrency(), this.number.add(amount.getNumber().numberValue(BigDecimal.class)));
+        return new Money(this.number.add(amount.getNumber().numberValue(BigDecimal.class)), getCurrency());
     }
 
     /*
@@ -458,17 +439,17 @@ public final class Money extends AbstractMoney implements Serializable{
             return this;
         }
         BigDecimal dec = this.number.divide(divisorBD, getMathContext(getMonetaryContext(), RoundingMode.HALF_EVEN));
-        return new Money(getCurrency(), dec);
+        return new Money(dec, getCurrency());
     }
 
     @Override
     public Money[] divideAndRemainder(Number divisor){
         BigDecimal divisorBD = getBigDecimal(divisor);
         if(divisorBD.equals(BigDecimal.ONE)){
-            return new Money[]{this, new Money(getCurrency(), BigDecimal.ZERO)};
+            return new Money[]{this, new Money(BigDecimal.ZERO, getCurrency())};
         }
         BigDecimal[] dec = this.number.divideAndRemainder(divisorBD);
-        return new Money[]{new Money(getCurrency(), dec[0]), new Money(getCurrency(), dec[1])};
+        return new Money[]{new Money(dec[0], getCurrency()), new Money(dec[1], getCurrency())};
     }
 
     /*
@@ -492,7 +473,7 @@ public final class Money extends AbstractMoney implements Serializable{
     public Money divideToIntegralValue(Number divisor){
         BigDecimal divisorBD = getBigDecimal(divisor);
         BigDecimal dec = this.number.divideToIntegralValue(divisorBD);
-        return new Money(getCurrency(), dec);
+        return new Money(dec, getCurrency());
     }
 
     /*
@@ -507,7 +488,7 @@ public final class Money extends AbstractMoney implements Serializable{
             return this;
         }
         BigDecimal dec = this.number.multiply(multiplicandBD);
-        return new Money(getCurrency(), dec);
+        return new Money(dec, getCurrency());
     }
 
     /*
@@ -517,7 +498,7 @@ public final class Money extends AbstractMoney implements Serializable{
      */
     @Override
     public Money negate(){
-        return new Money(getCurrency(), this.number.negate());
+        return new Money(this.number.negate(), getCurrency());
     }
 
     /*
@@ -527,7 +508,7 @@ public final class Money extends AbstractMoney implements Serializable{
      */
     @Override
     public Money plus(){
-        return new Money(getCurrency(), this.number.plus());
+        return new Money(this.number.plus(), getCurrency());
     }
 
     /*
@@ -541,7 +522,7 @@ public final class Money extends AbstractMoney implements Serializable{
         if(subtrahend.isZero()){
             return this;
         }
-        return new Money(getCurrency(), this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class)));
+        return new Money(this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class)), getCurrency());
     }
 
     /*
@@ -552,9 +533,9 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public Money stripTrailingZeros(){
         if(isZero()){
-            return new Money(getCurrency(), BigDecimal.ZERO);
+            return new Money(BigDecimal.ZERO, getCurrency());
         }
-        return new Money(getCurrency(), this.number.stripTrailingZeros());
+        return new Money(this.number.stripTrailingZeros(), getCurrency());
     }
 
     /*
@@ -565,7 +546,7 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public Money remainder(Number divisor){
         BigDecimal bd = getBigDecimal(divisor);
-        return new Money(getCurrency(), this.number.remainder(bd));
+        return new Money(this.number.remainder(bd), getCurrency());
     }
 
     /*
@@ -575,7 +556,7 @@ public final class Money extends AbstractMoney implements Serializable{
      */
     @Override
     public Money scaleByPowerOfTen(int n){
-        return new Money(getCurrency(), this.number.scaleByPowerOfTen(n));
+        return new Money(this.number.scaleByPowerOfTen(n), getCurrency());
     }
 
     /*
@@ -747,8 +728,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @throws ArithmeticException If the number exceeds the capabilities of the default
      *                             {@link MonetaryContext} used.
      */
-    public static Money of(CurrencyUnit currency, BigDecimal number){
-        return new Money(currency, number);
+    public static Money of(BigDecimal number, CurrencyUnit currency){
+        return new Money(number, currency);
     }
 
     /**
@@ -764,8 +745,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @throws ArithmeticException If the number exceeds the capabilities of the
      *                             {@link MonetaryContext} used.
      */
-    public static Money of(CurrencyUnit currency, BigDecimal number, MonetaryContext monetaryContext){
-        return new Money(currency, number, monetaryContext);
+    public static Money of(BigDecimal number, CurrencyUnit currency, MonetaryContext monetaryContext){
+        return new Money(number, currency, monetaryContext);
     }
 
     /**
@@ -778,8 +759,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @throws ArithmeticException If the number exceeds the capabilities of the default
      *                             {@link MonetaryContext} used.
      */
-    public static Money of(CurrencyUnit currency, Number number){
-        return new Money(currency, getBigDecimal(number));
+    public static Money of(Number number, CurrencyUnit currency){
+        return new Money(getBigDecimal(number), currency);
     }
 
     /**
@@ -794,8 +775,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @throws ArithmeticException If the number exceeds the capabilities of the
      *                             {@link MonetaryContext} used.
      */
-    public static Money of(CurrencyUnit currency, Number number, MonetaryContext monetaryContext){
-        return new Money(currency, getBigDecimal(number), monetaryContext);
+    public static Money of(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
+        return new Money(getBigDecimal(number), currency, monetaryContext);
     }
 
     /**
@@ -805,8 +786,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @param number       The numeric part, not null.
      * @return A new instance of {@link Money}.
      */
-    public static Money of(String currencyCode, Number number){
-        return new Money(MonetaryCurrencies.getCurrency(currencyCode), getBigDecimal(number));
+    public static Money of(Number number, String currencyCode){
+        return new Money(getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode));
     }
 
     /**
@@ -816,8 +797,8 @@ public final class Money extends AbstractMoney implements Serializable{
      * @param number       The numeric part, not null.
      * @return A new instance of {@link Money}.
      */
-    public static Money of(String currencyCode, BigDecimal number){
-        return new Money(MonetaryCurrencies.getCurrency(currencyCode), number);
+    public static Money of(BigDecimal number, String currencyCode){
+        return new Money(number, MonetaryCurrencies.getCurrency(currencyCode));
     }
 
     /**
@@ -829,8 +810,9 @@ public final class Money extends AbstractMoney implements Serializable{
      *                        default {@link MonetaryContext} is used.
      * @return A new instance of {@link Money}.
      */
-    public static Money of(String currencyCode, Number number, MonetaryContext monetaryContext){
-        return new Money(MonetaryCurrencies.getCurrency(currencyCode), getBigDecimal(number), monetaryContext);
+    public static Money of(Number number, String currencyCode, MonetaryContext monetaryContext){
+        return new Money(getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode),
+                         monetaryContext);
     }
 
     /**
@@ -842,8 +824,8 @@ public final class Money extends AbstractMoney implements Serializable{
      *                        default {@link MonetaryContext} is used.
      * @return A new instance of {@link Money}.
      */
-    public static Money of(String currencyCode, BigDecimal number, MonetaryContext monetaryContext){
-        return new Money(MonetaryCurrencies.getCurrency(currencyCode), number, monetaryContext);
+    public static Money of(BigDecimal number, String currencyCode, MonetaryContext monetaryContext){
+        return new Money(number, MonetaryCurrencies.getCurrency(currencyCode), monetaryContext);
     }
 
     /**
@@ -859,7 +841,7 @@ public final class Money extends AbstractMoney implements Serializable{
         if(amt.getClass() == Money.class){
             return (Money) amt;
         }
-        return Money.of(amt.getCurrency(), amt.getNumber().numberValue(BigDecimal.class), amt.getMonetaryContext());
+        return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(),  amt.getMonetaryContext());
     }
 
 }

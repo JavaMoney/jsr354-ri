@@ -17,10 +17,10 @@ import java.math.RoundingMode;
 public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMoney>{
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN)
+            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setAttribute(RoundingMode.HALF_EVEN)
                     .setFlavor(AmountFlavor.UNDEFINED).create();
     static final MonetaryContext MAX_CONTEXT =
-            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN)
+            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setAttribute(RoundingMode.HALF_EVEN)
                     .setFlavor(AmountFlavor.UNDEFINED).create();
 
     /*
@@ -29,8 +29,8 @@ public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMone
      * java.lang.Number, javax.money.MonetaryContext)
      */
     @Override
-    protected RoundedMoney create(CurrencyUnit currency, Number number, MonetaryContext monetaryContext){
-        return RoundedMoney.of(currency, number);
+    protected RoundedMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
+        return RoundedMoney.of(number, currency );
     }
 
     /*

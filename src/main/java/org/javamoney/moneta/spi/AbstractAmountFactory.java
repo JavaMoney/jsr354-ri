@@ -36,10 +36,10 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
      */
     @Override
     public T create(){
-        return create(currency, number, monetaryContext);
+        return create(number,currency, monetaryContext);
     }
 
-    protected abstract T create(CurrencyUnit currency, Number number, MonetaryContext monetaryContext);
+    protected abstract T create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext);
 
     protected abstract MonetaryContext loadDefaultMonetaryContext();
 

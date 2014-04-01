@@ -99,7 +99,7 @@ public class MonetaryRoundingsTest {
 					MonetaryOperator rounding = MonetaryRoundings
 							.getRounding(new MonetaryContext.Builder()
 									.setMaxScale(scale)
-									.set(roundingMode).create());
+									.setAttribute(roundingMode).create());
 					BigDecimal dec = samples[i].getNumber().numberValue(BigDecimal.class);
 					BigDecimal expected = dec.setScale(scale, roundingMode);
 					MonetaryAmount r = samples[i].with(rounding);
