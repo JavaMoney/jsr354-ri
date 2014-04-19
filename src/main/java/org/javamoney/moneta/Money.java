@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
  * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software distributed under the License
@@ -26,8 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Platform RI: Default immutable implementation of {@link MonetaryAmount} based
- * on {@link BigDecimal} for the numeric representation.
+ * Default immutable implementation of {@link MonetaryAmount} based
+ * on {@link BigDecimal} as numeric representation.
  * <p/>
  * As required by {@link MonetaryAmount} this class is final, thread-safe,
  * immutable and serializable.
@@ -50,7 +50,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 0.6.1
+ * @version 0.7
  */
 public final class Money extends AbstractMoney implements Serializable{
 
@@ -121,7 +121,7 @@ public final class Money extends AbstractMoney implements Serializable{
                 MonetaryContext mc =
                         new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class).create();
                 Logger.getLogger(Money.class.getName())
-                        .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm);
+                        .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm); // TODO why info?
                 return mc;
             }else{
                 MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
@@ -129,24 +129,24 @@ public final class Money extends AbstractMoney implements Serializable{
                 if(value != null){
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL32);
                             break;
                         case "DECIMAL64":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL64);
                             break;
                         case "DECIMAL128":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL128);
                             break;
                         case "UNLIMITED":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.UNLIMITED");
+                            Logger.getLogger(Money.class.getName()).info("Using MathContext.UNLIMITED"); // TODO why info?
                             builder.setAttribute(MathContext.UNLIMITED);
                             break;
                     }
                 }else{
-                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64");
+                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64"); // TODO why info?
                     builder.setAttribute(MathContext.DECIMAL64);
                 }
                 return builder.create();
