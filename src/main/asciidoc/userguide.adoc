@@ -1,0 +1,132 @@
+JavaMoney 'Moneta' User Guide
+=============================
+Anatole Tresch <atsticks@gmail.com>
+:Author Initials: ATR
+:source-highlighter: coderay
+:toc:
+:icons:
+:numbered:
+:website: http://javamoney.org/
+
+
+'Moneta' is an implementation of the JSR 354 'Java Money API'. The API is separated
+so also other can provide their own implementations. This document will
+mainly focus on the overall library usage from a user's perspective, when using 'Moneta'. Normally this document
+will not explicitly differentiate between the JSR 354 API and this implementation, unless it is useful for the
+common understanding.
+
+.This document
+**********************************************************************
+This is a user guide that describes all relevant aspects of
+Java Money, for using this API along with the 'Moneta' reference implementation.
+
+For a shorter introduction you may check out the quick start guide (tbd).
+
+**********************************************************************
+
+
+Introduction to Java Money
+--------------------------
+
+[NOTE]
+You may also read the JSR 354 API specification available https://jcp.org/en/jsr/detail?id=354[here].
+
+Overview
+~~~~~~~~
+
+Main Design Decisions
+~~~~~~~~~~~~~~~~~~~~~
+
+Component Loading and Bootstrapping
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Currency Units
+--------------
+
+Accessing Currency Units
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Registering Additional Currency Units
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Building Custom Currency Units
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Provided Currencies
+~~~~~~~~~~~~~~~~~~~
+
+
+Monetary Amounts
+----------------
+
+Choosing an Implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Creating new Amounts
+~~~~~~~~~~~~~~~~~~~~
+
+Registering Additional Amount Implementations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Perform Arithmetic Operations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Functional Extension Points
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Using the Monetary Context
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Mixing Amount Implementation Types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Additional Provided Extension Points
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Rounding
+--------
+
+Arithmetic Roundings
+~~~~~~~~~~~~~~~~~~~~
+
+Default Roundings
+~~~~~~~~~~~~~~~~~
+
+Custom Roundings
+~~~~~~~~~~~~~~~~
+
+Register your own Roundings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Currency Conversion
+-------------------
+
+The Concept of an Exchange Rate
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Exchange Rate Providers
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Modeling Currency Conversion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Accessing Rate Providers and Conversion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Converting Amounts
+~~~~~~~~~~~~~~~~~~
+
+
+Formatting Monetary Amounts
+---------------------------
+
+Accessing and Using Formats
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Customizing an Amount Style
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Regisetering your own Formats
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
