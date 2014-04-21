@@ -4,9 +4,13 @@ Anatole Tresch <atsticks@gmail.com>
 :Author Initials: ATR
 :source-highlighter: coderay
 :toc:
+:data-uri:
 :icons:
 :numbered:
 :website: http://javamoney.org/
+:imagesdir: src\main\asciidoc\images
+:iconsdir: src\main\asciidoc\images/icons
+:data-uri:
 
 
 'Moneta' is an implementation of the JSR 354 'Java Money API'. The API is separated
