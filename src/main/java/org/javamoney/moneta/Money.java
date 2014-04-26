@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  * @author Werner Keil
  * @version 0.7
  */
-public final class Money extends AbstractMoney implements Serializable{
+public final class Money extends AbstractMoney implements Comparable<MonetaryAmount>, Serializable{
 
     /**
      * serialVersionUID.
@@ -119,7 +119,8 @@ public final class Money extends AbstractMoney implements Serializable{
                 RoundingMode rm =
                         value != null ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
                 MonetaryContext mc =
-                        new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class).create();
+                        new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class)
+                                .create();
                 Logger.getLogger(Money.class.getName())
                         .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm); // TODO why info?
                 return mc;
@@ -129,24 +130,29 @@ public final class Money extends AbstractMoney implements Serializable{
                 if(value != null){
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL32"); // TODO why info?
+                            Logger.getLogger(Money.class.getName())
+                                    .info("Using MathContext.DECIMAL32"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL32);
                             break;
                         case "DECIMAL64":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL64"); // TODO why info?
+                            Logger.getLogger(Money.class.getName())
+                                    .info("Using MathContext.DECIMAL64"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL64);
                             break;
                         case "DECIMAL128":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.DECIMAL128"); // TODO why info?
+                            Logger.getLogger(Money.class.getName())
+                                    .info("Using MathContext.DECIMAL128"); // TODO why info?
                             builder.setAttribute(MathContext.DECIMAL128);
                             break;
                         case "UNLIMITED":
-                            Logger.getLogger(Money.class.getName()).info("Using MathContext.UNLIMITED"); // TODO why info?
+                            Logger.getLogger(Money.class.getName())
+                                    .info("Using MathContext.UNLIMITED"); // TODO why info?
                             builder.setAttribute(MathContext.UNLIMITED);
                             break;
                     }
                 }else{
-                    Logger.getLogger(Money.class.getName()).info("Using default MathContext.DECIMAL64"); // TODO why info?
+                    Logger.getLogger(Money.class.getName())
+                            .info("Using default MathContext.DECIMAL64"); // TODO why info?
                     builder.setAttribute(MathContext.DECIMAL64);
                 }
                 return builder.create();
@@ -577,7 +583,8 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public boolean isLessThan(MonetaryAmount amount){
         checkAmountParameter(amount);
-        return number.compareTo(Money.from(amount).number) < 0;
+        return number.stripTrailingZeros()
+                .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) < 0;
     }
 
     /*
@@ -590,7 +597,8 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public boolean isLessThanOrEqualTo(MonetaryAmount amount){
         checkAmountParameter(amount);
-        return number.compareTo(Money.from(amount).number) <= 0;
+        return number.stripTrailingZeros()
+                .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) <= 0;
     }
 
     /*
@@ -601,7 +609,8 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public boolean isGreaterThan(MonetaryAmount amount){
         checkAmountParameter(amount);
-        return number.compareTo(Money.from(amount).number) > 0;
+        return number.stripTrailingZeros()
+                .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) > 0;
     }
 
     /*
@@ -614,7 +623,8 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public boolean isGreaterThanOrEqualTo(MonetaryAmount amount){
         checkAmountParameter(amount);
-        return number.compareTo(Money.from(amount).number) >= 0;
+        return number.stripTrailingZeros()
+                .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) >= 0;
     }
 
     /*
@@ -625,7 +635,8 @@ public final class Money extends AbstractMoney implements Serializable{
     @Override
     public boolean isEqualTo(MonetaryAmount amount){
         checkAmountParameter(amount);
-        return equals(Money.from(amount));
+        return number.stripTrailingZeros()
+                .compareTo(amount.getNumber().numberValue(BigDecimal.class).stripTrailingZeros()) == 0;
     }
 
     /*
@@ -664,15 +675,19 @@ public final class Money extends AbstractMoney implements Serializable{
      */
     @Override
     public boolean equals(Object obj){
-        if(this == obj)
+        if(this == obj){
             return true;
-        if(obj == null)
+        }
+        if(obj == null){
             return false;
-        if(getClass() != obj.getClass())
+        }
+        if(getClass() != obj.getClass()){
             return false;
+        }
         Money other = (Money) obj;
-        if(!getCurrency().equals(other.getCurrency()))
+        if(!getCurrency().equals(other.getCurrency())){
             return false;
+        }
         return getNumberStripped().equals(other.getNumberStripped());
     }
 
@@ -811,8 +826,7 @@ public final class Money extends AbstractMoney implements Serializable{
      * @return A new instance of {@link Money}.
      */
     public static Money of(Number number, String currencyCode, MonetaryContext monetaryContext){
-        return new Money(getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode),
-                         monetaryContext);
+        return new Money(getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode), monetaryContext);
     }
 
     /**
@@ -841,7 +855,7 @@ public final class Money extends AbstractMoney implements Serializable{
         if(amt.getClass() == Money.class){
             return (Money) amt;
         }
-        return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(),  amt.getMonetaryContext());
+        return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), amt.getMonetaryContext());
     }
 
 }
