@@ -21,7 +21,7 @@ import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
 
 /**
- * Implementation class providing rounding {@link MonetaryAdjuster} instances
+ * Implementation class providing rounding {@link javax.money.MonetaryOperator} instances
  * for {@link CurrencyUnit} instances. modeling rounding based on standard JDK
  * math, a scale and {@link RoundingMode}.
  * <p>
@@ -41,8 +41,8 @@ final class DefaultRounding implements MonetaryOperator {
 	/**
 	 * Creates an rounding instance.
 	 * 
-	 * @param mathContext
-	 *            The {@link MathContext} to be used, not {@code null}.
+	 * @param roundingMode
+	 *            The {@link java.math.RoundingMode} to be used, not {@code null}.
 	 */
 	DefaultRounding(int scale, RoundingMode roundingMode) {
 		Objects.requireNonNull(roundingMode, "RoundingMode required.");
@@ -61,7 +61,7 @@ final class DefaultRounding implements MonetaryOperator {
 	 *            The currency, which determines the required precision. As
 	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
 	 *            is sued.
-	 * @return a new instance {@link MonetaryAdjuster} implementing the
+	 * @return a new instance {@link javax.money.MonetaryOperator} implementing the
 	 *         rounding.
 	 */
 	DefaultRounding(CurrencyUnit currency,
@@ -70,19 +70,18 @@ final class DefaultRounding implements MonetaryOperator {
 	}
 
 	/**
-	 * Creates an {@link MonetaryAdjuster} for rounding {@link MonetaryAmount}
+	 * Creates an {@link javax.money.MonetaryOperator} for rounding {@link MonetaryAmount}
 	 * instances given a currency.
 	 * 
 	 * @param currency
 	 *            The currency, which determines the required precision. As
 	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
 	 *            is sued.
-	 * @return a new instance {@link MonetaryAdjuster} implementing the
+	 * @return a new instance {@link javax.money.MonetaryOperator} implementing the
 	 *         rounding.
 	 */
 	DefaultRounding(CurrencyUnit currency) {
-		this(MonetaryCurrencies.getCurrency(currency.getCurrencyCode())
-				.getDefaultFractionDigits(), RoundingMode.HALF_UP);
+		this(currency.getDefaultFractionDigits(), RoundingMode.HALF_UP);
 	}
 
 	/*
