@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
-import javax.money.MonetaryContext.AmountFlavor;
+import javax.money.AmountFlavor;
 import javax.money.MonetaryException;
 
 import org.junit.Test;

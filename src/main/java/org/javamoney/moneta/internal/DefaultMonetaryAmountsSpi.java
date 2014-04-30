@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
-import javax.money.MonetaryContext.AmountFlavor;
+import javax.money.AmountFlavor;
 import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;

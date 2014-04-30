@@ -12,11 +12,12 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
-import javax.money.format.AmountStyle;
-import javax.money.format.AmountFormatSymbols;
+import javax.money.format.AmountFormatContext;
+
 import javax.money.format.MonetaryParseException;
 
 /**
@@ -26,52 +27,41 @@ import javax.money.format.MonetaryParseException;
  */
 final class AmountNumberToken implements FormatToken {
 
-	private AmountStyle style;
+	private AmountFormatContext amountFormatContext;
 	private String partialNumberPattern;
 	private DecimalFormat parseFormat;
     private DecimalFormat formatFormat;
 	private StringGrouper numberGroup;
 
-	public AmountNumberToken(AmountStyle style, String partialNumberPattern) {
-		if (style == null) {
-			throw new IllegalArgumentException("style is required.");
+	public AmountNumberToken(AmountFormatContext amountFormatContext, String partialNumberPattern) {
+		if (amountFormatContext == null) {
+			throw new IllegalArgumentException("amountFormatContext is required.");
 		}
-		this.style = style;
+		this.amountFormatContext = amountFormatContext;
 		this.partialNumberPattern = partialNumberPattern;
 		initDecimalFormats();
 	}
 
 	private void initDecimalFormats() {
-        formatFormat = (DecimalFormat) DecimalFormat.getInstance(style
-				.getLocale());
-        parseFormat = (DecimalFormat) DecimalFormat.getInstance(style
-                                                                         .getLocale());
+        formatFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.getAttribute(Locale.class));
+        parseFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.getAttribute(Locale.class));
 		DecimalFormatSymbols symbols = formatFormat.getDecimalFormatSymbols();
-		AmountFormatSymbols syms = style.getSymbols();
+		DecimalFormatSymbols syms = amountFormatContext.getAttribute(DecimalFormatSymbols.class);
 		if (syms != null) {
-			symbols.setDecimalSeparator(syms.getDecimalSeparator());
-			symbols.setDigit(syms.getDigit());
-			symbols.setExponentSeparator(syms.getExponentSeparator());
-			symbols.setMinusSign(syms.getMinusSign());
-			symbols.setPatternSeparator(syms.getPatternSeparator());
-			symbols.setZeroDigit(syms.getZeroDigit());
-            formatFormat.setDecimalFormatSymbols(symbols);
-            parseFormat.setDecimalFormatSymbols(symbols);
+            formatFormat.setDecimalFormatSymbols(syms);
+            parseFormat.setDecimalFormatSymbols(syms);
 		}
         formatFormat.applyPattern(this.partialNumberPattern);
         parseFormat.applyPattern(this.partialNumberPattern.trim());
 	}
 
 	/**
-	 * Access the underlying amount style. Note that the pattern that
-	 * corresponds to this {@link AmountNumberToken} instance may be only a
-	 * partial pattern of the full pattern returned by
-	 * {@link AmountStyle#getPattern()}.
+	 * Access the underlying amount fomat context.
 	 * 
-	 * @return the {@link AmountStyle}.
+	 * @return the {@link javax.money.format.AmountFormatContext}.
 	 */
-	public AmountStyle getAmountStyle() {
-		return style;
+	public AmountFormatContext getAmountFormatContext() {
+		return amountFormatContext;
 	}
 
 	/**
@@ -90,7 +80,7 @@ final class AmountNumberToken implements FormatToken {
 		int digits = amount.getCurrency().getDefaultFractionDigits();
 		this.formatFormat.setMinimumFractionDigits(digits);
 		this.formatFormat.setMaximumFractionDigits(digits);
-		if (this.style.getGroupingSizes().length == 0) {
+		if (amountFormatContext.getNamedAttribute("groupingSizes", int[].class, new int[0]).length == 0) {
 			appendable.append(this.formatFormat.format(amount.getNumber()
 					.numberValue(BigDecimal.class)));
 			return;
@@ -104,13 +94,13 @@ final class AmountNumberToken implements FormatToken {
 			appendable.append(preformattedValue);
 		} else {
 			if (numberGroup == null) {
-				char[] groupChars = style.getSymbols().getGroupingSeparators();
+				char[] groupChars = amountFormatContext.getNamedAttribute("groupingSeparators", char[].class, new char[0]);
 				if (groupChars.length == 0) {
 					groupChars = new char[] { this.formatFormat
 							.getDecimalFormatSymbols().getGroupingSeparator() };
 				}
 				numberGroup = new StringGrouper(groupChars,
-						style.getGroupingSizes());
+                                                amountFormatContext.getNamedAttribute("groupingSizes", int[].class, new int[0]));
 			}
 			preformattedValue = numberGroup.group(numberParts[0])
 					+ this.formatFormat.getDecimalFormatSymbols()

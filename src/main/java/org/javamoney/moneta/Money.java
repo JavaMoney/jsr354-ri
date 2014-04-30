@@ -119,7 +119,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
                 RoundingMode rm =
                         value != null ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
                 MonetaryContext mc =
-                        new MonetaryContext.Builder().setPrecision(prec).setAttribute(rm).setAmountType(Money.class)
+                        new MonetaryContext.Builder().setPrecision(prec).setObject(rm).setAmountType(Money.class)
                                 .create();
                 Logger.getLogger(Money.class.getName())
                         .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm); // TODO why info?
@@ -132,28 +132,28 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
                         case "DECIMAL32":
                             Logger.getLogger(Money.class.getName())
                                     .info("Using MathContext.DECIMAL32"); // TODO why info?
-                            builder.setAttribute(MathContext.DECIMAL32);
+                            builder.setObject(MathContext.DECIMAL32);
                             break;
                         case "DECIMAL64":
                             Logger.getLogger(Money.class.getName())
                                     .info("Using MathContext.DECIMAL64"); // TODO why info?
-                            builder.setAttribute(MathContext.DECIMAL64);
+                            builder.setObject(MathContext.DECIMAL64);
                             break;
                         case "DECIMAL128":
                             Logger.getLogger(Money.class.getName())
                                     .info("Using MathContext.DECIMAL128"); // TODO why info?
-                            builder.setAttribute(MathContext.DECIMAL128);
+                            builder.setObject(MathContext.DECIMAL128);
                             break;
                         case "UNLIMITED":
                             Logger.getLogger(Money.class.getName())
                                     .info("Using MathContext.UNLIMITED"); // TODO why info?
-                            builder.setAttribute(MathContext.UNLIMITED);
+                            builder.setObject(MathContext.UNLIMITED);
                             break;
                     }
                 }else{
                     Logger.getLogger(Money.class.getName())
                             .info("Using default MathContext.DECIMAL64"); // TODO why info?
-                    builder.setAttribute(MathContext.DECIMAL64);
+                    builder.setObject(MathContext.DECIMAL64);
                 }
                 return builder.create();
             }
@@ -162,7 +162,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
             Logger.getLogger(Money.class.getName())
                     .log(Level.SEVERE, "Error evaluating default NumericContext, using default (NumericContext.NUM64).",
                          e);
-            return new MonetaryContext.Builder(Money.class).setAttribute(MathContext.DECIMAL64).create();
+            return new MonetaryContext.Builder(Money.class).setObject(MathContext.DECIMAL64).create();
         }
         finally{
             if(is != null){
@@ -282,6 +282,9 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public Money[] divideAndRemainder(long divisor){
+        if(divisor==1L){
+            return new Money[]{this, Money.of(0L, getCurrency())};
+        }
         return divideAndRemainder(BigDecimal.valueOf(divisor));
     }
 
@@ -303,6 +306,9 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public Money multiply(long multiplicand){
+        if(multiplicand==1L){
+            return this;
+        }
         return multiply(BigDecimal.valueOf(multiplicand));
     }
 
@@ -313,6 +319,9 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public Money multiply(double multiplicand){
+        if(multiplicand==1.0d){
+            return this;
+        }
         return multiply(new BigDecimal(String.valueOf(multiplicand)));
     }
 
@@ -323,6 +332,9 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public Money remainder(long divisor){
+        if(divisor==1L){
+            return this;
+        }
         return remainder(BigDecimal.valueOf(divisor));
     }
 

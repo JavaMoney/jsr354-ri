@@ -28,7 +28,7 @@ final class MinorUnits implements MonetaryQuery<Long> {
 
 	/**
 	 * Private constructor, there is only one instance of this class, accessible
-	 * calling {@link #of()}.
+	 * calling {@link MonetaryFunctions#minorUnits()} ()}.
 	 */
 	MinorUnits() {
 	}

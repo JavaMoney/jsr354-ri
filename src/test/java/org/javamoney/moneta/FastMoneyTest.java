@@ -76,6 +76,10 @@ public class FastMoneyTest{
         FastMoney money1 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney result = money1.divideToIntegralValue(new BigDecimal("0.5001"));
         assertEquals(result.getNumber().numberValue(BigDecimal.class), new BigDecimal("1.0"));
+        result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class), new BigDecimal("4.0"));
+        result = money1.divideToIntegralValue(new BigDecimal("5.0"));
+        assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact()==0);
     }
 
 
@@ -397,7 +401,7 @@ public class FastMoneyTest{
                 FastMoney.of(23123213.435, "CHF"), FastMoney.of(0, "CHF"), FastMoney.of(-100, "CHF"),
                 FastMoney.of(-723527.36532, "CHF")};
         for(FastMoney m : moneys){
-            for(int p = -10; p < 10; p++){
+            for(int p = -3; p < 3; p++){
                 assertEquals("Invalid scaleByPowerOfTen.",
                              m.getFactory().setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
                                      .create(), m.scaleByPowerOfTen(p)
@@ -608,19 +612,15 @@ public class FastMoneyTest{
         assertEquals("longValue of " + m, 0L, m.getNumber().longValueExact());
         m = FastMoney.of(-0.0, "CHF");
         assertEquals("longValue of " + m, 0L, m.getNumber().longValueExact());
-        m = FastMoney.of(Long.MAX_VALUE, "CHF");
         try{
-            m = FastMoney
-                    .of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
-            m.getNumber().longValueExact();
+            m = FastMoney.of(Long.MAX_VALUE, "CHF");
             fail("longValueExact(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
         }
         catch(ArithmeticException e){
             // OK
         }
         try{
-            m = FastMoney.of(-100.3434, "CHF");
-            m.getNumber().longValueExact();
+            m = FastMoney.of(Long.MIN_VALUE, "CHF");
             fail("longValueExact(-100.3434) should raise an ArithmeticException.");
         }
         catch(ArithmeticException e){

@@ -42,7 +42,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
 	 * @param providerContext
 	 *            The {@link ProviderContext} this instance is providing.
 	 *            Providers added must return the same on
-	 *            {@link ProviderContext#getProviderName()}.
+	 *            {@link ProviderContext#getProvider()}.
 	 */
 	public CompoundRateProvider(Iterable<ExchangeRateProvider> providers) {
 		super(createContext(providers));
@@ -56,7 +56,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
 		StringBuilder providerName = new StringBuilder("Compound: ");
 		for (ExchangeRateProvider exchangeRateProvider : providers) {
 			providerName.append(exchangeRateProvider.getProviderContext()
-					.getProviderName());
+					.getProvider());
 			providerName.append(',');
 		}
 		providerName.setLength(providerName.length() - 1);

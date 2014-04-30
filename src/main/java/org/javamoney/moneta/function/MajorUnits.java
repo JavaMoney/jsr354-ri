@@ -13,11 +13,7 @@ package org.javamoney.moneta.function;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
-import javax.money.MonetaryRoundings;
+import javax.money.*;
 
 /**
  * This class allows to extract the major part of a {@link MonetaryAmount}
@@ -28,8 +24,8 @@ import javax.money.MonetaryRoundings;
 final class MajorUnits implements MonetaryQuery<Long> {
 
 	private MonetaryOperator downRounding = MonetaryRoundings
-			.getRounding(new MonetaryContext.Builder()
-					.setMaxScale(0).setAttribute(RoundingMode.DOWN).create());
+			.getRounding(new RoundingContext.Builder()
+					.setAttribute("scale", 0).setObject(RoundingMode.DOWN).create());
 
 	/**
 	 * Access the shared instance of {@link MajorUnits} for use.

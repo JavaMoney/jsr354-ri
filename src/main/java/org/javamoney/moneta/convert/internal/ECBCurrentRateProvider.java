@@ -114,11 +114,11 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     }
 
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        if(context.getTimestamp() != null){
+        if(context.getNamedAttribute("timestamp", Long.class) != null){
             return null;
         }
-        ExchangeRate.Builder builder = new ExchangeRate.Builder(
-                ConversionContext.of(CONTEXT.getProviderName(), RateType.DEFERRED, context.getTimestamp()));
+        ExchangeRate.Builder builder =
+                new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.DEFERRED).create());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate = null;
@@ -162,11 +162,11 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
 	 */
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
-        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProviderName())){
+        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
             return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
-                    .setFactor(new DefaultNumberValue(
-                            BigDecimal.ONE.divide(rate.getFactor().numberValue(BigDecimal.class), MathContext.DECIMAL64)))
-                    .create();
+                    .setFactor(new DefaultNumberValue(BigDecimal.ONE
+                                                              .divide(rate.getFactor().numberValue(BigDecimal.class),
+                                                                      MathContext.DECIMAL64))).create();
         }
         return null;
     }
@@ -244,8 +244,9 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * @param factor    The conversion factor.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
-        ExchangeRate.Builder builder =
-                new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), RateType.DEFERRED, timestamp));
+        ExchangeRate.Builder builder = new ExchangeRate.Builder(
+                new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
+                        .setAttribute("timestamp", timestamp).create());
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(factor));

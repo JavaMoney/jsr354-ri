@@ -13,7 +13,7 @@ import java.math.RoundingMode;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
-import javax.money.MonetaryContext.AmountFlavor;
+import javax.money.AmountFlavor;
 
 import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
@@ -28,12 +28,12 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
 			FastMoney.class).setPrecision(18)
 			.setMaxScale(5).setFixedScale(true)
-			.setAttribute(RoundingMode.HALF_EVEN)
+			.setObject(RoundingMode.HALF_EVEN)
 			.setFlavor(AmountFlavor.PERFORMANCE).create();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
 			FastMoney.class).setPrecision(18)
 			.setMaxScale(5).setFixedScale(true)
-			.setAttribute(RoundingMode.HALF_EVEN)
+			.setObject(RoundingMode.HALF_EVEN)
 			.setFlavor(AmountFlavor.PERFORMANCE).create();
 
 	@Override

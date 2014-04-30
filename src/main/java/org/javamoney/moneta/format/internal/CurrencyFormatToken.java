@@ -18,7 +18,7 @@ package org.javamoney.moneta.format.internal;
 //import javax.money.CurrencyUnit;
 //import javax.money.MonetaryAmount;
 //import javax.money.MonetaryCurrencies;
-//import javax.money.format.CurrencyStyle;
+//import org.javamoney.moneta.format.CurrencyStyle;
 //import javax.money.format.MonetaryParseException;
 //
 ///**

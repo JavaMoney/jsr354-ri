@@ -174,10 +174,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         rates = new ArrayList<ExchangeRate>(5);
                         newCurrencyToSdr.put(currency, rates);
                     }
-                    ExchangeRate rate =
-                            new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), rateType, toTS))
-                                    .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i]))
-                                    .create();
+                    ExchangeRate rate = new ExchangeRate.Builder(
+                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", toTS).create())
+                            .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).create();
                     rates.add(rate);
                 }else{ // SDR -> Currency
                     List<ExchangeRate> rates = this.sdrToCurrency.get(currency);
@@ -185,10 +184,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         rates = new ArrayList<ExchangeRate>(5);
                         newSdrToCurrency.put(currency, rates);
                     }
-                    ExchangeRate rate =
-                            new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), rateType, fromTS))
-                                    .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i]))
-                                    .create();
+                    ExchangeRate rate = new ExchangeRate.Builder(
+                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", fromTS).create())
+                            .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).create();
                     rates.add(rate);
                 }
             }
@@ -228,8 +226,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), context.getTimestamp());
-        ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), context.getTimestamp());
+        ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), context.getNamedAttribute("timestamp", Long.class));
+        ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), context.getNamedAttribute("timestamp", Long.class));
         if(base.equals(SDR)){
             return rate2;
         }else if(term.equals(SDR)){
@@ -239,7 +237,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             return null;
         }
         ExchangeRate.Builder builder =
-                new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), RateType.HISTORIC));
+                new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), RateType.HISTORIC));
         builder.setBase(base);
         builder.setTerm(term);
         builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
@@ -256,7 +254,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             if(timestamp == null){
                 timestamp = System.currentTimeMillis();
             }
-            if(rate.getConversionContext().isValid(timestamp)){
+            if(isValid(rate.getConversionContext(), timestamp)){
                 return rate;
             }
             if(found == null){
@@ -264,6 +262,18 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             }
         }
         return found;
+    }
+
+    private boolean isValid(ConversionContext conversionContext, Long timestamp){
+        Long validFrom = conversionContext.getNamedAttribute("validFrom", Long.class);
+        Long validTo = conversionContext.getNamedAttribute("validTo", Long.class);
+        if(validFrom!=null && validFrom.longValue() > timestamp.longValue()){
+            return false;
+        }
+        if(validTo!=null && validTo.longValue() < timestamp.longValue()){
+            return false;
+        }
+        return true;
     }
 
 }

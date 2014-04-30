@@ -94,8 +94,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * the {@link MonetaryContext} used by this instance, e.g. on division.
      */
     private static final MonetaryContext MONETARY_CONTEXT =
-            new MonetaryContext.Builder(FastMoney.class).setMaxScale(SCALE).setFixedScale(true)
-                    .setPrecision(String.valueOf(Integer.MAX_VALUE).length()).create();
+            new MonetaryContext.Builder(FastMoney.class).setFlavor(AmountFlavor.PERFORMANCE)
+                    .setMaxScale(SCALE).setFixedScale(true).setPrecision(String.valueOf(Integer.MAX_VALUE).length())
+                    .create();
 
     /**
      * Required for deserialization only.
@@ -119,8 +120,8 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
     /**
      * Creates a new instance os {@link FastMoney}.
      *
-     * @param currency the currency, not null.
-     * @param numberBinding   the amount, not null.
+     * @param currency      the currency, not null.
+     * @param numberBinding the amount, not null.
      */
     private FastMoney(NumberValue numberBinding, CurrencyUnit currency){
         super(currency, MONETARY_CONTEXT);
@@ -130,7 +131,18 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
 
     private long getInternalNumber(Number number){
         BigDecimal bd = getBigDecimal(number);
-        return bd.movePointRight(SCALE).longValue();
+        int signum = bd.signum();
+        long newValue = bd.movePointRight(SCALE).longValue();
+        if(signum == 0 && newValue != 0){
+            throw new ArithmeticException("Overflow");
+        }
+        else if(signum == 1 && newValue < 0){
+            throw new ArithmeticException("Overflow");
+        }
+        else if(signum == -1 && newValue > 0){
+            throw new ArithmeticException("Overflow");
+        }
+        return newValue;
     }
 
     private FastMoney(long number, CurrencyUnit currency){
@@ -204,20 +216,26 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     @Override
     public boolean equals(Object obj){
-        if(this == obj)
+        if(this == obj){
             return true;
-        if(obj == null)
+        }
+        if(obj == null){
             return false;
-        if(getClass() != obj.getClass())
+        }
+        if(getClass() != obj.getClass()){
             return false;
+        }
         FastMoney other = (FastMoney) obj;
         if(currency == null){
-            if(other.getCurrency() != null)
+            if(other.getCurrency() != null){
                 return false;
-        }else if(!currency.equals(other.getCurrency()))
+            }
+        }else if(!currency.equals(other.getCurrency())){
             return false;
-        if(number != other.number)
+        }
+        if(number != other.number){
             return false;
+        }
         return true;
     }
 
@@ -248,6 +266,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     public FastMoney add(MonetaryAmount amount){
         checkAmountParameter(amount);
+        if(amount.isZero()){
+            return this;
+        }
         return new FastMoney(this.number + getInternalNumber(amount.getNumber()), getCurrency());
     }
 
@@ -257,6 +278,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     public FastMoney divide(Number divisor){
         checkNumber(divisor);
+        if(isOne(divisor)){
+            return this;
+        }
         return new FastMoney(Math.round(this.number / divisor.doubleValue()), getCurrency());
     }
 
@@ -266,6 +290,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     public FastMoney[] divideAndRemainder(Number divisor){
         checkNumber(divisor);
+        if(isOne(divisor)){
+            return new FastMoney[]{this, FastMoney.of(0, getCurrency())};
+        }
         BigDecimal div = getBigDecimal(divisor);
         BigDecimal[] res = getBigDecimal().divideAndRemainder(div);
         return new FastMoney[]{new FastMoney(res[0], getCurrency()), new FastMoney(res[1], getCurrency())};
@@ -277,14 +304,25 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     public FastMoney divideToIntegralValue(Number divisor){
         checkNumber(divisor);
+        if(isOne(divisor)){
+            return this;
+        }
         BigDecimal div = getBigDecimal(divisor);
         return new FastMoney(getBigDecimal().divideToIntegralValue(div), getCurrency());
     }
 
     public FastMoney multiply(Number multiplicand){
         checkNumber(multiplicand);
-        double multiplicandNum = multiplicand.doubleValue();
-        return new FastMoney(Math.round(this.number * multiplicandNum), getCurrency());
+        if(isOne(multiplicand)){
+            return this;
+        }
+        BigDecimal mult = getBigDecimal(multiplicand);
+        try{
+            return new FastMoney(mult.multiply(BigDecimal.valueOf(this.number)).longValueExact(), getCurrency());
+        }
+        catch(ArithmeticException e){
+            throw new MonetaryException("Multiplication exceeds capabilities of " + getClass().getName(), e);
+        }
     }
 
     /*
@@ -324,7 +362,25 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     public FastMoney remainder(Number divisor){
         checkNumber(divisor);
+        if(isOne(divisor)){
+            return new FastMoney(0, getCurrency());
+        }
         return new FastMoney(this.number % getInternalNumber(divisor), getCurrency());
+    }
+
+    private boolean isOne(Number number){
+        BigDecimal bd = getBigDecimal(number);
+        try{
+            if(bd.scale() == 0 && bd.longValueExact() == 1L){
+                return true;
+            }
+            return false;
+        }
+        catch(Exception e){
+            // The only way to end up here is that longValueExact throws an ArithmeticException,
+            // so the amount is definitively not equal to 1.
+            return false;
+        }
     }
 
     /*
@@ -607,7 +663,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
 
     @Override
     public FastMoney divide(long amount){
-        if(amount == 1){
+        if(amount == 1L){
             return this;
         }
         return new FastMoney(this.number / amount, this.currency);
@@ -615,6 +671,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
 
     @Override
     public FastMoney divide(double number){
+        if(number == 1.0d){
+            return this;
+        }
         return new FastMoney(Math.round(this.number / number), getCurrency());
     }
 

@@ -68,7 +68,8 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-    private final Map<Long,Map<String,ExchangeRate>> historicRates = new ConcurrentHashMap<Long,Map<String,ExchangeRate>>();
+    private final Map<Long,Map<String,ExchangeRate>> historicRates =
+            new ConcurrentHashMap<Long,Map<String,ExchangeRate>>();
     /**
      * Parser factory.
      */
@@ -120,11 +121,12 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     }
 
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        if(context.getTimestamp() == null){
+        if(context.getNamedAttribute("timestamp", Long.class) == null){
             return null;
         }
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
-                ConversionContext.of(CONTEXT.getProviderName(), RateType.HISTORIC, context.getTimestamp()));
+                new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
+                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).create());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate = null;
@@ -133,7 +135,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTimeInMillis(context.getTimestamp());
+        cal.setTimeInMillis(context.getNamedAttribute("timestamp", Long.class));
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -249,9 +251,9 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     /**
      * Method to add a currency exchange rate.
      *
-     * @param term        the term (target) currency, mapped from EUR.
-     * @param timestamp   The target day.
-     * @param rate        The rate.
+     * @param term      the term (target) currency, mapped from EUR.
+     * @param timestamp The target day.
+     * @param rate      The rate.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
         RateType rateType = RateType.HISTORIC;
@@ -260,9 +262,9 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
-            builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), rateType, timestamp));
+            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).create());
         }else{
-            builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), rateType));
+            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).create());
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

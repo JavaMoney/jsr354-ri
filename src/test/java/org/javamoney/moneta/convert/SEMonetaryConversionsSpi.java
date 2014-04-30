@@ -43,7 +43,7 @@ public class SEMonetaryConversionsSpi implements MonetaryConversionsSpi {
 		Map<String, ExchangeRateProvider> newProviders = new ConcurrentHashMap<>();
 		for (ExchangeRateProvider prov : ServiceLoader
 				.load(ExchangeRateProvider.class)) {
-			newProviders.put(prov.getProviderContext().getProviderName(), prov);
+			newProviders.put(prov.getProviderContext().getProvider(), prov);
 		}
 		this.conversionProviders = newProviders;
 	}

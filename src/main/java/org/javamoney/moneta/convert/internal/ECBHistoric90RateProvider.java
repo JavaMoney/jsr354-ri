@@ -79,7 +79,8 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
      */
     private static final ProviderContext CONTEXT =
             new ProviderContext.Builder("ECB-HIST90").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
-                    .setAttribute("providerDescription", "European Central Bank (last 90 days)").setAttribute("days", 90).create();
+                    .setAttribute("providerDescription", "European Central Bank (last 90 days)")
+                    .setAttribute("days", 90).create();
 
     /**
      * Constructor, also loads initial data.
@@ -119,16 +120,18 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
         ExchangeRate sourceRate = null;
         ExchangeRate target = null;
-        if(context.getTimestamp() == null){
+        if(context.getNamedAttribute("timestamp", Long.class) == null){
             return null;
         }
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
-                ConversionContext.of(CONTEXT.getProviderName(), RateType.HISTORIC, context.getTimestamp()));
+                new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
+                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).create()
+        );
         if(rates.isEmpty()){
             return null;
         }
         final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTimeInMillis(context.getTimestamp());
+        cal.setTimeInMillis(context.getNamedAttribute("timestamp", Long.class));
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -250,9 +253,10 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
-            builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), rateType, timestamp));
+            builder = new ExchangeRate.Builder(
+                    new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).create());
         }else{
-            builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProviderName(), rateType));
+            builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), rateType));
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

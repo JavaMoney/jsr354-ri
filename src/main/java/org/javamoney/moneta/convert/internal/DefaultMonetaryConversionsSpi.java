@@ -62,7 +62,7 @@ public class DefaultMonetaryConversionsSpi implements MonetaryConversionsSpi{
     public void reload(){
         Map<String,ExchangeRateProvider> newProviders = new ConcurrentHashMap<>();
         for(ExchangeRateProvider prov : Bootstrap.getServices(ExchangeRateProvider.class)){
-            newProviders.put(prov.getProviderContext().getProviderName(), prov);
+            newProviders.put(prov.getProviderContext().getProvider(), prov);
         }
         this.conversionProviders = newProviders;
     }

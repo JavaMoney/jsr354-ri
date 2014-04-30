@@ -12,26 +12,14 @@ package org.javamoney.moneta.convert.internal;
 
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
-import javax.xml.parsers.SAXParser;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.net.MalformedURLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.logging.Level;
 
 /**
  * This class implements an {@link javax.money.convert.ExchangeRateProvider} that provides exchange rate with factor
@@ -61,7 +49,10 @@ public class IdentityRateProvider extends AbstractRateProvider{
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
         if(base.getCurrencyCode().equals(term.getCurrencyCode())){
             ExchangeRate.Builder builder = new ExchangeRate.Builder(
-                    ConversionContext.of(CONTEXT.getProviderName(), RateType.DEFERRED, context.getTimestamp()));
+                    new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
+                            .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)
+                            ).create()
+            );
             builder.setBase(base);
             builder.setTerm(term);
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
@@ -79,7 +70,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
 	 */
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
-        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProviderName())){
+        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
             return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
                     .setFactor(new DefaultNumberValue(BigDecimal.ONE)).create();
         }

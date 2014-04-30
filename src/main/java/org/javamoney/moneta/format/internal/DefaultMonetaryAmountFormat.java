@@ -8,9 +8,11 @@
  */
 package org.javamoney.moneta.format.internal;
 
-import org.javamoney.moneta.BuildableCurrencyUnit;
+import org.javamoney.moneta.format.CurrencyStyle;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +24,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
-import javax.money.format.AmountStyle;
+import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 
@@ -65,36 +67,35 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	/** Currency used, when no currency was on the input parsed. */
 	private CurrencyUnit defaultCurrency;
 
-	/** The current {@link AmountStyle}, never null. */
-	private AmountStyle amountStyle;
+	/** The current {@link javax.money.format.AmountFormatContext}, never null. */
+	private AmountFormatContext amountFormatContext;
 
 	/**
 	 * Creates a new instance.
 	 * 
 	 * @param style
-	 *            the {@link AmountStyle} to be used, not {@code null}.
+	 *            the {@link javax.money.format.AmountFormatContext} to be used, not {@code null}.
 	 * @param style
 	 *            the style defining how the {@link CurrencyUnit} should be
 	 *            formatted.
 	 */
-	DefaultMonetaryAmountFormat(AmountStyle style) {
-		setAmountStyle(style);
+	DefaultMonetaryAmountFormat(AmountFormatContext style) {
+		setAmountFormatContext(style);
 	}
 
 	private void initPattern(String pattern, List<FormatToken> tokens,
-			AmountStyle style) {
+			AmountFormatContext style) {
 		int index = pattern.indexOf(CURRENCY_SIGN);
 		if (index > 0) { // currency placement after, between
 			String p1 = pattern.substring(0, index);
 			String p2 = pattern.substring(index + 1);
 			if (isLiteralPattern(p1, style)) {
 				tokens.add(new LiteralToken(p1));
-				tokens.add(new CurrencyToken(style.getCurrencyStyle(), style
-						.getLocale()));
+				tokens.add(new CurrencyToken(style.getAttribute(CurrencyStyle.class), style.
+                                             getAttribute(Locale.class)));
 			} else {
 				tokens.add(new AmountNumberToken(style, p1));
-				tokens.add(new CurrencyToken(style.getCurrencyStyle(), style
-						.getLocale()));
+				tokens.add(new CurrencyToken(style.getAttribute(CurrencyStyle.class), style.getAttribute(Locale.class)));
 			}
 			if (!p2.isEmpty()) {
 				if (isLiteralPattern(p2, style)) {
@@ -104,15 +105,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 				}
 			}
 		} else if (index == 0) { // currency placement before
-			tokens.add(new CurrencyToken(style.getCurrencyStyle(), style
-					.getLocale()));
+			tokens.add(new CurrencyToken(style.getAttribute(CurrencyStyle.class), style
+					.getAttribute(Locale.class)));
 			tokens.add(new AmountNumberToken(style, pattern.substring(1)));
 		} else { // no currency
 			tokens.add(new AmountNumberToken(style, pattern));
 		}
 	}
 
-	private boolean isLiteralPattern(String pattern, AmountStyle style) {
+	private boolean isLiteralPattern(String pattern, AmountFormatContext style) {
 		// TODO implement better here
 		if (pattern.contains("#") || pattern.contains("0")) {
 			return false;
@@ -233,16 +234,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see javax.money.format.MonetaryAmountFormat#getMonetaryContext()
-	 */
-	@Override
-	public MonetaryContext getMonetaryContext() {
-		return monetaryContext;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.money.MonetaryQuery#queryFrom(javax.money.MonetaryAmount)
 	 */
 	@Override
@@ -251,35 +242,27 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	}
 
 	@Override
-	public CurrencyUnit getDefaultCurrency() {
-		return this.defaultCurrency;
+	public AmountFormatContext getAmountFormatContext() {
+		return this.amountFormatContext;
 	}
 
-	@Override
-	public void setDefaultCurrency(CurrencyUnit currency) {
-		this.defaultCurrency = currency;
-	}
-
-	@Override
-	public AmountStyle getAmountStyle() {
-		return this.amountStyle;
-	}
-
-	@Override
-	public void setAmountStyle(AmountStyle style) {
+	private void setAmountFormatContext(AmountFormatContext style) {
 		Objects.requireNonNull(style);
-		this.amountStyle = style;
+		this.amountFormatContext = style;
 		this.positiveTokens = new ArrayList<>();
 		this.negativeTokens = new ArrayList<>();
-		String pattern = style.getPattern();
+		String pattern = style.getText("pattern");
+        if(pattern==null){
+            pattern = ((DecimalFormat)DecimalFormat.getCurrencyInstance(style.getLocale())).toPattern();
+        }
 		if (pattern.indexOf(CURRENCY_SIGN) < 0) {
 			this.positiveTokens.add(new AmountNumberToken(style, pattern));
 			this.negativeTokens = positiveTokens;
 		} else {
 			// split into (potential) plus, minus patterns
 			char patternSeparator = ';';
-			if (style.getSymbols() != null) {
-				patternSeparator = style.getSymbols().getPatternSeparator();
+			if (style.getAttribute(DecimalFormatSymbols.class) != null) {
+				patternSeparator = style.getAttribute(DecimalFormatSymbols.class).getPatternSeparator();
 			}
 			String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));
 			initPattern(plusMinusPatterns[0], this.positiveTokens, style);
@@ -291,10 +274,5 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		}
 	}
 
-	@Override
-	public void setMonetaryContext(MonetaryContext context) {
-		Objects.requireNonNull(context);
-		this.monetaryContext = context;
-	}
 
 }

@@ -99,12 +99,10 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 			throw new CurrencyConversionException(amount.getCurrency(),
 					rate == null ? null : rate.getTerm(), null);
 		}
-		return (T) amount
+		return (T) amount.multiply(rate.getFactor())
 				.getFactory()
 				.setCurrency(rate.getTerm())
-				.setNumber(
-						amount.multiply(rate.getFactor()).getNumber()
-								.numberValue(BigDecimal.class)).create();
+				.create();
 	}
 
 	

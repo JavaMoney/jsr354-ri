@@ -8,9 +8,12 @@
  */
 package org.javamoney.moneta.format.internal;
 
+import java.util.Collections;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
-import javax.money.format.AmountStyle;
+import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
 
@@ -22,15 +25,25 @@ import javax.money.spi.MonetaryAmountFormatProviderSpi;
 public class DefaultAmountFormatProviderSpi implements
 		MonetaryAmountFormatProviderSpi {
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountStyle)
-	 */
+    @Override
+    public String getStyleId(){
+        return "default";
+    }
+
+    /*
+         * (non-Javadoc)
+         * @see
+         * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
+         */
 	@Override
-	public MonetaryAmountFormat getAmountFormat(AmountStyle style) {
-		Objects.requireNonNull(style, "AmountStyle required");
+	public MonetaryAmountFormat getAmountFormat(AmountFormatContext style) {
+		Objects.requireNonNull(style, "AmountFormatContext required");
 		return new DefaultMonetaryAmountFormat(style);
 	}
+
+    @Override
+    public Set<Locale> getAvailableLocales(){
+        return Collections.emptySet();
+    }
 
 }

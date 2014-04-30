@@ -5,7 +5,7 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
-import javax.money.MonetaryContext.AmountFlavor;
+import javax.money.AmountFlavor;
 import java.math.RoundingMode;
 
 /**
@@ -17,10 +17,10 @@ import java.math.RoundingMode;
 public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMoney>{
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setAttribute(RoundingMode.HALF_EVEN)
+            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setObject(RoundingMode.HALF_EVEN)
                     .setFlavor(AmountFlavor.UNDEFINED).create();
     static final MonetaryContext MAX_CONTEXT =
-            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setAttribute(RoundingMode.HALF_EVEN)
+            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setObject(RoundingMode.HALF_EVEN)
                     .setFlavor(AmountFlavor.UNDEFINED).create();
 
     /*

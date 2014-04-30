@@ -81,6 +81,11 @@ public class MoneyTest{
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         Money result = money1.divideToIntegralValue(new BigDecimal("0.50000000000000000001"));
         assertThat(result.getNumber().numberValue(BigDecimal.class), equalTo(BigDecimal.ONE));
+        result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class).stripTrailingZeros(),
+                     new BigDecimal("4.0").stripTrailingZeros());
+        result = money1.divideToIntegralValue(new BigDecimal("5.0"));
+        assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact() == 0);
     }
 
     /**
@@ -147,7 +152,7 @@ public class MoneyTest{
 
                 BigDecimal.valueOf(2.15), EURO,
                 new MonetaryContext.Builder(Money.class).setPrecision(2).setFixedScale(true)
-                        .setAttribute(RoundingMode.DOWN).create()
+                        .setObject(RoundingMode.DOWN).create()
         );
         Money m2 = Money.of(BigDecimal.valueOf(2.1), EURO);
         assertEquals(m, m2);
@@ -205,7 +210,7 @@ public class MoneyTest{
     @Test
     public void testOfCurrencyUnitNumberMathContext(){
         MonetaryContext mc = new MonetaryContext.Builder(Money.class).setMaxScale(2345).setFixedScale(true)
-                .setAttribute(RoundingMode.CEILING).create();
+                .setObject(RoundingMode.CEILING).create();
         Money m = Money.of((byte) 2, EURO, mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -298,7 +303,7 @@ public class MoneyTest{
     @Test
     public void testOfStringNumberMathContext(){
         MonetaryContext mc = new MonetaryContext.Builder(Money.class).setMaxScale(2345).setFixedScale(true)
-                .setAttribute(RoundingMode.CEILING).create();
+                .setObject(RoundingMode.CEILING).create();
         Money m = Money.of((byte) 2, "EUR", mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -420,8 +425,7 @@ public class MoneyTest{
         Money m = Money.of(10, "CHF");
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
         MonetaryContext mc =
-                new MonetaryContext.Builder(Money.class).setPrecision(128).setAttribute(RoundingMode.HALF_EVEN)
-                        .create();
+                new MonetaryContext.Builder(Money.class).setPrecision(128).setObject(RoundingMode.HALF_EVEN).create();
         MonetaryAmount m2 = m.getFactory().setContext(mc).create();
         assertNotNull(m2);
         assertTrue(m != m2);
