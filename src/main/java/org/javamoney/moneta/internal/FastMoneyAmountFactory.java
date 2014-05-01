@@ -26,12 +26,12 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
 public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
-			FastMoney.class).setPrecision(18)
+			FastMoney.class).setPrecision(14)
 			.setMaxScale(5).setFixedScale(true)
 			.setObject(RoundingMode.HALF_EVEN)
 			.setFlavor(AmountFlavor.PERFORMANCE).create();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
-			FastMoney.class).setPrecision(18)
+			FastMoney.class).setPrecision(14)
 			.setMaxScale(5).setFixedScale(true)
 			.setObject(RoundingMode.HALF_EVEN)
 			.setFlavor(AmountFlavor.PERFORMANCE).create();

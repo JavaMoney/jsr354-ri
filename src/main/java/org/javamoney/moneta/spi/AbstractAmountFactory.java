@@ -109,6 +109,14 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
     @Override
     public MonetaryAmountFactory<T> setContext(MonetaryContext monetaryContext){
         Objects.requireNonNull(monetaryContext);
+        int maxScale = getMaximalMonetaryContext().getMaxScale();
+        if(maxScale!=-1 && maxScale < monetaryContext.getMaxScale()){
+            throw new MonetaryException("Context exceeds maximal capabilities (scale) of this type: " + monetaryContext);
+        }
+        int precision = getMaximalMonetaryContext().getPrecision();
+        if(precision!=0 && precision < monetaryContext.getPrecision()){
+            throw new MonetaryException("Contexts exceeds maximal capabilities (precision) of this type: " + monetaryContext);
+        }
         this.monetaryContext = monetaryContext;
         return this;
     }
