@@ -159,37 +159,50 @@ public abstract class AbstractMoney implements
 	 */
 	protected static BigDecimal getBigDecimal(Number num) {
 		checkNumberParameter(num);
+        BigDecimal result = null;
 		if(num instanceof NumberValue){
-			return ((NumberValue)num).numberValue(BigDecimal.class);
+			result = ((NumberValue)num).numberValue(BigDecimal.class);
 		}
 		// try fast equality check first (delegates to identity!)
-		if (BigDecimal.class.equals(num.getClass())) {
-			return (BigDecimal) num;
+		if (result==null && BigDecimal.class.equals(num.getClass())) {
+			result = ((BigDecimal) num);
 		}
-		if (Long.class.equals(num.getClass())
+		if (result==null && (Long.class.equals(num.getClass())
 				|| Integer.class.equals(num.getClass())
 				|| Short.class.equals(num.getClass())
 				|| Byte.class.equals(num.getClass())
-				|| AtomicLong.class.equals(num.getClass())) {
+				|| AtomicLong.class.equals(num.getClass()))) {
 			return BigDecimal.valueOf(num.longValue());
 		}
-		if (Float.class.equals(num.getClass())
-				|| Double.class.equals(num.getClass())) {
+		if (result==null && (Float.class.equals(num.getClass())
+				|| Double.class.equals(num.getClass()))) {
 			return new BigDecimal(num.toString());
 		}
 		// try instance of (slower)
-		if (num instanceof BigDecimal) {
-			return (BigDecimal) num;
+		if (result==null && num instanceof BigDecimal) {
+			result = ((BigDecimal) num);
 		}
-		if (num instanceof BigInteger) {
+		if (result==null && num instanceof BigInteger) {
 			return new BigDecimal((BigInteger) num);
 		}
-		try {
-			// Avoid imprecise conversion to double value if at all possible
-			return new BigDecimal(num.toString());
-		} catch (NumberFormatException e) {
-		}
-		return BigDecimal.valueOf(num.doubleValue());
+        if(result==null){
+            try{
+                // Avoid imprecise conversion to double value if at all possible
+                result = new BigDecimal(num.toString());
+            }
+            catch(NumberFormatException e){
+            }
+        }
+        if(result.signum()==0){
+            return BigDecimal.ZERO;
+        }
+        if(result==null){
+            result = BigDecimal.valueOf(num.doubleValue());
+        }
+        if(result.scale()>0){
+            return result.stripTrailingZeros();
+        }
+        return result;
 	}
 
 	/**
@@ -244,8 +257,8 @@ public abstract class AbstractMoney implements
 	 * @param amount
 	 *            The monetary amount to be compared to, never null.
 	 * @throws MonetaryException
-	 *             If the amount is null, or the amount's currency is not
-	 *             compatible (same {@link CurrencyUnit#getNamespace()} and same
+	 *             If the amount is null, or the amount's {@link CurrencyUnit} is not
+	 *             compatible, meaning has a different value of
 	 *             {@link CurrencyUnit#getCurrencyCode()}).
 	 */
 	protected void checkAmountParameter(MonetaryAmount amount) {

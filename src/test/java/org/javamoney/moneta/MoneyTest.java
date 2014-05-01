@@ -1014,9 +1014,9 @@ public class MoneyTest{
     public void testToString(){
         assertEquals("XXX 1.23455645", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
         assertEquals("CHF 1234", Money.of(1234, "CHF").toString());
-        assertEquals("CHF 1234.0", Money.of(new BigDecimal("1234.0"), "CHF").toString());
+        assertEquals("CHF 1234", Money.of(new BigDecimal("1234.0"), "CHF").toString());
         assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
-        assertEquals("CHF 0.0100", Money.of(new BigDecimal("0.0100"), "CHF").toString());
+        assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
     }
 
     /**

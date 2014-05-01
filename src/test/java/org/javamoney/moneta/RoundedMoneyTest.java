@@ -91,7 +91,7 @@ public class RoundedMoneyTest {
 				equalTo(BigDecimal.ONE));
 		assertThat(
 				divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-				equalTo(new BigDecimal("0.50")));
+				equalTo(new BigDecimal("0.5")));
 	}
 
 	@Test
@@ -1120,11 +1120,11 @@ public class RoundedMoneyTest {
 		assertEquals("XXX 1.23455645",
 				RoundedMoney.of(new BigDecimal("1.23455645"),"XXX").toString());
 		assertEquals("CHF 1234", RoundedMoney.of( 1234,"CHF").toString());
-		assertEquals("CHF 1234.0",
+		assertEquals("CHF 1234",
 				RoundedMoney.of( new BigDecimal("1234.0"),"CHF").toString());
 		assertEquals("CHF 1234.1",
 				RoundedMoney.of( new BigDecimal("1234.1"),"CHF").toString());
-		assertEquals("CHF 0.0100",
+		assertEquals("CHF 0.01",
 				RoundedMoney.of( new BigDecimal("0.0100"),"CHF").toString());
 	}
 
