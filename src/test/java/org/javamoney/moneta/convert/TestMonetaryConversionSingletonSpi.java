@@ -20,9 +20,9 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
-import javax.money.spi.MonetaryConversionsSpi;
+import javax.money.spi.MonetaryConversionsSingletonSpi;
 
-public class TestMonetaryConversionSpi implements MonetaryConversionsSpi {
+public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSingletonSpi{
 
 	private ExchangeRateProvider dummyProvider = new DummyRateProvider();
 	private CurrencyConversion dummyConversion = new DummyConversion();

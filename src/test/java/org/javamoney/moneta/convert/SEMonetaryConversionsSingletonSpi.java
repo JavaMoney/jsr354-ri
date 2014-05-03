@@ -27,15 +27,15 @@ import javax.money.convert.ConversionContext;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
-import javax.money.spi.MonetaryConversionsSpi;
+import javax.money.spi.MonetaryConversionsSingletonSpi;
 
 import org.javamoney.moneta.spi.CompoundRateProvider;
 
-public class SEMonetaryConversionsSpi implements MonetaryConversionsSpi {
+public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSingletonSpi{
 
 	private Map<String, ExchangeRateProvider> conversionProviders = new ConcurrentHashMap<>();
 
-	public SEMonetaryConversionsSpi() {
+	public SEMonetaryConversionsSingletonSpi() {
 		reload();
 	}
 

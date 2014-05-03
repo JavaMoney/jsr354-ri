@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
@@ -26,15 +25,15 @@ import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
-import javax.money.spi.MonetaryAmountsSpi;
+import javax.money.spi.MonetaryAmountsSingletonSpi;
 
 import org.javamoney.moneta.ServicePriority;
 
 /**
- * Default implementation ot {@link javax.money.spi.MonetaryAmountsSpi} loading the SPIs on startup initially once, using the
+ * Default implementation ot {@link javax.money.spi.MonetaryAmountsSingletonSpi} loading the SPIs on startup initially once, using the
  * JSR's {@link javax.money.spi.Bootstrap} mechanism.
  */
-public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
+public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingletonSpi{
 
 	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactoryProviderSpi<?>> factories = new ConcurrentHashMap<>();
 
@@ -75,7 +74,7 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 		}
 	};
 
-	public DefaultMonetaryAmountsSpi() {
+	public DefaultMonetaryAmountsSingletonSpi() {
 		for (MonetaryAmountFactoryProviderSpi<?> f : Bootstrap
 				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 			MonetaryAmountFactoryProviderSpi<?> existing = factories.put(
@@ -200,109 +199,6 @@ public class DefaultMonetaryAmountsSpi implements MonetaryAmountsSpi {
 					"No MonetaryAmountFactoryProviderSpi registered.");
 		}
 		return configuredDefaultAmountType;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.spi.MonetaryAmountsSpi#queryAmountType(javax.money.MonetaryContext)
-	 */
-	@Override
-	public Class<? extends MonetaryAmount> queryAmountType(
-			MonetaryContext requiredContext) {
-		if (requiredContext == null) {
-			return getDefaultAmountType();
-		}
-		// first check for explicit type
-		for (@SuppressWarnings("unchecked")
-		MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
-				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
-			if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
-				continue;
-			}
-			if (requiredContext.getAmountType() == f.getAmountType()) {
-				if (isPrecisionOK(requiredContext,
-						f.getMaximalMonetaryContext())) {
-					return f.getAmountType();
-				} else {
-					throw new MonetaryException(
-							"Incompatible context required=" + requiredContext
-									+ ", maximal="
-									+ f.getMaximalMonetaryContext());
-				}
-			}
-		}
-		// Select on required flavor
-		List<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>> selection = new ArrayList<>();
-		for (@SuppressWarnings("unchecked")
-		MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
-				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
-			if (f.getDefaultMonetaryContext().getAmountFlavor() == AmountFlavor.UNDEFINED) {
-				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
-						|| f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
-					continue;
-				}
-				if (isPrecisionOK(requiredContext,
-						f.getMaximalMonetaryContext())) {
-					selection.add(f);
-				}
-			} else if (requiredContext.getAmountFlavor() == f
-					.getDefaultMonetaryContext().getAmountFlavor()) {
-				if (isPrecisionOK(requiredContext,
-						f.getMaximalMonetaryContext())) {
-					selection.add(f);
-				}
-			}
-		}
-		if (selection.isEmpty()) {
-			// fall back, add all selections, ignore flavor
-			for (@SuppressWarnings("unchecked")
-			MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
-					.getServices(MonetaryAmountFactoryProviderSpi.class)) {
-				if (f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY
-						|| f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER) {
-					continue;
-				}
-				if (isPrecisionOK(requiredContext,
-						f.getMaximalMonetaryContext())) {
-					selection.add(f);
-				}
-			}
-		}
-		if (selection.size() == 1) {
-			return selection.get(0).getAmountType();
-		} else {
-			// several matches, check for required flavor
-			for (@SuppressWarnings("unchecked")
-			MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : selection) {
-				if (f.getDefaultMonetaryContext().getAmountFlavor()
-						.equals(requiredContext.getAmountFlavor())) {
-					return f.getAmountType();
-				}
-			}
-		}
-		Collections.sort(selection, CONTEXT_COMPARATOR);
-		return selection.get(0).getAmountType();
-	}
-
-	private boolean isPrecisionOK(MonetaryContext requiredContext,
-			MonetaryContext maximalMonetaryContext) {
-		if (maximalMonetaryContext.getPrecision() == 0) {
-			return true;
-		}
-		if (requiredContext.getPrecision() == 0
-				&& maximalMonetaryContext.getPrecision() != 0) {
-			return false;
-		}
-		if (requiredContext.getPrecision() > maximalMonetaryContext
-				.getPrecision()) {
-			return false;
-		}
-		if (requiredContext.getMaxScale() > maximalMonetaryContext
-				.getMaxScale()) {
-			return false;
-		}
-		return true;
 	}
 
 }

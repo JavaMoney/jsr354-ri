@@ -26,7 +26,7 @@ import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
 import javax.money.spi.Bootstrap;
-import javax.money.spi.MonetaryConversionsSpi;
+import javax.money.spi.MonetaryConversionsSingletonSpi;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +35,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
- * This is the default implementation of the {@link javax.money.spi.MonetaryConversionsSpi} interface, backing
+ * This is the default implementation of the {@link javax.money.spi.MonetaryConversionsSingletonSpi} interface, backing
  * up the {@link javax.money.convert.MonetaryConversions} singleton.
  */
-public class DefaultMonetaryConversionsSpi implements MonetaryConversionsSpi{
+public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversionsSingletonSpi{
     /**
      * Logger used.
      */
-    private static final Logger LOG = Logger.getLogger(DefaultMonetaryConversionsSpi.class.getName());
+    private static final Logger LOG = Logger.getLogger(DefaultMonetaryConversionsSingletonSpi.class.getName());
 
     /**
      * The providers loaded.
@@ -52,7 +52,7 @@ public class DefaultMonetaryConversionsSpi implements MonetaryConversionsSpi{
     /**
      * Constructors, loads the providers from the {@link javax.money.spi.Bootstrap} component.
      */
-    public DefaultMonetaryConversionsSpi(){
+    public DefaultMonetaryConversionsSingletonSpi(){
         reload();
     }
 
