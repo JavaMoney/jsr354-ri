@@ -19,8 +19,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-// github.com/JavaMoney/jsr354-ri.git
-
 /**
  * <type>long</type> based implementation of {@link MonetaryAmount}. This class internally uses a
  * single long number as numeric representation, which basically is interpreted as minor units.<br/>

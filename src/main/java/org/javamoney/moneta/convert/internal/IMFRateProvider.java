@@ -17,6 +17,8 @@
  */
 package org.javamoney.moneta.convert.internal;
 
+import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
+
 import org.javamoney.moneta.BuildableCurrencyUnit;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
@@ -27,6 +29,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,7 +63,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             .setAttribute("providerDescription", "Internation Monetary Fond").setAttribute("days", 1).build();
 
     private static final CurrencyUnit SDR =
-            new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).create(true);
+            new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).build(true);
 
     private Map<CurrencyUnit,List<ExchangeRate>> currencyToSdr = new HashMap<CurrencyUnit,List<ExchangeRate>>();
 
@@ -74,7 +77,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                                  MonetaryCurrencies.getCurrency(currency.getCurrencyCode()));
         }
         // Additional IMF differing codes:
-        // This mapping is required to fix data issues in the input stream, it has nthing to do with i18n
+        // This mapping is required to fix data issues in the input stream, it has nothing to do with i18n
         currenciesByName.put("U.K. Pound Sterling", MonetaryCurrencies.getCurrency("GBP"));
         currenciesByName.put("U.S. Dollar", MonetaryCurrencies.getCurrency("USD"));
         currenciesByName.put("Bahrain Dinar", MonetaryCurrencies.getCurrency("BHD"));
@@ -175,7 +178,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newCurrencyToSdr.put(currency, rates);
                     }
                     ExchangeRate rate = new ExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", toTS).build())
+                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
@@ -185,7 +188,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newSdrToCurrency.put(currency, rates);
                     }
                     ExchangeRate rate = new ExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", fromTS).build())
+                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
                 }
@@ -226,8 +229,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), context.getNamedAttribute("timestamp", Long.class));
-        ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), context.getNamedAttribute("timestamp", Long.class));
+        ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), context.getNamedAttribute(TIMESTAMP, Long.class));
+        ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), context.getNamedAttribute(TIMESTAMP, Long.class));
         if(base.equals(SDR)){
             return rate2;
         }else if(term.equals(SDR)){

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2013, Credit Suisse (Anatole Tresch), Werner Keil.
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,8 @@
  * Contributors: Anatole Tresch - initial implementation.
  */
 package org.javamoney.moneta.convert.internal;
+
+import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
@@ -120,18 +122,18 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
         ExchangeRate sourceRate = null;
         ExchangeRate target = null;
-        if(context.getNamedAttribute("timestamp", Long.class) == null){
+        if(context.getNamedAttribute(TIMESTAMP, Long.class) == null){
             return null;
         }
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
-                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).build()
+                        .setAttribute(TIMESTAMP, context.getNamedAttribute(TIMESTAMP, Long.class)).build()
         );
         if(rates.isEmpty()){
             return null;
         }
         final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTimeInMillis(context.getNamedAttribute("timestamp", Long.class));
+        cal.setTimeInMillis(context.getNamedAttribute(TIMESTAMP, Long.class));
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -254,7 +256,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
                 rateType = RateType.DEFERRED;
             }
             builder = new ExchangeRate.Builder(
-                    new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).build());
+                    new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, timestamp).build());
         }else{
             builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), rateType));
         }

@@ -1,12 +1,12 @@
 /*
- * CREDIT SUISSE IS WILLING TO LICENSE THIS SPECIFICATION TO YOU ONLY UPON THE
- * CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THIS AGREEMENT.
- * PLEASE READ THE TERMS AND CONDITIONS OF THIS AGREEMENT CAREFULLY. BY
- * DOWNLOADING THIS SPECIFICATION, YOU ACCEPT THE TERMS AND CONDITIONS OF THE
- * AGREEMENT. IF YOU ARE NOT WILLING TO BE BOUND BY IT, SELECT THE "DECLINE"
- * BUTTON AT THE BOTTOM OF THIS PAGE. Specification: JSR-354 Money and Currency
- * API ("Specification") Copyright (c) 2012-2013, Credit Suisse All rights
- * reserved.
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil. Licensed under the Apache
+ * License, Version 2.0 (the "License"); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License. Contributors: Anatole Tresch - initial implementation Werner Keil - extensions and
+ * adaptions.
  */
 package org.javamoney.moneta;
 
@@ -26,7 +26,7 @@ import java.util.Objects;
 public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUnit>{
 
     /**
-     * The uniqie currency code.
+     * The unique currency code.
      */
     private String currencyCode;
     /**
@@ -194,17 +194,17 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         }
 
         /**
-         * Creates a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit}.
+         * Returns a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit}.
          *
          * @return the new CurrencyUnit instance.
          * @throws MonetaryException, if creation fails
          */
-        public BuildableCurrencyUnit create(){
-            return create(false);
+        public BuildableCurrencyUnit build(){
+            return build(false);
         }
 
         /**
-         * Creates a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit} and publishes it so it is
+         * Returns a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit} and publishes it so it is
          * accessible from the {@code MonetaryCurrencies} singleton.
          *
          * @param register if {@code true} the instance created is published so it is accessible from
@@ -212,7 +212,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          * @return the new CurrencyUnit instance.
          * @see javax.money.MonetaryCurrencies#getCurrency(String)
          */
-        public BuildableCurrencyUnit create(boolean register){
+        public BuildableCurrencyUnit build(boolean register){
             BuildableCurrencyUnit cu = new BuildableCurrencyUnit(this);
             if(register){
                 ConfigurableCurrencyUnitProvider.registerCurrencyUnit(cu);
@@ -221,7 +221,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         }
 
         /**
-         * Creates a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit} and publishes it so it is
+         * Returns a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit} and publishes it so it is
          * accessible from the {@code MonetaryCurrencies} singleton.
          *
          * @param register if {@code true} the instance created is published so it is accessible from
@@ -231,7 +231,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          * @see javax.money.MonetaryCurrencies#getCurrency(String)
          * @see javax.money.MonetaryCurrencies#getCurrency(java.util.Locale)
          */
-        public BuildableCurrencyUnit create(boolean register, Locale locale){
+        public BuildableCurrencyUnit build(boolean register, Locale locale){
             BuildableCurrencyUnit cu = new BuildableCurrencyUnit(this);
             if(register){
                 ConfigurableCurrencyUnitProvider.registerCurrencyUnit(cu);

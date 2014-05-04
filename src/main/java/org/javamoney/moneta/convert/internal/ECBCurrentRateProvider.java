@@ -9,6 +9,8 @@
  */
 package org.javamoney.moneta.convert.internal;
 
+import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
+
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -114,7 +116,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     }
 
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        if(context.getNamedAttribute("timestamp", Long.class) != null){
+        if(context.getNamedAttribute(TIMESTAMP, Long.class) != null){
             return null;
         }
         ExchangeRate.Builder builder =
@@ -246,7 +248,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
-                        .setAttribute("timestamp", timestamp).build());
+                        .setAttribute(TIMESTAMP, timestamp).build());
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(factor));
