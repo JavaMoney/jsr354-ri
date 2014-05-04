@@ -95,7 +95,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     private static final MonetaryContext MONETARY_CONTEXT =
             new MonetaryContext.Builder(FastMoney.class).setFlavor(AmountFlavor.PERFORMANCE).setMaxScale(SCALE)
-                    .setFixedScale(true).setPrecision(14).create();
+                    .setFixedScale(true).setPrecision(14).build();
 
     /**
      * Maximum possible value supported, using XX (no currency).

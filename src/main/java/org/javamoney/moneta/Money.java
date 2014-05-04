@@ -120,7 +120,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
                         value != null ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
                 MonetaryContext mc =
                         new MonetaryContext.Builder().setPrecision(prec).setObject(rm).setAmountType(Money.class)
-                                .create();
+                                .build();
                 Logger.getLogger(Money.class.getName())
                         .info("Using custom MathContext: precision=" + prec + ", roundingMode=" + rm); // TODO why info?
                 return mc;
@@ -155,14 +155,14 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
                             .info("Using default MathContext.DECIMAL64"); // TODO why info?
                     builder.setObject(MathContext.DECIMAL64);
                 }
-                return builder.create();
+                return builder.build();
             }
         }
         catch(Exception e){
             Logger.getLogger(Money.class.getName())
                     .log(Level.SEVERE, "Error evaluating default NumericContext, using default (NumericContext.NUM64).",
                          e);
-            return new MonetaryContext.Builder(Money.class).setObject(MathContext.DECIMAL64).create();
+            return new MonetaryContext.Builder(Money.class).setObject(MathContext.DECIMAL64).build();
         }
         finally{
             if(is != null){

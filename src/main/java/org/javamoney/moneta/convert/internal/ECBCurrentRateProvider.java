@@ -73,7 +73,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("ECB").setRateTypes(RateType.DEFERRED)
-            .setAttribute("providerDescription", "European Central Bank").setAttribute("days", 1).create();
+            .setAttribute("providerDescription", "European Central Bank").setAttribute("days", 1).build();
 
     /**
      * Constructor, also loads initial data.
@@ -118,7 +118,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             return null;
         }
         ExchangeRate.Builder builder =
-                new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.DEFERRED).create());
+                new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.DEFERRED).build());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate = null;
@@ -147,7 +147,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             if(rate1 != null && rate2 != null){
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
-                return builder.create();
+                return builder.build();
             }
         }
         return null;
@@ -166,7 +166,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
                     .setFactor(new DefaultNumberValue(BigDecimal.ONE
                                                               .divide(rate.getFactor().numberValue(BigDecimal.class),
-                                                                      MathContext.DECIMAL64))).create();
+                                                                      MathContext.DECIMAL64))).build();
         }
         return null;
     }
@@ -246,11 +246,11 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
-                        .setAttribute("timestamp", timestamp).create());
+                        .setAttribute("timestamp", timestamp).build());
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(factor));
-        this.currentRates.put(term.getCurrencyCode(), builder.create());
+        this.currentRates.put(term.getCurrencyCode(), builder.build());
     }
 
 }

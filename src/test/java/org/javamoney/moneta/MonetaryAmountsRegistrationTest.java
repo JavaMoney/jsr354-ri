@@ -78,47 +78,47 @@ public class MonetaryAmountsRegistrationTest {
 	public void testQueryAmountType() {
 		Class<? extends MonetaryAmount> type = MonetaryAmounts
 				.queryAmountType(new MonetaryContext.Builder(RoundedMoney.class)
-						.create());
+						.build());
 		assertNotNull(type);
 		assertTrue(type == RoundedMoney.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder(
-				FastMoney.class).setPrecision(5).create());
+				FastMoney.class).setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == FastMoney.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder(
-				Money.class).create());
+				Money.class).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.create());
+				.build());
 		assertNotNull(type);
 		assertTrue(type == MonetaryAmounts.getDefaultAmountType());
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PRECISION).create());
+				.setFlavor(AmountFlavor.PRECISION).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PERFORMANCE).setPrecision(5).create());
+				.setFlavor(AmountFlavor.PERFORMANCE).setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == FastMoney.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PERFORMANCE).setPrecision(20).create());
+				.setFlavor(AmountFlavor.PERFORMANCE).setPrecision(20).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PRECISION).setPrecision(5).create());
+				.setFlavor(AmountFlavor.PRECISION).setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).create());
+				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).create());
+				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(200).create());
+				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(200).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 	}
@@ -131,7 +131,7 @@ public class MonetaryAmountsRegistrationTest {
 	public void testQueryAmountType_InvalidContext() {
 		MonetaryAmounts
 				.queryAmountType(new MonetaryContext.Builder(FastMoney.class)
-						.setPrecision(20).create());
+						.setPrecision(20).build());
 	}
 
 }

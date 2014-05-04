@@ -57,7 +57,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("IMF").setRateTypes(RateType.DEFERRED)
-            .setAttribute("providerDescription", "Internation Monetary Fond").setAttribute("days", 1).create();
+            .setAttribute("providerDescription", "Internation Monetary Fond").setAttribute("days", 1).build();
 
     private static final CurrencyUnit SDR =
             new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).create(true);
@@ -175,8 +175,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newCurrencyToSdr.put(currency, rates);
                     }
                     ExchangeRate rate = new ExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", toTS).create())
-                            .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).create();
+                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", toTS).build())
+                            .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
                     List<ExchangeRate> rates = this.sdrToCurrency.get(currency);
@@ -185,8 +185,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newSdrToCurrency.put(currency, rates);
                     }
                     ExchangeRate rate = new ExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", fromTS).create())
-                            .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).create();
+                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", fromTS).build())
+                            .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
                 }
             }
@@ -242,7 +242,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         builder.setTerm(term);
         builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
         builder.setRateChain(rate1, rate2);
-        return builder.create();
+        return builder.build();
     }
 
     private ExchangeRate lookupRate(List<ExchangeRate> list, Long timestamp){

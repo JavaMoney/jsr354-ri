@@ -34,7 +34,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
      * The {@link javax.money.convert.ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("IDENT").setRateTypes(RateType.OTHER)
-            .setAttribute("providerDescription", "Identitiy Provider").create();
+            .setAttribute("providerDescription", "Identitiy Provider").build();
 
     /**
      * Constructor, also loads initial data.
@@ -51,12 +51,12 @@ public class IdentityRateProvider extends AbstractRateProvider{
             ExchangeRate.Builder builder = new ExchangeRate.Builder(
                     new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
                             .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)
-                            ).create()
+                            ).build()
             );
             builder.setBase(base);
             builder.setTerm(term);
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
-            return builder.create();
+            return builder.build();
         }
         return null;
     }
@@ -72,7 +72,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
     public ExchangeRate getReversed(ExchangeRate rate){
         if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
             return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
-                    .setFactor(new DefaultNumberValue(BigDecimal.ONE)).create();
+                    .setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
         return null;
     }

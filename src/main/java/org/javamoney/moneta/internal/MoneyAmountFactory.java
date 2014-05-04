@@ -19,11 +19,11 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
 			Money.class).setPrecision(64)
 			.setMaxScale(63).setObject(RoundingMode.HALF_EVEN)
-			.setFlavor(AmountFlavor.PRECISION).create();
+			.setFlavor(AmountFlavor.PRECISION).build();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
 			Money.class).setPrecision(0)
 			.setMaxScale(-1).setObject(RoundingMode.HALF_EVEN)
-			.setFlavor(AmountFlavor.PRECISION).create();
+			.setFlavor(AmountFlavor.PRECISION).build();
 
 	@Override
 	protected Money create(Number number, CurrencyUnit currency,

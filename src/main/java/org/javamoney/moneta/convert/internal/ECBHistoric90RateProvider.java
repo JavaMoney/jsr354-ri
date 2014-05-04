@@ -80,7 +80,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     private static final ProviderContext CONTEXT =
             new ProviderContext.Builder("ECB-HIST90").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
                     .setAttribute("providerDescription", "European Central Bank (last 90 days)")
-                    .setAttribute("days", 90).create();
+                    .setAttribute("days", 90).build();
 
     /**
      * Constructor, also loads initial data.
@@ -125,7 +125,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         }
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
-                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).create()
+                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).build()
         );
         if(rates.isEmpty()){
             return null;
@@ -148,7 +148,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         target = targets.get(term.getCurrencyCode());
         if(BASE_CURRENCY_CODE.equals(base.getCurrencyCode()) && BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
             builder.setFactor(DefaultNumberValue.ONE);
-            return builder.create();
+            return builder.build();
         }else if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
             if(sourceRate == null){
                 return null;
@@ -165,7 +165,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
             if(rate1 != null || rate2 != null){
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
-                return builder.create();
+                return builder.build();
             }
             return null;
         }
@@ -254,14 +254,14 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
                 rateType = RateType.DEFERRED;
             }
             builder = new ExchangeRate.Builder(
-                    new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).create());
+                    new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).build());
         }else{
             builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), rateType));
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(rate));
-        ExchangeRate exchangeRate = builder.create();
+        ExchangeRate exchangeRate = builder.build();
         Map<String,ExchangeRate> rateMap = this.rates.get(timestamp);
         if(rateMap == null){
             synchronized(this.rates){

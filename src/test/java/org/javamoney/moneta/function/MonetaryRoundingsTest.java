@@ -79,7 +79,7 @@ public class MonetaryRoundingsTest{
                     }
                     MonetaryOperator rounding = MonetaryRoundings.getRounding(
                             new RoundingContext.Builder().setInt("scale", scale).setObject(roundingMode)
-                                    .create()
+                                    .build()
                     );
                     BigDecimal dec = samples[i].getNumber().numberValue(BigDecimal.class);
                     BigDecimal expected = dec.setScale(scale, roundingMode);
@@ -145,12 +145,12 @@ public class MonetaryRoundingsTest{
     public void testGetCashRoundingCurrencyUnit(){
         MonetaryOperator r = MonetaryRoundings.getRounding(
                 new RoundingContext.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("GBP"))
-                        .setAttribute("cashRounding", true).create()
+                        .setAttribute("cashRounding", true).build()
         );
         assertNotNull(r);
         r = MonetaryRoundings.getRounding(
                 new RoundingContext.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("CHF"))
-                        .setAttribute("cashRounding", true).create()
+                        .setAttribute("cashRounding", true).build()
         );
         assertNotNull(r);
         assertEquals(MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(2).create(),
@@ -168,7 +168,7 @@ public class MonetaryRoundingsTest{
     public void testGetRoundingCurrencyUnitLong(){
         MonetaryOperator r = MonetaryRoundings.getRounding(
                 new RoundingContext.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("XXX"))
-                        .setAttribute("timestamp", System.currentTimeMillis() + 20000L).create()
+                        .setAttribute("timestamp", System.currentTimeMillis() + 20000L).build()
         );
         assertNotNull(r);
         assertEquals(MonetaryAmounts.getAmountFactory().setCurrency("XXX").setNumber(-1).create(),
@@ -185,7 +185,7 @@ public class MonetaryRoundingsTest{
         MonetaryOperator r = MonetaryRoundings.getRounding(
                 new RoundingContext.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("XXX"))
                         .setAttribute("timestamp", System.currentTimeMillis() + 20000L)
-                        .setAttribute("cashRounding", true).create()
+                        .setAttribute("cashRounding", true).build()
         );
         assertNotNull(r);
         assertEquals(MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(-1).create(),

@@ -79,7 +79,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      */
     private static final ProviderContext CONTEXT =
             new ProviderContext.Builder("ECB-HIST").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
-                    .setAttribute("providerDescription", "European Central Bank").setAttribute("days", 1500).create();
+                    .setAttribute("providerDescription", "European Central Bank").setAttribute("days", 1500).build();
 
     /**
      * Constructor, also loads initial data.
@@ -126,7 +126,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         }
         ExchangeRate.Builder builder = new ExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
-                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).create());
+                        .setAttribute("timestamp", context.getNamedAttribute("timestamp", Long.class)).build());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate = null;
@@ -149,7 +149,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         target = targets.get(term.getCurrencyCode());
         if(BASE_CURRENCY_CODE.equals(base.getCurrencyCode()) && BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
             builder.setFactor(DefaultNumberValue.ONE);
-            return builder.create();
+            return builder.build();
         }else if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
             if(sourceRate == null){
                 return null;
@@ -166,7 +166,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             if(rate1 != null || rate2 != null){
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
-                return builder.create();
+                return builder.build();
             }
             return null;
         }
@@ -177,7 +177,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             throw new IllegalArgumentException("Rate null is not reversable.");
         }
         return rate.toBuilder().setRate(rate).setBase(rate.getTerm()).setTerm(rate.getBase())
-                .setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(), MathContext.DECIMAL64)).create();
+                .setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(), MathContext.DECIMAL64)).build();
     }
 
     /**
@@ -262,14 +262,14 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
-            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).create());
+            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).setAttribute("timestamp", timestamp).build());
         }else{
-            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).create());
+            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).build());
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(DefaultNumberValue.of(rate));
-        ExchangeRate exchangeRate = builder.create();
+        ExchangeRate exchangeRate = builder.build();
         Map<String,ExchangeRate> rateMap = this.historicRates.get(timestamp);
         if(rateMap == null){
             synchronized(this.historicRates){

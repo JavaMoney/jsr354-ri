@@ -86,7 +86,7 @@ public class MonetaryAmountFormatTest {
      */
     @Test
     public void testFormatWithBuilder() {
-        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountFormatContext.Builder(Locale.JAPANESE).create());
+        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountFormatContext.Builder(Locale.JAPANESE).build());
         assertEquals(
                 "CHF 12.50",
                 defaultFormat.format(MonetaryAmounts.getAmountFactory()
@@ -101,7 +101,7 @@ public class MonetaryAmountFormatTest {
     @Test
     public void testFormatWithBuilder2() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
-                new AmountFormatContext.Builder(Locale.GERMANY).setObject(CurrencyStyle.NUMERIC_CODE).create());
+                new AmountFormatContext.Builder(Locale.GERMANY).setObject(CurrencyStyle.NUMERIC_CODE).build());
         assertEquals(
                 "12,50 756"
                 ,
@@ -109,7 +109,7 @@ public class MonetaryAmountFormatTest {
                                              .setCurrency(
                                                      "CHF").setNumber(12.50).create()));
         format = MonetaryFormats.getAmountFormat(
-                new AmountFormatContext.Builder(Locale.US).setObject(CurrencyStyle.SYMBOL).create());
+                new AmountFormatContext.Builder(Locale.US).setObject(CurrencyStyle.SYMBOL).build());
         assertEquals(
                 "$123,456.56"
                 ,

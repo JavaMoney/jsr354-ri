@@ -60,7 +60,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
 			providerName.append(',');
 		}
 		providerName.setLength(providerName.length() - 1);
-		return new ProviderContext.Builder(providerName.toString()).create();
+		return new ProviderContext.Builder(providerName.toString()).build();
 	}
 
 	/**

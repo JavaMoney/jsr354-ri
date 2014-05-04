@@ -70,7 +70,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 				minorRounding = MonetaryRoundings
 						.getRounding(new RoundingContext.Builder()
 								.setAttribute("scale",2)
-								.setObject(RoundingMode.HALF_UP).create());
+								.setObject(RoundingMode.HALF_UP).build());
 			}
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
