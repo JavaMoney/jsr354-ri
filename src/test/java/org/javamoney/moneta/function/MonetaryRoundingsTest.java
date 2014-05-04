@@ -210,15 +210,15 @@ public class MonetaryRoundingsTest{
 
     /**
      * Test method for
-     * {@link javax.money.MonetaryRoundings#getCustomRoundingIds()} .
+     * {@link javax.money.MonetaryRoundings#getRoundingIds()} .
      */
     @Test
     public void testGetCustomRoundingIds(){
-        assertNotNull(MonetaryRoundings.getCustomRoundingIds());
-        assertTrue(MonetaryRoundings.getCustomRoundingIds().size() == 3);
-        assertTrue(MonetaryRoundings.getCustomRoundingIds().contains("zero"));
-        assertTrue(MonetaryRoundings.getCustomRoundingIds().contains("minusOne"));
-        assertTrue(MonetaryRoundings.getCustomRoundingIds().contains("CHF-cash"));
+        assertNotNull(MonetaryRoundings.getRoundingIds());
+        assertTrue(MonetaryRoundings.getRoundingIds().size() == 3);
+        assertTrue(MonetaryRoundings.getRoundingIds().contains("zero"));
+        assertTrue(MonetaryRoundings.getRoundingIds().contains("minusOne"));
+        assertTrue(MonetaryRoundings.getRoundingIds().contains("CHF-cash"));
     }
 
     // Bad cases
