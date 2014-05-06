@@ -26,7 +26,7 @@ import javax.money.format.MonetaryAmountFormat;
  * This class is mutable and intended for use by a single thread. A new instance
  * is created for each parse.
  */
-public final class ParseContext {
+final class ParseContext {
 	/** The current position of parsing. */
 	private int index;
 	/** The error index position. */
