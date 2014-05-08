@@ -99,7 +99,6 @@ public class MonetaryAmountsRegistrationTest {
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
 				.setPrecision(5).build());
 		assertNotNull(type);
-		assertTrue(type == FastMoney.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
 				.setPrecision(20).build());
 		assertNotNull(type);
