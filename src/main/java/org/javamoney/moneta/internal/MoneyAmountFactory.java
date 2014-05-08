@@ -4,7 +4,6 @@ import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
-import javax.money.AmountFlavor;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
@@ -18,12 +17,10 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
 			Money.class).setPrecision(64)
-			.setMaxScale(63).setObject(RoundingMode.HALF_EVEN)
-			.setFlavor(AmountFlavor.PRECISION).build();
+			.setMaxScale(63).setObject(RoundingMode.HALF_EVEN).build();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
 			Money.class).setPrecision(0)
-			.setMaxScale(-1).setObject(RoundingMode.HALF_EVEN)
-			.setFlavor(AmountFlavor.PRECISION).build();
+			.setMaxScale(-1).setObject(RoundingMode.HALF_EVEN).build();
 
 	@Override
 	protected Money create(Number number, CurrencyUnit currency,

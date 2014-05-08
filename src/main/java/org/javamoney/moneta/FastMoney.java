@@ -92,7 +92,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * the {@link MonetaryContext} used by this instance, e.g. on division.
      */
     private static final MonetaryContext MONETARY_CONTEXT =
-            new MonetaryContext.Builder(FastMoney.class).setFlavor(AmountFlavor.PERFORMANCE).setMaxScale(SCALE)
+            new MonetaryContext.Builder(FastMoney.class).setMaxScale(SCALE)
                     .setFixedScale(true).setPrecision(14).build();
 
     /**

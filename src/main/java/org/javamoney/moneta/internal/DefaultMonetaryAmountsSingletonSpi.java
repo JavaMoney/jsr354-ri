@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
-import javax.money.AmountFlavor;
 import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
@@ -38,41 +37,6 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 	private Map<Class<? extends MonetaryAmount>, MonetaryAmountFactoryProviderSpi<?>> factories = new ConcurrentHashMap<>();
 
 	private Class<? extends MonetaryAmount> configuredDefaultAmountType = loadDefaultAmountType();
-
-	private static final Comparator<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>> CONTEXT_COMPARATOR = new Comparator<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>>() {
-
-		@Override
-		public int compare(
-				MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f1,
-				MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f2) {
-			int compare = 0;
-			MonetaryContext c1 = f1.getMaximalMonetaryContext();
-			MonetaryContext c2 = f2.getMaximalMonetaryContext();
-			if (c1.getAmountFlavor() == AmountFlavor.PRECISION
-					&& c2.getAmountFlavor() != AmountFlavor.PRECISION) {
-				compare = -1;
-			}
-			if (compare == 0 && c2.getAmountFlavor() == AmountFlavor.PRECISION
-					&& c1.getAmountFlavor() != AmountFlavor.PRECISION) {
-				compare = 1;
-			}
-			if (compare == 0 && c1.getPrecision() == 0
-					&& c2.getPrecision() != 0) {
-				compare = -1;
-			}
-			if (compare == 0 && c2.getPrecision() == 0
-					&& c1.getPrecision() != 0) {
-				compare = 1;
-			}
-			if (compare == 0 && (c1.getMaxScale() > c2.getMaxScale())) {
-				compare = -1;
-			}
-			if (compare == 0 && (c1.getMaxScale() < c2.getMaxScale())) {
-				compare = 1;
-			}
-			return compare;
-		}
-	};
 
 	public DefaultMonetaryAmountsSingletonSpi() {
 		for (MonetaryAmountFactoryProviderSpi<?> f : Bootstrap

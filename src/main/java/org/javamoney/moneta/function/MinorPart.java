@@ -26,8 +26,7 @@ import javax.money.MonetaryOperator;
 final class MinorPart implements MonetaryOperator {
 
 	/**
-	 * Private constructor, there is only one instance of this class, accessible
-	 * calling {@link #of()}.
+	 * Package private constructor used from MonetaryFunctions.
 	 */
 	MinorPart() {
 	}

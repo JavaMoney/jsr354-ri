@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
-import javax.money.AmountFlavor;
 import javax.money.MonetaryException;
 
 import org.junit.Test;
@@ -94,31 +93,31 @@ public class MonetaryAmountsRegistrationTest {
 		assertNotNull(type);
 		assertTrue(type == MonetaryAmounts.getDefaultAmountType());
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PRECISION).build());
+				.build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PERFORMANCE).setPrecision(5).build());
+				.setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == FastMoney.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PERFORMANCE).setPrecision(20).build());
+				.setPrecision(20).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.PRECISION).setPrecision(5).build());
+				.setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).build());
+				.setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(5).build());
+				.setPrecision(5).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 		type = MonetaryAmounts.queryAmountType(new MonetaryContext.Builder()
-				.setFlavor(AmountFlavor.UNDEFINED).setPrecision(200).build());
+				.setPrecision(200).build());
 		assertNotNull(type);
 		assertTrue(type == Money.class);
 	}
