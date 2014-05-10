@@ -802,8 +802,8 @@ public class FastMoneyTest{
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "USD"),
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
-        for(int i = 0; i < moneys.length; i++){
-            assertEquals((Integer) moneys[i].query(q), (Integer) moneys[i].getPrecision());
+        for (FastMoney money : moneys) {
+            assertEquals((Integer) money.query(q), (Integer) money.getPrecision());
         }
     }
 
