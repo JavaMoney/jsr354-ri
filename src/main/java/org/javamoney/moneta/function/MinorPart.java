@@ -50,11 +50,11 @@ final class MinorPart implements MonetaryOperator {
 	// safe, if the operator is implemented as specified by this JSR.
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount){
+	public MonetaryAmount apply(MonetaryAmount amount){
 		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = amount.getNumber().numberValue(BigDecimal.class);
 		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
-		return (T)amount.subtract(amount.getFactory().setNumber(wholes).create());
+		return amount.subtract(amount.getFactory().setNumber(wholes).create());
 	}
 
 }
