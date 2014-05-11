@@ -50,9 +50,9 @@ final class MajorPart implements MonetaryOperator {
 	// safe, if the operator is implemented as specified by this JSR.
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
-		return (T) amount.with(downRounding);
+		return amount.with(downRounding);
 	}
 
 }
