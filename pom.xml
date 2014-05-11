@@ -262,14 +262,23 @@
 					<plugin>
 						<groupId>com.google.code.maven-license-plugin</groupId>
 						<artifactId>maven-license-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>compile</phase>
-								<goals>
-									<goal>format</goal>
-								</goals>
-							</execution>
-						</executions>
+						<version>1.4.0</version>
+						<configuration>
+							<basedir>${basedir}</basedir>
+							<header>${basedir}/src/etc/header.txt</header>
+							<quiet>false</quiet>
+							<failIfMissing>true</failIfMissing>
+							<aggregate>false</aggregate>
+							<encoding>UTF-8</encoding>
+							<excludes>
+								<exclude>target/**</exclude>
+								<exclude>LICENSE*.*</exclude>
+								<exclude>README.*</exclude>
+								<exclude>checkstyle*.*</exclude>
+								<exclude>*.css</exclude>
+								<exclude>*.xml</exclude>
+							</excludes>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
