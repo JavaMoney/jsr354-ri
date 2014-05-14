@@ -45,15 +45,12 @@ final class MinorPart implements MonetaryOperator {
 	 * 
 	 * @return the minor units part of the amount, never {@code null}
 	 */
-	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
-	// safe, if the operator is implemented as specified by this JSR.
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount){
+	public MonetaryAmount apply(MonetaryAmount amount){
 		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = amount.getNumber().numberValue(BigDecimal.class);
 		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
-		return (T)amount.subtract(amount.getFactory().setNumber(wholes).create());
+		return amount.subtract(amount.getFactory().setNumber(wholes).create());
 	}
 
 }

@@ -93,7 +93,7 @@ final class DefaultCashRounding implements MonetaryOperator{
      * @see javax.money.MonetaryFunction#apply(java.lang.Object)
      */
     @Override
-    public <T extends MonetaryAmount> T apply(T value){
+    public MonetaryAmount apply(MonetaryAmount value){
         Objects.requireNonNull(value, "Amount required.");
         // 1 extract BD value, round according the default fraction units
         BigDecimal num = value.getNumber().numberValue(BigDecimal.class).setScale(scale, roundingMode);
@@ -117,7 +117,7 @@ final class DefaultCashRounding implements MonetaryOperator{
                     minors = low;
             }
         }
-        return (T) value.getFactory().setCurrency(value.getCurrency())
+        return value.getFactory().setCurrency(value.getCurrency())
                 .setNumber(BigDecimal.valueOf(minors).movePointLeft(scale)).create();
     }
 

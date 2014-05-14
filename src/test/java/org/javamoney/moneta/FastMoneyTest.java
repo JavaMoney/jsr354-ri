@@ -864,8 +864,8 @@ public class FastMoneyTest{
         assertEquals(FastMoney.of(-100, m.getCurrency()), a);
         adj = new MonetaryOperator(){
             @Override
-            public <T extends MonetaryAmount> T apply(T amount){
-                return (T) amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
+            public MonetaryAmount apply(MonetaryAmount amount){
+                return amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
             }
         };
         a = m.with(adj);

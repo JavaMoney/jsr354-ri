@@ -37,41 +37,27 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
 	private MonetaryOperator zeroRounding = new MonetaryOperator() {
-		// save cast, since type identity is required by spec
-		@SuppressWarnings("unchecked")
 		@Override
-		public <T extends MonetaryAmount> T apply(T amount) {
-			return (T)amount.getFactory().setCurrency(amount.getCurrency())
+		public MonetaryAmount apply(MonetaryAmount amount) {
+			return amount.getFactory().setCurrency(amount.getCurrency())
 					.setNumber(0L).create();
 		}
 
 	};
 
-	private MonetaryOperator minusOneRounding = new MonetaryOperator() {
-		// save cast, since type identity is required by spec
-		@SuppressWarnings("unchecked")
-		@Override
-		public <T extends MonetaryAmount> T apply(T amount) {
-			return (T)amount.getFactory().setCurrency(amount.getCurrency())
-					.setNumber(-1).create();
-		}
-
-	};
+	private MonetaryOperator minusOneRounding = (amount) ->
+			amount.getFactory().setCurrency(amount.getCurrency())
+					.setNumber(-1).create()
+		;
 
 	private MonetaryOperator chfCashRounding = new MonetaryOperator() {
 
-		private MonetaryOperator minorRounding;
-
-		// save cast, since type identity is required by spec
-		@SuppressWarnings("unchecked")
 		@Override
-		public <T extends MonetaryAmount> T apply(T amount) {
-			if (minorRounding == null) {
-				minorRounding = MonetaryRoundings
+		public MonetaryAmount apply(MonetaryAmount amount) {
+			MonetaryOperator minorRounding = MonetaryRoundings
 						.getRounding(new RoundingContext.Builder()
 								.setAttribute("scale",2)
 								.setObject(RoundingMode.HALF_UP).build());
-			}
 			MonetaryAmount amt = amount.with(minorRounding);
 			MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
 			if (mp.isGreaterThanOrEqualTo(MonetaryAmounts
@@ -79,7 +65,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 					.setCurrency(
 							amount.getCurrency()).setNumber(0.03).create())) {
 				// add
-				return (T)amt.add(
+				return amt.add(
 						MonetaryAmounts.getAmountFactory()
 								.setCurrency(amt.getCurrency())
 								.setNumber(new BigDecimal("0.05")).create()
@@ -87,7 +73,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 			}
 			else {
 				// subtract
-				return (T)amt.subtract(mp);
+				return amt.subtract(mp);
 			}
 		}
 	};
@@ -135,7 +121,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 	}
 
     @Override
-	public Set<String> getCustomRoundingIds() {
+	public Set<String> getRoundingIds() {
 		return customIds;
 	}
 

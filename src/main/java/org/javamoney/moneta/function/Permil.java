@@ -66,12 +66,9 @@ final class Permil implements MonetaryOperator {
 	 * 
 	 * @return the permil result of the amount, never {@code null}
 	 */
-	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
-	// safe, if the operator is implemented as specified by this JSR.
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount) {
-		return (T)amount.multiply(permilValue);
+	public MonetaryAmount apply(MonetaryAmount amount) {
+		return amount.multiply(permilValue);
 	}
 
 	/*
@@ -95,13 +92,7 @@ final class Permil implements MonetaryOperator {
 	 *            java.math.BigDecimal
 	 */
 	private static final BigDecimal calcPermil(BigDecimal decimal) {
-		return decimal.divide(ONE_THOUSAND, DEFAULT_MATH_CONTEXT); // we now
-																	// have .003
+		return decimal.divide(ONE_THOUSAND, DEFAULT_MATH_CONTEXT);
 	}
 
-	// @Override
-	// public String getDisplayName(Locale locale) {
-	// // TODO i18n?
-	// return toString();
-	// }
 }

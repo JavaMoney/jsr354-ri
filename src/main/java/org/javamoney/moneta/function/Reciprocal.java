@@ -43,13 +43,10 @@ final class Reciprocal implements MonetaryOperator {
 	 * @throws ArithmeticException
 	 *             if the arithmetic operation failed
 	 */
-	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
-	// safe, if the operator is implemented as specified by this JSR.
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
-		return (T)amount.getFactory().setNumber(BigDecimal.ONE.divide(
+		return amount.getFactory().setNumber(BigDecimal.ONE.divide(
 				amount.getNumber().numberValue(BigDecimal.class))).create();
 	}
 

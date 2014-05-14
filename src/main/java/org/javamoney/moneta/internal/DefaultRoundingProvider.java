@@ -40,7 +40,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
 
 
     @Override
-    public Set<String> getCustomRoundingIds(){
+    public Set<String> getRoundingIds(){
         return Collections.emptySet();
     }
 

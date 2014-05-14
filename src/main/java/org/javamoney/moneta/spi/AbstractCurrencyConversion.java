@@ -90,16 +90,13 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 	 * @throws CurrencyConversionException
 	 *             if conversion failed, or the required data is not available.
 	 */
-	// safe conversion due to MonetaryAmount contract
-	@Override
-	@SuppressWarnings("unchecked")
-	public <T extends MonetaryAmount> T apply(T amount) {
+	public MonetaryAmount apply(MonetaryAmount amount) {
 		ExchangeRate rate = getExchangeRate(amount);
 		if (rate == null || !amount.getCurrency().equals(rate.getBase())) {
 			throw new CurrencyConversionException(amount.getCurrency(),
 					rate == null ? null : rate.getTerm(), null);
 		}
-		return (T) amount.multiply(rate.getFactor())
+		return amount.multiply(rate.getFactor())
 				.getFactory()
 				.setCurrency(rate.getTerm())
 				.create();

@@ -11,6 +11,7 @@ package org.javamoney.moneta.convert.internal;
 
 import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
+import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -119,8 +120,8 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
         if(context.getNamedAttribute(TIMESTAMP, Long.class) != null){
             return null;
         }
-        ExchangeRate.Builder builder =
-                new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.DEFERRED).build());
+        DefaultExchangeRate.Builder builder =
+                new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.DEFERRED).build());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate = null;
@@ -165,7 +166,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
         if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
-            return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
+            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
                     .setFactor(new DefaultNumberValue(BigDecimal.ONE
                                                               .divide(rate.getFactor().numberValue(BigDecimal.class),
                                                                       MathContext.DECIMAL64))).build();
@@ -246,7 +247,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * @param factor    The conversion factor.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
-        ExchangeRate.Builder builder = new ExchangeRate.Builder(
+        DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
                         .setAttribute(TIMESTAMP, timestamp).build());
         builder.setBase(BASE_CURRENCY);

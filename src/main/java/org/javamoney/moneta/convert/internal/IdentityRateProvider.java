@@ -19,6 +19,7 @@ package org.javamoney.moneta.convert.internal;
 
 import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
+import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 
@@ -57,7 +58,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
 
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
         if(base.getCurrencyCode().equals(term.getCurrencyCode())){
-            ExchangeRate.Builder builder = new ExchangeRate.Builder(
+            DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
                     new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
                             .setAttribute(TIMESTAMP, context.getNamedAttribute(TIMESTAMP, Long.class)
                             ).build()
@@ -80,7 +81,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
         if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
-            return new ExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
+            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
                     .setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
         return null;

@@ -43,7 +43,7 @@
 
 	<properties>
 		<jsr.version>${project.version}</jsr.version>
-		<jdkVersion>1.7</jdkVersion>
+		<jdkVersion>1.8</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
 

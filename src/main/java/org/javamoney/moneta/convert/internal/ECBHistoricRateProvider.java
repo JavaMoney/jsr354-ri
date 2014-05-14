@@ -19,6 +19,7 @@ package org.javamoney.moneta.convert.internal;
 
 import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
+import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -126,7 +127,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         if(context.getNamedAttribute(TIMESTAMP, Long.class) == null){
             return null;
         }
-        ExchangeRate.Builder builder = new ExchangeRate.Builder(
+        DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
                         .setAttribute(TIMESTAMP, context.getNamedAttribute(TIMESTAMP, Long.class)).build());
         builder.setBase(base);
@@ -178,7 +179,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         if(rate == null){
             throw new IllegalArgumentException("Rate null is not reversable.");
         }
-        return rate.toBuilder().setRate(rate).setBase(rate.getTerm()).setTerm(rate.getBase())
+        return new DefaultExchangeRate.Builder(rate).setRate(rate).setBase(rate.getTerm()).setTerm(rate.getBase())
                 .setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(), MathContext.DECIMAL64)).build();
     }
 
@@ -259,14 +260,14 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      */
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
         RateType rateType = RateType.HISTORIC;
-        ExchangeRate.Builder builder = null;
+        DefaultExchangeRate.Builder builder = null;
         if(timestamp != null){
             if(timestamp.longValue() > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
-            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, timestamp).build());
+            builder = new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, timestamp).build());
         }else{
-            builder = new ExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).build());
+            builder = new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).build());
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

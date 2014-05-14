@@ -19,6 +19,7 @@ package org.javamoney.moneta.convert.internal;
 
 import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
+import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -125,7 +126,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         if(context.getNamedAttribute(TIMESTAMP, Long.class) == null){
             return null;
         }
-        ExchangeRate.Builder builder = new ExchangeRate.Builder(
+        DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
                 new ConversionContext.Builder(CONTEXT, RateType.HISTORIC)
                         .setAttribute(TIMESTAMP, context.getNamedAttribute(TIMESTAMP, Long.class)).build()
         );
@@ -249,16 +250,16 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
      * @param rate      The rate.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
-        ExchangeRate.Builder builder = null;
+        DefaultExchangeRate.Builder builder = null;
         RateType rateType = RateType.HISTORIC;
         if(timestamp != null){
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
-            builder = new ExchangeRate.Builder(
+            builder = new DefaultExchangeRate.Builder(
                     new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, timestamp).build());
         }else{
-            builder = new ExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), rateType));
+            builder = new DefaultExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), rateType));
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

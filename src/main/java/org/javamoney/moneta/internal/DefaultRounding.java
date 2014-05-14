@@ -89,12 +89,9 @@ final class DefaultRounding implements MonetaryOperator {
 	 * 
 	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
 	 */
-	// unchecked cast {@code (T)amount.with(MonetaryOperator)} is
-	// safe, if the operator is implemented as specified by this JSR.
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MonetaryAmount> T apply(T amount){
-		return (T)amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
+	public MonetaryAmount apply(MonetaryAmount amount){
+		return amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
 				((BigDecimal) amount.getNumber().numberValue(BigDecimal.class)).setScale(
 						this.scale,
 						this.roundingMode)).create();

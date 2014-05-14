@@ -91,12 +91,6 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     @Override
-    public CurrencyConversion getConversion(CurrencyUnit termCurrency, ConversionContext conversionContext,
-                                            String... providers){
-        return getExchangeRateProvider(providers).getCurrencyConversion(termCurrency);
-    }
-
-    @Override
     public List<String> getDefaultProviderChain(){
         List<String> provList = new ArrayList<>();
         String defaultChain = MonetaryConfig.getConfig().get("conversion.default-chain");
@@ -111,10 +105,5 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
         return provList;
     }
 
-    @Override
-    public ProviderContext getProviderContext(String provider){
-        ExchangeRateProvider prov = getExchangeRateProvider(provider);
-        return prov.getProviderContext();
-    }
 
 }

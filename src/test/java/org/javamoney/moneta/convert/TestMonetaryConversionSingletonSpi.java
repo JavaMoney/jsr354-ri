@@ -148,7 +148,7 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
 	public final class DummyConversion implements CurrencyConversion {
 
 		@Override
-		public <T extends MonetaryAmount> T apply(T value) {
+		public MonetaryAmount apply(MonetaryAmount value) {
 			return null;
 		}
 

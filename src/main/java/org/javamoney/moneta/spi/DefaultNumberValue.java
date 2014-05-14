@@ -87,7 +87,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getIntValue()
+	 * @see javax.money.NumberValue#getIntValue()
 	 */
 	@Override
 	public int intValue() {
@@ -96,7 +96,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getIntValueExact()
+	 * @see javax.money.NumberValue#getIntValueExact()
 	 */
 	@Override
 	public int intValueExact() {
@@ -105,7 +105,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getLongValue()
+	 * @see javax.money.NumberValue#getLongValue()
 	 */
 	@Override
 	public long longValue() {
@@ -114,7 +114,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getLongValueExact()
+	 * @see javax.money.NumberValue#getLongValueExact()
 	 */
 	@Override
 	public long longValueExact() {
@@ -123,7 +123,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getFloatValue()
+	 * @see javax.money.NumberValue#getFloatValue()
 	 */
 	@Override
 	public float floatValue() {
@@ -132,7 +132,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getDoubleValue()
+	 * @see javax.money.NumberValue#getDoubleValue()
 	 */
 	@Override
 	public double doubleValue() {
@@ -141,7 +141,7 @@ public class DefaultNumberValue extends NumberValue {
 
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getDoubleValueExact()
+	 * @see javax.money.NumberValue#getDoubleValueExact()
 	 */
 	@Override
 	public double doubleValueExact() {
@@ -153,9 +153,28 @@ public class DefaultNumberValue extends NumberValue {
 		return d;
 	}
 
+    /*
+     * (non-Javadoc)
+	 * @see javax.money.NumberValue#getAmountFractionNumerator()
+     */
+    @Override
+    public long getAmountFractionNumerator(){
+        BigDecimal bd = getBigDecimal(number).remainder(BigDecimal.ONE);
+        return bd.movePointRight(getScale()).longValueExact();
+    }
+
+    /*
+     * (non-Javadoc)
+	 * @see javax.money.NumberValue#getAmountFractionDenominator()
+     */
+    @Override
+    public long getAmountFractionDenominator(){
+        return BigDecimal.valueOf(10).pow(getScale()).longValueExact();
+    }
+
 	/*
 	 * (non-Javadoc)
-	 * @see javax.money.NumberBinding#getNumberValue(java.lang.Class)
+	 * @see javax.money.NumberValue#getNumberValue(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
