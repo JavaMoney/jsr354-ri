@@ -68,19 +68,19 @@ public class MonetaryRoundingsTest{
                 MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(new BigDecimal("-1.500000000000"))
                         .create()};
         int[] scales = new int[]{0, 1, 2, 3, 4, 5};
-        for(int i = 0; i < samples.length; i++){
-            for(int scale : scales){
-                for(RoundingMode roundingMode : RoundingMode.values()){
-                    if(roundingMode == RoundingMode.UNNECESSARY){
+        for (MonetaryAmount sample : samples) {
+            for (int scale : scales) {
+                for (RoundingMode roundingMode : RoundingMode.values()) {
+                    if (roundingMode == RoundingMode.UNNECESSARY) {
                         continue;
                     }
                     MonetaryOperator rounding = MonetaryRoundings.getRounding(
                             new RoundingContext.Builder().setInt("scale", scale).setObject(roundingMode)
                                     .build()
                     );
-                    BigDecimal dec = samples[i].getNumber().numberValue(BigDecimal.class);
+                    BigDecimal dec = sample.getNumber().numberValue(BigDecimal.class);
                     BigDecimal expected = dec.setScale(scale, roundingMode);
-                    MonetaryAmount r = samples[i].with(rounding);
+                    MonetaryAmount r = sample.with(rounding);
                     assertEquals(MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(expected).create(), r);
                 }
             }
@@ -109,26 +109,26 @@ public class MonetaryRoundingsTest{
                         .create(),
                 MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(new BigDecimal("-1.500000000000"))
                         .create()};
-        for(int i = 0; i < samples.length; i++){
-            for(Currency currency : Currency.getAvailableCurrencies()){
+        for (MonetaryAmount sample : samples) {
+            for (Currency currency : Currency.getAvailableCurrencies()) {
                 CurrencyUnit cur = MonetaryCurrencies.getCurrency(currency.getCurrencyCode());
                 // Omit test roundings, which are for testing only...
-                if("XXX".equals(cur.getCurrencyCode())){
+                if ("XXX".equals(cur.getCurrencyCode())) {
                     continue;
-                }else if("CHF".equals(cur.getCurrencyCode())){
+                } else if ("CHF".equals(cur.getCurrencyCode())) {
                     continue;
                 }
                 MonetaryOperator rounding = MonetaryRoundings.getRounding(cur);
-                BigDecimal dec = samples[i].getNumber().numberValue(BigDecimal.class);
+                BigDecimal dec = sample.getNumber().numberValue(BigDecimal.class);
                 BigDecimal expected = null;
-                if(cur.getDefaultFractionDigits() < 0){
+                if (cur.getDefaultFractionDigits() < 0) {
                     expected = dec.setScale(0, RoundingMode.HALF_UP);
-                }else{
+                } else {
                     expected = dec.setScale(cur.getDefaultFractionDigits(), RoundingMode.HALF_UP);
                 }
-                MonetaryAmount r = samples[i].with(rounding);
-                assertEquals("Rouding for: " + samples[i],
-                             MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(expected).create(), r);
+                MonetaryAmount r = sample.with(rounding);
+                assertEquals("Rouding for: " + sample,
+                        MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(expected).create(), r);
             }
         }
     }

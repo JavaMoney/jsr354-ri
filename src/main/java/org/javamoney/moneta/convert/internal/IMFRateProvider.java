@@ -269,10 +269,10 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     private boolean isValid(ConversionContext conversionContext, Long timestamp){
         Long validFrom = conversionContext.getNamedAttribute("validFrom", Long.class);
         Long validTo = conversionContext.getNamedAttribute("validTo", Long.class);
-        if(validFrom!=null && validFrom.longValue() > timestamp.longValue()){
+        if(validFrom!=null && validFrom > timestamp){
             return false;
         }
-        if(validTo!=null && validTo.longValue() < timestamp.longValue()){
+        if(validTo!=null && validTo < timestamp){
             return false;
         }
         return true;

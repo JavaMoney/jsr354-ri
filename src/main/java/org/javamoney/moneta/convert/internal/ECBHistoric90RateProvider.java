@@ -137,7 +137,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        Long targetTS = Long.valueOf(cal.getTimeInMillis());
+        Long targetTS = cal.getTimeInMillis();
 
         builder.setBase(base);
         builder.setTerm(term);
@@ -223,7 +223,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
                 if("Cube".equals(qName)){
                     if(attributes.getValue("time") != null){
                         Date date = dateFormat.parse(attributes.getValue("time"));
-                        timestamp = Long.valueOf(date.getTime());
+                        timestamp = date.getTime();
                     }else if(attributes.getValue("currency") != null){
                         // read data <Cube currency="USD" rate="1.3349"/>
                         CurrencyUnit tgtCurrency = MonetaryCurrencies.getCurrency(attributes.getValue("currency"));

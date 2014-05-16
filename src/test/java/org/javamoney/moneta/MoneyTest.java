@@ -962,8 +962,8 @@ public class MoneyTest{
         };
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "USD"), Money.of(23123213.435, "EUR"),
                 Money.of(-23123213.435, "USS"), Money.of(-23123213, "USN"), Money.of(0, "GBP")};
-        for(int i = 0; i < moneys.length; i++){
-            assertEquals((Integer) moneys[i].query(q), Integer.valueOf(moneys[i].getNumber().getPrecision()));
+        for (Money money : moneys) {
+            assertEquals((Integer) money.query(q), Integer.valueOf(money.getNumber().getPrecision()));
         }
     }
 

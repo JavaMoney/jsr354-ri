@@ -1069,10 +1069,10 @@ public class RoundedMoneyTest {
 				RoundedMoney.of( 23123213.435,"EUR"),
 				RoundedMoney.of( -23123213.435,"USS"),
 				RoundedMoney.of( -23123213,"USN"), RoundedMoney.of( 0,"GBP") };
-		for (int i = 0; i < moneys.length; i++) {
-			assertEquals((Integer) moneys[i].query(q),
-					(Integer) moneys[i].getPrecision());
-		}
+        for (RoundedMoney money : moneys) {
+            assertEquals((Integer) money.query(q),
+                    (Integer) money.getPrecision());
+        }
 	}
 
 	/**
