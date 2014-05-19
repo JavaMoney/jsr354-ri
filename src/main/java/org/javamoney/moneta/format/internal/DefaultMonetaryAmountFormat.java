@@ -96,7 +96,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		if (index > 0) { // currency placement after, between
 			String p1 = pattern.substring(0, index);
 			String p2 = pattern.substring(index + 1);
-			if (isLiteralPattern(p1)) {
+			if (isLiteralPattern(p1, style)) {
 				tokens.add(new LiteralToken(p1));
 				tokens.add(new CurrencyToken(style.getAttribute(CurrencyStyle.class), style.
                                              getAttribute(Locale.class)));
@@ -105,7 +105,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 				tokens.add(new CurrencyToken(style.getAttribute(CurrencyStyle.class), style.getAttribute(Locale.class)));
 			}
 			if (!p2.isEmpty()) {
-				if (isLiteralPattern(p2)) {
+				if (isLiteralPattern(p2, style)) {
 					tokens.add(new LiteralToken(p2));
 				} else {
 					tokens.add(new AmountNumberToken(style, p2));
@@ -120,7 +120,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		}
 	}
 
-	private boolean isLiteralPattern(String pattern) {
+	private boolean isLiteralPattern(String pattern, AmountFormatContext style) {
 		// TODO implement better here
 		if (pattern.contains("#") || pattern.contains("0")) {
 			return false;
