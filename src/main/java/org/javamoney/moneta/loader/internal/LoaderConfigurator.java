@@ -100,7 +100,7 @@ class LoaderConfigurator {
 			}
 			urls.add(new URL(res.trim()));
 		}
-		return urls.toArray(new URL[0]);
+		return urls.toArray(new URL[urls.size()]);
 	}
 
 	private URL getClassLoaderLocation(String res) {
