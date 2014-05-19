@@ -122,11 +122,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
 	private boolean isLiteralPattern(String pattern, AmountFormatContext style) {
 		// TODO implement better here
-		if (pattern.contains("#") || pattern.contains("0")) {
-			return false;
-		}
-		return true;
-	}
+        return !(pattern.contains("#") || pattern.contains("0"));
+    }
 
 	/**
 	 * Formats a value of {@code T} to a {@code String}. {@link java.util.Locale}

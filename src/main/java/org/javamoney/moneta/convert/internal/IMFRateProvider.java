@@ -272,10 +272,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         if(validFrom!=null && validFrom > timestamp){
             return false;
         }
-        if(validTo!=null && validTo < timestamp){
-            return false;
-        }
-        return true;
+        return !(validTo != null && validTo < timestamp);
     }
 
 }

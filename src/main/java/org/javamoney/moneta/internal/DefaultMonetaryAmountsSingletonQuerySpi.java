@@ -134,10 +134,7 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
         if(requiredContext.getPrecision() > maximalMonetaryContext.getPrecision()){
             return false;
         }
-        if(requiredContext.getMaxScale() > maximalMonetaryContext.getMaxScale()){
-            return false;
-        }
-        return true;
+        return requiredContext.getMaxScale() <= maximalMonetaryContext.getMaxScale();
     }
 
 }

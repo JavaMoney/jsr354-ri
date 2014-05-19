@@ -147,10 +147,8 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 		if (getClass() != obj.getClass())
 			return false;
 		CurrencyUnit other = (CurrencyUnit) obj;
-		if (!getCurrencyCode().equals(other.getCurrencyCode()))
-			return false;
-		return true;
-	}
+        return getCurrencyCode().equals(other.getCurrencyCode());
+    }
 
 	/**
 	 * Returns {@link #getCurrencyCode()}

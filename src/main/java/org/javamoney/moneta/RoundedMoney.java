@@ -849,10 +849,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
     private boolean isOne(Number number){
         BigDecimal bd = getBigDecimal(number);
         try{
-            if(bd.scale() == 0 && bd.longValueExact() == 1L){
-                return true;
-            }
-            return false;
+            return bd.scale() == 0 && bd.longValueExact() == 1L;
         }
         catch(Exception e){
             // The only way to end up here is that longValueExact throws an ArithmeticException,
