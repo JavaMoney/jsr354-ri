@@ -18,11 +18,7 @@ package org.javamoney.moneta.convert.internal;
 import org.javamoney.moneta.spi.CompoundRateProvider;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
-import javax.money.CurrencyUnit;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.ProviderContext;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
 import java.util.ArrayList;

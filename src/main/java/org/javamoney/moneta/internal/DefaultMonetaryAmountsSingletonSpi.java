@@ -15,25 +15,19 @@
  */
 package org.javamoney.moneta.internal;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import org.javamoney.moneta.ServicePriority;
+
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
+import javax.money.MonetaryException;
+import javax.money.spi.Bootstrap;
+import javax.money.spi.MonetaryAmountFactoryProviderSpi;
+import javax.money.spi.MonetaryAmountsSingletonSpi;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
-
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryException;
-import javax.money.spi.Bootstrap;
-import javax.money.spi.MonetaryAmountFactoryProviderSpi;
-import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
-import javax.money.spi.MonetaryAmountsSingletonSpi;
-
-import org.javamoney.moneta.ServicePriority;
 
 /**
  * Default implementation ot {@link javax.money.spi.MonetaryAmountsSingletonSpi} loading the SPIs on startup initially once, using the

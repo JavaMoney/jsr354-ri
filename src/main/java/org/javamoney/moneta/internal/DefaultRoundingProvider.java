@@ -16,7 +16,6 @@
 package org.javamoney.moneta.internal;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryContext;
 import javax.money.MonetaryOperator;
 import javax.money.RoundingContext;
 import javax.money.spi.RoundingProviderSpi;

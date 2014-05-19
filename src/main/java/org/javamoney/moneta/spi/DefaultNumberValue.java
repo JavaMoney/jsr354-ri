@@ -15,15 +15,11 @@
  */
 package org.javamoney.moneta.spi;
 
+import javax.money.NumberValue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
-
-import javax.money.MonetaryContext;
-import javax.money.NumberValue;
-
-import org.javamoney.moneta.Money;
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.

@@ -15,18 +15,17 @@
  */
 package org.javamoney.moneta.function;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.Locale;
+import org.junit.Test;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
 import javax.money.MonetaryOperator;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Locale;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Anatole
