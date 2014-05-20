@@ -79,7 +79,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContext.Builder("ECB-HIST90").setRateTypes(RateType.HISTORIC, RateType.DEFERRED)
+            new ProviderContext.Builder("ECB-HIST90",RateType.HISTORIC, RateType.DEFERRED)
                     .setAttribute("providerDescription", "European Central Bank (last 90 days)")
                     .setAttribute("days", 90).build();
 

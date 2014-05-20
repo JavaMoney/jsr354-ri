@@ -16,13 +16,12 @@
 package org.javamoney.moneta.spi;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.money.CurrencyUnit;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.ProviderContext;
+import javax.money.convert.*;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to
@@ -51,14 +50,17 @@ public class CompoundRateProvider extends AbstractRateProvider {
 
 	private static ProviderContext createContext(
 			Iterable<ExchangeRateProvider> providers) {
+        Set<RateType> rateTypeSet = new HashSet<>();
 		StringBuilder providerName = new StringBuilder("Compound: ");
 		for (ExchangeRateProvider exchangeRateProvider : providers) {
 			providerName.append(exchangeRateProvider.getProviderContext()
 					.getProvider());
 			providerName.append(',');
+            rateTypeSet.addAll(exchangeRateProvider.getProviderContext().getRateTypes());
 		}
 		providerName.setLength(providerName.length() - 1);
-		return new ProviderContext.Builder(providerName.toString()).build();
+
+		return new ProviderContext.Builder(providerName.toString(),rateTypeSet).build();
 	}
 
 	/**
