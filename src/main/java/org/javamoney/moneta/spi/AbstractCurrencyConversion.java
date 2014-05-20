@@ -15,9 +15,6 @@
  */
 package org.javamoney.moneta.spi;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
@@ -25,9 +22,7 @@ import javax.money.convert.ConversionContext;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
-import javax.money.convert.ProviderContext;
-
-import org.javamoney.moneta.BuildableCurrencyUnit;
+import java.util.Objects;
 
 /**
  * Abstract base class used for implementing currency conversion.

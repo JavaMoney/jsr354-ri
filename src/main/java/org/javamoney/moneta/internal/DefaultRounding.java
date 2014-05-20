@@ -15,15 +15,12 @@
  */
 package org.javamoney.moneta.internal;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.util.Objects;
-
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryOperator;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 /**
  * Implementation class providing rounding {@link javax.money.MonetaryOperator} instances
