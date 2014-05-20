@@ -249,10 +249,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
         }else if(!currency.equals(other.getCurrency())){
             return false;
         }
-        if(number != other.number){
-            return false;
-        }
-        return true;
+        return number == other.number;
     }
 
     /*
@@ -390,10 +387,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
     private boolean isOne(Number number){
         BigDecimal bd = getBigDecimal(number);
         try{
-            if(bd.scale() == 0 && bd.longValueExact() == 1L){
-                return true;
-            }
-            return false;
+            return bd.scale() == 0 && bd.longValueExact() == 1L;
         }
         catch(Exception e){
             // The only way to end up here is that longValueExact throws an ArithmeticException,
