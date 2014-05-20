@@ -567,6 +567,9 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         try{
             return RoundedMoney.from(operator.apply(this));
         }
+        catch(MonetaryException e){
+            throw e;
+        }
         catch(Exception e){
             throw new MonetaryException("Query failed: " + operator, e);
         }
@@ -596,6 +599,9 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         Objects.requireNonNull(query);
         try{
             return query.queryFrom(this);
+        }
+        catch(MonetaryException e){
+            throw e;
         }
         catch(Exception e){
             throw new MonetaryException("Query failed: " + query, e);

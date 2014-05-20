@@ -18,13 +18,11 @@ package org.javamoney.moneta.convert.internal;
 import org.javamoney.moneta.spi.CompoundRateProvider;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
+import javax.money.MonetaryException;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -63,13 +61,24 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
 
     @Override
     public ExchangeRateProvider getExchangeRateProvider(String... providers){
+        Objects.requireNonNull(providers);
+        if(providers.length==0){
+            List<String> defaultChain = getDefaultProviderChain();
+            if(defaultChain.isEmpty()){
+                throw new IllegalStateException("No default provider chain available.");
+            }
+            return getExchangeRateProvider(defaultChain.toArray(new String[defaultChain.size()]));
+        }
         List<ExchangeRateProvider> provInstances = new ArrayList<>();
         for(String provName : providers){
             ExchangeRateProvider prov = this.conversionProviders.get(provName);
             if(prov == null){
-                throw new IllegalArgumentException("Unsupported conversion/rate provider: " + provName);
+                throw new MonetaryException("Unsupported conversion/rate provider: " + provName);
             }
             provInstances.add(prov);
+        }
+        if(provInstances.size()==1){
+            return provInstances.get(0);
         }
         return new CompoundRateProvider(provInstances);
     }

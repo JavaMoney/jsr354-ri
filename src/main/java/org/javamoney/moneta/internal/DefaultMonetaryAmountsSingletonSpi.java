@@ -155,8 +155,10 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 		if (configuredDefaultAmountType == null) {
 			for (MonetaryAmountFactoryProviderSpi<?> f : Bootstrap
 					.getServices(MonetaryAmountFactoryProviderSpi.class)) {
-				configuredDefaultAmountType = f.getAmountType();
-				break;
+                if(f.getQueryInclusionPolicy()== MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy.ALWAYS){
+                    configuredDefaultAmountType = f.getAmountType();
+                    break;
+                }
 			}
 		}
 		if (configuredDefaultAmountType == null) {

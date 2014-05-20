@@ -416,6 +416,9 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
         try{
             return query.queryFrom(this);
         }
+        catch(MonetaryException e){
+            throw e;
+        }
         catch(Exception e){
             throw new MonetaryException("Query failed: " + query, e);
         }
@@ -431,6 +434,9 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
         Objects.requireNonNull(operator);
         try{
             return Money.class.cast(operator.apply(this));
+        }
+        catch(MonetaryException e){
+            throw e;
         }
         catch(Exception e){
             throw new MonetaryException("Operator failed: " + operator, e);

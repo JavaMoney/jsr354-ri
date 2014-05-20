@@ -57,9 +57,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
         if(base.getCurrencyCode().equals(term.getCurrencyCode())){
             DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                    new ConversionContext.Builder(CONTEXT, RateType.DEFERRED)
-                            .setAttribute(TIMESTAMP, context.getNamedAttribute(TIMESTAMP, Long.class)
-                            ).build()
+                    new ConversionContext.Builder(CONTEXT, RateType.OTHER).build()
             );
             builder.setBase(base);
             builder.setTerm(term);

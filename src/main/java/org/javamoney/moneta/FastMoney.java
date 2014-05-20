@@ -617,6 +617,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
         try{
             return FastMoney.class.cast(operator.apply(this));
         }
+        catch(MonetaryException e){
+            throw e;
+        }
         catch(Exception e){
             throw new MonetaryException("Operator failed: " + operator, e);
         }
@@ -627,6 +630,9 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
         Objects.requireNonNull(query);
         try{
             return query.queryFrom(this);
+        }
+        catch(MonetaryException e){
+            throw e;
         }
         catch(Exception e){
             throw new MonetaryException("Query failed: " + query, e);
