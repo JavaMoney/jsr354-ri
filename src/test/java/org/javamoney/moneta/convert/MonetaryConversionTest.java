@@ -27,6 +27,7 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
+import org.javamoney.moneta.convert.internal.ECBCurrentRateProvider;
 import org.javamoney.moneta.spi.CompoundRateProvider;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class MonetaryConversionTest {
 		ExchangeRateProvider prov = MonetaryConversions
 				.getExchangeRateProvider("ECB");
 		assertTrue(prov != null);
-		assertEquals(CompoundRateProvider.class, prov.getClass());
+		assertEquals(ECBCurrentRateProvider.class, prov.getClass());
 	}
 
 	@Test
