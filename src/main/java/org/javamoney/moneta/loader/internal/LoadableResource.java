@@ -265,7 +265,7 @@ public class LoadableResource {
 			}
 			this.data = bos.toByteArray();
 		} finally {
-			if (is != null) {
+			if (Objects.nonNull(is)) {
 				try {
 					is.close();
 				} catch (Exception e) {
@@ -273,7 +273,7 @@ public class LoadableResource {
 							+ resourceId, e);
 				}
 			}
-			if (bos != null) {
+			if (Objects.nonNull(bos)) {
 				bos.close();
 			}
 		}

@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -88,7 +89,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 		CurrencyUnit cu = CACHED.get(currencyCode);
 		if (cu == null) {
 			Currency cur = Currency.getInstance(currencyCode);
-			if(cur!=null){
+			if (Objects.nonNull(cur)) {
 				return of(cur);
 			}
 		}

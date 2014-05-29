@@ -119,11 +119,11 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
         try{
             Map<String,String> config = MonetaryConfig.getConfig();
             String value = config.get("org.javamoney.moneta.Money.defaults.precision");
-            if(value != null){
+            if (Objects.nonNull(value)) {
                 int prec = Integer.parseInt(value);
                 value = config.get("org.javamoney.moneta.Money.defaults.roundingMode");
                 RoundingMode rm =
-                        value != null ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
+                		Objects.nonNull(value) ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
                 MonetaryContext mc =
                         new MonetaryContext.Builder().setPrecision(prec).setObject(rm).setAmountType(Money.class)
                                 .build();
@@ -133,7 +133,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
             }else{
                 MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
                 value = config.get("org.javamoney.moneta.Money.defaults.mathContext");
-                if(value != null){
+                if (Objects.nonNull(value)) {
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
                             Logger.getLogger(Money.class.getName())
@@ -171,7 +171,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
             return new MonetaryContext.Builder(Money.class).setObject(MathContext.DECIMAL64).build();
         }
         finally{
-            if(is != null){
+            if (Objects.nonNull(is)) {
                 try{
                     is.close();
                 }
@@ -197,11 +197,11 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
     private Money(BigDecimal number, CurrencyUnit currency, MonetaryContext monetaryContext){
         super(currency, monetaryContext);
         Objects.requireNonNull(number, "Number is required.");
-        if(monetaryContext != null){
-            this.number = getBigDecimal(number, monetaryContext);
-        }else{
-            this.number = getBigDecimal(number, DEFAULT_MONETARY_CONTEXT);
-        }
+		if (Objects.nonNull(monetaryContext)) {
+			this.number = getBigDecimal(number, monetaryContext);
+		} else {
+			this.number = getBigDecimal(number, DEFAULT_MONETARY_CONTEXT);
+		}
     }
 
     /*

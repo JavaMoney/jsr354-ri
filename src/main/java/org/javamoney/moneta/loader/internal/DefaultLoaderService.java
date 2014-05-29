@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -112,7 +114,7 @@ public class DefaultLoaderService implements LoaderService {
 	 */
 	public void unload(String resourceId) {
 		LoadableResource res = this.resources.get(resourceId);
-		if (res != null) {
+		if (Objects.nonNull(res)) {
 			res.unload();
 		}
 	}
@@ -162,7 +164,7 @@ public class DefaultLoaderService implements LoaderService {
 	@Override
 	public Map<String, String> getUpdateConfiguration(String resourceId) {
 		LoadableResource res = this.resources.get(resourceId);
-		if (res != null) {
+		if (Objects.nonNull(res)) {
 			return res.getUpdateConfig();
 		}
 		return null;
@@ -197,7 +199,7 @@ public class DefaultLoaderService implements LoaderService {
 	@Override
 	public InputStream getData(String resourceId) throws IOException {
 		LoadableResource res = this.resources.get(resourceId);
-		if (res != null) {
+		if (Objects.nonNull(res)) {
 			res.getDataStream();
 		}
 		throw new IllegalArgumentException("No such resource: " + resourceId);
@@ -238,7 +240,7 @@ public class DefaultLoaderService implements LoaderService {
 	@Override
 	public boolean loadDataLocal(String resourceId) {
 		LoadableResource res = this.resources.get(resourceId);
-		if (res != null) {
+		if (Objects.nonNull(res)) {
 			try {
 				if (res.loadFallback()) {
 					triggerListeners(resourceId, res.getDataStream());
@@ -264,7 +266,7 @@ public class DefaultLoaderService implements LoaderService {
 	 */
 	private boolean loadDataSynch(String resourceId) {
 		LoadableResource res = this.resources.get(resourceId);
-		if (res != null) {
+		if (Objects.nonNull(res)) {
 			try {
 				if (res.load()) {
 					triggerListeners(resourceId, res.getDataStream());
@@ -288,13 +290,12 @@ public class DefaultLoaderService implements LoaderService {
 	 */
 	@Override
 	public void resetData(String dataId) throws IOException {
-		LoadableResource res = this.resources.get(dataId);
-		if (res != null) {
-			if (res.reset()) {
-				triggerListeners(dataId, res.getDataStream());
-			}
-		} else {
-			throw new IllegalArgumentException("No such resource: " + dataId);
+		LoadableResource res = Optional.ofNullable(this.resources.get(dataId))
+				.orElseThrow(
+						() -> new IllegalArgumentException("No such resource: "
+								+ dataId));
+		if (res.reset()) {
+			triggerListeners(dataId, res.getDataStream());
 		}
 	}
 
@@ -415,11 +416,12 @@ public class DefaultLoaderService implements LoaderService {
 	 */
 	@Override
 	public UpdatePolicy getUpdatePolicy(String resourceId) {
-		LoadableResource res = this.resources.get(resourceId);
-		if (res != null) {
-			return res.getUpdatePolicy();
-		}
-		throw new IllegalArgumentException("No such resource: " + resourceId);
+		
+		LoadableResource res = Optional.of(this.resources.get(resourceId))
+				.orElseThrow(
+						() -> new IllegalArgumentException("No such resource: "
+								+ resourceId));
+		return res.getUpdatePolicy();
 	}
 
 	/**
@@ -440,7 +442,7 @@ public class DefaultLoaderService implements LoaderService {
 			}
 		};
 		Map<String, String> props = loadableResource.getUpdateConfig();
-		if (props != null) {
+		if (Objects.nonNull(props)) {
 			String value = props.get("period");
 			long periodMS = parseDuration(value);
 			value = props.get("delay");
@@ -449,11 +451,11 @@ public class DefaultLoaderService implements LoaderService {
 				timer.scheduleAtFixedRate(task, delayMS, periodMS);
 			}
 			value = props.get("at");
-			if (value != null) {
+			if (Objects.nonNull(value)) {
 				List<GregorianCalendar> dates = parseDates(value);
-				for (GregorianCalendar date : dates) {
-					timer.schedule(task, date.getTime(), 3600000 * 24 /* daily */);
-				}
+				dates.forEach(date -> timer.schedule(task, date.getTime(),
+						3_600_000 * 24 /* daily */));
+
 			}
 		}
 	}
@@ -510,7 +512,7 @@ public class DefaultLoaderService implements LoaderService {
 	 */
 	protected long parseDuration(String value) {
 		long periodMS = 0L;
-		if (value != null) {
+		if (Objects.nonNull(value)) {
 			String[] parts = value.split(":");
 			for (int i = 0; i < parts.length; i++) {
 				switch (i) {

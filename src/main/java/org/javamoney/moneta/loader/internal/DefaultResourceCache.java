@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,7 +66,7 @@ public class DefaultResourceCache implements ResourceCache {
 					+ ", not writable, resource cache disabled!");
 			localDir = null;
 		}
-		if (localDir != null) {
+		if (Objects.nonNull(localDir)) {
 			File[] files = localDir.listFiles();
 			for (File file : files) {
 				if (file.isFile()) {
@@ -114,7 +115,7 @@ public class DefaultResourceCache implements ResourceCache {
 			bos.flush();
 		} finally {
 			try {
-				if (bos != null) {
+				if (Objects.nonNull(bos)) {
 					bos.close();
 				}
 			} catch (Exception e2) {
@@ -176,7 +177,7 @@ public class DefaultResourceCache implements ResourceCache {
 			return null;
 		} finally {
 			try {
-				if (is != null) {
+				if (Objects.nonNull(is)) {
 					is.close();
 				}
 			} catch (Exception e2) {

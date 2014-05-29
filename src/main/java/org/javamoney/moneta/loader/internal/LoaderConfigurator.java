@@ -106,7 +106,7 @@ class LoaderConfigurator {
 	private URL getClassLoaderLocation(String res) {
 		URL url = null;
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		if (cl != null) {
+		if (Objects.nonNull(cl)) {
 			url = cl.getResource(res);
 		}
 		if (url == null) {

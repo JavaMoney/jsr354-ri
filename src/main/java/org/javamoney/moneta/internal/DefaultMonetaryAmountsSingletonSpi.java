@@ -23,8 +23,10 @@ import javax.money.MonetaryException;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountsSingletonSpi;
+
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -44,7 +46,7 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 				.getServices(MonetaryAmountFactoryProviderSpi.class)) {
 			MonetaryAmountFactoryProviderSpi<?> existing = factories.put(
 					f.getAmountType(), f);
-			if (existing != null) {
+			if (Objects.nonNull(existing)) {
 				int compare = comparePriority(existing, f);
 				if (compare < 0) {
 					Logger.getLogger(getClass().getName()).warning(
@@ -88,7 +90,7 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 		}
 		ServicePriority prio = service.getClass().getAnnotation(
 				ServicePriority.class);
-		if (prio != null) {
+		if (Objects.nonNull(prio)) {
 			return prio.value();
 		}
 		return 0;
@@ -132,7 +134,7 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 			Class<T> amountType) {
 		MonetaryAmountFactoryProviderSpi<T> f = MonetaryAmountFactoryProviderSpi.class
 				.cast(factories.get(amountType));
-		if (f != null) {
+		if (Objects.nonNull(f)) {
 			return f.createMonetaryAmountFactory();
 		}
 		throw new MonetaryException(

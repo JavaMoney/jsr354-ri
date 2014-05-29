@@ -78,11 +78,11 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         Objects.requireNonNull(number, "Number is required.");
         checkNumber(number);
         this.currency = currency;
-        if(rounding != null){
-            this.rounding = rounding;
-        }else{
-            this.rounding = MonetaryRoundings.getRounding(currency);
-        }
+		if (Objects.nonNull(rounding)) {
+			this.rounding = rounding;
+		} else {
+			this.rounding = MonetaryRoundings.getRounding(currency);
+		}
         this.number = getBigDecimal(number, monetaryContext);
     }
 
@@ -717,7 +717,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         }
         RoundedMoney other = (RoundedMoney) obj;
         if(currency == null){
-            if(other.currency != null){
+            if (Objects.nonNull(other.currency)) {
                 return false;
             }
         }else if(!currency.equals(other.currency)){

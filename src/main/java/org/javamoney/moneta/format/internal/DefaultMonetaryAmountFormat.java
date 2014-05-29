@@ -265,7 +265,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		} else {
 			// split into (potential) plus, minus patterns
 			char patternSeparator = ';';
-			if (style.getAttribute(DecimalFormatSymbols.class) != null) {
+			if (Objects.nonNull(style.getAttribute(DecimalFormatSymbols.class))) {
 				patternSeparator = style.getAttribute(DecimalFormatSymbols.class).getPatternSeparator();
 			}
 			String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));

@@ -36,6 +36,7 @@ import javax.money.spi.Bootstrap;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -163,7 +164,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
                     getExchangeRateInternal(base, MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), context);
             ExchangeRate rate2 =
                     getExchangeRateInternal(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), term, context);
-            if(rate1 != null || rate2 != null){
+            if (Objects.nonNull(rate1) || Objects.nonNull(rate2)) {
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
                 return builder.build();
@@ -221,10 +222,10 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
             try{
                 if("Cube".equals(qName)){
-                    if(attributes.getValue("time") != null){
+                    if (Objects.nonNull(attributes.getValue("time"))) {
                         Date date = dateFormat.parse(attributes.getValue("time"));
                         timestamp = date.getTime();
-                    }else if(attributes.getValue("currency") != null){
+                    }else if(Objects.nonNull(attributes.getValue("currency"))) {
                         // read data <Cube currency="USD" rate="1.3349"/>
                         CurrencyUnit tgtCurrency = MonetaryCurrencies.getCurrency(attributes.getValue("currency"));
                         addRate(tgtCurrency, timestamp,
@@ -250,7 +251,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
         DefaultExchangeRate.Builder builder = null;
         RateType rateType = RateType.HISTORIC;
-        if(timestamp != null){
+        if (Objects.nonNull(timestamp)) {
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }

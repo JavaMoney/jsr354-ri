@@ -20,11 +20,11 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
-
 import javax.money.format.MonetaryParseException;
 
 /**
@@ -54,7 +54,7 @@ final class AmountNumberToken implements FormatToken {
         formatFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.getAttribute(Locale.class));
         parseFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.getAttribute(Locale.class));
 		DecimalFormatSymbols syms = amountFormatContext.getAttribute(DecimalFormatSymbols.class);
-		if (syms != null) {
+		if (Objects.nonNull(syms)) {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
 		}
@@ -130,7 +130,7 @@ final class AmountNumberToken implements FormatToken {
 	@Override
 	public void parse(ParseContext context) throws MonetaryParseException {
 		String token = context.lookupNextToken();
-		if(token != null && !context.isComplete()) {
+		if (Objects.nonNull(token) && !context.isComplete()) {
 			parseToken(context, token);
             if(context.hasError()){
                 throw new MonetaryParseException(context.getErrorMessage(), context.getInput(), context.getIndex());
@@ -145,7 +145,7 @@ final class AmountNumberToken implements FormatToken {
 	private void parseToken(ParseContext context, String token) {
 		try {
 			Number number = this.parseFormat.parse(token);
-			if (number != null) {
+			if (Objects.nonNull(number)) {
 				context.setParsedNumber(number);
 				context.consume(token);
 			}

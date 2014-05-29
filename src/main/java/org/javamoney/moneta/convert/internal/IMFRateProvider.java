@@ -134,7 +134,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         // January 28, 2013 January 25, 2013
         // Euro 1.137520 1.137760 1.143840 1.142570 1.140510
         List<Long> timestamps = null;
-        while(line != null){
+        while (Objects.nonNull(line)) {
             if(line.trim().isEmpty()){
                 line = pr.readLine();
                 continue;
@@ -269,10 +269,10 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     private boolean isValid(ConversionContext conversionContext, Long timestamp){
         Long validFrom = conversionContext.getNamedAttribute("validFrom", Long.class);
         Long validTo = conversionContext.getNamedAttribute("validTo", Long.class);
-        if(validFrom!=null && validFrom > timestamp){
+        if (Objects.nonNull(validFrom) && validFrom > timestamp){
             return false;
         }
-        return !(validTo != null && validTo < timestamp);
+        return !(Objects.nonNull(validTo) && validTo < timestamp);
     }
 
 }

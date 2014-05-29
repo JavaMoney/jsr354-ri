@@ -108,7 +108,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         }
         BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
         if(currencyCode == null){
-            if(other.currencyCode != null){
+            if (Objects.nonNull(other.currencyCode)) {
                 return false;
             }
         }else if(!currencyCode.equals(other.currencyCode)){

@@ -243,7 +243,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
         }
         FastMoney other = (FastMoney) obj;
         if(currency == null){
-            if(other.getCurrency() != null){
+            if (Objects.nonNull(other.getCurrency())) {
                 return false;
             }
         }else if(!currency.equals(other.getCurrency())){

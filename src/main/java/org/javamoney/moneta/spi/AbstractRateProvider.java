@@ -75,7 +75,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      */
     @Override
     public boolean isAvailable(CurrencyUnit src, CurrencyUnit target){
-        return getExchangeRate(src, target) != null;
+        return Objects.nonNull(getExchangeRate(src, target));
     }
 
     /*
@@ -224,7 +224,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      */
     @Override
     public boolean isAvailable(CurrencyUnit base, CurrencyUnit term, ConversionContext conversionContext){
-        return getExchangeRateInternal(base, term, conversionContext) != null;
+        return Objects.nonNull(getExchangeRateInternal(base, term, conversionContext));
     }
 
     /*

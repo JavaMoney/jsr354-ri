@@ -35,6 +35,7 @@ import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -164,7 +165,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
                     getExchangeRateInternal(base, MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), context);
             ExchangeRate rate2 =
                     getExchangeRateInternal(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), term, context);
-            if(rate1 != null || rate2 != null){
+            if (Objects.nonNull(rate1) || Objects.nonNull(rate2)) {
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
                 return builder.build();
@@ -230,10 +231,10 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
             try{
                 if("Cube".equals(qName)){
-                    if(attributes.getValue("time") != null){
+                    if (Objects.nonNull(attributes.getValue("time"))) {
                         Date date = dateFormat.parse(attributes.getValue("time"));
                         timestamp = date.getTime();
-                    }else if(attributes.getValue("currency") != null){
+                    }else if(Objects.nonNull(attributes.getValue("currency"))) {
                         // read data <Cube currency="USD" rate="1.3349"/>
                         CurrencyUnit tgtCurrency = MonetaryCurrencies.getCurrency(attributes.getValue("currency"));
                         addRate(tgtCurrency, timestamp,
@@ -259,12 +260,12 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
         RateType rateType = RateType.HISTORIC;
         DefaultExchangeRate.Builder builder = null;
-        if(timestamp != null){
+        if (Objects.nonNull(timestamp)) {
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
             builder = new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, timestamp).build());
-        }else{
+        } else {
             builder = new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).build());
         }
         builder.setBase(BASE_CURRENCY);

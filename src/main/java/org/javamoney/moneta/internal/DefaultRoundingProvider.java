@@ -19,8 +19,10 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryOperator;
 import javax.money.RoundingContext;
 import javax.money.spi.RoundingProviderSpi;
+
 import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,7 +36,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
         if("default".equals(context.getRoundingId())){
             CurrencyUnit currency = context.getCurrencyUnit();
                     // RoundingMode rm = monetaryContext.getAttribute(RoundingMode.class, RoundingMode.HALF_EVEN);
-            if(currency!=null){
+            if (Objects.nonNull(currency)) {
                 if(context.getNamedAttribute("cashRounding", Boolean.class, Boolean.FALSE)){
                     if("CHF".equals(currency.getCurrencyCode())){
                         return new DefaultCashRounding(currency, RoundingMode.HALF_UP,5);
@@ -43,7 +45,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
                 return new DefaultRounding(currency);
             }
             Integer scale = context.getNamedAttribute("scale", Integer.class);
-            if(scale!=null){
+            if (Objects.nonNull(scale!=null)){
                 RoundingMode mode = context.getAttribute(RoundingMode.class,
                                                               RoundingMode.HALF_EVEN);
                 return new DefaultRounding(scale, mode);
