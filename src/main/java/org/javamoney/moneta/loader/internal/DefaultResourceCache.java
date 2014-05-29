@@ -88,7 +88,7 @@ public class DefaultResourceCache implements ResourceCache {
 	@Override
 	public void write(String resourceId, byte[] data) throws IOException {
 		File f = this.cachedResources.get(resourceId);
-		if (f == null) {
+		if (Objects.isNull(f)) {
 			f = new File(localDir, resourceId + SUFFIX);
 			writeFile(f, data);
 			this.cachedResources.put(resourceId, f);
@@ -147,7 +147,7 @@ public class DefaultResourceCache implements ResourceCache {
 	@Override
 	public byte[] read(String resourceId) {
 		File f = this.cachedResources.get(resourceId);
-		if (f == null) {
+		if (Objects.isNull(f)) {
 			return null;
 		}
 		return readFile(f);

@@ -117,7 +117,7 @@ final class CurrencyToken implements FormatToken {
 	 */
 	private String getCurrencyName(CurrencyUnit currency) {
 		Currency jdkCurrency = getCurrency(currency.getCurrencyCode());
-		if (Objects.nonNull(jdkCurrency) {
+		if (Objects.nonNull(jdkCurrency)) {
 			return jdkCurrency.getDisplayName(locale);
 		}
 		return currency.getCurrencyCode();

@@ -17,6 +17,7 @@ package org.javamoney.moneta.format.internal;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Optional;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryParseException;
@@ -51,10 +52,8 @@ final class LiteralToken implements FormatToken, Serializable {
 	 *            The literal token part.
 	 */
 	public LiteralToken(String token) {
-		if (token == null) {
-			throw new IllegalArgumentException("Token is required.");
-		}
-		this.token = token;
+		this.token = Optional.ofNullable(token).orElseThrow(
+				() -> new IllegalArgumentException("Token is required."));
 	}
 
 	/**

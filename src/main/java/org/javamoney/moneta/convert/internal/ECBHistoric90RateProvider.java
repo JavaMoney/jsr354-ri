@@ -122,7 +122,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
         ExchangeRate sourceRate = null;
         ExchangeRate target = null;
-        if(context.getNamedAttribute(TIMESTAMP, Long.class) == null){
+        if (Objects.isNull(context.getNamedAttribute(TIMESTAMP, Long.class))) {
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
@@ -143,7 +143,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         builder.setBase(base);
         builder.setTerm(term);
         Map<String,ExchangeRate> targets = this.rates.get(targetTS);
-        if(targets == null){
+        if (Objects.isNull(targets)) {
             return null;
         }
         sourceRate = targets.get(base.getCurrencyCode());
@@ -152,7 +152,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
             builder.setFactor(DefaultNumberValue.ONE);
             return builder.build();
         }else if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
-            if(sourceRate == null){
+            if (Objects.isNull(sourceRate)) {
                 return null;
             }
             return getReversed(sourceRate);
@@ -265,15 +265,13 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         builder.setFactor(new DefaultNumberValue(rate));
         ExchangeRate exchangeRate = builder.build();
         Map<String,ExchangeRate> rateMap = this.rates.get(timestamp);
-        if(rateMap == null){
-            synchronized(this.rates){
-                rateMap = this.rates.get(timestamp);
-                if(rateMap == null){
-                    rateMap = new ConcurrentHashMap<String,ExchangeRate>();
-                    this.rates.put(timestamp, rateMap);
-                }
-            }
-        }
+		if (Objects.isNull(rateMap)) {
+			synchronized (this.rates) {
+				rateMap = Optional.ofNullable(this.rates.get(timestamp))
+						.orElse(new ConcurrentHashMap<>());
+				this.rates.putIfAbsent(timestamp, rateMap);
+			}
+		}
         rateMap.put(term.getCurrencyCode(), exchangeRate);
     }
 

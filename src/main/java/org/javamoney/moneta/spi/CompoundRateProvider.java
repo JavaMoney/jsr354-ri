@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.money.CurrencyUnit;
@@ -78,10 +79,9 @@ public class CompoundRateProvider extends AbstractRateProvider {
 	 *             .
 	 */
 	private void addProvider(ExchangeRateProvider prov) {
-		if (prov == null) {
-			throw new IllegalArgumentException("ConversionProvider required.");
-		}
-		providers.add(prov);
+		providers.add(Optional.ofNullable(prov).orElseThrow(
+				() -> new IllegalArgumentException(
+						"ConversionProvider required.")));
 	}
 
 	/*

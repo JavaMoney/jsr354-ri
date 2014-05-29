@@ -667,15 +667,14 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
 
     @SuppressWarnings("unused")
     private void readObjectNoData() throws ObjectStreamException{
-        if(this.number == null){
+        if (Objects.isNull(this.number)) {
             this.number = BigDecimal.ZERO;
         }
-        if(this.monetaryContext == null){
+        if (Objects.isNull(this.monetaryContext)) {
             this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
         }
-        if(this.currency == null){
+        if(Objects.isNull(this.currency)) {
             this.currency = MonetaryCurrencies.getCurrency("XXX"); // no
-            // currency
         }
     }
 
@@ -696,7 +695,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
     public int hashCode(){
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((currency == null) ? 0 : currency.hashCode());
+        result = prime * result + ((Objects.isNull(currency)) ? 0 : currency.hashCode());
         return prime * result + asNumberStripped().hashCode();
     }
 
@@ -709,14 +708,14 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         if(this == obj){
             return true;
         }
-        if(obj == null){
+        if (Objects.isNull(obj)) {
             return false;
         }
         if(getClass() != obj.getClass()){
             return false;
         }
         RoundedMoney other = (RoundedMoney) obj;
-        if(currency == null){
+        if (Objects.isNull(currency)){
             if (Objects.nonNull(other.currency)) {
                 return false;
             }

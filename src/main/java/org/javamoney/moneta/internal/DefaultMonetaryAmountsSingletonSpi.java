@@ -27,6 +27,7 @@ import javax.money.spi.MonetaryAmountsSingletonSpi;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -85,7 +86,7 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 	 * @return the priority from {@link ServicePriority}, or 0.
 	 */
 	private static int getServicePriority(Object service) {
-		if (service == null) {
+		if (Objects.isNull(service)) {
 			return Integer.MIN_VALUE;
 		}
 		ServicePriority prio = service.getClass().getAnnotation(
@@ -154,7 +155,7 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 	 */
 	@Override
 	public Class<? extends MonetaryAmount> getDefaultAmountType() {
-		if (configuredDefaultAmountType == null) {
+		if (Objects.isNull(configuredDefaultAmountType)) {
 			for (MonetaryAmountFactoryProviderSpi<?> f : Bootstrap
 					.getServices(MonetaryAmountFactoryProviderSpi.class)) {
                 if(f.getQueryInclusionPolicy()== MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy.ALWAYS){
@@ -163,11 +164,8 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
                 }
 			}
 		}
-		if (configuredDefaultAmountType == null) {
-			throw new MonetaryException(
-					"No MonetaryAmountFactoryProviderSpi registered.");
-		}
-		return configuredDefaultAmountType;
+		return Optional.ofNullable(configuredDefaultAmountType).orElseThrow(() -> new MonetaryException(
+				"No MonetaryAmountFactoryProviderSpi registered."));
 	}
 
 }

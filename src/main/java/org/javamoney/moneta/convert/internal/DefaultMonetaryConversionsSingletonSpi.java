@@ -70,11 +70,13 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
             return getExchangeRateProvider(defaultChain.toArray(new String[defaultChain.size()]));
         }
         List<ExchangeRateProvider> provInstances = new ArrayList<>();
-        for(String provName : providers){
-            ExchangeRateProvider prov = this.conversionProviders.get(provName);
-            if(prov == null){
-                throw new MonetaryException("Unsupported conversion/rate provider: " + provName);
-            }
+        for (String provName : providers) {
+			ExchangeRateProvider prov = Optional.ofNullable(
+					this.conversionProviders.get(provName))
+					.orElseThrow(
+							() -> new MonetaryException(
+									"Unsupported conversion/rate provider: "
+											+ provName));
             provInstances.add(prov);
         }
         if(provInstances.size()==1){

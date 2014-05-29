@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
@@ -42,10 +43,10 @@ final class AmountNumberToken implements FormatToken {
 	private StringGrouper numberGroup;
 
 	public AmountNumberToken(AmountFormatContext amountFormatContext, String partialNumberPattern) {
-		if (amountFormatContext == null) {
-			throw new IllegalArgumentException("amountFormatContext is required.");
-		}
-		this.amountFormatContext = amountFormatContext;
+		this.amountFormatContext = Optional.ofNullable(amountFormatContext)
+				.orElseThrow(
+						() -> new IllegalArgumentException(
+								"amountFormatContext is required."));
 		this.partialNumberPattern = partialNumberPattern;
 		initDecimalFormats();
 	}
@@ -100,7 +101,7 @@ final class AmountNumberToken implements FormatToken {
 		if (numberParts.length != 2) {
 			appendable.append(preformattedValue);
 		} else {
-			if (numberGroup == null) {
+			if (Objects.isNull(numberGroup)) {
 				char[] groupChars = amountFormatContext.getNamedAttribute("groupingSeparators", char[].class, new char[0]);
 				if (groupChars.length == 0) {
 					groupChars = new char[] { this.formatFormat

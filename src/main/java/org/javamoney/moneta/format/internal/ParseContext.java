@@ -17,6 +17,7 @@ package org.javamoney.moneta.format.internal;
 
 import java.text.ParsePosition;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -52,10 +53,8 @@ final class ParseContext {
 	 *            The test to be parsed.
 	 */
 	public ParseContext(CharSequence text) {
-		if (text == null) {
-			throw new IllegalArgumentException("test is required");
-		}
-		this.originalInput = text;
+		this.originalInput = Optional.ofNullable(text).orElseThrow(
+				() -> new IllegalArgumentException("test is required"));
 	}
 
 	/**

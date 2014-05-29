@@ -143,7 +143,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             return null;
         }
         if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
-            if(sourceRate == null){
+            if (Objects.isNull(sourceRate)) {
                 return null;
             }
             return getReversed(sourceRate);

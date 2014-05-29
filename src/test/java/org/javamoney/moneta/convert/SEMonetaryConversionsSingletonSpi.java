@@ -18,6 +18,7 @@ package org.javamoney.moneta.convert;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,12 +53,8 @@ public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSin
 	public ExchangeRateProvider getExchangeRateProvider(String... providers) {
 		List<ExchangeRateProvider> provInstances = new ArrayList<>();
 		for (String provName : providers) {
-			ExchangeRateProvider prov = this.conversionProviders.get(provName);
-			if (prov == null) {
-				throw new IllegalArgumentException(
-						"Unsupported conversion/rate provider: " + provName);
-			}
-			provInstances.add(prov);
+			provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(() -> new IllegalArgumentException(
+					"Unsupported conversion/rate provider: " + provName)));
 		}
 		return new CompoundRateProvider(provInstances);
 	}

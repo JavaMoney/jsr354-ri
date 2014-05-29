@@ -90,7 +90,7 @@ public class DefaultLoaderService implements LoaderService {
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
 		}
-		if (this.resourceCache == null) {
+		if (Objects.isNull(this.resourceCache)) {
 			LOG.fine("No ResourceCache loaded, using default.");
 			this.resourceCache = new DefaultResourceCache();
 		}
@@ -319,7 +319,7 @@ public class DefaultLoaderService implements LoaderService {
 				}
 			}
 		}
-		if (!(dataId == null || dataId.isEmpty())) {
+		if (!(Objects.isNull(dataId) || dataId.isEmpty())) {
 			listeners = getListeners(dataId);
 			synchronized (listeners) {
 				for (LoaderListener ll : listeners) {
@@ -367,14 +367,14 @@ public class DefaultLoaderService implements LoaderService {
 	 * @return the according listeners
 	 */
 	private List<LoaderListener> getListeners(String dataId) {
-		if (dataId == null) {
+		if (Objects.isNull(dataId)) {
 			dataId = "";
 		}
 		List<LoaderListener> listeners = this.listenersMap.get(dataId);
-		if (listeners == null) {
+		if (Objects.isNull(listeners)) {
 			synchronized (listenersMap) {
 				listeners = this.listenersMap.get(dataId);
-				if (listeners == null) {
+				if (Objects.isNull(listeners)) {
 					listeners = Collections
 							.synchronizedList(new ArrayList<LoaderListener>());
 					this.listenersMap.put(dataId, listeners);

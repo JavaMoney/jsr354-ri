@@ -22,6 +22,7 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -76,7 +77,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 	public static CurrencyUnit of(Currency currency) {
 		String key = ISO_NAMESPACE + ':' + currency.getCurrencyCode();
 		CurrencyUnit cachedItem = CACHED.get(key);
-		if (cachedItem == null) {
+		if (Objects.isNull(cachedItem)) {
 			cachedItem = new JDKCurrencyAdapter(currency);
 			CACHED.put(key, cachedItem);
 		}
@@ -87,7 +88,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 	public static CurrencyUnit of(
 			String currencyCode) {
 		CurrencyUnit cu = CACHED.get(currencyCode);
-		if (cu == null) {
+		if (Objects.isNull(cu)) {
 			Currency cur = Currency.getInstance(currencyCode);
 			if (Objects.nonNull(cur)) {
 				return of(cur);
@@ -151,11 +152,9 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 		}
 
 		public Builder withCurrencyCode(String currencyCode) {
-			if (currencyCode == null) {
-				throw new IllegalArgumentException(
-						"currencyCode may not be null.");
-			}
-			this.currencyCode = currencyCode;
+			this.currencyCode = Optional.ofNullable(currencyCode).orElseThrow(
+					() -> new IllegalArgumentException(
+							"currencyCode may not be null."));
 			return this;
 		}
 
@@ -184,14 +183,14 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 		}
 
 		public CurrencyUnit build(boolean cache) {
-			if (currencyCode == null || currencyCode.isEmpty()) {
+			if (Objects.isNull(currencyCode) || currencyCode.isEmpty()) {
 				throw new IllegalStateException(
 						"Can not create TestCurrencyUnit.");
 			}
 			if (cache) {
 				String key = currencyCode;
 				CurrencyUnit current = CACHED.get(key);
-				if (current == null) {
+				if (Objects.isNull(current)) {
 					current = new TestCurrency(
 							currencyCode,
 							numericCode, defaultFractionDigits);
@@ -236,10 +235,8 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 		 * @param currency
 		 */
 		private JDKCurrencyAdapter(Currency currency) {
-			if (currency == null) {
-				throw new IllegalArgumentException("Currency required.");
-			}
-			this.currency = currency;
+			this.currency = Optional.ofNullable(currency).orElseThrow(
+					() -> new IllegalArgumentException("Currency required."));
 		}
 
 		// public Long getValidFrom() {

@@ -702,7 +702,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
         if(this == obj){
             return true;
         }
-        if(obj == null){
+        if (Objects.isNull(obj)) {
             return false;
         }
         if(getClass() != obj.getClass()){
@@ -736,10 +736,10 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
 
     @SuppressWarnings("unused")
     private void readObjectNoData() throws ObjectStreamException{
-        if(this.number == null){
+        if (Objects.isNull(this.number)) {
             this.number = BigDecimal.ZERO;
         }
-        if(this.monetaryContext == null){
+        if (Objects.isNull(this.monetaryContext)) {
             this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
         }
     }

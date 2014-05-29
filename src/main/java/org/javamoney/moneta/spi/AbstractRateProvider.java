@@ -19,9 +19,11 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.NumberValue;
 import javax.money.convert.*;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -241,10 +243,10 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
         Objects.requireNonNull(term);
         Objects.requireNonNull(conversionContext);
         ExchangeRate rate = getExchangeRateInternal(base, term, conversionContext);
-        if(rate == null){
-            throw new CurrencyConversionException(base, term, conversionContext);
-        }
-        return rate;
+		return Optional.ofNullable(rate).orElseThrow(
+				() -> new CurrencyConversionException(base, term,
+						conversionContext));
+        
     }
 
     /**
@@ -256,10 +258,10 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @return the result of the multiplication as {@link NumberValue}
      */
     protected static final NumberValue multiply(NumberValue multiplicand, NumberValue multiplier){
-        if(multiplicand == null){
+        if (Objects.isNull(multiplicand)) {
             throw new ArithmeticException("The multiplicand cannot be null");
         }
-        if(multiplier == null){
+        if (Objects.isNull(multiplier)) {
             throw new ArithmeticException("The multiplier cannot be null");
         }
         return new DefaultNumberValue(
@@ -276,10 +278,10 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @return the result of the division as {@link NumberValue}
      */
     protected static final NumberValue divide(NumberValue dividend, NumberValue divisor){
-        if(dividend == null){
+        if (Objects.isNull(dividend)) {
             throw new ArithmeticException("The dividend cannot be null");
         }
-        if(divisor == null){
+        if (Objects.isNull(divisor)) {
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
@@ -297,10 +299,10 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @return the result of the division as {@link NumberValue}
      */
     protected static final NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context){
-        if(dividend == null){
+        if (Objects.isNull(dividend)) {
             throw new ArithmeticException("The dividend cannot be null");
         }
-        if(divisor == null){
+        if (Objects.isNull(divisor)) {
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
