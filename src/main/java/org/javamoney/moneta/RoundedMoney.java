@@ -693,10 +693,7 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((Objects.isNull(currency)) ? 0 : currency.hashCode());
-        return prime * result + asNumberStripped().hashCode();
+		return Objects.hash(currency, asNumberStripped());
     }
 
     /*
