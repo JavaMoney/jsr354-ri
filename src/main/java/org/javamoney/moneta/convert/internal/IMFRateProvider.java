@@ -134,7 +134,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         // January 28, 2013 January 25, 2013
         // Euro 1.137520 1.137760 1.143840 1.142570 1.140510
         List<Long> timestamps = null;
-        while(line != null){
+        while (Objects.nonNull(line)) {
             if(line.trim().isEmpty()){
                 line = pr.readLine();
                 continue;
@@ -154,14 +154,14 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             }
             String[] parts = line.split("\\t");
             CurrencyUnit currency = currenciesByName.get(parts[0]);
-            if(currency == null){
+            if (Objects.isNull(currency)) {
                 LOGGER.warning("Unknown currency from, IMF data feed: " + parts[0]);
                 line = pr.readLine();
                 continue;
             }
             Double[] values = parseValues(f, parts);
             for(int i = 0; i < values.length; i++){
-                if(values[i] == null){
+                if (Objects.isNull(values[i])) {
                     continue;
                 }
                 Long fromTS = timestamps.get(i);
@@ -172,7 +172,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                 }
                 if(currencyToSdr){ // Currency -> SDR
                     List<DefaultExchangeRate> rates = this.currencyToSdr.get(currency);
-                    if(rates == null){
+                    if (Objects.isNull(rates)) {
                         rates = new ArrayList<DefaultExchangeRate>(5);
                         newCurrencyToSdr.put(currency, rates);
                     }
@@ -182,7 +182,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                     rates.add(rate);
                 }else{ // SDR -> Currency
                     List<DefaultExchangeRate> rates = this.sdrToCurrency.get(currency);
-                    if(rates == null){
+                    if (Objects.isNull(rates)) {
                         rates = new ArrayList<DefaultExchangeRate>(5);
                         newSdrToCurrency.put(currency, rates);
                     }
@@ -235,7 +235,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         }else if(term.equals(SDR)){
             return rate1;
         }
-        if(rate1 == null || rate2 == null){
+        if (Objects.isNull(rate1 )|| Objects.isNull(rate2)) {
             return null;
         }
         DefaultExchangeRate.Builder builder =
@@ -248,18 +248,18 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     private ExchangeRate lookupRate(List<DefaultExchangeRate> list, Long timestamp){
-        if(list == null){
+        if (Objects.isNull(list)) {
             return null;
         }
         ExchangeRate found = null;
         for(ExchangeRate rate : list){
-            if(timestamp == null){
+            if (Objects.isNull(timestamp)) {
                 timestamp = System.currentTimeMillis();
             }
             if(isValid(rate.getConversionContext(), timestamp)){
                 return rate;
             }
-            if(found == null){
+            if(Objects.isNull(found)) {
                 found = rate;
             }
         }
@@ -269,10 +269,10 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     private boolean isValid(ConversionContext conversionContext, Long timestamp){
         Long validFrom = conversionContext.getNamedAttribute("validFrom", Long.class);
         Long validTo = conversionContext.getNamedAttribute("validTo", Long.class);
-        if(validFrom!=null && validFrom > timestamp){
+        if (Objects.nonNull(validFrom) && validFrom > timestamp){
             return false;
         }
-        return !(validTo != null && validTo < timestamp);
+        return !(Objects.nonNull(validTo) && validTo < timestamp);
     }
 
 }

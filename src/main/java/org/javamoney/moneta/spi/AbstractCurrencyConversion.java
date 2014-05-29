@@ -93,9 +93,9 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 	 */
 	public MonetaryAmount apply(MonetaryAmount amount) {
 		ExchangeRate rate = getExchangeRate(amount);
-		if (rate == null || !amount.getCurrency().equals(rate.getBase())) {
+		if (Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBase())) {
 			throw new CurrencyConversionException(amount.getCurrency(),
-					rate == null ? null : rate.getTerm(), null);
+					Objects.isNull(rate) ? null : rate.getTerm(), null);
 		}
 		return amount.multiply(rate.getFactor())
 				.getFactory()

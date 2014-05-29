@@ -23,10 +23,12 @@ import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSingletonQuerySpi;
 import javax.money.spi.MonetaryAmountsSingletonSpi;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Default implementation ot {@link javax.money.spi.MonetaryAmountsSingletonSpi} loading the SPIs on startup
@@ -74,7 +76,7 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
      */
     @Override
     public Class<? extends MonetaryAmount> queryAmountType(MonetaryAmountsSingletonSpi amountSpi, MonetaryContext requiredContext){
-        if(requiredContext == null){
+        if (Objects.isNull(requiredContext)) {
             return amountSpi.getDefaultAmountType();
         }
         // first check for explicit type

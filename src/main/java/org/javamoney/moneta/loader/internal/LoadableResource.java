@@ -172,14 +172,14 @@ public class LoadableResource {
 	 */
 	public final byte[] getData() {
 		accessCount.incrementAndGet();
-		if (this.data == null) {
+		if (Objects.isNull(this.data)) {
 			synchronized (LOCK) {
-				if (this.data == null) {
+				if (Objects.isNull(this.data)) {
 					if (!loadRemote()) {
 						loadFallback();
 					}
 				}
-				if (this.data == null) {
+				if (Objects.isNull(this.data)) {
 					throw new IllegalStateException(
 							"Failed to load remote as well as fallback resources for "
 									+ this);
@@ -265,7 +265,7 @@ public class LoadableResource {
 			}
 			this.data = bos.toByteArray();
 		} finally {
-			if (is != null) {
+			if (Objects.nonNull(is)) {
 				try {
 					is.close();
 				} catch (Exception e) {
@@ -273,7 +273,7 @@ public class LoadableResource {
 							+ resourceId, e);
 				}
 			}
-			if (bos != null) {
+			if (Objects.nonNull(bos)) {
 				bos.close();
 			}
 		}

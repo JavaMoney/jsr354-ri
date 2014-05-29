@@ -18,9 +18,11 @@ package org.javamoney.moneta.internal;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Implementation class providing cash rounding {@link javax.money.MonetaryOperator}
@@ -56,11 +58,9 @@ final class DefaultCashRounding implements MonetaryOperator{
         if(scale < 0){
             throw new IllegalArgumentException("scale < 0");
         }
-        if(roundingMode == null){
-            throw new IllegalArgumentException("roundingMode missing");
-        }
         this.scale = scale;
-        this.roundingMode = roundingMode;
+		this.roundingMode = Optional.ofNullable(roundingMode).orElseThrow(
+				() -> new IllegalArgumentException("roundingMode missing"));
         this.minimalMinors = minimalMinors;
     }
 

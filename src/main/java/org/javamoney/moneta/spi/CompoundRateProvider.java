@@ -18,6 +18,8 @@ package org.javamoney.moneta.spi;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.money.CurrencyUnit;
@@ -77,10 +79,9 @@ public class CompoundRateProvider extends AbstractRateProvider {
 	 *             .
 	 */
 	private void addProvider(ExchangeRateProvider prov) {
-		if (prov == null) {
-			throw new IllegalArgumentException("ConversionProvider required.");
-		}
-		providers.add(prov);
+		providers.add(Optional.ofNullable(prov).orElseThrow(
+				() -> new IllegalArgumentException(
+						"ConversionProvider required.")));
 	}
 
 	/*
@@ -97,7 +98,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
 		for (ExchangeRateProvider prov : this.providers) {
 			if (prov.isAvailable(base, term, context)) {
 				ExchangeRate rate = prov.getExchangeRate(base, term, context);
-				if (rate != null) {
+				if (Objects.nonNull(rate)) {
 					return rate;
 				}
 			}

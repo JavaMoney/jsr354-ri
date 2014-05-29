@@ -20,6 +20,7 @@ import org.javamoney.moneta.spi.AbstractMoney;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 
 import javax.money.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -221,7 +222,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
     public int hashCode(){
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((currency == null) ? 0 : currency.hashCode());
+        result = prime * result + ((Objects.isNull(currency)) ? 0 : currency.hashCode());
         result = prime * result + (int) number;
         return result;
     }
@@ -235,15 +236,15 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
         if(this == obj){
             return true;
         }
-        if(obj == null){
+        if (Objects.isNull(obj)){
             return false;
         }
         if(getClass() != obj.getClass()){
             return false;
         }
         FastMoney other = (FastMoney) obj;
-        if(currency == null){
-            if(other.getCurrency() != null){
+        if (Objects.isNull(currency)) {
+            if (Objects.nonNull(other.getCurrency())) {
                 return false;
             }
         }else if(!currency.equals(other.getCurrency())){
@@ -578,7 +579,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     @Override
     public NumberValue getNumber(){
-        if(numberValue == null){
+        if (Objects.isNull(numberValue)) {
             numberValue = new DefaultNumberValue(getBigDecimal());
         }
         return numberValue;

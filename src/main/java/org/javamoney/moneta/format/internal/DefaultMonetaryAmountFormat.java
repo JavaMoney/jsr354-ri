@@ -213,15 +213,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		}
 		CurrencyUnit unit = ctx.getParsedCurrency();
 		Number num = ctx.getParsedNumber();
-		if (unit == null) {
+		if (Objects.isNull(unit)) {
 			unit = defaultCurrency;
 		}
-		if (num == null) {
+		if (Objects.isNull(num)) {
 			throw new MonetaryParseException(text.toString(), -1);
 		}
 		Class<? extends MonetaryAmount> type = MonetaryAmounts
 				.queryAmountType(this.monetaryContext);
-		if (type == null) {
+		if (Objects.isNull(type)) {
 			Logger log = Logger.getLogger(getClass().getName());
 			if (log.isLoggable(Level.WARNING)){
 				log.warning("Required moneterayContext was not resolvable, using default, required="
@@ -265,7 +265,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		} else {
 			// split into (potential) plus, minus patterns
 			char patternSeparator = ';';
-			if (style.getAttribute(DecimalFormatSymbols.class) != null) {
+			if (Objects.nonNull(style.getAttribute(DecimalFormatSymbols.class))) {
 				patternSeparator = style.getAttribute(DecimalFormatSymbols.class).getPatternSeparator();
 			}
 			String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));

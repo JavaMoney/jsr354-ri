@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,7 +78,7 @@ public final class MonetaryConfig{
 				}
 			}
 			Integer existingPrio = priorities.get(key);
-			if (existingPrio == null) {
+			if (Objects.isNull(existingPrio)) {
 				this.config.put(key, value);
 			} else if (existingPrio < prio) {
 				this.config.put(key, value);

@@ -17,6 +17,7 @@ package org.javamoney.moneta.internal;
 
 import java.io.Serializable;
 import java.util.Currency;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 
@@ -129,7 +130,7 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((baseCurrency == null) ? 0 : baseCurrency.hashCode());
+				+ ((Objects.isNull(baseCurrency)) ? 0 : baseCurrency.hashCode());
 		return result;
 	}
 
@@ -142,7 +143,7 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (Objects.isNull(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
