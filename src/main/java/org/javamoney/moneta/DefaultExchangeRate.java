@@ -248,14 +248,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((Objects.isNull(base)) ? 0 : base.hashCode());
-        result = prime * result + ((Objects.isNull(conversionContext)) ? 0 : conversionContext.hashCode());
-        result = prime * result + ((Objects.isNull(factor)) ? 0 : factor.hashCode());
-        result = prime * result + ((Objects.isNull(term)) ? 0 : term.hashCode());
-        result = prime * result + ((Objects.isNull(chain)) ? 0: chain.hashCode());
-        return result;
+		return Objects.hash(base, conversionContext, factor, term, chain);
     }
 
     /*

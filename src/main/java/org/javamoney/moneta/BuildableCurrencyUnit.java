@@ -86,10 +86,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((Objects.isNull(currencyCode)) ? 0 : currencyCode.hashCode());
-        return result;
+        return Objects.hashCode(currencyCode);
     }
 
     /* (non-Javadoc)

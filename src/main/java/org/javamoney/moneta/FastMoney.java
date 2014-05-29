@@ -220,11 +220,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((Objects.isNull(currency)) ? 0 : currency.hashCode());
-        result = prime * result + (int) number;
-        return result;
+        return Objects.hash(currency, number);
     }
 
     /*
