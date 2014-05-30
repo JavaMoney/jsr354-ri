@@ -24,7 +24,7 @@ import java.util.Currency;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * Tests for {@link CurrencyUnit} implementation classes.

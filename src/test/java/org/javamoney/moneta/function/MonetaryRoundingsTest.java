@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.function;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import javax.money.*;
 import java.math.BigDecimal;
@@ -224,7 +224,7 @@ public class MonetaryRoundingsTest{
      * Test method for
      * {@link javax.money.MonetaryRoundings#getRounding(java.lang.String)} .
      */
-    @Test(expected = MonetaryException.class)
+    @Test(expectedExceptions = MonetaryException.class)
     public void testGetRoundingString_Invalid(){
         assertNull(MonetaryRoundings.getRounding("foo"));
     }
@@ -252,7 +252,7 @@ public class MonetaryRoundingsTest{
      * Test method for
      * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testGetRounding_Null1(){
         MonetaryRoundings.getRounding((CurrencyUnit) null);
     }
@@ -261,7 +261,7 @@ public class MonetaryRoundingsTest{
      * Test method for
      * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testGetRounding_Null3(){
         MonetaryRoundings.getRounding((String) null);
     }
@@ -270,7 +270,7 @@ public class MonetaryRoundingsTest{
      * Test method for
      * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
      */
-    @Test(expected = NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testGetRounding_Null2(){
         MonetaryRoundings.getRounding(MonetaryCurrencies.getCurrency("USD")).apply(null);
     }

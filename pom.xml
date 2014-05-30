@@ -52,6 +52,8 @@
 
 		<license.licenseName>jcp_spec</license.licenseName>
 		<license.licenseResolver>src/license</license.licenseResolver>
+        <!-- dependency versions -->
+        <testng.version>6.8.5</testng.version>
 	</properties>
 
 	<developers>
@@ -319,21 +321,21 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+                <scope>test</scope>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>javax.money</groupId>
 			<artifactId>money-api</artifactId>

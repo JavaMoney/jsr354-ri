@@ -23,7 +23,7 @@ import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryRoundings;
 
 import org.junit.Ignore;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole

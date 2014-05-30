@@ -24,7 +24,7 @@ import javax.money.MonetaryAmounts;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryException;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole
@@ -132,7 +132,7 @@ public class MonetaryAmountsRegistrationTest {
 	 * Test method for
 	 * {@link javax.money.MonetaryAmounts#queryAmountType(javax.money.MonetaryContext)} .
 	 */
-	@Test(expected = MonetaryException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void testQueryAmountType_InvalidContext() {
 		MonetaryAmounts
 				.queryAmountType(new MonetaryContext.Builder(FastMoney.class)

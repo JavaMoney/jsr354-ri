@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import javax.money.*;
 import java.io.*;
@@ -1084,7 +1084,7 @@ public class MoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)} .
      */
-    @Test(expected = MonetaryException.class)
+    @Test(expectedExceptions = MonetaryException.class)
     public void testAdd_WrongCurrency(){
         Money m1 = Money.of(BigDecimal.TEN, EURO);
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
@@ -1094,7 +1094,7 @@ public class MoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)} .
      */
-    @Test(expected = MonetaryException.class)
+    @Test(expectedExceptions = MonetaryException.class)
     public void testSubtract_WrongCurrency(){
         Money m1 = Money.of(BigDecimal.TEN, EURO);
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
@@ -1104,7 +1104,7 @@ public class MoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)} .
      */
-    @Test(expected = MonetaryException.class)
+    @Test(expectedExceptions = MonetaryException.class)
     public void testDivide_WrongCurrency(){
         Money m1 = Money.of(BigDecimal.TEN, EURO);
         Money m2 = Money.of(BigDecimal.TEN, "CHF");

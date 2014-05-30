@@ -34,7 +34,7 @@ import java.math.RoundingMode;
 
 import javax.money.*;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole
@@ -1255,7 +1255,7 @@ public class RoundedMoneyTest {
 	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
-	@Test(expected = MonetaryException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void testAdd_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
 		RoundedMoney m2 = RoundedMoney.of( BigDecimal.TEN,"CHF");
@@ -1267,7 +1267,7 @@ public class RoundedMoneyTest {
 	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
-	@Test(expected = MonetaryException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void testSubtract_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
 		RoundedMoney m2 = RoundedMoney.of( BigDecimal.TEN,"CHF");
@@ -1279,7 +1279,7 @@ public class RoundedMoneyTest {
 	 * {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)}
 	 * .
 	 */
-	@Test(expected = MonetaryException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void testDivide_WrongCurrency() {
 		RoundedMoney m1 = RoundedMoney.of(EURO, BigDecimal.TEN);
 		RoundedMoney m2 = RoundedMoney.of( BigDecimal.TEN,"CHF");

@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import javax.money.*;
 import java.io.*;
@@ -584,8 +584,8 @@ public class FastMoneyTest{
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
         for(FastMoney m : moneys){
-            assertEquals("Precision for " + m, m.getNumber().numberValue(BigDecimal.class).precision(),
-                         m.getPrecision());
+            assertEquals("Precision for " + m, m.getNumber().numberValue(BigDecimal.class).precision(), m
+                        .getPrecision());
         }
     }
 

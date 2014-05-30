@@ -27,7 +27,7 @@ import java.util.Locale;
 import javax.money.MonetaryAmounts;
 import javax.money.format.*;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole

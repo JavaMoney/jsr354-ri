@@ -29,7 +29,7 @@ import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.convert.internal.ECBCurrentRateProvider;
 import org.javamoney.moneta.spi.CompoundRateProvider;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 public class MonetaryConversionTest {
 

@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.function;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;
@@ -234,7 +234,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#minorUnits()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testMinorUnits_Null() {
 		MonetaryFunctions.minorUnits().queryFrom(null);
 	}
@@ -243,7 +243,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#majorUnits()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testMajorUnits_Null() {
 		MonetaryFunctions.majorUnits().queryFrom(null);
 	}
@@ -252,7 +252,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#majorPart()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testMajorPart_Null() {
 		MonetaryFunctions.majorPart().apply(null);
 	}
@@ -261,7 +261,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#majorPart()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testMinorPart_Null() {
 		MonetaryFunctions.minorPart().apply(null);
 	}
@@ -270,7 +270,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#percent()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testPercent_Null1() {
 		MonetaryFunctions.percent(null);
 	}
@@ -279,7 +279,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#percent()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testPercent_Null2() {
 		MonetaryFunctions.percent(1).apply(null);
 	}
@@ -288,7 +288,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#permil()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testPermil_Null1() {
 		MonetaryFunctions.permil(null);
 	}
@@ -297,7 +297,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#permil()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testPermil_Null2() {
 		MonetaryFunctions.permil(1).apply(null);
 	}
@@ -306,7 +306,7 @@ public class MonetaryFunctionsTest {
 	 * Test method for
 	 * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expectedExceptions = NullPointerException.class)
 	public void testReciprocal_Null() {
 		MonetaryFunctions.reciprocal().apply(null);
 	}
