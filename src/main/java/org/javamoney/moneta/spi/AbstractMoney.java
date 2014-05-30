@@ -26,8 +26,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
-import javax.money.NumberValue;
 import javax.money.MonetaryException;
+import javax.money.NumberValue;
 
 /**
  * Platform RI: This base class simplifies implementing {@link MonetaryAmount},

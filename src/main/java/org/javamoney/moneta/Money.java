@@ -21,6 +21,7 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
 import javax.money.*;
+
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -697,23 +698,19 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      *
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
             return true;
         }
-        if (Objects.isNull(obj)) {
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        Money other = (Money) obj;
-        if(!getCurrency().equals(other.getCurrency())){
-            return false;
-        }
-        return getNumberStripped().equals(other.getNumberStripped());
-    }
+		if (obj instanceof Money) {
+			Money other = (Money) obj;
+			return Objects.equals(getCurrency(), other.getCurrency())
+					&& Objects.equals(getNumberStripped(),
+							other.getNumberStripped());
+		}
+		return false;
+	}
 
     /*
      * (non-Javadoc)

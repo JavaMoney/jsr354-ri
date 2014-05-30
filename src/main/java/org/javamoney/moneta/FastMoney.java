@@ -228,26 +228,17 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	public boolean equals(Object obj) {
+    	if (obj == this) {
             return true;
         }
-        if (Objects.isNull(obj)){
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        FastMoney other = (FastMoney) obj;
-        if (Objects.isNull(currency)) {
-            if (Objects.nonNull(other.getCurrency())) {
-                return false;
-            }
-        }else if(!currency.equals(other.getCurrency())){
-            return false;
-        }
-        return number == other.number;
-    }
+		if (obj instanceof FastMoney) {
+			FastMoney other = (FastMoney) obj;
+			return Objects.equals(currency, other.currency)
+					&& Objects.equals(number, other.number);
+		}
+		return false;
+	}
 
     /*
      * (non-Javadoc)

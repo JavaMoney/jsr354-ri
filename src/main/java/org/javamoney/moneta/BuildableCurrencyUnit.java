@@ -93,25 +93,15 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	public boolean equals(Object obj) {
+    	if (obj == this) {
             return true;
         }
-        if (Objects.isNull(obj)) {
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
-        if (Objects.isNull(currencyCode)) {
-            if (Objects.nonNull(other.currencyCode)) {
-                return false;
-            }
-        }else if(!currencyCode.equals(other.currencyCode)){
-            return false;
-        }
-        return true;
+    	if (obj instanceof BuildableCurrencyUnit) {
+    		 BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
+    		 return Objects.equals(currencyCode, other.currencyCode);
+    	}
+    	return false;
     }
 
     /* (non-Javadoc)
