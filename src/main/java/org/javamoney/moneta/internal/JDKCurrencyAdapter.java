@@ -17,6 +17,7 @@ package org.javamoney.moneta.internal;
 
 import java.io.Serializable;
 import java.util.Currency;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 
@@ -116,6 +117,7 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(CurrencyUnit currency) {
+		Objects.requireNonNull(currency);
 		return getCurrencyCode().compareTo(currency.getCurrencyCode());
 	}
 
@@ -126,11 +128,7 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((baseCurrency == null) ? 0 : baseCurrency.hashCode());
-		return result;
+		return Objects.hashCode(baseCurrency);
 	}
 
 	/*
@@ -140,15 +138,15 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CurrencyUnit other = (CurrencyUnit) obj;
-        return getCurrencyCode().equals(other.getCurrencyCode());
-    }
+		if (obj == this) {
+            return true;
+        }
+		if (obj instanceof CurrencyUnit) {
+			CurrencyUnit other = (CurrencyUnit) obj;
+			return Objects.equals(getCurrencyCode(), other.getCurrencyCode());
+		}
+		return false;
+	}
 
 	/**
 	 * Returns {@link #getCurrencyCode()}

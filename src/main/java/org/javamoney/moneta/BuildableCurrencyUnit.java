@@ -78,6 +78,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
 
     @Override
     public int compareTo(CurrencyUnit o){
+    	Objects.requireNonNull(o);
         return this.currencyCode.compareTo(o.getCurrencyCode());
     }
 
@@ -86,35 +87,22 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((currencyCode == null) ? 0 : currencyCode.hashCode());
-        return result;
+        return Objects.hashCode(currencyCode);
     }
 
     /* (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	public boolean equals(Object obj) {
+    	if (obj == this) {
             return true;
         }
-        if(obj == null){
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
-        if(currencyCode == null){
-            if(other.currencyCode != null){
-                return false;
-            }
-        }else if(!currencyCode.equals(other.currencyCode)){
-            return false;
-        }
-        return true;
+    	if (obj instanceof BuildableCurrencyUnit) {
+    		 BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
+    		 return Objects.equals(currencyCode, other.currencyCode);
+    	}
+    	return false;
     }
 
     /* (non-Javadoc)

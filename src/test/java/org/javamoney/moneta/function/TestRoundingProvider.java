@@ -18,6 +18,7 @@ package org.javamoney.moneta.function;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.money.*;
@@ -83,7 +84,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
                 return null;
             }
             CurrencyUnit currency = roundingContext.getCurrencyUnit();
-            if(currency!=null){
+            if (Objects.nonNull(currency)) {
                 if (currency.getCurrencyCode().equals("XXX")) {
                     if (timestamp > System.currentTimeMillis()) {
                         return minusOneRounding;

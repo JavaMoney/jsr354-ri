@@ -52,7 +52,7 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
 		Currency cur = null;
 		try {
 			cur = Currency.getInstance(locale);
-			if(cur!=null){
+			if (Objects.nonNull(cur)) {
 				return getCurrencyUnit(cur.getCurrencyCode());
 			}
 		} catch (Exception e) {

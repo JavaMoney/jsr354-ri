@@ -21,6 +21,7 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
 import javax.money.*;
+
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -119,11 +120,11 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
         try{
             Map<String,String> config = MonetaryConfig.getConfig();
             String value = config.get("org.javamoney.moneta.Money.defaults.precision");
-            if(value != null){
+            if (Objects.nonNull(value)) {
                 int prec = Integer.parseInt(value);
                 value = config.get("org.javamoney.moneta.Money.defaults.roundingMode");
                 RoundingMode rm =
-                        value != null ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
+                		Objects.nonNull(value) ? RoundingMode.valueOf(value.toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
                 MonetaryContext mc =
                         new MonetaryContext.Builder().setPrecision(prec).setObject(rm).setAmountType(Money.class)
                                 .build();
@@ -133,7 +134,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
             }else{
                 MonetaryContext.Builder builder = new MonetaryContext.Builder(Money.class);
                 value = config.get("org.javamoney.moneta.Money.defaults.mathContext");
-                if(value != null){
+                if (Objects.nonNull(value)) {
                     switch(value.toUpperCase(Locale.ENGLISH)){
                         case "DECIMAL32":
                             Logger.getLogger(Money.class.getName())
@@ -171,7 +172,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
             return new MonetaryContext.Builder(Money.class).setObject(MathContext.DECIMAL64).build();
         }
         finally{
-            if(is != null){
+            if (Objects.nonNull(is)) {
                 try{
                     is.close();
                 }
@@ -197,11 +198,11 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
     private Money(BigDecimal number, CurrencyUnit currency, MonetaryContext monetaryContext){
         super(currency, monetaryContext);
         Objects.requireNonNull(number, "Number is required.");
-        if(monetaryContext != null){
-            this.number = getBigDecimal(number, monetaryContext);
-        }else{
-            this.number = getBigDecimal(number, DEFAULT_MONETARY_CONTEXT);
-        }
+		if (Objects.nonNull(monetaryContext)) {
+			this.number = getBigDecimal(number, monetaryContext);
+		} else {
+			this.number = getBigDecimal(number, DEFAULT_MONETARY_CONTEXT);
+		}
     }
 
     /*
@@ -697,23 +698,19 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      *
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
             return true;
         }
-        if(obj == null){
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        Money other = (Money) obj;
-        if(!getCurrency().equals(other.getCurrency())){
-            return false;
-        }
-        return getNumberStripped().equals(other.getNumberStripped());
-    }
+		if (obj instanceof Money) {
+			Money other = (Money) obj;
+			return Objects.equals(getCurrency(), other.getCurrency())
+					&& Objects.equals(getNumberStripped(),
+							other.getNumberStripped());
+		}
+		return false;
+	}
 
     /*
      * (non-Javadoc)
@@ -736,10 +733,10 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
 
     @SuppressWarnings("unused")
     private void readObjectNoData() throws ObjectStreamException{
-        if(this.number == null){
+        if (Objects.isNull(this.number)) {
             this.number = BigDecimal.ZERO;
         }
-        if(this.monetaryContext == null){
+        if (Objects.isNull(this.monetaryContext)) {
             this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
         }
     }
@@ -751,10 +748,7 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + getCurrency().hashCode();
-        return prime * result + getNumberStripped().hashCode();
+		return Objects.hash(getCurrency(), getNumberStripped());
     }
 
     /**

@@ -21,6 +21,7 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
 
 import javax.money.*;
 import java.io.*;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -78,11 +79,11 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
         Objects.requireNonNull(number, "Number is required.");
         checkNumber(number);
         this.currency = currency;
-        if(rounding != null){
-            this.rounding = rounding;
-        }else{
-            this.rounding = MonetaryRoundings.getRounding(currency);
-        }
+		if (Objects.nonNull(rounding)) {
+			this.rounding = rounding;
+		} else {
+			this.rounding = MonetaryRoundings.getRounding(currency);
+		}
         this.number = getBigDecimal(number, monetaryContext);
     }
 
@@ -667,15 +668,14 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
 
     @SuppressWarnings("unused")
     private void readObjectNoData() throws ObjectStreamException{
-        if(this.number == null){
+        if (Objects.isNull(this.number)) {
             this.number = BigDecimal.ZERO;
         }
-        if(this.monetaryContext == null){
+        if (Objects.isNull(this.monetaryContext)) {
             this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
         }
-        if(this.currency == null){
+        if(Objects.isNull(this.currency)) {
             this.currency = MonetaryCurrencies.getCurrency("XXX"); // no
-            // currency
         }
     }
 
@@ -694,37 +694,26 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((currency == null) ? 0 : currency.hashCode());
-        return prime * result + asNumberStripped().hashCode();
+		return Objects.hash(currency, asNumberStripped());
     }
 
     /*
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
             return true;
         }
-        if(obj == null){
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        RoundedMoney other = (RoundedMoney) obj;
-        if(currency == null){
-            if(other.currency != null){
-                return false;
-            }
-        }else if(!currency.equals(other.currency)){
-            return false;
-        }
-        return asNumberStripped().equals(other.asNumberStripped());
-    }
+		if (obj instanceof RoundedMoney) {
+			RoundedMoney other = (RoundedMoney) obj;
+			return Objects.equals(currency, other.currency)
+					&& Objects.equals(asNumberStripped(),
+							other.asNumberStripped());
+		}
+		return false;
+	}
 
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)

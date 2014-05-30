@@ -10,16 +10,17 @@
  */
 package org.javamoney.moneta;
 
-import javax.money.CurrencyUnit;
-import javax.money.NumberValue;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.RateType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import javax.money.CurrencyUnit;
+import javax.money.NumberValue;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.RateType;
 
 /**
  * This class models an exchange rate, which defines the factor the numeric value of a base amount in some currency
@@ -137,11 +138,11 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      */
     private void setExchangeRateChain(List<ExchangeRate> chain){
         this.chain.clear();
-        if(chain == null || chain.isEmpty()){
+        if (Objects.isNull(chain) || chain.isEmpty()){
             this.chain.add(this);
         }else{
             for (ExchangeRate aChain : chain) {
-                if (chain==null) {
+                if (Objects.isNull(chain)) {
                     throw new IllegalArgumentException("Chain element can not be null.");
                 }
             }
@@ -218,9 +219,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      */
     @Override
     public int compareTo(ExchangeRate o){
-        if(o == null){
-            return -1;
-        }
+        Objects.requireNonNull(o);
         int compare = this.getBase().getCurrencyCode().compareTo(o.getBase().getCurrencyCode());
         if(compare == 0){
             compare = this.getTerm().getCurrencyCode().compareTo(o.getTerm().getCurrencyCode());
@@ -248,14 +247,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      */
     @Override
     public int hashCode(){
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((base == null) ? 0 : base.hashCode());
-        result = prime * result + ((conversionContext == null) ? 0 : conversionContext.hashCode());
-        result = prime * result + ((factor == null) ? 0 : factor.hashCode());
-        result = prime * result + ((term == null) ? 0 : term.hashCode());
-        result = prime * result + ((chain == null) ? 0: chain.hashCode());
-        return result;
+		return Objects.hash(base, conversionContext, factor, term, chain);
     }
 
     /*
@@ -264,49 +256,20 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	public boolean equals(Object obj) {
+    	if (obj == this) {
             return true;
         }
-        if(obj == null){
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        DefaultExchangeRate other = (DefaultExchangeRate) obj;
-        if(base == null){
-            if(other.base != null){
-                return false;
-            }
-        }else if(!base.equals(other.base)){
-            return false;
-        }
-        if(!chain.equals(other.getExchangeRateChain())){
-            return false;
-        }
-        if(conversionContext == null){
-            if(other.conversionContext != null){
-                return false;
-            }
-        }else if(!conversionContext.equals(other.conversionContext)){
-            return false;
-        }
-        if(factor == null){
-            if(other.factor != null){
-                return false;
-            }
-        }else if(!factor.equals(other.factor)){
-            return false;
-        }
-        if(term == null){
-            if(other.term != null){
-                return false;
-            }
-        }else if(!term.equals(other.term)){
-            return false;
-        }
-        return true;
+    	if (obj instanceof DefaultExchangeRate) {
+    		DefaultExchangeRate other = (DefaultExchangeRate) obj;
+			return Objects.equals(base, other.base)
+					&& Objects.equals(chain, other.chain)
+					&& Objects.equals(conversionContext,
+							other.conversionContext)
+					&& Objects.equals(factor, other.factor)
+					&& Objects.equals(term, other.term); 
+    	}
+    	return false; 
     }
 
     /**
@@ -400,7 +363,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
          */
         public Builder setRateChain(ExchangeRate... exchangeRates){
             this.rateChain.clear();
-            if(exchangeRates != null){
+            if (Objects.nonNull(exchangeRates)){
                 this.rateChain.addAll(Arrays.asList(exchangeRates.clone()));
             }
             return this;
@@ -414,7 +377,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
          */
         public Builder setRateChain(List<ExchangeRate> exchangeRates){
             this.rateChain.clear();
-            if(exchangeRates != null){
+            if (Objects.nonNull(exchangeRates)) {
                 this.rateChain.addAll(exchangeRates);
             }
             return this;

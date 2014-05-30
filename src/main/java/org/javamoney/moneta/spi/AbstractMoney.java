@@ -26,8 +26,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
-import javax.money.NumberValue;
 import javax.money.MonetaryException;
+import javax.money.NumberValue;
 
 /**
  * Platform RI: This base class simplifies implementing {@link MonetaryAmount},
@@ -81,7 +81,7 @@ public abstract class AbstractMoney implements
 			MonetaryContext monetaryContext) {
 		Objects.requireNonNull(currency, "Currency is required.");
 		this.currency = currency;
-		if (monetaryContext != null) {
+		if (Objects.nonNull(monetaryContext)) {
 			this.monetaryContext = monetaryContext;
 		}
 		else {
@@ -217,7 +217,7 @@ public abstract class AbstractMoney implements
 	protected static BigDecimal getBigDecimal(Number num,
 			MonetaryContext moneyContext) {
 		BigDecimal bd = getBigDecimal(num);
-		if (moneyContext != null) {
+		if (Objects.nonNull(moneyContext)) {
 			return new BigDecimal(bd.toString(),
 					getMathContext(moneyContext, RoundingMode.HALF_EVEN));
 		}
@@ -238,10 +238,10 @@ public abstract class AbstractMoney implements
 			MonetaryContext monetaryContext,
 			RoundingMode defaultMode) {
 		MathContext ctx = monetaryContext.getAttribute(MathContext.class);
-		if (ctx != null) {
+		if (Objects.nonNull(ctx)) {
 			return ctx;
 		}
-		if (defaultMode != null) {
+		if (Objects.nonNull(defaultMode)) {
 			return new MathContext(monetaryContext.getPrecision(),
 					monetaryContext.getAttribute(RoundingMode.class,
 							defaultMode));
