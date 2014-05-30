@@ -219,9 +219,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      */
     @Override
     public int compareTo(ExchangeRate o){
-        if (Objects.isNull(o)) {
-            return -1;
-        }
+        Objects.requireNonNull(o);
         int compare = this.getBase().getCurrencyCode().compareTo(o.getBase().getCurrencyCode());
         if(compare == 0){
             compare = this.getTerm().getCurrencyCode().compareTo(o.getTerm().getCurrencyCode());

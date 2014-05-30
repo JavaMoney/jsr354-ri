@@ -123,6 +123,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 	}
 
 	public int compareTo(CurrencyUnit currency) {
+		Objects.requireNonNull(currency);
 		return getCurrencyCode().compareTo(currency.getCurrencyCode());
 	}
 
@@ -248,6 +249,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 		// }
 
 		public int compareTo(CurrencyUnit currency) {
+			Objects.requireNonNull(currency);
 			int compare = getCurrencyCode().compareTo(
 					currency.getCurrencyCode());
 			if (compare == 0) {

@@ -207,6 +207,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(MonetaryAmount o){
+    	Objects.requireNonNull(o);
         int compare = getCurrency().getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
         if(compare == 0){
             compare = getNumber().numberValue(BigDecimal.class).compareTo(o.getNumber().numberValue(BigDecimal.class));
