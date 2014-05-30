@@ -117,6 +117,7 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(CurrencyUnit currency) {
+		Objects.requireNonNull(currency);
 		return getCurrencyCode().compareTo(currency.getCurrencyCode());
 	}
 
