@@ -21,6 +21,7 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
 
 import javax.money.*;
 import java.io.*;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
@@ -700,27 +701,19 @@ public final class RoundedMoney extends AbstractMoney implements Comparable<Mone
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
             return true;
         }
-        if (Objects.isNull(obj)) {
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        RoundedMoney other = (RoundedMoney) obj;
-        if (Objects.isNull(currency)){
-            if (Objects.nonNull(other.currency)) {
-                return false;
-            }
-        }else if(!currency.equals(other.currency)){
-            return false;
-        }
-        return asNumberStripped().equals(other.asNumberStripped());
-    }
+		if (obj instanceof RoundedMoney) {
+			RoundedMoney other = (RoundedMoney) obj;
+			return Objects.equals(currency, other.currency)
+					&& Objects.equals(asNumberStripped(),
+							other.asNumberStripped());
+		}
+		return false;
+	}
 
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)

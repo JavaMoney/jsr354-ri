@@ -10,16 +10,17 @@
  */
 package org.javamoney.moneta;
 
-import javax.money.CurrencyUnit;
-import javax.money.NumberValue;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.RateType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import javax.money.CurrencyUnit;
+import javax.money.NumberValue;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.RateType;
 
 /**
  * This class models an exchange rate, which defines the factor the numeric value of a base amount in some currency
@@ -257,49 +258,20 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(this == obj){
+	public boolean equals(Object obj) {
+    	if (obj == this) {
             return true;
         }
-        if (Objects.isNull(obj)) {
-            return false;
-        }
-        if(getClass() != obj.getClass()){
-            return false;
-        }
-        DefaultExchangeRate other = (DefaultExchangeRate) obj;
-        if (Objects.isNull(base)) {
-            if(Objects.nonNull(other.base)) {
-                return false;
-            }
-        } else if(!base.equals(other.base)){
-            return false;
-        }
-        if(!chain.equals(other.getExchangeRateChain())){
-            return false;
-        }
-        if(Objects.isNull(conversionContext)) {
-            if (Objects.nonNull(other.conversionContext)) {
-                return false;
-            }
-        }else if(!conversionContext.equals(other.conversionContext)){
-            return false;
-        }
-        if (Objects.isNull(factor)) {
-            if (Objects.nonNull(other.factor)) {
-                return false;
-            }
-        }else if(!factor.equals(other.factor)){
-            return false;
-        }
-        if (Objects.isNull(term)) {
-            if (Objects.nonNull(other.term)) {
-                return false;
-            }
-        }else if(!term.equals(other.term)){
-            return false;
-        }
-        return true;
+    	if (obj instanceof DefaultExchangeRate) {
+    		DefaultExchangeRate other = (DefaultExchangeRate) obj;
+			return Objects.equals(base, other.base)
+					&& Objects.equals(chain, other.chain)
+					&& Objects.equals(conversionContext,
+							other.conversionContext)
+					&& Objects.equals(factor, other.factor)
+					&& Objects.equals(term, other.term); 
+    	}
+    	return false; 
     }
 
     /**
