@@ -84,7 +84,7 @@ public class DefaultNumberValue extends NumberValue {
 	 */
 	@Override
 	public int getScale() {
-		return numberValue(BigDecimal.class).scale();
+		return getBigDecimal(number).scale();
 	}
 
 	/*

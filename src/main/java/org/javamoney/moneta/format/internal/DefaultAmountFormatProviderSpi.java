@@ -15,13 +15,14 @@
  */
 package org.javamoney.moneta.format.internal;
 
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
+
+import java.text.DecimalFormat;
+import java.util.*;
 
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
+import javax.money.spi.DefaultServiceProvider;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
 
 /**
@@ -31,6 +32,13 @@ import javax.money.spi.MonetaryAmountFormatProviderSpi;
  */
 public class DefaultAmountFormatProviderSpi implements
 		MonetaryAmountFormatProviderSpi {
+
+    private Set<Locale> supportedSets = new HashSet<>();
+
+    public DefaultAmountFormatProviderSpi(){
+        supportedSets.addAll(Arrays.asList(DecimalFormat.getAvailableLocales()));
+        supportedSets = Collections.unmodifiableSet(supportedSets);
+    }
 
     @Override
     public String getStyleId(){
@@ -50,7 +58,7 @@ public class DefaultAmountFormatProviderSpi implements
 
     @Override
     public Set<Locale> getAvailableLocales(){
-        return Collections.emptySet();
+        return supportedSets;
     }
 
 }
