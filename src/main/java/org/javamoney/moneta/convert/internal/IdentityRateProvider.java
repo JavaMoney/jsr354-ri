@@ -15,19 +15,18 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
-
-import org.javamoney.moneta.DefaultExchangeRate;
-import org.javamoney.moneta.spi.AbstractRateProvider;
-import org.javamoney.moneta.spi.DefaultNumberValue;
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
-import java.math.BigDecimal;
-import java.net.MalformedURLException;
+
+import org.javamoney.moneta.DefaultExchangeRate;
+import org.javamoney.moneta.spi.AbstractRateProvider;
+import org.javamoney.moneta.spi.DefaultNumberValue;
 
 /**
  * This class implements an {@link javax.money.convert.ExchangeRateProvider} that provides exchange rate with factor
