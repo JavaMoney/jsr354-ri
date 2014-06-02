@@ -18,7 +18,6 @@ package org.javamoney.moneta.internal;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
-import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 
 import org.javamoney.moneta.RoundedMoney;
 
