@@ -122,7 +122,6 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
 	 * @return the loaded default class, or {@code null}
 	 */
 	// type check should be safe, exception will be logged if not.
-	@SuppressWarnings("unchecked")
 	private Class<? extends MonetaryAmount> loadDefaultAmountType() {
 		return null;
 	}

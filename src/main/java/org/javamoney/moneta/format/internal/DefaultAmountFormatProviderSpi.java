@@ -15,14 +15,12 @@
  */
 package org.javamoney.moneta.format.internal;
 
-import com.sun.xml.internal.ws.api.streaming.XMLStreamReaderFactory;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
-import javax.money.spi.DefaultServiceProvider;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
 
 /**
