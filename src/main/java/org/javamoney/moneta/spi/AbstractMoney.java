@@ -21,6 +21,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
@@ -196,9 +197,9 @@ public abstract class AbstractMoney implements
         if(result.signum()==0){
             return BigDecimal.ZERO;
         }
-        if(result==null){
-            result = BigDecimal.valueOf(num.doubleValue());
-        }
+		result = Optional.ofNullable(result).orElse(
+				BigDecimal.valueOf(num.doubleValue()));
+        
         if(result.scale()>0){
             return result.stripTrailingZeros();
         }

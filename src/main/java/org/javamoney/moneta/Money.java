@@ -116,7 +116,6 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
      * @return default MonetaryContext, never {@code null}.
      */
     private static MonetaryContext initDefaultMathContext(){
-        InputStream is = null;
         try{
             Map<String,String> config = MonetaryConfig.getConfig();
             String value = config.get("org.javamoney.moneta.Money.defaults.precision");
@@ -170,18 +169,6 @@ public final class Money extends AbstractMoney implements Comparable<MonetaryAmo
                     .log(Level.SEVERE, "Error evaluating default NumericContext, using default (NumericContext.NUM64).",
                          e);
             return new MonetaryContext.Builder(Money.class).setObject(MathContext.DECIMAL64).build();
-        }
-        finally{
-            if (Objects.nonNull(is)) {
-                try{
-                    is.close();
-                }
-                catch(IOException e){
-                    Logger.getLogger(Money.class.getName())
-                            .log(Level.WARNING, "Error closing InputStream after evaluating default NumericContext.",
-                                 e);
-                }
-            }
         }
     }
 
