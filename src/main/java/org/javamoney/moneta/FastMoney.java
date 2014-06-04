@@ -99,7 +99,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      */
     private static final MonetaryContext MONETARY_CONTEXT =
             new MonetaryContext.Builder(FastMoney.class).setMaxScale(SCALE)
-                    .setFixedScale(true).setPrecision(14).build();
+                    .setFixedScale(true).setPrecision(19).build();
 
     /**
      * Maximum possible value supported, using XX (no currency).
@@ -152,12 +152,12 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
     private long getInternalNumber(Number number, boolean allowInternalRounding){
         BigDecimal bd = getBigDecimal(number);
         if(!allowInternalRounding && bd.scale() > SCALE){
-            throw new ArithmeticException(number + " can not be represented by this class, scale > " + SCALE);
+            throw new MonetaryException(number + " can not be represented by this class, scale > " + SCALE);
         }
         if(bd.compareTo(MIN_BD) < 0){
-            throw new ArithmeticException("Overflow: " + number + " < " + MIN_BD);
+            throw new MonetaryException("Overflow: " + number + " < " + MIN_BD);
         }else if(bd.compareTo(MAX_BD) > 0){
-            throw new ArithmeticException("Overflow: " + number + " > " + MAX_BD);
+            throw new MonetaryException("Overflow: " + number + " > " + MAX_BD);
         }
         return bd.movePointRight(SCALE).longValue();
     }
@@ -271,14 +271,32 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
         if(amount.isZero()){
             return this;
         }
-        // TODO add numeric check for overflow...
-        return new FastMoney(this.number + getInternalNumber(amount.getNumber(), false), getCurrency());
+        try{
+            return new FastMoney(Math.addExact(this.number, getInternalNumber(amount.getNumber(), false)), getCurrency());
+        }
+        catch(ArithmeticException e){
+            throw new MonetaryException("Amount exceeds arithmetic capabilities.", e);
+        }
     }
 
+    @Override
+    protected void checkAmountParameter(MonetaryAmount amount){
+        super.checkAmountParameter(amount);
+        // numeric check for overflow...
+        if(amount.getNumber().getScale()>SCALE){
+            throw new MonetaryException("Parameter exceeds maximal scale: " + SCALE);
+        }
+        if(amount.getNumber().getPrecision()>MAX_BD.precision()){
+            throw new MonetaryException("Parameter exceeds maximal precision: " + SCALE);
+        }
+    }
+
+
+
     /*
-     * (non-Javadoc)
-     * @see javax.money.MonetaryAmount#divide(java.lang.Number)
-     */
+         * (non-Javadoc)
+         * @see javax.money.MonetaryAmount#divide(java.lang.Number)
+         */
     public FastMoney divide(Number divisor){
         checkNumber(divisor);
         if(isOne(divisor)){
@@ -357,8 +375,7 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
             return this;
         }
         long subtrahendAsLong = getInternalNumber(subtrahend.getNumber(), false);
-        // TODO check for numeric overflow
-        return new FastMoney(this.number - subtrahendAsLong, getCurrency());
+        return new FastMoney(Math.addExact(this.number, -1L * subtrahendAsLong), getCurrency());
     }
 
     /*
@@ -592,8 +609,19 @@ public final class FastMoney extends AbstractMoney implements Comparable<Monetar
      * @param number
      * @throws IllegalArgumentException If the number is null
      */
-    private void checkNumber(Number number){
+    protected void checkNumber(Number number){
         Objects.requireNonNull(number, "Number is required.");
+        // numeric check for overflow...
+        if(number.longValue()>MAX_BD.longValue()){
+            throw new MonetaryException("Value exceeds maximal value: " + MAX_BD);
+        }
+        BigDecimal bd = getBigDecimal(number);
+        if(bd.precision()>MAX_BD.precision()){
+            throw new MonetaryException("Precision exceeds maximal precision: " + MAX_BD.precision());
+        }
+        if(bd.scale()>SCALE){
+            throw new MonetaryException("Scale exceeds maximal scale: " + SCALE);
+        }
     }
 
     /*

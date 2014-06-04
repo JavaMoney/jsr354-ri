@@ -19,7 +19,9 @@ import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
+import javax.money.NumberValue;
 
+import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
 
@@ -43,6 +45,16 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 		return Money.of(number, currency,
                         MonetaryContext.from(monetaryContext, Money.class));
 	}
+
+    @Override
+    public NumberValue getMaxNumber(){
+        return null;
+    }
+
+    @Override
+    public NumberValue getMinNumber(){
+        return null;
+    }
 
 	@Override
 	public Class<Money> getAmountType() {

@@ -51,6 +51,15 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
      */
     @Override
     public T create(){
+        if(currency==null){
+            throw new MonetaryException("Cannot create FastMoney instance: missing currency.");
+        }
+        if(number==null){
+            throw new MonetaryException("Cannot create FastMoney instance: missing number.");
+        }
+        if(monetaryContext==null){
+            throw new MonetaryException("Cannot create FastMoney instance: missing context.");
+        }
         return create(number,currency, monetaryContext);
     }
 

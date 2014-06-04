@@ -20,6 +20,7 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
+import javax.money.NumberValue;
 import java.math.RoundingMode;
 
 /**
@@ -45,6 +46,16 @@ public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMone
     @Override
     protected RoundedMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
         return RoundedMoney.of(number, currency );
+    }
+
+    @Override
+    public NumberValue getMaxNumber(){
+        return null;
+    }
+
+    @Override
+    public NumberValue getMinNumber(){
+        return null;
     }
 
     /*

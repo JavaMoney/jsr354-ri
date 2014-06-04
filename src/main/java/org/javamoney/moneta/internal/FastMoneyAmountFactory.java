@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
+import javax.money.NumberValue;
 
 import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
@@ -32,11 +33,11 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
 public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
-			FastMoney.class).setPrecision(14)
+			FastMoney.class).setPrecision(19)
 			.setMaxScale(5).setFixedScale(true)
 			.setObject(RoundingMode.HALF_EVEN).build();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
-			FastMoney.class).setPrecision(14)
+			FastMoney.class).setPrecision(19)
 			.setMaxScale(5).setFixedScale(true)
 			.setObject(RoundingMode.HALF_EVEN).build();
 
@@ -51,7 +52,17 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 		return FastMoney.class;
 	}
 
-	@Override
+    @Override
+    public NumberValue getMaxNumber(){
+        return FastMoney.MAX_VALUE.getNumber();
+    }
+
+    @Override
+    public NumberValue getMinNumber(){
+        return FastMoney.MIN_VALUE.getNumber();
+    }
+
+    @Override
 	protected MonetaryContext loadDefaultMonetaryContext() {
 		return DEFAULT_CONTEXT;
 	}

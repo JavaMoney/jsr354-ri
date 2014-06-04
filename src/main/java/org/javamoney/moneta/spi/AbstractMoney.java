@@ -181,7 +181,7 @@ public abstract class AbstractMoney implements
 		}
 		// try instance of (slower)
 		if (result==null && num instanceof BigDecimal) {
-			result = ((BigDecimal) num);
+			result = ((BigDecimal) num).stripTrailingZeros();
 		}
 		if (result==null && num instanceof BigInteger) {
 			return new BigDecimal((BigInteger) num);
