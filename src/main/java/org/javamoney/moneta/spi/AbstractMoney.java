@@ -159,51 +159,7 @@ public abstract class AbstractMoney implements
 	 * @return the corresponding {@link BigDecimal}
 	 */
 	protected static BigDecimal getBigDecimal(Number num) {
-		checkNumberParameter(num);
-        BigDecimal result = null;
-		if(num instanceof NumberValue){
-			result = ((NumberValue)num).numberValue(BigDecimal.class);
-		}
-		// try fast equality check first (delegates to identity!)
-		if (result==null && BigDecimal.class.equals(num.getClass())) {
-			result = ((BigDecimal) num);
-		}
-		if (result==null && (Long.class.equals(num.getClass())
-				|| Integer.class.equals(num.getClass())
-				|| Short.class.equals(num.getClass())
-				|| Byte.class.equals(num.getClass())
-				|| AtomicLong.class.equals(num.getClass()))) {
-			return BigDecimal.valueOf(num.longValue());
-		}
-		if (result==null && (Float.class.equals(num.getClass())
-				|| Double.class.equals(num.getClass()))) {
-			return new BigDecimal(num.toString());
-		}
-		// try instance of (slower)
-		if (result==null && num instanceof BigDecimal) {
-			result = ((BigDecimal) num).stripTrailingZeros();
-		}
-		if (result==null && num instanceof BigInteger) {
-			return new BigDecimal((BigInteger) num);
-		}
-        if(result==null){
-            try{
-                // Avoid imprecise conversion to double value if at all possible
-                result = new BigDecimal(num.toString());
-            }
-            catch(NumberFormatException e){
-            }
-        }
-        if(result.signum()==0){
-            return BigDecimal.ZERO;
-        }
-		result = Optional.ofNullable(result).orElse(
-				BigDecimal.valueOf(num.doubleValue()));
-        
-        if(result.scale()>0){
-            return result.stripTrailingZeros();
-        }
-        return result;
+        return ConvertBigDecimal.of(num);
 	}
 
 	/**
