@@ -17,18 +17,14 @@ package org.javamoney.moneta.spi;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryException;
-import javax.money.NumberValue;
 
 /**
  * Platform RI: This base class simplifies implementing {@link MonetaryAmount},
