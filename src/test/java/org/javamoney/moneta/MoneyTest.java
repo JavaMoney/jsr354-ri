@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 /**
  * @author Anatole
@@ -76,16 +76,16 @@ public class MoneyTest{
     public void testDivideAndRemainder_BigDecimal(){
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         Money[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000000000000000001"));
-        assertThat(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), equalTo(BigDecimal.ONE));
-        assertThat(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-                   equalTo(new BigDecimal("0.49999999999999999999")));
+        assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
+        assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
+                   new BigDecimal("0.49999999999999999999"));
     }
 
     @Test
     public void testDivideToIntegralValue_BigDecimal(){
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         Money result = money1.divideToIntegralValue(new BigDecimal("0.50000000000000000001"));
-        assertThat(result.getNumber().numberValue(BigDecimal.class), equalTo(BigDecimal.ONE));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
         assertEquals(result.getNumber().numberValue(BigDecimal.class).stripTrailingZeros(),
                      new BigDecimal("4.0").stripTrailingZeros());
@@ -568,19 +568,19 @@ public class MoneyTest{
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF"),
                 Money.of(0, "CHF"), Money.of(-100, "CHF"), Money.of(-723527.36532, "CHF")};
         for(Money m : moneys){
-            assertEquals("Invalid remainder of " + 10.50, m.getFactory().setCurrency(m.getCurrency()).setNumber(
+            assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(10.50)))
-                                 .create(), m.remainder(10.50)
+                                 .create(), m.remainder(10.50), "Invalid remainder of " + 10.50
             );
-            assertEquals("Invalid remainder of " + -30.20, m.getFactory().setCurrency(m.getCurrency()).setNumber(
+            assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-30.20)))
-                                 .create(), m.remainder(-30.20)
+                                 .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20
             );
-            assertEquals("Invalid remainder of " + -3, m.getFactory().setCurrency(m.getCurrency()).setNumber(
+            assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-3)))
-                                 .create(), m.remainder(-3)
+                                 .create(), m.remainder(-3), "Invalid remainder of " + -3
             );
-            assertEquals("Invalid remainder of " + 3, m.getFactory().setCurrency(m.getCurrency()).setNumber(
+            assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(3))).create(),
                          m.remainder(3)
             );
@@ -596,9 +596,9 @@ public class MoneyTest{
                 Money.of(0, "CHF"), Money.of(-100, "CHF"), Money.of(-723527.36532, "CHF")};
         for(Money m : moneys){
             for(int p = -10; p < 10; p++){
-                assertEquals("Invalid scaleByPowerOfTen.", m.getFactory().setCurrency(m.getCurrency())
+                assertEquals(m.getFactory().setCurrency(m.getCurrency())
                                      .setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
-                                     .create(), m.scaleByPowerOfTen(p)
+                                     .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen."
                 );
             }
         }
@@ -647,11 +647,11 @@ public class MoneyTest{
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(100, "CHF"), Money.of(34242344, "CHF"),
                 Money.of(23123213.435, "CHF")};
         for(Money m : moneys){
-            assertTrue("Invalid positiveOrZero (expected true): " + m, m.isPositiveOrZero());
+            assertTrue(m.isPositiveOrZero(), "Invalid positiveOrZero (expected true): " + m);
         }
         moneys = new Money[]{Money.of(-100, "CHF"), Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
         for(Money m : moneys){
-            assertFalse("Invalid positiveOrZero (expected false): " + m, m.isPositiveOrZero());
+            assertFalse(m.isPositiveOrZero(), "Invalid positiveOrZero (expected false): " + m);
         }
     }
 
@@ -664,11 +664,11 @@ public class MoneyTest{
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(100, "CHF"), Money.of(34242344, "CHF"),
                 Money.of(23123213.435, "CHF")};
         for(Money m : moneys){
-            assertFalse("Invalid isNegative (expected false): " + m, m.isNegative());
+            assertFalse(m.isNegative(), "Invalid isNegative (expected false): " + m);
         }
         moneys = new Money[]{Money.of(-100, "CHF"), Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
         for(Money m : moneys){
-            assertTrue("Invalid isNegative (expected true): " + m, m.isNegative());
+            assertTrue(m.isNegative(), "Invalid isNegative (expected true): " + m);
         }
     }
 
@@ -679,13 +679,13 @@ public class MoneyTest{
     public void testIsNegativeOrZero(){
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF")};
         for(Money m : moneys){
-            assertFalse("Invalid negativeOrZero (expected false): " + m, m.isNegativeOrZero());
+            assertFalse(m.isNegativeOrZero(), "Invalid negativeOrZero (expected false): " + m);
         }
         moneys = new Money[]{Money.of(0, "CHF"), Money.of(0.0, "CHF"), Money.of(BigDecimal.ZERO, "CHF"),
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(-100, "CHF"),
                 Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
         for(Money m : moneys){
-            assertTrue("Invalid negativeOrZero (expected true): " + m, m.isNegativeOrZero());
+            assertTrue(m.isNegativeOrZero(), "Invalid negativeOrZero (expected true): " + m);
         }
     }
 
@@ -706,7 +706,7 @@ public class MoneyTest{
                         s.getFactory().setCurrency(s.getCurrency()).setNumber(-23123213).create(),
                         s.getFactory().setCurrency(s.getCurrency()).setNumber(0).create()};
         for(int i = 0; i < moneys.length; i++){
-            assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
+            assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
     }
 
@@ -730,7 +730,7 @@ public class MoneyTest{
                 s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USN")).setNumber(-23123213).create(),
                 s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("GBP")).setNumber(0).create()};
         for(int i = 0; i < moneys.length; i++){
-            assertEquals("with(Number) failed.", moneys[i], moneys2[i]);
+            assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
     }
 
@@ -740,21 +740,21 @@ public class MoneyTest{
     @Test
     public void testLongValue(){
         Money m = Money.of(100, "CHF");
-        assertEquals("longValue of " + m, 100L, m.getNumber().longValue());
+        assertEquals(100L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(-100, "CHF");
-        assertEquals("longValue of " + m, -100L, m.getNumber().longValue());
+        assertEquals(-100L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(-100.3434, "CHF");
-        assertEquals("longValue of " + m, -100L, m.getNumber().longValue());
+        assertEquals(-100L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(100.3434, "CHF");
-        assertEquals("longValue of " + m, 100L, m.getNumber().longValue());
+        assertEquals(100L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(0, "CHF");
-        assertEquals("longValue of " + m, 0L, m.getNumber().longValue());
+        assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(-0.0, "CHF");
-        assertEquals("longValue of " + m, 0L, m.getNumber().longValue());
+        assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MAX_VALUE, "CHF");
-        assertEquals("longValue of " + m, Long.MAX_VALUE, m.getNumber().longValue());
+        assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
-        assertEquals("longValue of " + m, Long.MIN_VALUE, m.getNumber().longValue());
+        assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
         // try {
         m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
         m.getNumber().longValue();
@@ -766,17 +766,17 @@ public class MoneyTest{
     @Test
     public void testLongValueExact(){
         Money m = Money.of(100, "CHF");
-        assertEquals("longValue of " + m, 100L, m.getNumber().longValueExact());
+        assertEquals(100L, m.getNumber().longValueExact(), "longValue of " + m);
         m = Money.of(-100, "CHF");
-        assertEquals("longValue of " + m, -100L, m.getNumber().longValueExact());
+        assertEquals(-100L, m.getNumber().longValueExact(), "longValue of " + m);
         m = Money.of(0, "CHF");
-        assertEquals("longValue of " + m, 0L, m.getNumber().longValueExact());
+        assertEquals(0L, m.getNumber().longValueExact(), "longValue of " + m);
         m = Money.of(-0.0, "CHF");
-        assertEquals("longValue of " + m, 0L, m.getNumber().longValue());
+        assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MAX_VALUE, "CHF");
-        assertEquals("longValue of " + m, Long.MAX_VALUE, m.getNumber().longValue());
+        assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
-        assertEquals("longValue of " + m, Long.MIN_VALUE, m.getNumber().longValue());
+        assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
         try{
             m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
             m.getNumber().longValueExact();
@@ -809,21 +809,21 @@ public class MoneyTest{
     @Test
     public void testDoubleValue(){
         Money m = Money.of(100, "CHF");
-        assertEquals("doubleValue of " + m, 100d, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(100d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(-100, "CHF");
-        assertEquals("doubleValue of " + m, -100d, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(-100d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(-100.3434, "CHF");
-        assertEquals("doubleValue of " + m, -100.3434, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(-100.3434, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(100.3434, "CHF");
-        assertEquals("doubleValue of " + m, 100.3434, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(100.3434, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(0, "CHF");
-        assertEquals("doubleValue of " + m, 0d, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(-0.0, "CHF");
-        assertEquals("doubleValue of " + m, 0d, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(Double.MAX_VALUE, "CHF");
-        assertEquals("doubleValue of " + m, Double.MAX_VALUE, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(Double.MAX_VALUE, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(Double.MIN_VALUE, "CHF");
-        assertEquals("doubleValue of " + m, Double.MIN_VALUE, m.getNumber().doubleValue(), 0.0d);
+        assertEquals(Double.MIN_VALUE, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         // try {
         m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
         m.getNumber().doubleValue();
@@ -839,17 +839,17 @@ public class MoneyTest{
     @Test
     public void testSignum(){
         Money m = Money.of(100, "CHF");
-        assertEquals("signum of " + m, 1, m.signum());
+        assertEquals(1, m.signum(), "signum of " + m);
         m = Money.of(-100, "CHF");
-        assertEquals("signum of " + m, -1, m.signum());
+        assertEquals(-1, m.signum(), "signum of " + m);
         m = Money.of(100.3435, "CHF");
-        assertEquals("signum of " + m, 1, m.signum());
+        assertEquals(1, m.signum(), "signum of " + m);
         m = Money.of(-100.3435, "CHF");
-        assertEquals("signum of " + m, -1, m.signum());
+        assertEquals(-1, m.signum(), "signum of " + m);
         m = Money.of(0, "CHF");
-        assertEquals("signum of " + m, 0, m.signum());
+        assertEquals(0, m.signum(), "signum of " + m);
         m = Money.of(-0, "CHF");
-        assertEquals("signum of " + m, 0, m.signum());
+        assertEquals(0, m.signum(), "signum of " + m);
     }
 
     /**

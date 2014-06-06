@@ -15,9 +15,9 @@
  */
 package org.javamoney.moneta;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmounts;

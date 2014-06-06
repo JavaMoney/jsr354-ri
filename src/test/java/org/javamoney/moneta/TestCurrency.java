@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 
@@ -58,9 +57,6 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 	private final int defaultFractionDigits;
 
 	private static final Map<String, CurrencyUnit> CACHED = new ConcurrentHashMap<String, CurrencyUnit>();
-
-	private static final Logger LOGGER = Logger.getLogger(TestCurrency.class
-			.getName());
 
 	/**
 	 * Private constructor.

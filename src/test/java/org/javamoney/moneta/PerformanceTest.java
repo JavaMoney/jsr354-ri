@@ -22,7 +22,6 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import javax.money.MonetaryRoundings;
 
-import org.junit.Ignore;
 import org.testng.annotations.Test;
 
 /**
@@ -31,14 +30,12 @@ import org.testng.annotations.Test;
  */
 public class PerformanceTest {
 
-	private static final BigDecimal TEN = new BigDecimal(10.0d);
 	protected static final CurrencyUnit EURO = MonetaryCurrencies
 			.getCurrency("EUR");
 	protected static final CurrencyUnit DOLLAR = MonetaryCurrencies
 			.getCurrency("USD");
 
-	@Test
-    @Ignore
+	@Test(enabled = true)
 	public void comparePerformanceNoRounding() {
 		FastMoney money1 = FastMoney.of(BigDecimal.ONE,EURO);
 		long start = System.currentTimeMillis();
@@ -90,8 +87,7 @@ public class PerformanceTest {
 	}
 	
 	
-	@Test
-    @Ignore
+	@Test(enabled = true)
 	public void comparePerformance() {
 		StringBuilder b = new StringBuilder();
 		b.append("PerformanceTest - Looping code Money,BD:\n");

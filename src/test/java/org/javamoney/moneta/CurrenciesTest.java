@@ -15,9 +15,9 @@
  */
 package org.javamoney.moneta;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Currency;
 
@@ -124,7 +124,6 @@ public class CurrenciesTest {
 	 * {@link net.java.javamoney.ri.CurrencyUnitImpl#compareTo(javax.money.CurrencyUnit)}
 	 * .
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testCompareTo() {
 		CurrencyUnit cur1 = MonetaryCurrencies.getCurrency("USD");
@@ -155,7 +154,7 @@ public class CurrenciesTest {
 		CurrencyUnit cur1 = MonetaryCurrencies.getCurrency("USD");
 		String toString = cur1.toString();
 		assertNotNull(toString);
-		assertTrue("Does not contain currency code.", toString.contains("USD"));
+		assertTrue(toString.contains("USD"), "Does not contain currency code.");
 		// Currencies.Builder builder = new Currencies.Builder();
 		// builder.setCurrencyCode("TEST");
 		// CurrencyUnit cur3 = builder.create();
