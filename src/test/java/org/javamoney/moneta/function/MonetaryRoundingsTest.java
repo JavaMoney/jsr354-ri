@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
 
 /**
  * Test for the {@link MonetaryRoundings} singleton.
@@ -127,8 +127,7 @@ public class MonetaryRoundingsTest{
                     expected = dec.setScale(cur.getDefaultFractionDigits(), RoundingMode.HALF_UP);
                 }
                 MonetaryAmount r = sample.with(rounding);
-                assertEquals("Rouding for: " + sample,
-                        MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(expected).create(), r);
+                assertEquals(MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(expected).create(), r, "Rouding for: " + sample);
             }
         }
     }

@@ -15,9 +15,8 @@
  */
 package org.javamoney.moneta.format;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.testng.Assert.assertEquals;
+
 
 import java.io.IOException;
 import java.math.BigDecimal;
