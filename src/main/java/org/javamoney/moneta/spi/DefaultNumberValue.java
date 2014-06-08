@@ -16,7 +16,6 @@
 package org.javamoney.moneta.spi;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Objects;
 
 import javax.money.NumberValue;
@@ -178,80 +177,18 @@ public class DefaultNumberValue extends NumberValue {
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#getNumberValue(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Number> T numberValue(Class<T> numberType) {
-		if (BigDecimal.class == numberType) {
-			return (T) getBigDecimal(number);
-		}
-		else if (BigInteger.class == numberType) {
-			return (T) getBigDecimal(number).toBigInteger();
-		}
-		else if (Double.class == numberType) {
-			return (T) Double.valueOf(this.number.doubleValue());
-		}
-		else if (Float.class == numberType) {
-			return (T) Float.valueOf(this.number.floatValue());
-		}
-		else if (Long.class == numberType) {
-			return (T) Long.valueOf(this.number.longValue());
-		}
-		else if (Integer.class == numberType) {
-			return (T) Integer.valueOf(this.number.intValue());
-		}
-		else if (Short.class == numberType) {
-			return (T) Short.valueOf(this.number.shortValue());
-		}
-		else if (Byte.class == numberType) {
-			return (T) Byte.valueOf(this.number.byteValue());
-		}
-		throw new IllegalArgumentException("Unsupported numeric type: "
-				+ numberType);
+		return ConvertNumberValue.of(numberType, number);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see javax.money.NumberValue#numberValueExact(java.lang.Class)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Number> T numberValueExact(Class<T> numberType) {
-		if (BigDecimal.class == numberType) {
-			return (T) getBigDecimal(number);
-		}
-		else if (BigInteger.class == numberType) {
-			return (T) getBigDecimal(number).toBigIntegerExact();
-		}
-		else if (Double.class == numberType) {
-			double d = this.number.doubleValue();
-			if (d == Double.NEGATIVE_INFINITY || d == Double.POSITIVE_INFINITY) {
-				throw new ArithmeticException(
-						"Value not exact mappable to double: " + this.number);
-			}
-			return (T) Double.valueOf(d);
-		}
-		else if (Float.class == numberType) {
-			float f = this.number.floatValue();
-			if (f == Float.NEGATIVE_INFINITY || f == Float.POSITIVE_INFINITY) {
-				throw new ArithmeticException(
-						"Value not exact mappable to float: " + this.number);
-			}
-			return (T) Float.valueOf(f);
-		}
-		else if (Long.class == numberType) {
-			return (T) Long.valueOf(getBigDecimal(number).longValueExact());
-		}
-		else if (Integer.class == numberType) {
-			return (T) Integer.valueOf(getBigDecimal(number).intValueExact());
-		}
-		else if (Short.class == numberType) {
-			return (T) Short.valueOf(getBigDecimal(number).shortValueExact());
-		}
-		else if (Byte.class == numberType) {
-			return (T) Short.valueOf(getBigDecimal(number).byteValueExact());
-		}
-		throw new IllegalArgumentException("Unsupported numeric type: "
-				+ numberType);
+		return ConvertNumberValue.ofExact(numberType, number);
 	}
 
 	/*
