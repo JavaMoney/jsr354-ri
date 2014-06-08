@@ -15,11 +15,11 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.NumberValue;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
+
+import javax.money.NumberValue;
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.
@@ -272,34 +272,7 @@ public class DefaultNumberValue extends NumberValue {
 	 * @return the corresponding {@link BigDecimal}
 	 */
 	protected static BigDecimal getBigDecimal(Number num) {
-		// try fast equality check first (delegates to identity!)
-		if (BigDecimal.class.equals(num.getClass())) {
-			return (BigDecimal) num;
-		}
-		if (Long.class.equals(num.getClass())
-				|| Integer.class.equals(num.getClass())
-				|| Short.class.equals(num.getClass())
-				|| Byte.class.equals(num.getClass())
-				|| AtomicLong.class.equals(num.getClass())) {
-			return BigDecimal.valueOf(num.longValue());
-		}
-		if (Float.class.equals(num.getClass())
-				|| Double.class.equals(num.getClass())) {
-			return new BigDecimal(num.toString());
-		}
-		// try instance of (slower)
-		if (num instanceof BigDecimal) {
-			return (BigDecimal) num;
-		}
-		if (num instanceof BigInteger) {
-			return new BigDecimal((BigInteger) num);
-		}
-		try {
-			// Avoid imprecise conversion to double value if at all possible
-			return new BigDecimal(num.toString());
-		} catch (NumberFormatException e) {
-		}
-		return BigDecimal.valueOf(num.doubleValue());
+		return ConvertBigDecimal.of(num);
 	}
 
 }
