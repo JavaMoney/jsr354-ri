@@ -80,10 +80,10 @@ public class FastMoneyTest{
     public void testDivideToIntegralValue_BigDecimal(){
         FastMoney money1 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney result = money1.divideToIntegralValue(new BigDecimal("0.5001"));
-        assertEquals(result.getNumber().numberValue(BigDecimal.class), new BigDecimal("1.0"));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class),BigDecimal.ONE);
         result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
-        assertEquals(result.getNumber().numberValue(BigDecimal.class), new BigDecimal("4.0"));
-        result = money1.divideToIntegralValue(new BigDecimal("5.0"));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class),BigDecimal.valueOf(4l));
+        result = money1.divideToIntegralValue(BigDecimal.valueOf(5));
         assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact() == 0);
     }
 
@@ -590,7 +590,7 @@ public class FastMoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#longValue()}.
      */
-    @Test
+    @Test(expectedExceptions = MonetaryException.class)
     public void testLongValue(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100L, m.getNumber().longValue(), "longValue of " + m);
@@ -604,14 +604,11 @@ public class FastMoneyTest{
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = FastMoney.of(-0.0, "CHF");
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
-        try{
-            m = FastMoney
-                    .of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
-            fail("longValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
-        }
-        catch(ArithmeticException e){
-            // OK
-        }
+		m = FastMoney
+				.of(new BigDecimal(
+						"12121762517652176251725178251872652765321876352187635217835378125"),
+						"CHF");
+		fail("longValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
     }
 
     /**
@@ -631,14 +628,14 @@ public class FastMoneyTest{
             m = FastMoney.of(Long.MAX_VALUE, "CHF");
             fail("longValueExact(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
         }
-        catch(ArithmeticException e){
+        catch(MonetaryException e){
             // OK
         }
         try{
             m = FastMoney.of(Long.MIN_VALUE, "CHF");
             fail("longValueExact(-100.3434) should raise an ArithmeticException.");
         }
-        catch(ArithmeticException e){
+        catch(MonetaryException e){
             // OK
         }
         try{
@@ -654,7 +651,7 @@ public class FastMoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#doubleValue()}.
      */
-    @Test
+    @Test(expectedExceptions = MonetaryException.class)
     public void testDoubleValue(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
@@ -668,15 +665,12 @@ public class FastMoneyTest{
         assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = FastMoney.of(-0.0, "CHF");
         assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
-        try{
-            m = FastMoney
-                    .of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
-            m.getNumber().doubleValue();
-            fail("doubleValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
-        }
-        catch(ArithmeticException e){
-            // OK
-        }
+		m = FastMoney
+				.of(new BigDecimal(
+						"12121762517652176251725178251872652765321876352187635217835378125"),
+						"CHF");
+		m.getNumber().doubleValue();
+		fail("doubleValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
     }
 
     /**
