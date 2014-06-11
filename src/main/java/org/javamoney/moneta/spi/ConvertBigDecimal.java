@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.javamoney.moneta.spi;
 
 import java.math.BigDecimal;
@@ -11,41 +26,56 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.NumberValue;
 
-enum ConvertBigDecimal {
+/**
+ * This enumeration provides general utility functions supporting conversion of number types to BigDecimal.
+ */
+public enum ConvertBigDecimal {
+    /** Conversion from integral numeric types, short, int, long. */
 	INTEGER {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			return BigDecimal.valueOf(num.longValue());
 		}
-	}, FLUCTUAGE {
+	},
+    /** Conversion for floating point numbers. */
+    FLUCTUAGE {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			return new BigDecimal(num.toString());
 		}
-	}, BIGINTEGER {
+	},
+    /** Conversion from BigInteger. */
+    BIGINTEGER {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			return new BigDecimal((BigInteger) num);
 		}
-	}, NUMBERVALUE {
+	},
+    /** Conversion from NumberValue. */
+    NUMBERVALUE {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			BigDecimal result = ((NumberValue)num).numberValue(BigDecimal.class);
 			return isScaleZero(result);
 		}
-	}, BIGDECIMAL {
+	},
+    /** Conversion from BigDecimal. */
+    BIGDECIMAL {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			BigDecimal result = ((BigDecimal)num);
 			return isScaleZero(result);
 		}
-	}, BIGDECIMAL_EXTENDS {
+	},
+    /** COnversion from BigDecimal, extended. */
+    BIGDECIMAL_EXTENDS {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			BigDecimal result = ((BigDecimal)num).stripTrailingZeros();
 			return isScaleZero(result);
 		}
 	},
+    /** Default conversion based on String, if everything else ffailed. */
 	DEFAULT {
 		@Override
 		BigDecimal getDecimal(Number num) {
