@@ -102,22 +102,18 @@ public enum ConvertBigDecimal {
 		if (INSTEGERS.contains(num.getClass())) {
 			return INTEGER;
 		}
-
 		if (FLOATINGS.contains(num.getClass())) {
 			return FLUCTUAGE;
 		}
-
-		if (num instanceof BigInteger) {
-			return BIGINTEGER;
-		}
-
 		if (num instanceof NumberValue) {
 			return NUMBERVALUE;
 		}
 		if (BigDecimal.class.equals(num.getClass())) {
 			return BIGDECIMAL;
 		}
-
+        if (num instanceof BigInteger) {
+            return BIGINTEGER;
+        }
 		if (num instanceof BigDecimal) {
 			return BIGDECIMAL_EXTENDS;
 		}
