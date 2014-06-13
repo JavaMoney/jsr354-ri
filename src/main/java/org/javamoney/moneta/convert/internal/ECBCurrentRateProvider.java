@@ -33,7 +33,6 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -106,11 +105,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     }
 
     /**
-     * (Re)load the given data feed.
-     *
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * (Re)load the given data feed. Logs an error if loading fails.
      */
     @Override
     public void newDataLoaded(String data, InputStream is){

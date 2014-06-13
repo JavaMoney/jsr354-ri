@@ -99,11 +99,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     }
 
     /**
-     * (Re)load the given data feed.
-     *
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * (Re)load the given data feed. Logs an error if loading fails.
      */
     @Override
     public void newDataLoaded(String data, InputStream is){

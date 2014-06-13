@@ -82,7 +82,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 	/**
 	 * Method that converts the source {@link MonetaryAmount} to an
 	 * {@link MonetaryAmount} based on the {@link ExchangeRate} of this
-	 * conversion.<br/>
+	 * conversion.
 	 * 
 	 * @see #getExchangeRate(MonetaryAmount)
 	 * @param amount
