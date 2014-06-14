@@ -22,14 +22,14 @@ import java.util.Objects;
 import javax.money.CurrencyUnit;
 
 /**
- * Default implementation of a {@link CurrencyUnit} based on the using the JDK's
- * {@link MoneyCurrency}, but also extendable using a {@link Builder} instance.
+ * Default implementation of a {@link CurrencyUnit} based on the JDK's
+ * {@link Currency}.
  * 
  * @version 0.5.1
  * @author Anatole Tresch
  * @author Werner Keil
  */
-final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
+public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 		Comparable<CurrencyUnit> {
 
 	/**
@@ -43,12 +43,8 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	/**
 	 * Private constructor, use a {@link Builder} for creating new instances.
 	 * 
-	 * @param code
-	 *            the currency code, not {@code null} or empty.
-	 * @param numCode
-	 *            the numeric code, >= -1.
-	 * @param fractionDigits
-	 *            the fraction digits, >= -1.
+	 * @param currency
+	 *            the currency, not {@code null} or empty.
 	 */
 	JDKCurrencyAdapter(Currency currency) {
 		this.baseCurrency = currency;
