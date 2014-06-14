@@ -25,11 +25,11 @@ import javax.money.CurrencyUnit;
  * Default implementation of a {@link CurrencyUnit} based on the using the JDK's
  * {@link Currency}.
  * 
- * @version 0.5.1
+ * @version 0.6
  * @author Anatole Tresch
  * @author Werner Keil
  */
-final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
+public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 		Comparable<CurrencyUnit> {
 
 	/**
