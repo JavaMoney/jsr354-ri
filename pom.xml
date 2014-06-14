@@ -54,6 +54,7 @@
 		<license.licenseResolver>src/license</license.licenseResolver>
         <!-- dependency versions -->
         <testng.version>6.8.5</testng.version>
+        <additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 
 	<developers>
@@ -457,6 +458,7 @@
 							</docletArtifact>
 							<show>private</show>
 							<additionalparam>
+								-Xdoclint:none
 								-inferrel -inferdep -quiet -hide java.*
 								-collpackages java.util.*
 								-postfixpackage -nodefontname Tahoma
