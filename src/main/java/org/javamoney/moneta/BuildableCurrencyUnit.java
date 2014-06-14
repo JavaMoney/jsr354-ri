@@ -19,6 +19,7 @@ import org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryException;
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -144,7 +145,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         }
 
         /**
-         * Allows to set the currenc< code, for creating multiple instances, using one Builder.
+         * Allows to set the currency code, for creating multiple instances, using one Builder.
          *
          * @param currencyCode the (unique) and identifying currency code, not null.
          * @return the Builder, for chaining.
@@ -159,7 +160,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         /**
          * Set the numeric code (optional).
          *
-         * @param numericCode The numeric currency code, >= -1. .1 hereby means <i>undefined</i>.
+         * @param numericCode The numeric currency code, &gt;= -1. .1 hereby means <i>undefined</i>.
          * @return the Builder, for chaining.
          * @see javax.money.CurrencyUnit#getNumericCode()
          */
@@ -174,7 +175,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         /**
          * Set the default fraction digits.
          *
-         * @param defaultFractionDigits the default fraction digits, >= 0.
+         * @param defaultFractionDigits the default fraction digits, &gt;= 0.
          * @return
          * @see javax.money.CurrencyUnit#getDefaultFractionDigits()
          */
@@ -190,7 +191,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          * Returns a new instance of {@link org.javamoney.moneta.BuildableCurrencyUnit}.
          *
          * @return the new CurrencyUnit instance.
-         * @throws MonetaryException, if creation fails
+         * @throws MonetaryException if creation fails
          */
         public BuildableCurrencyUnit build(){
             return build(false);

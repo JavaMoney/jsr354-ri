@@ -38,10 +38,9 @@ public class CompoundRateProvider extends AbstractRateProvider {
 	/**
 	 * Constructor.
 	 * 
-	 * @param providerContext
-	 *            The {@link ProviderContext} this instance is providing.
-	 *            Providers added must return the same on
-	 *            {@link ProviderContext#getProvider()}.
+	 * @param providers
+	 *            The collection of child {@link ExchangeRateProvider}
+	 *            instances this class delegates calls to.
 	 */
 	public CompoundRateProvider(Iterable<ExchangeRateProvider> providers) {
 		super(createContext(providers));

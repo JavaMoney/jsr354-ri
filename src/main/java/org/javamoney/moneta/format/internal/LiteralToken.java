@@ -30,9 +30,6 @@ import javax.money.format.MonetaryParseException;
  * 
  * @author Anatole Tresch
  * @author Werner Keil
- * 
- * @param <T>
- *            The item type.
  */
 final class LiteralToken implements FormatToken, Serializable {
 

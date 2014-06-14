@@ -31,7 +31,7 @@ import java.util.Objects;
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based on
  * {@link BigDecimal} for the numeric representation.
- * <p/>
+ * <p>
  * As required by {@link MonetaryAmount} this class is final, thread-safe, immutable and
  * serializable.
  *

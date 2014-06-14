@@ -67,7 +67,7 @@ public final class MonetaryFunctions {
 	}
 
 	/**
-	 * Return a {@link MonetaryAdjuster} realizing the recorpocal value of
+	 * Return a {@link MonetaryOperator} realizing the recorpocal value of
 	 * {@code f(R) = 1/R}.
 	 * 
 	 * @return the reciprocal operator, never {@code null}
@@ -76,8 +76,8 @@ public final class MonetaryFunctions {
 		return RECIPROCAL;
 	}
 
-/**
-	 * Factory method creating a new instance with the given {@code BigDecimal) permil value;
+	/**
+	 * Factory method creating a new instance with the given {@code BigDecimal} permil value.
 	 * @param decimal the decimal value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
 	 */
@@ -85,18 +85,18 @@ public final class MonetaryFunctions {
 		return new Permil(decimal);
 	}
 
-/**
-	 * Factory method creating a new instance with the given {@code Number) permil value;
-	 * @param decimal the decimal value of the permil operator being created.
+	/**
+	 * Factory method creating a new instance with the given {@code Number} permil value.
+	 * @param number the number value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
 	 */
 	public static MonetaryOperator permil(Number number) {
 		return permil(number, DEFAULT_MATH_CONTEXT);
 	}
 
-/**
-	 * Factory method creating a new instance with the given {@code Number) permil value;
-	 * @param decimal the decimal value of the permil operator being created.
+	/**
+	 * Factory method creating a new instance with the given {@code Number} permil value.
+	 * @param number the number value of the permil operator being created.
 	 * @return a new  {@code Permil} operator
 	 */
 	public static MonetaryOperator permil(Number number, MathContext mathContext) {
@@ -106,7 +106,7 @@ public final class MonetaryFunctions {
 	/**
 	 * Converts to {@link BigDecimal}, if necessary, or casts, if possible.
 	 * 
-	 * @param number
+	 * @param num
 	 *            The {@link Number}
 	 * @param mathContext
 	 *            the {@link MathContext}
@@ -132,8 +132,8 @@ public final class MonetaryFunctions {
 		return BigDecimal.valueOf(num.doubleValue());
 	}
 
-/**
-	 * Factory method creating a new instance with the given {@code BigDecimal) percent value;
+	/**
+	 * Factory method creating a new instance with the given {@code BigDecimal} percent value.
 	 * @param decimal the decimal value of the percent operator being created.
 	 * @return a new  {@code Percent} operator
 	 */
@@ -142,9 +142,9 @@ public final class MonetaryFunctions {
 										// work.
 	}
 
-/**
-	 * Factory method creating a new instance with the given {@code Number) percent value;
-	 * @param decimal the decimal value of the percent operator being created.
+	/**
+	 * Factory method creating a new instance with the given {@code Number} percent value.
+	 * @param number the number value of the percent operator being created.
 	 * 
 	 * @return a new  {@code Percent} operator
 	 */
