@@ -172,10 +172,11 @@ public interface LoaderService {
 	public Set<String> getResourceIds();
 
 	/**
-	 * Access the input stream of the given data resource. This method is called
-	 * by the modules that depend on the given data item. The method always
-	 * returns the most current data, either from the classpath or the local
-	 * cache, depending which flavors are available and recently updated.<br/>
+	 * Access the input stream of the given data resource.
+	 * <p>This method is called by the modules that depend on the given data
+	 * item. The method always returns the most current data, either from the
+	 * classpath or the local cache, depending which flavors are available
+	 * and recently updated.</p><p>
 	 * The method must be thread safe and can be accessed in parallel. Hereby it
 	 * is possible that, when an intermediate update of the data by update
 	 * occurs, that different input stream content is returned.
@@ -196,8 +197,6 @@ public interface LoaderService {
 	 * @param resourceId
 	 *            The unique identifier of the resource, not {@code null}.
 	 * @return true if load was successful.
-	 * @throws IOException
-	 *             if a problem occurred.
 	 */
 	public boolean loadDataLocal(String resourceId);
 

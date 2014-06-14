@@ -16,7 +16,6 @@
 package org.javamoney.moneta.format.internal;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryParseException;
@@ -33,7 +32,7 @@ public interface FormatToken {
 	 * 
 	 * @param context
 	 *            the current {@link ParseContext}.
-	 * @throws ParseException
+	 * @throws MonetaryParseException
 	 *             if parsing fails.
 	 */
 	public void parse(ParseContext context) throws MonetaryParseException;
