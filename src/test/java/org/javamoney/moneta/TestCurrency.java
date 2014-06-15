@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Currency;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -269,23 +268,6 @@ public final class TestCurrency implements CurrencyUnit, Serializable,
 
 		public String toString() {
 			return this.currency.toString();
-		}
-
-		public String getDisplayName(Locale locale) {
-			return this.currency.getDisplayName(locale);
-		}
-
-		public int getCashRounding() {
-			throw new UnsupportedOperationException("Not supported yet."); // To
-			// change
-			// body
-			// of
-			// generated
-			// methods,
-			// choose
-			// Tools
-			// |
-			// Templates.
 		}
 	}
 

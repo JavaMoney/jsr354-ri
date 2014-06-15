@@ -21,7 +21,6 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
 import javax.money.NumberValue;
 
-import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
 
