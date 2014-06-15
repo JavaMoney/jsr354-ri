@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.testng.Assert.*;
 
 /**
@@ -1030,7 +1029,6 @@ public class MoneyTest{
     @Test
     public void testWithMonetaryOperator(){
         MonetaryOperator adj = new MonetaryOperator(){
-            @SuppressWarnings("unchecked")
             @Override
             public MonetaryAmount apply(MonetaryAmount amount){
                 return Money.of(-100, amount.getCurrency());
@@ -1043,7 +1041,6 @@ public class MoneyTest{
         assertEquals(m.getCurrency(), a.getCurrency());
         assertEquals(Money.of(-100, m.getCurrency()), a);
         adj = new MonetaryOperator(){
-            @SuppressWarnings("unchecked")
             @Override
             public MonetaryAmount apply(MonetaryAmount amount){
                 return amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
