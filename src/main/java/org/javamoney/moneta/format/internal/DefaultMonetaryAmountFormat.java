@@ -71,9 +71,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	private MonetaryContext monetaryContext = MonetaryAmounts
 			.getAmountFactory().getDefaultMonetaryContext();
 
-	/** Currency used, when no currency was on the input parsed. */
-	private CurrencyUnit defaultCurrency;
-
 	/** The current {@link javax.money.format.AmountFormatContext}, never null. */
 	private AmountFormatContext amountFormatContext;
 
@@ -214,7 +211,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 		CurrencyUnit unit = ctx.getParsedCurrency();
 		Number num = ctx.getParsedNumber();
 		if (Objects.isNull(unit)) {
-			unit = defaultCurrency;
+			unit = this.amountFormatContext.getAttribute(CurrencyUnit.class);
 		}
 		if (Objects.isNull(num)) {
 			throw new MonetaryParseException(text.toString(), -1);
