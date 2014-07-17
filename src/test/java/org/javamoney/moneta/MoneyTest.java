@@ -157,7 +157,7 @@ public class MoneyTest{
 
                 BigDecimal.valueOf(2.15), EURO,
                 new MonetaryContext.Builder(Money.class).setPrecision(2).setFixedScale(true)
-                        .setObject(RoundingMode.DOWN).build()
+                        .set(RoundingMode.DOWN).build()
         );
         Money m2 = Money.of(BigDecimal.valueOf(2.1), EURO);
         assertEquals(m, m2);
@@ -215,7 +215,7 @@ public class MoneyTest{
     @Test
     public void testOfCurrencyUnitNumberMathContext(){
         MonetaryContext mc = new MonetaryContext.Builder(Money.class).setMaxScale(2345).setFixedScale(true)
-                .setObject(RoundingMode.CEILING).build();
+                .set(RoundingMode.CEILING).build();
         Money m = Money.of((byte) 2, EURO, mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -308,7 +308,7 @@ public class MoneyTest{
     @Test
     public void testOfStringNumberMathContext(){
         MonetaryContext mc = new MonetaryContext.Builder(Money.class).setMaxScale(2345).setFixedScale(true)
-                .setObject(RoundingMode.CEILING).build();
+                .set(RoundingMode.CEILING).build();
         Money m = Money.of((byte) 2, "EUR", mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -391,7 +391,7 @@ public class MoneyTest{
      */
     @Test
     public void testEqualsMonetarAmount(){
-        MonetaryAmount m = MonetaryAmounts.getAmountFactory().setCurrency("CHF").setNumber(100).create();
+        MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(100).create();
         MonetaryAmount m2 = Money.of(100, "CHF");
         Money m3 = Money.of(100, "CHF");
         assertTrue(m.equals(m2));
@@ -430,7 +430,7 @@ public class MoneyTest{
         Money m = Money.of(10, "CHF");
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
         MonetaryContext mc =
-                new MonetaryContext.Builder(Money.class).setPrecision(128).setObject(RoundingMode.HALF_EVEN).build();
+                new MonetaryContext.Builder(Money.class).setPrecision(128).set(RoundingMode.HALF_EVEN).build();
         MonetaryAmount m2 = m.getFactory().setContext(mc).create();
         assertNotNull(m2);
         assertTrue(m != m2);

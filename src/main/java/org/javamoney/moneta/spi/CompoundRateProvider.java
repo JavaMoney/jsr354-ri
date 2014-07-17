@@ -92,11 +92,10 @@ public class CompoundRateProvider extends AbstractRateProvider {
 	 * javax.money.convert.ConversionContext)
 	 */
 	@Override
-	protected ExchangeRate getExchangeRateInternal(CurrencyUnit base,
-			CurrencyUnit term, ConversionContext context) {
+	public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
 		for (ExchangeRateProvider prov : this.providers) {
-			if (prov.isAvailable(base, term, context)) {
-				ExchangeRate rate = prov.getExchangeRate(base, term, context);
+			if (prov.isAvailable(conversionQuery)) {
+				ExchangeRate rate = prov.getExchangeRate(conversionQuery);
 				if (Objects.nonNull(rate)) {
 					return rate;
 				}

@@ -80,9 +80,4 @@ public class MonetaryConversionTest {
 		assertTrue(types.contains("ECB"));
 	}
 
-	@Test
-	public void testIsProviderAvailable() {
-		assertTrue(MonetaryConversions.isProviderAvailable("IMF"));
-		assertFalse(MonetaryConversions.isProviderAvailable("foo"));
-	}
 }

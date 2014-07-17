@@ -17,9 +17,7 @@ package org.javamoney.moneta.spi;
 
 import javax.money.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Basic implementation of {@link MonetaryAmountFactory}, which simplifies development of the SPI interface.
@@ -51,16 +49,16 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
      */
     @Override
     public T create(){
-        if(currency==null){
+        if(currency == null){
             throw new MonetaryException("Cannot create FastMoney instance: missing currency.");
         }
-        if(number==null){
+        if(number == null){
             throw new MonetaryException("Cannot create FastMoney instance: missing number.");
         }
-        if(monetaryContext==null){
+        if(monetaryContext == null){
             throw new MonetaryException("Cannot create FastMoney instance: missing context.");
         }
-        return create(number,currency, monetaryContext);
+        return create(number, currency, monetaryContext);
     }
 
     protected abstract T create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext);
@@ -134,12 +132,14 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
     public MonetaryAmountFactory<T> setContext(MonetaryContext monetaryContext){
         Objects.requireNonNull(monetaryContext);
         int maxScale = getMaximalMonetaryContext().getMaxScale();
-        if(maxScale!=-1 && maxScale < monetaryContext.getMaxScale()){
-            throw new MonetaryException("Context exceeds maximal capabilities (scale) of this type: " + monetaryContext);
+        if(maxScale != -1 && maxScale < monetaryContext.getMaxScale()){
+            throw new MonetaryException(
+                    "Context exceeds maximal capabilities (scale) of this type: " + monetaryContext);
         }
         int precision = getMaximalMonetaryContext().getPrecision();
-        if(precision!=0 && precision < monetaryContext.getPrecision()){
-            throw new MonetaryException("Contexts exceeds maximal capabilities (precision) of this type: " + monetaryContext);
+        if(precision != 0 && precision < monetaryContext.getPrecision()){
+            throw new MonetaryException(
+                    "Contexts exceeds maximal capabilities (precision) of this type: " + monetaryContext);
         }
         this.monetaryContext = monetaryContext;
         return this;
@@ -177,8 +177,10 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
     public MonetaryAmountFactory<T> setAmount(MonetaryAmount amt){
         this.currency = amt.getCurrency();
         this.number = amt.getNumber().numberValue(BigDecimal.class);
-        this.monetaryContext = new MonetaryContext.Builder(amt.getMonetaryContext())
-                .setAmountType(DEFAULT_MONETARY_CONTEXT.getAmountType()).build();
+        this.monetaryContext =
+                new MonetaryContext.Builder(DEFAULT_MONETARY_CONTEXT.getAmountType()).importContext(
+                        amt.getMonetaryContext())
+                        .build();
         return this;
     }
 
@@ -190,7 +192,7 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
      * @return the corresponding {@link BigDecimal}
      */
     protected static BigDecimal getBigDecimal(Number num){
-    	return ConvertBigDecimal.of(num);
+        return ConvertBigDecimal.of(num);
     }
 
 }

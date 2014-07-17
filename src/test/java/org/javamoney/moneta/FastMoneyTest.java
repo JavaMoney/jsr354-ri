@@ -40,7 +40,7 @@ public class FastMoneyTest{
     @Test
     public void testOfCurrencyUnitBigDecimal(){
         FastMoney m = FastMoney.of(TEN, MonetaryCurrencies.getCurrency("EUR"));
-        assertEquals(new BigDecimal("10"), m.getNumber().numberValue(BigDecimal.class));
+        assertEquals(new BigDecimal("10").intValue(), m.getNumber().numberValue(BigDecimal.class).intValue());
     }
 
     @Test

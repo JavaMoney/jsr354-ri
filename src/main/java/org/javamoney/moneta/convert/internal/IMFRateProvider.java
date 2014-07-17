@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
-
 import org.javamoney.moneta.BuildableCurrencyUnit;
 import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
@@ -24,11 +22,11 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 
+import javax.money.CurrencyContext;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +38,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
+
+import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
 /**
  * Implements a {@link ExchangeRateProvider} that loads the IMF conversion data.
@@ -59,10 +59,10 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT = new ProviderContext.Builder("IMF", RateType.DEFERRED)
-            .setAttribute("providerDescription", "International Monetary Fond").setAttribute("days", 1).build();
+            .set("providerDescription", "International Monetary Fond").set("days", 1).build();
 
-    private static final CurrencyUnit SDR =
-            new BuildableCurrencyUnit.Builder("SDR").setDefaultFractionDigits(3).build(true);
+    private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", new CurrencyContext.Builder(
+            IMFRateProvider.class.getSimpleName()).build()).setDefaultFractionDigits(3).build(true);
 
     private Map<CurrencyUnit,List<DefaultExchangeRate>> currencyToSdr = new HashMap<>();
 
@@ -134,7 +134,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         // January 28, 2013 January 25, 2013
         // Euro 1.137520 1.137760 1.143840 1.142570 1.140510
         List<Long> timestamps = null;
-        while (Objects.nonNull(line)) {
+        while(Objects.nonNull(line)){
             if(line.trim().isEmpty()){
                 line = pr.readLine();
                 continue;
@@ -154,14 +154,14 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             }
             String[] parts = line.split("\\t");
             CurrencyUnit currency = currenciesByName.get(parts[0]);
-            if (Objects.isNull(currency)) {
+            if(Objects.isNull(currency)){
                 LOGGER.warning("Unknown currency from, IMF data feed: " + parts[0]);
                 line = pr.readLine();
                 continue;
             }
             Double[] values = parseValues(f, parts);
             for(int i = 0; i < values.length; i++){
-                if (Objects.isNull(values[i])) {
+                if(Objects.isNull(values[i])){
                     continue;
                 }
                 Long fromTS = timestamps.get(i);
@@ -172,22 +172,22 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                 }
                 if(currencyToSdr){ // Currency -> SDR
                     List<DefaultExchangeRate> rates = this.currencyToSdr.get(currency);
-                    if (Objects.isNull(rates)) {
+                    if(Objects.isNull(rates)){
                         rates = new ArrayList<DefaultExchangeRate>(5);
                         newCurrencyToSdr.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, toTS).build())
+                            new ConversionContext.Builder(CONTEXT, rateType).setTimestampMillis(toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
                     List<DefaultExchangeRate> rates = this.sdrToCurrency.get(currency);
-                    if (Objects.isNull(rates)) {
+                    if(Objects.isNull(rates)){
                         rates = new ArrayList<DefaultExchangeRate>(5);
                         newSdrToCurrency.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setAttribute(TIMESTAMP, fromTS).build())
+                            new ConversionContext.Builder(CONTEXT, rateType).setTimestampMillis(fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
                 }
@@ -227,15 +227,18 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return dates;
     }
 
-    protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), context.getNamedAttribute(TIMESTAMP, Long.class));
-        ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), context.getNamedAttribute(TIMESTAMP, Long.class));
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
+        CurrencyUnit base = conversionQuery.getBaseCurrency();
+        CurrencyUnit term = conversionQuery.getTermCurrency();
+        Long timestamp = conversionQuery.getTimestampMillis();
+        ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), timestamp);
+        ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), timestamp);
         if(base.equals(SDR)){
             return rate2;
         }else if(term.equals(SDR)){
             return rate1;
         }
-        if (Objects.isNull(rate1 )|| Objects.isNull(rate2)) {
+        if(Objects.isNull(rate1) || Objects.isNull(rate2)){
             return null;
         }
         DefaultExchangeRate.Builder builder =
@@ -248,18 +251,18 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     private ExchangeRate lookupRate(List<DefaultExchangeRate> list, Long timestamp){
-        if (Objects.isNull(list)) {
+        if(Objects.isNull(list)){
             return null;
         }
         ExchangeRate found = null;
         for(ExchangeRate rate : list){
-            if (Objects.isNull(timestamp)) {
+            if(Objects.isNull(timestamp)){
                 timestamp = System.currentTimeMillis();
             }
             if(isValid(rate.getConversionContext(), timestamp)){
                 return rate;
             }
-            if(Objects.isNull(found)) {
+            if(Objects.isNull(found)){
                 found = rate;
             }
         }
@@ -267,9 +270,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     private boolean isValid(ConversionContext conversionContext, Long timestamp){
-        Long validFrom = conversionContext.getNamedAttribute("validFrom", Long.class);
-        Long validTo = conversionContext.getNamedAttribute("validTo", Long.class);
-        if (Objects.nonNull(validFrom) && validFrom > timestamp){
+        Long validFrom = conversionContext.getLong("validFrom", null);
+        Long validTo = conversionContext.getLong("validTo", null);
+        if(Objects.nonNull(validFrom) && validFrom > timestamp){
             return false;
         }
         return !(Objects.nonNull(validTo) && validTo < timestamp);

@@ -30,13 +30,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryCurrencies;
-import javax.money.MonetaryException;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
+import javax.money.*;
 
 import org.testng.annotations.Test;
 
@@ -152,8 +146,8 @@ public class RoundedMoneyTest {
 		RoundedMoney m = RoundedMoney.of(
 				BigDecimal.valueOf(2.15),
                 EURO,
-				new MonetaryContext.Builder().setPrecision(2)
-						.setObject(RoundingMode.DOWN).build());
+				new MonetaryContext.Builder(RoundedMoney.class).setPrecision(2)
+						.set(RoundingMode.DOWN).build());
 		RoundedMoney m2 = RoundedMoney.of(EURO, BigDecimal.valueOf(2.1));
 		assertEquals(m, m2);
 		RoundedMoney m3 = m.multiply(100);
@@ -220,7 +214,7 @@ public class RoundedMoneyTest {
 	@Test
 	public void testOfCurrencyUnitNumberMonetaryContext() {
 		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
-				.setPrecision(2345).setObject(RoundingMode.CEILING).build();
+				.setPrecision(2345).set(RoundingMode.CEILING).build();
 		RoundedMoney m = RoundedMoney.of((byte) 2, EURO, mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -346,7 +340,7 @@ public class RoundedMoneyTest {
 	@Test
 	public void testOfStringNumberMathContext() {
 		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
-				.setPrecision(2345).setObject(RoundingMode.CEILING).build();
+				.setPrecision(2345).set(RoundingMode.CEILING).build();
 		RoundedMoney m = RoundedMoney.of( (byte) 2,"EUR", mc);
 		assertNotNull(m);
 		assertEquals(mc, m.getMonetaryContext());
@@ -460,7 +454,7 @@ public class RoundedMoneyTest {
 		assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT,
 				m.getMonetaryContext());
 		MonetaryContext mc = new MonetaryContext.Builder(RoundedMoney.class)
-				.setPrecision(2345).setObject(RoundingMode.CEILING).build();
+				.setPrecision(2345).set(RoundingMode.CEILING).build();
 		m = RoundedMoney.of( 10, "CHF",mc);
 		assertEquals(mc, m.getMonetaryContext());
 	}

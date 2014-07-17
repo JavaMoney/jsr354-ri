@@ -109,7 +109,7 @@ public class PerformanceTest {
 			money1 = money1.subtract(subtracting);
 			money1 = money1.multiply(3.4);
 			money1 = money1.divide(5.456);
-			money1 = money1.with(MonetaryRoundings.getRounding());
+			money1 = money1.with(MonetaryRoundings.getDefaultRounding());
 		}
 		long end = System.currentTimeMillis();
 		long duration = end - start;
@@ -136,7 +136,7 @@ public class PerformanceTest {
 			money2 = money2.subtract(subtracting);
 			money2 = money2.multiply(3.4);
 			money2 = money2.divide(5.456);
-			money2 = money2.with(MonetaryRoundings.getRounding());
+			money2 = money2.with(MonetaryRoundings.getDefaultRounding());
 		}
 		end = System.currentTimeMillis();
 		duration = end - start;
@@ -165,7 +165,7 @@ public class PerformanceTest {
 			money3 = money3.subtract(subtracting);
 			money3 = money3.multiply(3.4);
 			money3 = money3.divide(5.456);
-			money3 = money3.with(MonetaryRoundings.getRounding());
+			money3 = money3.with(MonetaryRoundings.getDefaultRounding());
 		}
 		end = System.currentTimeMillis();
 		duration = end - start;
@@ -193,7 +193,7 @@ public class PerformanceTest {
 			money4 = money4.subtract(Money.of( 232323,EURO));
 			money4 = money4.multiply(3.4);
 			money4 = money4.divide(5.456);
-			money4 = money4.with(MonetaryRoundings.getRounding());
+			money4 = money4.with(MonetaryRoundings.getDefaultRounding());
 		}
 		end = System.currentTimeMillis();
 		duration = end - start;

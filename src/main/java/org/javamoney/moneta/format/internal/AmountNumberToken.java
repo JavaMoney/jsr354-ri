@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
+import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryParseException;
 
 /**
@@ -52,9 +53,9 @@ final class AmountNumberToken implements FormatToken {
 	}
 
 	private void initDecimalFormats() {
-        formatFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.getAttribute(Locale.class));
-        parseFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.getAttribute(Locale.class));
-		DecimalFormatSymbols syms = amountFormatContext.getAttribute(DecimalFormatSymbols.class);
+        formatFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.get(Locale.class));
+        parseFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.get(Locale.class));
+		DecimalFormatSymbols syms = amountFormatContext.get(DecimalFormatSymbols.class);
 		if (Objects.nonNull(syms)) {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
@@ -88,7 +89,7 @@ final class AmountNumberToken implements FormatToken {
 		int digits = amount.getCurrency().getDefaultFractionDigits();
 		this.formatFormat.setMinimumFractionDigits(digits);
 		this.formatFormat.setMaximumFractionDigits(digits);
-		if (amountFormatContext.getNamedAttribute("groupingSizes", int[].class, new int[0]).length == 0) {
+		if (amountFormatContext.getAny("groupingSizes", int[].class, new int[0]).length == 0) {
 			appendable.append(this.formatFormat.format(amount.getNumber()
 					.numberValue(BigDecimal.class)));
 			return;
@@ -102,13 +103,13 @@ final class AmountNumberToken implements FormatToken {
 			appendable.append(preformattedValue);
 		} else {
 			if (Objects.isNull(numberGroup)) {
-				char[] groupChars = amountFormatContext.getNamedAttribute("groupingSeparators", char[].class, new char[0]);
+				char[] groupChars = amountFormatContext.getAny("groupingSeparators", char[].class, new char[0]);
 				if (groupChars.length == 0) {
 					groupChars = new char[] { this.formatFormat
 							.getDecimalFormatSymbols().getGroupingSeparator() };
 				}
 				numberGroup = new StringGrouper(groupChars,
-                                                amountFormatContext.getNamedAttribute("groupingSizes", int[].class, new int[0]));
+                                                amountFormatContext.getAny("groupingSizes", int[].class, new int[0]));
 			}
 			preformattedValue = numberGroup.group(numberParts[0])
 					+ this.formatFormat.getDecimalFormatSymbols()

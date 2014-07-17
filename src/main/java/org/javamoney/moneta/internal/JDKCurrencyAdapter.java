@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Currency;
 import java.util.Objects;
 
+import javax.money.CurrencyContext;
 import javax.money.CurrencyUnit;
 
 /**
@@ -38,17 +39,15 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	private static final long serialVersionUID = -798486953910548549L;
 
 	/** JDK currency instance. */
-	private Currency baseCurrency;
+	private final Currency baseCurrency;
+
+    private final CurrencyContext CONTEXT = new CurrencyContext.Builder(Currency.class.getName()).build();
 
 	/**
-	 * Private constructor, use a {@link Builder} for creating new instances.
+	 * Private constructor, uses a {@link java.util.Currency} for creating new instances.
 	 * 
-	 * @param code
-	 *            the currency code, not {@code null} or empty.
-	 * @param numCode
-	 *            the numeric code, >= -1.
-	 * @param fractionDigits
-	 *            the fraction digits, >= -1.
+	 * @param currency
+	 *            the Currency instance, not {@code null}.
 	 */
 	JDKCurrencyAdapter(Currency currency) {
 		this.baseCurrency = currency;
@@ -111,11 +110,17 @@ final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 		return baseCurrency.getDefaultFractionDigits();
 	}
 
-	/**
+    @Override
+    public CurrencyContext getCurrencyContext(){
+        return CONTEXT;
+    }
+
+    /**
 	 * Compares two instances, based on {@link #getCurrencyCode()}.
-	 * 
+	 * @param currency The instance to be compared with.
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+    @Override
 	public int compareTo(CurrencyUnit currency) {
 		Objects.requireNonNull(currency);
 		return getCurrencyCode().compareTo(currency.getCurrencyCode());

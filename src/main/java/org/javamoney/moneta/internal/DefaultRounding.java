@@ -17,10 +17,13 @@ package org.javamoney.moneta.internal;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
+import javax.money.MonetaryRounding;
+import javax.money.RoundingContext;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Implementation class providing rounding {@link javax.money.MonetaryOperator} instances
@@ -28,75 +31,90 @@ import java.util.Objects;
  * math, a scale and {@link RoundingMode}.
  * <p>
  * This class is thread safe.
- * 
+ *
  * @author Anatole Tresch
  * @author Werner Keil
  * @see RoundingMode
  */
-final class DefaultRounding implements MonetaryOperator {
+final class DefaultRounding implements MonetaryRounding, Serializable{
 
-	/** The {@link RoundingMode} used. */
-	private final RoundingMode roundingMode;
-	/** The scale to be applied. */
-	private final int scale;
+    /**
+     * The scale key to be used.
+     */
+    private static final String SCALE_KEY = "scale";
 
-	/**
-	 * Creates an rounding instance.
-	 * 
-	 * @param roundingMode
-	 *            The {@link java.math.RoundingMode} to be used, not {@code null}.
-	 */
-	DefaultRounding(int scale, RoundingMode roundingMode) {
-		Objects.requireNonNull(roundingMode, "RoundingMode required.");
-		if (scale < 0) {
-			scale = 0;
-		}
-		this.scale = scale;
-		this.roundingMode = roundingMode;
-	}
+    /**
+     * The provider class key to be used.
+     */
+    private static final String PROVCLASS_KEY = "providerClass";
 
-	/**
-	 * Creates an {@link DefaultRounding} for rounding {@link MonetaryAmount}
-	 * instances given a currency.
-	 * 
-	 * @param currency
-	 *            The currency, which determines the required precision. As
-	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
-	 *            is sued.
-	 * @return a new instance {@link javax.money.MonetaryOperator} implementing the
-	 *         rounding.
-	 */
-	DefaultRounding(CurrencyUnit currency,
-			RoundingMode roundingMode) {
-		this(currency.getDefaultFractionDigits(), roundingMode);
-	}
+    /**
+     * The {@link RoundingMode} used.
+     */
+    private final RoundingContext context;
 
-	/**
-	 * Creates an {@link javax.money.MonetaryOperator} for rounding {@link MonetaryAmount}
-	 * instances given a currency.
-	 * 
-	 * @param currency
-	 *            The currency, which determines the required precision. As
-	 *            {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
-	 *            is sued.
-	 * @return a new instance {@link javax.money.MonetaryOperator} implementing the
-	 *         rounding.
-	 */
-	DefaultRounding(CurrencyUnit currency) {
-		this(currency.getDefaultFractionDigits(), RoundingMode.HALF_UP);
-	}
+    /**
+     * Creates an rounding instance.
+     *
+     * @param roundingMode The {@link java.math.RoundingMode} to be used, not {@code null}.
+     */
+    DefaultRounding(int scale, RoundingMode roundingMode){
+        Objects.requireNonNull(roundingMode, "RoundingMode required.");
+        if(scale < 0){
+            scale = 0;
+        }
+        this.context = new RoundingContext.Builder("default", "default").
+                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).set(Optional.ofNullable(roundingMode)
+                                                                                           .orElseThrow(
+                                                                                                   () -> new
+                                                                                                           IllegalArgumentException(
+                                                                                                           "roundingMode missing")))
+                .build();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.money.MonetaryFunction#apply(java.lang.Object)
-	 */
-	@Override
-	public MonetaryAmount apply(MonetaryAmount amount){
-		return amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
-				((BigDecimal) amount.getNumber().numberValue(BigDecimal.class)).setScale(
-						this.scale,
-						this.roundingMode)).create();
-	}
+    /**
+     * Creates an {@link DefaultRounding} for rounding {@link MonetaryAmount}
+     * instances given a currency.
+     *
+     * @param currency The currency, which determines the required precision. As
+     *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
+     *                 is sued.
+     * @return a new instance {@link javax.money.MonetaryOperator} implementing the
+     * rounding.
+     */
+    DefaultRounding(CurrencyUnit currency, RoundingMode roundingMode){
+        this(currency.getDefaultFractionDigits(), roundingMode);
+    }
 
+    /**
+     * Creates an {@link javax.money.MonetaryOperator} for rounding {@link MonetaryAmount}
+     * instances given a currency.
+     *
+     * @param currency The currency, which determines the required precision. As
+     *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
+     *                 is sued.
+     * @return a new instance {@link javax.money.MonetaryOperator} implementing the
+     * rounding.
+     */
+    DefaultRounding(CurrencyUnit currency){
+        this(currency.getDefaultFractionDigits(), RoundingMode.HALF_UP);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see javax.money.MonetaryFunction#apply(java.lang.Object)
+     */
+    @Override
+    public MonetaryAmount apply(MonetaryAmount amount){
+        return amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
+                ((BigDecimal) amount.getNumber().numberValue(BigDecimal.class))
+                        .setScale(this.context.getInt(SCALE_KEY), this.context.get(RoundingMode.class))
+        ).create();
+    }
+
+    @Override
+    public RoundingContext getRoundingContext(){
+        return context;
+    }
 }

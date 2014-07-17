@@ -15,12 +15,11 @@
  */
 package org.javamoney.moneta.internal;
 
+import javax.money.CurrencyContext;
+import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -33,19 +32,36 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
     /** The currency units identified by Locale. */
     private static Map<Locale,CurrencyUnit> currencyUnitsByLocale = new ConcurrentHashMap<>();
 
-    @Override
-    public CurrencyUnit getCurrencyUnit(String currencyCode){
-        return currencyUnits.get(currencyCode);
-    }
 
-    @Override
-    public CurrencyUnit getCurrencyUnit(Locale locale){
-        return currencyUnitsByLocale.get(locale);
-    }
-
-    @Override
-    public Collection<CurrencyUnit> getCurrencies(){
-        return currencyUnits.values();
+    /**
+     * Return a {@link CurrencyUnit} instances matching the given
+     * {@link javax.money.CurrencyContext}.
+     *
+     * @param currencyQuery the {@link javax.money.CurrencyQuery} containing the parameters determining the query. not null.
+     * @return the corresponding {@link CurrencyUnit}, or null, if no such unit
+     * is provided by this provider.
+     */
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery currencyQuery){
+        Set<CurrencyUnit> result = new HashSet<>(currencyUnits.size());
+        if(currencyQuery.getTimestamp()!=null){
+            return Collections.emptySet();
+        }
+        for(String code: currencyQuery.getCurrencyCodes()){
+            CurrencyUnit cu = currencyUnits.get(code);
+            if(cu != null){
+                result.add(cu);
+            }
+        }
+        for(Locale locale: currencyQuery.getCountries()){
+            CurrencyUnit cu = currencyUnitsByLocale.get(locale);
+            if(cu!=null){
+                result.add(cu);
+            }
+        }
+        if(CurrencyQuery.ANY_QUERY.equals(currencyQuery)){
+            result.addAll(currencyUnits.values());
+        }
+        return result;
     }
 
     /**

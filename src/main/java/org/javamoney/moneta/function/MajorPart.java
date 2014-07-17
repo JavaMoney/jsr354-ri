@@ -15,48 +15,46 @@
  */
 package org.javamoney.moneta.function;
 
+import javax.money.*;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.money.*;
-
 /**
  * This class allows to extract the major part of a {@link MonetaryAmount} instance.
- * 
+ *
  * @author Anatole Tresch
  */
-final class MajorPart implements MonetaryOperator {
+final class MajorPart implements MonetaryOperator{
 
-	private MonetaryOperator downRounding = MonetaryRoundings
-			.getRounding(new RoundingContext.Builder()
-					.setAttribute("scale",0).setObject(RoundingMode.DOWN).build());
+    private MonetaryRounding downRounding =
+            MonetaryRoundings.getRounding(new RoundingQuery.Builder().set("scale", 0).set(RoundingMode.DOWN).build());
 
-	/**
-	 * Access the shared instance of {@link MajorPart} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
-	 */
-	MajorPart() {
-	}
+    /**
+     * Access the shared instance of {@link MajorPart} for use.
+     *
+     * @return the shared instance, never {@code null}.
+     */
+    MajorPart(){
+    }
 
-	/**
-	 * Gets the amount in major units as a {@code MonetaryAmount} with scale 0.
-	 * <p>
-	 * This returns the monetary amount in terms of the major units of the currency, truncating the
-	 * amount if necessary. For example, 'EUR 2.35' will return 'EUR 2', and 'BHD -1.345' will
-	 * return 'BHD -1'.
-	 * <p>
-	 * This is returned as a {@code MonetaryAmount} rather than a {@code BigInteger} . This is to
-	 * allow further calculations to be performed on the result. Should you need a
-	 * {@code BigInteger}, simply call {@code asType(BigInteger.class)}.
-	 * <p>
-	 * 
-	 * @return the major units part of the amount, never {@code null}
-	 */
-	@Override
-	public MonetaryAmount apply(MonetaryAmount amount) {
-		Objects.requireNonNull(amount, "Amount required.");
-		return amount.with(downRounding);
-	}
+    /**
+     * Gets the amount in major units as a {@code MonetaryAmount} with scale 0.
+     * <p>
+     * This returns the monetary amount in terms of the major units of the currency, truncating the
+     * amount if necessary. For example, 'EUR 2.35' will return 'EUR 2', and 'BHD -1.345' will
+     * return 'BHD -1'.
+     * <p>
+     * This is returned as a {@code MonetaryAmount} rather than a {@code BigInteger} . This is to
+     * allow further calculations to be performed on the result. Should you need a
+     * {@code BigInteger}, simply call {@code asType(BigInteger.class)}.
+     * <p>
+     *
+     * @return the major units part of the amount, never {@code null}
+     */
+    @Override
+    public MonetaryAmount apply(MonetaryAmount amount){
+        Objects.requireNonNull(amount, "Amount required.");
+        return amount.with(downRounding);
+    }
 
 }

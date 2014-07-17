@@ -15,20 +15,14 @@
  */
 package org.javamoney.moneta.internal;
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryException;
+import javax.money.*;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSingletonQuerySpi;
 import javax.money.spi.MonetaryAmountsSingletonSpi;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Default implementation ot {@link javax.money.spi.MonetaryAmountsSingletonSpi} loading the SPIs on startup
@@ -72,24 +66,23 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
     /**
      * (non-Javadoc)
      *
-     * @see javax.money.spi.MonetaryAmountsSingletonQuerySpi#queryAmountType(javax.money.spi.MonetaryAmountsSingletonSpi, javax.money.MonetaryContext)
+     * @see javax.money.spi.MonetaryAmountsSingletonQuerySpi#getAmountFactories(javax.money.MonetaryAmountFactoryQuery)
      */
     @Override
-    public Class<? extends MonetaryAmount> queryAmountType(MonetaryAmountsSingletonSpi amountSpi, MonetaryContext requiredContext){
-        if (Objects.isNull(requiredContext)) {
-            return amountSpi.getDefaultAmountType();
-        }
+    public Collection<MonetaryAmountFactory<?>> getAmountFactories(MonetaryAmountFactoryQuery factoryQuery){
+        Objects.requireNonNull(factoryQuery);
+        List<MonetaryAmountFactory<?>> factories = new ArrayList<>();
         // first check for explicit type
         for(@SuppressWarnings("unchecked") MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
                 .getServices(MonetaryAmountFactoryProviderSpi.class)){
             if(f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER){
                 continue;
             }
-            if(requiredContext.getAmountType() == f.getAmountType()){
-                if(isPrecisionOK(requiredContext, f.getMaximalMonetaryContext())){
-                    return f.getAmountType();
+            if(factoryQuery.getAmountType() == f.getAmountType()){
+                if(isPrecisionOK(factoryQuery, f.getMaximalMonetaryContext())){
+                    factories.add(f.createMonetaryAmountFactory());
                 }else{
-                    throw new MonetaryException("Incompatible context required=" + requiredContext + ", maximal=" +
+                    throw new MonetaryException("Incompatible context required=" + factoryQuery + ", maximal=" +
                                                         f.getMaximalMonetaryContext()
                     );
                 }
@@ -102,7 +95,7 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
                         f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER){
                     continue;
                 }
-                if(isPrecisionOK(requiredContext, f.getMaximalMonetaryContext())){
+                if(isPrecisionOK(factoryQuery, f.getMaximalMonetaryContext())){
                     selection.add(f);
                 }
             }
@@ -114,29 +107,35 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
                         f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER){
                     continue;
                 }
-                if(isPrecisionOK(requiredContext, f.getMaximalMonetaryContext())){
+                if(isPrecisionOK(factoryQuery, f.getMaximalMonetaryContext())){
                     selection.add(f);
                 }
             }
         }
         if(selection.size() == 1){
-            return selection.get(0).getAmountType();
+            factories.add(selection.get(0).createMonetaryAmountFactory());
         }
         Collections.sort(selection, CONTEXT_COMPARATOR);
-        return selection.get(0).getAmountType();
+        factories.add(selection.get(0).createMonetaryAmountFactory());
+        return factories;
     }
 
-    private boolean isPrecisionOK(MonetaryContext requiredContext, MonetaryContext maximalMonetaryContext){
+    private boolean isPrecisionOK(MonetaryAmountFactoryQuery requiredContext, MonetaryContext maximalMonetaryContext){
         if(maximalMonetaryContext.getPrecision() == 0){
             return true;
         }
-        if(requiredContext.getPrecision() == 0 && maximalMonetaryContext.getPrecision() != 0){
-            return false;
+        if(requiredContext.getPrecision()!=null){
+            if(requiredContext.getPrecision() == 0 && maximalMonetaryContext.getPrecision() != 0){
+                return false;
+            }
+            if(requiredContext.getPrecision() > maximalMonetaryContext.getPrecision()){
+                return false;
+            }
         }
-        if(requiredContext.getPrecision() > maximalMonetaryContext.getPrecision()){
-            return false;
+        if(requiredContext.getMaxScale()!=null){
+            return requiredContext.getMaxScale() <= maximalMonetaryContext.getMaxScale();
         }
-        return requiredContext.getMaxScale() <= maximalMonetaryContext.getMaxScale();
+        return true;
     }
 
 }

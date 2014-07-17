@@ -15,10 +15,8 @@
  */
 package org.javamoney.moneta.internal;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
-
+import javax.money.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -28,25 +26,34 @@ import java.util.Optional;
  * Implementation class providing cash rounding {@link javax.money.MonetaryOperator}
  * instances for {@link CurrencyUnit} instances. modeling rounding based on
  * minimal minor units available for cash payments.
- * <p/>
+ * <p>
  * This class is thread safe.
  *
  * @author Anatole Tresch
  */
-final class DefaultCashRounding implements MonetaryOperator{
+final class DefaultCashRounding implements MonetaryRounding, Serializable{
 
     /**
-     * The {@link RoundingMode} used.
+     * The scale key to be used.
      */
-    private final RoundingMode roundingMode;
+    private static final String SCALE_KEY = "scale";
     /**
-     * The scale to be applied.
+     * The scale key to be used.
      */
-    private final int scale;
+    private static final String MINMINORS_KEY = "minimalMinors";
+
     /**
-     * The minimal minors available in cash.
+     * The provider class key to be used.
      */
-    private final int minimalMinors;
+    private static final String PROVCLASS_KEY = "providerClass";
+
+    /**
+     * The cash rounding flag key to be used.
+     */
+    private static final String CASHROUNDING_KEY = "cashRounding";
+
+    private RoundingContext context;
+
 
     /**
      * Creates an rounding instance.
@@ -58,10 +65,10 @@ final class DefaultCashRounding implements MonetaryOperator{
         if(scale < 0){
             throw new IllegalArgumentException("scale < 0");
         }
-        this.scale = scale;
-		this.roundingMode = Optional.ofNullable(roundingMode).orElseThrow(
-				() -> new IllegalArgumentException("roundingMode missing"));
-        this.minimalMinors = minimalMinors;
+        this.context = new RoundingContext.Builder("default", "default").set(CASHROUNDING_KEY, true).
+                set(PROVCLASS_KEY, getClass().getName()).set(MINMINORS_KEY, minimalMinors).set(SCALE_KEY, scale)
+                .set(Optional.ofNullable(roundingMode)
+                             .orElseThrow(() -> new IllegalArgumentException("roundingMode missing"))).build();
     }
 
     /**
@@ -101,9 +108,12 @@ final class DefaultCashRounding implements MonetaryOperator{
     public MonetaryAmount apply(MonetaryAmount value){
         Objects.requireNonNull(value, "Amount required.");
         // 1 extract BD value, round according the default fraction units
+        int scale = this.context.getInt(SCALE_KEY);
+        RoundingMode roundingMode = this.context.get(RoundingMode.class);
         BigDecimal num = value.getNumber().numberValue(BigDecimal.class).setScale(scale, roundingMode);
         // 2 evaluate minor units and remainder
         long minors = num.movePointRight(num.scale()).longValueExact();
+        int minimalMinors = this.context.getInt(MINMINORS_KEY);
         long factor = minors / minimalMinors;
         long low = minimalMinors * factor;
         long high = minimalMinors * (factor + 1);
@@ -126,4 +136,8 @@ final class DefaultCashRounding implements MonetaryOperator{
                 .setNumber(BigDecimal.valueOf(minors).movePointLeft(scale)).create();
     }
 
+    @Override
+    public RoundingContext getRoundingContext(){
+        return context;
+    }
 }

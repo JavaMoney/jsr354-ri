@@ -17,8 +17,8 @@ package org.javamoney.moneta;
 
 import org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryException;
+import javax.money.*;
+import javax.money.CurrencyContext;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -43,6 +43,10 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
      * The default fraction digits.
      */
     private int defaultFractionDigits;
+    /**
+     * THe currency's context.
+     */
+    private javax.money.CurrencyContext currencyContext;
 
     /**
      * Constructor, called from the Builder.
@@ -56,6 +60,9 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         }
         if(builder.defaultFractionDigits < 0){
             throw new MonetaryException("defaultFractionDigits must be >= 0");
+        }
+        if(builder.currencyContext == null){
+            throw new MonetaryException("currencyContext must be != null");
         }
         this.defaultFractionDigits = builder.defaultFractionDigits;
         this.numericCode = builder.numericCode;
@@ -75,6 +82,11 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
     @Override
     public int getDefaultFractionDigits(){
         return defaultFractionDigits;
+    }
+
+    @Override
+    public CurrencyContext getCurrencyContext(){
+        return currencyContext;
     }
 
     @Override
@@ -133,15 +145,21 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          * The default fraction digits.
          */
         private int defaultFractionDigits = 2;
+        /**
+         * THe currency's context.
+         */
+        private javax.money.CurrencyContext currencyContext;
 
         /**
          * Creats a new Builder.
          *
          * @param currencyCode the (unique) and identifying currency code, not null.
          */
-        public Builder(String currencyCode){
+        public Builder(String currencyCode, javax.money.CurrencyContext currencyContext){
             Objects.requireNonNull(currencyCode, "currencyCode required");
             this.currencyCode = currencyCode;
+            Objects.requireNonNull(currencyContext, "currencyContext required");
+            this.currencyContext = currencyContext;
         }
 
         /**
@@ -204,7 +222,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          * @param register if {@code true} the instance created is published so it is accessible from
          *                 the {@code MonetaryCurrencies} singleton.
          * @return the new CurrencyUnit instance.
-         * @see javax.money.MonetaryCurrencies#getCurrency(String)
+         * @see javax.money.MonetaryCurrencies#getCurrency(String, String...)
          */
         public BuildableCurrencyUnit build(boolean register){
             BuildableCurrencyUnit cu = new BuildableCurrencyUnit(this);
@@ -222,8 +240,8 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          *                 the {@code MonetaryCurrencies} singleton.
          * @param locale   country Locale for making the currency for the given country.
          * @return the new CurrencyUnit instance.
-         * @see javax.money.MonetaryCurrencies#getCurrency(String)
-         * @see javax.money.MonetaryCurrencies#getCurrency(java.util.Locale)
+         * @see javax.money.MonetaryCurrencies#getCurrency(String, String...)
+         * @see javax.money.MonetaryCurrencies#getCurrency(Locale, String...)
          */
         public BuildableCurrencyUnit build(boolean register, Locale locale){
             BuildableCurrencyUnit cu = new BuildableCurrencyUnit(this);

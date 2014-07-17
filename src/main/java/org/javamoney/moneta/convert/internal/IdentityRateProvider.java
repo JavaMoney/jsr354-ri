@@ -15,18 +15,13 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import java.math.BigDecimal;
-import java.net.MalformedURLException;
-
-import javax.money.CurrencyUnit;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ProviderContext;
-import javax.money.convert.RateType;
-
 import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
+
+import javax.money.convert.*;
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
 
 /**
  * This class implements an {@link javax.money.convert.ExchangeRateProvider} that provides exchange rate with factor
@@ -40,8 +35,9 @@ public class IdentityRateProvider extends AbstractRateProvider{
     /**
      * The {@link javax.money.convert.ConversionContext} of this provider.
      */
-    private static final ProviderContext CONTEXT = new ProviderContext.Builder("IDENT",RateType.OTHER)
-            .setAttribute("providerDescription", "Identitiy Provider").build();
+    private static final ProviderContext CONTEXT =
+            new ProviderContext.Builder("IDENT", RateType.OTHER).set("providerDescription", "Identitiy Provider")
+                    .build();
 
     /**
      * Constructor, also loads initial data.
@@ -52,14 +48,23 @@ public class IdentityRateProvider extends AbstractRateProvider{
         super(CONTEXT);
     }
 
+    /**
+     * Check if this provider can provide a rate, which is only the case if base and term are equal.
+     *
+     * @param conversionQuery the required {@link ConversionQuery}, not {@code null}
+     * @return
+     */
+    public boolean isAvailable(ConversionQuery conversionQuery){
+        return conversionQuery.getBaseCurrency().getCurrencyCode()
+                .equals(conversionQuery.getTermCurrency().getCurrencyCode());
+    }
 
-    protected ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term, ConversionContext context){
-        if(base.getCurrencyCode().equals(term.getCurrencyCode())){
-            DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                    new ConversionContext.Builder(CONTEXT, RateType.OTHER).build()
-            );
-            builder.setBase(base);
-            builder.setTerm(term);
+    public ExchangeRate getExchangeRate(ConversionQuery query){
+        if(query.getBaseCurrency().getCurrencyCode().equals(query.getTermCurrency().getCurrencyCode())){
+            DefaultExchangeRate.Builder builder =
+                    new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.OTHER).build());
+            builder.setBase(query.getBaseCurrency());
+            builder.setTerm(query.getTermCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
             return builder.build();
         }
@@ -76,8 +81,8 @@ public class IdentityRateProvider extends AbstractRateProvider{
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
         if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
-            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase()).setBase(rate.getTerm())
-                    .setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
+            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase())
+                    .setBase(rate.getTerm()).setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
         return null;
     }

@@ -32,10 +32,10 @@ import java.math.RoundingMode;
 public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMoney>{
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setObject(RoundingMode.HALF_EVEN)
+            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN)
                     .build();
     static final MonetaryContext MAX_CONTEXT =
-            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).setObject(RoundingMode.HALF_EVEN)
+            new MonetaryContext.Builder(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN)
                     .build();
 
     /*

@@ -35,11 +35,11 @@ public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
 			FastMoney.class).setPrecision(19)
 			.setMaxScale(5).setFixedScale(true)
-			.setObject(RoundingMode.HALF_EVEN).build();
+			.set(RoundingMode.HALF_EVEN).build();
 	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
 			FastMoney.class).setPrecision(19)
 			.setMaxScale(5).setFixedScale(true)
-			.setObject(RoundingMode.HALF_EVEN).build();
+			.set(RoundingMode.HALF_EVEN).build();
 
 	@Override
 	protected FastMoney create(Number number, CurrencyUnit currency,

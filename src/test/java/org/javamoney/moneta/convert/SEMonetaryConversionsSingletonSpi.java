@@ -15,19 +15,11 @@
  */
 package org.javamoney.moneta.convert;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.money.CurrencyUnit;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.CurrencyConversion;
-import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.ProviderContext;
+import javax.money.convert.*;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
 
 import org.javamoney.moneta.spi.CompoundRateProvider;
@@ -40,7 +32,7 @@ public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSin
 		reload();
 	}
 
-	public void reload() {
+    public void reload() {
 		Map<String, ExchangeRateProvider> newProviders = new ConcurrentHashMap<>();
 		for (ExchangeRateProvider prov : ServiceLoader
 				.load(ExchangeRateProvider.class)) {
@@ -49,8 +41,8 @@ public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSin
 		this.conversionProviders = newProviders;
 	}
 
-	@Override
-	public ExchangeRateProvider getExchangeRateProvider(String... providers) {
+    @Override
+    public ExchangeRateProvider getExchangeRateProvider(String... providers) {
 		List<ExchangeRateProvider> provInstances = new ArrayList<>();
 		for (String provName : providers) {
 			provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(() -> new IllegalArgumentException(
@@ -59,21 +51,53 @@ public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSin
 		return new CompoundRateProvider(provInstances);
 	}
 
+    @Override
+    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query) {
+        List<ExchangeRateProvider> provInstances = new ArrayList<>();
+        for (String provName : query.getProviders()) {
+            provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(() -> new IllegalArgumentException(
+                    "Unsupported conversion/rate provider: " + provName)));
+        }
+        return new CompoundRateProvider(provInstances);
+    }
+
+    @Override
+    public boolean isExchangeRateProviderAvailable(ConversionQuery conversionQuery){
+        for (String provName : conversionQuery.getProviders()) {
+            if(this.conversionProviders.get(provName)!=null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isConversionAvailable(ConversionQuery conversionQuery){
+        if(conversionQuery.getTermCurrency()==null){
+            return false;
+        }
+        for (String provName : conversionQuery.getProviders()) {
+            if(this.conversionProviders.get(provName)!=null){
+                if(this.conversionProviders.get(provName).isAvailable(conversionQuery)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Collection<ExchangeRateProvider> getExchangeRateProviders(ConversionQuery query) {
+        List<ExchangeRateProvider> provInstances = new ArrayList<>();
+        for (String provName : query.getProviders()) {
+            provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(() -> new IllegalArgumentException(
+                    "Unsupported conversion/rate provider: " + provName)));
+        }
+        return provInstances;
+    }
+
 	@Override
 	public Set<String> getProviderNames() {
 		return this.conversionProviders.keySet();
-	}
-
-	@Override
-	public boolean isProviderAvailable(String provider) {
-		return conversionProviders.containsKey(provider);
-	}
-
-	@Override
-	public CurrencyConversion getConversion(CurrencyUnit termCurrency,
-			ConversionContext conversionContext, String... providers) {
-		return getExchangeRateProvider(providers).getCurrencyConversion(
-				termCurrency);
 	}
 
 	@Override
@@ -81,12 +105,6 @@ public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSin
 		List<String> stringList = new ArrayList<>();
 		stringList.add("test");
 		return stringList;
-	}
-
-	@Override
-	public ProviderContext getProviderContext(String provider) {
-		ExchangeRateProvider prov = getExchangeRateProvider(provider);
-		return prov.getProviderContext();
 	}
 
 }

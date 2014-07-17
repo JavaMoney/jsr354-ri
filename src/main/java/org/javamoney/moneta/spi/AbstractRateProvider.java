@@ -54,9 +54,6 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
         this.providerContext = providerContext;
     }
 
-    protected abstract ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term,
-                                                            ConversionContext context);
-
     /*
      * (non-Javadoc)
      *
@@ -68,186 +65,19 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
         return providerContext;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#isAvailable(javax.money.CurrencyUnit
-     * , javax.money.CurrencyUnit)
-     */
     @Override
-    public boolean isAvailable(CurrencyUnit src, CurrencyUnit target){
-        return Objects.nonNull(getExchangeRate(src, target));
-    }
+    public abstract ExchangeRate getExchangeRate(ConversionQuery conversionQuery);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getExchangeRate(javax.money.
-     * CurrencyUnit, javax.money.CurrencyUnit)
-     */
     @Override
-    public ExchangeRate getExchangeRate(CurrencyUnit source, CurrencyUnit target){
-        return getExchangeRate(source, target, ConversionContext.of());
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getReversed(javax.money.convert
-     * .ExchangeRate)
-     */
-    @Override
-    public ExchangeRate getReversed(ExchangeRate rate){
-        if(isAvailable(rate.getTerm(), rate.getBase(), rate.getConversionContext())){
-            return getExchangeRate(rate.getTerm(), rate.getBase(), rate.getConversionContext());
-        }
-        return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getCurrencyConversion(javax.
-     * money.CurrencyUnit)
-     */
-    @Override
-    public CurrencyConversion getCurrencyConversion(CurrencyUnit termCurrency){
+    public CurrencyConversion getCurrencyConversion(ConversionQuery conversionQuery){
         if(getProviderContext().getRateTypes().size() == 1){
-            return new LazyBoundCurrencyConversion(termCurrency, this, ConversionContext
+            return new LazyBoundCurrencyConversion(conversionQuery.getTermCurrency(), this, ConversionContext
                     .of(getProviderContext().getProvider(), getProviderContext().getRateTypes().iterator().next()));
         }
-        return new LazyBoundCurrencyConversion(termCurrency, this,
+        return new LazyBoundCurrencyConversion(conversionQuery.getTermCurrency(), this,
                                                ConversionContext.of(getProviderContext().getProvider(), RateType.ANY));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getCurrencyConversion(javax.
-     * money.CurrencyUnit, javax.money.convert.ConversionContext)
-     */
-    @Override
-    public CurrencyConversion getCurrencyConversion(CurrencyUnit term, ConversionContext conversionContext){
-        ConversionContext ctx = ConversionContext.of(getProviderContext().getProvider(), conversionContext.getRateType());
-        return new LazyBoundCurrencyConversion(term, this, ctx);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#isAvailable(java.lang.String,
-     * java.lang.String)
-     */
-    @Override
-    public boolean isAvailable(String baseCode, String termCode){
-        return isAvailable(MonetaryCurrencies.getCurrency(baseCode), MonetaryCurrencies.getCurrency(termCode),
-                           ConversionContext.of());
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getExchangeRate(java.lang.String
-     * , java.lang.String)
-     */
-    @Override
-    public ExchangeRate getExchangeRate(String baseCode, String termCode){
-        return getExchangeRate(MonetaryCurrencies.getCurrency(baseCode), MonetaryCurrencies.getCurrency(termCode),
-                               ConversionContext.of());
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getCurrencyConversion(java.lang
-     * .String)
-     */
-    @Override
-    public CurrencyConversion getCurrencyConversion(String termCode){
-        return getCurrencyConversion(MonetaryCurrencies.getCurrency(termCode));
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getCurrencyConversion(java.lang
-     * .String, javax.money.convert.ConversionContext)
-     */
-    @Override
-    public CurrencyConversion getCurrencyConversion(String termCode, ConversionContext conversionContext){
-        return getCurrencyConversion(MonetaryCurrencies.getCurrency(termCode), conversionContext);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#isAvailable(java.lang.String,
-     * java.lang.String, javax.money.convert.ConversionContext)
-     */
-    @Override
-    public boolean isAvailable(String baseCode, String termCode, ConversionContext conversionContext){
-        return isAvailable(MonetaryCurrencies.getCurrency(baseCode), MonetaryCurrencies.getCurrency(termCode),
-                           conversionContext);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * javax.money.convert.ExchangeRateProvider#getExchangeRate(java.lang.String
-     * , java.lang.String, javax.money.convert.ConversionContext)
-     */
-    @Override
-    public ExchangeRate getExchangeRate(String baseCode, String termCode, ConversionContext conversionContext){
-        Objects.requireNonNull(baseCode);
-        Objects.requireNonNull(termCode);
-        Objects.requireNonNull(conversionContext);
-        return getExchangeRate(MonetaryCurrencies.getCurrency(baseCode), MonetaryCurrencies.getCurrency(termCode),
-                               conversionContext);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.convert.internal.AbstractRateProvider#isAvailable
-     * (javax.money.CurrencyUnit, javax.money.CurrencyUnit,
-     * javax.money.convert.ConversionContext)
-     */
-    @Override
-    public boolean isAvailable(CurrencyUnit base, CurrencyUnit term, ConversionContext conversionContext){
-        return Objects.nonNull(getExchangeRateInternal(base, term, conversionContext));
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.convert.internal.AbstractRateProvider#getExchangeRate
-     * (javax.money.CurrencyUnit, javax.money.CurrencyUnit,
-     * javax.money.convert.ConversionContext)
-     */
-    @Override
-    public ExchangeRate getExchangeRate(CurrencyUnit base, CurrencyUnit term, ConversionContext conversionContext){
-        Objects.requireNonNull(base);
-        Objects.requireNonNull(term);
-        Objects.requireNonNull(conversionContext);
-        ExchangeRate rate = getExchangeRateInternal(base, term, conversionContext);
-		return Optional.ofNullable(rate).orElseThrow(
-				() -> new CurrencyConversionException(base, term,
-						conversionContext));
-        
-    }
 
     /**
      * A protected helper method to multiply 2 {@link NumberValue} types.<br>
@@ -265,8 +95,8 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
             throw new ArithmeticException("The multiplier cannot be null");
         }
         return new DefaultNumberValue(
-                multiplicand.numberValue(BigDecimal.class).multiply(multiplier.numberValue(BigDecimal.class))
-        ); // TODO should we use numberValueExact?
+                multiplicand.numberValueExact(BigDecimal.class).multiply(multiplier.numberValue(BigDecimal.class))
+        );
     }
 
     /**
@@ -285,8 +115,8 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
-                dividend.numberValue(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class))
-        ); // TODO should we use numberValueExact?
+                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class))
+        );
     }
 
     /**
@@ -306,7 +136,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
-                dividend.numberValue(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class), context)
-        ); // TODO should we use numberValueExact?
+                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class), context)
+        );
     }
 }

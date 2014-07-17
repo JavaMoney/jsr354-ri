@@ -51,7 +51,7 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion
 	@Override
 	public ExchangeRate getExchangeRate(MonetaryAmount amount) {
 		return this.rateProvider.getExchangeRate(amount.getCurrency(),
-				getTermCurrency(), getConversionContext());
+				getTermCurrency());
 	}
 
 	/*

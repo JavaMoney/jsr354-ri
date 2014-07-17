@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.money.CurrencyContext;
+import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
 
@@ -32,7 +34,7 @@ import javax.money.spi.CurrencyProviderSpi;
  */
 public class JDKCurrencyProvider implements CurrencyProviderSpi {
 
-	/** Internal shared cache of {@link MoneyCurrency} instances. */
+	/** Internal shared cache of {@link javax.money.CurrencyUnit} instances. */
 	private static final Map<String, CurrencyUnit> CACHED = new HashMap<String, CurrencyUnit>();
 
 	public JDKCurrencyProvider() {
@@ -42,18 +44,45 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
 		}
 	}
 
-	@Override
-	public CurrencyUnit getCurrencyUnit(String currencyCode) {
-		return CACHED.get(currencyCode);
-	}
+    @Override
+    public String getProviderName(){
+        return "default";
+    }
 
-	@Override
-	public CurrencyUnit getCurrencyUnit(Locale locale) {
+    /**
+     * Return a {@link CurrencyUnit} instances matching the given
+     * {@link javax.money.CurrencyContext}.
+     *
+     * @param currencyQuery the {@link javax.money.CurrencyContext} containing the parameters determining the query. not null.
+     * @return the corresponding {@link CurrencyUnit}, or null, if no such unit
+     * is provided by this provider.
+     */
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery currencyQuery){
+        Set<CurrencyUnit> result = new HashSet<>();
+        for(String code: currencyQuery.getCurrencyCodes()){
+            CurrencyUnit cu = CACHED.get(code);
+            if(cu!=null){
+                result.add(cu);
+            }
+        }
+        for(Locale country: currencyQuery.getCountries()){
+            CurrencyUnit cu = getCurrencyUnit(country);
+            if(cu!=null){
+                result.add(cu);
+            }
+        }
+        if(CurrencyQuery.ANY_QUERY.equals(currencyQuery)){
+            result.addAll(CACHED.values());
+        }
+        return result;
+    }
+
+	private CurrencyUnit getCurrencyUnit(Locale locale) {
 		Currency cur = null;
 		try {
 			cur = Currency.getInstance(locale);
 			if (Objects.nonNull(cur)) {
-				return getCurrencyUnit(cur.getCurrencyCode());
+				return CACHED.get(cur.getCurrencyCode());
 			}
 		} catch (Exception e) {
 			if (Logger.getLogger(getClass().getName()).isLoggable(Level.FINEST)) {
@@ -63,10 +92,5 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
 		}
 		return null;
 	}
-
-    @Override
-    public Collection<CurrencyUnit> getCurrencies(){
-        return CACHED.values();
-    }
 
 }

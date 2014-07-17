@@ -19,6 +19,7 @@ import org.javamoney.moneta.spi.CompoundRateProvider;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
 import javax.money.MonetaryException;
+import javax.money.convert.ConversionQuery;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
@@ -60,15 +61,8 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     @Override
-    public ExchangeRateProvider getExchangeRateProvider(String... providers){
-        Objects.requireNonNull(providers);
-        if(providers.length==0){
-            List<String> defaultChain = getDefaultProviderChain();
-            if(defaultChain.isEmpty()){
-                throw new IllegalStateException("No default provider chain available.");
-            }
-            return getExchangeRateProvider(defaultChain.toArray(new String[defaultChain.size()]));
-        }
+    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query){
+        Collection<String> providers = getProvidersToUse(query);
         List<ExchangeRateProvider> provInstances = new ArrayList<>();
         for (String provName : providers) {
 			ExchangeRateProvider prov = Optional.ofNullable(
@@ -86,13 +80,62 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     @Override
-    public Set<String> getProviderNames(){
-        return this.conversionProviders.keySet();
+    public boolean isExchangeRateProviderAvailable(ConversionQuery conversionQuery){
+        return false;
     }
 
     @Override
-    public boolean isProviderAvailable(String provider){
-        return conversionProviders.containsKey(provider);
+    public boolean isConversionAvailable(ConversionQuery conversionQuery){
+        return false;
+    }
+
+    private Collection<ExchangeRateProvider> getExchangeRateProviders(ConversionQuery query){
+        Collection<String> providers = getProvidersToUse(query);
+        List<ExchangeRateProvider> provInstances = new ArrayList<>();
+        for (String provName : providers) {
+            ExchangeRateProvider prov = Optional.ofNullable(
+                    this.conversionProviders.get(provName))
+                    .orElseThrow(
+                            () -> new MonetaryException(
+                                    "Unsupported conversion/rate provider: "
+                                            + provName));
+            provInstances.add(prov);
+        }
+        return provInstances;
+    }
+
+    @Override
+    public ExchangeRateProvider getExchangeRateProvider(String... providers){
+        List<ExchangeRateProvider> provInstances = new ArrayList<>();
+        for (String provName : providers) {
+            ExchangeRateProvider prov = Optional.ofNullable(
+                    this.conversionProviders.get(provName))
+                    .orElseThrow(
+                            () -> new MonetaryException(
+                                    "Unsupported conversion/rate provider: "
+                                            + provName));
+            provInstances.add(prov);
+        }
+        if(provInstances.size()==1){
+            return provInstances.get(0);
+        }
+        return new CompoundRateProvider(provInstances);
+    }
+
+    private Collection<String> getProvidersToUse(ConversionQuery query){
+        Collection<String> providers = query.getProviders();
+        if(providers.isEmpty()){
+            providers = getDefaultProviderChain();
+            if(providers.isEmpty()){
+                throw new IllegalStateException("No default provider chain available.");
+            }
+        }
+        return providers;
+    }
+
+    @Override
+    public Set<String> getProviderNames(){
+        return this.conversionProviders.keySet();
     }
 
     @Override
@@ -101,7 +144,7 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
         String defaultChain = MonetaryConfig.getConfig().get("conversion.default-chain");
         String[] items = defaultChain.split(",");
         for(String item : items){
-            if(isProviderAvailable(item.trim())){
+            if(getProviderNames().contains(item.trim())){
                 provList.add(item);
             }else{
                 LOG.warning("Ignoring non existing default provider: " + item);

@@ -26,7 +26,7 @@ import javax.money.NumberValue;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class DefaultNumberValue extends NumberValue {
+public final class DefaultNumberValue extends NumberValue {
 	
 	/**
 	 * serialVersionUID.
