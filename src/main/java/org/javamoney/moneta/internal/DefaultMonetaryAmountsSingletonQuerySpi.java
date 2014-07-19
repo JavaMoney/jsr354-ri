@@ -78,7 +78,7 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
             if(f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER){
                 continue;
             }
-            if(factoryQuery.getAmountType() == f.getAmountType()){
+            if(factoryQuery.getTargetType() == f.getAmountType()){
                 if(isPrecisionOK(factoryQuery, f.getMaximalMonetaryContext())){
                     factories.add(f.createMonetaryAmountFactory());
                 }else{
