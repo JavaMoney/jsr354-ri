@@ -184,12 +184,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     private long getInternalNumber(Number number, boolean allowInternalRounding){
         BigDecimal bd = MoneyUtils.getBigDecimal(number);
         if(!allowInternalRounding && bd.scale() > SCALE){
-            throw new MonetaryException(number + " can not be represented by this class, scale > " + SCALE);
+            throw new ArithmeticException(number + " can not be represented by this class, scale > " + SCALE);
         }
         if(bd.compareTo(MIN_BD) < 0){
-            throw new MonetaryException("Overflow: " + number + " < " + MIN_BD);
+            throw new ArithmeticException("Overflow: " + number + " < " + MIN_BD);
         }else if(bd.compareTo(MAX_BD) > 0){
-            throw new MonetaryException("Overflow: " + number + " > " + MAX_BD);
+            throw new ArithmeticException("Overflow: " + number + " > " + MAX_BD);
         }
         return bd.movePointRight(SCALE).longValue();
     }
@@ -289,23 +289,18 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if(amount.isZero()){
             return this;
         }
-        try{
-            return new FastMoney(Math.addExact(this.number, getInternalNumber(amount.getNumber(), false)),
+        return new FastMoney(Math.addExact(this.number, getInternalNumber(amount.getNumber(), false)),
                                  getCurrency());
-        }
-        catch(ArithmeticException e){
-            throw new MonetaryException("Amount exceeds arithmetic capabilities.", e);
-        }
     }
 
     private void checkAmountParameter(MonetaryAmount amount){
         MoneyUtils.checkAmountParameter(amount, this.currency);
         // numeric check for overflow...
         if(amount.getNumber().getScale() > SCALE){
-            throw new MonetaryException("Parameter exceeds maximal scale: " + SCALE);
+            throw new ArithmeticException("Parameter exceeds maximal scale: " + SCALE);
         }
         if(amount.getNumber().getPrecision() > MAX_BD.precision()){
-            throw new MonetaryException("Parameter exceeds maximal precision: " + SCALE);
+            throw new ArithmeticException("Parameter exceeds maximal precision: " + SCALE);
         }
     }
 
@@ -356,12 +351,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
             return this;
         }
         BigDecimal mult = MoneyUtils.getBigDecimal(multiplicand);
-        try{
             return new FastMoney(mult.multiply(BigDecimal.valueOf(this.number)).longValueExact(), getCurrency());
-        }
-        catch(ArithmeticException e){
-            throw new MonetaryException("Multiplication exceeds capabilities of " + getClass().getName(), e);
-        }
     }
 
     /*
@@ -628,14 +618,14 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         Objects.requireNonNull(number, "Number is required.");
         // numeric check for overflow...
         if(number.longValue() > MAX_BD.longValue()){
-            throw new MonetaryException("Value exceeds maximal value: " + MAX_BD);
+            throw new ArithmeticException("Value exceeds maximal value: " + MAX_BD);
         }
         BigDecimal bd = MoneyUtils.getBigDecimal(number);
         if(bd.precision() > MAX_BD.precision()){
-            throw new MonetaryException("Precision exceeds maximal precision: " + MAX_BD.precision());
+            throw new ArithmeticException("Precision exceeds maximal precision: " + MAX_BD.precision());
         }
         if(bd.scale() > SCALE){
-            throw new MonetaryException("Scale exceeds maximal scale: " + SCALE);
+            throw new ArithmeticException("Scale exceeds maximal scale: " + SCALE);
         }
     }
 
@@ -649,7 +639,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         try{
             return FastMoney.class.cast(operator.apply(this));
         }
-        catch(MonetaryException e){
+        catch(ArithmeticException e){
             throw e;
         }
         catch(Exception e){
@@ -663,7 +653,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         try{
             return query.queryFrom(this);
         }
-        catch(MonetaryException e){
+        catch(MonetaryException | ArithmeticException e){
             throw e;
         }
         catch(Exception e){

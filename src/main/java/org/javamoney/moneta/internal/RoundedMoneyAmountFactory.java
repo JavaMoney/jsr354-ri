@@ -45,7 +45,7 @@ public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMone
      */
     @Override
     protected RoundedMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
-        return RoundedMoney.of(number, currency );
+        return RoundedMoney.of(number, currency, monetaryContext);
     }
 
     @Override

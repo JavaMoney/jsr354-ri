@@ -86,7 +86,7 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
 
     @Override
     public boolean isConversionAvailable(ConversionQuery conversionQuery){
-        return false;
+        return getExchangeRateProvider(conversionQuery).getCurrencyConversion(conversionQuery)!=null;
     }
 
     private Collection<ExchangeRateProvider> getExchangeRateProviders(ConversionQuery query){

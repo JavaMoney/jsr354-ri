@@ -590,7 +590,7 @@ public class FastMoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#longValue()}.
      */
-    @Test(expectedExceptions = MonetaryException.class)
+    @Test(expectedExceptions = ArithmeticException.class)
     public void testLongValue(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100L, m.getNumber().longValue(), "longValue of " + m);
@@ -628,14 +628,14 @@ public class FastMoneyTest{
             m = FastMoney.of(Long.MAX_VALUE, "CHF");
             fail("longValueExact(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
         }
-        catch(MonetaryException e){
+        catch(ArithmeticException e){
             // OK
         }
         try{
             m = FastMoney.of(Long.MIN_VALUE, "CHF");
             fail("longValueExact(-100.3434) should raise an ArithmeticException.");
         }
-        catch(MonetaryException e){
+        catch(ArithmeticException e){
             // OK
         }
         try{
@@ -651,7 +651,7 @@ public class FastMoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#doubleValue()}.
      */
-    @Test(expectedExceptions = MonetaryException.class)
+    @Test(expectedExceptions = ArithmeticException.class)
     public void testDoubleValue(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
