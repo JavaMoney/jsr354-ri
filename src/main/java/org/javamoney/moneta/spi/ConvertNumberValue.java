@@ -103,7 +103,7 @@ enum ConvertNumberValue {
 				throw new ArithmeticException(
 						"Value not exact mappable to double: " + number);
 			}
-			return Double.valueOf(d);
+			return d;
 		}
 
 	}
@@ -124,7 +124,7 @@ enum ConvertNumberValue {
 				throw new ArithmeticException(
 						"Value not exact mappable to float: " + number);
 			}
-			return Float.valueOf(f);
+			return f;
 		}
 
 	}
@@ -140,7 +140,7 @@ enum ConvertNumberValue {
 		@Override
 		public <E extends Number> Long convertExact(Class<E> numberType,
 				Number number) {
-			return Long.valueOf(ConvertBigDecimal.of(number).longValueExact());
+			return ConvertBigDecimal.of(number).longValueExact();
 		}
 
 	}
@@ -156,7 +156,7 @@ enum ConvertNumberValue {
 		public <E extends Number> Integer convertExact(Class<E> numberType,
 				Number number) {
 			
-			return Integer.valueOf(ConvertBigDecimal.of(number).intValueExact());
+			return ConvertBigDecimal.of(number).intValueExact();
 		}
 
 	}
@@ -171,7 +171,7 @@ enum ConvertNumberValue {
 		@Override
 		public <E extends Number> Short convertExact(Class<E> numberType,
 				Number number) {
-			return Short.valueOf(ConvertBigDecimal.of(number).shortValueExact());
+			return ConvertBigDecimal.of(number).shortValueExact();
 		}
 
 	}
@@ -187,7 +187,7 @@ enum ConvertNumberValue {
 		public <E extends Number> Byte convertExact(Class<E> numberType,
 				Number number) {
 			
-			return Byte.valueOf(ConvertBigDecimal.of(number).byteValueExact());
+			return ConvertBigDecimal.of(number).byteValueExact();
 		}
 
 	}
@@ -203,8 +203,8 @@ enum ConvertNumberValue {
 		@Override
 		public <E extends Number> AtomicInteger convertExact(
 				Class<E> numberType, Number number) {
-			return new AtomicInteger(Integer.valueOf(ConvertBigDecimal.of(
-					number).intValueExact()));
+			return new AtomicInteger(ConvertBigDecimal.of(
+                    number).intValueExact());
 		}
 
 	}
@@ -220,7 +220,7 @@ enum ConvertNumberValue {
 		@Override
 		public <E extends Number> AtomicLong convertExact(Class<E> numberType,
 				Number number) {
-			return new AtomicLong(Long.valueOf(ConvertBigDecimal.of(number).longValueExact()));
+			return new AtomicLong(ConvertBigDecimal.of(number).longValueExact());
 		}
 
 	}
