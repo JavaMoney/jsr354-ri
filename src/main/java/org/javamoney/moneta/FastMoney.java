@@ -22,7 +22,11 @@ import org.javamoney.moneta.spi.MoneyUtils;
 import javax.money.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <code>long</code> based implementation of {@link MonetaryAmount}.This class internally uses a
@@ -99,6 +103,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     private static final MonetaryContext MONETARY_CONTEXT =
             new MonetaryContext.Builder(FastMoney.class).setMaxScale(SCALE).setFixedScale(true).setPrecision(19)
                     .build();
+    /** Default rounding context used. */
+    private static final MathContext CALC_CONTEXT = new MathContext(19, RoundingMode.HALF_EVEN);
 
     /**
      * Maximum possible value supported, using XX (no currency).
@@ -350,8 +356,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if(isOne(multiplicand)){
             return this;
         }
-        BigDecimal mult = MoneyUtils.getBigDecimal(multiplicand);
-            return new FastMoney(mult.multiply(BigDecimal.valueOf(this.number)).longValueExact(), getCurrency());
+        return new FastMoney(Math.round(this.number * multiplicand.doubleValue()), getCurrency());
+//        BigDecimal mult = MoneyUtils.getBigDecimal(multiplicand);
+//            return new FastMoney(mult.multiply(BigDecimal.valueOf(this.number), CALC_CONTEXT).longValueExact(), getCurrency());
     }
 
     /*
@@ -625,7 +632,10 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
             throw new ArithmeticException("Precision exceeds maximal precision: " + MAX_BD.precision());
         }
         if(bd.scale() > SCALE){
-            throw new ArithmeticException("Scale exceeds maximal scale: " + SCALE);
+            Logger log = Logger.getLogger(getClass().getName());
+            if(log.isLoggable(Level.FINEST)){
+                log.finest("Scale exceeds maximal scale of FastMoney (" + SCALE + "), implicit rounding will be applied to " + number);
+            }
         }
     }
 
