@@ -346,6 +346,7 @@
 			<groupId>javax.money</groupId>
 			<artifactId>money-api</artifactId>
 			<version>${jsr.version}</version>
+            <scope>compile</scope>
 		</dependency>
 	</dependencies>
 

@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 public class ConvertBigDecimalTest {
 
 	private BigDecimal expectValue = BigDecimal.TEN;
-	
+
 	@Test
 	public void ofIntegerTest() {
 		Assert.assertEquals(ConvertBigDecimal.of(10), expectValue);
