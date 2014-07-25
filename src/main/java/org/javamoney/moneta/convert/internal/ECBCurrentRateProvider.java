@@ -34,8 +34,8 @@ import java.util.logging.Level;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
@@ -147,7 +147,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
 
     private ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term){
         DefaultExchangeRate.Builder builder =
-                new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, RateType.DEFERRED).build());
+                new DefaultExchangeRate.Builder(new ConversionContextBuilder(CONTEXT, RateType.DEFERRED).build());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate = null;
@@ -273,7 +273,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                new ConvertionContextBuilder(CONTEXT, RateType.DEFERRED).set(TIMESTAMP, timestamp).build());
+                new ConversionContextBuilder(CONTEXT, RateType.DEFERRED).set(TIMESTAMP, timestamp).build());
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(factor));
