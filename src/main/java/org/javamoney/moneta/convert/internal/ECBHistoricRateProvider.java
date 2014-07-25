@@ -37,7 +37,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
+import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
@@ -136,7 +136,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                new ConvertionContextBuilder(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
+                new ConversionContextBuilder(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
                         .build()
         );
         builder.setBase(query.getBaseCurrency());
@@ -277,9 +277,9 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
                 rateType = RateType.DEFERRED;
             }
             builder = new DefaultExchangeRate.Builder(
-                    new ConvertionContextBuilder(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
+                    new ConversionContextBuilder(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
         }else{
-            builder = new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, rateType).build());
+            builder = new DefaultExchangeRate.Builder(new ConversionContextBuilder(CONTEXT, rateType).build());
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

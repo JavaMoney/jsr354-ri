@@ -39,7 +39,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
+import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
@@ -190,7 +190,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newCurrencyToSdr.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConvertionContextBuilder(CONTEXT, rateType).setTimestampMillis(toTS).build())
+                            new ConversionContextBuilder(CONTEXT, rateType).setTimestampMillis(toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
@@ -200,7 +200,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newSdrToCurrency.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConvertionContextBuilder(CONTEXT, rateType).setTimestampMillis(fromTS).build())
+                            new ConversionContextBuilder(CONTEXT, rateType).setTimestampMillis(fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
                 }
