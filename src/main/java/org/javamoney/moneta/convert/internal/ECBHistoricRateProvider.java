@@ -15,6 +15,37 @@
  */
 package org.javamoney.moneta.convert.internal;
 
+import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
+
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryCurrencies;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ConvertionContextBuilder;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
+import javax.money.spi.Bootstrap;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
@@ -23,24 +54,6 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
-import javax.money.convert.*;
-import javax.money.spi.Bootstrap;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-
-import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
 
 /**
  * This class implements an {@link javax.money.convert.ExchangeRateProvider} that loads data from
@@ -76,7 +89,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContext.Builder("ECB-HIST", RateType.HISTORIC, RateType.DEFERRED)
+            new ProviderContextBuilder("ECB-HIST", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
     /**
@@ -123,7 +136,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                new ConversionContext.Builder(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
+                new ConvertionContextBuilder(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
                         .build()
         );
         builder.setBase(query.getBaseCurrency());
@@ -264,9 +277,9 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
                 rateType = RateType.DEFERRED;
             }
             builder = new DefaultExchangeRate.Builder(
-                    new ConversionContext.Builder(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
+                    new ConvertionContextBuilder(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
         }else{
-            builder = new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, rateType).build());
+            builder = new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, rateType).build());
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

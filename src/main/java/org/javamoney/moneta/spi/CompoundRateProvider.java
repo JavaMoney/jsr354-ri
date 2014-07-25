@@ -22,8 +22,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.money.CurrencyUnit;
-import javax.money.convert.*;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to
@@ -61,7 +65,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
 		}
 		providerName.setLength(providerName.length() - 1);
 
-		return new ProviderContext.Builder(providerName.toString(),rateTypeSet).build();
+		return new ProviderContextBuilder(providerName.toString(),rateTypeSet).build();
 	}
 
 	/**

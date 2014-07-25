@@ -16,12 +16,19 @@
 package org.javamoney.moneta.format.internal;
 
 
-import javax.money.format.AmountFormatContext;
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+
+import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.spi.MonetaryAmountFormatProviderSpi;
-import java.text.DecimalFormat;
-import java.util.*;
 
 /**
  * Default format provider, which mainly maps the existing JDK functionality into the JSR 354 logic.
@@ -62,7 +69,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
         if(!(amountFormatQuery.getStyleId()==null || DEFAULT_STYLE.equals(amountFormatQuery.getStyleId()))){
             return Collections.emptySet();
         }
-        AmountFormatContext.Builder builder = new AmountFormatContext.Builder(DEFAULT_STYLE);
+        AmountFormatContextBuilder builder = new AmountFormatContextBuilder(DEFAULT_STYLE);
         if(amountFormatQuery.getLocale()!=null){
             builder.setLocale(amountFormatQuery.getLocale());
         }

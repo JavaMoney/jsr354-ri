@@ -15,18 +15,6 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import org.javamoney.moneta.BuildableCurrencyUnit;
-import org.javamoney.moneta.DefaultExchangeRate;
-import org.javamoney.moneta.spi.AbstractRateProvider;
-import org.javamoney.moneta.spi.DefaultNumberValue;
-import org.javamoney.moneta.spi.LoaderService;
-import org.javamoney.moneta.spi.LoaderService.LoaderListener;
-
-import javax.money.CurrencyContext;
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
-import javax.money.convert.*;
-import javax.money.spi.Bootstrap;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,10 +24,35 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 
-import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
+import javax.money.CurrencyContext;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryCurrencies;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ConvertionContextBuilder;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
+import javax.money.spi.Bootstrap;
+
+import org.javamoney.moneta.BuildableCurrencyUnit;
+import org.javamoney.moneta.DefaultExchangeRate;
+import org.javamoney.moneta.spi.AbstractRateProvider;
+import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.javamoney.moneta.spi.LoaderService;
+import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 
 /**
  * Implements a {@link ExchangeRateProvider} that loads the IMF conversion data.
@@ -58,7 +71,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     /**
      * The {@link ConversionContext} of this provider.
      */
-    private static final ProviderContext CONTEXT = new ProviderContext.Builder("IMF", RateType.DEFERRED)
+    private static final ProviderContext CONTEXT = new ProviderContextBuilder("IMF", RateType.DEFERRED)
             .set("providerDescription", "International Monetary Fond").set("days", 1).build();
 
     private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", new CurrencyContext.Builder(
@@ -177,7 +190,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newCurrencyToSdr.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setTimestampMillis(toTS).build())
+                            new ConvertionContextBuilder(CONTEXT, rateType).setTimestampMillis(toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
@@ -187,7 +200,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                         newSdrToCurrency.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConversionContext.Builder(CONTEXT, rateType).setTimestampMillis(fromTS).build())
+                            new ConvertionContextBuilder(CONTEXT, rateType).setTimestampMillis(fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
                 }
