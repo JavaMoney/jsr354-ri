@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+	 * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,14 +17,16 @@ package org.javamoney.moneta.format;
 
 import static org.testng.Assert.assertEquals;
 
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Locale;
 
 import javax.money.MonetaryAmounts;
-import javax.money.format.*;
+import javax.money.format.AmountFormartQueryBuilder;
+import javax.money.format.AmountFormatQuery;
+import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 
 import org.testng.annotations.Test;
 
@@ -90,7 +92,7 @@ public class MonetaryAmountFormatTest {
      */
     @Test
     public void testFormatWithBuilder() {
-        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountFormatQuery.Builder(Locale.JAPANESE).build());
+        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountFormartQueryBuilder(Locale.JAPANESE).build());
         assertEquals(
                 "CHF 12.50",
                 defaultFormat.format(MonetaryAmounts.getDefaultAmountFactory()
@@ -105,7 +107,7 @@ public class MonetaryAmountFormatTest {
     @Test
     public void testFormatWithBuilder2() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
-                new AmountFormatQuery.Builder(Locale.GERMANY).set(CurrencyStyle.NUMERIC_CODE).build());
+                new AmountFormartQueryBuilder(Locale.GERMANY).set(CurrencyStyle.NUMERIC_CODE).build());
         assertEquals(
                 "12,50 756"
                 ,
@@ -113,7 +115,7 @@ public class MonetaryAmountFormatTest {
                                              .setCurrency(
                                                      "CHF").setNumber(12.50).create()));
         format = MonetaryFormats.getAmountFormat(
-                new AmountFormatQuery.Builder(Locale.US).set(CurrencyStyle.SYMBOL).build());
+                new AmountFormartQueryBuilder(Locale.US).set(CurrencyStyle.SYMBOL).build());
         assertEquals(
                 "$123,456.56"
                 ,

@@ -15,13 +15,19 @@
  */
 package org.javamoney.moneta.convert.internal;
 
+import java.math.BigDecimal;
+import java.net.MalformedURLException;
+
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ConvertionContextBuilder;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
+
 import org.javamoney.moneta.DefaultExchangeRate;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
-
-import javax.money.convert.*;
-import java.math.BigDecimal;
-import java.net.MalformedURLException;
 
 /**
  * This class implements an {@link javax.money.convert.ExchangeRateProvider} that provides exchange rate with factor
@@ -36,7 +42,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
      * The {@link javax.money.convert.ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContext.Builder("IDENT", RateType.OTHER).set("providerDescription", "Identitiy Provider")
+            new ProviderContextBuilder("IDENT", RateType.OTHER).set("providerDescription", "Identitiy Provider")
                     .build();
 
     /**
@@ -62,7 +68,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
     public ExchangeRate getExchangeRate(ConversionQuery query){
         if(query.getBaseCurrency().getCurrencyCode().equals(query.getTermCurrency().getCurrencyCode())){
             DefaultExchangeRate.Builder builder =
-                    new DefaultExchangeRate.Builder(new ConversionContext.Builder(CONTEXT, RateType.OTHER).build());
+                    new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, RateType.OTHER).build());
             builder.setBase(query.getBaseCurrency());
             builder.setTerm(query.getTermCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
