@@ -33,7 +33,7 @@ public class CompoundRateProvider extends AbstractRateProvider{
     /**
      * The {@link ExchangeRateProvider} instances.
      */
-    private final List<ExchangeRateProvider> providers = new ArrayList<ExchangeRateProvider>();
+    private final List<ExchangeRateProvider> providers = new ArrayList<>();
 
     /**
      * Constructor.

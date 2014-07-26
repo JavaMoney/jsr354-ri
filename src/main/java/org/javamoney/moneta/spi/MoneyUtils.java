@@ -135,7 +135,7 @@ public final class MoneyUtils{
     /**
      * Internal method to check for correct number parameter.
      *
-     * @param number
+     * @param number the number to be checked.
      * @throws IllegalArgumentException If the number is null
      */
     public static void checkNumberParameter(Number number){

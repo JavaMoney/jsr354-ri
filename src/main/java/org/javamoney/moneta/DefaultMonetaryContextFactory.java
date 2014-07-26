@@ -30,8 +30,6 @@ import org.javamoney.moneta.spi.MonetaryConfig;
  * <p/>
  * Hereby the roundingMode constants are the same as defined on
  * {@link RoundingMode}.
- *
- * @return default MonetaryContext, never {@code null}.
  */
 class DefaultMonetaryContextFactory {
 

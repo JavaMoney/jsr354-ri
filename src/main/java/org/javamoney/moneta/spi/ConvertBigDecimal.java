@@ -82,7 +82,7 @@ public enum ConvertBigDecimal {
 			BigDecimal result = null;
 			try {
 				result = new BigDecimal(num.toString());
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException ignored) {
 			}
 			result = Optional.ofNullable(result).orElse(
 					BigDecimal.valueOf(num.doubleValue()));

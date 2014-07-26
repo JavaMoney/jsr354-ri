@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,6 +46,7 @@ import org.javamoney.moneta.spi.LoaderService;
  * interal file cache.
  * 
  * @author Anatole Tresch
+ * TODO This class seems to have severe isseus and also not really good tests!
  */
 public class DefaultLoaderService implements LoaderService {
 	/** Logger used. */
@@ -223,12 +223,7 @@ public class DefaultLoaderService implements LoaderService {
 	 */
 	@Override
 	public Future<Boolean> loadDataAsync(final String resourceId) {
-		return executors.submit(new Callable<Boolean>() {
-			@Override
-			public Boolean call() {
-				return loadDataSynch(resourceId);
-			}
-		});
+		return executors.submit(() -> loadDataSynch(resourceId));
 	}
 
 	/*
@@ -376,7 +371,7 @@ public class DefaultLoaderService implements LoaderService {
 				listeners = this.listenersMap.get(dataId);
 				if (Objects.isNull(listeners)) {
 					listeners = Collections
-							.synchronizedList(new ArrayList<LoaderListener>());
+							.synchronizedList(new ArrayList<>());
 					this.listenersMap.put(dataId, listeners);
 				}
 			}

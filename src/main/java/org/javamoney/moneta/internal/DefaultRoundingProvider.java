@@ -57,7 +57,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
         if(roundingQuery.getRoundingName()==null || DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())){
             if(currency!=null){
                 if(roundingQuery.getBoolean("cashRounding", false)){
-                    if(currency != null && currency.getCurrencyCode().equals("CHF")){
+                    if(currency.getCurrencyCode().equals("CHF")){
                         return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
                     }else{
                         return new DefaultCashRounding(currency, 1);

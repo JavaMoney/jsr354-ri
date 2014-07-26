@@ -76,25 +76,9 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
      * @param currency The currency, which determines the required precision. As
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
      *                 is sued.
-     * @return a new instance {@link javax.money.MonetaryOperator} implementing the
-     * rounding.
      */
     DefaultRounding(CurrencyUnit currency, RoundingMode roundingMode){
         this(currency.getDefaultFractionDigits(), roundingMode);
-    }
-
-    /**
-     * Creates an {@link javax.money.MonetaryOperator} for rounding {@link MonetaryAmount}
-     * instances given a currency.
-     *
-     * @param currency The currency, which determines the required precision. As
-     *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
-     *                 is sued.
-     * @return a new instance {@link javax.money.MonetaryOperator} implementing the
-     * rounding.
-     */
-    DefaultRounding(CurrencyUnit currency){
-        this(currency.getDefaultFractionDigits(), RoundingMode.HALF_UP);
     }
 
     /*
@@ -105,7 +89,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
     @Override
     public MonetaryAmount apply(MonetaryAmount amount){
         return amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
-                ((BigDecimal) amount.getNumber().numberValue(BigDecimal.class))
+                amount.getNumber().numberValue(BigDecimal.class)
                         .setScale(this.context.getInt(SCALE_KEY), this.context.get(RoundingMode.class))
         ).create();
     }
