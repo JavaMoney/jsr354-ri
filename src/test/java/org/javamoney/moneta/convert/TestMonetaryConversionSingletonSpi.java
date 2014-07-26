@@ -37,7 +37,7 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
 
     @Override
     public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query) {
-        if ("test".equals(query.getProviders())) {
+        if (isConversionAvailable(query)) {
             return dummyProvider;
         }
         return null;
@@ -45,22 +45,22 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
 
     @Override
     public boolean isExchangeRateProviderAvailable(ConversionQuery conversionQuery){
-        return "test".equals(conversionQuery.getProviders());
+        return conversionQuery.getProviders().contains("test");
     }
 
     @Override
     public boolean isConversionAvailable(ConversionQuery conversionQuery){
-        return "test".equals(conversionQuery.getProviders());
+        return conversionQuery.getProviders().contains("test");
     }
 
     @Override
 	public List<String> getProviderNames() {
-		return Arrays.asList(new String[] { "test" });
+		return Arrays.asList("test");
 	}
 
 	@Override
 	public List<String> getDefaultProviderChain() {
-		return Arrays.asList(new String[] { "test" });
+		return Arrays.asList("test");
 	}
 
 

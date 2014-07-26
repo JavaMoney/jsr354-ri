@@ -56,8 +56,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	/**
 	 * Parses the literal from the current {@link ParseContext}.
 	 * 
-	 * @see org.javamoney.moneta.format.internal.FormatToken#parse(org.javamoney.moneta.format.internal.ParseContext,
-	 *      java.util.Locale, javax.money.format.LocalizationStyle)
+	 * @see org.javamoney.moneta.format.internal.FormatToken#parse(ParseContext)
 	 */
 	@Override
 	public void parse(ParseContext context)
@@ -71,9 +70,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	/**
 	 * Prints the amount to the {@link Appendable} given.
 	 * 
-	 * @see org.javamoney.moneta.format.internal.FormatToken#print(java.lang.Appendable,
-	 *      java.lang.Object, java.util.Locale,
-	 *      javax.money.format.LocalizationStyle)
+	 * @see org.javamoney.moneta.format.internal.FormatToken#print(Appendable, javax.money.MonetaryAmount)
 	 */
 	@Override
 	public void print(Appendable appendable, MonetaryAmount amount)

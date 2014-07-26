@@ -42,8 +42,6 @@ final class Percent implements MonetaryOperator {
 
 	/**
 	 * Access the shared instance of {@link Percent} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
 	 */
 	Percent(final BigDecimal decimal) {
 		percentValue = calcPercent(decimal);
@@ -92,7 +90,7 @@ final class Percent implements MonetaryOperator {
 	 * @param decimal
 	 *            java.math.BigDecimal
 	 */
-	private static final BigDecimal calcPercent(BigDecimal decimal) {
+	private static BigDecimal calcPercent(BigDecimal decimal) {
 		return decimal.divide(ONE_HUNDRED, MathContext.DECIMAL64); // we now
 																	// have
 	}

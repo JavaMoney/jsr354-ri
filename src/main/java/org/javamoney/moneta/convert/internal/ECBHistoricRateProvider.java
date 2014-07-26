@@ -35,13 +35,7 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ProviderContext;
-import javax.money.convert.ProviderContextBuilder;
-import javax.money.convert.RateType;
+import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -80,7 +74,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      * Historic exchange rates, rate timestamp as UTC long.
      */
     private final Map<Long,Map<String,ExchangeRate>> historicRates =
-            new ConcurrentHashMap<Long,Map<String,ExchangeRate>>();
+            new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -89,7 +83,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContextBuilder("ECB-HIST", RateType.HISTORIC, RateType.DEFERRED)
+            ProviderContextBuilder.create("ECB-HIST", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
     /**
@@ -136,13 +130,13 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                new ConvertionContextBuilder(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
+                ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
                         .build()
         );
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getTermCurrency());
-        ExchangeRate sourceRate = null;
-        ExchangeRate target = null;
+        ExchangeRate sourceRate;
+        ExchangeRate target;
         if(historicRates.isEmpty()){
             return null;
         }
@@ -271,15 +265,15 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      */
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
         RateType rateType = RateType.HISTORIC;
-        DefaultExchangeRate.Builder builder = null;
+        DefaultExchangeRate.Builder builder;
         if(Objects.nonNull(timestamp)){
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
             builder = new DefaultExchangeRate.Builder(
-                    new ConvertionContextBuilder(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
+                    ConversionContextBuilder.create(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
         }else{
-            builder = new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, rateType).build());
+            builder = new DefaultExchangeRate.Builder(ConversionContextBuilder.create(CONTEXT, rateType).build());
         }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);

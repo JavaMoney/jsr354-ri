@@ -15,10 +15,7 @@
  */
 package org.javamoney.moneta.internal;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryRounding;
-import javax.money.RoundingContext;
+import javax.money.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -63,7 +60,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
         if(scale < 0){
             scale = 0;
         }
-        this.context = new RoundingContext.Builder("default", "default").
+        this.context = RoundingContextBuilder.create("default", "default").
                 set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).set(Optional.ofNullable(roundingMode)
                                                                                            .orElseThrow(
                                                                                                    () -> new

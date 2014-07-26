@@ -178,7 +178,7 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
         this.currency = amt.getCurrency();
         this.number = amt.getNumber().numberValue(BigDecimal.class);
         this.monetaryContext =
-                new MonetaryContext.Builder(DEFAULT_MONETARY_CONTEXT.getAmountType()).importContext(
+                MonetaryContextBuilder.create(DEFAULT_MONETARY_CONTEXT.getAmountType()).importContext(
                         amt.getMonetaryContext())
                         .build();
         return this;

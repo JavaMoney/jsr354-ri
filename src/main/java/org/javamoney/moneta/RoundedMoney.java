@@ -47,7 +47,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     /**
      * The default {@link MonetaryContext} applied.
      */
-    public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = new MonetaryContext.Builder(RoundedMoney.class)
+    public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = MonetaryContextBuilder.create(RoundedMoney.class)
             .set("rounding", MonetaryRoundings.getDefaultRounding(), MonetaryOperator.class).
 
                     build();
@@ -86,7 +86,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     public RoundedMoney(Number number, CurrencyUnit currency, MathContext mathContext){
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
-        this.rounding = MonetaryRoundings.getRounding(new RoundingQuery.Builder().set(mathContext).build());
+        this.rounding = MonetaryRoundings.getRounding(RoundingQueryBuilder.create().set(mathContext).build());
         this.monetaryContext =
                 DEFAULT_MONETARY_CONTEXT.toBuilder().set("rounding", rounding, MonetaryOperator.class).set(mathContext)
                         .build();
@@ -101,7 +101,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         Objects.requireNonNull(number, "Number is required.");
         checkNumber(number);
 
-        MonetaryContext.Builder b = DEFAULT_MONETARY_CONTEXT.toBuilder();
+        MonetaryContextBuilder b = DEFAULT_MONETARY_CONTEXT.toBuilder();
         if(Objects.nonNull(rounding)){
             this.rounding = rounding;
         }else{
@@ -114,12 +114,12 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
                         b.set(rm);
                         b.set("scale", scale);
                         this.rounding = MonetaryRoundings
-                                .getRounding(new RoundingQuery.Builder().setScale(scale).set(rm).build());
+                                .getRounding(RoundingQueryBuilder.create().setScale(scale).set(rm).build());
                     }
                 }else{
                     b.set(mc.getRoundingMode());
                     b.set("scale", 2);
-                    this.rounding = MonetaryRoundings.getRounding(new RoundingQuery.Builder().set(mc).setScale(2).build());
+                    this.rounding = MonetaryRoundings.getRounding(RoundingQueryBuilder.create().set(mc).setScale(2).build());
                 }
                 if(this.rounding == null){
                     this.rounding = MonetaryRoundings.getDefaultRounding();

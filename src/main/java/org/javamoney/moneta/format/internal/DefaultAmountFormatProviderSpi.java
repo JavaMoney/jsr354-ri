@@ -69,7 +69,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
         if(!(amountFormatQuery.getStyleId()==null || DEFAULT_STYLE.equals(amountFormatQuery.getStyleId()))){
             return Collections.emptySet();
         }
-        AmountFormatContextBuilder builder = new AmountFormatContextBuilder(DEFAULT_STYLE);
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(DEFAULT_STYLE);
         if(amountFormatQuery.getLocale()!=null){
             builder.setLocale(amountFormatQuery.getLocale());
         }

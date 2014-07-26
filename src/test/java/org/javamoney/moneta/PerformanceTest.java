@@ -32,8 +32,6 @@ public class PerformanceTest {
 
 	protected static final CurrencyUnit EURO = MonetaryCurrencies
 			.getCurrency("EUR");
-	protected static final CurrencyUnit DOLLAR = MonetaryCurrencies
-			.getCurrency("USD");
 
 	@Test(enabled = true)
 	public void comparePerformanceNoRounding() {
@@ -189,8 +187,8 @@ public class PerformanceTest {
 		Money money4 = Money.of( BigDecimal.ONE,EURO);
 		start = System.currentTimeMillis();
 		for (int i = 0; i < NUM; i++) {
-			money4 = money4.add(FastMoney.of( 1234567.3444,EURO));
-			money4 = money4.subtract(Money.of( 232323,EURO));
+			money4 = money4.add(adding);
+			money4 = money4.subtract(subtracting);
 			money4 = money4.multiply(3.4);
 			money4 = money4.divide(5.456);
 			money4 = money4.with(MonetaryRoundings.getDefaultRounding());

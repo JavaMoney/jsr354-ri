@@ -61,13 +61,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 	 */
 	private List<FormatToken> negativeTokens;
 
-	/**
-	 * The {@link MonetaryContext} applied on creating a {@link MonetaryAmount}
-	 * based on data parsed.
-	 */
-	private MonetaryContext monetaryContext = MonetaryAmounts
-			.getDefaultAmountFactory().getDefaultMonetaryContext();
-
 	/** The current {@link javax.money.format.AmountFormatContext}, never null. */
 	private AmountFormatContext amountFormatContext;
 

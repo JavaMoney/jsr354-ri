@@ -83,8 +83,8 @@ final class StringGrouper {
 	public String group(String input) {
 		// strip way starting and ending alpha chars
 		StringBuilder builder = new StringBuilder(4);
-		String start = null;
-		String end = null;
+		String start;
+		String end;
 		char[] inputArr = input.toCharArray();
 		for (char ch : inputArr) {
 			if (Character.isDigit(ch)) {

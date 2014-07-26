@@ -23,8 +23,7 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import javax.money.MonetaryAmounts;
-import javax.money.format.AmountFormartQueryBuilder;
-import javax.money.format.AmountFormatQuery;
+import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
@@ -92,7 +91,7 @@ public class MonetaryAmountFormatTest {
      */
     @Test
     public void testFormatWithBuilder() {
-        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(new AmountFormartQueryBuilder(Locale.JAPANESE).build());
+        MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.create(Locale.JAPANESE).build());
         assertEquals(
                 "CHF 12.50",
                 defaultFormat.format(MonetaryAmounts.getDefaultAmountFactory()
@@ -107,7 +106,7 @@ public class MonetaryAmountFormatTest {
     @Test
     public void testFormatWithBuilder2() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
-                new AmountFormartQueryBuilder(Locale.GERMANY).set(CurrencyStyle.NUMERIC_CODE).build());
+                AmountFormatQueryBuilder.create(Locale.GERMANY).set(CurrencyStyle.NUMERIC_CODE).build());
         assertEquals(
                 "12,50 756"
                 ,
@@ -115,7 +114,7 @@ public class MonetaryAmountFormatTest {
                                              .setCurrency(
                                                      "CHF").setNumber(12.50).create()));
         format = MonetaryFormats.getAmountFormat(
-                new AmountFormartQueryBuilder(Locale.US).set(CurrencyStyle.SYMBOL).build());
+                AmountFormatQueryBuilder.create(Locale.US).set(CurrencyStyle.SYMBOL).build());
         assertEquals(
                 "$123,456.56"
                 ,

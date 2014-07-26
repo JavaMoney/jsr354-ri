@@ -32,7 +32,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
     }
 
     private MonetaryRounding zeroRounding = new MonetaryRounding(){
-        private final RoundingContext CONTEXT = new RoundingContext.Builder("TestRoundingProvider", "zero").build();
+        private final RoundingContext CONTEXT = RoundingContextBuilder.create("TestRoundingProvider", "zero").build();
 
         @Override
         public RoundingContext getRoundingContext(){
@@ -47,7 +47,8 @@ public class TestRoundingProvider implements RoundingProviderSpi{
     };
 
     private MonetaryRounding minusOneRounding = new MonetaryRounding(){
-        private final RoundingContext CONTEXT = new RoundingContext.Builder("TestRoundingProvider", "minusOne").build();
+        private final RoundingContext CONTEXT =
+                RoundingContextBuilder.create("TestRoundingProvider", "minusOne").build();
 
         @Override
         public RoundingContext getRoundingContext(){
@@ -62,7 +63,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
 
     private MonetaryRounding chfCashRounding = new MonetaryRounding(){
         private final RoundingContext CONTEXT =
-                new RoundingContext.Builder("TestRoundingProvider", "chfCashRounding").build();
+                RoundingContextBuilder.create("TestRoundingProvider", "chfCashRounding").build();
 
         @Override
         public RoundingContext getRoundingContext(){
@@ -72,7 +73,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
         @Override
         public MonetaryAmount apply(MonetaryAmount amount){
             MonetaryOperator minorRounding = MonetaryRoundings
-                    .getRounding(new RoundingQuery.Builder().set("scale", 2).set(RoundingMode.HALF_UP).build());
+                    .getRounding(RoundingQueryBuilder.create().set("scale", 2).set(RoundingMode.HALF_UP).build());
             MonetaryAmount amt = amount.with(minorRounding);
             MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
             if(mp.isGreaterThanOrEqualTo(
@@ -80,8 +81,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
                             .create())){
                 // add
                 return amt.add(MonetaryAmounts.getDefaultAmountFactory().setCurrency(amt.getCurrency())
-                                       .setNumber(new BigDecimal("0.05")).create().subtract(mp)
-                );
+                                       .setNumber(new BigDecimal("0.05")).create().subtract(mp));
             }else{
                 // subtract
                 return amt.subtract(mp);
@@ -91,18 +91,15 @@ public class TestRoundingProvider implements RoundingProviderSpi{
 
     @Override
     public MonetaryRounding getRounding(RoundingQuery roundingQuery){
-        List<MonetaryRounding> result = new ArrayList<>();
         Long timestamp = roundingQuery.getTimestampMillis();
-        if(roundingQuery.getRoundingName()==null){
+        if(roundingQuery.getRoundingName() == null){
             return getRounding(roundingQuery, timestamp, "default");
-        }
-        else{
+        }else{
             return getRounding(roundingQuery, timestamp, roundingQuery.getRoundingName());
         }
     }
 
-    private MonetaryRounding getRounding(RoundingQuery roundingQuery, Long timestamp,
-                             String roundingId){
+    private MonetaryRounding getRounding(RoundingQuery roundingQuery, Long timestamp, String roundingId){
         if("default".equals(roundingId)){
             CurrencyUnit currency = roundingQuery.getCurrencyUnit();
             if(Objects.nonNull(currency)){
@@ -120,7 +117,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
             }
         }else{
             MonetaryRounding r = getCustomRounding(roundingId);
-            if(r!=null){
+            if(r != null){
                 return r;
             }
         }
@@ -129,12 +126,13 @@ public class TestRoundingProvider implements RoundingProviderSpi{
 
 
     private MonetaryRounding getCustomRounding(String customRoundingId){
-        if("CHF-cash".equals(customRoundingId)){
-            return chfCashRounding;
-        }else if("zero".equals(customRoundingId)){
-            return zeroRounding;
-        }else if("minusOne".equals(customRoundingId)){
-            return minusOneRounding;
+        switch(customRoundingId){
+            case "CHF-cash":
+                return chfCashRounding;
+            case "zero":
+                return zeroRounding;
+            case "minusOne":
+                return minusOneRounding;
         }
         return null;
     }

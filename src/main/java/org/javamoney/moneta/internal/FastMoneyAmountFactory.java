@@ -17,10 +17,7 @@ package org.javamoney.moneta.internal;
 
 import java.math.RoundingMode;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmountFactory;
-import javax.money.MonetaryContext;
-import javax.money.NumberValue;
+import javax.money.*;
 
 import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
@@ -32,11 +29,11 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
  */
 public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
-	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
+	static final MonetaryContext DEFAULT_CONTEXT = MonetaryContextBuilder.create(
 			FastMoney.class).setPrecision(19)
 			.setMaxScale(5).setFixedScale(true)
 			.set(RoundingMode.HALF_EVEN).build();
-	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
+	static final MonetaryContext MAX_CONTEXT = MonetaryContextBuilder.create(
 			FastMoney.class).setPrecision(19)
 			.setMaxScale(5).setFixedScale(true)
 			.set(RoundingMode.HALF_EVEN).build();

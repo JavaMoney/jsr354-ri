@@ -38,7 +38,7 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String)} .
+	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)} .
 	 */
 	@Test
 	public void testCurrencyValues() {
@@ -53,7 +53,7 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String)} .
+	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)} .
 	 */
 	@Test
 	public void testGetCurrencyString() {
@@ -68,7 +68,7 @@ public class CurrenciesTest {
 
     /**
      * Test method for
-     * {@link MonetaryCurrencies#getCurrencies(java.util.Locale)}.
+     * {@link MonetaryCurrencies#getCurrencies(java.util.Locale, String...)}.
      */
     @Test
     public void testGetCurrencyLocale() {
@@ -85,7 +85,7 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String)}.
+	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)}.
 	 * .
 	 */
 	@Test
@@ -103,7 +103,7 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String)}.
+	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)}.
 	 */
 	@Test
 	public void testGetDifferentCurrencyCodes() {
@@ -121,12 +121,12 @@ public class CurrenciesTest {
 	public void testCompareTo() {
 		CurrencyUnit cur1 = MonetaryCurrencies.getCurrency("USD");
 		CurrencyUnit cur2 = MonetaryCurrencies.getCurrency("EUR");
-		assertTrue(cur1 instanceof Comparable);
-		assertTrue(cur2 instanceof Comparable);
-		assertTrue(0 < ((Comparable<CurrencyUnit>) cur1).compareTo(cur2));
-		assertTrue(0 > ((Comparable<CurrencyUnit>) cur2).compareTo(cur1));
-		assertEquals(0, ((Comparable<CurrencyUnit>) cur1).compareTo(cur1));
-		assertEquals(0, ((Comparable<CurrencyUnit>) cur2).compareTo(cur2));
+		assertNotNull(cur1);
+        assertNotNull(cur2);
+		assertTrue(0 < cur1.compareTo(cur2));
+		assertTrue(0 > cur2.compareTo(cur1));
+		assertEquals(0, cur1.compareTo(cur1));
+		assertEquals(0, cur2.compareTo(cur2));
 	}
 
 	/**
