@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 
 import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConversionContextBuilder;
+import javax.money.convert.ConvertionContextBuilder;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
@@ -68,7 +68,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
     public ExchangeRate getExchangeRate(ConversionQuery query){
         if(query.getBaseCurrency().getCurrencyCode().equals(query.getTermCurrency().getCurrencyCode())){
             DefaultExchangeRate.Builder builder =
-                    new DefaultExchangeRate.Builder(new ConversionContextBuilder(CONTEXT, RateType.OTHER).build());
+                    new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, RateType.OTHER).build());
             builder.setBase(query.getBaseCurrency());
             builder.setTerm(query.getTermCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
