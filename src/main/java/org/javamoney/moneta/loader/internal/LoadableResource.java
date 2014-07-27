@@ -15,351 +15,483 @@
  */
 package org.javamoney.moneta.loader.internal;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import org.javamoney.moneta.spi.LoaderService;
+
+import java.io.*;
+import java.lang.ref.SoftReference;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.javamoney.moneta.spi.LoaderService.UpdatePolicy;
-
 /**
  * This class represent a resource that automatically is reloaded, if needed.
- * 
+ *
  * @author Anatole Tresch
  */
-public class LoadableResource {
-	/** The logger used. */
-	private static final Logger LOG = Logger.getLogger(LoadableResource.class
-			.getName());
-	/** Lock for this instance. */
-	private final Object LOCK = new Object();
-	/** resource id. */
-	private String resourceId;
-	/** The {@link UpdatePolicy}. */
-	private UpdatePolicy updatePolicy;
-	/** The remote URLs to be looked up (first wins). */
-	private List<URL> remoteResources = new ArrayList<>();
-	/** The fallback location (classpath). */
-	private URL fallbackLocation;
-	/** The cached resource URL. */
-	private URL cachedResource;
-	/** How many times this resource was successfully loaded. */
-	private AtomicInteger loadCount = new AtomicInteger();
-	/** How many times this resource was accessed. */
-	private AtomicInteger accessCount = new AtomicInteger();
-	/** The current data array. */
-	private volatile byte[] data;
-	/** THe timestamp of the last successful load. */
-	private long lastLoaded;
-	/** The registration config. */
-	private Map<String, String> updateConfig;
+public class LoadableResource{
+    /**
+     * The logger used.
+     */
+    private static final Logger LOG = Logger.getLogger(LoadableResource.class.getName());
+    /**
+     * Lock for this instance.
+     */
+    private final Object LOCK = new Object();
+    /**
+     * resource id.
+     */
+    private String resourceId;
+    /**
+     * The remote URLs to be looked up (first wins).
+     */
+    private List<URI> remoteResources = new ArrayList<>();
+    /**
+     * The fallback location (classpath).
+     */
+    private URI fallbackLocation;
+    /**
+     * The cached resource URL.
+     */
+    private volatile URI cachedResource;
+    /**
+     * How many times this resource was successfully loaded.
+     */
+    private AtomicInteger loadCount = new AtomicInteger();
+    /**
+     * How many times this resource was accessed.
+     */
+    private AtomicInteger accessCount = new AtomicInteger();
+    /**
+     * The current data array.
+     */
+    private volatile SoftReference<byte[]> data;
+    /**
+     * THe timestamp of the last successful load.
+     */
+    private long lastLoaded;
+    /**
+     * The time to live (TTL) of cache entries in milliseconds, by default 24 h.
+     */
+    private long cacheTTLMillis = 3600000L * 24; // 24 h
 
-	/**
-	 * Create a new instance.
-	 * 
-	 * @param resourceId
-	 *            The dataId.
-	 * @param updatePolicy
-	 *            The {@link UpdatePolicy}, not null.
-	 * @param fallbackLocation
-	 *            teh fallback ULR, not null.
-	 * @param locations
-	 *            the remote locations, not null (but may be empty!)
-	 */
-	public LoadableResource(String resourceId, UpdatePolicy updatePolicy,
-			URL fallbackLocation, URL... locations) {
-		Objects.requireNonNull(resourceId, "resourceId required");
-		Objects.requireNonNull(fallbackLocation, "classpathDefault required");
-		Objects.requireNonNull(updatePolicy, "UpdatePolicy required");
-		this.resourceId = resourceId;
-		this.fallbackLocation = fallbackLocation;
-		this.remoteResources.addAll(Arrays.asList(locations));
-		this.updatePolicy = updatePolicy;
-	}
+    /** The required update policy for this resource. */
+    private LoaderService.UpdatePolicy updatePolicy;
+    /**
+     * The resource configuration.
+     */
+    private Map<String,String> properties;
 
-	/**
-	 * Loads the resource, first from the remote resources, if that fails from
-	 * the fallback location.
-	 * 
-	 * @return true, if load succeeded.
-	 */
-	public boolean load() {
-		if (!loadRemote()) {
-			return loadFallback();
-		}
-		return true;
-	}
+    /**
+     * Create a new instance.
+     *
+     * @param resourceId       The dataId.
+     * @param properties       The configuration properties.
+     * @param fallbackLocation teh fallback ULR, not null.
+     * @param locations        the remote locations, not null (but may be empty!)
+     */
+    public LoadableResource(String resourceId, LoaderService.UpdatePolicy updatePolicy, Map<String,String> properties, URI fallbackLocation, URI... locations){
+        Objects.requireNonNull(resourceId, "resourceId required");
+        Objects.requireNonNull(fallbackLocation, "classpathDefault required");
+        Objects.requireNonNull(properties, "properties required");
+        Objects.requireNonNull(updatePolicy, "updatePolicy required");
+        String val = properties.get("cacheTTLMillis");
+        if(val!=null){
+            this.cacheTTLMillis = Long.parseLong(val);
+        }
+        this.resourceId = resourceId;
+        this.updatePolicy = updatePolicy;
+        this.properties = properties;
+        this.fallbackLocation = fallbackLocation;
+        this.remoteResources.addAll(Arrays.asList(locations));
+    }
 
-	/**
-	 * Get the resourceId.
-	 * 
-	 * @return the resourceId
-	 */
-	public final String getResourceId() {
-		return resourceId;
-	}
+    /**
+     * Get the UpdatePolicy of this resource.
+     * @return the UpdatePolicy of this resource, never null.
+     */
+    public LoaderService.UpdatePolicy getUpdatePolicy(){
+        return updatePolicy;
+    }
 
-	/**
-	 * Get the {@link UpdatePolicy}.
-	 * 
-	 * @return the updatePolicy
-	 */
-	public UpdatePolicy getUpdatePolicy() {
-		return updatePolicy;
-	}
+    /**
+     * Get the configuration properties of this resource.
+     * @return the  configuration properties of this resource, never null.
+     */
+    public Map<String,String> getProperties(){
+        return properties;
+    }
 
-	/**
-	 * Get the remote locations.
-	 * 
-	 * @return the remote locations, maybe empty.
-	 */
-	public final List<URL> getRemoteResources() {
-		return Collections.unmodifiableList(remoteResources);
-	}
+    /**
+     * Loads the resource, first from the remote resources, if that fails from
+     * the fallback location.
+     *
+     * @return true, if load succeeded.
+     */
+    public boolean load(){
+        if((lastLoaded + cacheTTLMillis) <= System.currentTimeMillis()){
+            clearCache();
+        }
+        if(!readCache()){
+            if(!loadRemote()){
+                return loadFallback();
+            }
+        }
+        return true;
+    }
 
-	/**
-	 * Return the fallback location.
-	 * 
-	 * @return the fallback location
-	 */
-	public final URL getFallbackResource() {
-		return fallbackLocation;
-	}
+    /**
+     * Get the resourceId.
+     *
+     * @return the resourceId
+     */
+    public final String getResourceId(){
+        return resourceId;
+    }
 
-	/**
-	 * Get the URL of the locally cached resource.
-	 * 
-	 * @return the cachedResource
-	 */
-	public final URL getCachedResource() {
-		return cachedResource;
-	}
+    /**
+     * Get the remote locations.
+     *
+     * @return the remote locations, maybe empty.
+     */
+    public final List<URI> getRemoteResources(){
+        return Collections.unmodifiableList(remoteResources);
+    }
 
-	/**
-	 * Get the number of active loads of this resource (InputStream).
-	 * 
-	 * @return the number of successful loads.
-	 */
-	public final int getLoadCount() {
-		return loadCount.get();
-	}
+    /**
+     * Return the fallback location.
+     *
+     * @return the fallback location
+     */
+    public final URI getFallbackResource(){
+        return fallbackLocation;
+    }
 
-	/**
-	 * Get the number of successful accesses.
-	 * 
-	 * @return the number of successful accesses.
-	 */
-	public final int getAccessCount() {
-		return accessCount.get();
-	}
+    /**
+     * Get the URL of the locally cached resource.
+     *
+     * @return the cachedResource
+     */
+    public final URI getCachedResource(){
+        return cachedResource;
+    }
 
-	/**
-	 * Get the resource data. This will trigger a full load, if the resource is
-	 * not loaded, e.g. for LAZY resources.
-	 * 
-	 * @return the data to load.
-	 */
-	public final byte[] getData() {
-		accessCount.incrementAndGet();
-		if (Objects.isNull(this.data)) {
-			synchronized (LOCK) {
-				if (Objects.isNull(this.data)) {
-					if (!loadRemote()) {
-						loadFallback();
-					}
-				}
-				if (Objects.isNull(this.data)) {
-					throw new IllegalStateException(
-							"Failed to load remote as well as fallback resources for "
-									+ this);
-				}
-			}
-		}
-		return data.clone();
-	}
+    /**
+     * Get the number of active loads of this resource (InputStream).
+     *
+     * @return the number of successful loads.
+     */
+    public final int getLoadCount(){
+        return loadCount.get();
+    }
 
-	/**
-	 * Get the resource data as input stream.
-	 * 
-	 * @return the input stream.
-	 */
-	public InputStream getDataStream() {
-		return new WrappedInputStream(new ByteArrayInputStream(getData()));
-	}
+    /**
+     * Get the number of successful accesses.
+     *
+     * @return the number of successful accesses.
+     */
+    public final int getAccessCount(){
+        return accessCount.get();
+    }
 
-	/**
-	 * Get the timestamp of the last succesful load.
-	 * 
-	 * @return the lastLoaded
-	 */
-	public final long getLastLoaded() {
-		return lastLoaded;
-	}
+    /**
+     * Get the resource data as input stream.
+     *
+     * @return the input stream.
+     */
+    public InputStream getDataStream(){
+        return new WrappedInputStream(new ByteArrayInputStream(getData()));
+    }
 
-	/**
-	 * Try to load the resource from the remote locations.
-	 * 
-	 * @return true, on success.
-	 */
-	public boolean loadRemote() {
-		for (URL itemToLoad : remoteResources) {
-			try {
-				load(itemToLoad, false);
-				return true;
-			} catch (Exception e) {
-				LOG.log(Level.INFO, "Failed to load resource: " + itemToLoad, e);
-			}
-		}
-		return false;
-	}
+    /**
+     * Get the timestamp of the last succesful load.
+     *
+     * @return the lastLoaded
+     */
+    public final long getLastLoaded(){
+        return lastLoaded;
+    }
 
-	/**
-	 * Try to load the resource from the faööback resources. This will override
-	 * any remote data already loaded.
-	 * 
-	 * @return true, on success.
-	 */
-	public boolean loadFallback() {
-		try {
-			load(fallbackLocation, true);
-			return true;
-		} catch (Exception e) {
-			LOG.log(Level.SEVERE, "Failed to load fallback resource: "
-					+ fallbackLocation, e);
-		}
-		return false;
-	}
+    /**
+     * Try to load the resource from the remote locations.
+     *
+     * @return true, on success.
+     */
+    public boolean loadRemote(){
+        for(URI itemToLoad : remoteResources){
+            try{
+                load(itemToLoad, false);
+                return true;
+            }
+            catch(Exception e){
+                LOG.log(Level.INFO, "Failed to load resource: " + itemToLoad, e);
+            }
+        }
+        return false;
+    }
 
-	/**
-	 * Load the data.
-	 * 
-	 * @param itemToLoad
-	 *            the target {@link URL}
-	 * @param fallbackLoad
-	 *            true, for a fallback URL.
-	 * @throws IOException
-	 *             if load fails.
-	 */
-	private void load(URL itemToLoad, boolean fallbackLoad) throws IOException {
-		InputStream is = null;
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		try {
-			URLConnection conn = itemToLoad.openConnection();
-			byte[] data = new byte[4096];
-			is = conn.getInputStream();
-			int read = is.read(data);
-			while (read > 0) {
-				bos.write(data, 0, read);
-				read = is.read(data);
-			}
-			this.data = bos.toByteArray();
-		} finally {
-			if (Objects.nonNull(is)) {
-				try {
-					is.close();
-				} catch (Exception e) {
-					LOG.log(Level.SEVERE, "Error closing resource input for "
-							+ resourceId, e);
-				}
-			}
-			if (Objects.nonNull(bos)) {
-				bos.close();
-			}
-		}
-		if (!fallbackLoad) {
-			lastLoaded = System.currentTimeMillis();
-			loadCount.incrementAndGet();
-		}
-	}
+    /**
+     * Try to load the resource from the fallback resources. This will override
+     * any remote data already loaded, and also will clear the cached data.
+     *
+     * @return true, on success.
+     */
+    public boolean loadFallback(){
+        try{
+            load(fallbackLocation, true);
+            clearCache();
+            return true;
+        }
+        catch(Exception e){
+            LOG.log(Level.SEVERE, "Failed to load fallback resource: " + fallbackLocation, e);
+        }
+        return false;
+    }
 
-	/**
-	 * Unloads the data.
-	 */
-	public void unload() {
-		synchronized (LOCK) {
-			int count = accessCount.decrementAndGet();
-			if (count == 0) {
-				this.data = null;
-			}
-		}
-	}
+    /**
+     * This method is called when the cached data should be removed, e.g. after an explicit fallback reload, or
+     * a clear operation.
+     */
+    protected void clearCache(){
+        URI fileUri = this.cachedResource;
+        if(fileUri != null){
+            File file = new File(fileUri);
+            if(file.exists()){
+                if(!file.delete()){
+                    LOG.warning("Failed to delete caching file: " + file.getAbsolutePath());
+                }
+            }
+            this.cachedResource = null;
+        }
+    }
 
-	/**
-	 * InputStream , that helps managing the load count.
-	 * 
-	 * @author Anatole
-	 * 
-	 */
-	private final class WrappedInputStream extends InputStream {
+    /**
+     * This method is called when the data should be loaded from the cache. This method abstracts the effective
+     * caching mechanism implemented. By default it tries to read a file from the current user's home directory.
+     * If the data could be read, #setData(byte[]) should be called to apply the data read.
+     *
+     * @return true, if data could be read and applied from the cache sucdcessfully.
+     */
+    protected boolean readCache(){
+        URI fileUri = this.cachedResource;
+        if(fileUri == null){
+            String userHome = System.getProperty("user.home");
+            File file = new File(userHome + "/.cache", resourceId);
+            if(file.exists()){
+                fileUri = file.toURI();
+            }
+        }
+        if(fileUri != null){
+            File file = new File(fileUri);
+            try(
+                    FileInputStream fis = new FileInputStream(file);
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+                    ObjectInputStream ois = new ObjectInputStream(bis)
+            ){
+                long loadTS = ois.readLong();
+                byte[] data = (byte[]) ois.readObject();
+                this.lastLoaded = loadTS;
+                setData(data);
+                return true;
+            }
+            catch(Exception e){
+                LOG.log(Level.WARNING, "Failed to read data from cache: " + fileUri, e);
+            }
+        }
+        return false;
+    }
 
-		private InputStream wrapped;
+    /**
+     * This method is called after data could be successfully loaded from a non fallback resource. This method by
+     * default writes an file containing the data into the user's local home directory, so subsequent or later calls,
+     * even after a VM restart, should be able to recover this information.
+     */
+    protected URI writeCache(){
+        File file = null;
+        URI fileUri = this.cachedResource;
+        if(fileUri == null){
+            String userHome = System.getProperty("user.home");
+            file = new File(userHome + "/.cache", resourceId);
+            fileUri = file.toURI();
+        }
+        if(file == null){
+            file = new File(fileUri);
+        }
+        byte[] data = this.data == null ? null : this.data.get();
+        if(data == null){
+            return null;
+        }
+        try(
+                FileOutputStream fos = new FileOutputStream(file);
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(bos)
+        ){
+            oos.writeLong(this.lastLoaded);
+            oos.writeObject(data);
+            return fileUri;
+        }
+        catch(Exception e){
+            LOG.log(Level.WARNING, "Failed to write data to cache: " + fileUri, e);
+        }
+        return null;
+    }
 
-		public WrappedInputStream(InputStream wrapped) {
-			this.wrapped = wrapped;
-		}
+    /**
+     * Tries to load the data from the given location. The location hereby can be a remote location or a local
+     * location. Also it can be an URL pointing to a current dataset, or an url directing to fallback resources,
+     * e.g. within the cuzrrent classpath.
+     *
+     * @param itemToLoad   the target {@link URL}
+     * @param fallbackLoad true, for a fallback URL.
+     */
+    protected boolean load(URI itemToLoad, boolean fallbackLoad){
+        InputStream is = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try{
+            URLConnection conn = itemToLoad.toURL().openConnection();
+            byte[] data = new byte[4096];
+            is = conn.getInputStream();
+            int read = is.read(data);
+            while(read > 0){
+                bos.write(data, 0, read);
+                read = is.read(data);
+            }
+            setData(bos.toByteArray());
+            if(!fallbackLoad){
+                this.cachedResource = writeCache();
+            }
+            if(!fallbackLoad){
+                lastLoaded = System.currentTimeMillis();
+                loadCount.incrementAndGet();
+            }
+            return true;
+        }
+        catch(Exception e){
+            LOG.log(Level.INFO, "Failed to load resource input for " + resourceId + " from " + itemToLoad, e);
+        }
+        finally{
+            if(Objects.nonNull(is)){
+                try{
+                    is.close();
+                }
+                catch(Exception e){
+                    LOG.log(Level.INFO, "Error closing resource input for " + resourceId, e);
+                }
+            }
+            if(Objects.nonNull(bos)){
+                try{
+                    bos.close();
+                }
+                catch(IOException e){
+                    LOG.log(Level.INFO, "Error closing resource input for " + resourceId, e);
+                }
+            }
+        }
+        return false;
+    }
 
-		@Override
-		public int read() throws IOException {
-			return wrapped.read();
-		}
+    /**
+     * Get the resource data. This will trigger a full load, if the resource is
+     * not loaded, e.g. for LAZY resources.
+     *
+     * @return the data to load.
+     */
+    public final byte[] getData(){
+        return getData(true);
+    }
 
-		@Override
-		public void close() throws IOException {
-			try {
-				wrapped.close();
-				super.close();
-			} finally {
-				unload();
-			}
-		}
+    protected byte[] getData(boolean loadIfNeeded){
+        byte[] result = this.data == null ? null : this.data.get();
+        if(result == null && loadIfNeeded){
+            accessCount.incrementAndGet();
+            byte[] currentData = this.data == null ? null : this.data.get();
+            if(Objects.isNull(currentData)){
+                synchronized(LOCK){
+                    currentData = this.data == null ? null : this.data.get();
+                    if(Objects.isNull(currentData)){
+                        if(!loadRemote()){
+                            loadFallback();
+                        }
+                    }
+                }
+            }
+            currentData = this.data == null ? null : this.data.get();
+            if(Objects.isNull(currentData)){
+                throw new IllegalStateException("Failed to load remote as well as fallback resources for " + this);
+            }
+            return currentData.clone();
+        }
+        return result;
+    }
 
-	}
+    protected final void setData(byte[] bytes){
+        this.data = new SoftReference<>(bytes);
+    }
 
-	/**
-	 * Explcitly override the resource wih the fallback context and resets the
-	 * load counter.
-	 * 
-	 * @return true on success.
-	 * @throws IOException
-	 */
-	public boolean reset() throws IOException {
-		if (loadFallback()) {
-			loadCount.set(0);
-			return true;
-		}
-		return false;
-	}
 
-	/**
-	 * Access the registration config.
-	 * 
-	 * @return the config, not null.
-	 */
-	public Map<String, String> getUpdateConfig() {
-		return this.updateConfig;
-	}
+    public void unload(){
+        synchronized(LOCK){
+            int count = accessCount.decrementAndGet();
+            if(count == 0){
+                this.data = null;
+            }
+        }
+    }
 
-	@Override
-	public String toString() {
-		return "LoadableResource [resourceId=" + resourceId + ", updatePolicy="
-				+ updatePolicy + ", fallbackLocation=" + fallbackLocation
-				+ ", remoteResources=" + remoteResources + ", cachedResource="
-				+ cachedResource + ", loadCount=" + loadCount
-				+ ", accessCount=" + accessCount + ", lastLoaded=" + lastLoaded
-				+ ", updateConfig=" + updateConfig + "]";
-	}
-	
-	
+    /**
+     * Explicitly override the resource wih the fallback context and resets the
+     * load counter.
+     *
+     * @return true on success.
+     * @throws IOException
+     */
+    public boolean resetToFallback() throws IOException{
+        if(loadFallback()){
+            loadCount.set(0);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString(){
+        return "LoadableResource [resourceId=" + resourceId + ", fallbackLocation=" +
+                fallbackLocation + ", remoteResources=" + remoteResources + ", cachedResource=" + cachedResource +
+                ", loadCount=" + loadCount + ", accessCount=" + accessCount + ", lastLoaded=" + lastLoaded + "]";
+    }
+
+    /**
+     * InputStream , that helps managing the load count.
+     *
+     * @author Anatole
+     */
+    private final class WrappedInputStream extends InputStream{
+
+        private InputStream wrapped;
+
+        public WrappedInputStream(InputStream wrapped){
+            this.wrapped = wrapped;
+        }
+
+        @Override
+        public int read() throws IOException{
+            return wrapped.read();
+        }
+
+        @Override
+        public void close() throws IOException{
+            try{
+                wrapped.close();
+                super.close();
+            }
+            finally{
+                unload();
+            }
+        }
+
+    }
 
 }

@@ -37,7 +37,7 @@ final class StringGrouper {
 	}
 
 	public StringGrouper(char groupCharacter, int... groupSizes) {
-		setGroupChars(new char[] { groupCharacter });
+		setGroupChars(groupCharacter);
 		setGroupSizes(groupSizes);
 	}
 

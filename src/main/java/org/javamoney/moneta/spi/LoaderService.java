@@ -17,14 +17,14 @@ package org.javamoney.moneta.spi;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 /**
  * This interface defines an updatable/reloadable data cache for providing data
- * sources that are updatable by any remote {@link URL}s. Initial version are
+ * sources that are updatable by any remote {@link URI}s. Initial version are
  * loaded from the classpath, or other fallback URL.
  * <p>
  * This class is used for managing/updating/reloading of data sources, e.g. data
@@ -42,7 +42,7 @@ public interface LoaderService {
 	 * Platform RI: The update policy defines how and when the
 	 * {@link LoaderService} tries to update the local cache with newest version of
 	 * the registered data resources, accessing the configured remote
-	 * {@link URL}s. By default no remote connections are done (
+	 * {@link URI}s. By default no remote connections are done (
 	 * {@link UpdatePolicy#NEVER} ).
 	 * 
 	 * @author Anatole Tresch
@@ -69,7 +69,7 @@ public interface LoaderService {
 
 	/**
 	 * Callback that can be registered to be informed, when a data item was
-	 * loaded/updated or reset.
+	 * loaded/updated or resetToFallback.
 	 * 
 	 * @see #resetData(String)
 	 * @see #loadData(String)
@@ -103,8 +103,8 @@ public interface LoaderService {
 	 *            {@code null}.
 	 */
 	public void registerData(String resourceId, UpdatePolicy updatePolicy,
-			Map<String, String> properties, URL backupResource,
-			URL... resourceLocations);
+			Map<String, String> properties, URI backupResource,
+            URI... resourceLocations);
 
 	/**
 	 * Get the {@link UpdatePolicy} in place for the given dataId.
@@ -130,7 +130,7 @@ public interface LoaderService {
 
 	/**
 	 * Add a {@link LoaderListener} callback that is informed when a data
-	 * resource was update from remote, or reset. Passing an empty String or
+	 * resource was update from remote, or resetToFallback. Passing an empty String or
 	 * {@code null} sa {@code dataId} allows to register a listener for all data
 	 * resources registered. {@link #loadData(String)}
 	 * {@link #resetData(String)}
@@ -225,7 +225,7 @@ public interface LoaderService {
 	public Future<Boolean> loadDataAsync(String resourceId);
 
 	/**
-	 * Explicitly triggers the reset (loading of the registered data from the
+	 * Explicitly triggers the resetToFallback (loading of the registered data from the
 	 * classpath backup resource).
 	 * 
 	 * @param resourceId
