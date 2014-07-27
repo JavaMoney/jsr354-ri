@@ -20,42 +20,47 @@ import java.io.IOException;
 /**
  * Abstraction of a {@link ResourceCache}. By default a file cache is used:
  * {@link DefaultResourceCache}.
- * 
+ *
  * @author Anatole Tresch
  */
 public interface ResourceCache {
-	/**
-	 * Write the given byte array to the internal store and register it on the
-	 * given resource ID.
-	 * 
-	 * @param resourceId
-	 *            the resource id, never {@code null}.
-	 * @param data
-	 *            the data
-	 * @throws IOException
-	 *             when an IO error occurs.
-	 */
-	public void write(String resourceId, byte[] data) throws IOException;
+    /**
+     * Write the given byte array to the internal store and register it on the
+     * given resource ID.
+     *
+     * @param resourceId
+     *            the resource id, never {@code null}.
+     * @param data
+     *            the data
+     * @throws IOException
+     *             when an IO error occurs.
+     */
+    void write(String resourceId, byte[] data);
 
-	/**
-	 * Allows to query if a resource with the given id is present within the
-	 * local cache.
-	 * 
-	 * @param resourceId
-	 *            The resourceId
-	 * @return true, if the resource was found in the local cache.
-	 */
-	public boolean isCached(String resourceId);
+    /**
+     * Allows to query if a resource with the given id is present within the
+     * local cache.
+     *
+     * @param resourceId
+     *            The resourceId
+     * @return true, if the resource was found in the local cache.
+     */
+    boolean isCached(String resourceId);
 
-	/**
-	 * Reads the given resource, identified by the resourceId, from the cache.
-	 * 
-	 * @param resourceId
-	 *            the resource id.
-	 * @return the data of the resource.
-	 * @throws IllegalArgumentException
-	 *             if no such resource is existing.
-	 */
-	public byte[] read(String resourceId);
+    /**
+     * Reads the given resource, identified by the resourceId, from the cache.
+     *
+     * @param resourceId
+     *            the resource id.
+     * @return the data of the resource.
+     * @throws IllegalArgumentException
+     *             if no such resource is existing.
+     */
+    byte[] read(String resourceId);
 
+    /**
+     * Remove a cache entry.
+     * @param resourceId the resource idntifer, not null.
+     */
+    void clear(String resourceId);
 }

@@ -84,14 +84,19 @@ public class DefaultResourceCache implements ResourceCache{
      * , byte[])
      */
     @Override
-    public void write(String resourceId, byte[] data) throws IOException{
-        File f = this.cachedResources.get(resourceId);
-        if(Objects.isNull(f)){
-            f = new File(localDir, resourceId + SUFFIX);
-            writeFile(f, data);
-            this.cachedResources.put(resourceId, f);
-        }else{
-            writeFile(f, data);
+    public void write(String resourceId, byte[] data){
+        try{
+            File f = this.cachedResources.get(resourceId);
+            if(Objects.isNull(f)){
+                f = new File(localDir, resourceId + SUFFIX);
+                writeFile(f, data);
+                this.cachedResources.put(resourceId, f);
+            }else{
+                writeFile(f, data);
+            }
+        }
+        catch(Exception e){
+            LOG.log(Level.WARNING, "Caching of resource failed: " + resourceId, e);
         }
     }
 
@@ -149,6 +154,19 @@ public class DefaultResourceCache implements ResourceCache{
         return readFile(f);
     }
 
+    @Override
+    public void clear(String resourceId){
+        File f = this.cachedResources.get(resourceId);
+        if(f != null){
+            if(f.exists()){
+                if(!f.delete()){
+                    LOG.warning("Failed to delete caching file: " + f.getAbsolutePath());
+                }
+            }
+            this.cachedResources.remove(resourceId);
+        }
+    }
+
     /**
      * Read a file.
      *
@@ -164,7 +182,9 @@ public class DefaultResourceCache implements ResourceCache{
             int read = 1;
             while(read > 0){
                 read = is.read(input);
-                bos.write(input, 0, read);
+                if(read > 0){
+                    bos.write(input, 0, read);
+                }
             }
             return bos.toByteArray();
         }
@@ -182,7 +202,34 @@ public class DefaultResourceCache implements ResourceCache{
                 LOG.log(Level.SEVERE, "Error closing input stream from " + f, e2);
             }
         }
-
+/*
+URI fileUri = this.cachedResource;
+        if(fileUri == null){
+            String userHome = System.getProperty("user.home");
+            File file = new File(userHome + "/.cache", resourceId);
+            if(file.exists()){
+                fileUri = file.toURI();
+            }
+        }
+        if(fileUri != null){
+            File file = new File(fileUri);
+            try(
+                    FileInputStream fis = new FileInputStream(file);
+                    BufferedInputStream bis = new BufferedInputStream(fis);
+                    ObjectInputStream ois = new ObjectInputStream(bis)
+            ){
+                long loadTS = ois.readLong();
+                byte[] data = (byte[]) ois.readObject();
+                this.lastLoaded = loadTS;
+                setData(data);
+                return true;
+            }
+            catch(Exception e){
+                LOG.log(Level.WARNING, "Failed to read data from cache: " + fileUri, e);
+            }
+        }
+        return false;
+ */
     }
 
     @Override

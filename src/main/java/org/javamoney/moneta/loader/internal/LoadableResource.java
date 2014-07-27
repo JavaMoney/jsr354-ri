@@ -17,7 +17,10 @@ package org.javamoney.moneta.loader.internal;
 
 import org.javamoney.moneta.spi.LoaderService;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.URI;
 import java.net.URL;
@@ -33,6 +36,7 @@ import java.util.logging.Logger;
  * @author Anatole Tresch
  */
 public class LoadableResource{
+
     /**
      * The logger used.
      */
@@ -54,9 +58,9 @@ public class LoadableResource{
      */
     private URI fallbackLocation;
     /**
-     * The cached resource URL.
+     * The cache used.
      */
-    private volatile URI cachedResource;
+    private ResourceCache cache;
     /**
      * How many times this resource was successfully loaded.
      */
@@ -78,30 +82,36 @@ public class LoadableResource{
      */
     private long cacheTTLMillis = 3600000L * 24; // 24 h
 
-    /** The required update policy for this resource. */
+    /**
+     * The required update policy for this resource.
+     */
     private LoaderService.UpdatePolicy updatePolicy;
     /**
      * The resource configuration.
      */
     private Map<String,String> properties;
 
+
     /**
      * Create a new instance.
      *
      * @param resourceId       The dataId.
+     * @param cache            The cache to be used for storing remote data locally.
      * @param properties       The configuration properties.
      * @param fallbackLocation teh fallback ULR, not null.
      * @param locations        the remote locations, not null (but may be empty!)
      */
-    public LoadableResource(String resourceId, LoaderService.UpdatePolicy updatePolicy, Map<String,String> properties, URI fallbackLocation, URI... locations){
+    public LoadableResource(String resourceId, ResourceCache cache, LoaderService.UpdatePolicy updatePolicy,
+                            Map<String,String> properties, URI fallbackLocation, URI... locations){
         Objects.requireNonNull(resourceId, "resourceId required");
         Objects.requireNonNull(fallbackLocation, "classpathDefault required");
         Objects.requireNonNull(properties, "properties required");
         Objects.requireNonNull(updatePolicy, "updatePolicy required");
         String val = properties.get("cacheTTLMillis");
-        if(val!=null){
+        if(val != null){
             this.cacheTTLMillis = Long.parseLong(val);
         }
+        this.cache = cache;
         this.resourceId = resourceId;
         this.updatePolicy = updatePolicy;
         this.properties = properties;
@@ -111,6 +121,7 @@ public class LoadableResource{
 
     /**
      * Get the UpdatePolicy of this resource.
+     *
      * @return the UpdatePolicy of this resource, never null.
      */
     public LoaderService.UpdatePolicy getUpdatePolicy(){
@@ -119,6 +130,7 @@ public class LoadableResource{
 
     /**
      * Get the configuration properties of this resource.
+     *
      * @return the  configuration properties of this resource, never null.
      */
     public Map<String,String> getProperties(){
@@ -170,14 +182,14 @@ public class LoadableResource{
         return fallbackLocation;
     }
 
-    /**
-     * Get the URL of the locally cached resource.
-     *
-     * @return the cachedResource
-     */
-    public final URI getCachedResource(){
-        return cachedResource;
-    }
+    //    /**
+    //     * Get the URL of the locally cached resource.
+    //     *
+    //     * @return the cachedResource
+    //     */
+    //    public final URI getCachedResource(){
+    //        return cachedResource;
+    //    }
 
     /**
      * Get the number of active loads of this resource (InputStream).
@@ -256,15 +268,8 @@ public class LoadableResource{
      * a clear operation.
      */
     protected void clearCache(){
-        URI fileUri = this.cachedResource;
-        if(fileUri != null){
-            File file = new File(fileUri);
-            if(file.exists()){
-                if(!file.delete()){
-                    LOG.warning("Failed to delete caching file: " + file.getAbsolutePath());
-                }
-            }
-            this.cachedResource = null;
+        if(this.cache != null){
+            this.cache.clear(resourceId);
         }
     }
 
@@ -276,29 +281,13 @@ public class LoadableResource{
      * @return true, if data could be read and applied from the cache sucdcessfully.
      */
     protected boolean readCache(){
-        URI fileUri = this.cachedResource;
-        if(fileUri == null){
-            String userHome = System.getProperty("user.home");
-            File file = new File(userHome + "/.cache", resourceId);
-            if(file.exists()){
-                fileUri = file.toURI();
-            }
-        }
-        if(fileUri != null){
-            File file = new File(fileUri);
-            try(
-                    FileInputStream fis = new FileInputStream(file);
-                    BufferedInputStream bis = new BufferedInputStream(fis);
-                    ObjectInputStream ois = new ObjectInputStream(bis)
-            ){
-                long loadTS = ois.readLong();
-                byte[] data = (byte[]) ois.readObject();
-                this.lastLoaded = loadTS;
-                setData(data);
-                return true;
-            }
-            catch(Exception e){
-                LOG.log(Level.WARNING, "Failed to read data from cache: " + fileUri, e);
+        if(this.cache != null){
+            if(this.cache.isCached(resourceId)){
+                byte[] data = this.cache.read(resourceId);
+                if(data != null){
+                    setData(data);
+                    return true;
+                }
             }
         }
         return false;
@@ -309,34 +298,14 @@ public class LoadableResource{
      * default writes an file containing the data into the user's local home directory, so subsequent or later calls,
      * even after a VM restart, should be able to recover this information.
      */
-    protected URI writeCache(){
-        File file = null;
-        URI fileUri = this.cachedResource;
-        if(fileUri == null){
-            String userHome = System.getProperty("user.home");
-            file = new File(userHome + "/.cache", resourceId);
-            fileUri = file.toURI();
+    protected void writeCache(){
+        if(this.cache != null){
+            byte[] data = this.data == null ? null : this.data.get();
+            if(data == null){
+                return;
+            }
+            this.cache.write(resourceId, data);
         }
-        if(file == null){
-            file = new File(fileUri);
-        }
-        byte[] data = this.data == null ? null : this.data.get();
-        if(data == null){
-            return null;
-        }
-        try(
-                FileOutputStream fos = new FileOutputStream(file);
-                BufferedOutputStream bos = new BufferedOutputStream(fos);
-                ObjectOutputStream oos = new ObjectOutputStream(bos)
-        ){
-            oos.writeLong(this.lastLoaded);
-            oos.writeObject(data);
-            return fileUri;
-        }
-        catch(Exception e){
-            LOG.log(Level.WARNING, "Failed to write data to cache: " + fileUri, e);
-        }
-        return null;
     }
 
     /**
@@ -361,7 +330,7 @@ public class LoadableResource{
             }
             setData(bos.toByteArray());
             if(!fallbackLoad){
-                this.cachedResource = writeCache();
+                writeCache();
             }
             if(!fallbackLoad){
                 lastLoaded = System.currentTimeMillis();
@@ -459,7 +428,7 @@ public class LoadableResource{
     @Override
     public String toString(){
         return "LoadableResource [resourceId=" + resourceId + ", fallbackLocation=" +
-                fallbackLocation + ", remoteResources=" + remoteResources + ", cachedResource=" + cachedResource +
+                fallbackLocation + ", remoteResources=" + remoteResources +
                 ", loadCount=" + loadCount + ", accessCount=" + accessCount + ", lastLoaded=" + lastLoaded + "]";
     }
 

@@ -17,6 +17,7 @@ package org.javamoney.moneta.loader.internal;
 
 import org.javamoney.moneta.spi.LoaderService;
 
+import javax.money.spi.Bootstrap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -52,11 +53,12 @@ public class DefaultLoaderService implements LoaderService{
      * The registered {@link LoaderListener} instances.
      */
     private final Map<String,List<LoaderListener>> listenersMap = new ConcurrentHashMap<>();
-//    /**
-//     * The local resource cache, to allow keeping current data on the local
-//     * system.
-//     */
-//    private ResourceCache resourceCache = loadResourceCache();
+
+    /**
+     * The local resource cache, to allow keeping current data on the local
+     * system.
+     */
+    private static final ResourceCache CACHE = loadResourceCache();
     /**
      * The thread pool used for loading of data, triggered by the timer.
      */
@@ -89,24 +91,28 @@ public class DefaultLoaderService implements LoaderService{
         configurator.load();
     }
 
-//    /**
-//     * Loads the cache to be used.
-//     *
-//     * @return the cache to be used, not null.
-//     */
-//    private ResourceCache loadResourceCache(){
-//        try{
-//            this.resourceCache = Bootstrap.getService(ResourceCache.class, null);
-//        }
-//        catch(Exception e){
-//            LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
-//        }
-//        if(Objects.isNull(this.resourceCache)){
-//            LOG.fine("No ResourceCache loaded, using default.");
-//            this.resourceCache = new DefaultResourceCache();
-//        }
-//        return this.resourceCache;
-//    }
+    /**
+     * Loads the cache to be used.
+     *
+     * @return the cache to be used, not null.
+     */
+    private static ResourceCache loadResourceCache(){
+        try{
+            return Bootstrap.getService(ResourceCache.class, new DefaultResourceCache());
+        }
+        catch(Exception e){
+            LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
+            return new DefaultResourceCache();
+        }
+    }
+
+    /**
+     * Get the resource cache loaded.
+     * @return the resource cache, not null.
+     */
+    static ResourceCache getResourceCache(){
+        return DefaultLoaderService.CACHE;
+    }
 
     /**
      * Removes a resource managed.
@@ -134,7 +140,7 @@ public class DefaultLoaderService implements LoaderService{
         if(resources.containsKey(resourceId)){
             throw new IllegalArgumentException("Resource : " + resourceId + " already registered.");
         }
-        LoadableResource res = new LoadableResource(resourceId, updatePolicy, properties, backupResource, resourceLocations);
+        LoadableResource res = new LoadableResource(resourceId, CACHE, updatePolicy, properties, backupResource, resourceLocations);
         this.resources.put(resourceId, res);
         switch(updatePolicy){
             case NEVER:
@@ -432,11 +438,12 @@ public class DefaultLoaderService implements LoaderService{
             if(periodMS > 0){
                 timer.scheduleAtFixedRate(task, delayMS, periodMS);
             }
-            value = props.get("at");
-            if(Objects.nonNull(value)){
-                List<GregorianCalendar> dates = parseDates(value);
-                dates.forEach(date -> timer.schedule(task, date.getTime(), 3_600_000 * 24 /* daily */));
-
+            else{
+                value = props.get("at");
+                if(Objects.nonNull(value)){
+                    List<GregorianCalendar> dates = parseDates(value);
+                    dates.forEach(date -> timer.schedule(task, date.getTime(), 3_600_000 * 24 /* daily */));
+                }
             }
         }
     }
