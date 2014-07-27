@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.MonetaryCurrencies;
 import javax.money.NumberValue;
 import javax.money.convert.*;
 
