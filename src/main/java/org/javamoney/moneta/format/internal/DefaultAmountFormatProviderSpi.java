@@ -41,13 +41,13 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     private static final String PROVIDER_NAME = "default";
 
     private Set<Locale> supportedSets = new HashSet<>();
-    private Set<String> supportedStyles = new HashSet<>();
+    private Set<String> formatNames = new HashSet<>();
 
     public DefaultAmountFormatProviderSpi(){
         supportedSets.addAll(Arrays.asList(DecimalFormat.getAvailableLocales()));
         supportedSets = Collections.unmodifiableSet(supportedSets);
-        supportedStyles.add(DEFAULT_STYLE);
-        supportedStyles = Collections.unmodifiableSet(supportedStyles);
+        formatNames.add(DEFAULT_STYLE);
+        formatNames = Collections.unmodifiableSet(formatNames);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
         if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getStyleId()==null || DEFAULT_STYLE.equals(amountFormatQuery.getStyleId()))){
+        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
             return Collections.emptySet();
         }
         AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(DEFAULT_STYLE);
@@ -84,8 +84,8 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     }
 
     @Override
-    public Set<String> getAvailableStyles(){
-        return supportedStyles;
+    public Set<String> getAvailableFormatNames(){
+        return formatNames;
     }
 
 }
