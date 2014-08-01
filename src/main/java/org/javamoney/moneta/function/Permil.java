@@ -54,8 +54,6 @@ final class Permil implements MonetaryOperator {
 
 	/**
 	 * Access the shared instance of {@link Permil} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
 	 */
 	Permil(final BigDecimal decimal) {
 		permilValue = calcPermil(decimal);
@@ -96,7 +94,7 @@ final class Permil implements MonetaryOperator {
 	 * @param decimal
 	 *            java.math.BigDecimal
 	 */
-	private static final BigDecimal calcPermil(BigDecimal decimal) {
+	private static BigDecimal calcPermil(BigDecimal decimal) {
 		return decimal.divide(ONE_THOUSAND, DEFAULT_MATH_CONTEXT);
 	}
 

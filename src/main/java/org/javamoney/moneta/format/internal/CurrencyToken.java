@@ -32,9 +32,6 @@ import javax.money.format.MonetaryParseException;
  * by key from a {@link ResourceBundle}.
  * 
  * @author Anatole Tresch
- * 
- * @param <T>
- *            The concrete type.
  */
 final class CurrencyToken implements FormatToken {
 	/** The style defining, how the currency should be localized. */
@@ -177,7 +174,7 @@ final class CurrencyToken implements FormatToken {
 			break;
 		}
 		try {
-			CurrencyUnit cur = null;
+			CurrencyUnit cur;
 			switch (style) {
 			case CODE:
 				cur = MonetaryCurrencies.getCurrency(token);
@@ -196,8 +193,11 @@ final class CurrencyToken implements FormatToken {
 					cur = MonetaryCurrencies.getCurrency("GBP");
 					context.consume("£");
 				}
-				cur = MonetaryCurrencies.getCurrency(token);
+				else{
+                    cur = MonetaryCurrencies.getCurrency(token);
+                }
 				context.consume(token);
+                context.setParsedCurrency(cur);
 				break;
 			case NAME:
 			case NUMERIC_CODE:

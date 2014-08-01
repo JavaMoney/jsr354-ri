@@ -15,97 +15,89 @@
  */
 package org.javamoney.moneta.spi;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.ProviderContext;
-import javax.money.convert.ProviderContextBuilder;
-import javax.money.convert.RateType;
+import javax.money.convert.*;
+import java.util.*;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to
  * a collection of child {@link ExchangeRateProvider} instance.
- * 
+ *
  * @author Anatole Tresch
  */
-public class CompoundRateProvider extends AbstractRateProvider {
-	/** The {@link ExchangeRateProvider} instances. */
-	private final List<ExchangeRateProvider> providers = new ArrayList<ExchangeRateProvider>();
+public class CompoundRateProvider extends AbstractRateProvider{
+    /**
+     * Kery used to store a list of child {@link javax.money.convert.ProviderContext} instances of the providers
+     * contained within this instance.
+     */
+    public static final String CHILD_PROVIDER_CONTEXTS_KEY = "childProviderContexts";
+    /**
+     * The {@link ExchangeRateProvider} instances.
+     */
+    private final List<ExchangeRateProvider> providers = new ArrayList<>();
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param providers
-	 *            The collection of child {@link ExchangeRateProvider}
-	 *            instances this class delegates calls to.
-	 */
-	public CompoundRateProvider(Iterable<ExchangeRateProvider> providers) {
-		super(createContext(providers));
-		for (ExchangeRateProvider exchangeRateProvider : providers) {
-			addProvider(exchangeRateProvider);
-		}
-	}
+    /**
+     * Constructor.
+     *
+     * @param providers The collection of child {@link ExchangeRateProvider}
+     *                  instances this class delegates calls to.
+     */
+    public CompoundRateProvider(Iterable<ExchangeRateProvider> providers){
+        super(createContext(providers));
+        for(ExchangeRateProvider exchangeRateProvider : providers){
+            addProvider(exchangeRateProvider);
+        }
+    }
 
-	private static ProviderContext createContext(
-			Iterable<ExchangeRateProvider> providers) {
+    private static ProviderContext createContext(Iterable<ExchangeRateProvider> providers){
         Set<RateType> rateTypeSet = new HashSet<>();
-		StringBuilder providerName = new StringBuilder("Compound: ");
-		for (ExchangeRateProvider exchangeRateProvider : providers) {
-			providerName.append(exchangeRateProvider.getProviderContext()
-					.getProvider());
-			providerName.append(',');
+        StringBuilder providerName = new StringBuilder("Compound: ");
+        List<ProviderContext> childContextList = new ArrayList<>();
+        for(ExchangeRateProvider exchangeRateProvider : providers){
+            childContextList.add(exchangeRateProvider.getProviderContext());
+            providerName.append(exchangeRateProvider.getProviderContext().getProvider());
+            providerName.append(',');
             rateTypeSet.addAll(exchangeRateProvider.getProviderContext().getRateTypes());
-		}
-		providerName.setLength(providerName.length() - 1);
+        }
+        providerName.setLength(providerName.length() - 1);
 
-		return new ProviderContextBuilder(providerName.toString(),rateTypeSet).build();
-	}
+        ProviderContextBuilder builder = ProviderContextBuilder.create(providerName.toString(), rateTypeSet);
+        builder.set(CHILD_PROVIDER_CONTEXTS_KEY, childContextList, List.class);
+        return builder.build();
+    }
 
-	/**
-	 * Add an additional {@link ExchangeRateProvider} to the instance's delegate
-	 * list. Hereby {@link ExchangeRateProvider#getExchangeRateType()} of the
-	 * provider added must be equal to {@link #getExchangeRateType()}.
-	 * 
-	 * @param prov
-	 *            The {@link ExchangeRateProvider} to be added, not {@code null}
-	 *            .
-	 * @throws IllegalArgumentException
-	 *             if {@link ExchangeRateProvider#getExchangeRateType()} of the
-	 *             provider added is not equal to {@link #getExchangeRateType()}
-	 *             .
-	 */
-	private void addProvider(ExchangeRateProvider prov) {
-		providers.add(Optional.ofNullable(prov).orElseThrow(
-				() -> new IllegalArgumentException(
-						"ConversionProvider required.")));
-	}
+    /**
+     * Add an additional {@link ExchangeRateProvider} to the instance's delegate
+     * list.
+     *
+     * @param prov The {@link ExchangeRateProvider} to be added, not {@code null}
+     *             .
+     * @throws java.lang.NullPointerException if the provider is null.
+     *                                        .
+     */
+    private void addProvider(ExchangeRateProvider prov){
+        providers.add(Optional.ofNullable(prov)
+                              .orElseThrow(() -> new NullPointerException("ConversionProvider required.")));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.money.convert.ExchangeRateProvider#getExchangeRate(javax.money.
-	 * CurrencyUnit, javax.money.CurrencyUnit,
-	 * javax.money.convert.ConversionContext)
-	 */
-	@Override
-	public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
-		for (ExchangeRateProvider prov : this.providers) {
-			if (prov.isAvailable(conversionQuery)) {
-				ExchangeRate rate = prov.getExchangeRate(conversionQuery);
-				if (Objects.nonNull(rate)) {
-					return rate;
-				}
-			}
-		}
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * javax.money.convert.ExchangeRateProvider#getExchangeRate(javax.money.
+     * CurrencyUnit, javax.money.CurrencyUnit,
+     * javax.money.convert.ConversionContext)
+     */
+    @Override
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
+        for(ExchangeRateProvider prov : this.providers){
+            if(prov.isAvailable(conversionQuery)){
+                ExchangeRate rate = prov.getExchangeRate(conversionQuery);
+                if(Objects.nonNull(rate)){
+                    return rate;
+                }
+            }
+        }
+        return null;
+    }
 
 }

@@ -75,7 +75,7 @@ public class MonetaryRoundingsTest{
                         continue;
                     }
                     MonetaryOperator rounding = MonetaryRoundings.getRounding(
-                            new RoundingQuery.Builder().set("scale", scale).set(roundingMode)
+                            RoundingQueryBuilder.create().set("scale", scale).set(roundingMode)
                                     .build()
                     );
                     BigDecimal dec = sample.getNumber().numberValue(BigDecimal.class);
@@ -120,7 +120,7 @@ public class MonetaryRoundingsTest{
                 }
                 MonetaryOperator rounding = MonetaryRoundings.getRounding(cur);
                 BigDecimal dec = sample.getNumber().numberValue(BigDecimal.class);
-                BigDecimal expected = null;
+                BigDecimal expected;
                 if (cur.getDefaultFractionDigits() < 0) {
                     expected = dec.setScale(0, RoundingMode.HALF_UP);
                 } else {
@@ -140,12 +140,12 @@ public class MonetaryRoundingsTest{
     @Test
     public void testGetCashRoundingCurrencyUnit(){
         MonetaryOperator r = MonetaryRoundings.getRounding(
-                new RoundingQuery.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("GBP"))
+                RoundingQueryBuilder.create().setCurrencyUnit(MonetaryCurrencies.getCurrency("GBP"))
                         .set("cashRounding", true).build()
         );
         assertNotNull(r);
         r = MonetaryRoundings.getRounding(
-                new RoundingQuery.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("CHF"))
+                RoundingQueryBuilder.create().setCurrencyUnit(MonetaryCurrencies.getCurrency("CHF"))
                         .set("cashRounding", true).build()
         );
         assertNotNull(r);
@@ -163,8 +163,8 @@ public class MonetaryRoundingsTest{
     @Test
     public void testGetRoundingCurrencyUnitLong(){
         MonetaryOperator r = MonetaryRoundings.getRounding(
-                new RoundingQuery.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("XXX"))
-                        .set("timestamp", System.currentTimeMillis() + 20000L).build()
+                RoundingQueryBuilder.create().setCurrencyUnit(MonetaryCurrencies.getCurrency("XXX"))
+                        .setTimestampMillis(System.currentTimeMillis() + 20000L).build()
         );
         assertNotNull(r);
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("XXX").setNumber(-1).create(),
@@ -179,7 +179,7 @@ public class MonetaryRoundingsTest{
     @Test
     public void testGetCashRoundingCurrencyUnitLong(){
         MonetaryOperator r = MonetaryRoundings.getRounding(
-                new RoundingQuery.Builder().setCurrencyUnit(MonetaryCurrencies.getCurrency("XXX"))
+                RoundingQueryBuilder.create().setCurrencyUnit(MonetaryCurrencies.getCurrency("XXX"))
                         .setTimestampMillis(System.currentTimeMillis() + 20000L)
                         .set("cashRounding", true).build()
         );

@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.money.CurrencyContext;
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
@@ -35,7 +34,7 @@ import javax.money.spi.CurrencyProviderSpi;
 public class JDKCurrencyProvider implements CurrencyProviderSpi {
 
 	/** Internal shared cache of {@link javax.money.CurrencyUnit} instances. */
-	private static final Map<String, CurrencyUnit> CACHED = new HashMap<String, CurrencyUnit>();
+	private static final Map<String, CurrencyUnit> CACHED = new HashMap<>();
 
 	public JDKCurrencyProvider() {
 		for (Currency jdkCurrency : Currency.getAvailableCurrencies()) {
@@ -78,7 +77,7 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
     }
 
 	private CurrencyUnit getCurrencyUnit(Locale locale) {
-		Currency cur = null;
+		Currency cur;
 		try {
 			cur = Currency.getInstance(locale);
 			if (Objects.nonNull(cur)) {

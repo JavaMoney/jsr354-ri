@@ -190,7 +190,7 @@ final class ParseContext {
 	}
 
 	/**
-	 * Resets this instance; this will reset the parsing position, the error
+	 * Resets this instance; this will resetToFallback the parsing position, the error
 	 * index and also all containing results.
 	 */
 	public void reset() {

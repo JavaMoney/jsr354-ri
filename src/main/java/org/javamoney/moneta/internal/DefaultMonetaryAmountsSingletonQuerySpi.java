@@ -20,8 +20,6 @@ import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi.QueryInclusionPolicy;
 import javax.money.spi.MonetaryAmountsSingletonQuerySpi;
-import javax.money.spi.MonetaryAmountsSingletonSpi;
-
 import java.util.*;
 
 /**
@@ -32,34 +30,29 @@ import java.util.*;
 public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsSingletonQuerySpi{
 
     private static final Comparator<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>> CONTEXT_COMPARATOR =
-            new Comparator<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>>(){
-
-                @Override
-                public int compare(MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f1,
-                                   MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f2){
-                    int compare = 0;
-                    MonetaryContext c1 = f1.getMaximalMonetaryContext();
-                    MonetaryContext c2 = f2.getMaximalMonetaryContext();
-                    if(compare == 0 && c1.getPrecision() == 0 && c2.getPrecision() != 0){
-                        compare = -1;
-                    }
-                    if(compare == 0 && c2.getPrecision() == 0 && c1.getPrecision() != 0){
-                        compare = 1;
-                    }
-                    if(compare == 0 && c1.getPrecision()!=0 && c2.getPrecision() > c1.getPrecision()){
-                        compare = 1;
-                    }
-                    if(compare == 0 && c2.getPrecision()!=0 && c2.getPrecision() < c1.getPrecision()){
-                        compare = -1;
-                    }
-                    if(compare == 0 && (c1.getMaxScale() > c2.getMaxScale())){
-                        compare = -1;
-                    }
-                    if(compare == 0 && (c1.getMaxScale() < c2.getMaxScale())){
-                        compare = 1;
-                    }
-                    return compare;
+            (f1, f2) -> {
+                int compare = 0;
+                MonetaryContext c1 = f1.getMaximalMonetaryContext();
+                MonetaryContext c2 = f2.getMaximalMonetaryContext();
+                if(c1.getPrecision() == 0 && c2.getPrecision() != 0){
+                    compare = -1;
                 }
+                if(compare == 0 && c2.getPrecision() == 0 && c1.getPrecision() != 0){
+                    compare = 1;
+                }
+                if(compare == 0 && c1.getPrecision() != 0 && c2.getPrecision() > c1.getPrecision()){
+                    compare = 1;
+                }
+                if(compare == 0 && c2.getPrecision() != 0 && c2.getPrecision() < c1.getPrecision()){
+                    compare = -1;
+                }
+                if(compare == 0 && (c1.getMaxScale() > c2.getMaxScale())){
+                    compare = -1;
+                }
+                if(compare == 0 && (c1.getMaxScale() < c2.getMaxScale())){
+                    compare = 1;
+                }
+                return compare;
             };
 
 
@@ -83,22 +76,21 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
                     factories.add(f.createMonetaryAmountFactory());
                 }else{
                     throw new MonetaryException("Incompatible context required=" + factoryQuery + ", maximal=" +
-                                                        f.getMaximalMonetaryContext()
-                    );
+                                                        f.getMaximalMonetaryContext());
                 }
             }
         }
         List<MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount>> selection = new ArrayList<>();
         for(@SuppressWarnings("unchecked") MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
                 .getServices(MonetaryAmountFactoryProviderSpi.class)){
-                if(f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY ||
-                        f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER){
-                    continue;
-                }
-                if(isPrecisionOK(factoryQuery, f.getMaximalMonetaryContext())){
-                    selection.add(f);
-                }
+            if(f.getQueryInclusionPolicy() == QueryInclusionPolicy.DIRECT_REFERENCE_ONLY ||
+                    f.getQueryInclusionPolicy() == QueryInclusionPolicy.NEVER){
+                continue;
             }
+            if(isPrecisionOK(factoryQuery, f.getMaximalMonetaryContext())){
+                selection.add(f);
+            }
+        }
         if(selection.isEmpty()){
             // fall back, add all selections, ignore flavor
             for(@SuppressWarnings("unchecked") MonetaryAmountFactoryProviderSpi<? extends MonetaryAmount> f : Bootstrap
@@ -124,18 +116,16 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
         if(maximalMonetaryContext.getPrecision() == 0){
             return true;
         }
-        if(requiredContext.getPrecision()!=null){
-            if(requiredContext.getPrecision() == 0 && maximalMonetaryContext.getPrecision() != 0){
+        if(requiredContext.getPrecision() != null){
+            if(requiredContext.getPrecision() == 0){
                 return false;
             }
             if(requiredContext.getPrecision() > maximalMonetaryContext.getPrecision()){
                 return false;
             }
         }
-        if(requiredContext.getMaxScale()!=null){
-            return requiredContext.getMaxScale() <= maximalMonetaryContext.getMaxScale();
-        }
-        return true;
+        return null == requiredContext.getMaxScale() ||
+                requiredContext.getMaxScale() <= maximalMonetaryContext.getMaxScale();
     }
 
 }

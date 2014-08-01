@@ -22,8 +22,6 @@ import org.javamoney.moneta.spi.MoneyUtils;
 import javax.money.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,10 +99,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * the {@link MonetaryContext} used by this instance, e.g. on division.
      */
     private static final MonetaryContext MONETARY_CONTEXT =
-            new MonetaryContext.Builder(FastMoney.class).setMaxScale(SCALE).setFixedScale(true).setPrecision(19)
+            MonetaryContextBuilder.create(FastMoney.class).setMaxScale(SCALE).setFixedScale(true).setPrecision(19)
                     .build();
-    /** Default rounding context used. */
-    private static final MathContext CALC_CONTEXT = new MathContext(19, RoundingMode.HALF_EVEN);
+    /**
+     * Default rounding context used.
+     */
+    //    private static final MathContext CALC_CONTEXT = new MathContext(19, RoundingMode.HALF_EVEN);
 
     /**
      * Maximum possible value supported, using XX (no currency).
@@ -127,11 +127,10 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /**
      * Creates a new instance os {@link FastMoney}.
      *
-     * @param currency        the currency, not null.
-     * @param number          the amount, not null.
+     * @param currency the currency, not null.
+     * @param number   the amount, not null.
      */
-    private FastMoney(Number number, CurrencyUnit currency,
-                      boolean allowInternalRounding){
+    private FastMoney(Number number, CurrencyUnit currency, boolean allowInternalRounding){
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
         Objects.requireNonNull(number, "Number is required.");
@@ -295,8 +294,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if(amount.isZero()){
             return this;
         }
-        return new FastMoney(Math.addExact(this.number, getInternalNumber(amount.getNumber(), false)),
-                                 getCurrency());
+        return new FastMoney(Math.addExact(this.number, getInternalNumber(amount.getNumber(), false)), getCurrency());
     }
 
     private void checkAmountParameter(MonetaryAmount amount){
@@ -334,8 +332,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         }
         BigDecimal div = MoneyUtils.getBigDecimal(divisor);
         BigDecimal[] res = getBigDecimal().divideAndRemainder(div);
-        return new FastMoney[]{new FastMoney(res[0], getCurrency(), true),
-                new FastMoney(res[1], getCurrency(), true)};
+        return new FastMoney[]{new FastMoney(res[0], getCurrency(), true), new FastMoney(res[1], getCurrency(), true)};
     }
 
     /*
@@ -357,8 +354,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
             return this;
         }
         return new FastMoney(Math.round(this.number * multiplicand.doubleValue()), getCurrency());
-//        BigDecimal mult = MoneyUtils.getBigDecimal(multiplicand);
-//            return new FastMoney(mult.multiply(BigDecimal.valueOf(this.number), CALC_CONTEXT).longValueExact(), getCurrency());
+        //        BigDecimal mult = MoneyUtils.getBigDecimal(multiplicand);
+        //            return new FastMoney(mult.multiply(BigDecimal.valueOf(this.number),
+        // CALC_CONTEXT).longValueExact(), getCurrency());
     }
 
     /*
@@ -618,8 +616,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /**
      * Internal method to check for correct number parameter.
      *
-     * @param number
-     * @throws IllegalArgumentException If the number is null
+     * @param number the number to be checked, including null..
+     * @throws NullPointerException          If the number is null
+     * @throws java.lang.ArithmeticException If the number exceeds the capabilities of this class.
      */
     protected void checkNumber(Number number){
         Objects.requireNonNull(number, "Number is required.");
@@ -634,7 +633,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if(bd.scale() > SCALE){
             Logger log = Logger.getLogger(getClass().getName());
             if(log.isLoggable(Level.FINEST)){
-                log.finest("Scale exceeds maximal scale of FastMoney (" + SCALE + "), implicit rounding will be applied to " + number);
+                log.finest("Scale exceeds maximal scale of FastMoney (" + SCALE +
+                                   "), implicit rounding will be applied to " + number);
             }
         }
     }

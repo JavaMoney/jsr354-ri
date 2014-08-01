@@ -67,6 +67,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         this.defaultFractionDigits = builder.defaultFractionDigits;
         this.numericCode = builder.numericCode;
         this.currencyCode = builder.currencyCode;
+        this.currencyContext = builder.currencyContext;
     }
 
     @Override
@@ -172,6 +173,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
         public Builder setCurrencyCode(String currencyCode){
             Objects.requireNonNull(currencyCode, "currencyCode required");
             this.currencyCode = currencyCode;
+            this.currencyContext = CurrencyContextBuilder.create(getClass().getSimpleName()).build();
             return this;
         }
 
@@ -194,7 +196,7 @@ public final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<Cur
          * Set the default fraction digits.
          *
          * @param defaultFractionDigits the default fraction digits, &gt;= 0.
-         * @return
+         * @return the Builder, for chaining.
          * @see javax.money.CurrencyUnit#getDefaultFractionDigits()
          */
         public Builder setDefaultFractionDigits(int defaultFractionDigits){

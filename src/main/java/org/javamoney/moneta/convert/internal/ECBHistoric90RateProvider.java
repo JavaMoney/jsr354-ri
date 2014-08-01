@@ -34,13 +34,7 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ProviderContext;
-import javax.money.convert.ProviderContextBuilder;
-import javax.money.convert.RateType;
+import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -78,7 +72,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-    private Map<Long,Map<String,ExchangeRate>> rates = new ConcurrentHashMap<Long,Map<String,ExchangeRate>>();
+    private final Map<Long,Map<String,ExchangeRate>> rates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -87,7 +81,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContextBuilder("ECB-HIST90", RateType.HISTORIC, RateType.DEFERRED)
+            ProviderContextBuilder.create("ECB-HIST90", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank (last 90 days)")
                     .set("days", 90).build();
 
@@ -123,13 +117,13 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
     }
 
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
-        ExchangeRate sourceRate = null;
-        ExchangeRate target = null;
+        ExchangeRate sourceRate;
+        ExchangeRate target;
         if(Objects.isNull(conversionQuery.getAny(TIMESTAMP, Long.class))){
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                new ConvertionContextBuilder(CONTEXT, RateType.HISTORIC)
+                ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC)
                         .set(TIMESTAMP, conversionQuery.getAny(TIMESTAMP, Long.class)).build()
         );
         if(rates.isEmpty()){
@@ -255,14 +249,14 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
      * @param rate      The rate.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number rate){
-        DefaultExchangeRate.Builder builder = null;
+        DefaultExchangeRate.Builder builder;
         RateType rateType = RateType.HISTORIC;
         if(Objects.nonNull(timestamp)){
             if(timestamp > System.currentTimeMillis()){
                 rateType = RateType.DEFERRED;
             }
             builder = new DefaultExchangeRate.Builder(
-                    new ConvertionContextBuilder(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
+                    ConversionContextBuilder.create(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
         }else{
             builder = new DefaultExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), rateType));
         }

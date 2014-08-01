@@ -112,7 +112,7 @@ public final class MonetaryFunctions {
 	 *            the {@link MathContext}
 	 * @return the {@code number} as {@link BigDecimal}
 	 */
-	private static final BigDecimal getBigDecimal(Number num,
+	private static BigDecimal getBigDecimal(Number num,
 			MathContext mathContext) {
 		if (num instanceof BigDecimal) {
 			return (BigDecimal) num;
@@ -127,7 +127,7 @@ public final class MonetaryFunctions {
 		try {
 			// Avoid imprecise conversion to double value if at all possible
 			return new BigDecimal(num.toString(), mathContext);
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException ignored) {
 		}
 		return BigDecimal.valueOf(num.doubleValue());
 	}

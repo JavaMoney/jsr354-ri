@@ -65,7 +65,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
         if(scale < 0){
             throw new IllegalArgumentException("scale < 0");
         }
-        this.context = new RoundingContext.Builder("default", "default").set(CASHROUNDING_KEY, true).
+        this.context = RoundingContextBuilder.create("default", "default").set(CASHROUNDING_KEY, true).
                 set(PROVCLASS_KEY, getClass().getName()).set(MINMINORS_KEY, minimalMinors).set(SCALE_KEY, scale)
                 .set(Optional.ofNullable(roundingMode)
                              .orElseThrow(() -> new IllegalArgumentException("roundingMode missing"))).build();
@@ -78,8 +78,6 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      * @param currency The currency, which determines the required precision. As
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
      *                 is sued.
-     * @return a new instance {@link javax.money.MonetaryOperator} implementing the
-     * rounding.
      */
     DefaultCashRounding(CurrencyUnit currency, RoundingMode roundingMode, int minimalMinors){
         this(currency.getDefaultFractionDigits(), roundingMode, minimalMinors);
@@ -92,8 +90,6 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      * @param currency The currency, which determines the required precision. As
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
      *                 is sued.
-     * @return a new instance {@link MonetaryOperator} implementing the
-     * rounding.
      */
     DefaultCashRounding(CurrencyUnit currency, int minimalMinors){
         this(currency, RoundingMode.HALF_UP, minimalMinors);

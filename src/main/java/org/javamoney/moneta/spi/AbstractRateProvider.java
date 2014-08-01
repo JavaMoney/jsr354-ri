@@ -15,15 +15,12 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
 import javax.money.NumberValue;
 import javax.money.convert.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -87,7 +84,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @param multiplier   the second value to be multiplied
      * @return the result of the multiplication as {@link NumberValue}
      */
-    protected static final NumberValue multiply(NumberValue multiplicand, NumberValue multiplier){
+    protected static NumberValue multiply(NumberValue multiplicand, NumberValue multiplier){
         if (Objects.isNull(multiplicand)) {
             throw new ArithmeticException("The multiplicand cannot be null");
         }
@@ -107,7 +104,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @param divisor  the value to be divided by
      * @return the result of the division as {@link NumberValue}
      */
-    protected static final NumberValue divide(NumberValue dividend, NumberValue divisor){
+    protected static NumberValue divide(NumberValue dividend, NumberValue divisor){
         if (Objects.isNull(dividend)) {
             throw new ArithmeticException("The dividend cannot be null");
         }
@@ -128,7 +125,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @param context  the {@link MathContext} to use
      * @return the result of the division as {@link NumberValue}
      */
-    protected static final NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context){
+    protected static NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context){
         if (Objects.isNull(dividend)) {
             throw new ArithmeticException("The dividend cannot be null");
         }

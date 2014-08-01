@@ -33,13 +33,7 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ProviderContext;
-import javax.money.convert.ProviderContextBuilder;
-import javax.money.convert.RateType;
+import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -77,7 +71,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     /**
      * Current exchange rates.
      */
-    private Map<String,ExchangeRate> currentRates = new ConcurrentHashMap<String,ExchangeRate>();
+    private Map<String,ExchangeRate> currentRates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -86,7 +80,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            new ProviderContextBuilder("ECB", RateType.DEFERRED).set("providerDescription", "European Central Bank")
+            ProviderContextBuilder.create("ECB", RateType.DEFERRED).set("providerDescription", "European Central Bank")
                     .set("days", 1).build();
 
     /**
@@ -133,7 +127,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
         if(!"EUR".equals(termCode) && !currentRates.containsKey(termCode)){
             return false;
         }
-        return conversionQuery.getTimestampMillis() == null;
+        return Objects.isNull(conversionQuery.getTimestampMillis());
     }
 
     @Override
@@ -147,11 +141,11 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
 
     private ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term){
         DefaultExchangeRate.Builder builder =
-                new DefaultExchangeRate.Builder(new ConvertionContextBuilder(CONTEXT, RateType.DEFERRED).build());
+                new DefaultExchangeRate.Builder(ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
         builder.setBase(base);
         builder.setTerm(term);
-        ExchangeRate sourceRate = null;
-        ExchangeRate target = null;
+        ExchangeRate sourceRate;
+        ExchangeRate target;
         if(currentRates.isEmpty()){
             return null;
         }
@@ -273,7 +267,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                new ConvertionContextBuilder(CONTEXT, RateType.DEFERRED).set(TIMESTAMP, timestamp).build());
+                ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).set(TIMESTAMP, timestamp).build());
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(factor));

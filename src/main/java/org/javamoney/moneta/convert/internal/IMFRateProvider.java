@@ -34,17 +34,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import javax.money.CurrencyContext;
+import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.convert.ConversionContext;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.ConvertionContextBuilder;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.ProviderContext;
-import javax.money.convert.ProviderContextBuilder;
-import javax.money.convert.RateType;
+import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 
 import org.javamoney.moneta.BuildableCurrencyUnit;
@@ -71,17 +64,17 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     /**
      * The {@link ConversionContext} of this provider.
      */
-    private static final ProviderContext CONTEXT = new ProviderContextBuilder("IMF", RateType.DEFERRED)
+    private static final ProviderContext CONTEXT = ProviderContextBuilder.create("IMF", RateType.DEFERRED)
             .set("providerDescription", "International Monetary Fond").set("days", 1).build();
 
-    private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", new CurrencyContext.Builder(
+    private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", CurrencyContextBuilder.create(
             IMFRateProvider.class.getSimpleName()).build()).setDefaultFractionDigits(3).build(true);
 
     private Map<CurrencyUnit,List<DefaultExchangeRate>> currencyToSdr = new HashMap<>();
 
     private Map<CurrencyUnit,List<DefaultExchangeRate>> sdrToCurrency = new HashMap<>();
 
-    private static Map<String,CurrencyUnit> currenciesByName = new HashMap<String,CurrencyUnit>();
+    private static Map<String,CurrencyUnit> currenciesByName = new HashMap<>();
 
     static{
         for(Currency currency : Currency.getAvailableCurrencies()){
@@ -177,7 +170,10 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                 if(Objects.isNull(values[i])){
                     continue;
                 }
-                Long fromTS = timestamps.get(i);
+                Long fromTS = timestamps != null ? timestamps.get(i) : null;
+                if(fromTS==null){
+                    continue;
+                }
                 Long toTS = fromTS + 3600L * 1000L * 24L; // One day
                 RateType rateType = RateType.HISTORIC;
                 if(toTS > System.currentTimeMillis()){
@@ -186,33 +182,29 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                 if(currencyToSdr){ // Currency -> SDR
                     List<DefaultExchangeRate> rates = this.currencyToSdr.get(currency);
                     if(Objects.isNull(rates)){
-                        rates = new ArrayList<DefaultExchangeRate>(5);
+                        rates = new ArrayList<>(5);
                         newCurrencyToSdr.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConvertionContextBuilder(CONTEXT, rateType).setTimestampMillis(toTS).build())
+                            ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
                     List<DefaultExchangeRate> rates = this.sdrToCurrency.get(currency);
                     if(Objects.isNull(rates)){
-                        rates = new ArrayList<DefaultExchangeRate>(5);
+                        rates = new ArrayList<>(5);
                         newSdrToCurrency.put(currency, rates);
                     }
                     DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
-                            new ConvertionContextBuilder(CONTEXT, rateType).setTimestampMillis(fromTS).build())
+                            ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
                 }
             }
             line = pr.readLine();
         }
-        for(List<DefaultExchangeRate> rateList : newSdrToCurrency.values()){
-            Collections.sort(rateList);
-        }
-        for(List<DefaultExchangeRate> rateList : newCurrencyToSdr.values()){
-            Collections.sort(rateList);
-        }
+        newSdrToCurrency.values().forEach(Collections::sort);
+        newCurrencyToSdr.values().forEach(Collections::sort);
         this.sdrToCurrency = newSdrToCurrency;
         this.currencyToSdr = newCurrencyToSdr;
     }
@@ -233,7 +225,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         // April 25, 2013
         SimpleDateFormat sdf = new SimpleDateFormat("MMM DD, yyyy", Locale.ENGLISH);
         String[] parts = line.split("\\\t");
-        List<Long> dates = new ArrayList<Long>(parts.length);
+        List<Long> dates = new ArrayList<>(parts.length);
         for(int i = 1; i < parts.length; i++){
             dates.add(sdf.parse(parts[i]).getTime());
         }
@@ -285,10 +277,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     private boolean isValid(ConversionContext conversionContext, Long timestamp){
         Long validFrom = conversionContext.getLong("validFrom", null);
         Long validTo = conversionContext.getLong("validTo", null);
-        if(Objects.nonNull(validFrom) && validFrom > timestamp){
-            return false;
-        }
-        return !(Objects.nonNull(validTo) && validTo < timestamp);
+        return !(Objects.nonNull(validFrom) && validFrom > timestamp) &&
+                !(Objects.nonNull(validTo) && validTo < timestamp);
     }
 
 }

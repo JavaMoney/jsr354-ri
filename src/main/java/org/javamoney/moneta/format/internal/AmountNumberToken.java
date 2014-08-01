@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
-import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryParseException;
 
 /**

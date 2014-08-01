@@ -20,6 +20,7 @@ import java.util.Currency;
 import java.util.Objects;
 
 import javax.money.CurrencyContext;
+import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 
 /**
@@ -41,7 +42,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable,
 	/** JDK currency instance. */
 	private final Currency baseCurrency;
 
-    private final CurrencyContext CONTEXT = new CurrencyContext.Builder(Currency.class.getName()).build();
+    private final CurrencyContext CONTEXT = CurrencyContextBuilder.create(Currency.class.getName()).build();
 
 	/**
 	 * Private constructor, uses a {@link java.util.Currency} for creating new instances.

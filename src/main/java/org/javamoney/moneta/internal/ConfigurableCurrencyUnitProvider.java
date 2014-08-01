@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.internal;
 
-import javax.money.CurrencyContext;
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
@@ -77,7 +76,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
     /**
      * Registers a bew currency unit under the given Locale.
      * @param currencyUnit the new currency to be registered, not null.
-     * @param locale
+     * @param locale the Locale, not null.
      * @return any unit instance registered previously by this instance, or null.
      */
     public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit, Locale locale){

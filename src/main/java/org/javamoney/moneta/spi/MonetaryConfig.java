@@ -46,7 +46,7 @@ public final class MonetaryConfig{
 			Enumeration<URL> urls = getClass().getClassLoader().getResources(
 					"javamoney.properties");
 			while (urls.hasMoreElements()) {
-				URL url = (URL) urls.nextElement();
+				URL url = urls.nextElement();
 				try {
 					Properties props = new Properties();
 					props.load(url.openStream());

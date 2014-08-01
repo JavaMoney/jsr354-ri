@@ -37,8 +37,8 @@ public class ConvertNumberValueTest {
 		Integer number = ConvertNumberValue.of(Integer.class, valueTest);
 		Integer numberExact = ConvertNumberValue.ofExact(Integer.class, valueTest);
 		
-		Assert.assertTrue(number instanceof Integer);
-		Assert.assertTrue(numberExact instanceof Integer);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -51,8 +51,8 @@ public class ConvertNumberValueTest {
 		Long number = ConvertNumberValue.of(Long.class, valueTest);
 		Long numberExact = ConvertNumberValue.ofExact(Long.class, valueTest);
 		
-		Assert.assertTrue(number instanceof Long);
-		Assert.assertTrue(numberExact instanceof Long);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -65,8 +65,8 @@ public class ConvertNumberValueTest {
 		Byte number = ConvertNumberValue.of(Byte.class, valueTest);
 		Byte numberExact = ConvertNumberValue.ofExact(Byte.class, valueTest);
 		
-		Assert.assertTrue(number instanceof Byte);
-		Assert.assertTrue(numberExact instanceof Byte);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -79,8 +79,8 @@ public class ConvertNumberValueTest {
 		Short number = ConvertNumberValue.of(Short.class, valueTest);
 		Short numberExact = ConvertNumberValue.ofExact(Short.class, valueTest);
 		
-		Assert.assertTrue(number instanceof Short);
-		Assert.assertTrue(numberExact instanceof Short);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -93,8 +93,8 @@ public class ConvertNumberValueTest {
 		Float number = ConvertNumberValue.of(Float.class, valueTest);
 		Float numberExact = ConvertNumberValue.ofExact(Float.class, valueTest);
 		
-		Assert.assertTrue(number instanceof Float);
-		Assert.assertTrue(numberExact instanceof Float);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -107,8 +107,8 @@ public class ConvertNumberValueTest {
 		Double number = ConvertNumberValue.of(Double.class, valueTest);
 		Double numberExact = ConvertNumberValue.ofExact(Double.class, valueTest);
 		
-		Assert.assertTrue(number instanceof Double);
-		Assert.assertTrue(numberExact instanceof Double);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -121,8 +121,8 @@ public class ConvertNumberValueTest {
 		BigInteger number = ConvertNumberValue.of(BigInteger.class, valueTest);
 		BigInteger numberExact = ConvertNumberValue.ofExact(BigInteger.class, valueTest);
 		
-		Assert.assertTrue(number instanceof BigInteger);
-		Assert.assertTrue(numberExact instanceof BigInteger);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -135,8 +135,8 @@ public class ConvertNumberValueTest {
 		BigDecimal number = ConvertNumberValue.of(BigDecimal.class, valueTest);
 		BigDecimal numberExact = ConvertNumberValue.ofExact(BigDecimal.class, valueTest);
 		
-		Assert.assertTrue(number instanceof BigDecimal);
-		Assert.assertTrue(numberExact instanceof BigDecimal);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue, number);
 		Assert.assertEquals(expectedValue, numberExact);
@@ -149,8 +149,8 @@ public class ConvertNumberValueTest {
 		AtomicInteger number = ConvertNumberValue.of(AtomicInteger.class, valueTest);
 		AtomicInteger numberExact = ConvertNumberValue.ofExact(AtomicInteger.class, valueTest);
 		
-		Assert.assertTrue(number instanceof AtomicInteger);
-		Assert.assertTrue(numberExact instanceof AtomicInteger);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue.get(), number.get());
 		Assert.assertEquals(expectedValue.get(), numberExact.get());
@@ -163,8 +163,8 @@ public class ConvertNumberValueTest {
 		AtomicLong number = ConvertNumberValue.of(AtomicLong.class, valueTest);
 		AtomicLong numberExact = ConvertNumberValue.ofExact(AtomicLong.class, valueTest);
 		
-		Assert.assertTrue(number instanceof AtomicLong);
-		Assert.assertTrue(numberExact instanceof AtomicLong);
+		Assert.assertTrue(number != null);
+		Assert.assertTrue(numberExact != null);
 		
 		Assert.assertEquals(expectedValue.get(), number.get());
 		Assert.assertEquals(expectedValue.get(), numberExact.get());

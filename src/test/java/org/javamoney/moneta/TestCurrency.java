@@ -16,6 +16,7 @@
 package org.javamoney.moneta;
 
 import javax.money.CurrencyContext;
+import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 import java.io.Serializable;
 import java.util.*;
@@ -55,10 +56,10 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
      */
     private final int defaultFractionDigits;
 
-    private static final Map<String,CurrencyUnit> CACHED = new ConcurrentHashMap<String,CurrencyUnit>();
+    private static final Map<String,CurrencyUnit> CACHED = new ConcurrentHashMap<>();
 
     private static final CurrencyContext CONTEXT =
-            new CurrencyContext.Builder(TestCurrency.class.getSimpleName()).build();
+            CurrencyContextBuilder.create(TestCurrency.class.getSimpleName()).build();
 
     /**
      * Private constructor.
@@ -110,19 +111,6 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
     @Override
     public CurrencyContext getCurrencyContext(){
         return CONTEXT;
-    }
-
-    public int getCashRounding(){
-        throw new UnsupportedOperationException("Not supported yet."); // To
-        // change
-        // body
-        // of
-        // generated
-        // methods,
-        // choose
-        // Tools
-        // |
-        // Templates.
     }
 
     public int compareTo(CurrencyUnit currency){
@@ -232,21 +220,14 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
         /**
          * Private constructor.
          *
-         * @param currency
+         * @param currency the JDK currency instance
          */
         private JDKCurrencyAdapter(Currency currency){
             this.currency =
                     Optional.ofNullable(currency).orElseThrow(() -> new IllegalArgumentException("Currency required."));
         }
 
-        // public Long getValidFrom() {
-        // return null;
-        // }
-        //
-        // public Long getValidUntil() {
-        // return null;
-        // }
-
+       @Override
         public int compareTo(CurrencyUnit currency){
             Objects.requireNonNull(currency);
             int compare = getCurrencyCode().compareTo(currency.getCurrencyCode());

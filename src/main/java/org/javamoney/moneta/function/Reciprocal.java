@@ -31,8 +31,6 @@ final class Reciprocal implements MonetaryOperator {
 
 	/**
 	 * Access the shared instance of {@link Reciprocal} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
 	 */
 	Reciprocal() {
 	}
@@ -41,9 +39,6 @@ final class Reciprocal implements MonetaryOperator {
 	 * Gets the amount as reciprocal / multiplcative inversed value (1/n).
 	 * <p>
 	 * E.g. 'EUR 2.0' will be converted to 'EUR 0.5'.
-	 * 
-	 * @return
-	 * 
 	 * @return the reciprocal / multiplcative inversed of the amount
 	 * @throws ArithmeticException
 	 *             if the arithmetic operation failed

@@ -19,6 +19,7 @@ import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
+import javax.money.MonetaryContextBuilder;
 import javax.money.NumberValue;
 
 import org.javamoney.moneta.Money;
@@ -31,10 +32,10 @@ import org.javamoney.moneta.spi.AbstractAmountFactory;
  */
 public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
 
-	static final MonetaryContext DEFAULT_CONTEXT = new MonetaryContext.Builder(
+	static final MonetaryContext DEFAULT_CONTEXT = MonetaryContextBuilder.create(
 			Money.class).set(64)
 			.setMaxScale(63).set(RoundingMode.HALF_EVEN).build();
-	static final MonetaryContext MAX_CONTEXT = new MonetaryContext.Builder(
+	static final MonetaryContext MAX_CONTEXT = MonetaryContextBuilder.create(
 			Money.class).setPrecision(0)
 			.setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
 
