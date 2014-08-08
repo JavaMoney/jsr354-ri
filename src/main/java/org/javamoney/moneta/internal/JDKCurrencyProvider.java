@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
+import javax.money.QueryType;
 import javax.money.spi.CurrencyProviderSpi;
 
 /**
@@ -70,13 +71,18 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
                 result.add(cu);
             }
         }
-        if(CurrencyQuery.ANY_QUERY.equals(currencyQuery)){
+        if(result.isEmpty() && QueryType.DEFAULT.equals(currencyQuery.getQueryType())){
             result.addAll(CACHED.values());
         }
         return result;
     }
 
-	private CurrencyUnit getCurrencyUnit(Locale locale) {
+    @Override
+    public Set<QueryType> getQueryTypes() {
+        return QueryType.DEFAULT_SET;
+    }
+
+    private CurrencyUnit getCurrencyUnit(Locale locale) {
 		Currency cur;
 		try {
 			cur = Currency.getInstance(locale);

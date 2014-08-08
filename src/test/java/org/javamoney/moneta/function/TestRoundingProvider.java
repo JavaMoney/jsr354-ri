@@ -15,6 +15,8 @@
  */
 package org.javamoney.moneta.function;
 
+import org.javamoney.moneta.QueryTypes;
+
 import javax.money.*;
 import javax.money.spi.RoundingProviderSpi;
 import java.math.BigDecimal;
@@ -99,7 +101,15 @@ public class TestRoundingProvider implements RoundingProviderSpi{
         }
     }
 
+    @Override
+    public Set<QueryType> getQueryTypes() {
+        return QueryType.DEFAULT_SET;
+    }
+
     private MonetaryRounding getRounding(RoundingQuery roundingQuery, Long timestamp, String roundingId){
+        if("foo".equals(roundingId)){
+            return null;
+        }
         if("default".equals(roundingId)){
             CurrencyUnit currency = roundingQuery.getCurrencyUnit();
             if(Objects.nonNull(currency)){

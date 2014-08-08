@@ -15,6 +15,7 @@
  */
 package org.javamoney.moneta.spi;
 
+import javax.money.QueryType;
 import javax.money.convert.*;
 import java.util.*;
 
@@ -99,5 +100,15 @@ public class CompoundRateProvider extends AbstractRateProvider{
         }
         return null;
     }
+
+    @Override
+    public Set<QueryType> getQueryTypes() {
+        Set<QueryType> types = new HashSet<>();
+        for(ExchangeRateProvider prov : this.providers){
+            types.addAll(prov.getQueryTypes());
+        }
+        return types;
+    }
+
 
 }

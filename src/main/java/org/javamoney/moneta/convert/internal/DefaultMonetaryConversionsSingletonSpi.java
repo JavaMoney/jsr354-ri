@@ -108,14 +108,24 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     private Collection<String> getProvidersToUse(ConversionQuery query){
-        Collection<String> providers = query.getProviders();
+        List<String> providersToUse = new ArrayList<>();
+        List<String> providers = query.getProviders();
         if(providers.isEmpty()){
             providers = getDefaultProviderChain();
             if(providers.isEmpty()){
                 throw new IllegalStateException("No default provider chain available.");
             }
         }
-        return providers;
+        for(String provider:providers){
+            ExchangeRateProvider prov = this.conversionProviders.get(provider);
+            if(prov==null){
+                throw new MonetaryException("Invalid ExchangeRateProvider (not found): " + provider);
+            }
+            if(prov.getQueryTypes().contains(query.getQueryType())){
+                providersToUse.add(provider);
+            }
+        }
+        return providersToUse;
     }
 
     @Override

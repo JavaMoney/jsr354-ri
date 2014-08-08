@@ -15,32 +15,26 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
-
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
+import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.javamoney.moneta.DefaultExchangeRate;
+import org.javamoney.moneta.QueryTypes;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -126,13 +120,15 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     }
 
     public ExchangeRate getExchangeRate(ConversionQuery query){
-        if(Objects.isNull(query.getLong(TIMESTAMP, null))){
+        if(!query.getQueryType().equals(QueryTypes.RATE_HIST_QUERY)){
+            return null;
+        }
+        if(Objects.isNull(query.getTimestampMillis())){
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC).set(TIMESTAMP, query.getLong(TIMESTAMP))
-                        .build()
-        );
+                ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC).setTimestampMillis(query.getTimestampMillis())
+                        .build());
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getTermCurrency());
         ExchangeRate sourceRate;
@@ -141,7 +137,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTimeInMillis(query.getAny(TIMESTAMP, Long.class));
+        cal.setTimeInMillis(query.getTimestampMillis());
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -271,7 +267,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
                 rateType = RateType.DEFERRED;
             }
             builder = new DefaultExchangeRate.Builder(
-                    ConversionContextBuilder.create(CONTEXT, rateType).set(TIMESTAMP, timestamp).build());
+                    ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(timestamp).build());
         }else{
             builder = new DefaultExchangeRate.Builder(ConversionContextBuilder.create(CONTEXT, rateType).build());
         }
@@ -290,4 +286,8 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         rateMap.put(term.getCurrencyCode(), exchangeRate);
     }
 
+    @Override
+    public Set<QueryType> getQueryTypes() {
+        return ProviderConstants.HIST_RATE_SET;
+    }
 }

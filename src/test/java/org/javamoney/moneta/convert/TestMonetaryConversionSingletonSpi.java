@@ -19,6 +19,7 @@ import java.util.*;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
 
@@ -75,6 +76,11 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
         @Override
         public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
             return null;
+        }
+
+        @Override
+        public Set<QueryType> getQueryTypes() {
+            return QueryType.DEFAULT_SET;
         }
 
         @Override

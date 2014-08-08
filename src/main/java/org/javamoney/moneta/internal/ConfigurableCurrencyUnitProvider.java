@@ -17,6 +17,7 @@ package org.javamoney.moneta.internal;
 
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
+import javax.money.QueryType;
 import javax.money.spi.CurrencyProviderSpi;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,22 +46,33 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
         if(currencyQuery.getTimestamp()!=null){
             return Collections.emptySet();
         }
-        for(String code: currencyQuery.getCurrencyCodes()){
-            CurrencyUnit cu = currencyUnits.get(code);
-            if(cu != null){
-                result.add(cu);
+        if(!currencyQuery.getCurrencyCodes().isEmpty()) {
+            for (String code : currencyQuery.getCurrencyCodes()) {
+                CurrencyUnit cu = currencyUnits.get(code);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        for(Locale locale: currencyQuery.getCountries()){
-            CurrencyUnit cu = currencyUnitsByLocale.get(locale);
-            if(cu!=null){
-                result.add(cu);
+        if(!currencyQuery.getCountries().isEmpty()) {
+            for (Locale locale : currencyQuery.getCountries()) {
+                CurrencyUnit cu = currencyUnitsByLocale.get(locale);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        if(CurrencyQuery.ANY_QUERY.equals(currencyQuery)){
+        if(QueryType.DEFAULT.equals(currencyQuery.getQueryType())){
             result.addAll(currencyUnits.values());
         }
         return result;
+    }
+
+    @Override
+    public Set<QueryType> getQueryTypes() {
+        return QueryType.DEFAULT_SET;
     }
 
     /**

@@ -15,6 +15,16 @@
  */
 package org.javamoney.moneta.convert.internal;
 
+import org.javamoney.moneta.QueryTypes;
+
+import javax.money.QueryType;
+import javax.money.convert.ConversionQuery;
+import java.util.Set;
+
 final class ProviderConstants {
-	static final String TIMESTAMP = "timestamp";
+
+    static final Set<QueryType> HIST_RATE_SET = QueryTypes.from(QueryTypes.RATE_HIST_QUERY);
+
+    static final Set<QueryType> RATE_SET = QueryTypes.from(QueryTypes.RATE_QUERY, QueryType.DEFAULT);
+
 }

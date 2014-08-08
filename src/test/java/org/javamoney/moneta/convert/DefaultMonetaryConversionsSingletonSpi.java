@@ -18,16 +18,20 @@ package org.javamoney.moneta.convert;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
 
 import org.javamoney.moneta.spi.CompoundRateProvider;
 
-public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSingletonSpi{
+/**
+ * Default implementation of the {@link javax.money.spi.MonetaryConversionsSingletonSpi} instance.
+ */
+public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversionsSingletonSpi{
 
 	private Map<String, ExchangeRateProvider> conversionProviders = new ConcurrentHashMap<>();
 
-	public SEMonetaryConversionsSingletonSpi() {
+	public DefaultMonetaryConversionsSingletonSpi() {
 		reload();
 	}
 
@@ -83,6 +87,16 @@ public class SEMonetaryConversionsSingletonSpi implements MonetaryConversionsSin
             }
         }
         return false;
+    }
+
+    @Override
+    public Set<QueryType> getQueryTypes(String... providers){
+        Collection<ExchangeRateProvider> effProviders = getExchangeRateProviders(providers);
+        Set<QueryType> types = new HashSet<>();
+        for (ExchangeRateProvider provider : effProviders) {
+            types.addAll(provider.getQueryTypes());
+        }
+        return types;
     }
 
     @Override

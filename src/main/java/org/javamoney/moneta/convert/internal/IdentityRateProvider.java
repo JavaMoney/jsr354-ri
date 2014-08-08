@@ -17,7 +17,9 @@ package org.javamoney.moneta.convert.internal;
 
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
+import java.util.Set;
 
+import javax.money.QueryType;
 import javax.money.convert.*;
 
 import org.javamoney.moneta.DefaultExchangeRate;
@@ -84,6 +86,11 @@ public class IdentityRateProvider extends AbstractRateProvider{
                     .setBase(rate.getTerm()).setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
         return null;
+    }
+
+    @Override
+    public Set<QueryType> getQueryTypes() {
+        return QueryType.DEFAULT_SET;
     }
 
 }
