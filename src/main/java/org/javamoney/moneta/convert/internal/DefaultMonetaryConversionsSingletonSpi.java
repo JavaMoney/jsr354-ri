@@ -25,6 +25,7 @@ import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -73,6 +74,9 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
 											+ provName));
             provInstances.add(prov);
         }
+        if(provInstances.isEmpty()){
+            throw new MonetaryException("No such providers: " + query);
+        }
         if(provInstances.size()==1){
             return provInstances.get(0);
         }
@@ -81,12 +85,21 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
 
     @Override
     public boolean isExchangeRateProviderAvailable(ConversionQuery conversionQuery){
-        return false;
+        Collection<String> providers = getProvidersToUse(conversionQuery);
+        return !providers.isEmpty();
     }
 
     @Override
     public boolean isConversionAvailable(ConversionQuery conversionQuery){
-        return getExchangeRateProvider(conversionQuery).getCurrencyConversion(conversionQuery)!=null;
+        try {
+            if(isExchangeRateProviderAvailable(conversionQuery)) {
+                return getExchangeRateProvider(conversionQuery).getCurrencyConversion(conversionQuery) != null;
+            }
+        }
+        catch(Exception e){
+            LOG.log(Level.FINEST, "Error during availability check for conversion: " + conversionQuery, e);
+        }
+        return false;
     }
 
     @Override
@@ -121,9 +134,7 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
             if(prov==null){
                 throw new MonetaryException("Invalid ExchangeRateProvider (not found): " + provider);
             }
-            if(prov.getQueryTypes().contains(query.getQueryType())){
-                providersToUse.add(provider);
-            }
+            providersToUse.add(provider);
         }
         return providersToUse;
     }

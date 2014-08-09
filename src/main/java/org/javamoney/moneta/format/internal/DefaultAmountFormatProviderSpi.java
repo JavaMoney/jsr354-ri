@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.money.QueryType;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryAmountFormat;
@@ -64,9 +63,6 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     @Override
     public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-        if(!getQueryTypes().contains(amountFormatQuery.getQueryType())){
-            return null;
-        }
         if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
             return Collections.emptySet();
         }
@@ -90,11 +86,6 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     @Override
     public Set<String> getAvailableFormatNames(){
         return formatNames;
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return QueryType.DEFAULT_SET;
     }
 
 }

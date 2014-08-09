@@ -75,7 +75,7 @@ public class MonetaryRoundingsTest{
                         continue;
                     }
                     MonetaryOperator rounding = MonetaryRoundings.getRounding(
-                            RoundingQueryBuilder.create().set("scale", scale).set(roundingMode)
+                            RoundingQueryBuilder.create().setScale(scale).set(roundingMode)
                                     .build()
                     );
                     BigDecimal dec = sample.getNumber().numberValue(BigDecimal.class);

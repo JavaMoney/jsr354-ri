@@ -27,14 +27,12 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.javamoney.moneta.DefaultExchangeRate;
-import org.javamoney.moneta.QueryTypes;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -120,9 +118,6 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     }
 
     public ExchangeRate getExchangeRate(ConversionQuery query){
-        if(!query.getQueryType().equals(QueryTypes.RATE_HIST_QUERY)){
-            return null;
-        }
         if(Objects.isNull(query.getTimestampMillis())){
             return null;
         }
@@ -284,10 +279,5 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             }
         }
         rateMap.put(term.getCurrencyCode(), exchangeRate);
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return ProviderConstants.HIST_RATE_SET;
     }
 }

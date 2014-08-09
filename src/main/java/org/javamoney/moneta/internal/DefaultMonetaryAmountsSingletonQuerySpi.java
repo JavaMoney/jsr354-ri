@@ -112,11 +112,6 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
         return factories;
     }
 
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return QueryType.DEFAULT_SET;
-    }
-
     private boolean isPrecisionOK(MonetaryAmountFactoryQuery requiredContext, MonetaryContext maximalMonetaryContext){
         if(maximalMonetaryContext.getPrecision() == 0){
             return true;

@@ -28,7 +28,6 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
@@ -115,9 +114,6 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
 
     @Override
     public boolean isAvailable(ConversionQuery conversionQuery){
-        if(!getQueryTypes().contains(conversionQuery.getQueryType())){
-            return false;
-        }
         String baseCode = conversionQuery.getBaseCurrency().getCurrencyCode();
         String termCode = conversionQuery.getTermCurrency().getCurrencyCode();
         if(!"EUR".equals(baseCode) && !currentRates.containsKey(baseCode)){
@@ -136,11 +132,6 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
         }
         return getExchangeRateInternal(conversionQuery.getBaseCurrency(),
                                        conversionQuery.getTermCurrency());
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return ProviderConstants.RATE_SET;
     }
 
     private ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term){

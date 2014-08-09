@@ -30,7 +30,6 @@ import java.util.logging.Level;
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 
@@ -276,11 +275,6 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         Long validTo = conversionContext.getLong("validTo", null);
         return !(Objects.nonNull(validFrom) && validFrom > timestamp) &&
                 !(Objects.nonNull(validTo) && validTo < timestamp);
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return ProviderConstants.RATE_SET;
     }
 
 }

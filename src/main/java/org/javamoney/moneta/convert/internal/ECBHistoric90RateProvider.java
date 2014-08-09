@@ -26,7 +26,6 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
@@ -265,11 +264,6 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
             }
         }
         rateMap.put(term.getCurrencyCode(), exchangeRate);
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return ProviderConstants.HIST_RATE_SET;
     }
 
 }

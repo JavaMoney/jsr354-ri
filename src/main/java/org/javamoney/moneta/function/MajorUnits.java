@@ -30,7 +30,7 @@ final class MajorUnits implements MonetaryQuery<Long> {
 
 	private MonetaryOperator downRounding = MonetaryRoundings
 			.getRounding(RoundingQueryBuilder.create()
-					.set("scale", 0).set(RoundingMode.DOWN).build());
+					.setScale(0).set(RoundingMode.DOWN).build());
 
 	/**
 	 * Access the shared instance of {@link MajorUnits} for use.

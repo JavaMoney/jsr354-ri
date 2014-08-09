@@ -18,7 +18,6 @@ package org.javamoney.moneta.convert;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.money.QueryType;
 import javax.money.convert.*;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
 
@@ -87,16 +86,6 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
             }
         }
         return false;
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes(String... providers){
-        Collection<ExchangeRateProvider> effProviders = getExchangeRateProviders(providers);
-        Set<QueryType> types = new HashSet<>();
-        for (ExchangeRateProvider provider : effProviders) {
-            types.addAll(provider.getQueryTypes());
-        }
-        return types;
     }
 
     @Override

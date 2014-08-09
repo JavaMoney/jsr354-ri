@@ -17,7 +17,6 @@ package org.javamoney.moneta.internal;
 
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
-import javax.money.QueryType;
 import javax.money.spi.CurrencyProviderSpi;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -64,15 +63,8 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
             }
             return result;
         }
-        if(QueryType.DEFAULT.equals(currencyQuery.getQueryType())){
-            result.addAll(currencyUnits.values());
-        }
+        result.addAll(currencyUnits.values());
         return result;
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return QueryType.DEFAULT_SET;
     }
 
     /**

@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
-import javax.money.QueryType;
 import javax.money.spi.CurrencyProviderSpi;
 
 /**
@@ -59,27 +58,26 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
      */
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery currencyQuery){
         Set<CurrencyUnit> result = new HashSet<>();
-        for(String code: currencyQuery.getCurrencyCodes()){
-            CurrencyUnit cu = CACHED.get(code);
-            if(cu!=null){
-                result.add(cu);
+        if(!currencyQuery.getCurrencyCodes().isEmpty()) {
+            for (String code : currencyQuery.getCurrencyCodes()) {
+                CurrencyUnit cu = CACHED.get(code);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        for(Locale country: currencyQuery.getCountries()){
-            CurrencyUnit cu = getCurrencyUnit(country);
-            if(cu!=null){
-                result.add(cu);
+        if(!currencyQuery.getCountries().isEmpty()) {
+            for (Locale country : currencyQuery.getCountries()) {
+                CurrencyUnit cu = getCurrencyUnit(country);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        if(result.isEmpty() && QueryType.DEFAULT.equals(currencyQuery.getQueryType())){
-            result.addAll(CACHED.values());
-        }
+        result.addAll(CACHED.values());
         return result;
-    }
-
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return QueryType.DEFAULT_SET;
     }
 
     private CurrencyUnit getCurrencyUnit(Locale locale) {

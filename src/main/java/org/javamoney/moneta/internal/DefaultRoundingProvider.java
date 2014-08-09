@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal;
 
-import org.javamoney.moneta.QueryTypes;
-
 import javax.money.*;
 import javax.money.spi.RoundingProviderSpi;
 import java.math.MathContext;
@@ -52,9 +50,6 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
         if(roundingQuery.getTimestamp() != null){
             return null;
         }
-        if(!QueryType.DEFAULT.equals(roundingQuery.getQueryType())){
-            return null;
-        }
         CurrencyUnit currency = roundingQuery.getCurrencyUnit();
         if(currency!=null) {
             RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, RoundingMode.HALF_EVEN);
@@ -67,7 +62,10 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
             }
             return new DefaultRounding(currency, roundingMode);
         }
-        int scale = roundingQuery.getInt("scale", 2);
+        Integer scale = roundingQuery.getScale();
+        if(scale==null){
+            scale = 2;
+        }
         MathContext mc = roundingQuery.get(MathContext.class, null);
         RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, null);
         if(roundingMode!=null || mc!=null) {
@@ -85,15 +83,9 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
         return null;
     }
 
-    @Override
-    public Set<QueryType> getQueryTypes() {
-        return QueryTypes.from(QueryTypes.ROUNDING_CURRENCY_QUERY, QueryTypes.ROUNDING_MATH_QUERY,
-                QueryTypes.ROUNDING_NAMED_QUERY);
-    }
-
 
     @Override
-    public Set<String> getRoundingIds(){
+    public Set<String> getRoundingNames(){
         return roundingsIds;
     }
 
