@@ -100,4 +100,5 @@ public class CompoundRateProvider extends AbstractRateProvider{
         return null;
     }
 
+
 }

@@ -45,21 +45,25 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
         if(currencyQuery.getTimestamp()!=null){
             return Collections.emptySet();
         }
-        for(String code: currencyQuery.getCurrencyCodes()){
-            CurrencyUnit cu = currencyUnits.get(code);
-            if(cu != null){
-                result.add(cu);
+        if(!currencyQuery.getCurrencyCodes().isEmpty()) {
+            for (String code : currencyQuery.getCurrencyCodes()) {
+                CurrencyUnit cu = currencyUnits.get(code);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        for(Locale locale: currencyQuery.getCountries()){
-            CurrencyUnit cu = currencyUnitsByLocale.get(locale);
-            if(cu!=null){
-                result.add(cu);
+        if(!currencyQuery.getCountries().isEmpty()) {
+            for (Locale locale : currencyQuery.getCountries()) {
+                CurrencyUnit cu = currencyUnitsByLocale.get(locale);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        if(CurrencyQuery.ANY_QUERY.equals(currencyQuery)){
-            result.addAll(currencyUnits.values());
-        }
+        result.addAll(currencyUnits.values());
         return result;
     }
 

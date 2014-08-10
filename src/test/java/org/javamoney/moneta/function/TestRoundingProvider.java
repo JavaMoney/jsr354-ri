@@ -100,6 +100,9 @@ public class TestRoundingProvider implements RoundingProviderSpi{
     }
 
     private MonetaryRounding getRounding(RoundingQuery roundingQuery, Long timestamp, String roundingId){
+        if("foo".equals(roundingId)){
+            return null;
+        }
         if("default".equals(roundingId)){
             CurrencyUnit currency = roundingQuery.getCurrencyUnit();
             if(Objects.nonNull(currency)){
@@ -138,7 +141,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
     }
 
     @Override
-    public Set<String> getRoundingIds(){
+    public Set<String> getRoundingNames(){
         return customIds;
     }
 

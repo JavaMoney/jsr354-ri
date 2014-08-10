@@ -58,25 +58,29 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
      */
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery currencyQuery){
         Set<CurrencyUnit> result = new HashSet<>();
-        for(String code: currencyQuery.getCurrencyCodes()){
-            CurrencyUnit cu = CACHED.get(code);
-            if(cu!=null){
-                result.add(cu);
+        if(!currencyQuery.getCurrencyCodes().isEmpty()) {
+            for (String code : currencyQuery.getCurrencyCodes()) {
+                CurrencyUnit cu = CACHED.get(code);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        for(Locale country: currencyQuery.getCountries()){
-            CurrencyUnit cu = getCurrencyUnit(country);
-            if(cu!=null){
-                result.add(cu);
+        if(!currencyQuery.getCountries().isEmpty()) {
+            for (Locale country : currencyQuery.getCountries()) {
+                CurrencyUnit cu = getCurrencyUnit(country);
+                if (cu != null) {
+                    result.add(cu);
+                }
             }
+            return result;
         }
-        if(CurrencyQuery.ANY_QUERY.equals(currencyQuery)){
-            result.addAll(CACHED.values());
-        }
+        result.addAll(CACHED.values());
         return result;
     }
 
-	private CurrencyUnit getCurrencyUnit(Locale locale) {
+    private CurrencyUnit getCurrencyUnit(Locale locale) {
 		Currency cur;
 		try {
 			cur = Currency.getInstance(locale);

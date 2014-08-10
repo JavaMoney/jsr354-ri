@@ -74,7 +74,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
             builder.setLocale(amountFormatQuery.getLocale());
         }
         builder.importContext(amountFormatQuery, false);
-        builder.setMonetaryAmountFactory(amountFormatQuery.getMonetaryAmopuntFactory());
+        builder.setMonetaryAmountFactory(amountFormatQuery.getMonetaryAmountFactory());
         return Arrays.asList(new MonetaryAmountFormat[]{new DefaultMonetaryAmountFormat(builder.build())});
     }
 

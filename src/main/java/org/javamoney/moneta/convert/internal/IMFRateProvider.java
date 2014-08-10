@@ -24,14 +24,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 
 import javax.money.CurrencyContextBuilder;
@@ -233,6 +226,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
+        if(!isAvailable(conversionQuery)){
+            return null;
+        }
         CurrencyUnit base = conversionQuery.getBaseCurrency();
         CurrencyUnit term = conversionQuery.getTermCurrency();
         Long timestamp = conversionQuery.getTimestampMillis();

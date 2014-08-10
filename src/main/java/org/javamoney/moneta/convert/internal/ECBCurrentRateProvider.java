@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import static org.javamoney.moneta.convert.internal.ProviderConstants.TIMESTAMP;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -24,10 +22,7 @@ import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -266,8 +261,15 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * @param factor    The conversion factor.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
-        DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).set(TIMESTAMP, timestamp).build());
+        DefaultExchangeRate.Builder builder;
+        if(timestamp==null) {
+            builder = new DefaultExchangeRate.Builder(
+                    ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
+        }
+        else{
+            builder = new DefaultExchangeRate.Builder(
+                    ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).setTimestampMillis(timestamp).build());
+        }
         builder.setBase(BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(new DefaultNumberValue(factor));

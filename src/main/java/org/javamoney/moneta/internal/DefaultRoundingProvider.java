@@ -15,10 +15,9 @@
  */
 package org.javamoney.moneta.internal;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryRounding;
-import javax.money.RoundingQuery;
+import javax.money.*;
 import javax.money.spi.RoundingProviderSpi;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.*;
 
@@ -52,31 +51,41 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
             return null;
         }
         CurrencyUnit currency = roundingQuery.getCurrencyUnit();
-        RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, RoundingMode.HALF_EVEN);
-        int scale = roundingQuery.getInt("scale", 2);
-        if(roundingQuery.getRoundingName()==null || DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())){
-            if(currency!=null){
-                if(roundingQuery.getBoolean("cashRounding", false)){
-                    if(currency.getCurrencyCode().equals("CHF")){
-                        return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
-                    }else{
-                        return new DefaultCashRounding(currency, 1);
-                    }
+        if(currency!=null) {
+            RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, RoundingMode.HALF_EVEN);
+            if(roundingQuery.getBoolean("cashRounding", false)){
+                if(currency.getCurrencyCode().equals("CHF")){
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
                 }else{
-                    return new DefaultRounding(currency, roundingMode);
+                    return new DefaultCashRounding(currency, 1);
                 }
             }
-            else{
-                return new DefaultRounding(scale, roundingMode);
+            return new DefaultRounding(currency, roundingMode);
+        }
+        Integer scale = roundingQuery.getScale();
+        if(scale==null){
+            scale = 2;
+        }
+        MathContext mc = roundingQuery.get(MathContext.class, null);
+        RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, null);
+        if(roundingMode!=null || mc!=null) {
+            if(mc!=null){
+                return new DefaultRounding(scale, mc.getRoundingMode());
             }
+            if(roundingMode==null){
+                roundingMode = RoundingMode.HALF_EVEN;
+            }
+            return new DefaultRounding(scale, roundingMode);
+        }
+        if(roundingQuery.getRoundingName()!=null &&  DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())) {
+            return MonetaryRoundings.getDefaultRounding();
         }
         return null;
     }
 
 
-
     @Override
-    public Set<String> getRoundingIds(){
+    public Set<String> getRoundingNames(){
         return roundingsIds;
     }
 
