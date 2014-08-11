@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoaderConfigurator{
+class LoaderConfigurator {
 
     private static final String LOAD = "load.";
 
@@ -37,94 +37,91 @@ class LoaderConfigurator{
 
     private LoaderService loaderService;
 
-    public LoaderConfigurator(LoaderService loaderService){
+    public LoaderConfigurator(LoaderService loaderService) {
         Objects.requireNonNull(loaderService);
         this.loaderService = loaderService;
     }
 
-    public void load(){
-        Map<String,String> config = MonetaryConfig.getConfig();
+    public void load() {
+        Map<String, String> config = MonetaryConfig.getConfig();
         // collect loads
         Set<String> loads = new HashSet<>();
-        for(String key : config.keySet()){
-            if(key.startsWith(LOAD) && key.endsWith('.' + TYPE)){
+        for (String key : config.keySet()) {
+            if (key.startsWith(LOAD) && key.endsWith('.' + TYPE)) {
                 String res = key.substring(LOAD.length());
                 res = res.substring(0, res.length() - ('.' + TYPE).length());
                 loads.add(res);
             }
         }
         // init loads
-        for(String l : loads){
-            try{
+        for (String l : loads) {
+            try {
                 initResource(l, config);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Failed to initialize/register resource: " + l, e);
             }
         }
     }
 
-    private void initResource(String name, Map<String,String> allProps) throws MalformedURLException{
-        Map<String,String> props = mapProperties(allProps, name);
+    private void initResource(String name, Map<String, String> allProps) throws MalformedURLException {
+        Map<String, String> props = mapProperties(allProps, name);
         UpdatePolicy updatePolicy = UpdatePolicy.valueOf(props.get(TYPE));
         String fallbackRes = props.get("resource");
-        if(Objects.isNull(fallbackRes)){
+        if (Objects.isNull(fallbackRes)) {
             throw new IllegalArgumentException(LOAD + name + ".resource (classpath resource) required.");
         }
         String resourcesString = props.get("urls");
         String[] resources;
-        if(Objects.isNull(resourcesString)){
+        if (Objects.isNull(resourcesString)) {
             LOG.info("No update URLs configured for: " + name);
             resources = new String[0];
-        }else{
+        } else {
             resources = resourcesString.split(",");
         }
         URI[] urls = createURIs(resources);
-        this.loaderService.registerData(name, updatePolicy, props, getClassLoaderLocation(fallbackRes), urls);
+        this.loaderService.registerData(name, updatePolicy, props, null, getClassLoaderLocation(fallbackRes), urls);
     }
 
-    private URI[] createURIs(String[] resources) throws MalformedURLException{
+    private URI[] createURIs(String[] resources) throws MalformedURLException {
         List<URI> urls = new ArrayList<>(resources.length);
-        for(String res : resources){
-            if(res.trim().isEmpty()){
+        for (String res : resources) {
+            if (res.trim().isEmpty()) {
                 continue;
             }
-            try{
+            try {
                 urls.add(new URL(res.trim()).toURI());
-            }
-            catch(URISyntaxException e){
+            } catch (URISyntaxException e) {
                 LOG.log(Level.WARNING, "Failed to load resoiurce as URI: " + res.trim(), e);
             }
         }
         return urls.toArray(new URI[urls.size()]);
     }
 
-    private URI getClassLoaderLocation(String res){
+    private URI getClassLoaderLocation(String res) {
         URL url = null;
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        if(Objects.nonNull(cl)){
+        if (Objects.nonNull(cl)) {
             url = cl.getResource(res);
         }
-        if(Objects.isNull(url)){
+        if (Objects.isNull(url)) {
             url = getClass().getResource(res);
         }
-        if(Objects.isNull(url)){
+        if (Objects.isNull(url)) {
             throw new IllegalArgumentException("Resource not found: " + res);
         }
-        try{
+        try {
             return url.toURI();
-        }
-        catch(URISyntaxException e){
+        } catch (URISyntaxException e) {
             LOG.log(Level.WARNING, "Failed to load resoiurce as URI: " + res.trim(), e);
             return null;
         }
     }
 
-    private Map<String,String> mapProperties(Map<String,String> allProps, String name){
-        Map<String,String> props = new HashMap<>();
+    private Map<String, String> mapProperties(Map<String, String> allProps, String name) {
+        Map<String, String> props = new HashMap<>();
         String start = LOAD + name;
-        for(Map.Entry<String,String> entry : allProps.entrySet()){
-            if(entry.getKey().startsWith(start)){
+        for (Map.Entry<String, String> entry : allProps.entrySet()) {
+            if (entry.getKey().startsWith(start)) {
                 props.put(entry.getKey().substring(start.length() + 1), entry.getValue());
             }
         }
