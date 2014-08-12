@@ -15,18 +15,33 @@
  */
 package org.javamoney.moneta;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
-import javax.money.*;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.stream.Stream;
 
-import static org.testng.Assert.*;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmounts;
+import javax.money.MonetaryContext;
+import javax.money.MonetaryContextBuilder;
+import javax.money.MonetaryCurrencies;
+import javax.money.MonetaryException;
+import javax.money.MonetaryOperator;
+import javax.money.MonetaryQuery;
+
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole
@@ -1095,88 +1110,4 @@ public class MoneyTest{
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
         m1.subtract(m2);
     }
-
-	@Test
-	public void shouldSumCorretly() {
-		Stream<Money> stream = streamNormal();
-		Money sum = stream.reduce(Money::sum).get();
-		Assert.assertTrue(sum.getNumber().intValue() == 20);
-	}
-
-	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldsumWithNPEWhenAnElementIsNull() {
-		Stream<Money> stream = streamNull();
-		stream.reduce(Money::sum).get();
-	}
-
-	@Test(expectedExceptions = MonetaryException.class)
-	public void shouldSumMoneratyExceptionWhenHasDifferenctsCurrencies() {
-		Stream<Money> stream = streamCurrencyDifferent();
-		stream.reduce(Money::sum).get();
-	}
-
-	@Test
-	public void shouldMinCorretly() {
-		Stream<Money> stream = streamNormal();
-		Money min = stream.reduce(Money::min).get();
-		Assert.assertTrue(min.getNumber().intValue() == 0);
-	}
-
-	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldMinWithNPEWhenAnElementIsNull() {
-		Stream<Money> stream = streamNull();
-		stream.reduce(Money::min).get();
-	}
-
-	@Test(expectedExceptions = MonetaryException.class)
-	public void shouldMinMoneratyExceptionWhenHasDifferenctsCurrencies() {
-		Stream<Money> stream = streamCurrencyDifferent();
-		stream.reduce(Money::min).get();
-	}
-
-	@Test
-	public void shouldMaxCorretly() {
-		Stream<Money> stream = streamNormal();
-		Money max = stream.reduce(Money::max).get();
-		Assert.assertTrue(max.getNumber().intValue() == 10);
-	}
-
-	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldMaxWithNPEWhenAnElementIsNull() {
-		Stream<Money> stream = streamNull();
-		stream.reduce(Money::max).get();
-	}
-
-	@Test(expectedExceptions = MonetaryException.class)
-	public void shouldMaxMoneratyExceptionWhenHasDifferenctsCurrencies() {
-		Stream<Money> stream = streamCurrencyDifferent();
-		stream.reduce(Money::max).get();
-	}
-
-	private Stream<Money> streamCurrencyDifferent() {
-		Money m1 = Money.of(BigDecimal.TEN, BRAZILIAN_REAL);
-		Money m2 = Money.of(BigDecimal.ZERO, BRAZILIAN_REAL);
-		Money m3 = Money.of(BigDecimal.ONE, BRAZILIAN_REAL);
-		Money m4 = Money.of(BigDecimal.valueOf(4L), EURO);
-		Money m5 = Money.of(BigDecimal.valueOf(5L), BRAZILIAN_REAL);
-		return Stream.of(m1, m2, m3, m4, m5);
-	}
-
-	private Stream<Money> streamNormal() {
-		Money m1 = Money.of(BigDecimal.TEN, BRAZILIAN_REAL);
-		Money m2 = Money.of(BigDecimal.ZERO, BRAZILIAN_REAL);
-		Money m3 = Money.of(BigDecimal.ONE, BRAZILIAN_REAL);
-		Money m4 = Money.of(BigDecimal.valueOf(4L), BRAZILIAN_REAL);
-		Money m5 = Money.of(BigDecimal.valueOf(5L), BRAZILIAN_REAL);
-		return Stream.of(m1, m2, m3, m4, m5);
-	}
-
-	private Stream<Money> streamNull() {
-		Money m1 = Money.of(BigDecimal.TEN, BRAZILIAN_REAL);
-		Money m2 = Money.of(BigDecimal.ZERO, BRAZILIAN_REAL);
-		Money m3 = Money.of(BigDecimal.ONE, BRAZILIAN_REAL);
-		Money m4 = Money.of(BigDecimal.valueOf(4L), BRAZILIAN_REAL);
-		Money m5 = Money.of(BigDecimal.valueOf(5L), BRAZILIAN_REAL);
-		return Stream.of(m1, m2, m3, m4, m5, null);
-	}
 }

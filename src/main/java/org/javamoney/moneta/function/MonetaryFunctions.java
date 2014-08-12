@@ -17,10 +17,15 @@ package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
+
+import org.javamoney.moneta.spi.MoneyUtils;
 
 /**
  * This singleton class provides access to the predefined monetary functions.
@@ -188,4 +193,43 @@ public final class MonetaryFunctions {
 		return MAJORUNITS;
 	}
 
+	/**
+	 * Adds two monetary together
+	 * @param a the first operand
+	 * @param b the second operand
+	 * @return the sum of {@code a} and {@code b}
+	 * @throws NullPointerException if a o b be null
+	 * @throws MonetaryException if a and b have different currency
+	 */
+	public static MonetaryAmount sum(MonetaryAmount a, MonetaryAmount b) {
+		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
+				Objects.requireNonNull(b.getCurrency()));
+		return a.add(b);
+	}
+
+	/**
+	 * Returns the smaller of two {MonetaryAmount int} values. If the arguments
+	 * have the same value, the result is that same value.
+	 * @param a an argument.
+	 * @param b another argument.
+	 * @return the smaller of {@code a} and {@code b}.
+	 */
+	public static MonetaryAmount min(MonetaryAmount a, MonetaryAmount b) {
+		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
+				Objects.requireNonNull(b.getCurrency()));
+		return a.isLessThan(b) ? a : b;
+	}
+
+	/**
+	 * Returns the greater of two {@code MonetaryAmount} values. If the
+	 * arguments have the same value, the result is that same value.
+	 * @param a an argument.
+	 * @param b another argument.
+	 * @return the larger of {@code a} and {@code b}.
+	 */
+	public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b) {
+		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
+				Objects.requireNonNull(b.getCurrency()));
+		return a.isGreaterThan(b) ? a : b;
+	}
 }
