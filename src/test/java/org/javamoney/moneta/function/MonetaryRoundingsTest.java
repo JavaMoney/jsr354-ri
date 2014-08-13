@@ -249,7 +249,7 @@ public class MonetaryRoundingsTest{
 
     /**
      * Test method for
-     * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+     * {@link org.javamoney.moneta.function.MonetaryUtil#reciprocal()}.
      */
     @Test(expectedExceptions = NullPointerException.class)
     public void testGetRounding_Null1(){
@@ -258,7 +258,7 @@ public class MonetaryRoundingsTest{
 
     /**
      * Test method for
-     * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+     * {@link org.javamoney.moneta.function.MonetaryUtil#reciprocal()}.
      */
     @Test(expectedExceptions = NullPointerException.class)
     public void testGetRounding_Null3(){
@@ -267,7 +267,7 @@ public class MonetaryRoundingsTest{
 
     /**
      * Test method for
-     * {@link org.javamoney.moneta.function.MonetaryFunctions#reciprocal()}.
+     * {@link org.javamoney.moneta.function.MonetaryUtil#reciprocal()}.
      */
     @Test(expectedExceptions = NullPointerException.class)
     public void testGetRounding_Null2(){
