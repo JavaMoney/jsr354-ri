@@ -12,6 +12,7 @@ import org.javamoney.moneta.spi.MoneyUtils;
  * A state object for collecting statistics such as count, min, max, sum, and
  * average.
  * @author otaviojava
+ * @author Anatole Tresch
  */
 public class MonetarySummaryStatistics {
 
@@ -27,44 +28,48 @@ public class MonetarySummaryStatistics {
 
 	private MonetaryAmount avarage;
 
-	MonetarySummaryStatistics(CurrencyUnit currencyUnit) {
+    /**
+     * Creates a new instance, targeting the given {@link javax.money.CurrencyUnit}.
+     *
+     * @param currencyUnit the target currency, not null.
+     */
+    MonetarySummaryStatistics(CurrencyUnit currencyUnit) {
 		empty = FastMoney.of(0, Objects.requireNonNull(currencyUnit));
 		setSameMonetary(empty);
 	}
 
 	/**
 	 * Records another value into the summary information.
-	 *
-	 * @param moneraty
-	 *            the input value
-	 */
-	public void accept(MonetaryAmount moneraty) {
-		MoneyUtils.checkAmountParameter(moneraty, this.empty.getCurrency());
-		if (isEmpty()) {
-			setSameMonetary(moneraty);
-			count++;
+     *
+     * @param amount
+     *            the input amount value to be addeed, not null.
+     */
+    public void accept(MonetaryAmount amount) {
+        MoneyUtils.checkAmountParameter(amount, this.empty.getCurrency());
+        if (isEmpty()) {
+            setSameMonetary(amount);
+            count++;
 		} else {
-			doSummary(moneraty);
-		}
+            doSummary(amount);
+        }
 	}
 
 	/**
 	 * Combines the state of another {@code MonetarySummaryStatistics} into this
-	 * one.
-	 * @param summary
-	 *            another {@code MonetarySummaryStatistics}
-	 * @throws NullPointerException
-	 *             if {@code other} is null
-	 */
-	public MonetarySummaryStatistics combine(MonetarySummaryStatistics summary) {
-		Objects.requireNonNull(summary);
-		min = MonetaryFunctions.min(min, summary.min);
-		max = MonetaryFunctions.max(max, summary.max);
-		sum = sum.add(summary.sum);
-		count += summary.count;
-		avarage = sum.divide(count);
+     * one.
+     * @param summaryStatistics
+     *            another {@code MonetarySummaryStatistics}, not null.
+     */
+    public MonetarySummaryStatistics combine(MonetarySummaryStatistics summaryStatistics) {
+        Objects.requireNonNull(summaryStatistics);
+        min = MonetaryFunctions.min(min, summaryStatistics.min);
+        max = MonetaryFunctions.max(max, summaryStatistics.max);
+        sum = sum.add(summaryStatistics.sum);
+        count += summaryStatistics.count;
+        avarage = sum.divide(count);
 		return this;
 	}
+
 	private void doSummary(MonetaryAmount moneraty) {
 		min = MonetaryFunctions.min(min, moneraty);
 		max = MonetaryFunctions.max(max, moneraty);
@@ -81,25 +86,45 @@ public class MonetarySummaryStatistics {
 		max = monetary;
 		sum = monetary;
 		avarage = monetary;
-	}
+    }
 
-	public long getCount() {
+    /**
+     * Get the number of items added to this summary instance.
+     * @return the number of summarized items, >= 0.
+     */
+    public long getCount() {
 		return count;
-	}
+    }
 
-	public MonetaryAmount getMin() {
+    /**
+     * Get the minimal amount found within this summary.
+     * @return the minimal amount, or null if no amount was added to this summary instance.
+     */
+    public MonetaryAmount getMin() {
 		return min;
-	}
+    }
 
-	public MonetaryAmount getMax() {
+    /**
+     * Get the maximal amount found within this summary.
+     * @return the minimal amount, or null if no amount was added to this summary instance.
+     */
+    public MonetaryAmount getMax() {
 		return max;
-	}
+    }
 
-	public MonetaryAmount getSum() {
+    /**
+     * Get the sum of all amounts within this summary.
+     * @return the total amount, or null if no amount was added to this summary instance.
+     */
+    public MonetaryAmount getSum() {
 		return sum;
-	}
+    }
 
-	public MonetaryAmount getAvarage() {
+    /**
+     * Get the mean average of all amounts added.
+     * @return the mean average amount, or null if no amount was added to this summary instance.
+     */
+    public MonetaryAmount getAvarage() {
 		return avarage;
 	}
 

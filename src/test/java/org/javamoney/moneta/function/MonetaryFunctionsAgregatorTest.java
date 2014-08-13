@@ -92,8 +92,8 @@ public class MonetaryFunctionsAgregatorTest {
 				.currenciesToSummary()
 				.filter(MonetaryFunctions
 						.isCurrency(StreamFactory.BRAZILIAN_REAL))
-				.collect(MonetaryFunctions.summarizingMonetary());
-		Assert.assertEquals(8L, summary.getCount());
+                .collect(MonetaryFunctions.summarizingMonetary(StreamFactory.BRAZILIAN_REAL));
+        Assert.assertEquals(8L, summary.getCount());
 		Assert.assertEquals(0L, summary.getMin().getNumber().longValue());
 		Assert.assertEquals(10L, summary.getMax().getNumber().longValue());
 		Assert.assertEquals(16L, summary.getSum().getNumber().longValue());

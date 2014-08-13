@@ -33,128 +33,133 @@ public final class MonetaryFunctions {
 
 	/**
 	 * create the summary of the MonetaryAmount
-	 * @return the MonetarySummaryStatistics
+     * @param currencyUnit the target {@link javax.money.CurrencyUnit}
+     * @return the MonetarySummaryStatistics
 	 */
-	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary() {
-		Supplier<MonetarySummaryStatistics> supplier = () -> new MonetarySummaryStatistics(
-				StreamFactory.BRAZILIAN_REAL);
-		return Collector.of(supplier, MonetarySummaryStatistics::accept,
+    public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
+            CurrencyUnit currencyUnit
+    ) {
+        Supplier<MonetarySummaryStatistics> supplier = () -> new MonetarySummaryStatistics(
+                currencyUnit);
+        return Collector.of(supplier, MonetarySummaryStatistics::accept,
 				MonetarySummaryStatistics::combine);
 	}
 
 	/**
-	 * sort ascending CurrencyUnit
-	 * @return the Comparator sort by CurrencyUnit in ascending way
-	 */
+     * Get a comparator for sorting CurrencyUnits ascending.
+     * @return the Comparator to sort by CurrencyUnit in ascending order, not null.
+     */
 	public static Comparator<MonetaryAmount> sortCurrencyUnit() {
 		return Comparator.comparing(MonetaryAmount::getCurrency);
 	}
 
-	/**
-	 * sort descending CurrencyUnit
-	 * @return the Comparator to sort by CurrencyUnit in descending way
-	 */
-	public static Comparator<MonetaryAmount> sortCurrencyUnitDesc() {
+    /**
+     * Get a comparator for sorting CurrencyUnits descending.
+     *
+     * @return the Comparator to sort by CurrencyUnit in descending order, not null.
+     */
+    public static Comparator<MonetaryAmount> sortCurrencyUnitDesc() {
 		return sortCurrencyUnit().reversed();
 	}
 
-	/**
-	 * sort ascending CurrencyUnit
-	 * @return the Comparator to sort by NumberValue in ascending way
-	 */
+    /**
+     * Get a comparator for sorting amount by number value ascending.
+     * @return the Comparator to sort by number in ascending way, not null.
+     */
 	public static Comparator<MonetaryAmount> sortNumber() {
 		return Comparator.comparing(MonetaryAmount::getNumber);
-	}
+    }
 
-	/**
-	 * sort descending CurrencyUnit
-	 * @return the Comparator to order by NumberValue in descending way
-	 */
-	public static Comparator<MonetaryAmount> sortNumberDesc() {
+    /**
+     * Get a comparator for sorting amount by number value descending.
+     * @return the Comparator to sort by number in descending way, not null.
+     */
+    public static Comparator<MonetaryAmount> sortNumberDesc() {
 		return sortNumber().reversed();
 	}
 
-	/**
-	 * Filter by CurrencyUnit
-	 * @param unit
-	 * @return the predicate from CurrencyUnit
-	 */
-	public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit unit) {
-		return m -> m.getCurrency().equals(unit);
-	}
+    /**
+     * Create predicate that filters by CurrencyUnit.
+     * @param currencyUnit the target {@link javax.money.CurrencyUnit}
+     * @return the predicate from CurrencyUnit
+     */
+    public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit currencyUnit) {
+        return m -> m.getCurrency().equals(currencyUnit);
+    }
 
-	/**
-	 * Filter by is not CurrencyUnit
-	 * @param unit
-	 * @return the predicate that is not the CurrencyUnit
-	 */
-	public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit unit) {
-		return isCurrency(unit).negate();
-	}
+    /**
+     * Create predicate that filters by CurrencyUnit.
+     *
+     * @param currencyUnit the target {@link javax.money.CurrencyUnit}
+     * @return the predicate from CurrencyUnit
+     */
+    public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit currencyUnit) {
+        return isCurrency(currencyUnit).negate();
+    }
 
-	/**
-	 * Filter by CurrencyUnits
-	 * @param a
-	 *            first CurrencyUnit
-	 * @param units
-	 *            - the another units
-	 * @return the predicate in
-	 */
-	public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit a,
-			CurrencyUnit... units) {
-		Predicate<MonetaryAmount> inPredicate = isCurrency(a);
-		for (CurrencyUnit unit : units) {
-			inPredicate = inPredicate.or(isCurrency(unit));
+    /**
+     * Creates a filtering predicate based on the given currencies.
+     * @param requiredUnit
+     *            first CurrencyUnit, required.
+     * @param otherUnits
+     *            - any another units, not null.
+     * @return the predicate filtering entries with one of the given currencies.
+     */
+    public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit requiredUnit,
+                                                               CurrencyUnit... otherUnits) {
+        Predicate<MonetaryAmount> inPredicate = isCurrency(requiredUnit);
+        for (CurrencyUnit unit : otherUnits) {
+            inPredicate = inPredicate.or(isCurrency(unit));
 		}
 		return inPredicate;
-	}
+    }
 
-	/**
-	 * Filter using isGreaterThan in MonetaryAmount
-	 * @param amount
+    /**
+     * Creates filter using isGreaterThan in MonetaryAmount.
+     * @param amount
 	 * @return the filter with isGreaterThan conditions
 	 */
 	public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount) {
 		return m -> m.isGreaterThan(amount);
-	}
+    }
 
-	/**
-	 * Filter using isGreaterThanOrEqualTo in MonetaryAmount
-	 * @param amount
+    /**
+     * Creates filter using isGreaterThanOrEqualTo in MonetaryAmount
+     * @param amount
 	 * @return the filter with isGreaterThanOrEqualTo conditions
 	 */
 	public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(
 			MonetaryAmount amount) {
 		return m -> m.isGreaterThanOrEqualTo(amount);
-	}
+    }
 
-	/**
-	 * Filter using isLessThan in MonetaryAmount
-	 * @param amount
+    /**
+     * Creates filter using isLessThan in MonetaryAmount
+     * @param amount
 	 * @return the filter with isLessThan conditions
 	 */
 	public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount) {
 		return m -> m.isLessThan(amount);
-	}
+    }
 
-	/**
-	 * Filter using isLessThanOrEqualTo in MonetaryAmount
-	 * @param amount
+    /**
+     * Creates filter using isLessThanOrEqualTo in MonetaryAmount
+     * @param amount
 	 * @return the filter with isLessThanOrEqualTo conditions
 	 */
 	public static Predicate<MonetaryAmount> isLessThanOrEqualTo(
 			MonetaryAmount amount) {
 		return m -> m.isLessThanOrEqualTo(amount);
-	}
+    }
 
-	/**
-	 * Filter using the isBetween predicate
-	 * @param min
-	 *            - min value inclusive
-	 * @param max
-	 *            - max value inclusive
-	 * @return - the Predicate between min and max
-	 */
+    /**
+     * Creates a filter using the isBetween predicate.
+     * @param min
+     *           min value inclusive, not null.
+     * @param max
+     *           max value inclusive, not null.
+     * @return the Predicate between min and max.
+     */
 	public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min,
 			MonetaryAmount max) {
 		return isLessThanOrEqualTo(max).and(isGreaterThanOrEqualTo(min));
@@ -172,11 +177,11 @@ public final class MonetaryFunctions {
 		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
 				Objects.requireNonNull(b.getCurrency()));
 		return a.add(b);
-	}
+    }
 
-	/**
-	 * Returns the smaller of two {MonetaryAmount int} values. If the arguments
-	 * have the same value, the result is that same value.
+    /**
+     * Returns the smaller of two {@code MonetaryAmount} values. If the arguments
+     * have the same value, the result is that same value.
 	 * @param a an argument.
 	 * @param b another argument.
 	 * @return the smaller of {@code a} and {@code b}.
@@ -198,28 +203,28 @@ public final class MonetaryFunctions {
 		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
 				Objects.requireNonNull(b.getCurrency()));
 		return a.isGreaterThan(b) ? a : b;
-	}
+    }
 
-	/**
-	 * create the BinaryOperator to sum
-	 * @return the sum BinaryOperator
-	 */
+    /**
+     * Creates a BinaryOperator to sum.
+     * @return the sum BinaryOperator, not null.
+     */
 	public static BinaryOperator<MonetaryAmount> sum() {
 		return MonetaryFunctions::sum;
-	}
+    }
 
-	/**
-	 * create the BinaryOperator to min
-	 * @return the min BinaryOperator
-	 */
+    /**
+     * Creates a BinaryOperator to calculate the mininum amount
+     * @return the min BinaryOperator, not null.
+     */
 	public static BinaryOperator<MonetaryAmount> min() {
 		return MonetaryFunctions::min;
-	}
+    }
 
-	/**
-	 * create the BinaryOperator to max
-	 * @return the max BinaryOperator
-	 */
+    /**
+     * Creates a BinaryOperator to caclulate the maximum amount.
+     * @return the max BinaryOperator, not null.
+     */
 	public static BinaryOperator<MonetaryAmount> max() {
 		return MonetaryFunctions::max;
 	}
