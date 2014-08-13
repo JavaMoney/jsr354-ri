@@ -2,10 +2,6 @@ package org.javamoney.moneta.function;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import javax.money.CurrencyUnit;
@@ -26,58 +22,58 @@ public class MonetaryFunctionsAgregatorTest {
 	@Test
 	public void shouldSumCorretly() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamNormal();
-		MonetaryAmount sum = stream.reduce(MonetaryFunctions::sum).get();
+		MonetaryAmount sum = stream.reduce(MonetaryFunctions.sum()).get();
 		Assert.assertTrue(sum.getNumber().intValue() == 20);
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldsumWithNPEWhenAnElementIsNull() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamNull();
-		stream.reduce(MonetaryFunctions::sum).get();
+		stream.reduce(MonetaryFunctions.sum()).get();
 	}
 
 	@Test(expectedExceptions = MonetaryException.class)
 	public void shouldSumMoneratyExceptionWhenHasDifferenctsCurrencies() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamCurrencyDifferent();
-		stream.reduce(MonetaryFunctions::sum).get();
+		stream.reduce(MonetaryFunctions.sum()).get();
 	}
 
 	@Test
 	public void shouldMinCorretly() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamNormal();
-		MonetaryAmount min = stream.reduce(MonetaryFunctions::min).get();
+		MonetaryAmount min = stream.reduce(MonetaryFunctions.min()).get();
 		Assert.assertTrue(min.getNumber().intValue() == 0);
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldMinWithNPEWhenAnElementIsNull() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamNull();
-		stream.reduce(MonetaryFunctions::min).get();
+		stream.reduce(MonetaryFunctions.min()).get();
 	}
 
 	@Test(expectedExceptions = MonetaryException.class)
 	public void shouldMinMoneratyExceptionWhenHasDifferenctsCurrencies() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamCurrencyDifferent();
-		stream.reduce(MonetaryFunctions::min).get();
+		stream.reduce(MonetaryFunctions.min()).get();
 	}
 
 	@Test
 	public void shouldMaxCorretly() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamNormal();
-		MonetaryAmount max = stream.reduce(MonetaryFunctions::max).get();
+		MonetaryAmount max = stream.reduce(MonetaryFunctions.max()).get();
 		Assert.assertTrue(max.getNumber().intValue() == 10);
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldMaxWithNPEWhenAnElementIsNull() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamNull();
-		stream.reduce(MonetaryFunctions::max).get();
+		stream.reduce(MonetaryFunctions.max()).get();
 	}
 
 	@Test(expectedExceptions = MonetaryException.class)
 	public void shouldMaxMoneratyExceptionWhenHasDifferenctsCurrencies() {
 		Stream<MonetaryAmount> stream = StreamFactory.streamCurrencyDifferent();
-		stream.reduce(MonetaryFunctions::max).get();
+		stream.reduce(MonetaryFunctions.max()).get();
 	}
 
 	@Test
@@ -97,7 +93,6 @@ public class MonetaryFunctionsAgregatorTest {
 				.filter(MonetaryFunctions
 						.isCurrency(StreamFactory.BRAZILIAN_REAL))
 				.collect(MonetaryFunctions.summarizingMonetary());
-
 		Assert.assertEquals(8L, summary.getCount());
 		Assert.assertEquals(0L, summary.getMin().getNumber().longValue());
 		Assert.assertEquals(10L, summary.getMax().getNumber().longValue());
@@ -105,6 +100,5 @@ public class MonetaryFunctionsAgregatorTest {
 		Assert.assertEquals(2L, summary.getAvarage().getNumber().longValue());
 
 	}
-
 
 }

@@ -103,4 +103,15 @@ public class MonetarySummaryStatistics {
 		return avarage;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[count:").append(count).append(",");
+		sb.append("min:").append(min).append(",");
+		sb.append("max:").append(max).append(",");
+		sb.append("sum:").append(sum).append(",");
+		sb.append("avarage:").append(avarage).append("]");
+		return sb.toString();
+	}
+
 }

@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -39,9 +38,8 @@ public final class MonetaryFunctions {
 	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary() {
 		Supplier<MonetarySummaryStatistics> supplier = () -> new MonetarySummaryStatistics(
 				StreamFactory.BRAZILIAN_REAL);
-		BiConsumer<MonetarySummaryStatistics, MonetaryAmount> accumulator = MonetarySummaryStatistics::accept;
-		BinaryOperator<MonetarySummaryStatistics> combiner = MonetarySummaryStatistics::combine;
-		return Collector.of(supplier, accumulator, combiner);
+		return Collector.of(supplier, MonetarySummaryStatistics::accept,
+				MonetarySummaryStatistics::combine);
 	}
 
 	/**
@@ -200,5 +198,29 @@ public final class MonetaryFunctions {
 		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
 				Objects.requireNonNull(b.getCurrency()));
 		return a.isGreaterThan(b) ? a : b;
+	}
+
+	/**
+	 * create the BinaryOperator to sum
+	 * @return the sum BinaryOperator
+	 */
+	public static BinaryOperator<MonetaryAmount> sum() {
+		return MonetaryFunctions::sum;
+	}
+
+	/**
+	 * create the BinaryOperator to min
+	 * @return the min BinaryOperator
+	 */
+	public static BinaryOperator<MonetaryAmount> min() {
+		return MonetaryFunctions::min;
+	}
+
+	/**
+	 * create the BinaryOperator to max
+	 * @return the max BinaryOperator
+	 */
+	public static BinaryOperator<MonetaryAmount> max() {
+		return MonetaryFunctions::max;
 	}
 }
