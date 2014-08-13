@@ -4,7 +4,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -21,109 +24,143 @@ import org.javamoney.moneta.spi.MoneyUtils;
 public final class MonetaryFunctions {
 
 
-		public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit() {
-			return Collectors.groupingBy(MonetaryAmount::getCurrency);
-		}
-		/**
-		 * sort ascending CurrencyUnit
-		 * @return the Comparator sort by CurrencyUnit in ascending way
-		 */
-		public static  Comparator<MonetaryAmount> sortCurrencyUnit() {
-			return Comparator.comparing(MonetaryAmount::getCurrency);
-		}
-		/**
-		 * sort descending CurrencyUnit
-		 * @return the Comparator to sort by CurrencyUnit in descending way
-		 */
-		public static  Comparator<MonetaryAmount> sortCurrencyUnitDesc() {
-			return sortCurrencyUnit().reversed();
-		}
+	/**
+	 * Collector to group by CurrencyUnit
+	 * @return the Collector to create Map<CurrencyUnit, List<MonetaryAmount>>
+	 */
+	public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit() {
+		return Collectors.groupingBy(MonetaryAmount::getCurrency);
+	}
 
-		/**
-		 * sort ascending CurrencyUnit
-		 * @return the Comparator to sort by NumberValue in ascending way
-		 */
-		public static  Comparator<MonetaryAmount> sortNumber() {
-			return Comparator.comparing(MonetaryAmount::getNumber);
-		}
-		/**
-		 * sort descending CurrencyUnit
-		 * @return the Comparator to order by NumberValue in descending way
-		 */
-		public static  Comparator<MonetaryAmount> sortNumberDesc() {
-			return sortNumber().reversed();
-		}
+	/**
+	 * create the summary of the MonetaryAmount
+	 * @return the MonetarySummaryStatistics
+	 */
+	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary() {
+		Supplier<MonetarySummaryStatistics> supplier = () -> new MonetarySummaryStatistics(
+				StreamFactory.BRAZILIAN_REAL);
+		BiConsumer<MonetarySummaryStatistics, MonetaryAmount> accumulator = MonetarySummaryStatistics::accept;
+		BinaryOperator<MonetarySummaryStatistics> combiner = MonetarySummaryStatistics::combine;
+		return Collector.of(supplier, accumulator, combiner);
+	}
 
-		/**
-		 * Filter by CurrencyUnit
-		 * @param unit
-		 * @return the predicate from CurrencyUnit
-		 */
-		public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit unit) {
-			return  m -> m.getCurrency().equals(unit);
+	/**
+	 * sort ascending CurrencyUnit
+	 * @return the Comparator sort by CurrencyUnit in ascending way
+	 */
+	public static Comparator<MonetaryAmount> sortCurrencyUnit() {
+		return Comparator.comparing(MonetaryAmount::getCurrency);
+	}
+
+	/**
+	 * sort descending CurrencyUnit
+	 * @return the Comparator to sort by CurrencyUnit in descending way
+	 */
+	public static Comparator<MonetaryAmount> sortCurrencyUnitDesc() {
+		return sortCurrencyUnit().reversed();
+	}
+
+	/**
+	 * sort ascending CurrencyUnit
+	 * @return the Comparator to sort by NumberValue in ascending way
+	 */
+	public static Comparator<MonetaryAmount> sortNumber() {
+		return Comparator.comparing(MonetaryAmount::getNumber);
+	}
+
+	/**
+	 * sort descending CurrencyUnit
+	 * @return the Comparator to order by NumberValue in descending way
+	 */
+	public static Comparator<MonetaryAmount> sortNumberDesc() {
+		return sortNumber().reversed();
+	}
+
+	/**
+	 * Filter by CurrencyUnit
+	 * @param unit
+	 * @return the predicate from CurrencyUnit
+	 */
+	public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit unit) {
+		return m -> m.getCurrency().equals(unit);
+	}
+
+	/**
+	 * Filter by is not CurrencyUnit
+	 * @param unit
+	 * @return the predicate that is not the CurrencyUnit
+	 */
+	public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit unit) {
+		return isCurrency(unit).negate();
+	}
+
+	/**
+	 * Filter by CurrencyUnits
+	 * @param a
+	 *            first CurrencyUnit
+	 * @param units
+	 *            - the another units
+	 * @return the predicate in
+	 */
+	public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit a,
+			CurrencyUnit... units) {
+		Predicate<MonetaryAmount> inPredicate = isCurrency(a);
+		for (CurrencyUnit unit : units) {
+			inPredicate = inPredicate.or(isCurrency(unit));
 		}
-		/**
-		 * Filter by is not CurrencyUnit
-		 * @param unit
-		 * @return the predicate that is not the CurrencyUnit
-		 */
-		public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit unit) {
-			return  isCurrency(unit).negate();
-		}
-		/**
-		 * Filter by CurrencyUnits
-		 * @param a - first CurrencyUnit
-		 * @param units - the another units
-		 * @return the predicate in
-		 */
-		public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit a, CurrencyUnit... units) {
-			Predicate<MonetaryAmount> inPredicate = isCurrency(a);
-			for (CurrencyUnit unit: units) {
-				inPredicate = inPredicate.or(isCurrency(unit));
-			}
-			return  inPredicate;
-		}
-		/**
-		 * Filter using isGreaterThan in MonetaryAmount
-		 * @param amount
-		 * @return the filter with isGreaterThan conditions
-		 */
-		public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount){
-			return m -> m.isGreaterThan(amount);
-		}
-		/**
-		 * Filter using isGreaterThanOrEqualTo in MonetaryAmount
-		 * @param amount
-		 * @return the filter with isGreaterThanOrEqualTo conditions
-		 */
-		public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(MonetaryAmount amount){
-			return m -> m.isGreaterThanOrEqualTo(amount);
-		}
-		/**
-		 * Filter using isLessThan in MonetaryAmount
-		 * @param amount
-		 * @return the filter with isLessThan conditions
-		 */
-		public  static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount){
-			return m -> m.isLessThan(amount);
-		}
-		/**
-		 * Filter using isLessThanOrEqualTo in MonetaryAmount
-		 * @param amount
-		 * @return the filter with isLessThanOrEqualTo conditions
-		 */
-		public static Predicate<MonetaryAmount> isLessThanOrEqualTo(MonetaryAmount amount){
-			return m -> m.isLessThanOrEqualTo(amount);
-		}
-		/**
-		 * Filter using the isBetween predicate
-		 * @param min - min value inclusive
-		 * @param max - max value inclusive
-		 * @return - the Predicate between min and max
-		 */
-		public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min, MonetaryAmount max){
-			return isLessThanOrEqualTo(max).and(isGreaterThanOrEqualTo(min));
-		}
+		return inPredicate;
+	}
+
+	/**
+	 * Filter using isGreaterThan in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isGreaterThan conditions
+	 */
+	public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount) {
+		return m -> m.isGreaterThan(amount);
+	}
+
+	/**
+	 * Filter using isGreaterThanOrEqualTo in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isGreaterThanOrEqualTo conditions
+	 */
+	public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(
+			MonetaryAmount amount) {
+		return m -> m.isGreaterThanOrEqualTo(amount);
+	}
+
+	/**
+	 * Filter using isLessThan in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isLessThan conditions
+	 */
+	public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount) {
+		return m -> m.isLessThan(amount);
+	}
+
+	/**
+	 * Filter using isLessThanOrEqualTo in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isLessThanOrEqualTo conditions
+	 */
+	public static Predicate<MonetaryAmount> isLessThanOrEqualTo(
+			MonetaryAmount amount) {
+		return m -> m.isLessThanOrEqualTo(amount);
+	}
+
+	/**
+	 * Filter using the isBetween predicate
+	 * @param min
+	 *            - min value inclusive
+	 * @param max
+	 *            - max value inclusive
+	 * @return - the Predicate between min and max
+	 */
+	public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min,
+			MonetaryAmount max) {
+		return isLessThanOrEqualTo(max).and(isGreaterThanOrEqualTo(min));
+	}
 
 	/**
 	 * Adds two monetary together

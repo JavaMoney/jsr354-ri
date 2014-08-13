@@ -2,6 +2,10 @@ package org.javamoney.moneta.function;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import javax.money.CurrencyUnit;
@@ -85,6 +89,22 @@ public class MonetaryFunctionsAgregatorTest {
 		 Assert.assertEquals(3, groupBy.get(StreamFactory.EURO).size());
 	}
 
+	@Test
+	public void summarizingMonetary() {
+
+		MonetarySummaryStatistics summary = StreamFactory
+				.currenciesToSummary()
+				.filter(MonetaryFunctions
+						.isCurrency(StreamFactory.BRAZILIAN_REAL))
+				.collect(MonetaryFunctions.summarizingMonetary());
+
+		Assert.assertEquals(8L, summary.getCount());
+		Assert.assertEquals(0L, summary.getMin().getNumber().longValue());
+		Assert.assertEquals(10L, summary.getMax().getNumber().longValue());
+		Assert.assertEquals(16L, summary.getSum().getNumber().longValue());
+		Assert.assertEquals(2L, summary.getAvarage().getNumber().longValue());
+
+	}
 
 
 }
