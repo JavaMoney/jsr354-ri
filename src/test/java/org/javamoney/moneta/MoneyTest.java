@@ -15,15 +15,33 @@
  */
 package org.javamoney.moneta;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
-import javax.money.*;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import static org.testng.Assert.*;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmounts;
+import javax.money.MonetaryContext;
+import javax.money.MonetaryContextBuilder;
+import javax.money.MonetaryCurrencies;
+import javax.money.MonetaryException;
+import javax.money.MonetaryOperator;
+import javax.money.MonetaryQuery;
+
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole
@@ -35,6 +53,7 @@ public class MoneyTest{
     private static final BigDecimal TEN = new BigDecimal(10.0d);
     protected static final CurrencyUnit EURO = MonetaryCurrencies.getCurrency("EUR");
     protected static final CurrencyUnit DOLLAR = MonetaryCurrencies.getCurrency("USD");
+    protected static final CurrencyUnit BRAZILIAN_REAL = MonetaryCurrencies.getCurrency("BRL");
 
     /**
      * Test method for

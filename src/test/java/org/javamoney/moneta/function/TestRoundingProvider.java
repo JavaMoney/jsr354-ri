@@ -75,7 +75,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
             MonetaryOperator minorRounding = MonetaryRoundings
                     .getRounding(RoundingQueryBuilder.create().set("scale", 2).set(RoundingMode.HALF_UP).build());
             MonetaryAmount amt = amount.with(minorRounding);
-            MonetaryAmount mp = amt.with(MonetaryFunctions.minorPart());
+            MonetaryAmount mp = amt.with(MonetaryUtil.minorPart());
             if(mp.isGreaterThanOrEqualTo(
                     MonetaryAmounts.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03)
                             .create())){

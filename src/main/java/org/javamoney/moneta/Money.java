@@ -782,5 +782,4 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         }
         return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), amt.getMonetaryContext());
     }
-
 }

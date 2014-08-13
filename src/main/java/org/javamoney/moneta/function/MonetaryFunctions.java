@@ -1,191 +1,226 @@
-/**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package org.javamoney.moneta.function;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryException;
+
+import org.javamoney.moneta.spi.MoneyUtils;
 
 /**
  * This singleton class provides access to the predefined monetary functions.
- * <p>
- * The class is thread-safe, which is also true for all functions returned by
- * this class.
- * 
- * @author Anatole Tresch
+ * @author otaviojava
  */
 public final class MonetaryFunctions {
-	/** defaulkt Math context used. */
-	private static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
-	/** Shared reciprocal instance. */
-	private static final Reciprocal RECIPROCAL = new Reciprocal();
+
 
 	/**
-	 * The shared instance of this class.
+	 * Collector to group by CurrencyUnit
+	 * @return the Collector to create Map<CurrencyUnit, List<MonetaryAmount>>
 	 */
-	private static final MinorPart MINORPART = new MinorPart();
-	/** SHared minor units class. */
-	private static final MinorUnits MINORUNITS = new MinorUnits();
-	/** Shared major part instance. */
-	private static final MajorPart MAJORPART = new MajorPart();
-	/** Shared major units instance. */
-	private static final MajorUnits MAJORUNITS = new MajorUnits();
-
-	/**
-	 * Private singleton constructor.
-	 */
-	private MonetaryFunctions() {
-		// Singleton constructor
+	public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit() {
+		return Collectors.groupingBy(MonetaryAmount::getCurrency);
 	}
 
 	/**
-	 * Get {@link MathContext} for {@link Permil} instances.
-	 * 
-	 * @return the {@link MathContext} to be used, by default
-	 *         {@link MathContext#DECIMAL64}.
+	 * create the summary of the MonetaryAmount
+	 * @return the MonetarySummaryStatistics
 	 */
-	private static MathContext initDefaultMathContext() {
-		// TODO Initialize default, e.g. by system properties, or better:
-		// classpath properties!
-		return MathContext.DECIMAL64;
+	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary() {
+		Supplier<MonetarySummaryStatistics> supplier = () -> new MonetarySummaryStatistics(
+				StreamFactory.BRAZILIAN_REAL);
+		return Collector.of(supplier, MonetarySummaryStatistics::accept,
+				MonetarySummaryStatistics::combine);
 	}
 
 	/**
-	 * Return a {@link MonetaryOperator} realizing the recorpocal value of
-	 * {@code f(R) = 1/R}.
-	 * 
-	 * @return the reciprocal operator, never {@code null}
+	 * sort ascending CurrencyUnit
+	 * @return the Comparator sort by CurrencyUnit in ascending way
 	 */
-	public static MonetaryOperator reciprocal() {
-		return RECIPROCAL;
+	public static Comparator<MonetaryAmount> sortCurrencyUnit() {
+		return Comparator.comparing(MonetaryAmount::getCurrency);
 	}
 
 	/**
-	 * Factory method creating a new instance with the given {@code BigDecimal} permil value.
-	 * @param decimal the decimal value of the permil operator being created.
-	 * @return a new  {@code Permil} operator
+	 * sort descending CurrencyUnit
+	 * @return the Comparator to sort by CurrencyUnit in descending way
 	 */
-	public static MonetaryOperator permil(BigDecimal decimal) {
-		return new Permil(decimal);
+	public static Comparator<MonetaryAmount> sortCurrencyUnitDesc() {
+		return sortCurrencyUnit().reversed();
 	}
 
 	/**
-	 * Factory method creating a new instance with the given {@code Number} permil value.
-	 * @param number the number value of the permil operator being created.
-	 * @return a new  {@code Permil} operator
+	 * sort ascending CurrencyUnit
+	 * @return the Comparator to sort by NumberValue in ascending way
 	 */
-	public static MonetaryOperator permil(Number number) {
-		return permil(number, DEFAULT_MATH_CONTEXT);
+	public static Comparator<MonetaryAmount> sortNumber() {
+		return Comparator.comparing(MonetaryAmount::getNumber);
 	}
 
 	/**
-	 * Factory method creating a new instance with the given {@code Number} permil value.
-	 * @param number the number value of the permil operator being created.
-	 * @return a new  {@code Permil} operator
+	 * sort descending CurrencyUnit
+	 * @return the Comparator to order by NumberValue in descending way
 	 */
-	public static MonetaryOperator permil(Number number, MathContext mathContext) {
-		return new Permil(getBigDecimal(number, mathContext));
+	public static Comparator<MonetaryAmount> sortNumberDesc() {
+		return sortNumber().reversed();
 	}
 
 	/**
-	 * Converts to {@link BigDecimal}, if necessary, or casts, if possible.
-	 * 
-	 * @param num
-	 *            The {@link Number}
-	 * @param mathContext
-	 *            the {@link MathContext}
-	 * @return the {@code number} as {@link BigDecimal}
+	 * Filter by CurrencyUnit
+	 * @param unit
+	 * @return the predicate from CurrencyUnit
 	 */
-	private static BigDecimal getBigDecimal(Number num,
-			MathContext mathContext) {
-		if (num instanceof BigDecimal) {
-			return (BigDecimal) num;
+	public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit unit) {
+		return m -> m.getCurrency().equals(unit);
+	}
+
+	/**
+	 * Filter by is not CurrencyUnit
+	 * @param unit
+	 * @return the predicate that is not the CurrencyUnit
+	 */
+	public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit unit) {
+		return isCurrency(unit).negate();
+	}
+
+	/**
+	 * Filter by CurrencyUnits
+	 * @param a
+	 *            first CurrencyUnit
+	 * @param units
+	 *            - the another units
+	 * @return the predicate in
+	 */
+	public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit a,
+			CurrencyUnit... units) {
+		Predicate<MonetaryAmount> inPredicate = isCurrency(a);
+		for (CurrencyUnit unit : units) {
+			inPredicate = inPredicate.or(isCurrency(unit));
 		}
-		if (num instanceof Long || num instanceof Integer
-				|| num instanceof Byte || num instanceof AtomicLong) {
-			return BigDecimal.valueOf(num.longValue());
-		}
-		if (num instanceof Float || num instanceof Double) {
-			return new BigDecimal(num.toString());
-		}
-		try {
-			// Avoid imprecise conversion to double value if at all possible
-			return new BigDecimal(num.toString(), mathContext);
-		} catch (NumberFormatException ignored) {
-		}
-		return BigDecimal.valueOf(num.doubleValue());
+		return inPredicate;
 	}
 
 	/**
-	 * Factory method creating a new instance with the given {@code BigDecimal} percent value.
-	 * @param decimal the decimal value of the percent operator being created.
-	 * @return a new  {@code Percent} operator
+	 * Filter using isGreaterThan in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isGreaterThan conditions
 	 */
-	public static MonetaryOperator percent(BigDecimal decimal) {
-		return new Percent(decimal); // TODO caching, e.g. array for 1-100 might
-										// work.
+	public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount) {
+		return m -> m.isGreaterThan(amount);
 	}
 
 	/**
-	 * Factory method creating a new instance with the given {@code Number} percent value.
-	 * @param number the number value of the percent operator being created.
-	 * 
-	 * @return a new  {@code Percent} operator
+	 * Filter using isGreaterThanOrEqualTo in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isGreaterThanOrEqualTo conditions
 	 */
-	public static MonetaryOperator percent(Number number) {
-		return percent(getBigDecimal(number, DEFAULT_MATH_CONTEXT));
+	public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(
+			MonetaryAmount amount) {
+		return m -> m.isGreaterThanOrEqualTo(amount);
 	}
 
 	/**
-	 * Access the shared instance of {@link MinorPart} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
+	 * Filter using isLessThan in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isLessThan conditions
 	 */
-	public static MonetaryOperator minorPart() {
-		return MINORPART;
+	public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount) {
+		return m -> m.isLessThan(amount);
 	}
 
 	/**
-	 * Access the shared instance of {@link MajorPart} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
+	 * Filter using isLessThanOrEqualTo in MonetaryAmount
+	 * @param amount
+	 * @return the filter with isLessThanOrEqualTo conditions
 	 */
-	public static MonetaryOperator majorPart() {
-		return MAJORPART;
+	public static Predicate<MonetaryAmount> isLessThanOrEqualTo(
+			MonetaryAmount amount) {
+		return m -> m.isLessThanOrEqualTo(amount);
 	}
 
 	/**
-	 * Access the shared instance of {@link MinorUnits} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
+	 * Filter using the isBetween predicate
+	 * @param min
+	 *            - min value inclusive
+	 * @param max
+	 *            - max value inclusive
+	 * @return - the Predicate between min and max
 	 */
-	public static MonetaryQuery<Long> minorUnits() {
-		return MINORUNITS;
+	public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min,
+			MonetaryAmount max) {
+		return isLessThanOrEqualTo(max).and(isGreaterThanOrEqualTo(min));
 	}
 
 	/**
-	 * Access the shared instance of {@link MajorUnits} for use.
-	 * 
-	 * @return the shared instance, never {@code null}.
+	 * Adds two monetary together
+	 * @param a the first operand
+	 * @param b the second operand
+	 * @return the sum of {@code a} and {@code b}
+	 * @throws NullPointerException if a o b be null
+	 * @throws MonetaryException if a and b have different currency
 	 */
-	public static MonetaryQuery<Long> majorUnits() {
-		return MAJORUNITS;
+	public static MonetaryAmount sum(MonetaryAmount a, MonetaryAmount b) {
+		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
+				Objects.requireNonNull(b.getCurrency()));
+		return a.add(b);
 	}
 
+	/**
+	 * Returns the smaller of two {MonetaryAmount int} values. If the arguments
+	 * have the same value, the result is that same value.
+	 * @param a an argument.
+	 * @param b another argument.
+	 * @return the smaller of {@code a} and {@code b}.
+	 */
+	public static MonetaryAmount min(MonetaryAmount a, MonetaryAmount b) {
+		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
+				Objects.requireNonNull(b.getCurrency()));
+		return a.isLessThan(b) ? a : b;
+	}
+
+	/**
+	 * Returns the greater of two {@code MonetaryAmount} values. If the
+	 * arguments have the same value, the result is that same value.
+	 * @param a an argument.
+	 * @param b another argument.
+	 * @return the larger of {@code a} and {@code b}.
+	 */
+	public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b) {
+		MoneyUtils.checkAmountParameter(Objects.requireNonNull(a),
+				Objects.requireNonNull(b.getCurrency()));
+		return a.isGreaterThan(b) ? a : b;
+	}
+
+	/**
+	 * create the BinaryOperator to sum
+	 * @return the sum BinaryOperator
+	 */
+	public static BinaryOperator<MonetaryAmount> sum() {
+		return MonetaryFunctions::sum;
+	}
+
+	/**
+	 * create the BinaryOperator to min
+	 * @return the min BinaryOperator
+	 */
+	public static BinaryOperator<MonetaryAmount> min() {
+		return MonetaryFunctions::min;
+	}
+
+	/**
+	 * create the BinaryOperator to max
+	 * @return the max BinaryOperator
+	 */
+	public static BinaryOperator<MonetaryAmount> max() {
+		return MonetaryFunctions::max;
+	}
 }
