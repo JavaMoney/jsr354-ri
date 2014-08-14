@@ -29,33 +29,212 @@ For a shorter introduction you may check out the quick start guide (tbd).
 **********************************************************************
 
 
-Introduction to Java Money
---------------------------
+== Introduction to Java Money
 
-[NOTE]
-You may also read the JSR 354 API specification available https://jcp.org/en/jsr/detail?id=354[here].
+Java Money is a initiative lead by Credit Suisse to standardize monetary aspects in Java. The main part hereby is
+JSR 354, which defines the money and currency API covering currencies, monetary amounts, rounding, currency conversion
+and formatting. _Moneta_ is the JSR 354 reference implementation, also adding some additional aspects like
+extended Lambda-Support and multiple amount implementation classes. Additionally there is the JavaMoney OSS library,
+which contains additionally financial calculations and formulas, additional currency mapping, regions, historic
+currencies, currency/region mapping and last but not least EE/CDI support. Below given the most important links:
 
-Overview
-~~~~~~~~
+* JSR 354 API specification available https://jcp.org/en/jsr/detail?id=354[here].
+* JSR 354 on GitHub https://github.com/4[here].
+* JavaMoney Umbrella Site: http://javamoney.org
 
-Main Design Decisions
-~~~~~~~~~~~~~~~~~~~~~
+Basically the API of JSR 354 provides the following packages:
 
-Component Loading and Bootstrapping
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++javax.money+:: contains the main artifacts, such as +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
+MonetaryQuery, MonetaryRounding+, and the singleton accessors +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+..
+
++javax.money.conversion+:: contains the conversion artifacts +ExchangeRate, ExchangeRateProvider, CurrencyConversion+
+and the according +MonetaryConversions+ accessor singleton..
+
++javax.money.format+:: contains the formatting artifacts +MonetaryAmountFormat, AmountFormatContext+ and the according
++MonetaryFormats+ accessor singleton.
+
++javax.money.spi+:: contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
+different runtime environments and component loading mechanisms.
+
+Basically the JSR 354 API is complete, meaning users won't have to reference anything other than what is already part of
+the JSR's API. As a consequence this reference implementation contains mostly components that are registered into the
+API using the JSR's SPI mechanism. Only a few additions to the API are done, e.g. singletons providing Lambda-supporting
+methods (+MonetaryFunctions+).
 
 
-Currency Units
---------------
+== Working with Currency Units
+=== Accessing Currency Units
 
-Accessing Currency Units
-~~~~~~~~~~~~~~~~~~~~~~~~
+Basically access to  currency units is based on the +javax.money.MonetaryCurrencies+ singleton. Hereby you can access
+currencies in different ways:
 
-Registering Additional Currency Units
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+==== Access currencies by currency code
 
-Building Custom Currency Units
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You can use the currency code to access currencies.
+
+[source,java]
+.Accessing currencies by currency code
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit("CHF");
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit("USD");
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit("EUR");
+--------------------------------------------
+
+Hereby all codes available in the underlying JDK are mapped by default.
+
+==== Access currencies by Locale
+
+You can use +java.util.Locale+ to access currencies. Hereby the +Locale+ instance, represents a
+country. All available countries can be accessed by calling +Locale.getISOCountries()+. With the
+given ISO country code a corresponding +Locale+ can be created:
+[source,java]
+--------------------------------------------
+String isoCountry = "USA";
+Locale country = new Locale("", isoCountry);
+--------------------------------------------
+
+Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +Locale+:
+
+[source,java]
+.Accessing currencies by Locale
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit(new Locale("", "SUI")); // Switzerland
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit(new Locale("", "USA")); // United States of America
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit(new Locale("", "GER")); // Germany
+--------------------------------------------
+
+Hereby all codes available in the underlying JDK are mapped by default.
+
+==== Accessing all currencies
+
+Also all currently known currencies can be accessed:
+
+[source,java]
+.Accessing all currencies
+--------------------------------------------
+Collection<CurrencyUnit> allCurrencies = MonetaryCurrencies.getCurrencies();
+--------------------------------------------
+
+Similarly to other access methods you can also explicitly specifiy the provider chain to be used. The _Moneta_
+reference implementation provides the following currency providers:
+
+* _default_: this currency provider (implemented by +org.javamoney.moneta.internal.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
+* _ConfigurableCurrencyUnitProvider_ (implemented by +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+)
+  provides a configuration hook for programmatically add instances. This provider is autoconfigured. Ir provides
+  static hooks for adding additional +CurrencyUnit+ instances:
+
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically.
+--------------------------------------------
+ /**
+ * Registers a bew currency unit under its currency code.
+ * @param currencyUnit the new currency to be registered, not null.
+ * @return any unit instance registered previously by this instance, or null.
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit);
+
+/**
+ * Registers a bew currency unit under the given Locale.
+ * @param currencyUnit the new currency to be registered, not null.
+ * @param locale the Locale, not null.
+ * @return any unit instance registered previously by this instance, or null.
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit, Locale locale);
+
+/**
+ * Removes a CurrencyUnit.
+ * @param currencyCode the currency code, not null.
+ * @return any unit instance removed, or null.
+ */
+public static CurrencyUnit removeCurrencyUnit(String currencyCode);
+
+/**
+ * Removes a CurrencyUnit.
+ * @param locale the Locale, not null.
+ * @return  any unit instance removed, or null.
+ */
+public static CurrencyUnit removeCurrencyUnit(Locale locale);
+--------------------------------------------
+
+The API is straightforward so far. For most cases the +BuildableCurrencyUnit+ class can be used to create additional
+currency instances that then can be registered using the static methods:
+
+==== Registering Additional Currency Units
+
+For adding additional CurrencyUnit instances to the +MonetaryCurrencies+ singleton, you must implement an instance
+of +CurrencyProvider+. Following a minimal example, hereby also reusing the +BuildableCurrencyUnit+ class, that
+also provides currencies for Bitcoin:
+
+[source,java]
+.Implementing a Bitcoin currency provider
+--------------------------------------------
+public final class BitCoinProvider implements CurrencyProviderSpi{
+
+    private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
+
+    public BitCoinProvider(){
+       bitcoinSet.add(new BuildableCurrencyUnit.Builder("BTC").build());
+       bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
+    }
+
+    /**
+     * Return a {@link CurrencyUnit} instances matching the given
+     * {@link javax.money.CurrencyContext}.
+     *
+     * @param query the {@link javax.money.CurrencyQuery} containing the parameters determining the query. not null.
+     * @return the corresponding {@link CurrencyUnit}s matching, never null.
+     */
+    @Override
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
+       // only ensure BTC is the code, or it is a default query.
+       if(query.isDefault()){
+         if(query.getCurrencyCodes().contains("BTC") || query.getCurrencyCodes().isEmpty()){
+           return bitcoinSet;
+         }
+       }
+       return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
+
+Now given this example it is obvious that the tricky part is to define, when exactly a given +CurrencyQuery+
+should be targeted by this provider, or otherwise, be simply ignored. In our case just provide an additional
+ISO code, so it is a good idea to just only return data for _default_ query types. Additionally we only return our code
+sublist, when the according code is requested, or a unspecified request is performed.
+
+==== Building Custom Currency Units
+
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically.
+--------------------------------------------
+CurrencyUnit unit = new BuildableCurrencyUnit.Builder("FLS22").setDefaltFractionUnits(3).build();
+
+// registering it
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+
+Fortunately the +BuildableCurrencyUnit+ class also can be delegated to register a currency on creation, by just passing
+a register flag to the call: So the same can be rewritten as follows:
+
+[source,java]
+--------------------------------------------
+..........................................................................................
+new BuildableCurrencyUnit.Builder("FLS22").setDefaltFractionUnits(3).build(true /* register */);
+--------------------------------------------
+
+Alternatively one may use the +MonetaryCurrencies+ static methods as follows:
+
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically.
+--------------------------------------------
+CurrencyUnit unit = new BuildableCurrencyUnit.Builder("FLS22").setDefaltFractionUnits(3).create();
+
+// registering it
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
 
 Provided Currencies
 ~~~~~~~~~~~~~~~~~~~
