@@ -33,11 +33,15 @@ public final class MonetaryFunctions {
 
 	/**
 	 * create the summary of the MonetaryAmount
+	 * 
+	 * @param unit
+	 *            - the unit
 	 * @return the MonetarySummaryStatistics
 	 */
-	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary() {
+	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
+			CurrencyUnit unit) {
 		Supplier<MonetarySummaryStatistics> supplier = () -> new MonetarySummaryStatistics(
-				StreamFactory.BRAZILIAN_REAL);
+				unit);
 		return Collector.of(supplier, MonetarySummaryStatistics::accept,
 				MonetarySummaryStatistics::combine);
 	}
