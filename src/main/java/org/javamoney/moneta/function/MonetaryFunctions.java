@@ -46,6 +46,16 @@ public final class MonetaryFunctions {
 	}
 
 	/**
+	 * create MonetaryAmount group by MonetarySummary
+	 * @return the MonetarySummaryStatistics
+	 */
+	public static Collector<MonetaryAmount, GroupMonetarySummaryStatistics, GroupMonetarySummaryStatistics> groupBySummarizingMonetary() {
+		return Collector.of(GroupMonetarySummaryStatistics::new,
+				GroupMonetarySummaryStatistics::accept,
+				GroupMonetarySummaryStatistics::combine);
+	}
+
+	/**
      * Get a comparator for sorting CurrencyUnits ascending.
      * @return the Comparator to sort by CurrencyUnit in ascending order, not null.
      */
