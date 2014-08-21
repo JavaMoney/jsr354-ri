@@ -19,8 +19,8 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>0.5-SNAPSHOT</version>
-	</parent>
+        <version>0.5</version>
+    </parent>
 
 	<artifactId>moneta</artifactId>
 	<packaging>jar</packaging>
