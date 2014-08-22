@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmounts;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryAmountFormat;

@@ -16,6 +16,7 @@
 package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.MonetaryAmount;
@@ -24,30 +25,30 @@ import javax.money.MonetaryOperator;
 /**
  * This class allows to extract the reciprocal value (multiplcative inversion)
  * of a {@link MonetaryAmount} instance.
- * 
+ *
  * @author Anatole Tresch
  */
 final class Reciprocal implements MonetaryOperator {
 
-	/**
-	 * Access the shared instance of {@link Reciprocal} for use.
-	 */
-	Reciprocal() {
-	}
+    /**
+     * Access the shared instance of {@link Reciprocal} for use.
+     */
+    Reciprocal() {
+    }
 
-	/**
-	 * Gets the amount as reciprocal / multiplcative inversed value (1/n).
-	 * <p>
-	 * E.g. 'EUR 2.0' will be converted to 'EUR 0.5'.
-	 * @return the reciprocal / multiplcative inversed of the amount
-	 * @throws ArithmeticException
-	 *             if the arithmetic operation failed
-	 */
-	@Override
-	public MonetaryAmount apply(MonetaryAmount amount) {
-		Objects.requireNonNull(amount, "Amount required.");
-		return amount.getFactory().setNumber(BigDecimal.ONE.divide(
-				amount.getNumber().numberValue(BigDecimal.class))).create();
-	}
+    /**
+     * Gets the amount as reciprocal / multiplcative inversed value (1/n).
+     * <p>
+     * E.g. 'EUR 2.0' will be converted to 'EUR 0.5'.
+     *
+     * @return the reciprocal / multiplcative inversed of the amount
+     * @throws ArithmeticException if the arithmetic operation failed
+     */
+    @Override
+    public MonetaryAmount apply(MonetaryAmount amount) {
+        Objects.requireNonNull(amount, "Amount required.");
+        return amount.getFactory().setNumber(BigDecimal.ONE.divide(
+                amount.getNumber().numberValue(BigDecimal.class), RoundingMode.HALF_EVEN)).create();
+    }
 
 }

@@ -17,6 +17,7 @@ package org.javamoney.moneta;
 
 import org.javamoney.moneta.internal.FastMoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.javamoney.moneta.spi.MonetaryConfig;
 import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
@@ -76,7 +77,7 @@ import java.util.logging.Logger;
  * @author Werner Keil
  * @version 0.5.2
  */
-public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable{
+public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -130,7 +131,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param currency the currency, not null.
      * @param number   the amount, not null.
      */
-    private FastMoney(Number number, CurrencyUnit currency, boolean allowInternalRounding){
+    private FastMoney(Number number, CurrencyUnit currency, boolean allowInternalRounding) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
         Objects.requireNonNull(number, "Number is required.");
@@ -143,7 +144,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param currency    the currency, not null.
      * @param numberValue the numeric value, not null.
      */
-    private FastMoney(NumberValue numberValue, CurrencyUnit currency, boolean allowInternalRounding){
+    private FastMoney(NumberValue numberValue, CurrencyUnit currency, boolean allowInternalRounding) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
         Objects.requireNonNull(numberValue, "Number is required.");
@@ -156,7 +157,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param number   The internal number value
      * @param currency the currency, not null.
      */
-    private FastMoney(long number, CurrencyUnit currency){
+    private FastMoney(long number, CurrencyUnit currency) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
         this.number = number;
@@ -171,7 +172,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see javax.money.MonetaryAmount#getCurrency()
      */
     @Override
-    public CurrencyUnit getCurrency(){
+    public CurrencyUnit getCurrency() {
         return currency;
     }
 
@@ -182,18 +183,18 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see javax.money.MonetaryAmount#getMonetaryContext()
      */
     @Override
-    public MonetaryContext getMonetaryContext(){
+    public MonetaryContext getMonetaryContext() {
         return MONETARY_CONTEXT;
     }
 
-    private long getInternalNumber(Number number, boolean allowInternalRounding){
+    private long getInternalNumber(Number number, boolean allowInternalRounding) {
         BigDecimal bd = MoneyUtils.getBigDecimal(number);
-        if(!allowInternalRounding && bd.scale() > SCALE){
+        if (!allowInternalRounding && bd.scale() > SCALE) {
             throw new ArithmeticException(number + " can not be represented by this class, scale > " + SCALE);
         }
-        if(bd.compareTo(MIN_BD) < 0){
+        if (bd.compareTo(MIN_BD) < 0) {
             throw new ArithmeticException("Overflow: " + number + " < " + MIN_BD);
-        }else if(bd.compareTo(MAX_BD) > 0){
+        } else if (bd.compareTo(MAX_BD) > 0) {
             throw new ArithmeticException("Overflow: " + number + " > " + MAX_BD);
         }
         return bd.movePointRight(SCALE).longValue();
@@ -207,7 +208,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param numberBinding The numeric part, not null.
      * @return A new instance of {@link FastMoney}.
      */
-    public static FastMoney of(NumberValue numberBinding, CurrencyUnit currency){
+    public static FastMoney of(NumberValue numberBinding, CurrencyUnit currency) {
         return new FastMoney(numberBinding, currency, false);
     }
 
@@ -218,7 +219,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param number   The numeric part, not null.
      * @return A new instance of {@link FastMoney}.
      */
-    public static FastMoney of(Number number, CurrencyUnit currency){
+    public static FastMoney of(Number number, CurrencyUnit currency) {
         return new FastMoney(number, currency, false);
     }
 
@@ -229,7 +230,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param number       The numeric part, not null.
      * @return A new instance of {@link FastMoney}.
      */
-    public static FastMoney of(Number number, String currencyCode){
+    public static FastMoney of(Number number, String currencyCode) {
         CurrencyUnit currency = MonetaryCurrencies.getCurrency(currencyCode);
         return of(number, currency);
     }
@@ -237,10 +238,10 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
-    public int compareTo(MonetaryAmount o){
+    public int compareTo(MonetaryAmount o) {
         Objects.requireNonNull(o);
         int compare = getCurrency().getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
-        if(compare == 0){
+        if (compare == 0) {
             compare = getNumber().numberValue(BigDecimal.class).compareTo(o.getNumber().numberValue(BigDecimal.class));
         }
         return compare;
@@ -251,7 +252,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(currency, number);
     }
 
@@ -260,11 +261,11 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(obj == this){
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
-        if(obj instanceof FastMoney){
+        if (obj instanceof FastMoney) {
             FastMoney other = (FastMoney) obj;
             return Objects.equals(currency, other.currency) && Objects.equals(number, other.number);
         }
@@ -276,8 +277,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#abs()
      */
-    public FastMoney abs(){
-        if(this.isPositiveOrZero()){
+    public FastMoney abs() {
+        if (this.isPositiveOrZero()) {
             return this;
         }
         return this.negate();
@@ -289,21 +290,21 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#add(javax.money.MonetaryAmount)
      */
-    public FastMoney add(MonetaryAmount amount){
+    public FastMoney add(MonetaryAmount amount) {
         checkAmountParameter(amount);
-        if(amount.isZero()){
+        if (amount.isZero()) {
             return this;
         }
         return new FastMoney(Math.addExact(this.number, getInternalNumber(amount.getNumber(), false)), getCurrency());
     }
 
-    private void checkAmountParameter(MonetaryAmount amount){
+    private void checkAmountParameter(MonetaryAmount amount) {
         MoneyUtils.checkAmountParameter(amount, this.currency);
         // numeric check for overflow...
-        if(amount.getNumber().getScale() > SCALE){
+        if (amount.getNumber().getScale() > SCALE) {
             throw new ArithmeticException("Parameter exceeds maximal scale: " + SCALE);
         }
-        if(amount.getNumber().getPrecision() > MAX_BD.precision()){
+        if (amount.getNumber().getPrecision() > MAX_BD.precision()) {
             throw new ArithmeticException("Parameter exceeds maximal precision: " + SCALE);
         }
     }
@@ -313,9 +314,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
          * (non-Javadoc)
          * @see javax.money.MonetaryAmount#divide(java.lang.Number)
          */
-    public FastMoney divide(Number divisor){
+    public FastMoney divide(Number divisor) {
         checkNumber(divisor);
-        if(isOne(divisor)){
+        if (isOne(divisor)) {
             return this;
         }
         return new FastMoney(Math.round(this.number / divisor.doubleValue()), getCurrency());
@@ -325,9 +326,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#divideAndRemainder(java.lang.Number)
      */
-    public FastMoney[] divideAndRemainder(Number divisor){
+    public FastMoney[] divideAndRemainder(Number divisor) {
         checkNumber(divisor);
-        if(isOne(divisor)){
+        if (isOne(divisor)) {
             return new FastMoney[]{this, FastMoney.of(0, getCurrency())};
         }
         BigDecimal div = MoneyUtils.getBigDecimal(divisor);
@@ -339,18 +340,18 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#divideToIntegralValue(java.lang.Number)
      */
-    public FastMoney divideToIntegralValue(Number divisor){
+    public FastMoney divideToIntegralValue(Number divisor) {
         checkNumber(divisor);
-        if(isOne(divisor)){
+        if (isOne(divisor)) {
             return this;
         }
         BigDecimal div = MoneyUtils.getBigDecimal(divisor);
         return new FastMoney(getBigDecimal().divideToIntegralValue(div), getCurrency(), false);
     }
 
-    public FastMoney multiply(Number multiplicand){
+    public FastMoney multiply(Number multiplicand) {
         checkNumber(multiplicand);
-        if(isOne(multiplicand)){
+        if (isOne(multiplicand)) {
             return this;
         }
         return new FastMoney(Math.round(this.number * multiplicand.doubleValue()), getCurrency());
@@ -363,7 +364,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#negate()
      */
-    public FastMoney negate(){
+    public FastMoney negate() {
         return new FastMoney(this.number * -1, getCurrency());
     }
 
@@ -371,8 +372,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#plus()
      */
-    public FastMoney plus(){
-        if(this.number >= 0){
+    public FastMoney plus() {
+        if (this.number >= 0) {
             return this;
         }
         return new FastMoney(this.number * -1, getCurrency());
@@ -382,9 +383,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
      */
-    public FastMoney subtract(MonetaryAmount subtrahend){
+    public FastMoney subtract(MonetaryAmount subtrahend) {
         checkAmountParameter(subtrahend);
-        if(subtrahend.isZero()){
+        if (subtrahend.isZero()) {
             return this;
         }
         long subtrahendAsLong = getInternalNumber(subtrahend.getNumber(), false);
@@ -395,20 +396,19 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#remainder(java.lang.Number)
      */
-    public FastMoney remainder(Number divisor){
+    public FastMoney remainder(Number divisor) {
         checkNumber(divisor);
-        if(isOne(divisor)){
+        if (isOne(divisor)) {
             return new FastMoney(0, getCurrency());
         }
         return new FastMoney(this.number % getInternalNumber(divisor, true), getCurrency());
     }
 
-    private boolean isOne(Number number){
+    private boolean isOne(Number number) {
         BigDecimal bd = MoneyUtils.getBigDecimal(number);
-        try{
+        try {
             return bd.scale() == 0 && bd.longValueExact() == 1L;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             // The only way to end up here is that longValueExact throws an ArithmeticException,
             // so the amount is definitively not equal to 1.
             return false;
@@ -419,7 +419,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
      */
-    public FastMoney scaleByPowerOfTen(int n){
+    public FastMoney scaleByPowerOfTen(int n) {
         return new FastMoney(getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(n), getCurrency(), true);
     }
 
@@ -427,7 +427,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#isZero()
      */
-    public boolean isZero(){
+    public boolean isZero() {
         return this.number == 0L;
     }
 
@@ -435,7 +435,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#isPositive()
      */
-    public boolean isPositive(){
+    public boolean isPositive() {
         return this.number > 0L;
     }
 
@@ -443,7 +443,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#isPositiveOrZero()
      */
-    public boolean isPositiveOrZero(){
+    public boolean isPositiveOrZero() {
         return this.number >= 0L;
     }
 
@@ -451,7 +451,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#isNegative()
      */
-    public boolean isNegative(){
+    public boolean isNegative() {
         return this.number < 0L;
     }
 
@@ -459,7 +459,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#isNegativeOrZero()
      */
-    public boolean isNegativeOrZero(){
+    public boolean isNegativeOrZero() {
         return this.number <= 0L;
     }
 
@@ -467,7 +467,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#getScale()
      */
-    public int getScale(){
+    public int getScale() {
         return FastMoney.SCALE;
     }
 
@@ -475,7 +475,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#getPrecision()
      */
-    public int getPrecision(){
+    public int getPrecision() {
         return getNumber().numberValue(BigDecimal.class).precision();
     }
 
@@ -484,11 +484,11 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 	 * @see javax.money.MonetaryAmount#signum()
 	 */
 
-    public int signum(){
-        if(this.number < 0){
+    public int signum() {
+        if (this.number < 0) {
             return -1;
         }
-        if(this.number == 0){
+        if (this.number == 0) {
             return 0;
         }
         return 1;
@@ -498,7 +498,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#lessThan(javax.money.MonetaryAmount)
      */
-    public boolean isLessThan(MonetaryAmount amount){
+    public boolean isLessThan(MonetaryAmount amount) {
         checkAmountParameter(amount);
         return getBigDecimal().compareTo(amount.getNumber().numberValue(BigDecimal.class)) < 0;
     }
@@ -507,7 +507,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#lessThan(java.lang.Number)
      */
-    public boolean isLessThan(Number number){
+    public boolean isLessThan(Number number) {
         checkNumber(number);
         return getBigDecimal().compareTo(MoneyUtils.getBigDecimal(number)) < 0;
     }
@@ -516,7 +516,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#lessThanOrEqualTo(javax.money.MonetaryAmount)
      */
-    public boolean isLessThanOrEqualTo(MonetaryAmount amount){
+    public boolean isLessThanOrEqualTo(MonetaryAmount amount) {
         checkAmountParameter(amount);
         return getBigDecimal().compareTo(amount.getNumber().numberValue(BigDecimal.class)) <= 0;
     }
@@ -525,7 +525,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#lessThanOrEqualTo(java.lang.Number)
      */
-    public boolean isLessThanOrEqualTo(Number number){
+    public boolean isLessThanOrEqualTo(Number number) {
         checkNumber(number);
         return getBigDecimal().compareTo(MoneyUtils.getBigDecimal(number)) <= 0;
     }
@@ -534,7 +534,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#greaterThan(javax.money.MonetaryAmount)
      */
-    public boolean isGreaterThan(MonetaryAmount amount){
+    public boolean isGreaterThan(MonetaryAmount amount) {
         checkAmountParameter(amount);
         return getBigDecimal().compareTo(amount.getNumber().numberValue(BigDecimal.class)) > 0;
     }
@@ -543,7 +543,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#greaterThan(java.lang.Number)
      */
-    public boolean isGreaterThan(Number number){
+    public boolean isGreaterThan(Number number) {
         checkNumber(number);
         return getBigDecimal().compareTo(MoneyUtils.getBigDecimal(number)) > 0;
     }
@@ -552,7 +552,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#greaterThanOrEqualTo(javax.money.MonetaryAmount ) #see
      */
-    public boolean isGreaterThanOrEqualTo(MonetaryAmount amount){
+    public boolean isGreaterThanOrEqualTo(MonetaryAmount amount) {
         checkAmountParameter(amount);
         return getBigDecimal().compareTo(amount.getNumber().numberValue(BigDecimal.class)) >= 0;
     }
@@ -561,7 +561,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#greaterThanOrEqualTo(java.lang.Number)
      */
-    public boolean isGreaterThanOrEqualTo(Number number){
+    public boolean isGreaterThanOrEqualTo(Number number) {
         checkNumber(number);
         return getBigDecimal().compareTo(MoneyUtils.getBigDecimal(number)) >= 0;
     }
@@ -570,7 +570,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#isEqualTo(javax.money.MonetaryAmount)
      */
-    public boolean isEqualTo(MonetaryAmount amount){
+    public boolean isEqualTo(MonetaryAmount amount) {
         checkAmountParameter(amount);
         return getBigDecimal().compareTo(amount.getNumber().numberValue(BigDecimal.class)) == 0;
     }
@@ -579,12 +579,11 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#hasSameNumberAs(java.lang.Number)
      */
-    public boolean hasSameNumberAs(Number number){
+    public boolean hasSameNumberAs(Number number) {
         checkNumber(number);
-        try{
+        try {
             return this.number == getInternalNumber(number, false);
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             return false;
         }
     }
@@ -596,7 +595,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @return The {@link Number} represention matching best.
      */
     @Override
-    public NumberValue getNumber(){
+    public NumberValue getNumber() {
         return new DefaultNumberValue(getBigDecimal());
     }
 
@@ -607,7 +606,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return currency.toString() + ' ' + getBigDecimal();
     }
 
@@ -620,21 +619,25 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @throws NullPointerException          If the number is null
      * @throws java.lang.ArithmeticException If the number exceeds the capabilities of this class.
      */
-    protected void checkNumber(Number number){
+    protected void checkNumber(Number number) {
         Objects.requireNonNull(number, "Number is required.");
         // numeric check for overflow...
-        if(number.longValue() > MAX_BD.longValue()){
+        if (number.longValue() > MAX_BD.longValue()) {
             throw new ArithmeticException("Value exceeds maximal value: " + MAX_BD);
         }
         BigDecimal bd = MoneyUtils.getBigDecimal(number);
-        if(bd.precision() > MAX_BD.precision()){
+        if (bd.precision() > MAX_BD.precision()) {
             throw new ArithmeticException("Precision exceeds maximal precision: " + MAX_BD.precision());
         }
-        if(bd.scale() > SCALE){
-            Logger log = Logger.getLogger(getClass().getName());
-            if(log.isLoggable(Level.FINEST)){
-                log.finest("Scale exceeds maximal scale of FastMoney (" + SCALE +
-                                   "), implicit rounding will be applied to " + number);
+        if (bd.scale() > SCALE) {
+            if (Boolean.parseBoolean(MonetaryConfig.getConfig().getOrDefault("javax.money.FastMoney.enforceScaleCompatibility", "false"))) {
+                throw new ArithmeticException("Scale of " + bd + " exceeds maximal scale: " + SCALE);
+            } else {
+                Logger log = Logger.getLogger(getClass().getName());
+                if (log.isLoggable(Level.FINEST)) {
+                    log.finest("Scale exceeds maximal scale of FastMoney (" + SCALE +
+                            "), implicit rounding will be applied to " + number);
+                }
             }
         }
     }
@@ -644,125 +647,121 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
      */
     @Override
-    public FastMoney with(MonetaryOperator operator){
+    public FastMoney with(MonetaryOperator operator) {
         Objects.requireNonNull(operator);
-        try{
+        try {
             return FastMoney.class.cast(operator.apply(this));
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             throw e;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new MonetaryException("Operator failed: " + operator, e);
         }
     }
 
     @Override
-    public <R> R query(MonetaryQuery<R> query){
+    public <R> R query(MonetaryQuery<R> query) {
         Objects.requireNonNull(query);
-        try{
+        try {
             return query.queryFrom(this);
-        }
-        catch(MonetaryException | ArithmeticException e){
+        } catch (MonetaryException | ArithmeticException e) {
             throw e;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new MonetaryException("Query failed: " + query, e);
         }
     }
 
-    public static FastMoney from(MonetaryAmount amount){
-        if(FastMoney.class == amount.getClass()){
+    public static FastMoney from(MonetaryAmount amount) {
+        if (FastMoney.class == amount.getClass()) {
             return (FastMoney) amount;
         }
         return new FastMoney(amount.getNumber(), amount.getCurrency(), false);
     }
 
-    private BigDecimal getBigDecimal(){
+    private BigDecimal getBigDecimal() {
         return BigDecimal.valueOf(this.number).movePointLeft(SCALE);
     }
 
     @Override
-    public FastMoney multiply(double amount){
-        if(amount == 1.0){
+    public FastMoney multiply(double amount) {
+        if (amount == 1.0) {
             return this;
         }
-        if(amount == 0.0){
+        if (amount == 0.0) {
             return new FastMoney(0, this.currency);
         }
         return new FastMoney(Math.round(this.number * amount), this.currency);
     }
 
     @Override
-    public FastMoney divide(long amount){
-        if(amount == 1L){
+    public FastMoney divide(long amount) {
+        if (amount == 1L) {
             return this;
         }
         return new FastMoney(this.number / amount, this.currency);
     }
 
     @Override
-    public FastMoney divide(double number){
-        if(number == 1.0d){
+    public FastMoney divide(double number) {
+        if (number == 1.0d) {
             return this;
         }
         return new FastMoney(Math.round(this.number / number), getCurrency());
     }
 
     @Override
-    public FastMoney remainder(long number){
+    public FastMoney remainder(long number) {
         return remainder(BigDecimal.valueOf(number));
     }
 
     @Override
-    public FastMoney remainder(double amount){
+    public FastMoney remainder(double amount) {
         return remainder(new BigDecimal(String.valueOf(amount)));
     }
 
     @Override
-    public FastMoney[] divideAndRemainder(long amount){
+    public FastMoney[] divideAndRemainder(long amount) {
         return divideAndRemainder(BigDecimal.valueOf(amount));
     }
 
     @Override
-    public FastMoney[] divideAndRemainder(double amount){
+    public FastMoney[] divideAndRemainder(double amount) {
         return divideAndRemainder(new BigDecimal(String.valueOf(amount)));
     }
 
     @Override
-    public FastMoney stripTrailingZeros(){
+    public FastMoney stripTrailingZeros() {
         return this;
     }
 
     @Override
-    public FastMoney multiply(long multiplicand){
-        if(multiplicand == 1){
+    public FastMoney multiply(long multiplicand) {
+        if (multiplicand == 1) {
             return this;
         }
-        if(multiplicand == 0){
+        if (multiplicand == 0) {
             return new FastMoney(0L, this.currency);
         }
         return new FastMoney(multiplicand * this.number, this.currency);
     }
 
     @Override
-    public FastMoney divideToIntegralValue(long divisor){
-        if(divisor == 1){
+    public FastMoney divideToIntegralValue(long divisor) {
+        if (divisor == 1) {
             return this;
         }
         return divideToIntegralValue(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public FastMoney divideToIntegralValue(double divisor){
-        if(divisor == 1.0){
+    public FastMoney divideToIntegralValue(double divisor) {
+        if (divisor == 1.0) {
             return this;
         }
         return divideToIntegralValue(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public MonetaryAmountFactory<FastMoney> getFactory(){
+    public MonetaryAmountFactory<FastMoney> getFactory() {
         return new FastMoneyAmountFactory().setAmount(this);
     }
 
