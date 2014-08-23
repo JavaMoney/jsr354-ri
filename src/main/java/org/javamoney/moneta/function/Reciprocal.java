@@ -16,11 +16,13 @@
 package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+import javax.money.NumberValue;
 
 /**
  * This class allows to extract the reciprocal value (multiplcative inversion)
@@ -30,11 +32,13 @@ import javax.money.MonetaryOperator;
  */
 final class Reciprocal implements MonetaryOperator {
 
+
     /**
      * Access the shared instance of {@link Reciprocal} for use.
      */
     Reciprocal() {
     }
+
 
     /**
      * Gets the amount as reciprocal / multiplcative inversed value (1/n).
@@ -47,8 +51,10 @@ final class Reciprocal implements MonetaryOperator {
     @Override
     public MonetaryAmount apply(MonetaryAmount amount) {
         Objects.requireNonNull(amount, "Amount required.");
-        return amount.getFactory().setNumber(BigDecimal.ONE.divide(
-                amount.getNumber().numberValue(BigDecimal.class), RoundingMode.HALF_EVEN)).create();
+        NumberValue num = amount.getNumber();
+        BigDecimal one = new BigDecimal("1.0").setScale(num.getScale() < 5 ? 5 : num.getScale());
+        return amount.getFactory().setNumber(one.divide(
+                num.numberValue(BigDecimal.class), RoundingMode.HALF_EVEN)).create();
     }
 
 }
