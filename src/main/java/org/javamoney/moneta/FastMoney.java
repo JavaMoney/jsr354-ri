@@ -630,7 +630,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
             throw new ArithmeticException("Precision exceeds maximal precision: " + MAX_BD.precision());
         }
         if (bd.scale() > SCALE) {
-            if (Boolean.parseBoolean(MonetaryConfig.getConfig().getOrDefault("javax.money.FastMoney.enforceScaleCompatibility", "false"))) {
+            if (Boolean.parseBoolean(MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.FastMoney.enforceScaleCompatibility", "false"))) {
                 throw new ArithmeticException("Scale of " + bd + " exceeds maximal scale: " + SCALE);
             } else {
                 Logger log = Logger.getLogger(getClass().getName());
