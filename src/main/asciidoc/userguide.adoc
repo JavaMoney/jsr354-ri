@@ -790,3 +790,69 @@ MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
 
 === Registering your own Formats
 
+You can add additional formats by registering instances of +MonetaryAmountFormatProviderSpi+. Be default this has to be
+done based on the mechanism as defined by the Java +ServiceLoader+.
+
+[source,java]
+.Implement a +MonetaryAmountFormatProviderSpi+ providing a format for "GKC" (GeeCoin)
+--------------------------------------------
+public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
+
+    private static final String PROVIDER_NAME = "GeeCoin";
+    /** The supported locales. */
+    private Set<Locale> supportedSets = new HashSet<>();
+    /** The provided formats, by name. */
+    private Set<String> formatNames = new HashSet<>();
+
+    public GeeCoinFormatProviderSpi(){
+        supportedSets.addAll(Locale.CHINA);
+        supportedSets = Collections.unmodifiableSet(supportedSets);
+        formatNames.add("GeeCoin");
+        formatNames = Collections.unmodifiableSet(formatNames);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.money.spi.MonetaryAmountFormatProviderSpi#getProviderName()
+     */
+    @Override
+    public String getProviderName(){
+        return PROVIDER_NAME;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
+     */
+    @Override
+    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
+        Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
+        if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
+            return Collections.emptySet();
+        }
+        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+            return Collections.emptySet();
+        }
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(PROVIDER_NAME);
+        if(amountFormatQuery.getLocale()!=null){
+            builder.setLocale(amountFormatQuery.getLocale());
+        }
+        builder.importContext(amountFormatQuery, false);
+        builder.setMonetaryAmountFactory(amountFormatQuery.getMonetaryAmountFactory());
+        return Arrays.asList(new MonetaryAmountFormat[]{new GeeCoinAmountFormat(builder.build())});
+    }
+
+    @Override
+    public Set<Locale> getAvailableLocales(){
+        return supportedSets;
+    }
+
+    @Override
+    public Set<String> getAvailableFormatNames(){
+        return formatNames;
+    }
+
+}
+--------------------------------------------
