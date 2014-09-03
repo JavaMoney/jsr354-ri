@@ -3,3 +3,5 @@ target/
 moneta.iml
 .classpath
 -project
+/.resourceCache
+/.project
