@@ -27,57 +27,50 @@ import javax.money.convert.ExchangeRateProvider;
  * specific target {@link CurrencyUnit}. Each instance of this class is bound to
  * a specific {@link ExchangeRateProvider}, a term {@link CurrencyUnit} and a
  * target timestamp.
- * 
+ *
  * @author Anatole Tresch
  */
-public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion
-		implements CurrencyConversion {
+public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion implements CurrencyConversion{
 
-	private ExchangeRateProvider rateProvider;
+    private ExchangeRateProvider rateProvider;
 
-	public LazyBoundCurrencyConversion(CurrencyUnit termCurrency,
-			ExchangeRateProvider rateProvider,
-			ConversionContext conversionContext) {
-		super(termCurrency, conversionContext);
-		this.rateProvider = rateProvider;
-	}
+    public LazyBoundCurrencyConversion(CurrencyUnit termCurrency, ExchangeRateProvider rateProvider,
+                                       ConversionContext conversionContext){
+        super(termCurrency, conversionContext);
+        this.rateProvider = rateProvider;
+    }
 
-	/**
-	 * Get the exchange rate type that this provider instance is providing data
-	 * for.
-	 * 
-	 * @return the exchange rate type if this instance.
-	 */
-	@Override
-	public ExchangeRate getExchangeRate(MonetaryAmount amount) {
-		return this.rateProvider.getExchangeRate(amount.getCurrency(),
-				getTermCurrency());
-	}
+    /**
+     * Get the exchange rate type that this provider instance is providing data
+     * for.
+     *
+     * @return the exchange rate type if this instance.
+     */
+    @Override
+    public ExchangeRate getExchangeRate(MonetaryAmount amount){
+        return this.rateProvider.getExchangeRate(amount.getCurrency(), getCurrency());
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.javamoney.moneta.conversion.AbstractCurrencyConversion#with(javax
-	 * .money.convert.ConversionContext)
-	 */
-	public CurrencyConversion with(ConversionContext conversionContext) {
-		return new LazyBoundCurrencyConversion(getTermCurrency(), rateProvider,
-				conversionContext);
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * org.javamoney.moneta.conversion.AbstractCurrencyConversion#with(javax
+     * .money.convert.ConversionContext)
+     */
+    public CurrencyConversion with(ConversionContext conversionContext){
+        return new LazyBoundCurrencyConversion(getCurrency(), rateProvider, conversionContext);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "CurrencyConversion [MonetaryAmount -> MonetaryAmount; provider="
-				+ rateProvider
-				+ ", context="
-				+ getConversionContext()
-				+ ", termCurrency=" + getTermCurrency() + "]";
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString(){
+        return "CurrencyConversion [MonetaryAmount -> MonetaryAmount; provider=" + rateProvider + ", context=" +
+                getConversionContext() + ", termCurrency=" + getCurrency() + "]";
+    }
 
 }

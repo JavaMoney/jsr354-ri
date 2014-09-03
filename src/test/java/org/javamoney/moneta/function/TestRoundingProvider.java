@@ -77,8 +77,8 @@ public class TestRoundingProvider implements RoundingProviderSpi{
             MonetaryAmount amt = amount.with(minorRounding);
             MonetaryAmount mp = amt.with(MonetaryUtil.minorPart());
             if(mp.isGreaterThanOrEqualTo(
-                    MonetaryAmounts.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03)
-                            .create())){
+                    MonetaryAmounts.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03).create()
+            )){
                 // add
                 return amt.add(MonetaryAmounts.getDefaultAmountFactory().setCurrency(amt.getCurrency())
                                        .setNumber(new BigDecimal("0.05")).create().subtract(mp));
@@ -104,7 +104,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
             return null;
         }
         if("default".equals(roundingId)){
-            CurrencyUnit currency = roundingQuery.getCurrencyUnit();
+            CurrencyUnit currency = roundingQuery.getCurrency();
             if(Objects.nonNull(currency)){
                 if(currency.getCurrencyCode().equals("XXX")){
                     if(timestamp > System.currentTimeMillis()){

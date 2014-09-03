@@ -26,47 +26,46 @@ import org.javamoney.moneta.spi.CompoundRateProvider;
 /**
  * Default implementation of the {@link javax.money.spi.MonetaryConversionsSingletonSpi} instance.
  */
-public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversionsSingletonSpi {
+public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversionsSingletonSpi{
 
-    private Map<String, ExchangeRateProvider> conversionProviders = new ConcurrentHashMap<>();
+    private Map<String,ExchangeRateProvider> conversionProviders = new ConcurrentHashMap<>();
 
-    public DefaultMonetaryConversionsSingletonSpi() {
+    public DefaultMonetaryConversionsSingletonSpi(){
         reload();
     }
 
-    public void reload() {
-        Map<String, ExchangeRateProvider> newProviders = new ConcurrentHashMap<>();
-        for (ExchangeRateProvider prov : ServiceLoader
-                .load(ExchangeRateProvider.class)) {
+    public void reload(){
+        Map<String,ExchangeRateProvider> newProviders = new ConcurrentHashMap<>();
+        for(ExchangeRateProvider prov : ServiceLoader.load(ExchangeRateProvider.class)){
             newProviders.put(prov.getProviderContext().getProvider(), prov);
         }
         this.conversionProviders = newProviders;
     }
 
     @Override
-    public ExchangeRateProvider getExchangeRateProvider(String... providers) {
+    public ExchangeRateProvider getExchangeRateProvider(String... providers){
         List<ExchangeRateProvider> provInstances = new ArrayList<>();
-        for (String provName : providers) {
-            provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(() -> new IllegalArgumentException(
-                    "Unsupported conversion/rate provider: " + provName)));
+        for(String provName : providers){
+            provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(
+                    () -> new IllegalArgumentException("Unsupported conversion/rate provider: " + provName)));
         }
         return new CompoundRateProvider(provInstances);
     }
 
     @Override
-    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query) {
+    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query){
         List<ExchangeRateProvider> provInstances = new ArrayList<>();
-        for (String provName : query.getProviders()) {
-            provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(() -> new IllegalArgumentException(
-                    "Unsupported conversion/rate provider: " + provName)));
+        for(String provName : query.getProviders()){
+            provInstances.add(Optional.ofNullable(this.conversionProviders.get(provName)).orElseThrow(
+                    () -> new IllegalArgumentException("Unsupported conversion/rate provider: " + provName)));
         }
         return new CompoundRateProvider(provInstances);
     }
 
     @Override
-    public boolean isExchangeRateProviderAvailable(ConversionQuery conversionQuery) {
-        for (String provName : conversionQuery.getProviders()) {
-            if (this.conversionProviders.get(provName) != null) {
+    public boolean isExchangeRateProviderAvailable(ConversionQuery conversionQuery){
+        for(String provName : conversionQuery.getProviders()){
+            if(this.conversionProviders.get(provName) != null){
                 return true;
             }
         }
@@ -74,13 +73,13 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     @Override
-    public boolean isConversionAvailable(ConversionQuery conversionQuery) {
-        if (conversionQuery.getTermCurrency() == null) {
+    public boolean isConversionAvailable(ConversionQuery conversionQuery){
+        if(conversionQuery.getCurrency() == null){
             return false;
         }
-        for (String provName : conversionQuery.getProviders()) {
-            if (this.conversionProviders.get(provName) != null) {
-                if (this.conversionProviders.get(provName).isAvailable(conversionQuery)) {
+        for(String provName : conversionQuery.getProviders()){
+            if(this.conversionProviders.get(provName) != null){
+                if(this.conversionProviders.get(provName).isAvailable(conversionQuery)){
                     return true;
                 }
             }
@@ -89,12 +88,12 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     @Override
-    public Set<String> getProviderNames() {
+    public Set<String> getProviderNames(){
         return this.conversionProviders.keySet();
     }
 
     @Override
-    public List<String> getDefaultProviderChain() {
+    public List<String> getDefaultProviderChain(){
         List<String> stringList = new ArrayList<>();
         stringList.add("test");
         return stringList;

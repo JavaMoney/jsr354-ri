@@ -60,8 +60,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     private static final ProviderContext CONTEXT = ProviderContextBuilder.create("IMF", RateType.DEFERRED)
             .set("providerDescription", "International Monetary Fond").set("days", 1).build();
 
-    private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", CurrencyContextBuilder.create(
-            IMFRateProvider.class.getSimpleName()).build()).setDefaultFractionDigits(3).build(true);
+    private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", CurrencyContextBuilder
+            .create(IMFRateProvider.class.getSimpleName()).build()).setDefaultFractionDigits(3).build(true);
 
     private Map<CurrencyUnit,List<DefaultExchangeRate>> currencyToSdr = new HashMap<>();
 
@@ -164,7 +164,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                     continue;
                 }
                 Long fromTS = timestamps != null ? timestamps.get(i) : null;
-                if(fromTS==null){
+                if(fromTS == null){
                     continue;
                 }
                 Long toTS = fromTS + 3600L * 1000L * 24L; // One day
@@ -230,7 +230,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             return null;
         }
         CurrencyUnit base = conversionQuery.getBaseCurrency();
-        CurrencyUnit term = conversionQuery.getTermCurrency();
+        CurrencyUnit term = conversionQuery.getCurrency();
         Long timestamp = conversionQuery.getTimestampMillis();
         ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), timestamp);
         ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), timestamp);

@@ -24,20 +24,20 @@ import javax.money.spi.MonetaryConversionsSingletonSpi;
 
 public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSingletonSpi{
 
-	private ExchangeRateProvider dummyProvider = new DummyRateProvider();
-	private CurrencyConversion dummyConversion = new DummyConversion();
-
-	@Override
-	public ExchangeRateProvider getExchangeRateProvider(String... providers) {
-		if ("test".equals(providers[0])) {
-			return dummyProvider;
-		}
-		return null;
-	}
+    private ExchangeRateProvider dummyProvider = new DummyRateProvider();
+    private CurrencyConversion dummyConversion = new DummyConversion();
 
     @Override
-    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query) {
-        if (isConversionAvailable(query)) {
+    public ExchangeRateProvider getExchangeRateProvider(String... providers){
+        if("test".equals(providers[0])){
+            return dummyProvider;
+        }
+        return null;
+    }
+
+    @Override
+    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query){
+        if(isConversionAvailable(query)){
             return dummyProvider;
         }
         return null;
@@ -54,23 +54,22 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
     }
 
     @Override
-	public List<String> getProviderNames() {
-		return Arrays.asList("test");
-	}
+    public List<String> getProviderNames(){
+        return Arrays.asList("test");
+    }
 
-	@Override
-	public List<String> getDefaultProviderChain() {
-		return Arrays.asList("test");
-	}
+    @Override
+    public List<String> getDefaultProviderChain(){
+        return Arrays.asList("test");
+    }
 
 
+    public final class DummyRateProvider implements ExchangeRateProvider{
 
-    public final class DummyRateProvider implements ExchangeRateProvider {
-
-		@Override
-		public ProviderContext getProviderContext() {
-			return ProviderContext.of("test", RateType.ANY);
-		}
+        @Override
+        public ProviderContext getProviderContext(){
+            return ProviderContext.of("test", RateType.ANY);
+        }
 
         @Override
         public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
@@ -83,66 +82,65 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
         }
 
         @Override
-		public boolean isAvailable(CurrencyUnit src, CurrencyUnit target) {
-			return false;
-		}
+        public boolean isAvailable(CurrencyUnit src, CurrencyUnit target){
+            return false;
+        }
 
-		@Override
-		public ExchangeRate getExchangeRate(CurrencyUnit source,
-				CurrencyUnit target) {
-			return null;
-		}
+        @Override
+        public ExchangeRate getExchangeRate(CurrencyUnit source, CurrencyUnit target){
+            return null;
+        }
 
-		@Override
-		public ExchangeRate getReversed(ExchangeRate rate) {
-			return null;
-		}
+        @Override
+        public ExchangeRate getReversed(ExchangeRate rate){
+            return null;
+        }
 
-		@Override
-		public CurrencyConversion getCurrencyConversion(CurrencyUnit currency) {
-			return dummyConversion;
-		}
+        @Override
+        public CurrencyConversion getCurrencyConversion(CurrencyUnit currency){
+            return dummyConversion;
+        }
 
 
-		@Override
-		public boolean isAvailable(String baseCode, String termCode) {
-			return false;
-		}
+        @Override
+        public boolean isAvailable(String baseCode, String termCode){
+            return false;
+        }
 
-		@Override
-		public ExchangeRate getExchangeRate(String baseCode, String termCode) {
-			return null;
-		}
+        @Override
+        public ExchangeRate getExchangeRate(String baseCode, String termCode){
+            return null;
+        }
 
-		@Override
-		public CurrencyConversion getCurrencyConversion(String termCode) {
-			return null;
-		}
+        @Override
+        public CurrencyConversion getCurrencyConversion(String termCode){
+            return null;
+        }
 
-	}
+    }
 
-	public final class DummyConversion implements CurrencyConversion {
+    public final class DummyConversion implements CurrencyConversion{
 
-		@Override
-		public MonetaryAmount apply(MonetaryAmount value) {
-			return null;
-		}
+        @Override
+        public MonetaryAmount apply(MonetaryAmount value){
+            return null;
+        }
 
-		@Override
-		public CurrencyUnit getTermCurrency() {
-			return null;
-		}
+        @Override
+        public CurrencyUnit getCurrency(){
+            return null;
+        }
 
-		@Override
-		public ConversionContext getConversionContext() {
-			return ConversionContext.of("test", RateType.ANY);
-		}
+        @Override
+        public ConversionContext getConversionContext(){
+            return ConversionContext.of("test", RateType.ANY);
+        }
 
-		@Override
-		public ExchangeRate getExchangeRate(MonetaryAmount sourceAmount) {
-			return null;
-		}
+        @Override
+        public ExchangeRate getExchangeRate(MonetaryAmount sourceAmount){
+            return null;
+        }
 
-	}
+    }
 
 }

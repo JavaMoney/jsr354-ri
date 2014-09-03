@@ -26,93 +26,86 @@ import java.util.Objects;
 
 /**
  * Abstract base class used for implementing currency conversion.
- * 
+ *
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public abstract class AbstractCurrencyConversion implements CurrencyConversion {
+public abstract class AbstractCurrencyConversion implements CurrencyConversion{
 
-	private CurrencyUnit termCurrency;
-	private ConversionContext conversionContext;
+    private CurrencyUnit termCurrency;
+    private ConversionContext conversionContext;
 
-	public AbstractCurrencyConversion(CurrencyUnit termCurrency,
-			ConversionContext conversionContext) {
-		Objects.requireNonNull(termCurrency);
-		Objects.requireNonNull(conversionContext);
-		this.termCurrency = termCurrency;
-		this.conversionContext = conversionContext;
-	}
+    public AbstractCurrencyConversion(CurrencyUnit termCurrency, ConversionContext conversionContext){
+        Objects.requireNonNull(termCurrency);
+        Objects.requireNonNull(conversionContext);
+        this.termCurrency = termCurrency;
+        this.conversionContext = conversionContext;
+    }
 
-	/**
-	 * Access the terminating {@link CurrencyUnit} of this conversion instance.
-	 * 
-	 * @return the terminating {@link CurrencyUnit} , never {@code null}.
-	 */
-	public CurrencyUnit getTermCurrency() {
-		return termCurrency;
-	}
+    /**
+     * Access the terminating {@link CurrencyUnit} of this conversion instance.
+     *
+     * @return the terminating {@link CurrencyUnit} , never {@code null}.
+     */
+    public CurrencyUnit getCurrency(){
+        return termCurrency;
+    }
 
-	/**
-	 * Access the target {@link ConversionContext} of this conversion instance.
-	 * 
-	 * @return the target {@link ConversionContext}.
-	 */
-	public ConversionContext getConversionContext() {
-		return conversionContext;
-	}
+    /**
+     * Access the target {@link ConversionContext} of this conversion instance.
+     *
+     * @return the target {@link ConversionContext}.
+     */
+    public ConversionContext getConversionContext(){
+        return conversionContext;
+    }
 
-	/**
-	 * Get the exchange rate type that this {@link MonetaryOperator} instance is
-	 * using for conversion.
-	 * 
-	 * @see #apply(MonetaryAmount)
-	 * @return the {@link ExchangeRate} to be used, or null, if this conversion
-	 *         is not supported (will lead to a
-	 *         {@link CurrencyConversionException}.
-	 */
-	@Override
-	public abstract ExchangeRate getExchangeRate(MonetaryAmount amount);
-	
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.convert.CurrencyConversion#with(javax.money.convert.ConversionContext)
-	 */
-	public abstract CurrencyConversion with(ConversionContext conversionContext);
+    /**
+     * Get the exchange rate type that this {@link MonetaryOperator} instance is
+     * using for conversion.
+     *
+     * @return the {@link ExchangeRate} to be used, or null, if this conversion
+     * is not supported (will lead to a
+     * {@link CurrencyConversionException}.
+     * @see #apply(MonetaryAmount)
+     */
+    @Override
+    public abstract ExchangeRate getExchangeRate(MonetaryAmount amount);
 
-	/**
-	 * Method that converts the source {@link MonetaryAmount} to an
-	 * {@link MonetaryAmount} based on the {@link ExchangeRate} of this
-	 * conversion.
-	 * 
-	 * @see #getExchangeRate(MonetaryAmount)
-	 * @param amount
-	 *            The source amount
-	 * @return The converted amount, never null.
-	 * @throws CurrencyConversionException
-	 *             if conversion failed, or the required data is not available.
-	 */
-	public MonetaryAmount apply(MonetaryAmount amount) {
-		ExchangeRate rate = getExchangeRate(amount);
-		if (Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBase())) {
-			throw new CurrencyConversionException(amount.getCurrency(),
-					Objects.isNull(rate) ? null : rate.getTerm(), null);
-		}
-		return amount.multiply(rate.getFactor())
-				.getFactory()
-				.setCurrency(rate.getTerm())
-				.create();
-	}
+    /*
+     * (non-Javadoc)
+     * @see javax.money.convert.CurrencyConversion#with(javax.money.convert.ConversionContext)
+     */
+    public abstract CurrencyConversion with(ConversionContext conversionContext);
 
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getClass().getName() + " [MonetaryAmount -> MonetaryAmount"
-				+ "]";
-	}
+    /**
+     * Method that converts the source {@link MonetaryAmount} to an
+     * {@link MonetaryAmount} based on the {@link ExchangeRate} of this
+     * conversion.
+     *
+     * @param amount The source amount
+     * @return The converted amount, never null.
+     * @throws CurrencyConversionException if conversion failed, or the required data is not available.
+     * @see #getExchangeRate(MonetaryAmount)
+     */
+    public MonetaryAmount apply(MonetaryAmount amount){
+        ExchangeRate rate = getExchangeRate(amount);
+        if(Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBaseCurrency())){
+            throw new CurrencyConversionException(amount.getCurrency(),
+                                                  Objects.isNull(rate) ? null : rate.getCurrency(), null);
+        }
+        return amount.multiply(rate.getFactor()).getFactory().setCurrency(rate.getCurrency()).create();
+    }
+
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString(){
+        return getClass().getName() + " [MonetaryAmount -> MonetaryAmount" + "]";
+    }
 
 }

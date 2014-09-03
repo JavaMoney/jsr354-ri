@@ -50,8 +50,8 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
         if(roundingQuery.getTimestamp() != null){
             return null;
         }
-        CurrencyUnit currency = roundingQuery.getCurrencyUnit();
-        if(currency!=null) {
+        CurrencyUnit currency = roundingQuery.getCurrency();
+        if(currency != null){
             RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, RoundingMode.HALF_EVEN);
             if(roundingQuery.getBoolean("cashRounding", false)){
                 if(currency.getCurrencyCode().equals("CHF")){
@@ -63,21 +63,21 @@ public class DefaultRoundingProvider implements RoundingProviderSpi{
             return new DefaultRounding(currency, roundingMode);
         }
         Integer scale = roundingQuery.getScale();
-        if(scale==null){
+        if(scale == null){
             scale = 2;
         }
         MathContext mc = roundingQuery.get(MathContext.class, null);
         RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, null);
-        if(roundingMode!=null || mc!=null) {
-            if(mc!=null){
+        if(roundingMode != null || mc != null){
+            if(mc != null){
                 return new DefaultRounding(scale, mc.getRoundingMode());
             }
-            if(roundingMode==null){
+            if(roundingMode == null){
                 roundingMode = RoundingMode.HALF_EVEN;
             }
             return new DefaultRounding(scale, roundingMode);
         }
-        if(roundingQuery.getRoundingName()!=null &&  DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())) {
+        if(roundingQuery.getRoundingName() != null && DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())){
             return MonetaryRoundings.getDefaultRounding();
         }
         return null;

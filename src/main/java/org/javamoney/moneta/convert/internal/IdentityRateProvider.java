@@ -57,13 +57,15 @@ public class IdentityRateProvider extends AbstractRateProvider{
      */
     public boolean isAvailable(ConversionQuery conversionQuery){
         return conversionQuery.getBaseCurrency().getCurrencyCode()
-                .equals(conversionQuery.getTermCurrency().getCurrencyCode());
+                .equals(conversionQuery.getCurrency().getCurrencyCode());
     }
 
     public ExchangeRate getExchangeRate(ConversionQuery query){
-        if(query.getBaseCurrency().getCurrencyCode().equals(query.getTermCurrency().getCurrencyCode())){
-            DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(getProviderContext().getProvider(), RateType.OTHER).setBase(query.getBaseCurrency());
-            builder.setTerm(query.getTermCurrency());
+        if(query.getBaseCurrency().getCurrencyCode().equals(query.getCurrency().getCurrencyCode())){
+            DefaultExchangeRate.Builder builder =
+                    new DefaultExchangeRate.Builder(getProviderContext().getProvider(), RateType.OTHER)
+                            .setBase(query.getBaseCurrency());
+            builder.setTerm(query.getCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
             return builder.build();
         }
@@ -80,8 +82,8 @@ public class IdentityRateProvider extends AbstractRateProvider{
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
         if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
-            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBase())
-                    .setBase(rate.getTerm()).setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
+            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBaseCurrency())
+                    .setBase(rate.getCurrency()).setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
         return null;
     }

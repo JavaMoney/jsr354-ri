@@ -68,10 +68,10 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
     @Override
     public CurrencyConversion getCurrencyConversion(ConversionQuery conversionQuery){
         if(getProviderContext().getRateTypes().size() == 1){
-            return new LazyBoundCurrencyConversion(conversionQuery.getTermCurrency(), this, ConversionContext
+            return new LazyBoundCurrencyConversion(conversionQuery.getCurrency(), this, ConversionContext
                     .of(getProviderContext().getProvider(), getProviderContext().getRateTypes().iterator().next()));
         }
-        return new LazyBoundCurrencyConversion(conversionQuery.getTermCurrency(), this,
+        return new LazyBoundCurrencyConversion(conversionQuery.getCurrency(), this,
                                                ConversionContext.of(getProviderContext().getProvider(), RateType.ANY));
     }
 
@@ -85,15 +85,14 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @return the result of the multiplication as {@link NumberValue}
      */
     protected static NumberValue multiply(NumberValue multiplicand, NumberValue multiplier){
-        if (Objects.isNull(multiplicand)) {
+        if(Objects.isNull(multiplicand)){
             throw new ArithmeticException("The multiplicand cannot be null");
         }
-        if (Objects.isNull(multiplier)) {
+        if(Objects.isNull(multiplier)){
             throw new ArithmeticException("The multiplier cannot be null");
         }
         return new DefaultNumberValue(
-                multiplicand.numberValueExact(BigDecimal.class).multiply(multiplier.numberValue(BigDecimal.class))
-        );
+                multiplicand.numberValueExact(BigDecimal.class).multiply(multiplier.numberValue(BigDecimal.class)));
     }
 
     /**
@@ -105,15 +104,14 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @return the result of the division as {@link NumberValue}
      */
     protected static NumberValue divide(NumberValue dividend, NumberValue divisor){
-        if (Objects.isNull(dividend)) {
+        if(Objects.isNull(dividend)){
             throw new ArithmeticException("The dividend cannot be null");
         }
-        if (Objects.isNull(divisor)) {
+        if(Objects.isNull(divisor)){
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
-                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class))
-        );
+                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class)));
     }
 
     /**
@@ -126,14 +124,13 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
      * @return the result of the division as {@link NumberValue}
      */
     protected static NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context){
-        if (Objects.isNull(dividend)) {
+        if(Objects.isNull(dividend)){
             throw new ArithmeticException("The dividend cannot be null");
         }
-        if (Objects.isNull(divisor)) {
+        if(Objects.isNull(divisor)){
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
-                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class), context)
-        );
+                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class), context));
     }
 }

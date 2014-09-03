@@ -65,8 +65,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-    private final Map<Long,Map<String,ExchangeRate>> historicRates =
-            new ConcurrentHashMap<>();
+    private final Map<Long,Map<String,ExchangeRate>> historicRates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -122,10 +121,11 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         DefaultExchangeRate.Builder builder = new DefaultExchangeRate.Builder(
-                ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC).setTimestampMillis(query.getTimestampMillis())
-                        .build());
+                ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC)
+                        .setTimestampMillis(query.getTimestampMillis()).build()
+        );
         builder.setBase(query.getBaseCurrency());
-        builder.setTerm(query.getTermCurrency());
+        builder.setTerm(query.getCurrency());
         ExchangeRate sourceRate;
         ExchangeRate target;
         if(historicRates.isEmpty()){
@@ -143,12 +143,12 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             return null;
         }
         sourceRate = targets.get(query.getBaseCurrency().getCurrencyCode());
-        target = targets.get(query.getTermCurrency().getCurrencyCode());
+        target = targets.get(query.getCurrency().getCurrencyCode());
         if(BASE_CURRENCY_CODE.equals(query.getBaseCurrency().getCurrencyCode()) &&
-                BASE_CURRENCY_CODE.equals(query.getTermCurrency().getCurrencyCode())){
+                BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode())){
             builder.setFactor(DefaultNumberValue.ONE);
             return builder.build();
-        }else if(BASE_CURRENCY_CODE.equals(query.getTermCurrency().getCurrencyCode())){
+        }else if(BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode())){
             if(Objects.isNull(sourceRate)){
                 return null;
             }
@@ -161,7 +161,8 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
                     query.toBuilder().setTermCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE)).build());
             ExchangeRate rate2 = getExchangeRate(
                     query.toBuilder().setBaseCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE))
-                            .setTermCurrency(query.getTermCurrency()).build());
+                            .setTermCurrency(query.getCurrency()).build()
+            );
             if(Objects.nonNull(rate1) || Objects.nonNull(rate2)){
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
@@ -175,7 +176,8 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         if(Objects.isNull(rate)){
             throw new IllegalArgumentException("Rate null is not reversable.");
         }
-        return new DefaultExchangeRate.Builder(rate).setRate(rate).setBase(rate.getTerm()).setTerm(rate.getBase())
+        return new DefaultExchangeRate.Builder(rate).setRate(rate).setBase(rate.getCurrency())
+                .setTerm(rate.getBaseCurrency())
                 .setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(), MathContext.DECIMAL64)).build();
     }
 

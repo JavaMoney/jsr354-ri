@@ -74,8 +74,7 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
      */
     private static final ProviderContext CONTEXT =
             ProviderContextBuilder.create("ECB-HIST90", RateType.HISTORIC, RateType.DEFERRED)
-                    .set("providerDescription", "European Central Bank (last 90 days)")
-                    .set("days", 90).build();
+                    .set("providerDescription", "European Central Bank (last 90 days)").set("days", 90).build();
 
     /**
      * Constructor, also loads initial data.
@@ -130,18 +129,18 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
         Long targetTS = cal.getTimeInMillis();
 
         builder.setBase(conversionQuery.getBaseCurrency());
-        builder.setTerm(conversionQuery.getTermCurrency());
+        builder.setTerm(conversionQuery.getCurrency());
         Map<String,ExchangeRate> targets = this.rates.get(targetTS);
         if(Objects.isNull(targets)){
             return null;
         }
         sourceRate = targets.get(conversionQuery.getBaseCurrency().getCurrencyCode());
-        target = targets.get(conversionQuery.getTermCurrency().getCurrencyCode());
+        target = targets.get(conversionQuery.getCurrency().getCurrencyCode());
         if(BASE_CURRENCY_CODE.equals(conversionQuery.getBaseCurrency().getCurrencyCode()) &&
-                BASE_CURRENCY_CODE.equals(conversionQuery.getTermCurrency().getCurrencyCode())){
+                BASE_CURRENCY_CODE.equals(conversionQuery.getCurrency().getCurrencyCode())){
             builder.setFactor(DefaultNumberValue.ONE);
             return builder.build();
-        }else if(BASE_CURRENCY_CODE.equals(conversionQuery.getTermCurrency().getCurrencyCode())){
+        }else if(BASE_CURRENCY_CODE.equals(conversionQuery.getCurrency().getCurrencyCode())){
             if(Objects.isNull(sourceRate)){
                 return null;
             }
@@ -152,10 +151,12 @@ public class ECBHistoric90RateProvider extends AbstractRateProvider implements L
             // Get Conversion base as derived rate: base -> EUR -> term
             ExchangeRate rate1 = getExchangeRate(
                     conversionQuery.toBuilder().setBaseCurrency(conversionQuery.getBaseCurrency())
-                            .setTermCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE)).build());
+                            .setTermCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE)).build()
+            );
             ExchangeRate rate2 = getExchangeRate(
                     conversionQuery.toBuilder().setBaseCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE))
-                            .setTermCurrency(conversionQuery.getTermCurrency()).build());
+                            .setTermCurrency(conversionQuery.getCurrency()).build()
+            );
             if(Objects.nonNull(rate1) || Objects.nonNull(rate2)){
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
