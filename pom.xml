@@ -207,8 +207,8 @@
                     <value>true</value>
                 </property>
             </activation>
-            <create>
-                <plugins>
+            <build>
+            <plugins>
                     <plugin>
                         <!-- Usage: mvn clean deploy -Dgpg.passphrase=yourpassphrase ; Or sign
                             already deployed artifact: mvn gpg:sign-and-deploy-file -DpomFile=target/myapp-1.0.pom
@@ -256,7 +256,7 @@
                         </executions>
                     </plugin>
                 </plugins>
-            </create>
+            </build>
         </profile>
 
         <profile>
@@ -267,8 +267,8 @@
                     <value>true</value>
                 </property>
             </activation>
-            <create>
-                <plugins>
+            <build>
+            <plugins>
                     <plugin>
                         <groupId>com.google.code.maven-license-plugin</groupId>
                         <artifactId>maven-license-plugin</artifactId>
@@ -291,13 +291,13 @@
                         </configuration>
                     </plugin>
                 </plugins>
-            </create>
+            </build>
         </profile>
 
         <profile>
             <id>documentation</id>
-            <create>
-                <plugins>
+            <build>
+            <plugins>
                     <plugin>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -324,7 +324,7 @@
                         </executions>
                     </plugin>
                 </plugins>
-            </create>
+            </build>
         </profile>
     </profiles>
 
@@ -353,9 +353,9 @@
         </dependency>
     </dependencies>
 
-    <create>
+    <build>
 
-        <defaultGoal>install</defaultGoal>
+    <defaultGoal>install</defaultGoal>
 
         <extensions>
             <extension>
@@ -430,7 +430,7 @@
                 </executions>
             </plugin>
         </plugins>
-    </create>
+    </build>
 
     <reporting>
         <plugins>
@@ -455,7 +455,7 @@
                             <keywords>true</keywords>
                             <linksource>true</linksource>
                             <!-- overview>${basedir}/overview.html</overview -->
-                            <source>${project.create.sourceCompilerLevel}</source>
+                            <source>${project.build.sourceCompilerLevel}</source>
                             <!-- stylesheetfile>${basedir}/src/site/css/money-jdoc.css</stylesheetfile -->
                             <verbose>true</verbose>
                             <aggregate>true</aggregate>
@@ -502,7 +502,7 @@
                     <format>xml</format>
                     <linkXRef>true</linkXRef>
                     <aggregate>true</aggregate>
-                    <sourceEncoding>${project.create.sourceEncoding}</sourceEncoding>
+                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
                 </configuration>
             </plugin>
             <plugin>
@@ -511,7 +511,7 @@
                 <version>2.4</version>
                 <configuration>
                     <aggregate>true</aggregate>
-                    <encoding>${project.create.sourceEncoding}</encoding>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <tagListOptions>
                         <tagClasses>
                             <tagClass>
