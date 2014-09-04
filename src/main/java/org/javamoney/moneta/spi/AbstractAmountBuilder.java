@@ -20,11 +20,11 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Basic implementation of {@link MonetaryAmountFactory}, which simplifies development of the SPI interface.
+ * Basic implementation of {@link javax.money.MonetaryAmountFactory}, which simplifies development of the SPI interface.
  *
  * @param <T> the target class implementing {@link javax.money.MonetaryAmount}.
  */
-public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements MonetaryAmountFactory<T>{
+public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements MonetaryAmountFactory<T>{
 
     /**
      * The default {@link MonetaryContext} applied, if not set explicitly on creation.
@@ -50,13 +50,13 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
     @Override
     public T create(){
         if(currency == null){
-            throw new MonetaryException("Cannot create FastMoney instance: missing currency.");
+            throw new MonetaryException("Cannot of FastMoney instance: missing currency.");
         }
         if(number == null){
-            throw new MonetaryException("Cannot create FastMoney instance: missing number.");
+            throw new MonetaryException("Cannot of FastMoney instance: missing number.");
         }
         if(monetaryContext == null){
-            throw new MonetaryException("Cannot create FastMoney instance: missing context.");
+            throw new MonetaryException("Cannot of FastMoney instance: missing context.");
         }
         return create(number, currency, monetaryContext);
     }
@@ -177,10 +177,8 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
     public MonetaryAmountFactory<T> setAmount(MonetaryAmount amt){
         this.currency = amt.getCurrency();
         this.number = amt.getNumber().numberValue(BigDecimal.class);
-        this.monetaryContext =
-                MonetaryContextBuilder.create(DEFAULT_MONETARY_CONTEXT.getAmountType()).importContext(
-                        amt.getMonetaryContext())
-                        .build();
+        this.monetaryContext = MonetaryContextBuilder.of(DEFAULT_MONETARY_CONTEXT.getAmountType())
+                .importContext(amt.getMonetaryContext()).build();
         return this;
     }
 

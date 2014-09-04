@@ -24,40 +24,39 @@ import org.javamoney.moneta.ServicePriority;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
- * {@link MoneyAmountFactory}.
- * 
+ * {@link MoneyAmountBuilder}.
+ *
  * @author Anatole Tresch
  */
 @ServicePriority(10)
-public final class MoneyAmountFactoryProvider implements
-		MonetaryAmountFactoryProviderSpi<Money> {
+public final class MoneyAmountFactoryProvider implements MonetaryAmountFactoryProviderSpi<Money>{
 
-	@Override
-	public Class<Money> getAmountType() {
-		return Money.class;
-	}
+    @Override
+    public Class<Money> getAmountType(){
+        return Money.class;
+    }
 
-	@Override
-	public MonetaryAmountFactory<Money> createMonetaryAmountFactory() {
-		return new MoneyAmountFactory();
-	}
+    @Override
+    public MonetaryAmountFactory<Money> createMonetaryAmountFactory(){
+        return new MoneyAmountBuilder();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.spi.MonetaryAmountFactoryProviderSpi#getQueryInclusionPolicy()
-	 */
-	@Override
-	public QueryInclusionPolicy getQueryInclusionPolicy() {
-		return QueryInclusionPolicy.ALWAYS;
-	}
+    /*
+     * (non-Javadoc)
+     * @see javax.money.spi.MonetaryAmountFactoryProviderSpi#getQueryInclusionPolicy()
+     */
+    @Override
+    public QueryInclusionPolicy getQueryInclusionPolicy(){
+        return QueryInclusionPolicy.ALWAYS;
+    }
 
-	@Override
-	public MonetaryContext getDefaultMonetaryContext() {
-		return MoneyAmountFactory.DEFAULT_CONTEXT;
-	}
+    @Override
+    public MonetaryContext getDefaultMonetaryContext(){
+        return MoneyAmountBuilder.DEFAULT_CONTEXT;
+    }
 
-	@Override
-	public MonetaryContext getMaximalMonetaryContext() {
-		return MoneyAmountFactory.MAX_CONTEXT;
-	}
+    @Override
+    public MonetaryContext getMaximalMonetaryContext(){
+        return MoneyAmountBuilder.MAX_CONTEXT;
+    }
 }

@@ -12,7 +12,6 @@ package org.javamoney.moneta;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +19,6 @@ import javax.money.CurrencyUnit;
 import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ExchangeRate;
-import javax.money.convert.RateType;
 
 /**
  * This class models an exchange rate, which defines the factor the numeric value of a base amount in some currency
@@ -83,7 +81,7 @@ import javax.money.convert.RateType;
  * href="https://en.wikipedia.org/wiki/Exchange_rate#Quotations">Wikipedia:
  * Exchange Rate (Quotations)</a>
  */
-public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<ExchangeRate>{
+class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<ExchangeRate>{
 
     /**
      * serialVersionUID.
@@ -117,7 +115,7 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
      *
      * @param builder The Builder, never {@code null}.
      */
-    private DefaultExchangeRate(Builder builder){
+    DefaultExchangeRate(ExchangeRateBuilder builder){
         Objects.requireNonNull(builder.base, "base may not be null.");
         Objects.requireNonNull(builder.term, "term may not be null.");
         Objects.requireNonNull(builder.factor, "factor may not be null.");
@@ -271,177 +269,12 @@ public class DefaultExchangeRate implements ExchangeRate, Serializable, Comparab
     }
 
     /**
-     * Builder for creating new instances of {@link javax.money.convert.ExchangeRate}. Note that
-     * instances of this class are not thread-safe.
+     * Create a {@link ExchangeRateBuilder} based on the current rate instance.
      *
-     * @author Anatole Tresch
-     * @author Werner Keil
+     * @return a new {@link ExchangeRateBuilder}, never {@code null}.
      */
-    public static class Builder{
-
-        /**
-         * The {@link javax.money.convert.ConversionContext}.
-         */
-        private ConversionContext conversionContext;
-        /**
-         * The base (source) currency.
-         */
-        private CurrencyUnit base;
-        /**
-         * The term (target) currency.
-         */
-        private CurrencyUnit term;
-        /**
-         * The conversion factor.
-         */
-        private NumberValue factor;
-        /**
-         * The chain of invovled rates.
-         */
-        private List<ExchangeRate> rateChain = new ArrayList<>();
-
-        /**
-         * Sets the exchange rate type
-         *
-         * @param rateType the {@link javax.money.convert.RateType} contained
-         */
-        public Builder(String provider, RateType rateType){
-            this(ConversionContext.of(provider, rateType));
-        }
-
-        /**
-         * Sets the exchange rate type
-         *
-         * @param context the {@link javax.money.convert.ConversionContext} to be applied
-         */
-        public Builder(ConversionContext context){
-            setContext(context);
-        }
-
-        /**
-         * Sets the exchange rate type
-         *
-         * @param rate the {@link javax.money.convert.ExchangeRate} to be applied
-         */
-        public Builder(ExchangeRate rate){
-            setContext(rate.getConversionContext());
-            setFactor(rate.getFactor());
-            setTerm(rate.getCurrency());
-            setBase(rate.getBaseCurrency());
-            setRateChain(rate.getExchangeRateChain());
-        }
-
-        /**
-         * Sets the base {@link javax.money.CurrencyUnit}
-         *
-         * @param base to base (source) {@link javax.money.CurrencyUnit} to be applied
-         * @return the builder instance
-         */
-        public Builder setBase(CurrencyUnit base){
-            this.base = base;
-            return this;
-        }
-
-        /**
-         * Sets the terminating (target) {@link javax.money.CurrencyUnit}
-         *
-         * @param term to terminating {@link javax.money.CurrencyUnit} to be applied
-         * @return the builder instance
-         */
-        public Builder setTerm(CurrencyUnit term){
-            this.term = term;
-            return this;
-        }
-
-        /**
-         * Sets the {@link javax.money.convert.ExchangeRate} chain.
-         *
-         * @param exchangeRates the {@link javax.money.convert.ExchangeRate} chain to be applied
-         * @return the builder instance
-         */
-        public Builder setRateChain(ExchangeRate... exchangeRates){
-            this.rateChain.clear();
-            if(Objects.nonNull(exchangeRates)){
-                this.rateChain.addAll(Arrays.asList(exchangeRates.clone()));
-            }
-            return this;
-        }
-
-        /**
-         * Sets the {@link javax.money.convert.ExchangeRate} chain.
-         *
-         * @param exchangeRates the {@link javax.money.convert.ExchangeRate} chain to be applied
-         * @return the builder instance
-         */
-        public Builder setRateChain(List<ExchangeRate> exchangeRates){
-            this.rateChain.clear();
-            if(Objects.nonNull(exchangeRates)){
-                this.rateChain.addAll(exchangeRates);
-            }
-            return this;
-        }
-
-
-        /**
-         * Sets the conversion factor, as the factor
-         * {@code base * factor = target}.
-         *
-         * @param factor the factor.
-         * @return The builder instance.
-         */
-        public Builder setFactor(NumberValue factor){
-            this.factor = factor;
-            return this;
-        }
-
-        /**
-         * Sets the provider to be applied.
-         *
-         * @param conversionContext the {@link javax.money.convert.ConversionContext}, not null.
-         * @return The builder.
-         */
-        public Builder setContext(ConversionContext conversionContext){
-            Objects.requireNonNull(conversionContext);
-            this.conversionContext = conversionContext;
-            return this;
-        }
-
-        /**
-         * Builds a new instance of {@link javax.money.convert.ExchangeRate}.
-         *
-         * @return a new instance of {@link javax.money.convert.ExchangeRate}.
-         * @throws IllegalArgumentException if the rate could not be built.
-         */
-        public DefaultExchangeRate build(){
-            return new DefaultExchangeRate(this);
-        }
-
-        /**
-         * Initialize the {@link Builder} with an {@link javax.money.convert.ExchangeRate}. This is
-         * useful for creating a new rate, reusing some properties from an
-         * existing one.
-         *
-         * @param rate the base rate
-         * @return the Builder, for chaining.
-         */
-        public Builder setRate(ExchangeRate rate){
-            this.base = rate.getBaseCurrency();
-            this.term = rate.getCurrency();
-            this.conversionContext = rate.getConversionContext();
-            this.factor = rate.getFactor();
-            this.rateChain = rate.getExchangeRateChain();
-            this.term = rate.getCurrency();
-            return this;
-        }
-    }
-
-    /**
-     * Create a {@link Builder} based on the current rate instance.
-     *
-     * @return a new {@link Builder}, never {@code null}.
-     */
-    public Builder toBuilder(){
-        return new Builder(getConversionContext()).setBase(getBaseCurrency()).setTerm(getCurrency())
+    public ExchangeRateBuilder toBuilder(){
+        return new ExchangeRateBuilder(getConversionContext()).setBase(getBaseCurrency()).setTerm(getCurrency())
                 .setFactor(getFactor()).setRateChain(getExchangeRateChain());
     }
 }

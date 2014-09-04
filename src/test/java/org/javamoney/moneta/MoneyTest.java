@@ -96,7 +96,7 @@ public class MoneyTest{
         Money[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000000000000000001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-                   new BigDecimal("0.49999999999999999999"));
+                     new BigDecimal("0.49999999999999999999"));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class MoneyTest{
         Money m = Money.of(
 
                 BigDecimal.valueOf(2.15), EURO,
-                MonetaryContextBuilder.create(Money.class).setPrecision(2).setFixedScale(true).set(RoundingMode.DOWN)
+                MonetaryContextBuilder.of(Money.class).setPrecision(2).setFixedScale(true).set(RoundingMode.DOWN)
                         .build());
         Money m2 = Money.of(BigDecimal.valueOf(2.1), EURO);
         assertEquals(m, m2);
@@ -231,8 +231,9 @@ public class MoneyTest{
      */
     @Test
     public void testOfCurrencyUnitNumberMathContext(){
-        MonetaryContext mc = MonetaryContextBuilder.create(Money.class).setMaxScale(2345).setFixedScale(true)
-                .set(RoundingMode.CEILING).build();
+        MonetaryContext mc =
+                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).set(RoundingMode.CEILING)
+                        .build();
         Money m = Money.of((byte) 2, EURO, mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -324,8 +325,9 @@ public class MoneyTest{
      */
     @Test
     public void testOfStringNumberMathContext(){
-        MonetaryContext mc = MonetaryContextBuilder.create(Money.class).setMaxScale(2345).setFixedScale(true)
-                .set(RoundingMode.CEILING).build();
+        MonetaryContext mc =
+                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).set(RoundingMode.CEILING)
+                        .build();
         Money m = Money.of((byte) 2, "EUR", mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -447,7 +449,7 @@ public class MoneyTest{
         Money m = Money.of(10, "CHF");
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
         MonetaryContext mc =
-                MonetaryContextBuilder.create(Money.class).setPrecision(128).set(RoundingMode.HALF_EVEN).build();
+                MonetaryContextBuilder.of(Money.class).setPrecision(128).set(RoundingMode.HALF_EVEN).build();
         MonetaryAmount m2 = m.getFactory().setContext(mc).create();
         assertNotNull(m2);
         assertTrue(m != m2);
@@ -587,20 +589,16 @@ public class MoneyTest{
         for(Money m : moneys){
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(10.50)))
-                                 .create(), m.remainder(10.50), "Invalid remainder of " + 10.50
-            );
+                                 .create(), m.remainder(10.50), "Invalid remainder of " + 10.50);
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-30.20)))
-                                 .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20
-            );
+                                 .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20);
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-3)))
-                                 .create(), m.remainder(-3), "Invalid remainder of " + -3
-            );
+                                 .create(), m.remainder(-3), "Invalid remainder of " + -3);
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
                                  m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(3))).create(),
-                         m.remainder(3)
-            );
+                         m.remainder(3));
         }
     }
 
@@ -615,8 +613,7 @@ public class MoneyTest{
             for(int p = -10; p < 10; p++){
                 assertEquals(m.getFactory().setCurrency(m.getCurrency())
                                      .setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
-                                     .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen."
-                );
+                                     .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen.");
             }
         }
     }
@@ -974,7 +971,7 @@ public class MoneyTest{
         MonetaryQuery<Integer> q = amount -> Money.from(amount).getNumber().getPrecision();
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "USD"), Money.of(23123213.435, "EUR"),
                 Money.of(-23123213.435, "USS"), Money.of(-23123213, "USN"), Money.of(0, "GBP")};
-        for (Money money : moneys) {
+        for(Money money : moneys){
             assertEquals(money.query(q), Integer.valueOf(money.getNumber().getPrecision()));
         }
     }
@@ -1008,20 +1005,16 @@ public class MoneyTest{
                 .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
                      Money.of(new BigDecimal("12.123000"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class)
-        );
+                             .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
                      Money.of(new BigDecimal("12.12300"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class)
-        );
+                             .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
                      Money.of(new BigDecimal("12.1230"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class)
-        );
+                             .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
                      Money.of(new BigDecimal("12.123"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class)
-        );
+                             .numberValue(BigDecimal.class));
     }
 
     /**

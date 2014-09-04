@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta;
 
-import org.javamoney.moneta.internal.MoneyAmountFactory;
+import org.javamoney.moneta.internal.MoneyAmountBuilder;
 import org.javamoney.moneta.spi.MoneyUtils;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 
@@ -119,7 +119,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
             this.monetaryContext = DEFAULT_MONETARY_CONTEXT;
         }
         Objects.requireNonNull(number, "Number is required.");
-		this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
+        this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
     }
 
     /**
@@ -234,7 +234,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money[] divideAndRemainder(long divisor){
-        if(divisor==1L){
+        if(divisor == 1L){
             return new Money[]{this, Money.of(0L, getCurrency())};
         }
         return divideAndRemainder(BigDecimal.valueOf(divisor));
@@ -258,7 +258,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money multiply(long multiplicand){
-        if(multiplicand==1L){
+        if(multiplicand == 1L){
             return this;
         }
         return multiply(BigDecimal.valueOf(multiplicand));
@@ -271,7 +271,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money multiply(double multiplicand){
-        if(multiplicand==1.0d){
+        if(multiplicand == 1.0d){
             return this;
         }
         return multiply(new BigDecimal(String.valueOf(multiplicand)));
@@ -284,7 +284,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money remainder(long divisor){
-        if(divisor==1L){
+        if(divisor == 1L){
             return this;
         }
         return remainder(BigDecimal.valueOf(divisor));
@@ -414,7 +414,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if(divisorBD.equals(BigDecimal.ONE)){
             return this;
         }
-        BigDecimal dec = this.number.divide(divisorBD, MoneyUtils.getMathContext(getMonetaryContext(), RoundingMode.HALF_EVEN));
+        BigDecimal dec =
+                this.number.divide(divisorBD, MoneyUtils.getMathContext(getMonetaryContext(), RoundingMode.HALF_EVEN));
         return new Money(dec, getCurrency());
     }
 
@@ -616,7 +617,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public MonetaryAmountFactory<Money> getFactory(){
-        return new MoneyAmountFactory().setAmount(this);
+        return new MoneyAmountBuilder().setAmount(this);
     }
 
     /*
@@ -624,19 +625,18 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      *
      * @see java.lang.Object#equals(java.lang.Object)
      */
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
+    @Override
+    public boolean equals(Object obj){
+        if(obj == this){
             return true;
         }
-		if (obj instanceof Money) {
-			Money other = (Money) obj;
-			return Objects.equals(getCurrency(), other.getCurrency())
-					&& Objects.equals(getNumberStripped(),
-							other.getNumberStripped());
-		}
-		return false;
-	}
+        if(obj instanceof Money){
+            Money other = (Money) obj;
+            return Objects.equals(getCurrency(), other.getCurrency()) &&
+                    Objects.equals(getNumberStripped(), other.getNumberStripped());
+        }
+        return false;
+    }
 
     /*
      * (non-Javadoc)
@@ -655,7 +655,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public int hashCode(){
-		return Objects.hash(getCurrency(), getNumberStripped());
+        return Objects.hash(getCurrency(), getNumberStripped());
     }
 
     /**
@@ -751,7 +751,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @return A new instance of {@link Money}.
      */
     public static Money of(Number number, String currencyCode, MonetaryContext monetaryContext){
-        return new Money(MoneyUtils.getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode), monetaryContext);
+        return new Money(MoneyUtils.getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode),
+                         monetaryContext);
     }
 
     /**

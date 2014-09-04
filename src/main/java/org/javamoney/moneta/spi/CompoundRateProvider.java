@@ -60,7 +60,7 @@ public class CompoundRateProvider extends AbstractRateProvider{
         }
         providerName.setLength(providerName.length() - 1);
 
-        ProviderContextBuilder builder = ProviderContextBuilder.create(providerName.toString(), rateTypeSet);
+        ProviderContextBuilder builder = ProviderContextBuilder.of(providerName.toString(), rateTypeSet);
         builder.set(CHILD_PROVIDER_CONTEXTS_KEY, childContextList, List.class);
         return builder.build();
     }

@@ -59,7 +59,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
     private static final Map<String,CurrencyUnit> CACHED = new ConcurrentHashMap<>();
 
     private static final CurrencyContext CONTEXT =
-            CurrencyContextBuilder.create(TestCurrency.class.getSimpleName()).build();
+            CurrencyContextBuilder.of(TestCurrency.class.getSimpleName()).build();
 
     /**
      * Private constructor.
@@ -157,8 +157,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
 
         public Builder withDefaultFractionDigits(int defaultFractionDigits){
             if(defaultFractionDigits < -1){
-                throw new IllegalArgumentException("Invalid value for defaultFractionDigits: " + defaultFractionDigits
-                );
+                throw new IllegalArgumentException("Invalid value for defaultFractionDigits: " + defaultFractionDigits);
             }
             this.defaultFractionDigits = defaultFractionDigits;
             return this;
@@ -179,7 +178,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
 
         public CurrencyUnit build(boolean cache){
             if(Objects.isNull(currencyCode) || currencyCode.isEmpty()){
-                throw new IllegalStateException("Can not create TestCurrencyUnit.");
+                throw new IllegalStateException("Can not of TestCurrencyUnit.");
             }
             if(cache){
                 String key = currencyCode;
@@ -227,7 +226,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
                     Optional.ofNullable(currency).orElseThrow(() -> new IllegalArgumentException("Currency required."));
         }
 
-       @Override
+        @Override
         public int compareTo(CurrencyUnit currency){
             Objects.requireNonNull(currency);
             int compare = getCurrencyCode().compareTo(currency.getCurrencyCode());

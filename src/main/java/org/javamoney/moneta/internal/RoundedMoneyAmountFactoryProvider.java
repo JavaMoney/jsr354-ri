@@ -23,40 +23,39 @@ import org.javamoney.moneta.RoundedMoney;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
- * {@link RoundedMoneyAmountFactory}.
- * 
+ * {@link RoundedMoneyAmountBuilder}.
+ *
  * @author Anatole Tresch
  */
-public final class RoundedMoneyAmountFactoryProvider implements
-		MonetaryAmountFactoryProviderSpi<RoundedMoney> {
+public final class RoundedMoneyAmountFactoryProvider implements MonetaryAmountFactoryProviderSpi<RoundedMoney>{
 
-	@Override
-	public Class<RoundedMoney> getAmountType() {
-		return RoundedMoney.class;
-	}
+    @Override
+    public Class<RoundedMoney> getAmountType(){
+        return RoundedMoney.class;
+    }
 
-	@Override
-	public MonetaryAmountFactory<RoundedMoney> createMonetaryAmountFactory() {
-		return new RoundedMoneyAmountFactory();
-	}
+    @Override
+    public MonetaryAmountFactory<RoundedMoney> createMonetaryAmountFactory(){
+        return new RoundedMoneyAmountBuilder();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.spi.MonetaryAmountFactoryProviderSpi#getQueryInclusionPolicy()
-	 */
-	@Override
-	public QueryInclusionPolicy getQueryInclusionPolicy() {
-		return QueryInclusionPolicy.DIRECT_REFERENCE_ONLY;
-	}
+    /*
+     * (non-Javadoc)
+     * @see javax.money.spi.MonetaryAmountFactoryProviderSpi#getQueryInclusionPolicy()
+     */
+    @Override
+    public QueryInclusionPolicy getQueryInclusionPolicy(){
+        return QueryInclusionPolicy.DIRECT_REFERENCE_ONLY;
+    }
 
-	@Override
-	public MonetaryContext getDefaultMonetaryContext() {
-		return RoundedMoneyAmountFactory.DEFAULT_CONTEXT;
-	}
+    @Override
+    public MonetaryContext getDefaultMonetaryContext(){
+        return RoundedMoneyAmountBuilder.DEFAULT_CONTEXT;
+    }
 
-	@Override
-	public MonetaryContext getMaximalMonetaryContext() {
-		return RoundedMoneyAmountFactory.MAX_CONTEXT;
-	}
+    @Override
+    public MonetaryContext getMaximalMonetaryContext(){
+        return RoundedMoneyAmountBuilder.MAX_CONTEXT;
+    }
 
 }

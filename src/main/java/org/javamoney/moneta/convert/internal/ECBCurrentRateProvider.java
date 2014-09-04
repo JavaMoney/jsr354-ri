@@ -33,7 +33,7 @@ import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.javamoney.moneta.DefaultExchangeRate;
+import org.javamoney.moneta.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -75,7 +75,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * The {@link ConversionContext} of this provider.
      */
     private static final ProviderContext CONTEXT =
-            ProviderContextBuilder.create("ECB", RateType.DEFERRED).set("providerDescription", "European Central Bank")
+            ProviderContextBuilder.of("ECB", RateType.DEFERRED).set("providerDescription", "European Central Bank")
                     .set("days", 1).build();
 
     /**
@@ -134,8 +134,8 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     }
 
     private ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term){
-        DefaultExchangeRate.Builder builder =
-                new DefaultExchangeRate.Builder(ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
+        ExchangeRateBuilder builder =
+                new ExchangeRateBuilder(ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate;
@@ -179,10 +179,13 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     @Override
     public ExchangeRate getReversed(ExchangeRate rate){
         if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
-            return new DefaultExchangeRate.Builder(rate.getConversionContext()).setTerm(rate.getBaseCurrency())
-                    .setBase(rate.getCurrency()).setFactor(new DefaultNumberValue(
-                            BigDecimal.ONE.divide(rate.getFactor().numberValue(BigDecimal.class), MathContext.DECIMAL64)
-                    )).build();
+            return new ExchangeRateBuilder(rate.getConversionContext()).setTerm(rate.getBaseCurrency())
+                    .setBase(rate.getCurrency()).setFactor(new DefaultNumberValue(BigDecimal.ONE.divide(rate.getFactor()
+                                                                                                                .numberValue(
+                                                                                                                        BigDecimal.class),
+                                                                                                        MathContext
+                                                                                                                .DECIMAL64)))
+                    .build();
         }
         return null;
     }
@@ -260,12 +263,11 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * @param factor    The conversion factor.
      */
     void addRate(CurrencyUnit term, Long timestamp, Number factor){
-        DefaultExchangeRate.Builder builder;
+        ExchangeRateBuilder builder;
         if(timestamp == null){
-            builder = new DefaultExchangeRate.Builder(
-                    ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
+            builder = new ExchangeRateBuilder(ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
         }else{
-            builder = new DefaultExchangeRate.Builder(
+            builder = new ExchangeRateBuilder(
                     ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).setTimestampMillis(timestamp).build());
         }
         builder.setBase(BASE_CURRENCY);

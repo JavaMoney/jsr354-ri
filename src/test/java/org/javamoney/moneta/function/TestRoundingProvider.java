@@ -32,7 +32,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
     }
 
     private MonetaryRounding zeroRounding = new MonetaryRounding(){
-        private final RoundingContext CONTEXT = RoundingContextBuilder.create("TestRoundingProvider", "zero").build();
+        private final RoundingContext CONTEXT = RoundingContextBuilder.of("TestRoundingProvider", "zero").build();
 
         @Override
         public RoundingContext getRoundingContext(){
@@ -47,8 +47,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
     };
 
     private MonetaryRounding minusOneRounding = new MonetaryRounding(){
-        private final RoundingContext CONTEXT =
-                RoundingContextBuilder.create("TestRoundingProvider", "minusOne").build();
+        private final RoundingContext CONTEXT = RoundingContextBuilder.of("TestRoundingProvider", "minusOne").build();
 
         @Override
         public RoundingContext getRoundingContext(){
@@ -63,7 +62,7 @@ public class TestRoundingProvider implements RoundingProviderSpi{
 
     private MonetaryRounding chfCashRounding = new MonetaryRounding(){
         private final RoundingContext CONTEXT =
-                RoundingContextBuilder.create("TestRoundingProvider", "chfCashRounding").build();
+                RoundingContextBuilder.of("TestRoundingProvider", "chfCashRounding").build();
 
         @Override
         public RoundingContext getRoundingContext(){
@@ -73,12 +72,12 @@ public class TestRoundingProvider implements RoundingProviderSpi{
         @Override
         public MonetaryAmount apply(MonetaryAmount amount){
             MonetaryOperator minorRounding = MonetaryRoundings
-                    .getRounding(RoundingQueryBuilder.create().set("scale", 2).set(RoundingMode.HALF_UP).build());
+                    .getRounding(RoundingQueryBuilder.of().set("scale", 2).set(RoundingMode.HALF_UP).build());
             MonetaryAmount amt = amount.with(minorRounding);
             MonetaryAmount mp = amt.with(MonetaryUtil.minorPart());
             if(mp.isGreaterThanOrEqualTo(
-                    MonetaryAmounts.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03).create()
-            )){
+                    MonetaryAmounts.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03)
+                            .create())){
                 // add
                 return amt.add(MonetaryAmounts.getDefaultAmountFactory().setCurrency(amt.getCurrency())
                                        .setNumber(new BigDecimal("0.05")).create().subtract(mp));

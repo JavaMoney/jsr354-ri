@@ -33,8 +33,8 @@ import javax.money.MonetaryCurrencies;
 import javax.money.convert.*;
 import javax.money.spi.Bootstrap;
 
-import org.javamoney.moneta.BuildableCurrencyUnit;
-import org.javamoney.moneta.DefaultExchangeRate;
+import org.javamoney.moneta.CurrencyUnitBuilder;
+import org.javamoney.moneta.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;
@@ -57,15 +57,16 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     /**
      * The {@link ConversionContext} of this provider.
      */
-    private static final ProviderContext CONTEXT = ProviderContextBuilder.create("IMF", RateType.DEFERRED)
+    private static final ProviderContext CONTEXT = ProviderContextBuilder.of("IMF", RateType.DEFERRED)
             .set("providerDescription", "International Monetary Fond").set("days", 1).build();
 
-    private static final CurrencyUnit SDR = new BuildableCurrencyUnit.Builder("SDR", CurrencyContextBuilder
-            .create(IMFRateProvider.class.getSimpleName()).build()).setDefaultFractionDigits(3).build(true);
+    private static final CurrencyUnit SDR =
+            CurrencyUnitBuilder.of("SDR", CurrencyContextBuilder.of(IMFRateProvider.class.getSimpleName()).build())
+                    .setDefaultFractionDigits(3).build(true);
 
-    private Map<CurrencyUnit,List<DefaultExchangeRate>> currencyToSdr = new HashMap<>();
+    private Map<CurrencyUnit,List<ExchangeRate>> currencyToSdr = new HashMap<>();
 
-    private Map<CurrencyUnit,List<DefaultExchangeRate>> sdrToCurrency = new HashMap<>();
+    private Map<CurrencyUnit,List<ExchangeRate>> sdrToCurrency = new HashMap<>();
 
     private static Map<String,CurrencyUnit> currenciesByName = new HashMap<>();
 
@@ -112,8 +113,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     private void loadRatesTSV(InputStream inputStream) throws IOException, ParseException{
-        Map<CurrencyUnit,List<DefaultExchangeRate>> newCurrencyToSdr = new HashMap<>();
-        Map<CurrencyUnit,List<DefaultExchangeRate>> newSdrToCurrency = new HashMap<>();
+        Map<CurrencyUnit,List<ExchangeRate>> newCurrencyToSdr = new HashMap<>();
+        Map<CurrencyUnit,List<ExchangeRate>> newSdrToCurrency = new HashMap<>();
         NumberFormat f = new DecimalFormat("#0.0000000000");
         f.setGroupingUsed(false);
         BufferedReader pr = new BufferedReader(new InputStreamReader(inputStream));
@@ -173,22 +174,22 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                     rateType = RateType.DEFERRED;
                 }
                 if(currencyToSdr){ // Currency -> SDR
-                    List<DefaultExchangeRate> rates = this.currencyToSdr.get(currency);
+                    List<ExchangeRate> rates = this.currencyToSdr.get(currency);
                     if(Objects.isNull(rates)){
                         rates = new ArrayList<>(5);
                         newCurrencyToSdr.put(currency, rates);
                     }
-                    DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
+                    ExchangeRate rate = new ExchangeRateBuilder(
                             ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
                 }else{ // SDR -> Currency
-                    List<DefaultExchangeRate> rates = this.sdrToCurrency.get(currency);
+                    List<ExchangeRate> rates = this.sdrToCurrency.get(currency);
                     if(Objects.isNull(rates)){
                         rates = new ArrayList<>(5);
                         newSdrToCurrency.put(currency, rates);
                     }
-                    DefaultExchangeRate rate = new DefaultExchangeRate.Builder(
+                    ExchangeRate rate = new ExchangeRateBuilder(
                             ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
                     rates.add(rate);
@@ -196,8 +197,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             }
             line = pr.readLine();
         }
-        newSdrToCurrency.values().forEach(Collections::sort);
-        newCurrencyToSdr.values().forEach(Collections::sort);
+        // Cast is save, since contained DefaultExchangeRate is Comparable!
+        newSdrToCurrency.values().forEach((c) -> Collections.sort(List.class.cast(c)));
+        newCurrencyToSdr.values().forEach((c) -> Collections.sort(List.class.cast(c)));
         this.sdrToCurrency = newSdrToCurrency;
         this.currencyToSdr = newCurrencyToSdr;
     }
@@ -242,8 +244,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         if(Objects.isNull(rate1) || Objects.isNull(rate2)){
             return null;
         }
-        DefaultExchangeRate.Builder builder =
-                new DefaultExchangeRate.Builder(ConversionContext.of(CONTEXT.getProvider(), RateType.HISTORIC));
+        ExchangeRateBuilder builder =
+                new ExchangeRateBuilder(ConversionContext.of(CONTEXT.getProvider(), RateType.HISTORIC));
         builder.setBase(base);
         builder.setTerm(term);
         builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
@@ -251,7 +253,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return builder.build();
     }
 
-    private ExchangeRate lookupRate(List<DefaultExchangeRate> list, Long timestamp){
+    private ExchangeRate lookupRate(List<ExchangeRate> list, Long timestamp){
         if(Objects.isNull(list)){
             return null;
         }

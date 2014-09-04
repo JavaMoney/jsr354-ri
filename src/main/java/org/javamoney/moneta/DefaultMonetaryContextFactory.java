@@ -45,12 +45,12 @@ class DefaultMonetaryContextFactory {
         } catch (Exception e) {
             Logger.getLogger(DefaultMonetaryContextFactory.class.getName())
                     .log(Level.SEVERE, "Error evaluating default NumericContext, using default (NumericContext.NUM64).", e);
-            return MonetaryContextBuilder.create(Money.class).set(MathContext.DECIMAL64).build();
+            return MonetaryContextBuilder.of(Money.class).set(MathContext.DECIMAL64).build();
         }
     }
 
     private MonetaryContext createContextWithConfig(Map<String, String> config) {
-        MonetaryContextBuilder builder = MonetaryContextBuilder.create(Money.class);
+        MonetaryContextBuilder builder = MonetaryContextBuilder.of(Money.class);
         String value = config.get("org.javamoney.moneta.Money.defaults.mathContext");
         if (Objects.nonNull(value)) {
             switch (value.toUpperCase(Locale.ENGLISH)) {
@@ -91,8 +91,7 @@ class DefaultMonetaryContextFactory {
         String value = config.get("org.javamoney.moneta.Money.defaults.roundingMode");
         RoundingMode rm = Objects.nonNull(value) ? RoundingMode.valueOf(value
                 .toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
-        MonetaryContext mc = MonetaryContextBuilder.create(Money.class)
-                .setPrecision(prec).set(rm).set(Money.class).build();
+        MonetaryContext mc = MonetaryContextBuilder.of(Money.class).setPrecision(prec).set(rm).set(Money.class).build();
         Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info("Using custom MathContext: precision=" + prec
                 + ", roundingMode=" + rm);
         return mc;

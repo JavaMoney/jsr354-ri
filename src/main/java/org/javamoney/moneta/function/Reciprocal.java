@@ -16,7 +16,6 @@
 package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
@@ -30,13 +29,13 @@ import javax.money.NumberValue;
  *
  * @author Anatole Tresch
  */
-final class Reciprocal implements MonetaryOperator {
+final class Reciprocal implements MonetaryOperator{
 
 
     /**
      * Access the shared instance of {@link Reciprocal} for use.
      */
-    Reciprocal() {
+    Reciprocal(){
     }
 
 
@@ -49,12 +48,12 @@ final class Reciprocal implements MonetaryOperator {
      * @throws ArithmeticException if the arithmetic operation failed
      */
     @Override
-    public MonetaryAmount apply(MonetaryAmount amount) {
+    public MonetaryAmount apply(MonetaryAmount amount){
         Objects.requireNonNull(amount, "Amount required.");
         NumberValue num = amount.getNumber();
         BigDecimal one = new BigDecimal("1.0").setScale(num.getScale() < 5 ? 5 : num.getScale());
-        return amount.getFactory().setNumber(one.divide(
-                num.numberValue(BigDecimal.class), RoundingMode.HALF_EVEN)).create();
+        return amount.getFactory().setNumber(one.divide(num.numberValue(BigDecimal.class), RoundingMode.HALF_EVEN))
+                .create();
     }
 
 }

@@ -23,28 +23,24 @@ import javax.money.MonetaryContextBuilder;
 import javax.money.NumberValue;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.spi.AbstractAmountFactory;
+import org.javamoney.moneta.spi.AbstractAmountBuilder;
 
 /**
  * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link Money}.
  *
  * @author Anatole Tresch
  */
-public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
+public class MoneyAmountBuilder extends AbstractAmountBuilder<Money>{
 
-	static final MonetaryContext DEFAULT_CONTEXT = MonetaryContextBuilder.create(
-			Money.class).set(64)
-			.setMaxScale(63).set(RoundingMode.HALF_EVEN).build();
-	static final MonetaryContext MAX_CONTEXT = MonetaryContextBuilder.create(
-			Money.class).setPrecision(0)
-			.setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
+    static final MonetaryContext DEFAULT_CONTEXT =
+            MonetaryContextBuilder.of(Money.class).set(64).setMaxScale(63).set(RoundingMode.HALF_EVEN).build();
+    static final MonetaryContext MAX_CONTEXT =
+            MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
 
-	@Override
-	protected Money create(Number number, CurrencyUnit currency,
-                           MonetaryContext monetaryContext) {
-		return Money.of(number, currency,
-                        MonetaryContext.from(monetaryContext, Money.class));
-	}
+    @Override
+    protected Money create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
+        return Money.of(number, currency, MonetaryContext.from(monetaryContext, Money.class));
+    }
 
     @Override
     public NumberValue getMaxNumber(){
@@ -56,19 +52,19 @@ public class MoneyAmountFactory extends AbstractAmountFactory<Money> {
         return null;
     }
 
-	@Override
-	public Class<Money> getAmountType() {
-		return Money.class;
-	}
+    @Override
+    public Class<Money> getAmountType(){
+        return Money.class;
+    }
 
-	@Override
-	protected MonetaryContext loadDefaultMonetaryContext() {
-		return DEFAULT_CONTEXT;
-	}
+    @Override
+    protected MonetaryContext loadDefaultMonetaryContext(){
+        return DEFAULT_CONTEXT;
+    }
 
-	@Override
-	protected MonetaryContext loadMaxMonetaryContext() {
-		return MAX_CONTEXT;
-	}
+    @Override
+    protected MonetaryContext loadMaxMonetaryContext(){
+        return MAX_CONTEXT;
+    }
 
 }

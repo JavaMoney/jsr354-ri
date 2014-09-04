@@ -25,8 +25,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmounts;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryAmountFormat;
@@ -65,14 +63,15 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     @Override
     public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-        if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
+        if(!amountFormatQuery.getProviders().isEmpty() &&
+                !amountFormatQuery.getProviders().contains(getProviderName())){
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+        if(!(amountFormatQuery.getFormatName() == null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
             return Collections.emptySet();
         }
-        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(DEFAULT_STYLE);
-        if(amountFormatQuery.getLocale()!=null){
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(DEFAULT_STYLE);
+        if(amountFormatQuery.getLocale() != null){
             builder.setLocale(amountFormatQuery.getLocale());
         }
         builder.importContext(amountFormatQuery, false);

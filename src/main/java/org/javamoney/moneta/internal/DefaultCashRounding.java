@@ -65,7 +65,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
         if(scale < 0){
             throw new IllegalArgumentException("scale < 0");
         }
-        this.context = RoundingContextBuilder.create("default", "default").set(CASHROUNDING_KEY, true).
+        this.context = RoundingContextBuilder.of("default", "default").set(CASHROUNDING_KEY, true).
                 set(PROVCLASS_KEY, getClass().getName()).set(MINMINORS_KEY, minimalMinors).set(SCALE_KEY, scale)
                 .set(Optional.ofNullable(roundingMode)
                              .orElseThrow(() -> new IllegalArgumentException("roundingMode missing"))).build();
