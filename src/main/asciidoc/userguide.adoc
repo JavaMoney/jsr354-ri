@@ -232,27 +232,28 @@ sublist, when the according code is requested, or a unspecified request is perfo
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically.
 --------------------------------------------
-CurrencyUnit unit = new BuildableCurrencyUnit.Builder("FLS22").setDefaltFractionUnits(3).build();
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
 
 // registering it
 MonetaryCurrencies.registerCurrency(unit);
 MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
 --------------------------------------------
 
-Fortunately the +BuildableCurrencyUnit+ class also can be delegated to register a currency on creation, by just passing
+Fortunately +CurrencyUnitBuilder+ is also capable of registering a currency on creation, by just passing
 a register flag to the call: So the same can be rewritten as follows:
 
 [source,java]
+.Example of registering +CurrencyUnit+ instances programmatically, using +CurrencyUnitBuilder+.
 --------------------------------------------
-new BuildableCurrencyUnit.Builder("FLS22").setDefaltFractionUnits(3).build(true /* register */);
+CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* register */);
 --------------------------------------------
 
 Alternatively one may use the +MonetaryCurrencies+ static methods as follows:
 
 [source,java]
-.Example of registering +CurrencyUnit+ instances programmatically.
+.Example of registering +CurrencyUnit+ instances programmatically, using +MonetaryCurrencies+ .
 --------------------------------------------
-CurrencyUnit unit = new BuildableCurrencyUnit.Builder("FLS22").setDefaltFractionUnits(3).create();
+CurrencyUnit unit = new CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
 
 // registering it
 MonetaryCurrencies.registerCurrency(unit);
@@ -475,6 +476,43 @@ when combined with the new Java 8 Lambda/Streaming features:
 * +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the mininum amount
 * +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to caclulate the maximum amount.
 
+==== Performance Aspects
+
+Performance was not measured in deep. Nevertheless we have a simple test in place, which is executed during all
+component test runs, which performs different monetary operations on the different implementation types provided:
+
+[source,java]
+.Simple Performance Test Code
+--------------------------------------------
+M money1 = money1.add(M.of(EURO, 1234567.3444));
+money1 = money1.subtract(M.of(EURO, 232323));
+money1 = money1.multiply(3.4);
+money1 = money1.divide(5.456);
+money1 = money1.with(MonetaryRoundings.getRounding());
+--------------------------------------------
+
+All tests were executed on a notebook with an +Intel i7 2.6GHz+ processor with SSD.
+The VM was not configured in any special way.
+
+This test is executed 100000 times for each monetary amount class +M+:
+
+[source,listing]
+.Performance Test Results for monetary arithmetic, no implementation mix
+--------------------------------------------
+Duration for 100000 operations (Money,BD): 2107 ms (21 ns per loop) -> EUR 1657407.95
+Duration for 100000 operations (FastMoney,long): 1011 ms (10 ns per loop) -> EUR 1657407.95000
+--------------------------------------------
+
+The same test is also done, hereby mixing different implementation types. Also this test is executed 100000 times for
+each monetary amount class +M+:
+
+[source,listing]
+.Performance Test Results for monetary arithmetic, mixing implementations
+--------------------------------------------
+Duration for 100000 operations (FastMoney/Money mixed): 899 ms (8 ns per loop) -> EUR 1657407.95000
+Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop) -> EUR 1657407.95
+--------------------------------------------
+
 
 === Rounding
 
@@ -489,7 +527,7 @@ the +RoundingQuery+ passed:
 .Access and apply arithmetic rounding.
 --------------------------------------------
 MonetaryRounding rounding = MonetaryRoundings.getRounding(
-                               RoundingQueryBuilder.create().set("scale", 4).set(RoundingMode.HALF_UP).build());
+                               RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding);
 --------------------------------------------

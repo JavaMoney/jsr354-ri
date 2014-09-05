@@ -20,7 +20,7 @@ import javax.money.MonetaryContext;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.ServicePriority;
+import org.javamoney.moneta.spi.ServicePriority;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of

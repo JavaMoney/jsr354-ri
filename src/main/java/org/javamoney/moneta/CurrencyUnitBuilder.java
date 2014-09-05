@@ -25,9 +25,15 @@ public final class CurrencyUnitBuilder{
      */
     int defaultFractionDigits = 2;
     /**
-     * THe currency's context.
+     * The currency's context.
      */
     javax.money.CurrencyContext currencyContext;
+
+    /**
+     * Private constructor, use #of() methods.
+     */
+    private CurrencyUnitBuilder(){
+    }
 
     /**
      * Creats a new CurrencyUnitBuilder.
