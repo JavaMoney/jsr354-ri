@@ -101,7 +101,9 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
      * @return the comparison result.
      */
     public static <T> int comparePriority(T service1, T service2){
-        return getServicePriority(service2) - getServicePriority(service1);
+        int servicePriority1 = getServicePriority(service1);
+        int servicePriority2 = getServicePriority(service2);
+        return servicePriority1 == servicePriority2 ? 0 : servicePriority1 < servicePriority2 ? 1 : -1;
     }
 
     /**
