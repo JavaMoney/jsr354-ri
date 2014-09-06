@@ -203,7 +203,7 @@ public class MoneyTest{
         m = Money.of((long) 12, DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = Money.of((float) 12.23, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -253,7 +253,7 @@ public class MoneyTest{
         assertEquals(mc, m.getMonetaryContext());
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = Money.of((float) 12.23, EURO, mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -298,7 +298,7 @@ public class MoneyTest{
         m = Money.of((long) 12, "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = Money.of((float) 12.23, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -347,7 +347,7 @@ public class MoneyTest{
         assertEquals(mc, m.getMonetaryContext());
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = Money.of((float) 12.23, "EUR", mc);
         assertNotNull(m);
         assertEquals(mc, m.getMonetaryContext());
@@ -1058,6 +1058,13 @@ public class MoneyTest{
         Money m2 = Money.from(m);
         assertTrue(m == m2);
     }
+
+	@Test
+	public void parseTest() {
+		Money money = Money.parse("EUR 25.25");
+		assertEquals(money.getCurrency(), EURO);
+		assertEquals(money.getNumber().doubleValue(), 25.25);
+	}
 
     @Test
     public void testSerialization() throws IOException, ClassNotFoundException{

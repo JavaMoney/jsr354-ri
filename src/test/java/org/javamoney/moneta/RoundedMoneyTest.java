@@ -163,7 +163,7 @@ public class RoundedMoneyTest{
         m = RoundedMoney.of((long) 12, DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = RoundedMoney.of((float) 12.23, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -215,7 +215,7 @@ public class RoundedMoneyTest{
         assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = RoundedMoney.of((float) 12.23, EURO, mc);
         assertNotNull(m);
         assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
@@ -267,7 +267,7 @@ public class RoundedMoneyTest{
         m = RoundedMoney.of((long) 12, "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = RoundedMoney.of((float) 12.23, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -330,7 +330,7 @@ public class RoundedMoneyTest{
         assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = RoundedMoney.of((float) 12.23, "EUR", mc);
         assertNotNull(m);
         assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
@@ -1050,6 +1050,13 @@ public class RoundedMoneyTest{
         assertFalse(m == m2);
         assertEquals(m, m2);
     }
+
+	@Test
+	public void parseTest() {
+		RoundedMoney money = RoundedMoney.parse("EUR 25.25");
+		assertEquals(money.getCurrency(), EURO);
+		assertEquals(money.getNumber().doubleValue(), 25.25);
+	}
 
     @Test
     public void testSerialization() throws IOException, ClassNotFoundException{

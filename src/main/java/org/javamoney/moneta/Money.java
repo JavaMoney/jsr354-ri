@@ -783,4 +783,16 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         }
         return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), amt.getMonetaryContext());
     }
+
+	/**
+	 * Obtains an instance of Money from a text string.
+	 * @param text
+	 * @return Money instance
+	 * @throws NullPointerException
+	 * @throws NumberFormatException
+	 * @throws UnknownCurrencyException
+	 */
+	public static Money parse(CharSequence text) {
+		return MonetaryAmountParser.parserMoney(text);
+	}
 }
