@@ -639,7 +639,8 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     }
 
 	/**
-	 * Obtains an instance of RoundedMoney from a text string.
+	 * Obtains an instance of RoundedMoney from a text string such as 'EUR
+	 * 25.25'.
 	 * @param text
 	 * @return RoundedMoney instance
 	 * @throws NullPointerException

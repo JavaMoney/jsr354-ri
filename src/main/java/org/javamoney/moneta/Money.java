@@ -785,7 +785,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     }
 
 	/**
-	 * Obtains an instance of Money from a text string.
+	 * Obtains an instance of Money from a text string such as 'EUR 25.25'.
 	 * @param text
 	 * @return Money instance
 	 * @throws NullPointerException

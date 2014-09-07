@@ -702,7 +702,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
 	/**
-	 * Obtains an instance of FastMoney from a text string.
+	 * Obtains an instance of FastMoney from a text string such as 'EUR 25.25'.
 	 * @param text
 	 * @return FastMoney instance
 	 * @throws NullPointerException
