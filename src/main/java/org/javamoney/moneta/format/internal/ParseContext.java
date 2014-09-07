@@ -48,19 +48,19 @@ final class ParseContext {
 
 	/**
 	 * Creates a new {@link ParseContext} with the given input.
-	 * 
+	 *
 	 * @param text
 	 *            The test to be parsed.
 	 */
 	public ParseContext(CharSequence text) {
 		this.originalInput = Optional.ofNullable(text).orElseThrow(
-				() -> new IllegalArgumentException("test is required"));
+				() -> new IllegalArgumentException("text is required"));
 	}
 
 	/**
 	 * Method allows to determine if the item being parsed is available from the
 	 * {@link ParseContext}.
-	 * 
+	 *
 	 * @return true, if the item is available.
 	 */
 	public boolean isComplete() {
@@ -69,7 +69,7 @@ final class ParseContext {
 
 	/**
 	 * Get the parsed item.
-	 * 
+	 *
 	 * @return the item parsed.
 	 */
 	public Number getParsedNumber() {
@@ -79,7 +79,7 @@ final class ParseContext {
 	/**
 	 * Consumes the given token. If the current residual text to be parsed
 	 * starts with the parsing index is increased by {@code token.size()}.
-	 * 
+	 *
 	 * @param token
 	 *            The token expected.
 	 * @return true, if the token could be consumed and the index was increased
@@ -95,7 +95,7 @@ final class ParseContext {
 
 	/**
 	 * Tries to consume one single character.
-	 * 
+	 *
 	 * @param c
 	 *            the next character being expected.
 	 * @return true, if the character matched and the index could be increased
@@ -112,9 +112,9 @@ final class ParseContext {
 	/**
 	 * Skips all whitespaces until a non whitespace character is occurring. If
 	 * the next character is not whitespace this method does nothing.
-	 * 
+	 *
 	 * @see Character#isWhitespace(char)
-	 * 
+	 *
 	 * @return the new parse index after skipping any whitespaces.
 	 */
 	public int skipWhitespace() {
@@ -130,7 +130,7 @@ final class ParseContext {
 
 	/**
 	 * Gets the error index.
-	 * 
+	 *
 	 * @return the error index, negative if no error
 	 */
 	public int getErrorIndex() {
@@ -139,7 +139,7 @@ final class ParseContext {
 
 	/**
 	 * Sets the error index.
-	 * 
+	 *
 	 * @param index
 	 *            the error index
 	 */
@@ -164,7 +164,7 @@ final class ParseContext {
 
 	/**
 	 * Gets the current parse position.
-	 * 
+	 *
 	 * @return the current parse position within the input.
 	 */
 	public int getIndex() {
@@ -173,7 +173,7 @@ final class ParseContext {
 
 	/**
 	 * Gets the residual input text starting from the current parse position.
-	 * 
+	 *
 	 * @return the residual input text
 	 */
 	public CharSequence getInput() {
@@ -182,7 +182,7 @@ final class ParseContext {
 
 	/**
 	 * Gets the full input text.
-	 * 
+	 *
 	 * @return the full input.
 	 */
 	public String getOriginalInput() {
@@ -202,7 +202,7 @@ final class ParseContext {
 
 	/**
 	 * Sets the parsed numeric value into the context.
-	 * 
+	 *
 	 * @param number
 	 *            The result number
 	 */
@@ -212,7 +212,7 @@ final class ParseContext {
 
 	/**
 	 * Set the parsed currency into the context.
-	 * 
+	 *
 	 * @param currency
 	 *            The parsed currency
 	 */
@@ -222,7 +222,7 @@ final class ParseContext {
 
 	/**
 	 * Checks if the parse has found an error.
-	 * 
+	 *
 	 * @return whether a parse error has occurred
 	 */
 	public boolean hasError() {
@@ -232,7 +232,7 @@ final class ParseContext {
 	/**
 	 * Checks if the text has been fully parsed such that there is no more text
 	 * to parse.
-	 * 
+	 *
 	 * @return true if fully parsed
 	 */
 	public boolean isFullyParsed() {
@@ -243,7 +243,7 @@ final class ParseContext {
 	 * This method skips all whitespaces and returns the full text, until
 	 * another whitespace area or the end of the input is reached. The method
 	 * will not update any index pointers.
-	 * 
+	 *
 	 * @return the next token found, or null.
 	 */
 	public String lookupNextToken() {
@@ -266,7 +266,7 @@ final class ParseContext {
 
 	/**
 	 * Converts the indexes to a parse position.
-	 * 
+	 *
 	 * @return the parse position, never null
 	 */
 	public ParsePosition toParsePosition() {
@@ -275,7 +275,7 @@ final class ParseContext {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

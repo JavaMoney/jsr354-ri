@@ -15,12 +15,15 @@
  */
 package org.javamoney.moneta;
 
+import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.javamoney.moneta.internal.FastMoneyAmountBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MonetaryConfig;
 import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
+import javax.money.format.MonetaryAmountFormat;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -703,15 +706,27 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
 	/**
 	 * Obtains an instance of FastMoney from a text string such as 'EUR 25.25'.
-	 * @param text
+	 * @param text the text to parse not null
 	 * @return FastMoney instance
 	 * @throws NullPointerException
 	 * @throws NumberFormatException
 	 * @throws UnknownCurrencyException
 	 */
 	public static FastMoney parse(CharSequence text) {
-		return MonetaryAmountParser.parserFastMoney(text);
+		return parse(text, DEFAULT_FORMATTER);
 	}
+	/**
+	 * Obtains an instance of FastMoney from a text using specific formatter.
+	 * @param text  the text to parse not null
+	 * @param formatter the formatter to use not null
+	 * @return FastMoney instance
+	 */
+	public static FastMoney parse(CharSequence text, MonetaryAmountFormat formatter) {
+		return from(formatter.parse(text));
+	}
+
+	private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
+			.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
 
     private BigDecimal getBigDecimal(){
         return BigDecimal.valueOf(this.number).movePointLeft(SCALE);

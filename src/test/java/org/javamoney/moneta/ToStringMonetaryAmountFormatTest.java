@@ -9,10 +9,11 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import javax.money.UnknownCurrencyException;
 
+import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class MonetaryAmountParserTest {
+public class ToStringMonetaryAmountFormatTest {
 	private static final CurrencyUnit BRAZILIAN_REAL = MonetaryCurrencies
 			.getCurrency("BRL");
 
@@ -20,9 +21,7 @@ public class MonetaryAmountParserTest {
 	private MonetaryAmount fastMoney;
 	private MonetaryAmount roundedMoney;
 
-	private enum ParserType {
-		MONEY, FAST_MONEY, ROUNDED_MONEY;
-	}
+
 
 	@BeforeTest
 	public void init() {
@@ -33,36 +32,45 @@ public class MonetaryAmountParserTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldRunNPE() {
-		MonetaryAmountParser.parserMoney(null);
+		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
+				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+		format.parse(null);
 	}
 
 	@Test(expectedExceptions = NumberFormatException.class)
 	public void shouldRunNumberFormatException() {
-		MonetaryAmountParser.parserMoney("BRL 23AD");
+		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
+				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+		format.parse("BRL 23AD");
 	}
 
 	@Test(expectedExceptions = UnknownCurrencyException.class)
 	public void shouldRunUnknownCurrencyException() {
-		MonetaryAmountParser.parserMoney("AXD 23");
+		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
+				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+		format.parse("AXD 23");
 	}
 
 	@Test
 	public void parserMoneyTest() {
-		executeTest(money, fastMoney, roundedMoney, ParserType.MONEY);
+		executeTest(money, fastMoney, roundedMoney,
+				ToStringMonetaryAmountFormatStyle.MONEY);
 	}
 
 	@Test
 	public void parserFastMoneyTest() {
-		executeTest(fastMoney, money, roundedMoney, ParserType.FAST_MONEY);
+		executeTest(fastMoney, money, roundedMoney,
+				ToStringMonetaryAmountFormatStyle.FAST_MONEY);
 	}
 
 	@Test
 	public void parserRoundedMoneyTest() {
-		executeTest(roundedMoney, fastMoney, money, ParserType.ROUNDED_MONEY);
+		executeTest(roundedMoney, fastMoney, money,
+				ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
 	}
 
 	private void executeTest(MonetaryAmount expectedMoney, MonetaryAmount a,
-			MonetaryAmount b, ParserType type) {
+			MonetaryAmount b, ToStringMonetaryAmountFormatStyle type) {
 
 		MonetaryAmount parserAResult = parser(a, type);
 		MonetaryAmount parserBResult = parser(b, type);
@@ -72,16 +80,8 @@ public class MonetaryAmountParserTest {
 		assertEquals(parserBResult, parserAResult);
 	}
 
-	private MonetaryAmount parser(MonetaryAmount a, ParserType type) {
-		switch (type) {
-		case MONEY:
-			return MonetaryAmountParser.parserMoney(a.toString());
-
-		case FAST_MONEY:
-			return MonetaryAmountParser.parserFastMoney(a.toString());
-		case ROUNDED_MONEY:
-			return MonetaryAmountParser.parserRoundedMoney(a.toString());
-		}
-		throw new IllegalArgumentException();
+	private MonetaryAmount parser(MonetaryAmount a,
+			ToStringMonetaryAmountFormatStyle style) {
+		return ToStringMonetaryAmountFormat.of(style).parse(a.toString());
 	}
 }

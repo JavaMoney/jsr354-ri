@@ -15,17 +15,28 @@
  */
 package org.javamoney.moneta;
 
-import org.javamoney.moneta.internal.MoneyAmountBuilder;
-import org.javamoney.moneta.spi.MoneyUtils;
-import org.javamoney.moneta.spi.DefaultNumberValue;
-
-import javax.money.*;
-
-import java.io.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
+
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryAmountFactory;
+import javax.money.MonetaryContext;
+import javax.money.MonetaryCurrencies;
+import javax.money.MonetaryException;
+import javax.money.MonetaryOperator;
+import javax.money.MonetaryQuery;
+import javax.money.NumberValue;
+import javax.money.UnknownCurrencyException;
+import javax.money.format.MonetaryAmountFormat;
+
+import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
+import org.javamoney.moneta.internal.MoneyAmountBuilder;
+import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.javamoney.moneta.spi.MoneyUtils;
 
 /**
  * Default immutable implementation of {@link MonetaryAmount} based
@@ -793,6 +804,19 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 	 * @throws UnknownCurrencyException
 	 */
 	public static Money parse(CharSequence text) {
-		return MonetaryAmountParser.parserMoney(text);
+		return parse(text, DEFAULT_FORMATTER);
 	}
+
+	/**
+	 * Obtains an instance of Money from a text using specific formatter.
+	 * @param text  the text to parse not null
+	 * @param formatter the formatter to use not null
+	 * @return Money instance
+	 */
+	public static Money parse(CharSequence text, MonetaryAmountFormat formatter) {
+		return from(formatter.parse(text));
+	}
+
+	private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
+			.of(ToStringMonetaryAmountFormatStyle.MONEY);
 }

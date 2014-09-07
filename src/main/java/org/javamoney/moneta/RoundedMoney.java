@@ -15,11 +15,13 @@
  */
 package org.javamoney.moneta;
 
+import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.javamoney.moneta.internal.RoundedMoneyAmountBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
+import javax.money.format.MonetaryAmountFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -648,8 +650,20 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 	 * @throws UnknownCurrencyException
 	 */
 	public static RoundedMoney parse(CharSequence text) {
-		return MonetaryAmountParser.parserRoundedMoney(text);
+		return parse(text, DEFAULT_FORMATTER);
 	}
+	/**
+	 * Obtains an instance of FastMoney from a text using specific formatter.
+	 * @param text  the text to parse not null
+	 * @param formatter the formatter to use not null
+	 * @return RoundedMoney instance
+	 */
+	public static RoundedMoney parse(CharSequence text, MonetaryAmountFormat formatter) {
+		return from(formatter.parse(text));
+	}
+
+	private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
+			.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
     /*
      * }(non-Javadoc)
      * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
