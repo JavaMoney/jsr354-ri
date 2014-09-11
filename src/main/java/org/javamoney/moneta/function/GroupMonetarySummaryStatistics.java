@@ -25,7 +25,7 @@ import javax.money.MonetaryAmount;
 /**
  * Internal class implementing grouped statistic functionality.
  */
-class GroupMonetarySummaryStatistics {
+public class GroupMonetarySummaryStatistics {
 
     private Map<CurrencyUnit, MonetarySummaryStatistics> groupSummary = new HashMap<>();
 

@@ -124,27 +124,27 @@ public class FastMoneyTest{
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Short.valueOf((short) -2), m.getNumber().numberValue(Short.class));
-        m = FastMoney.of((int) -12, EURO);
+        m = FastMoney.of(-12, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(Integer.valueOf((int) -12), m.getNumber().numberValue(Integer.class));
+        assertEquals(Integer.valueOf(-12), m.getNumber().numberValue(Integer.class));
         m = FastMoney.of((long) 12, DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = FastMoney.of((float) 12.23, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
         assertEquals(Float.valueOf((float) 12.23), m.getNumber().numberValue(Float.class));
-        m = FastMoney.of((double) -12.23, DOLLAR);
+        m = FastMoney.of(-12.23, DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Double.valueOf((double) -12.23), m.getNumber().numberValue(Double.class));
-        m = FastMoney.of((Number) BigDecimal.valueOf(234.2345), EURO);
+        assertEquals(Double.valueOf(-12.23), m.getNumber().numberValue(Double.class));
+        m = FastMoney.of(BigDecimal.valueOf(234.2345), EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
         assertEquals(new BigDecimal("234.2345"), m.getNumber().numberValue(BigDecimal.class));
-        m = FastMoney.of((Number) BigInteger.valueOf(232323123L), DOLLAR);
+        m = FastMoney.of(BigInteger.valueOf(232323123L), DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Long.valueOf(232323123L), m.getNumber().numberValue(Long.class));
@@ -165,27 +165,27 @@ public class FastMoneyTest{
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Short.valueOf((short) -2), m.getNumber().numberValue(Short.class));
-        m = FastMoney.of((int) -12, "EUR");
+        m = FastMoney.of(-12, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(Integer.valueOf((int) -12), m.getNumber().numberValue(Integer.class));
+        assertEquals(Integer.valueOf(-12), m.getNumber().numberValue(Integer.class));
         m = FastMoney.of((long) 12, "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf((long) 12), m.getNumber().numberValue(Long.class));
+        assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = FastMoney.of((float) 12.23, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
         assertEquals(Float.valueOf((float) 12.23), m.getNumber().numberValue(Float.class));
-        m = FastMoney.of((double) -12.23, "USD");
+        m = FastMoney.of(-12.23, "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Double.valueOf((double) -12.23), m.getNumber().numberValue(Double.class));
-        m = FastMoney.of((Number) BigDecimal.valueOf(234.2345), "EUR");
+        assertEquals(Double.valueOf(-12.23), m.getNumber().numberValue(Double.class));
+        m = FastMoney.of(BigDecimal.valueOf(234.2345), "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
         assertEquals(new BigDecimal("234.2345"), m.getNumber().numberValue(BigDecimal.class));
-        m = FastMoney.of((Number) BigInteger.valueOf(21432432L), "USD");
+        m = FastMoney.of(BigInteger.valueOf(21432432L), "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Long.valueOf(21432432L), m.getNumber().numberValue(Long.class));
@@ -800,7 +800,7 @@ public class FastMoneyTest{
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
         for (FastMoney money : moneys) {
-            assertEquals((Integer) money.query(q), (Integer) money.getPrecision());
+            assertEquals(money.query(q), (Integer) money.getPrecision());
         }
     }
 
@@ -898,6 +898,13 @@ public class FastMoneyTest{
         assertEquals(m, m2);
         assertTrue(m != m2);
     }
+
+	@Test
+	public void parseTest() {
+		FastMoney money = FastMoney.parse("EUR 25.25");
+		assertEquals(money.getCurrency(), EURO);
+		assertEquals(money.getNumber().doubleValue(), 25.25);
+	}
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#from(javax.money.MonetaryAmount)}.

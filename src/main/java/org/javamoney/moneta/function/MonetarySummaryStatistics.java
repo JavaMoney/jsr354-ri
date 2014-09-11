@@ -30,7 +30,6 @@ public class MonetarySummaryStatistics {
 
     /**
      * Creates a new instance, targeting the given {@link javax.money.CurrencyUnit}.
-     *
      * @param currencyUnit the target currency, not null.
      */
     MonetarySummaryStatistics(CurrencyUnit currencyUnit) {
