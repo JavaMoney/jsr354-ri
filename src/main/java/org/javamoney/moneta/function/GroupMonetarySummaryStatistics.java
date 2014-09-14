@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.function;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,7 +26,7 @@ import javax.money.MonetaryAmount;
  */
 public class GroupMonetarySummaryStatistics {
 
-    private Map<CurrencyUnit, MonetarySummaryStatistics> groupSummary = new HashMap<>();
+	private Map<CurrencyUnit, MonetarySummaryStatistics> groupSummary = new MonetarySummaryMap();
 
     GroupMonetarySummaryStatistics() {
 

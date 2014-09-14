@@ -1,11 +1,11 @@
 package org.javamoney.moneta.function;
 
-import org.javamoney.moneta.FastMoney;
-import org.javamoney.moneta.spi.MoneyUtils;
+import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import java.util.Objects;
+
+import org.javamoney.moneta.FastMoney;
 
 /**
  * A state object for collecting statistics such as count, min, max, sum, and
@@ -43,7 +43,11 @@ public class MonetarySummaryStatistics {
      *            the input amount value to be addeed, not null.
      */
     public void accept(MonetaryAmount amount) {
-        MoneyUtils.checkAmountParameter(amount, this.empty.getCurrency());
+
+		if (!empty.getCurrency().equals(
+				Objects.requireNonNull(amount).getCurrency())) {
+			return;
+		}
         if (isEmpty()) {
             setSameMonetary(amount);
             count++;
@@ -60,6 +64,10 @@ public class MonetarySummaryStatistics {
      */
     public MonetarySummaryStatistics combine(MonetarySummaryStatistics summaryStatistics) {
         Objects.requireNonNull(summaryStatistics);
+
+		if (!equals(summaryStatistics)) {
+        	return this;
+        }
         min = MonetaryFunctions.min(min, summaryStatistics.min);
         max = MonetaryFunctions.max(max, summaryStatistics.max);
         sum = sum.add(summaryStatistics.sum);

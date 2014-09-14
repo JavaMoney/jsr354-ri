@@ -35,7 +35,14 @@ public class GroupMonetarySummaryStatisticsTest {
 
 		Map<CurrencyUnit, MonetarySummaryStatistics> map = group.get();
 		Assert.assertEquals(map.keySet().size(), 1);
+	}
 
+	@Test
+	public void shouldReturnsAnEmptySummaryWhenCurrencyThereIsNot() {
+		GroupMonetarySummaryStatistics group = new GroupMonetarySummaryStatistics();
+		MonetarySummaryStatistics brazilianSummary = group.get().get(
+				BRAZILIAN_REAL);
+		verifySummary(brazilianSummary, 0, 0, 0L);
 	}
 
 	@Test
