@@ -77,7 +77,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      *
      * @param currency The currency, which determines the required precision. As
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
-     *                 is sued.
+     *                 is used.
      */
     DefaultCashRounding(CurrencyUnit currency, RoundingMode roundingMode, int minimalMinors){
         this(currency.getDefaultFractionDigits(), roundingMode, minimalMinors);
@@ -89,7 +89,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      *
      * @param currency The currency, which determines the required precision. As
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
-     *                 is sued.
+     *                 is used.
      */
     DefaultCashRounding(CurrencyUnit currency, int minimalMinors){
         this(currency, RoundingMode.HALF_UP, minimalMinors);
