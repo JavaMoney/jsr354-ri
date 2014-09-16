@@ -134,6 +134,23 @@ public class MonetarySummaryStatistics {
 		return average;
 	}
 
+	/**
+	 * will equals when the currency utils were equals
+	 */
+	@Override
+    public boolean equals(Object obj) {
+    	if (MonetarySummaryStatistics.class.isInstance(obj)) {
+    		MonetarySummaryStatistics other = MonetarySummaryStatistics.class.cast(obj);
+			return Objects.equals(empty.getCurrency(),
+					other.empty.getCurrency());
+    	}
+    	return false;
+    }
+	@Override
+	public int hashCode() {
+		return empty.getCurrency().hashCode();
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
