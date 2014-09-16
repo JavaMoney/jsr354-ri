@@ -128,7 +128,7 @@ public class GroupMonetarySummaryStatisticsTest {
 	private void verifySummary(MonetarySummaryStatistics summary,
 			int expectedAvarage, int expectedSumm, long count) {
 		Assert.assertEquals(summary.getCount(), count);
-		Assert.assertEquals(summary.getAvarage().getNumber()
+		Assert.assertEquals(summary.getAverage().getNumber()
 				.intValue(), expectedAvarage);
 		Assert.assertEquals(summary.getSum().getNumber().intValue(),
 				expectedSumm);

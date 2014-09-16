@@ -75,7 +75,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
      *
      * @param currency The currency, which determines the required precision. As
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
-     *                 is sued.
+     *                 is used.
      */
     DefaultRounding(CurrencyUnit currency, RoundingMode roundingMode){
         this(currency.getDefaultFractionDigits(), roundingMode);

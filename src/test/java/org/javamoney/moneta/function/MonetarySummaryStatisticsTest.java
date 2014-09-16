@@ -20,7 +20,7 @@ public class MonetarySummaryStatisticsTest {
 		Assert.assertEquals(0L, summary.getMin().getNumber().longValue());
 		Assert.assertEquals(0L, summary.getMax().getNumber().longValue());
 		Assert.assertEquals(0L, summary.getSum().getNumber().longValue());
-		Assert.assertEquals(0L, summary.getAvarage().getNumber().longValue());
+		Assert.assertEquals(0L, summary.getAverage().getNumber().longValue());
 
 	}
 
@@ -47,7 +47,7 @@ public class MonetarySummaryStatisticsTest {
 		Assert.assertEquals(10L, summary.getMin().getNumber().longValue());
 		Assert.assertEquals(10L, summary.getMax().getNumber().longValue());
 		Assert.assertEquals(10L, summary.getSum().getNumber().longValue());
-		Assert.assertEquals(10L, summary.getAvarage().getNumber().longValue());
+		Assert.assertEquals(10L, summary.getAverage().getNumber().longValue());
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class MonetarySummaryStatisticsTest {
 		Assert.assertEquals(10L, summary.getMin().getNumber().longValue());
 		Assert.assertEquals(110L, summary.getMax().getNumber().longValue());
 		Assert.assertEquals(210L, summary.getSum().getNumber().longValue());
-		Assert.assertEquals(70L, summary.getAvarage().getNumber().longValue());
+		Assert.assertEquals(70L, summary.getAverage().getNumber().longValue());
 	}
 
 	@Test
@@ -69,7 +69,7 @@ public class MonetarySummaryStatisticsTest {
 		Assert.assertEquals(10L, summaryA.getMin().getNumber().longValue());
 		Assert.assertEquals(110L, summaryA.getMax().getNumber().longValue());
 		Assert.assertEquals(420L, summaryA.getSum().getNumber().longValue());
-		Assert.assertEquals(70L, summaryA.getAvarage().getNumber().longValue());
+		Assert.assertEquals(70L, summaryA.getAverage().getNumber().longValue());
 	}
 
 	private MonetarySummaryStatistics createSummary() {

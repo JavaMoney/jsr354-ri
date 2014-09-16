@@ -112,7 +112,7 @@ public class MonetaryFunctionsAgregatorTest {
 		assertEquals(0L, summary.getMin().getNumber().longValue());
 		assertEquals(10L, summary.getMax().getNumber().longValue());
 		assertEquals(16L, summary.getSum().getNumber().longValue());
-		assertEquals(2L, summary.getAvarage().getNumber().longValue());
+		assertEquals(2L, summary.getAverage().getNumber().longValue());
 
 	}
 

@@ -1,12 +1,11 @@
 package org.javamoney.moneta.function;
 
-import java.util.Objects;
+import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-
-import org.javamoney.moneta.FastMoney;
-import org.javamoney.moneta.spi.MoneyUtils;
+import java.util.Objects;
 
 /**
  * A state object for collecting statistics such as count, min, max, sum, and
@@ -26,7 +25,7 @@ public class MonetarySummaryStatistics {
 
 	private MonetaryAmount sum;
 
-	private MonetaryAmount avarage;
+	private MonetaryAmount average;
 
     /**
      * Creates a new instance, targeting the given {@link javax.money.CurrencyUnit}.
@@ -65,7 +64,7 @@ public class MonetarySummaryStatistics {
         max = MonetaryFunctions.max(max, summaryStatistics.max);
         sum = sum.add(summaryStatistics.sum);
         count += summaryStatistics.count;
-        avarage = sum.divide(count);
+        average = sum.divide(count);
 		return this;
 	}
 
@@ -73,7 +72,7 @@ public class MonetarySummaryStatistics {
 		min = MonetaryFunctions.min(min, moneraty);
 		max = MonetaryFunctions.max(max, moneraty);
 		sum = sum.add(moneraty);
-		avarage = sum.divide(++count);
+		average = sum.divide(++count);
 	}
 
 	private boolean isEmpty() {
@@ -84,7 +83,7 @@ public class MonetarySummaryStatistics {
 		min = monetary;
 		max = monetary;
 		sum = monetary;
-		avarage = monetary;
+		average = monetary;
     }
 
     /**
@@ -123,8 +122,8 @@ public class MonetarySummaryStatistics {
      * Get the mean average of all amounts added.
      * @return the mean average amount, or null if no amount was added to this summary instance.
      */
-    public MonetaryAmount getAvarage() {
-		return avarage;
+    public MonetaryAmount getAverage() {
+		return average;
 	}
 
 	@Override
@@ -134,7 +133,7 @@ public class MonetarySummaryStatistics {
 		sb.append("min:").append(min).append(",");
 		sb.append("max:").append(max).append(",");
 		sb.append("sum:").append(sum).append(",");
-		sb.append("avarage:").append(avarage).append("]");
+		sb.append("average:").append(average).append("]");
 		return sb.toString();
 	}
 
