@@ -26,18 +26,33 @@ public class MonetaryFunctionsFilterTest {
 
 	@Test
 	public void isNotCurrencyTest() {
-		List<MonetaryAmount> justRealList = currencies().filter(isNotCurrency(BRAZILIAN_REAL)).collect(
+		List<MonetaryAmount> justRealList = currencies().filter(fiterByExcludingCurrency(BRAZILIAN_REAL)).collect(
 				Collectors.toList());
 		Assert.assertEquals(6, justRealList.size());
 	}
 
 	@Test
-	public void ContainsCurrenciesTest() {
-		List<MonetaryAmount> justRealList = currencies().filter(containsCurrencies(BRAZILIAN_REAL, DOLLAR)).collect(
+	public void containsCurrenciesTest() {
+		List<MonetaryAmount> justRealList = currencies().filter(
+				isCurrency(BRAZILIAN_REAL, DOLLAR))
+				.collect(
 				Collectors.toList());
 		Assert.assertEquals(6, justRealList.size());
 	}
 
+	@Test
+	public void shouldReturnAllisCurrencyEmptyTest() {
+		List<MonetaryAmount> justRealList = currencies().filter(isCurrency())
+				.collect(Collectors.toList());
+		Assert.assertEquals(9, justRealList.size());
+	}
+
+	@Test
+	public void shouldReturnAllfiterByExcludingCurrencyEmptyTest() {
+		List<MonetaryAmount> justRealList = currencies().filter(
+				fiterByExcludingCurrency()).collect(Collectors.toList());
+		Assert.assertEquals(9, justRealList.size());
+	}
 	@Test
 	public void isGreaterThanTest() {
 		MonetaryAmount money = FastMoney.of(1, BRAZILIAN_REAL);
