@@ -20,8 +20,9 @@ import org.javamoney.moneta.spi.MoneyUtils;
  * This singleton class provides access to the predefined monetary functions.
  *
  * @author otaviojava
+ * @author anatole
  */
-public final class MonetaryFunctions{
+public final class MonetaryFunctions {
 
 
     /**
@@ -93,13 +94,28 @@ public final class MonetaryFunctions{
     }
 
     /**
-     * Create predicate that filters by CurrencyUnit.
-     *
-     * @param currencyUnit the target {@link javax.money.CurrencyUnit}
-     * @return the predicate from CurrencyUnit
-     */
-    public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit currencyUnit){
-        return m -> m.getCurrency().equals(currencyUnit);
+	 * Create predicate that filters by CurrencyUnit.
+	 * @param currencies
+	 *            the target {@link javax.money.CurrencyUnit}
+	 * @return the predicate from CurrencyUnit
+	 */
+	public static Predicate<MonetaryAmount> isCurrency(
+			CurrencyUnit... currencies) {
+
+		if (Objects.isNull(currencies) || currencies.length == 0) {
+			return m -> true;
+		}
+		Predicate<MonetaryAmount> predicate = null;
+
+		for (CurrencyUnit currencyUnit : currencies) {
+			if (Objects.isNull(predicate)) {
+				predicate = m -> m.getCurrency().equals(currencyUnit);
+			} else {
+				predicate = predicate.or(m -> m.getCurrency().equals(
+						currencyUnit));
+			}
+		}
+		return predicate;
     }
 
     /**
@@ -108,23 +124,13 @@ public final class MonetaryFunctions{
      * @param currencyUnit the target {@link javax.money.CurrencyUnit}
      * @return the predicate from CurrencyUnit
      */
-    public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit currencyUnit){
-        return isCurrency(currencyUnit).negate();
-    }
+	public static Predicate<MonetaryAmount> fiterByExcludingCurrency(
+			CurrencyUnit... currencies) {
 
-    /**
-     * Creates a filtering predicate based on the given currencies.
-     *
-     * @param requiredUnit first CurrencyUnit, required.
-     * @param otherUnits   - any another units, not null.
-     * @return the predicate filtering entries with one of the given currencies.
-     */
-    public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit requiredUnit, CurrencyUnit... otherUnits){
-        Predicate<MonetaryAmount> inPredicate = isCurrency(requiredUnit);
-        for(CurrencyUnit unit : otherUnits){
-            inPredicate = inPredicate.or(isCurrency(unit));
-        }
-        return inPredicate;
+		if (Objects.isNull(currencies) || currencies.length == 0) {
+			return m -> true;
+		}
+		return isCurrency(currencies).negate();
     }
 
     /**
@@ -228,19 +234,19 @@ public final class MonetaryFunctions{
     }
 
     /**
-     * Creates a BinaryOperator to calculate the mininum amount
-     *
-     * @return the min BinaryOperator, not null.
-     */
+	 * Creates a BinaryOperator to calculate the minimum amount
+	 *
+	 * @return the min BinaryOperator, not null.
+	 */
     public static BinaryOperator<MonetaryAmount> min(){
         return MonetaryFunctions::min;
     }
 
     /**
-     * Creates a BinaryOperator to caclulate the maximum amount.
-     *
-     * @return the max BinaryOperator, not null.
-     */
+	 * Creates a BinaryOperator to calculate the maximum amount.
+	 *
+	 * @return the max BinaryOperator, not null.
+	 */
     public static BinaryOperator<MonetaryAmount> max(){
         return MonetaryFunctions::max;
     }
