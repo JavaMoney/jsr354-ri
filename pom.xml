@@ -24,7 +24,7 @@
 
     <artifactId>moneta</artifactId>
     <packaging>jar</packaging>
-    <version>0.9-SNAPSHOT</version>
+    <version>0.9</version>
 
     <name>Moneta (JSR 354 RI)</name>
     <url>http://javamoney.org</url>
@@ -188,12 +188,12 @@
     <distributionManagement>
         <repository>
             <id>sonatype-nexus-staging</id>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
             <name>Nexus Release Repository</name>
         </repository>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <name>Sonatype Nexus Snapshots</name>
         </snapshotRepository>
     </distributionManagement>

@@ -121,7 +121,7 @@ public final class MonetaryFunctions {
     /**
      * Create predicate that filters by CurrencyUnit.
      *
-     * @param currencyUnit the target {@link javax.money.CurrencyUnit}
+     * @param currencies the target {@link javax.money.CurrencyUnit} instances to be filtered.
      * @return the predicate from CurrencyUnit
      */
 	public static Predicate<MonetaryAmount> fiterByExcludingCurrency(
@@ -136,7 +136,7 @@ public final class MonetaryFunctions {
     /**
      * Creates filter using isGreaterThan in MonetaryAmount.
      *
-     * @param amount
+     * @param amount the amount to be compared, not null.
      * @return the filter with isGreaterThan conditions
      */
     public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount){
@@ -146,7 +146,7 @@ public final class MonetaryFunctions {
     /**
      * Creates filter using isGreaterThanOrEqualTo in MonetaryAmount
      *
-     * @param amount
+     * @param amount the amount to be compared, not null.
      * @return the filter with isGreaterThanOrEqualTo conditions
      */
     public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(MonetaryAmount amount){
@@ -156,7 +156,7 @@ public final class MonetaryFunctions {
     /**
      * Creates filter using isLessThan in MonetaryAmount
      *
-     * @param amount
+     * @param amount the amount to be compared, not null.
      * @return the filter with isLessThan conditions
      */
     public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount){
@@ -166,7 +166,7 @@ public final class MonetaryFunctions {
     /**
      * Creates filter using isLessThanOrEqualTo in MonetaryAmount
      *
-     * @param amount
+     * @param amount the amount to be compared, not null.
      * @return the filter with isLessThanOrEqualTo conditions
      */
     public static Predicate<MonetaryAmount> isLessThanOrEqualTo(MonetaryAmount amount){
