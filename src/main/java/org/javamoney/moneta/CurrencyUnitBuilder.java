@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.javamoney.moneta;
 
 import org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
@@ -8,7 +23,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * Builder for constructing new instances o{@link BuildableCurrencyUnit} using a fluent
+ * Builder for constructing new instances of {@link BuildableCurrencyUnit} using a fluent
  * API.
  */
 public final class CurrencyUnitBuilder{
@@ -36,7 +51,7 @@ public final class CurrencyUnitBuilder{
     }
 
     /**
-     * Creats a new CurrencyUnitBuilder.
+     * Creates a new CurrencyUnitBuilder.
      *
      * @param currencyCode    the (unique) and identifying currency code, not null.
      * @param currencyContext The currency context to be used.
@@ -46,7 +61,7 @@ public final class CurrencyUnitBuilder{
     }
 
     /**
-     * Creats a new CurrencyUnitBuilder, creates a simple CurrencyContext using the given provider name.
+     * Creates a new CurrencyUnitBuilder, creates a simple CurrencyContext using the given provider name.
      *
      * @param currencyCode the (unique) and identifying currency code, not null.
      * @param providerName the currency provider, not null.
@@ -56,7 +71,7 @@ public final class CurrencyUnitBuilder{
     }
 
     /**
-     * Creats a new Builder.
+     * Creates a new Builder.
      *
      * @param currencyCode the (unique) and identifying currency code, not null.
      */
