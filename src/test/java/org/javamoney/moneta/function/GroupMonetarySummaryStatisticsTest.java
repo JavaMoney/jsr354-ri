@@ -55,7 +55,8 @@ public class GroupMonetarySummaryStatisticsTest {
 		Assert.assertNotNull(map.get(EURO));
 		Assert.assertNotNull(map.get(DOLLAR));
 
-		MonetarySummaryStatistics brazilianSummary = map.get(BRAZILIAN_REAL);
+		MonetarySummaryStatistics brazilianSummary = map
+				.get(BRAZILIAN_REAL);
 		verifySummary(brazilianSummary, 15, 30, 2L);
 
 		MonetarySummaryStatistics euroSummary = map.get(EURO);
@@ -77,7 +78,8 @@ public class GroupMonetarySummaryStatisticsTest {
 		Assert.assertNotNull(map.get(EURO));
 		Assert.assertNotNull(map.get(DOLLAR));
 
-		MonetarySummaryStatistics brazilianSummary = map.get(BRAZILIAN_REAL);
+		MonetarySummaryStatistics brazilianSummary = map
+				.get(BRAZILIAN_REAL);
 		verifySummary(brazilianSummary, 15, 60, 4L);
 
 		MonetarySummaryStatistics euroSummary = map.get(EURO);
@@ -109,7 +111,8 @@ public class GroupMonetarySummaryStatisticsTest {
 		Assert.assertNotNull(map.get(EURO));
 		Assert.assertNotNull(map.get(DOLLAR));
 
-		MonetarySummaryStatistics brazilianSummary = map.get(BRAZILIAN_REAL);
+		MonetarySummaryStatistics brazilianSummary = map
+				.get(BRAZILIAN_REAL);
 		verifySummary(brazilianSummary, 15, 30, 2L);
 
 		MonetarySummaryStatistics euroSummary = map.get(EURO);

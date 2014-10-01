@@ -32,15 +32,15 @@ public class GroupMonetarySummaryStatistics {
 
     }
 
-    public Map<CurrencyUnit, MonetarySummaryStatistics> get() {
+	public Map<CurrencyUnit, MonetarySummaryStatistics> get() {
         return groupSummary;
     }
 
     public GroupMonetarySummaryStatistics accept(MonetaryAmount amount) {
         CurrencyUnit currency = Objects.requireNonNull(amount).getCurrency();
-        groupSummary.putIfAbsent(currency, new MonetarySummaryStatistics(
+        groupSummary.putIfAbsent(currency, new DefaultMonetarySummaryStatistics(
                 currency));
-        MonetarySummaryStatistics summary = groupSummary.get(currency);
+		MonetarySummaryStatistics summary = groupSummary.get(currency);
         summary.accept(amount);
         return this;
     }
@@ -71,8 +71,10 @@ public class GroupMonetarySummaryStatistics {
 
         for (CurrencyUnit keyCurrency : another.groupSummary.keySet()) {
             groupSummary.putIfAbsent(keyCurrency,
-                    new MonetarySummaryStatistics(keyCurrency));
-            groupSummary.merge(keyCurrency, another.groupSummary.get(keyCurrency), MonetarySummaryStatistics::combine);
+                    new DefaultMonetarySummaryStatistics(keyCurrency));
+			groupSummary.merge(keyCurrency,
+					another.groupSummary.get(keyCurrency),
+					MonetarySummaryStatistics::combine);
         }
         return this;
     }
