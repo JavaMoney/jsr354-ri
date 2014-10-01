@@ -42,7 +42,8 @@ class MonetarySummaryMap implements
 	public MonetarySummaryStatistics get(Object key) {
 		if (CurrencyUnit.class.isInstance(key)) {
 			CurrencyUnit unit = CurrencyUnit.class.cast(key);
-			return map.getOrDefault(unit, new MonetarySummaryStatistics(unit));
+			return map.getOrDefault(unit, new DefaultMonetarySummaryStatistics(
+					unit));
 		}
 		return map.get(key);
 	}

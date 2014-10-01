@@ -47,7 +47,8 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      *
      * @return the terminating {@link CurrencyUnit} , never {@code null}.
      */
-    public CurrencyUnit getCurrency(){
+    @Override
+	public CurrencyUnit getCurrency(){
         return termCurrency;
     }
 
@@ -56,7 +57,8 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      *
      * @return the target {@link ConversionContext}.
      */
-    public ConversionContext getConversionContext(){
+    @Override
+	public ConversionContext getConversionContext(){
         return conversionContext;
     }
 
@@ -88,7 +90,11 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      * @throws CurrencyConversionException if conversion failed, or the required data is not available.
      * @see #getExchangeRate(MonetaryAmount)
      */
-    public MonetaryAmount apply(MonetaryAmount amount){
+    @Override
+	public MonetaryAmount apply(MonetaryAmount amount){
+		if (getCurrency().equals(Objects.requireNonNull(amount).getCurrency())) {
+			return amount;
+		}
         ExchangeRate rate = getExchangeRate(amount);
         if(Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBaseCurrency())){
             throw new CurrencyConversionException(amount.getCurrency(),
