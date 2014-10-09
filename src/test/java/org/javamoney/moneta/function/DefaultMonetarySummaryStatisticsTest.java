@@ -10,11 +10,11 @@ import junit.framework.Assert;
 import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
-public class MonetarySummaryStatisticsTest {
+public class DefaultMonetarySummaryStatisticsTest {
 
 	@Test
 	public void shouldBeEmpty() {
-		MonetarySummaryStatistics summary = new MonetarySummaryStatistics(
+		DefaultMonetarySummaryStatistics summary = new DefaultMonetarySummaryStatistics(
 				BRAZILIAN_REAL);
 		Assert.assertEquals(0L, summary.getCount());
 		Assert.assertEquals(0L, summary.getMin().getNumber().longValue());
@@ -26,14 +26,14 @@ public class MonetarySummaryStatisticsTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldErrorWhenIsNull() {
-		MonetarySummaryStatistics summary = new MonetarySummaryStatistics(
+		DefaultMonetarySummaryStatistics summary = new DefaultMonetarySummaryStatistics(
 				BRAZILIAN_REAL);
 		summary.accept(null);
 	}
 
 	@Test
 	public void shouldStayEmptyWhenIsDifferentCurrency() {
-		MonetarySummaryStatistics summary = new MonetarySummaryStatistics(
+		DefaultMonetarySummaryStatistics summary = new DefaultMonetarySummaryStatistics(
 				BRAZILIAN_REAL);
 		summary.accept(Money.of(10, DOLLAR));
 		Assert.assertEquals(0L, summary.getCount());
@@ -45,7 +45,7 @@ public class MonetarySummaryStatisticsTest {
 
 	@Test
 	public void shouldBeSameValueWhenOneMonetaryIsAdded() {
-		MonetarySummaryStatistics summary = new MonetarySummaryStatistics(
+		DefaultMonetarySummaryStatistics summary = new DefaultMonetarySummaryStatistics(
 				BRAZILIAN_REAL);
 		summary.accept(Money.of(10, BRAZILIAN_REAL));
 		Assert.assertEquals(1L, summary.getCount());
@@ -90,7 +90,7 @@ public class MonetarySummaryStatisticsTest {
 	}
 
 	private MonetarySummaryStatistics createSummary(CurrencyUnit currencyUnit) {
-		MonetarySummaryStatistics summary = new MonetarySummaryStatistics(
+		MonetarySummaryStatistics summary = new DefaultMonetarySummaryStatistics(
 				currencyUnit);
 		summary.accept(Money.of(10, currencyUnit));
 		summary.accept(Money.of(90, currencyUnit));
