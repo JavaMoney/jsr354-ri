@@ -208,7 +208,7 @@
                 </property>
             </activation>
             <build>
-            <plugins>
+                <plugins>
                     <plugin>
                         <!-- Usage: mvn clean deploy -Dgpg.passphrase=yourpassphrase ; Or sign
                             already deployed artifact: mvn gpg:sign-and-deploy-file -DpomFile=target/myapp-1.0.pom
@@ -268,7 +268,7 @@
                 </property>
             </activation>
             <build>
-            <plugins>
+                <plugins>
                     <plugin>
                         <groupId>com.google.code.maven-license-plugin</groupId>
                         <artifactId>maven-license-plugin</artifactId>
@@ -297,7 +297,7 @@
         <profile>
             <id>documentation</id>
             <build>
-            <plugins>
+                <plugins>
                     <plugin>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -355,7 +355,7 @@
 
     <build>
 
-    <defaultGoal>install</defaultGoal>
+        <defaultGoal>install</defaultGoal>
 
         <extensions>
             <extension>
@@ -421,13 +421,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
