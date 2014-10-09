@@ -1,3 +1,6 @@
 language: java
 jdk:
   - oraclejdk8
+
+after_success:
+  - mvn clean test jacoco:report org.eluder.coveralls:coveralls-maven-plugin:report -DsourceEncoding=UTF-8
