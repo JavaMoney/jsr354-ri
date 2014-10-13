@@ -85,7 +85,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     private static final long serialVersionUID = 1L;
 
     /**
-     * THe logger used.
+     * The logger used.
      */
     private static final Logger LOG = Logger.getLogger(FastMoney.class.getName());
 
