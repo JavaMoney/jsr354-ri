@@ -20,6 +20,8 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -208,8 +210,8 @@ final class CurrencyToken implements FormatToken {
 				context.setParsedCurrency(cur);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error parsing CurrencyUnit.", e);
+        }
 	}
 
 	/**
