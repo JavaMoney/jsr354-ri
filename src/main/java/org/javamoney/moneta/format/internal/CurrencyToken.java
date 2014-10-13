@@ -27,6 +27,8 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
 import org.javamoney.moneta.format.CurrencyStyle;
+
+import javax.money.MonetaryException;
 import javax.money.format.MonetaryParseException;
 
 /**
@@ -210,7 +212,7 @@ final class CurrencyToken implements FormatToken {
 				context.setParsedCurrency(cur);
 			}
 		} catch (Exception e) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Error parsing CurrencyUnit.", e);
+            throw new MonetaryException("Error parsing CurrencyUnit.", e);
         }
 	}
 
