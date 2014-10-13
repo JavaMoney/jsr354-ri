@@ -85,6 +85,11 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     private static final long serialVersionUID = 1L;
 
     /**
+     * THe logger used.
+     */
+    private static final Logger LOG = Logger.getLogger(FastMoney.class.getName());
+
+    /**
      * The currency of this amount.
      */
     private final CurrencyUnit currency;
@@ -647,9 +652,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
                             "false"))) {
                 throw new ArithmeticException("Scale of " + bd + " exceeds maximal scale: " + SCALE);
             } else {
-                Logger log = Logger.getLogger(getClass().getName());
-                if (log.isLoggable(Level.FINEST)) {
-                    log.finest("Scale exceeds maximal scale of FastMoney (" + SCALE +
+                if (LOG.isLoggable(Level.FINEST)) {
+                    LOG.finest("Scale exceeds maximal scale of FastMoney (" + SCALE +
                             "), implicit rounding will be applied to " + number);
                 }
             }
