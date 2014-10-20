@@ -236,7 +236,7 @@ final class CurrencyToken implements FormatToken {
 	 */
 	@Override
 	public String toString() {
-		return "CurrencyToken [locale=" + locale + ", style=" + style + "]";
+		return "CurrencyToken [locale=" + locale + ", style=" + style + ']';
 	}
 
 }

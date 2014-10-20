@@ -122,7 +122,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
     @Override
     public String toString(){
         return "BuildableCurrencyUnit(currencyCode=" + currencyCode + ", numericCode=" + numericCode +
-                ", defaultFractionDigits=" + defaultFractionDigits + ", context="+this.currencyContext+")";
+                ", defaultFractionDigits=" + defaultFractionDigits + ", context="+this.currencyContext+ ')';
     }
 
 
