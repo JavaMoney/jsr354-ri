@@ -417,7 +417,7 @@ public class LoadableResource {
     public String toString() {
         return "LoadableResource [resourceId=" + resourceId + ", fallbackLocation=" +
                 fallbackLocation + ", remoteResources=" + remoteResources +
-                ", loadCount=" + loadCount + ", accessCount=" + accessCount + ", lastLoaded=" + lastLoaded + "]";
+                ", loadCount=" + loadCount + ", accessCount=" + accessCount + ", lastLoaded=" + lastLoaded + ']';
     }
 
     /**

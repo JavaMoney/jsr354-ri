@@ -283,7 +283,7 @@ final class ParseContext {
 		return "ParseContext [index=" + index + ", errorIndex=" + errorIndex
 				+ ", originalInput='" + originalInput + "', parsedNumber="
 				+ parsedNumber + "', parsedCurrency=" + parsedCurrency
-				+ "]";
+				+ ']';
 	}
 
 	public CurrencyUnit getParsedCurrency() {

@@ -92,7 +92,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      */
     @Override
 	public MonetaryAmount apply(MonetaryAmount amount){
-		if (getCurrency().equals(Objects.requireNonNull(amount).getCurrency())) {
+		if (termCurrency.equals(Objects.requireNonNull(amount).getCurrency())) {
 			return amount;
 		}
         ExchangeRate rate = getExchangeRate(amount);
@@ -111,7 +111,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      */
     @Override
     public String toString(){
-        return getClass().getName() + " [MonetaryAmount -> MonetaryAmount" + "]";
+        return getClass().getName() + " [MonetaryAmount -> MonetaryAmount" + ']';
     }
 
 }

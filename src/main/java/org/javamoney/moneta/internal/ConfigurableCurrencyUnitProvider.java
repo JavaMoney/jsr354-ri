@@ -117,7 +117,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi{
     @Override
     public String toString(){
         return "ConfigurableCurrencyUnitProvider [currencyUnits=" + currencyUnits + ", currencyUnitsByLocale=" +
-                currencyUnitsByLocale + "]";
+                currencyUnitsByLocale + ']';
     }
 
 }

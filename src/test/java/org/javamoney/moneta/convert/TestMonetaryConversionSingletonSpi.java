@@ -55,12 +55,12 @@ public class TestMonetaryConversionSingletonSpi implements MonetaryConversionsSi
 
     @Override
     public List<String> getProviderNames(){
-        return Arrays.asList("test");
+        return Collections.singletonList("test");
     }
 
     @Override
     public List<String> getDefaultProviderChain(){
-        return Arrays.asList("test");
+        return Collections.singletonList("test");
     }
 
 
