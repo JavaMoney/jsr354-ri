@@ -20,16 +20,14 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
-import org.javamoney.moneta.format.CurrencyStyle;
-
 import javax.money.MonetaryException;
 import javax.money.format.MonetaryParseException;
+
+import org.javamoney.moneta.format.CurrencyStyle;
 
 /**
  * Implements a {@link FormatToken} that adds a localizable {@link String}, read
