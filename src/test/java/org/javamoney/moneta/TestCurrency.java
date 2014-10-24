@@ -257,13 +257,6 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
             return this.currency.toString();
         }
 
-        // it be used and if so,
-        // consider changing it to a pattern similar as getAvailableCurrencies()
-        // (including the type Set, unless Collection provides value)
-        public static Collection<CurrencyUnit> getAllMatching(String expression){
-            return Collections.emptySet();
-        }
-
     }
 
 }
