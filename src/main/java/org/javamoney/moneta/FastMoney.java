@@ -364,7 +364,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (isOne(multiplicand)) {
             return this;
         }
-        return new FastMoney(Math.round(this.number * multiplicand.doubleValue()), getCurrency());
+        return new FastMoney(Math.multiplyExact(this.number, getInternalNumber(multiplicand, false)),
+                getCurrency());
     }
 
     /*
@@ -373,7 +374,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      */
     @Override
     public FastMoney negate() {
-        return new FastMoney(this.number * -1, getCurrency());
+        return new FastMoney(Math.multiplyExact(this.number, -1), getCurrency());
     }
 
     /*
@@ -385,7 +386,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (this.number >= 0) {
             return this;
         }
-        return new FastMoney(this.number * -1, getCurrency());
+        return new FastMoney(Math.multiplyExact(this.number, -1), getCurrency());
     }
 
     /*
@@ -398,8 +399,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (subtrahend.isZero()) {
             return this;
         }
-        long subtrahendAsLong = getInternalNumber(subtrahend.getNumber(), false);
-        return new FastMoney(Math.addExact(this.number, -1L * subtrahendAsLong), getCurrency());
+        return new FastMoney(Math.subtractExact(this.number, getInternalNumber(subtrahend.getNumber(), false)),
+                getCurrency());
     }
 
     /*
@@ -412,7 +413,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (isOne(divisor)) {
             return new FastMoney(0, getCurrency());
         }
-        return new FastMoney(this.number % getInternalNumber(divisor, true), getCurrency());
+        return new FastMoney(this.number % getInternalNumber(divisor, false), getCurrency());
     }
 
     private boolean isOne(Number number) {

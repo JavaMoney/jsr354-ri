@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Werner Keil
  * @version 0.5
  */
-public final class TestCurrency implements CurrencyUnit, Serializable, Comparable<CurrencyUnit>{
+public final class TestCurrency implements CurrencyUnit, Serializable, Comparable<CurrencyUnit> {
 
     /**
      * The predefined name space for ISO 4217 currencies, similar to
@@ -56,7 +56,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
      */
     private final int defaultFractionDigits;
 
-    private static final Map<String,CurrencyUnit> CACHED = new ConcurrentHashMap<>();
+    private static final Map<String, CurrencyUnit> CACHED = new ConcurrentHashMap<>();
 
     private static final CurrencyContext CONTEXT =
             CurrencyContextBuilder.of(TestCurrency.class.getSimpleName()).build();
@@ -68,16 +68,16 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
      * @param numCode        the numeric code.
      * @param fractionDigits the fraction digits to be used.
      */
-    private TestCurrency(String code, int numCode, int fractionDigits){
+    private TestCurrency(String code, int numCode, int fractionDigits) {
         this.currencyCode = code;
         this.numericCode = numCode;
         this.defaultFractionDigits = fractionDigits;
     }
 
-    public static CurrencyUnit of(Currency currency){
+    public static CurrencyUnit of(Currency currency) {
         String key = ISO_NAMESPACE + ':' + currency.getCurrencyCode();
         CurrencyUnit cachedItem = CACHED.get(key);
-        if(Objects.isNull(cachedItem)){
+        if (Objects.isNull(cachedItem)) {
             cachedItem = new JDKCurrencyAdapter(currency);
             CACHED.put(key, cachedItem);
         }
@@ -85,35 +85,35 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
     }
 
 
-    public static CurrencyUnit of(String currencyCode){
+    public static CurrencyUnit of(String currencyCode) {
         CurrencyUnit cu = CACHED.get(currencyCode);
-        if(Objects.isNull(cu)){
+        if (Objects.isNull(cu)) {
             Currency cur = Currency.getInstance(currencyCode);
-            if(Objects.nonNull(cur)){
+            if (Objects.nonNull(cur)) {
                 return of(cur);
             }
         }
         return cu;
     }
 
-    public String getCurrencyCode(){
+    public String getCurrencyCode() {
         return currencyCode;
     }
 
-    public int getNumericCode(){
+    public int getNumericCode() {
         return numericCode;
     }
 
-    public int getDefaultFractionDigits(){
+    public int getDefaultFractionDigits() {
         return defaultFractionDigits;
     }
 
     @Override
-    public CurrencyContext getCurrencyContext(){
+    public CurrencyContext getCurrencyContext() {
         return CONTEXT;
     }
 
-    public int compareTo(CurrencyUnit currency){
+    public int compareTo(CurrencyUnit currency) {
         Objects.requireNonNull(currency);
         return getCurrencyCode().compareTo(currency.getCurrencyCode());
     }
@@ -124,11 +124,11 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return currencyCode;
     }
 
-    public static final class Builder{
+    public static final class Builder {
         /**
          * currency code for this currency.
          */
@@ -142,29 +142,29 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
          */
         private int defaultFractionDigits = -1;
 
-        public Builder(){
+        public Builder() {
         }
 
-        public Builder(String currencyCode){
+        public Builder(String currencyCode) {
             withCurrencyCode(currencyCode);
         }
 
-        public Builder withCurrencyCode(String currencyCode){
+        public Builder withCurrencyCode(String currencyCode) {
             this.currencyCode = Optional.ofNullable(currencyCode)
                     .orElseThrow(() -> new IllegalArgumentException("currencyCode may not be null."));
             return this;
         }
 
-        public Builder withDefaultFractionDigits(int defaultFractionDigits){
-            if(defaultFractionDigits < -1){
+        public Builder withDefaultFractionDigits(int defaultFractionDigits) {
+            if (defaultFractionDigits < -1) {
                 throw new IllegalArgumentException("Invalid value for defaultFractionDigits: " + defaultFractionDigits);
             }
             this.defaultFractionDigits = defaultFractionDigits;
             return this;
         }
 
-        public Builder withNumericCode(int numericCode){
-            if(numericCode < -1){
+        public Builder withNumericCode(int numericCode) {
+            if (numericCode < -1) {
                 throw new IllegalArgumentException("Invalid value for numericCode: " + numericCode);
             }
             this.numericCode = numericCode;
@@ -172,18 +172,18 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
         }
 
 
-        public CurrencyUnit build(){
+        public CurrencyUnit build() {
             return build(true);
         }
 
-        public CurrencyUnit build(boolean cache){
-            if(Objects.isNull(currencyCode) || currencyCode.isEmpty()){
+        public CurrencyUnit build(boolean cache) {
+            if (Objects.isNull(currencyCode) || currencyCode.isEmpty()) {
                 throw new IllegalStateException("Can not of TestCurrencyUnit.");
             }
-            if(cache){
+            if (cache) {
                 String key = currencyCode;
                 CurrencyUnit current = CACHED.get(key);
-                if(Objects.isNull(current)){
+                if (Objects.isNull(current)) {
                     current = new TestCurrency(currencyCode, numericCode, defaultFractionDigits);
                     CACHED.put(key, current);
                 }
@@ -202,7 +202,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
      * @author Anatole Tresch
      * @author Werner Keil
      */
-    private final static class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Comparable<CurrencyUnit>{
+    private final static class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Comparable<CurrencyUnit> {
 
         /**
          * serialVersionUID.
@@ -221,47 +221,40 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
          *
          * @param currency the JDK currency instance
          */
-        private JDKCurrencyAdapter(Currency currency){
+        private JDKCurrencyAdapter(Currency currency) {
             this.currency =
                     Optional.ofNullable(currency).orElseThrow(() -> new IllegalArgumentException("Currency required."));
         }
 
         @Override
-        public int compareTo(CurrencyUnit currency){
+        public int compareTo(CurrencyUnit currency) {
             Objects.requireNonNull(currency);
             int compare = getCurrencyCode().compareTo(currency.getCurrencyCode());
-            if(compare == 0){
+            if (compare == 0) {
                 compare = getCurrencyCode().compareTo(currency.getCurrencyCode());
             }
             return compare;
         }
 
-        public String getCurrencyCode(){
+        public String getCurrencyCode() {
             return this.currency.getCurrencyCode();
         }
 
-        public int getNumericCode(){
+        public int getNumericCode() {
             return this.currency.getNumericCode();
         }
 
-        public int getDefaultFractionDigits(){
+        public int getDefaultFractionDigits() {
             return this.currency.getDefaultFractionDigits();
         }
 
         @Override
-        public CurrencyContext getCurrencyContext(){
+        public CurrencyContext getCurrencyContext() {
             return CONTEXT;
         }
 
-        public String toString(){
+        public String toString() {
             return this.currency.toString();
-        }
-
-        // it be used and if so,
-        // consider changing it to a pattern similar as getAvailableCurrencies()
-        // (including the type Set, unless Collection provides value)
-        public static Collection<CurrencyUnit> getAllMatching(String expression){
-            return Collections.emptySet();
         }
 
     }

@@ -20,27 +20,34 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.time.LocalDate;
 
 /**
  * Annotation used for prioritizing multiple services of the same type. The resulting order can be
  * used, for defining the order within a chain of services, or to select the implementation to be
  * used.
- * 
+ *
  * @author Anatole Tresch
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ServicePriority {
-	
-	/** Normal priority. */
-	public static final int NORM_PRIORITY = 0;
-	/** Low priority. */
-	public static final int LOW_PRIORITY = -100;
-	/** High priority. */
-	public static final int HIGH_PRIORITY = 100;
-	
-	/** The priority value. */
-	int value();
+
+    /**
+     * Normal priority.
+     */
+    public static final int NORM_PRIORITY = 0;
+    /**
+     * Low priority.
+     */
+    public static final int LOW_PRIORITY = -100;
+    /**
+     * High priority.
+     */
+    public static final int HIGH_PRIORITY = 100;
+
+    /**
+     * The priority value.
+     */
+    int value();
 }
