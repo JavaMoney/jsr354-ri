@@ -18,6 +18,7 @@ package org.javamoney.moneta;
 import org.testng.annotations.Test;
 
 import javax.money.*;
+
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -248,6 +249,15 @@ public class FastMoneyTest{
         m = FastMoney.of(-10, "CHF");
         assertEquals(m.negate(), m.abs());
         assertTrue(m != m.abs());
+        
+        // Long.MIN_VALUE * -1 == Long.MIN_VALUE
+        m = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
+        assertFalse(m.isPositiveOrZero());
+        try {
+            assertTrue(m.abs().isPositiveOrZero());
+        } catch (ArithmeticException e) {
+            // should happen
+        }
     }
 
     /**
@@ -260,6 +270,15 @@ public class FastMoneyTest{
         FastMoney moneyResult = money1.add(money2);
         assertNotNull(moneyResult);
         assertEquals(11d, moneyResult.getNumber().doubleValue(), 0d);
+        
+        FastMoney money3 = FastMoney.of(90000000000000L, "CHF");
+        try {
+            // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
+            money3.add(money3);
+            fail("overflow should raise ArithmeticException");
+        } catch (ArithmeticException e) {
+            // should happen
+        }
     }
 
     /**
@@ -268,8 +287,38 @@ public class FastMoneyTest{
     @Test
     public void testDivideNumber(){
         FastMoney m = FastMoney.of(100, "CHF");
-        assertEquals(FastMoney.of(BigDecimal.valueOf(100).divide(BigDecimal.valueOf(5)), "CHF"),
-                     m.divide(BigDecimal.valueOf(5)));
+        assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(BigDecimal.valueOf(5)));
+        
+        // the maximum value for FastMoney is 92233720368547.75807
+        // so this should fit right below this limit
+        BigDecimal baseValue = new BigDecimal("90000000000000");
+        BigDecimal expectedValue = new BigDecimal("0.00009");
+        // the argument exceeds the numeric capabilities but the result will not
+        BigDecimal divisor = new BigDecimal("1000000000000000000");
+        
+        // verify the expected results
+        assertEquals(0, expectedValue.compareTo(baseValue.divide(divisor)));
+        
+        m = FastMoney.of(baseValue, "CHF");
+        assertEquals(FastMoney.of(expectedValue, "CHF"), m.divide(divisor));
+    }
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#divide(long)}.
+     */
+    @Test
+    public void testDivideLong(){
+        FastMoney m = FastMoney.of(100, "CHF");
+        assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(5L));
+    }
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
+     */
+    @Test
+    public void testDividedouble(){
+        FastMoney m = FastMoney.of(100, "CHF");
+        assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(5.0d));
     }
 
     /**
@@ -311,8 +360,52 @@ public class FastMoneyTest{
     @Test
     public void testMultiplyNumber(){
         FastMoney m = FastMoney.of(100, "CHF");
+        assertEquals(FastMoney.of(10, "CHF"), m.multiply(new BigDecimal("0.1")));
+        
+        // the maximum value for FastMoney is 92233720368547.75807
+        // so this should fit right below this limit
+        BigDecimal baseValue = new BigDecimal("90000000000000");
+        BigDecimal expectedValue = new BigDecimal("90000000000000.00009");
+        BigDecimal multiplicant = new BigDecimal("1.000000000000000001");
+        
+        // verify the expected results
+        assertEquals(0, expectedValue.compareTo(baseValue.multiply(multiplicant)));
+        
+        m = FastMoney.of(baseValue, "CHF");
+        
+        try {
+            m.multiply(baseValue);
+            fail("overflow should raise ArithmeticException");
+        } catch (ArithmeticException e) {
+            // should happen
+        }
+    }
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#multiply(long)}.
+     */
+    @Test
+    public void testMultiplyLong(){
+        FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(400, "CHF"), m.multiply(4));
         assertEquals(FastMoney.of(200, "CHF"), m.multiply(2));
+        assertEquals(FastMoney.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
+        
+        try {
+            // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
+            FastMoney.of(90000000000000L, "CHF").multiply(90000000000000L);
+            fail("overflow should raise ArithmeticException");
+        } catch (ArithmeticException e) {
+            // should happen
+        }
+    }
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#multiply(double)}.
+     */
+    @Test
+    public void testMultiplyDouble(){
+        FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
     }
 
@@ -325,6 +418,15 @@ public class FastMoneyTest{
         assertEquals(FastMoney.of(-100, "CHF"), m.negate());
         m = FastMoney.of(-123.234, "CHF");
         assertEquals(FastMoney.of(123.234, "CHF"), m.negate());
+        
+        // Long.MIN_VALUE * -1 == Long.MIN_VALUE
+        m = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
+        assertTrue(m.isNegative());
+        try {
+            assertFalse(m.negate().isNegative());
+        } catch (ArithmeticException e) {
+            // should happen
+        }
     }
 
     /**
