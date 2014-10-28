@@ -234,7 +234,7 @@ URI fileUri = this.cachedResource;
 
     @Override
     public String toString(){
-        return "DefaultResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + "]";
+        return "DefaultResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + ']';
     }
 
 }

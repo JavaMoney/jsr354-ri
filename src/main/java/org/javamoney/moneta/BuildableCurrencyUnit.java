@@ -16,8 +16,8 @@
 package org.javamoney.moneta;
 
 import javax.money.*;
-import javax.money.CurrencyContext;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -26,9 +26,13 @@ import java.util.Objects;
  * singleton, which publishes the instances, so they are visible from the {@link javax.money.MonetaryCurrencies}
  * singleton.
  */
-final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUnit>{
+final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUnit>, Serializable {
 
     /**
+     * serialVersionUID.
+     */
+	private static final long serialVersionUID = -2389580389919492220L;
+	/**
      * The unique currency code.
      */
     private String currencyCode;
@@ -122,7 +126,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
     @Override
     public String toString(){
         return "BuildableCurrencyUnit(currencyCode=" + currencyCode + ", numericCode=" + numericCode +
-                ", defaultFractionDigits=" + defaultFractionDigits + ", context="+this.currencyContext+")";
+                ", defaultFractionDigits=" + defaultFractionDigits + ", context="+this.currencyContext+ ')';
     }
 
 

@@ -85,7 +85,7 @@ final class LiteralToken implements FormatToken, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "LiteralToken [token=" + token + "]";
+		return "LiteralToken [token=" + token + ']';
 	}
 
 }

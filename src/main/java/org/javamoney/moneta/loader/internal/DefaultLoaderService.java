@@ -549,7 +549,7 @@ public class DefaultLoaderService implements LoaderService {
 
     @Override
     public String toString() {
-        return "DefaultLoaderService [resources=" + resources + "]";
+        return "DefaultLoaderService [resources=" + resources + ']';
     }
 
 
