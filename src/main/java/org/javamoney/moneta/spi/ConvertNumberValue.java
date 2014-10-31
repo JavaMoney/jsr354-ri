@@ -55,7 +55,7 @@ enum ConvertNumberValue {
 		<E extends Number> T convertExact(Class<E> numberType, Number number);
 	}
 	
-	class ConvertNumberValueBigDecimal implements ConvertNumberValueI<BigDecimal> {
+	static class ConvertNumberValueBigDecimal implements ConvertNumberValueI<BigDecimal> {
 
 		@Override
 		public <E extends Number> BigDecimal convert(Class<E> numberType,
@@ -71,7 +71,7 @@ enum ConvertNumberValue {
 
 	}
 	
-	class ConvertNumberValueBigInteger implements ConvertNumberValueI<BigInteger> {
+	static class ConvertNumberValueBigInteger implements ConvertNumberValueI<BigInteger> {
 
 		@Override
 		public <E extends Number> BigInteger convert(Class<E> numberType,
@@ -87,7 +87,7 @@ enum ConvertNumberValue {
 
 	}
 	
-	class ConvertNumberValueDouble implements ConvertNumberValueI<Double> {
+	static class ConvertNumberValueDouble implements ConvertNumberValueI<Double> {
 
 		@Override
 		public <E extends Number> Double convert(Class<E> numberType,
@@ -108,7 +108,7 @@ enum ConvertNumberValue {
 
 	}
 	
-	class ConvertNumberValueFloat implements ConvertNumberValueI<Float> {
+	static class ConvertNumberValueFloat implements ConvertNumberValueI<Float> {
 
 		@Override
 		public <E extends Number> Float convert(Class<E> numberType,
@@ -129,7 +129,7 @@ enum ConvertNumberValue {
 
 	}
 	
-	class ConvertNumberValueLong implements ConvertNumberValueI<Long> {
+	static class ConvertNumberValueLong implements ConvertNumberValueI<Long> {
 
 		@Override
 		public <E extends Number> Long convert(Class<E> numberType,
@@ -144,7 +144,7 @@ enum ConvertNumberValue {
 		}
 
 	}
-	class ConvertNumberValueInteger implements ConvertNumberValueI<Integer> {
+	static class ConvertNumberValueInteger implements ConvertNumberValueI<Integer> {
 
 		@Override
 		public <E extends Number> Integer convert(Class<E> numberType,
@@ -160,7 +160,7 @@ enum ConvertNumberValue {
 		}
 
 	}
-	class ConvertNumberValueShort implements ConvertNumberValueI<Short> {
+	static class ConvertNumberValueShort implements ConvertNumberValueI<Short> {
 
 		@Override
 		public <E extends Number> Short convert(Class<E> numberType,
@@ -175,7 +175,7 @@ enum ConvertNumberValue {
 		}
 
 	}
-	class ConvertNumberValueByte implements ConvertNumberValueI<Byte> {
+	static class ConvertNumberValueByte implements ConvertNumberValueI<Byte> {
 
 		@Override
 		public <E extends Number> Byte convert(Class<E> numberType,
@@ -192,7 +192,7 @@ enum ConvertNumberValue {
 
 	}
 	
-	class ConvertNumberValueAtomicInteger implements ConvertNumberValueI<AtomicInteger> {
+	static class ConvertNumberValueAtomicInteger implements ConvertNumberValueI<AtomicInteger> {
 
 		@Override
 		public <E extends Number> AtomicInteger convert(Class<E> numberType,
@@ -209,7 +209,7 @@ enum ConvertNumberValue {
 
 	}
 	
-	class ConvertNumberValueAtomicLong implements ConvertNumberValueI<AtomicLong> {
+	static class ConvertNumberValueAtomicLong implements ConvertNumberValueI<AtomicLong> {
 
 		@Override
 		public <E extends Number> AtomicLong convert(Class<E> numberType,
