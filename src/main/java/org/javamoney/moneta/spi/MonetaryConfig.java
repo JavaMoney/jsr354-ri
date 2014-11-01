@@ -28,70 +28,70 @@ import java.util.logging.Logger;
 
 /**
  * Loader for the Java Money JSR configuration.
- * 
+ *
  * @author Anatole Tresch
  */
-public final class MonetaryConfig{
+public final class MonetaryConfig {
 
-	private static final Logger LOG = Logger
-			.getLogger(MonetaryConfig.class.getName());
+    private static final Logger LOG = Logger
+            .getLogger(MonetaryConfig.class.getName());
 
-	private static final MonetaryConfig INSTANCE = new MonetaryConfig();
-	
-	private Map<String, String> config = new HashMap<>();
-	private Map<String, Integer> priorities = new HashMap<>();
+    private static final MonetaryConfig INSTANCE = new MonetaryConfig();
 
-	private MonetaryConfig() {
-		try {
-			Enumeration<URL> urls = getClass().getClassLoader().getResources(
-					"javamoney.properties");
-			while (urls.hasMoreElements()) {
-				URL url = urls.nextElement();
-				try {
-					Properties props = new Properties();
-					props.load(url.openStream());
-					updateConfig(props);
-				} catch (Exception e) {
-					LOG.log(Level.SEVERE,
-							"Error loading javamoney.properties, ignoring "
-									+ url, e);
-				}
-			}
-		} catch (IOException e) {
-			LOG.log(Level.SEVERE, "Error loading javamoney.properties.", e);
-		}
-	}
+    private Map<String, String> config = new HashMap<>();
+    private Map<String, Integer> priorities = new HashMap<>();
 
-	private void updateConfig(Properties props) {
-		for (Map.Entry<Object, Object> en : props.entrySet()) {
-			String key = en.getKey().toString();
-			String value = en.getValue().toString();
-			int prio = 0;
-			if (value.contains("{prio=")) {
-				int index = value.indexOf('}');
-				if (index > 0) {
-					String prioString = value.substring("{prio=".length(),
-							index - 1);
-					value = value.substring(index + 1);
-					prio = Integer.parseInt(prioString);
-					this.priorities.put(key, prio);
-				}
-			}
-			Integer existingPrio = priorities.get(key);
-			if (Objects.isNull(existingPrio)) {
-				this.config.put(key, value);
-			} else if (existingPrio < prio) {
-				this.config.put(key, value);
-			} else if (existingPrio == prio) {
-				throw new IllegalStateException(
-						"AmbigousConfiguration detected for '" + key + "'.");
-			}
-			// else ignore entry with lower prio!
-		}
-	}
+    private MonetaryConfig() {
+        try {
+            Enumeration<URL> urls = getClass().getClassLoader().getResources(
+                    "javamoney.properties");
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                try {
+                    Properties props = new Properties();
+                    props.load(url.openStream());
+                    updateConfig(props);
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE,
+                            "Error loading javamoney.properties, ignoring "
+                                    + url, e);
+                }
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error loading javamoney.properties.", e);
+        }
+    }
 
-	public static Map<String, String> getConfig() {
-		return Collections.unmodifiableMap(INSTANCE.config);
-	}
+    private void updateConfig(Properties props) {
+        for (Map.Entry<Object, Object> en : props.entrySet()) {
+            String key = en.getKey().toString();
+            String value = en.getValue().toString();
+            Integer existingPrio = priorities.get(key);
+            int prio = 0;
+            if (value.startsWith("{prio=")) {
+                int index = value.indexOf('}');
+                if (index > 0) {
+                    String prioString = value.substring("{prio=".length(),
+                            index);
+                    value = value.substring(index + 1);
+                    prio = Integer.parseInt(prioString);
+                    priorities.put(key, prio);
+                }
+            }
+            if (Objects.isNull(existingPrio)) {
+                config.put(key, value);
+            } else if (existingPrio < prio) {
+                config.put(key, value);
+            } else if (existingPrio == prio) {
+                throw new IllegalStateException(
+                        "AmbiguousConfiguration detected for '" + key + "'.");
+            }
+            // else ignore entry with lower prio!
+        }
+    }
+
+    public static Map<String, String> getConfig() {
+        return Collections.unmodifiableMap(INSTANCE.config);
+    }
 
 }
