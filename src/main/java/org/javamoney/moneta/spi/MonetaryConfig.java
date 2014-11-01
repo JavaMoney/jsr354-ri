@@ -66,25 +66,25 @@ public final class MonetaryConfig{
 		for (Map.Entry<Object, Object> en : props.entrySet()) {
 			String key = en.getKey().toString();
 			String value = en.getValue().toString();
+			Integer existingPrio = priorities.get(key);
 			int prio = 0;
-			if (value.contains("{prio=")) {
+			if (value.startsWith("{prio=")) {
 				int index = value.indexOf('}');
 				if (index > 0) {
 					String prioString = value.substring("{prio=".length(),
-							index - 1);
+							index);
 					value = value.substring(index + 1);
 					prio = Integer.parseInt(prioString);
-					this.priorities.put(key, prio);
+					priorities.put(key, prio);
 				}
 			}
-			Integer existingPrio = priorities.get(key);
 			if (Objects.isNull(existingPrio)) {
-				this.config.put(key, value);
+				config.put(key, value);
 			} else if (existingPrio < prio) {
-				this.config.put(key, value);
+				config.put(key, value);
 			} else if (existingPrio == prio) {
 				throw new IllegalStateException(
-						"AmbigousConfiguration detected for '" + key + "'.");
+						"AmbiguousConfiguration detected for '" + key + "'.");
 			}
 			// else ignore entry with lower prio!
 		}
