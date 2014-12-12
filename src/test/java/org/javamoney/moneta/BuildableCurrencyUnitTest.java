@@ -29,36 +29,35 @@ import javax.money.CurrencyUnit;
 import org.testng.annotations.Test;
 
 /**
- * 
  * @author Philippe Marschall
  */
 public class BuildableCurrencyUnitTest {
-	
-	/**
-	 * Tests that currencies built by {@link CurrencyUnitBuilder} are serializable.
-	 */
-	@Test
-	public void testSerialization() throws ClassNotFoundException, IOException {
-		CurrencyUnit currencyUnit = CurrencyUnitBuilder.of("SDR", "serialization-test")
-				.setDefaultFractionDigits(3).build(false);
-		
-		CurrencyUnit copy = (CurrencyUnit) deserailize(serailize(currencyUnit));
-		assertEquals(currencyUnit, copy);
-	}
-	
-	private byte[] serailize(Object obj) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try (ObjectOutputStream objectStream = new ObjectOutputStream(out)) {
-			objectStream.writeObject(obj);
-		}
-		return out.toByteArray();
-	}
-	
-	private Object deserailize(byte[] buf) throws IOException, ClassNotFoundException {
-		try (InputStream in = new ByteArrayInputStream(buf);
-			ObjectInputStream objectStream = new ObjectInputStream(in)) {
-			return objectStream.readObject();
-		}
-	}
+
+    /**
+     * Tests that currencies built by {@link CurrencyUnitBuilder} are serializable.
+     */
+    @Test
+    public void testSerialization() throws ClassNotFoundException, IOException {
+        CurrencyUnit currencyUnit = CurrencyUnitBuilder.of("SDR", "serialization-test")
+                .setDefaultFractionDigits(3).build(false);
+
+        CurrencyUnit copy = (CurrencyUnit) deserailize(serailize(currencyUnit));
+        assertEquals(currencyUnit, copy);
+    }
+
+    private byte[] serailize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ObjectOutputStream objectStream = new ObjectOutputStream(out)) {
+            objectStream.writeObject(obj);
+        }
+        return out.toByteArray();
+    }
+
+    private Object deserailize(byte[] buf) throws IOException, ClassNotFoundException {
+        try (InputStream in = new ByteArrayInputStream(buf);
+             ObjectInputStream objectStream = new ObjectInputStream(in)) {
+            return objectStream.readObject();
+        }
+    }
 
 }

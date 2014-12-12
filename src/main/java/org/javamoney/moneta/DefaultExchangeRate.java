@@ -81,7 +81,7 @@ import javax.money.convert.ExchangeRate;
  * href="https://en.wikipedia.org/wiki/Exchange_rate#Quotations">Wikipedia:
  * Exchange Rate (Quotations)</a>
  */
-class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<ExchangeRate>{
+class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<ExchangeRate> {
 
     /**
      * serialVersionUID.
@@ -115,7 +115,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @param builder The Builder, never {@code null}.
      */
-    DefaultExchangeRate(ExchangeRateBuilder builder){
+    DefaultExchangeRate(ExchangeRateBuilder builder) {
         Objects.requireNonNull(builder.base, "base may not be null.");
         Objects.requireNonNull(builder.term, "term may not be null.");
         Objects.requireNonNull(builder.factor, "factor may not be null.");
@@ -134,13 +134,13 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @param chain the chain to set.
      */
-    private void setExchangeRateChain(List<ExchangeRate> chain){
+    private void setExchangeRateChain(List<ExchangeRate> chain) {
         this.chain.clear();
-        if(Objects.isNull(chain) || chain.isEmpty()){
+        if (Objects.isNull(chain) || chain.isEmpty()) {
             this.chain.add(this);
-        }else{
-            for(ExchangeRate rate : chain){
-                if(Objects.isNull(rate)){
+        } else {
+            for (ExchangeRate rate : chain) {
+                if (Objects.isNull(rate)) {
                     throw new IllegalArgumentException("Rate Chain element can not be null.");
                 }
             }
@@ -153,7 +153,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the conversion context, never null.
      */
-    public final ConversionContext getConversionContext(){
+    public final ConversionContext getConversionContext() {
         return this.conversionContext;
     }
 
@@ -162,7 +162,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the base {@link javax.money.CurrencyUnit}.
      */
-    public final CurrencyUnit getBaseCurrency(){
+    public final CurrencyUnit getBaseCurrency() {
         return this.base;
     }
 
@@ -171,7 +171,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the term {@link javax.money.CurrencyUnit}.
      */
-    public final CurrencyUnit getCurrency(){
+    public final CurrencyUnit getCurrency() {
         return this.term;
     }
 
@@ -180,7 +180,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the bid factor for this exchange rate, or {@code null}.
      */
-    public final NumberValue getFactor(){
+    public final NumberValue getFactor() {
         return this.factor;
     }
 
@@ -191,7 +191,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * several instances. For a direct exchange rate, this equals to
      * <code>new ExchangeRate[]{this}</code>.
      */
-    public final List<ExchangeRate> getExchangeRateChain(){
+    public final List<ExchangeRate> getExchangeRateChain() {
         return this.chain;
     }
 
@@ -207,7 +207,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return true, if the exchange rate is derived.
      */
-    public final boolean isDerived(){
+    public final boolean isDerived() {
         return this.chain.size() > 1;
     }
 
@@ -217,13 +217,13 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
-    public int compareTo(ExchangeRate o){
+    public int compareTo(ExchangeRate o) {
         Objects.requireNonNull(o);
         int compare = this.getBaseCurrency().getCurrencyCode().compareTo(o.getBaseCurrency().getCurrencyCode());
-        if(compare == 0){
+        if (compare == 0) {
             compare = this.getCurrency().getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
         }
-        if(compare == 0){
+        if (compare == 0) {
             compare = this.getConversionContext().getProvider().compareTo(o.getConversionContext().getProvider());
         }
         return compare;
@@ -235,7 +235,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return "ExchangeRate [base=" + base + ", factor=" + factor + ", conversionContext=" + conversionContext + ']';
     }
 
@@ -245,7 +245,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(base, conversionContext, factor, term, chain);
     }
 
@@ -255,11 +255,11 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(obj == this){
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
-        if(obj instanceof DefaultExchangeRate){
+        if (obj instanceof DefaultExchangeRate) {
             DefaultExchangeRate other = (DefaultExchangeRate) obj;
             return Objects.equals(base, other.base) && Objects.equals(chain, other.chain) &&
                     Objects.equals(conversionContext, other.conversionContext) &&
@@ -273,7 +273,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return a new {@link ExchangeRateBuilder}, never {@code null}.
      */
-    public ExchangeRateBuilder toBuilder(){
+    public ExchangeRateBuilder toBuilder() {
         return new ExchangeRateBuilder(getConversionContext()).setBase(getBaseCurrency()).setTerm(getCurrency())
                 .setFactor(getFactor()).setRateChain(getExchangeRateChain());
     }

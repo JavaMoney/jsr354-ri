@@ -30,12 +30,12 @@ import javax.money.convert.ExchangeRateProvider;
  *
  * @author Anatole Tresch
  */
-public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion implements CurrencyConversion{
+public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion implements CurrencyConversion {
 
     private ExchangeRateProvider rateProvider;
 
     public LazyBoundCurrencyConversion(CurrencyUnit termCurrency, ExchangeRateProvider rateProvider,
-                                       ConversionContext conversionContext){
+                                       ConversionContext conversionContext) {
         super(termCurrency, conversionContext);
         this.rateProvider = rateProvider;
     }
@@ -47,7 +47,7 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      * @return the exchange rate type if this instance.
      */
     @Override
-    public ExchangeRate getExchangeRate(MonetaryAmount amount){
+    public ExchangeRate getExchangeRate(MonetaryAmount amount) {
         return this.rateProvider.getExchangeRate(amount.getCurrency(), getCurrency());
     }
 
@@ -58,7 +58,7 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      * org.javamoney.moneta.conversion.AbstractCurrencyConversion#with(javax
      * .money.convert.ConversionContext)
      */
-    public CurrencyConversion with(ConversionContext conversionContext){
+    public CurrencyConversion with(ConversionContext conversionContext) {
         return new LazyBoundCurrencyConversion(getCurrency(), rateProvider, conversionContext);
     }
 
@@ -68,7 +68,7 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return "CurrencyConversion [MonetaryAmount -> MonetaryAmount; provider=" + rateProvider + ", context=" +
                 getConversionContext() + ", termCurrency=" + getCurrency() + ']';
     }

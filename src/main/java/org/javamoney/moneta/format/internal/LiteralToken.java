@@ -27,65 +27,64 @@ import javax.money.format.MonetaryParseException;
  * output.
  * <p>
  * This class is thread safe, immutable and serializable.
- * 
+ *
  * @author Anatole Tresch
  * @author Werner Keil
  */
 final class LiteralToken implements FormatToken, Serializable {
 
-	/**
-	 * serialVersionUID.
-	 */
-	private static final long serialVersionUID = -2528757575867480018L;
-	/**
-	 * The literal part.
-	 */
-	private String token;
+    /**
+     * serialVersionUID.
+     */
+    private static final long serialVersionUID = -2528757575867480018L;
+    /**
+     * The literal part.
+     */
+    private String token;
 
-	/**
-	 * Creates a new {@link LiteralToken}.
-	 * 
-	 * @param token
-	 *            The literal token part.
-	 */
-	public LiteralToken(String token) {
-		this.token = Optional.ofNullable(token).orElseThrow(
-				() -> new IllegalArgumentException("Token is required."));
-	}
+    /**
+     * Creates a new {@link LiteralToken}.
+     *
+     * @param token The literal token part.
+     */
+    public LiteralToken(String token) {
+        this.token = Optional.ofNullable(token).orElseThrow(
+                () -> new IllegalArgumentException("Token is required."));
+    }
 
-	/**
-	 * Parses the literal from the current {@link ParseContext}.
-	 * 
-	 * @see org.javamoney.moneta.format.internal.FormatToken#parse(ParseContext)
-	 */
-	@Override
-	public void parse(ParseContext context)
-			throws MonetaryParseException {
-		if (!context.consume(token)) {
-			throw new MonetaryParseException(context.getOriginalInput(),
-					context.getErrorIndex());
-		}
-	}
+    /**
+     * Parses the literal from the current {@link ParseContext}.
+     *
+     * @see org.javamoney.moneta.format.internal.FormatToken#parse(ParseContext)
+     */
+    @Override
+    public void parse(ParseContext context)
+            throws MonetaryParseException {
+        if (!context.consume(token)) {
+            throw new MonetaryParseException(context.getOriginalInput(),
+                    context.getErrorIndex());
+        }
+    }
 
-	/**
-	 * Prints the amount to the {@link Appendable} given.
-	 * 
-	 * @see org.javamoney.moneta.format.internal.FormatToken#print(Appendable, javax.money.MonetaryAmount)
-	 */
-	@Override
-	public void print(Appendable appendable, MonetaryAmount amount)
-			throws IOException {
-		appendable.append(this.token);
-	}
+    /**
+     * Prints the amount to the {@link Appendable} given.
+     *
+     * @see org.javamoney.moneta.format.internal.FormatToken#print(Appendable, javax.money.MonetaryAmount)
+     */
+    @Override
+    public void print(Appendable appendable, MonetaryAmount amount)
+            throws IOException {
+        appendable.append(this.token);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "LiteralToken [token=" + token + ']';
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "LiteralToken [token=" + token + ']';
+    }
 
 }

@@ -284,21 +284,29 @@ public class FastMoneyTest{
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
      */
+    @Test(expectedExceptions = java.lang.ArithmeticException.class)
+    public void testDivideNumber_Overflow() {
+        FastMoney m = FastMoney.of(100, "CHF");
+        // the argument exceeds the numeric capabilities but the result will not
+        BigDecimal divisor = new BigDecimal("100000000000000000");
+        m.divide(divisor);
+    }
+
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
+     */
     @Test
     public void testDivideNumber(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(BigDecimal.valueOf(5)));
-        
+
         // the maximum value for FastMoney is 92233720368547.75807
         // so this should fit right below this limit
-        BigDecimal baseValue = new BigDecimal("90000000000000");
-        BigDecimal expectedValue = new BigDecimal("0.00009");
+        BigDecimal baseValue = new BigDecimal("90000000000");
         // the argument exceeds the numeric capabilities but the result will not
-        BigDecimal divisor = new BigDecimal("1000000000000000000");
-        
-        // verify the expected results
-        assertEquals(0, expectedValue.compareTo(baseValue.divide(divisor)));
-        
+        BigDecimal divisor = new BigDecimal("1000000");
+        BigDecimal expectedValue = baseValue.divide(divisor);
+
         m = FastMoney.of(baseValue, "CHF");
         assertEquals(FastMoney.of(expectedValue, "CHF"), m.divide(divisor));
     }

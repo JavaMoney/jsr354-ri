@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  */
-public class DefaultResourceCache implements ResourceCache{
+public class DefaultResourceCache implements ResourceCache {
     /**
      * The logger used.
      */
@@ -43,31 +43,31 @@ public class DefaultResourceCache implements ResourceCache{
     /**
      * Cached resources.
      */
-    private Map<String,File> cachedResources = new ConcurrentHashMap<>();
+    private Map<String, File> cachedResources = new ConcurrentHashMap<>();
 
     /**
      * Constructor.
      */
-    public DefaultResourceCache(){
-        if(!localDir.exists()){
-            if(!localDir.mkdirs()){
+    public DefaultResourceCache() {
+        if (!localDir.exists()) {
+            if (!localDir.mkdirs()) {
                 LOG.severe("Error creating cache dir  " + localDir + ", resource cache disabled!");
                 localDir = null;
-            }else{
+            } else {
                 LOG.finest("Created cache dir  " + localDir);
             }
-        }else if(!localDir.isDirectory()){
+        } else if (!localDir.isDirectory()) {
             LOG.severe("Error initializing cache dir  " + localDir + ", not a directory, resource cache disabled!");
             localDir = null;
-        }else if(!localDir.canWrite()){
+        } else if (!localDir.canWrite()) {
             LOG.severe("Error initializing cache dir  " + localDir + ", not writable, resource cache disabled!");
             localDir = null;
         }
-        if(Objects.nonNull(localDir)){
+        if (Objects.nonNull(localDir)) {
             File[] files = localDir.listFiles();
-            if(files != null){
-                for(File file : files){
-                    if(file.isFile()){
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
                         String resourceId = file.getName().substring(0, file.getName().length() - 4);
                         cachedResources.put(resourceId, file);
                     }
@@ -84,18 +84,17 @@ public class DefaultResourceCache implements ResourceCache{
      * , byte[])
      */
     @Override
-    public void write(String resourceId, byte[] data){
-        try{
+    public void write(String resourceId, byte[] data) {
+        try {
             File f = this.cachedResources.get(resourceId);
-            if(Objects.isNull(f)){
+            if (Objects.isNull(f)) {
                 f = new File(localDir, resourceId + SUFFIX);
                 writeFile(f, data);
                 this.cachedResources.put(resourceId, f);
-            }else{
+            } else {
                 writeFile(f, data);
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOG.log(Level.WARNING, "Caching of resource failed: " + resourceId, e);
         }
     }
@@ -107,20 +106,18 @@ public class DefaultResourceCache implements ResourceCache{
      * @param data the data
      * @throws IOException if writing failed.
      */
-    private void writeFile(File f, byte[] data) throws IOException{
+    private void writeFile(File f, byte[] data) throws IOException {
         BufferedOutputStream bos = null;
-        try{
+        try {
             bos = new BufferedOutputStream(new FileOutputStream(f));
             bos.write(data);
             bos.flush();
-        }
-        finally{
-            try{
-                if(Objects.nonNull(bos)){
+        } finally {
+            try {
+                if (Objects.nonNull(bos)) {
                     bos.close();
                 }
-            }
-            catch(Exception e2){
+            } catch (Exception e2) {
                 LOG.log(Level.SEVERE, "Error closing output stream for " + f, e2);
             }
         }
@@ -135,7 +132,7 @@ public class DefaultResourceCache implements ResourceCache{
      * .String)
      */
     @Override
-    public boolean isCached(String resourceId){
+    public boolean isCached(String resourceId) {
         return this.cachedResources.containsKey(resourceId);
     }
 
@@ -146,20 +143,20 @@ public class DefaultResourceCache implements ResourceCache{
      * org.javamoney.moneta.loader.internal.ResourceCache#read(java.lang.String)
      */
     @Override
-    public byte[] read(String resourceId){
+    public byte[] read(String resourceId) {
         File f = this.cachedResources.get(resourceId);
-        if(Objects.isNull(f)){
+        if (Objects.isNull(f)) {
             return null;
         }
         return readFile(f);
     }
 
     @Override
-    public void clear(String resourceId){
+    public void clear(String resourceId) {
         File f = this.cachedResources.get(resourceId);
-        if(f != null){
-            if(f.exists()){
-                if(!f.delete()){
+        if (f != null) {
+            if (f.exists()) {
+                if (!f.delete()) {
                     LOG.warning("Failed to delete caching file: " + f.getAbsolutePath());
                 }
             }
@@ -173,32 +170,29 @@ public class DefaultResourceCache implements ResourceCache{
      * @param f the file
      * @return the bytes read.
      */
-    private byte[] readFile(File f){
+    private byte[] readFile(File f) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         BufferedInputStream is = null;
-        try{
+        try {
             is = new BufferedInputStream(new FileInputStream(f));
             byte[] input = new byte[1024];
             int read = 1;
-            while(read > 0){
+            while (read > 0) {
                 read = is.read(input);
-                if(read > 0){
+                if (read > 0) {
                     bos.write(input, 0, read);
                 }
             }
             return bos.toByteArray();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error reading cached resource from " + f, e);
             return null;
-        }
-        finally{
-            try{
-                if(Objects.nonNull(is)){
+        } finally {
+            try {
+                if (Objects.nonNull(is)) {
                     is.close();
                 }
-            }
-            catch(Exception e2){
+            } catch (Exception e2) {
                 LOG.log(Level.SEVERE, "Error closing input stream from " + f, e2);
             }
         }
@@ -233,7 +227,7 @@ URI fileUri = this.cachedResource;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "DefaultResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + ']';
     }
 

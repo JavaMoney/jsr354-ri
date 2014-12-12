@@ -10,154 +10,154 @@ import org.javamoney.moneta.FastMoney;
 /**
  * the default implementations of {@link MonetarySummaryStatistics} This
  * implementations cannot do exchange rate
+ *
  * @author otaviojava
  * @author Anatole Tresch
  */
 class DefaultMonetarySummaryStatistics implements MonetarySummaryStatistics {
 
-	private final MonetaryAmount empty;
+    private final MonetaryAmount empty;
 
-	protected long count;
+    protected long count;
 
-	protected MonetaryAmount min;
+    protected MonetaryAmount min;
 
-	protected MonetaryAmount max;
+    protected MonetaryAmount max;
 
-	protected MonetaryAmount sum;
+    protected MonetaryAmount sum;
 
-	protected MonetaryAmount average;
+    protected MonetaryAmount average;
 
-	/**
-	 * Creates a new instance, targeting the given
-	 * {@link javax.money.CurrencyUnit}.
-	 *
-	 * @param currencyUnit
-	 *            the target currency, not null.
-	 */
+    /**
+     * Creates a new instance, targeting the given
+     * {@link javax.money.CurrencyUnit}.
+     *
+     * @param currencyUnit the target currency, not null.
+     */
     DefaultMonetarySummaryStatistics(CurrencyUnit currencyUnit) {
-		empty = FastMoney.of(0, Objects.requireNonNull(currencyUnit));
-		setSameMonetary(empty);
-	}
+        empty = FastMoney.of(0, Objects.requireNonNull(currencyUnit));
+        setSameMonetary(empty);
+    }
 
     @Override
-	public void accept(MonetaryAmount amount) {
+    public void accept(MonetaryAmount amount) {
 
-		if (!empty.getCurrency().equals(
-				Objects.requireNonNull(amount).getCurrency())) {
-			return;
-		}
+        if (!empty.getCurrency().equals(
+                Objects.requireNonNull(amount).getCurrency())) {
+            return;
+        }
         if (isEmpty()) {
             setSameMonetary(amount);
             count++;
-		} else {
+        } else {
             doSummary(amount);
         }
-	}
+    }
 
-	@Override
-	public CurrencyUnit getCurrencyUnit() {
-		return empty.getCurrency();
-	}
+    @Override
+    public CurrencyUnit getCurrencyUnit() {
+        return empty.getCurrency();
+    }
 
-	@Override
-	public MonetarySummaryStatistics combine(
-			MonetarySummaryStatistics summaryStatistics) {
+    @Override
+    public MonetarySummaryStatistics combine(
+            MonetarySummaryStatistics summaryStatistics) {
         Objects.requireNonNull(summaryStatistics);
 
-		if (!equals(summaryStatistics)) {
-        	return this;
+        if (!equals(summaryStatistics)) {
+            return this;
         }
-		min = MonetaryFunctions.min(min, summaryStatistics.getMin());
-		max = MonetaryFunctions.max(max, summaryStatistics.getMax());
-		sum = sum.add(summaryStatistics.getSum());
-		count += summaryStatistics.getCount();
+        min = MonetaryFunctions.min(min, summaryStatistics.getMin());
+        max = MonetaryFunctions.max(max, summaryStatistics.getMax());
+        sum = sum.add(summaryStatistics.getSum());
+        count += summaryStatistics.getCount();
         average = sum.divide(count);
-		return this;
-	}
+        return this;
+    }
 
-	private void doSummary(MonetaryAmount moneraty) {
-		min = MonetaryFunctions.min(min, moneraty);
-		max = MonetaryFunctions.max(max, moneraty);
-		sum = sum.add(moneraty);
-		average = sum.divide(++count);
-	}
+    private void doSummary(MonetaryAmount moneraty) {
+        min = MonetaryFunctions.min(min, moneraty);
+        max = MonetaryFunctions.max(max, moneraty);
+        sum = sum.add(moneraty);
+        average = sum.divide(++count);
+    }
 
-	private boolean isEmpty() {
-		return count == 0;
-	}
+    private boolean isEmpty() {
+        return count == 0;
+    }
 
-	private void setSameMonetary(MonetaryAmount monetary) {
-		min = monetary;
-		max = monetary;
-		sum = monetary;
-		average = monetary;
+    private void setSameMonetary(MonetaryAmount monetary) {
+        min = monetary;
+        max = monetary;
+        sum = monetary;
+        average = monetary;
     }
 
 
     @Override
-	public long getCount() {
-		return count;
+    public long getCount() {
+        return count;
     }
 
     @Override
-	public MonetaryAmount getMin() {
-		return min;
-    }
-
-
-    @Override
-	public MonetaryAmount getMax() {
-		return max;
+    public MonetaryAmount getMin() {
+        return min;
     }
 
 
     @Override
-	public MonetaryAmount getSum() {
-		return sum;
+    public MonetaryAmount getMax() {
+        return max;
     }
 
 
     @Override
-	public MonetaryAmount getAverage() {
-		return average;
-	}
+    public MonetaryAmount getSum() {
+        return sum;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (DefaultMonetarySummaryStatistics.class.isInstance(obj)) {
-			DefaultMonetarySummaryStatistics other = DefaultMonetarySummaryStatistics.class
-					.cast(obj);
-			return Objects.equals(empty.getCurrency(),
-					other.empty.getCurrency());
-		}
-		return false;
-	}
 
-	@Override
-	public int hashCode() {
-		return empty.getCurrency().hashCode();
-	}
+    @Override
+    public MonetaryAmount getAverage() {
+        return average;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[currency: ").append(empty.getCurrency()).append(',');
-		sb.append("count:").append(count).append(',');
-		sb.append("min:").append(min).append(',');
-		sb.append("max:").append(max).append(',');
-		sb.append("sum:").append(sum).append(',');
-		sb.append("average:").append(average).append(']');
-		return sb.toString();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (DefaultMonetarySummaryStatistics.class.isInstance(obj)) {
+            DefaultMonetarySummaryStatistics other = DefaultMonetarySummaryStatistics.class
+                    .cast(obj);
+            return Objects.equals(empty.getCurrency(),
+                    other.empty.getCurrency());
+        }
+        return false;
+    }
 
-	@Override
-	public boolean isExchangeable() {
-		return false;
-	}
+    @Override
+    public int hashCode() {
+        return empty.getCurrency().hashCode();
+    }
 
-	@Override
-	public MonetarySummaryStatistics to(CurrencyUnit unit) {
-		throw new UnsupportedOperationException(
-				"the default implementation of MonetarySummaryStatistics cannot do exchange rate");
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[currency: ").append(empty.getCurrency()).append(',');
+        sb.append("count:").append(count).append(',');
+        sb.append("min:").append(min).append(',');
+        sb.append("max:").append(max).append(',');
+        sb.append("sum:").append(sum).append(',');
+        sb.append("average:").append(average).append(']');
+        return sb.toString();
+    }
+
+    @Override
+    public boolean isExchangeable() {
+        return false;
+    }
+
+    @Override
+    public MonetarySummaryStatistics to(CurrencyUnit unit) {
+        throw new UnsupportedOperationException(
+                "the default implementation of MonetarySummaryStatistics cannot do exchange rate");
+    }
 }

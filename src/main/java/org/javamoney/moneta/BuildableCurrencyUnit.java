@@ -31,8 +31,8 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
     /**
      * serialVersionUID.
      */
-	private static final long serialVersionUID = -2389580389919492220L;
-	/**
+    private static final long serialVersionUID = -2389580389919492220L;
+    /**
      * The unique currency code.
      */
     private String currencyCode;
@@ -54,15 +54,15 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
      *
      * @param builder the builder, never null.
      */
-    BuildableCurrencyUnit(CurrencyUnitBuilder builder){
+    BuildableCurrencyUnit(CurrencyUnitBuilder builder) {
         Objects.requireNonNull(builder.currencyCode, "currencyCode required");
-        if(builder.numericCode < -1){
+        if (builder.numericCode < -1) {
             throw new MonetaryException("numericCode must be >= -1");
         }
-        if(builder.defaultFractionDigits < 0){
+        if (builder.defaultFractionDigits < 0) {
             throw new MonetaryException("defaultFractionDigits must be >= 0");
         }
-        if(builder.currencyContext == null){
+        if (builder.currencyContext == null) {
             throw new MonetaryException("currencyContext must be != null");
         }
         this.defaultFractionDigits = builder.defaultFractionDigits;
@@ -72,28 +72,28 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
     }
 
     @Override
-    public String getCurrencyCode(){
+    public String getCurrencyCode() {
         return currencyCode;
     }
 
     @Override
-    public int getNumericCode(){
+    public int getNumericCode() {
         return numericCode;
     }
 
     @Override
-    public int getDefaultFractionDigits(){
+    public int getDefaultFractionDigits() {
         return defaultFractionDigits;
     }
 
     @Override
-    public CurrencyContext getCurrencyContext(){
+    public CurrencyContext getCurrencyContext() {
         return currencyContext;
     }
 
     @Override
-    public int compareTo(CurrencyUnit o){
-    	Objects.requireNonNull(o);
+    public int compareTo(CurrencyUnit o) {
+        Objects.requireNonNull(o);
         return this.currencyCode.compareTo(o.getCurrencyCode());
     }
 
@@ -101,7 +101,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hashCode(currencyCode);
     }
 
@@ -109,24 +109,24 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-	public boolean equals(Object obj) {
-    	if (obj == this) {
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
-    	if (obj instanceof BuildableCurrencyUnit) {
-    		 BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
-    		 return Objects.equals(currencyCode, other.currencyCode);
-    	}
-    	return false;
+        if (obj instanceof BuildableCurrencyUnit) {
+            BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
+            return Objects.equals(currencyCode, other.currencyCode);
+        }
+        return false;
     }
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return "BuildableCurrencyUnit(currencyCode=" + currencyCode + ", numericCode=" + numericCode +
-                ", defaultFractionDigits=" + defaultFractionDigits + ", context="+this.currencyContext+ ')';
+                ", defaultFractionDigits=" + defaultFractionDigits + ", context=" + this.currencyContext + ')';
     }
 
 

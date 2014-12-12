@@ -364,7 +364,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (isOne(multiplicand)) {
             return this;
         }
-        return new FastMoney(Math.multiplyExact(this.number, getInternalNumber(multiplicand, false)),
+        return new FastMoney(Math.multiplyExact(this.number, getInternalNumber(multiplicand, false)) / 100000L,
                 getCurrency());
     }
 

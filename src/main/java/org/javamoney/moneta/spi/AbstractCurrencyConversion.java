@@ -30,12 +30,12 @@ import java.util.Objects;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public abstract class AbstractCurrencyConversion implements CurrencyConversion{
+public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 
     private CurrencyUnit termCurrency;
     private ConversionContext conversionContext;
 
-    public AbstractCurrencyConversion(CurrencyUnit termCurrency, ConversionContext conversionContext){
+    public AbstractCurrencyConversion(CurrencyUnit termCurrency, ConversionContext conversionContext) {
         Objects.requireNonNull(termCurrency);
         Objects.requireNonNull(conversionContext);
         this.termCurrency = termCurrency;
@@ -48,7 +48,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      * @return the terminating {@link CurrencyUnit} , never {@code null}.
      */
     @Override
-	public CurrencyUnit getCurrency(){
+    public CurrencyUnit getCurrency() {
         return termCurrency;
     }
 
@@ -58,7 +58,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      * @return the target {@link ConversionContext}.
      */
     @Override
-	public ConversionContext getConversionContext(){
+    public ConversionContext getConversionContext() {
         return conversionContext;
     }
 
@@ -91,14 +91,14 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      * @see #getExchangeRate(MonetaryAmount)
      */
     @Override
-	public MonetaryAmount apply(MonetaryAmount amount){
-		if (termCurrency.equals(Objects.requireNonNull(amount).getCurrency())) {
-			return amount;
-		}
+    public MonetaryAmount apply(MonetaryAmount amount) {
+        if (termCurrency.equals(Objects.requireNonNull(amount).getCurrency())) {
+            return amount;
+        }
         ExchangeRate rate = getExchangeRate(amount);
-        if(Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBaseCurrency())){
+        if (Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBaseCurrency())) {
             throw new CurrencyConversionException(amount.getCurrency(),
-                                                  Objects.isNull(rate) ? null : rate.getCurrency(), null);
+                    Objects.isNull(rate) ? null : rate.getCurrency(), null);
         }
         return amount.multiply(rate.getFactor()).getFactory().setCurrency(rate.getCurrency()).create();
     }
@@ -110,7 +110,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion{
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return getClass().getName() + " [MonetaryAmount -> MonetaryAmount" + ']';
     }
 
