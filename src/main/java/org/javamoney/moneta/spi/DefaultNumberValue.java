@@ -16,8 +16,10 @@
 package org.javamoney.moneta.spi;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Objects;
 
+import javax.money.MonetaryAmount;
 import javax.money.NumberValue;
 
 /**
@@ -44,9 +46,8 @@ public final class DefaultNumberValue extends NumberValue {
 	public static final NumberValue ONE = new DefaultNumberValue(BigDecimal.ONE);
 	
 	public DefaultNumberValue(Number number) {
-		Objects.requireNonNull(number, "Number required");
-		this.number = number;
-	}
+        this.number = Objects.requireNonNull(number, "Number required");
+    }
 	
 	/**
 	 * Creates a new instance of {@link NumberValue}, using the given number.
@@ -182,11 +183,23 @@ public final class DefaultNumberValue extends NumberValue {
 		return ConvertNumberValue.of(numberType, number);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see javax.money.NumberValue#numberValueExact(java.lang.Class)
+    /*
+     * (non-Javadoc)
+	 * @see javax.money.NumberValue#round(java.math.MathContext)
 	 */
-	@Override
+    @Override
+    public NumberValue round(MathContext mathContext) {
+        if (this.number instanceof BigDecimal) {
+            return new DefaultNumberValue(((BigDecimal) this.number).round(mathContext));
+        }
+        return new DefaultNumberValue(new BigDecimal(this.number.toString()).round(mathContext));
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see javax.money.NumberValue#numberValueExact(java.lang.Class)
+     */
+    @Override
 	public <T extends Number> T numberValueExact(Class<T> numberType) {
 		return ConvertNumberValue.ofExact(numberType, number);
 	}

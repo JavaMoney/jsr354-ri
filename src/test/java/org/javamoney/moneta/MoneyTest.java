@@ -47,7 +47,7 @@ import org.testng.annotations.Test;
  * @author Anatole
  * @author Werner
  */
-public class MoneyTest{
+public class MoneyTest {
     // TODO break this down into smaller test classes, 1.5k LOC seems a bit large;-)
 
     private static final BigDecimal TEN = new BigDecimal(10.0d);
@@ -60,13 +60,13 @@ public class MoneyTest{
      * {@link org.javamoney.moneta.Money#of(java.math.BigDecimal, javax.money.CurrencyUnit)} .
      */
     @Test
-    public void testOfCurrencyUnitBigDecimal(){
+    public void testOfCurrencyUnitBigDecimal() {
         Money m = Money.of(TEN, MonetaryCurrencies.getCurrency("EUR"));
         assertEquals(TEN, m.getNumber().numberValue(BigDecimal.class));
     }
 
     @Test
-    public void testOfCurrencyUnitDouble(){
+    public void testOfCurrencyUnitDouble() {
         Money m = Money.of(10.0d, MonetaryCurrencies.getCurrency("EUR"));
         assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
     }
@@ -75,14 +75,14 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#getCurrency()}.
      */
     @Test
-    public void testGetCurrency(){
+    public void testGetCurrency() {
         MonetaryAmount money = Money.of(BigDecimal.TEN, EURO);
         assertNotNull(money.getCurrency());
         assertEquals("EUR", money.getCurrency().getCurrencyCode());
     }
 
     @Test
-    public void testSubtractMonetaryAmount(){
+    public void testSubtractMonetaryAmount() {
         Money money1 = Money.of(BigDecimal.TEN, EURO);
         Money money2 = Money.of(BigDecimal.ONE, EURO);
         Money moneyResult = money1.subtract(money2);
@@ -91,22 +91,22 @@ public class MoneyTest{
     }
 
     @Test
-    public void testDivideAndRemainder_BigDecimal(){
+    public void testDivideAndRemainder_BigDecimal() {
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         Money[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000000000000000001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-                     new BigDecimal("0.49999999999999999999"));
+                new BigDecimal("0.49999999999999999999"));
     }
 
     @Test
-    public void testDivideToIntegralValue_BigDecimal(){
+    public void testDivideToIntegralValue_BigDecimal() {
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         Money result = money1.divideToIntegralValue(new BigDecimal("0.50000000000000000001"));
         assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
         assertEquals(result.getNumber().numberValue(BigDecimal.class).stripTrailingZeros(),
-                     new BigDecimal("4.0").stripTrailingZeros());
+                new BigDecimal("4.0").stripTrailingZeros());
         result = money1.divideToIntegralValue(new BigDecimal("5.0"));
         assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact() == 0);
     }
@@ -115,7 +115,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#hashCode()}.
      */
     @Test
-    public void testHashCode(){
+    public void testHashCode() {
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         Money money2 = Money.of(new BigDecimal("1"), EURO);
         assertEquals(money1.hashCode(), money2.hashCode());
@@ -134,31 +134,31 @@ public class MoneyTest{
         // Test equality for values with different scales, but same numeric
         // values
         assertTrue(Money.of(BigDecimal.valueOf(0d), "CHF").hashCode() ==
-                           Money.of(BigDecimal.valueOf(0), "CHF").hashCode());
+                Money.of(BigDecimal.valueOf(0), "CHF").hashCode());
         assertTrue(Money.of(BigDecimal.ZERO, "CHF").hashCode() == Money.of(BigDecimal.valueOf(0), "CHF").hashCode());
         assertTrue(
                 Money.of(BigDecimal.valueOf(5), "CHF").hashCode() == Money.of(new BigDecimal("5.0"), "CHF").hashCode());
         assertTrue(Money.of(BigDecimal.valueOf(5), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("5.00"), "CHF").hashCode());
+                Money.of(new BigDecimal("5.00"), "CHF").hashCode());
         assertTrue(Money.of(BigDecimal.valueOf(5), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("5.000"), "CHF").hashCode());
+                Money.of(new BigDecimal("5.000"), "CHF").hashCode());
         assertTrue(Money.of(BigDecimal.valueOf(5), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("5.0000"), "CHF").hashCode());
+                Money.of(new BigDecimal("5.0000"), "CHF").hashCode());
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("-1.230"), "CHF").hashCode());
+                Money.of(new BigDecimal("-1.230"), "CHF").hashCode());
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("-1.2300"), "CHF").hashCode());
+                Money.of(new BigDecimal("-1.2300"), "CHF").hashCode());
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("-1.23000"), "CHF").hashCode());
+                Money.of(new BigDecimal("-1.23000"), "CHF").hashCode());
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").hashCode() ==
-                           Money.of(new BigDecimal("-1.230000000000000000000"), "CHF").hashCode());
+                Money.of(new BigDecimal("-1.230000000000000000000"), "CHF").hashCode());
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#getMonetaryContext()}.
      */
     @Test
-    public void testGetDefaultMathContext(){
+    public void testGetDefaultMathContext() {
         Money money1 = Money.of(BigDecimal.ONE, EURO);
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, money1.getMonetaryContext());
     }
@@ -170,11 +170,11 @@ public class MoneyTest{
      * .
      */
     @Test
-    public void testOfCurrencyUnitBigDecimalMathContext(){
+    public void testOfCurrencyUnitBigDecimalMathContext() {
         Money m = Money.of(
 
                 BigDecimal.valueOf(2.15), EURO,
-                MonetaryContextBuilder.of(Money.class).setPrecision(2).setFixedScale(true).set(RoundingMode.DOWN)
+                MonetaryContextBuilder.of(Money.class).setPrecision(2).setFixedScale(true).setTyped(RoundingMode.DOWN)
                         .build());
         Money m2 = Money.of(BigDecimal.valueOf(2.1), EURO);
         assertEquals(m, m2);
@@ -187,7 +187,7 @@ public class MoneyTest{
      * {@link org.javamoney.moneta.Money#of(java.lang.Number, javax.money.CurrencyUnit)} .
      */
     @Test
-    public void testOfCurrencyUnitNumber(){
+    public void testOfCurrencyUnitNumber() {
         Money m = Money.of((byte) 2, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -230,9 +230,9 @@ public class MoneyTest{
      * .
      */
     @Test
-    public void testOfCurrencyUnitNumberMathContext(){
+    public void testOfCurrencyUnitNumberMathContext() {
         MonetaryContext mc =
-                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).set(RoundingMode.CEILING)
+                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).setTyped(RoundingMode.CEILING)
                         .build();
         Money m = Money.of((byte) 2, EURO, mc);
         assertNotNull(m);
@@ -282,7 +282,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#of(java.lang.Number, java.lang.String)} .
      */
     @Test
-    public void testOfStringNumber(){
+    public void testOfStringNumber() {
         Money m = Money.of((byte) 2, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -324,9 +324,9 @@ public class MoneyTest{
      * .
      */
     @Test
-    public void testOfStringNumberMathContext(){
+    public void testOfStringNumberMathContext() {
         MonetaryContext mc =
-                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).set(RoundingMode.CEILING)
+                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).setTyped(RoundingMode.CEILING)
                         .build();
         Money m = Money.of((byte) 2, "EUR", mc);
         assertNotNull(m);
@@ -376,15 +376,15 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#equals(java.lang.Object)}.
      */
     @Test
-    public void testEqualsObject(){
+    public void testEqualsObject() {
         Money[] moneys =
                 new Money[]{Money.of(0, "CHF"), Money.of(BigDecimal.ONE, "CHF"), Money.of(BigDecimal.ONE, "XXX"),
                         Money.of(BigDecimal.ONE.negate(), "XXX")};
-        for(int i = 0; i < moneys.length; i++){
-            for(int j = 0; j < moneys.length; j++){
-                if(i == j){
+        for (int i = 0; i < moneys.length; i++) {
+            for (int j = 0; j < moneys.length; j++) {
+                if (i == j) {
                     assertEquals(moneys[i], moneys[j]);
-                }else{
+                } else {
                     assertNotSame(moneys[i], moneys[j]);
                 }
             }
@@ -401,7 +401,7 @@ public class MoneyTest{
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").equals(Money.of(new BigDecimal("-1.2300"), "CHF")));
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").equals(Money.of(new BigDecimal("-1.23000"), "CHF")));
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF")
-                           .equals(Money.of(new BigDecimal("-1.230000000000000000000"), "CHF")));
+                .equals(Money.of(new BigDecimal("-1.230000000000000000000"), "CHF")));
     }
 
     /**
@@ -409,7 +409,7 @@ public class MoneyTest{
      * {@link org.javamoney.moneta.Money#equals(Object)}.
      */
     @Test
-    public void testEqualsMonetarAmount(){
+    public void testEqualsMonetarAmount() {
         MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(100).create();
         MonetaryAmount m2 = Money.of(100, "CHF");
         Money m3 = Money.of(100, "CHF");
@@ -422,7 +422,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#compareTo(javax.money.MonetaryAmount)}.
      */
     @Test
-    public void testCompareTo(){
+    public void testCompareTo() {
         Money m1 = Money.of(-2, "CHF");
         Money m2 = Money.of(0, "CHF");
         Money m3 = Money.of(-0, "CHF");
@@ -445,11 +445,11 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#getFactory()#setContext(java.math.MathContext)}.
      */
     @Test
-    public void testWithMonetaryContext(){
+    public void testWithMonetaryContext() {
         Money m = Money.of(10, "CHF");
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
         MonetaryContext mc =
-                MonetaryContextBuilder.of(Money.class).setPrecision(128).set(RoundingMode.HALF_EVEN).build();
+                MonetaryContextBuilder.of(Money.class).setPrecision(128).setTyped(RoundingMode.HALF_EVEN).build();
         MonetaryAmount m2 = m.getFactory().setContext(mc).create();
         assertNotNull(m2);
         assertTrue(m != m2);
@@ -461,7 +461,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#abs()}.
      */
     @Test
-    public void testAbs(){
+    public void testAbs() {
         Money m = Money.of(10, "CHF");
         assertEquals(m, m.abs());
         assertTrue(m == m.abs());
@@ -477,7 +477,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#add(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testAdd(){
+    public void testAdd() {
         Money money1 = Money.of(BigDecimal.TEN, EURO);
         Money money2 = Money.of(BigDecimal.ONE, EURO);
         Money moneyResult = money1.add(money2);
@@ -489,17 +489,17 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#divide(java.lang.Number)}.
      */
     @Test
-    public void testDivideNumber(){
+    public void testDivideNumber() {
         Money m = Money.of(100, "CHF");
         assertEquals(Money.of(BigDecimal.valueOf(100).divide(BigDecimal.valueOf(5)), "CHF"),
-                     m.divide(BigDecimal.valueOf(5)));
+                m.divide(BigDecimal.valueOf(5)));
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#divideAndRemainder(java.lang.Number)}.
      */
     @Test
-    public void testDivideAndRemainderNumber(){
+    public void testDivideAndRemainderNumber() {
         Money m = Money.of(100, "CHF");
         assertEquals(Money.of(BigDecimal.valueOf(33), "CHF"), m.divideAndRemainder(BigDecimal.valueOf(3))[0]);
         assertEquals(Money.of(BigDecimal.valueOf(1), "CHF"), m.divideAndRemainder(BigDecimal.valueOf(3))[1]);
@@ -509,7 +509,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#divideToIntegralValue(java.lang.Number)} .
      */
     @Test
-    public void testDivideToIntegralValueNumber(){
+    public void testDivideToIntegralValueNumber() {
         Money m = Money.of(100, "CHF");
         assertEquals(Money.of(BigDecimal.valueOf(5), "CHF"), m.divideToIntegralValue(BigDecimal.valueOf(20)));
         assertEquals(Money.of(BigDecimal.valueOf(33), "CHF"), m.divideToIntegralValue(BigDecimal.valueOf(3)));
@@ -519,7 +519,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#multiply(java.lang.Number)}.
      */
     @Test
-    public void testMultiplyNumber(){
+    public void testMultiplyNumber() {
         Money m = Money.of(100, "CHF");
         assertEquals(Money.of(400, "CHF"), m.multiply(4));
         assertEquals(Money.of(200, "CHF"), m.multiply(2));
@@ -530,7 +530,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#negate()}.
      */
     @Test
-    public void testNegate(){
+    public void testNegate() {
         Money m = Money.of(100, "CHF");
         assertEquals(Money.of(-100, "CHF"), m.negate());
         m = Money.of(-123.234, "CHF");
@@ -541,7 +541,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#plus()}.
      */
     @Test
-    public void testPlus(){
+    public void testPlus() {
         Money m = Money.of(100, "CHF");
         assertEquals(Money.of(100, "CHF"), m.plus());
         m = Money.of(123.234, "CHF");
@@ -552,7 +552,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#subtract(javax.money.MonetaryAmount)}.
      */
     @Test
-    public void testSubtract(){
+    public void testSubtract() {
         Money m = Money.of(100, "CHF");
         Money s1 = Money.of(100, "CHF");
         Money s2 = Money.of(200, "CHF");
@@ -571,9 +571,9 @@ public class MoneyTest{
         s2 = Money.of(12.402345534, "CHF");
         s3 = Money.of(-2343.45, "CHF");
         assertEquals(Money.of(new BigDecimal("12.402345534").subtract(new BigDecimal("2343.45")), "CHF"),
-                     m.subtract(s1));
+                m.subtract(s1));
         assertEquals(Money.of(new BigDecimal("12.402345534").subtract(new BigDecimal("12.402345534")), "CHF"),
-                     m.subtract(s2));
+                m.subtract(s2));
         assertEquals(Money.of(0, "CHF"), m.subtract(s2));
         assertEquals(Money.of(new BigDecimal("2355.852345534"), "CHF"), m.subtract(s3));
         assertTrue(m == m.subtract(Money.of(0, "CHF")));
@@ -583,22 +583,22 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#remainder(java.lang.Number)}.
      */
     @Test
-    public void testRemainderNumber(){
+    public void testRemainderNumber() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF"),
                 Money.of(0, "CHF"), Money.of(-100, "CHF"), Money.of(-723527.36532, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(10.50)))
-                                 .create(), m.remainder(10.50), "Invalid remainder of " + 10.50);
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(10.50)))
+                    .create(), m.remainder(10.50), "Invalid remainder of " + 10.50);
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-30.20)))
-                                 .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20);
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-30.20)))
+                    .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20);
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-3)))
-                                 .create(), m.remainder(-3), "Invalid remainder of " + -3);
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-3)))
+                    .create(), m.remainder(-3), "Invalid remainder of " + -3);
             assertEquals(m.getFactory().setCurrency(m.getCurrency()).setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(3))).create(),
-                         m.remainder(3));
+                            m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(3))).create(),
+                    m.remainder(3));
         }
     }
 
@@ -606,14 +606,14 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#scaleByPowerOfTen(int)} .
      */
     @Test
-    public void testScaleByPowerOfTen(){
+    public void testScaleByPowerOfTen() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF"),
                 Money.of(0, "CHF"), Money.of(-100, "CHF"), Money.of(-723527.36532, "CHF")};
-        for(Money m : moneys){
-            for(int p = -10; p < 10; p++){
+        for (Money m : moneys) {
+            for (int p = -10; p < 10; p++) {
                 assertEquals(m.getFactory().setCurrency(m.getCurrency())
-                                     .setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
-                                     .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen.");
+                        .setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
+                        .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen.");
             }
         }
     }
@@ -622,15 +622,15 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isZero()}.
      */
     @Test
-    public void testIsZero(){
+    public void testIsZero() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF"),
                 Money.of(-100, "CHF"), Money.of(-723527.36532, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertFalse(m.isZero());
         }
         moneys = new Money[]{Money.of(0, "CHF"), Money.of(0.0, "CHF"), Money.of(BigDecimal.ZERO, "CHF"),
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertTrue(m.isZero());
         }
     }
@@ -639,15 +639,15 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isPositive()}.
      */
     @Test
-    public void testIsPositive(){
+    public void testIsPositive() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertTrue(m.isPositive());
         }
         moneys = new Money[]{Money.of(0, "CHF"), Money.of(0.0, "CHF"), Money.of(BigDecimal.ZERO, "CHF"),
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(-100, "CHF"),
                 Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertFalse(m.isPositive());
         }
     }
@@ -656,15 +656,15 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isPositiveOrZero()}.
      */
     @Test
-    public void testIsPositiveOrZero(){
+    public void testIsPositiveOrZero() {
         Money[] moneys = new Money[]{Money.of(0, "CHF"), Money.of(0.0, "CHF"), Money.of(BigDecimal.ZERO, "CHF"),
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(100, "CHF"), Money.of(34242344, "CHF"),
                 Money.of(23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertTrue(m.isPositiveOrZero(), "Invalid positiveOrZero (expected true): " + m);
         }
         moneys = new Money[]{Money.of(-100, "CHF"), Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertFalse(m.isPositiveOrZero(), "Invalid positiveOrZero (expected false): " + m);
         }
     }
@@ -673,15 +673,15 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isNegative()}.
      */
     @Test
-    public void testIsNegative(){
+    public void testIsNegative() {
         Money[] moneys = new Money[]{Money.of(0, "CHF"), Money.of(0.0, "CHF"), Money.of(BigDecimal.ZERO, "CHF"),
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(100, "CHF"), Money.of(34242344, "CHF"),
                 Money.of(23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertFalse(m.isNegative(), "Invalid isNegative (expected false): " + m);
         }
         moneys = new Money[]{Money.of(-100, "CHF"), Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertTrue(m.isNegative(), "Invalid isNegative (expected true): " + m);
         }
     }
@@ -690,15 +690,15 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isNegativeOrZero()}.
      */
     @Test
-    public void testIsNegativeOrZero(){
+    public void testIsNegativeOrZero() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"), Money.of(23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertFalse(m.isNegativeOrZero(), "Invalid negativeOrZero (expected false): " + m);
         }
         moneys = new Money[]{Money.of(0, "CHF"), Money.of(0.0, "CHF"), Money.of(BigDecimal.ZERO, "CHF"),
                 Money.of(new BigDecimal("0.00000000000000000"), "CHF"), Money.of(-100, "CHF"),
                 Money.of(-34242344, "CHF"), Money.of(-23123213.435, "CHF")};
-        for(Money m : moneys){
+        for (Money m : moneys) {
             assertTrue(m.isNegativeOrZero(), "Invalid negativeOrZero (expected true): " + m);
         }
     }
@@ -707,7 +707,7 @@ public class MoneyTest{
      * Test method for {@link Money#getFactory()#setNumber(java.lang.Number)}.
      */
     @Test
-    public void testWithNumber(){
+    public void testWithNumber() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "CHF"),
                 Money.of(new BigDecimal("23123213.435"), "CHF"), Money.of(new BigDecimal("-23123213.435"), "CHF"),
                 Money.of(-23123213, "CHF"), Money.of(0, "CHF")};
@@ -719,7 +719,7 @@ public class MoneyTest{
                         s.getFactory().setCurrency(s.getCurrency()).setNumber(new BigDecimal("-23123213.435")).create(),
                         s.getFactory().setCurrency(s.getCurrency()).setNumber(-23123213).create(),
                         s.getFactory().setCurrency(s.getCurrency()).setNumber(0).create()};
-        for(int i = 0; i < moneys.length; i++){
+        for (int i = 0; i < moneys.length; i++) {
             assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
     }
@@ -730,7 +730,7 @@ public class MoneyTest{
      * (Number)}.
      */
     @Test
-    public void testWithCurrencyUnitNumber(){
+    public void testWithCurrencyUnitNumber() {
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "USD"), Money.of(23123213.435, "EUR"),
                 Money.of(-23123213.435, "USS"), Money.of(-23123213, "USN"), Money.of(0, "GBP")};
         Money s = Money.of(10, "XXX");
@@ -743,7 +743,7 @@ public class MoneyTest{
                         .setNumber(new BigDecimal("-23123213.435")).create(),
                 s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USN")).setNumber(-23123213).create(),
                 s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("GBP")).setNumber(0).create()};
-        for(int i = 0; i < moneys.length; i++){
+        for (int i = 0; i < moneys.length; i++) {
             assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
     }
@@ -752,7 +752,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#getNumber()#longValue()}.
      */
     @Test
-    public void testLongValue(){
+    public void testLongValue() {
         Money m = Money.of(100, "CHF");
         assertEquals(100L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(-100, "CHF");
@@ -778,7 +778,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#getNumber()#longValueExact()}.
      */
     @Test
-    public void testLongValueExact(){
+    public void testLongValueExact() {
         Money m = Money.of(100, "CHF");
         assertEquals(100L, m.getNumber().longValueExact(), "longValue of " + m);
         m = Money.of(-100, "CHF");
@@ -791,28 +791,25 @@ public class MoneyTest{
         assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
         assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
-        try{
+        try {
             m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
             m.getNumber().longValueExact();
             fail("longValueExact(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             // OK
         }
-        try{
+        try {
             m = Money.of(-100.3434, "CHF");
             m.getNumber().longValueExact();
             fail("longValueExact(-100.3434) should raise an ArithmeticException.");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             // OK
         }
-        try{
+        try {
             m = Money.of(100.3434, "CHF");
             m.getNumber().longValueExact();
             fail("longValueExact(100.3434) should raise an ArithmeticException.");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             // OK
         }
     }
@@ -821,7 +818,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#getNumber()#doubleValue()}.
      */
     @Test
-    public void testDoubleValue(){
+    public void testDoubleValue() {
         Money m = Money.of(100, "CHF");
         assertEquals(100d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(-100, "CHF");
@@ -851,7 +848,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#signum()}.
      */
     @Test
-    public void testSignum(){
+    public void testSignum() {
         Money m = Money.of(100, "CHF");
         assertEquals(1, m.signum(), "signum of " + m);
         m = Money.of(-100, "CHF");
@@ -870,10 +867,10 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isLessThan(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testIsLessThan(){
+    public void testIsLessThan() {
         assertFalse(Money.of(BigDecimal.valueOf(0d), "CHF").isLessThan(Money.of(BigDecimal.valueOf(0), "CHF")));
         assertFalse(Money.of(BigDecimal.valueOf(0.00000000001d), "CHF")
-                            .isLessThan(Money.of(BigDecimal.valueOf(0d), "CHF")));
+                .isLessThan(Money.of(BigDecimal.valueOf(0d), "CHF")));
         assertFalse(Money.of(15, "CHF").isLessThan(Money.of(10, "CHF")));
         assertFalse(Money.of(15.546, "CHF").isLessThan(Money.of(10.34, "CHF")));
         assertTrue(Money.of(5, "CHF").isLessThan(Money.of(10, "CHF")));
@@ -885,10 +882,10 @@ public class MoneyTest{
      * {@link org.javamoney.moneta.Money#isLessThanOrEqualTo(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testIsLessThanOrEqualTo(){
+    public void testIsLessThanOrEqualTo() {
         assertTrue(Money.of(BigDecimal.valueOf(0d), "CHF").isLessThanOrEqualTo(Money.of(BigDecimal.valueOf(0), "CHF")));
         assertFalse(Money.of(BigDecimal.valueOf(0.00000000001d), "CHF")
-                            .isLessThanOrEqualTo(Money.of(BigDecimal.valueOf(0d), "CHF")));
+                .isLessThanOrEqualTo(Money.of(BigDecimal.valueOf(0d), "CHF")));
         assertFalse(Money.of(15, "CHF").isLessThanOrEqualTo(Money.of(10, "CHF")));
         assertFalse(Money.of(15.546, "CHF").isLessThan(Money.of(10.34, "CHF")));
         assertTrue(Money.of(5, "CHF").isLessThanOrEqualTo(Money.of(10, "CHF")));
@@ -900,10 +897,10 @@ public class MoneyTest{
      * .
      */
     @Test
-    public void testIsGreaterThan(){
+    public void testIsGreaterThan() {
         assertFalse(Money.of(BigDecimal.valueOf(0d), "CHF").isGreaterThan(Money.of(BigDecimal.valueOf(0), "CHF")));
         assertTrue(Money.of(BigDecimal.valueOf(0.00000000001d), "CHF")
-                           .isGreaterThan(Money.of(BigDecimal.valueOf(0d), "CHF")));
+                .isGreaterThan(Money.of(BigDecimal.valueOf(0d), "CHF")));
         assertTrue(Money.of(15, "CHF").isGreaterThan(Money.of(10, "CHF")));
         assertTrue(Money.of(15.546, "CHF").isGreaterThan(Money.of(10.34, "CHF")));
         assertFalse(Money.of(5, "CHF").isGreaterThan(Money.of(10, "CHF")));
@@ -915,11 +912,11 @@ public class MoneyTest{
      * {@link org.javamoney.moneta.Money#isGreaterThanOrEqualTo(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testIsGreaterThanOrEqualTo(){
+    public void testIsGreaterThanOrEqualTo() {
         assertTrue(
                 Money.of(BigDecimal.valueOf(0d), "CHF").isGreaterThanOrEqualTo(Money.of(BigDecimal.valueOf(0), "CHF")));
         assertTrue(Money.of(BigDecimal.valueOf(0.00000000001d), "CHF")
-                           .isGreaterThanOrEqualTo(Money.of(BigDecimal.valueOf(0d), "CHF")));
+                .isGreaterThanOrEqualTo(Money.of(BigDecimal.valueOf(0d), "CHF")));
         assertTrue(Money.of(15, "CHF").isGreaterThanOrEqualTo(Money.of(10, "CHF")));
         assertTrue(Money.of(15.546, "CHF").isGreaterThanOrEqualTo(Money.of(10.34, "CHF")));
         assertFalse(Money.of(5, "CHF").isGreaterThanOrEqualTo(Money.of(10, "CHF")));
@@ -930,7 +927,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#isEqualTo(javax.money.MonetaryAmount)}.
      */
     @Test
-    public void testIsEqualTo(){
+    public void testIsEqualTo() {
         assertTrue(Money.of(BigDecimal.valueOf(0d), "CHF").isEqualTo(Money.of(BigDecimal.valueOf(0), "CHF")));
         assertFalse(
                 Money.of(BigDecimal.valueOf(0.00000000001d), "CHF").isEqualTo(Money.of(BigDecimal.valueOf(0d), "CHF")));
@@ -950,14 +947,14 @@ public class MoneyTest{
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").isEqualTo(Money.of(new BigDecimal("-1.2300"), "CHF")));
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF").isEqualTo(Money.of(new BigDecimal("-1.23000"), "CHF")));
         assertTrue(Money.of(new BigDecimal("-1.23"), "CHF")
-                           .isEqualTo(Money.of(new BigDecimal("-1.230000000000000000000"), "CHF")));
+                .isEqualTo(Money.of(new BigDecimal("-1.230000000000000000000"), "CHF")));
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#getNumber()#getNumberType()}.
      */
     @Test
-    public void testGetImplementationType(){
+    public void testGetImplementationType() {
         assertEquals(Money.of(0, "CHF").getMonetaryContext().getAmountType(), Money.class);
         assertEquals(Money.of(0.34738746d, "CHF").getMonetaryContext().getAmountType(), Money.class);
         assertEquals(Money.of(100034L, "CHF").getMonetaryContext().getAmountType(), Money.class);
@@ -967,11 +964,11 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#query(javax.money.MonetaryQuery)}.
      */
     @Test
-    public void testQuery(){
+    public void testQuery() {
         MonetaryQuery<Integer> q = amount -> Money.from(amount).getNumber().getPrecision();
         Money[] moneys = new Money[]{Money.of(100, "CHF"), Money.of(34242344, "USD"), Money.of(23123213.435, "EUR"),
                 Money.of(-23123213.435, "USS"), Money.of(-23123213, "USN"), Money.of(0, "GBP")};
-        for(Money money : moneys){
+        for (Money money : moneys) {
             assertEquals(money.query(q), Integer.valueOf(money.getNumber().getPrecision()));
         }
     }
@@ -980,7 +977,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#getNumber()#asType(java.lang.Class)}.
      */
     @Test
-    public void testAsTypeClassOfT(){
+    public void testAsTypeClassOfT() {
         Money m = Money.of(13.656, "CHF");
         assertEquals(m.getNumber().byteValue(), 13);
         assertEquals(m.getNumber().shortValue(), 13);
@@ -996,7 +993,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#stripTrailingZeros()}.
      */
     @Test
-    public void testStripTrailingZeroes(){
+    public void testStripTrailingZeroes() {
         assertEquals(BigDecimal.ZERO, Money.of(new BigDecimal("0.0"), "CHF").stripTrailingZeros().getNumber()
                 .numberValue(BigDecimal.class));
         assertEquals(BigDecimal.ZERO, Money.of(new BigDecimal("0.00"), "CHF").stripTrailingZeros().getNumber()
@@ -1004,24 +1001,24 @@ public class MoneyTest{
         assertEquals(BigDecimal.ZERO, Money.of(new BigDecimal("0.000"), "CHF").stripTrailingZeros().getNumber()
                 .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
-                     Money.of(new BigDecimal("12.123000"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class));
+                Money.of(new BigDecimal("12.123000"), "CHF").stripTrailingZeros().getNumber()
+                        .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
-                     Money.of(new BigDecimal("12.12300"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class));
+                Money.of(new BigDecimal("12.12300"), "CHF").stripTrailingZeros().getNumber()
+                        .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
-                     Money.of(new BigDecimal("12.1230"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class));
+                Money.of(new BigDecimal("12.1230"), "CHF").stripTrailingZeros().getNumber()
+                        .numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("12.123"),
-                     Money.of(new BigDecimal("12.123"), "CHF").stripTrailingZeros().getNumber()
-                             .numberValue(BigDecimal.class));
+                Money.of(new BigDecimal("12.123"), "CHF").stripTrailingZeros().getNumber()
+                        .numberValue(BigDecimal.class));
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#toString()}.
      */
     @Test
-    public void testToString(){
+    public void testToString() {
         assertEquals("XXX 1.23455645", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
         assertEquals("CHF 1234", Money.of(1234, "CHF").toString());
         assertEquals("CHF 1234", Money.of(new BigDecimal("1234.0"), "CHF").toString());
@@ -1033,7 +1030,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#with(javax.money.MonetaryOperator)}.
      */
     @Test
-    public void testWithMonetaryOperator(){
+    public void testWithMonetaryOperator() {
         MonetaryOperator adj = amount -> Money.of(-100, amount.getCurrency());
         Money m = Money.of(1.23455645d, "XXX");
         Money a = m.with(adj);
@@ -1053,21 +1050,21 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.Money#from(javax.money.MonetaryAmount)}.
      */
     @Test
-    public void testFrom(){
+    public void testFrom() {
         Money m = Money.of(new BigDecimal("1.2345"), "XXX");
         Money m2 = Money.from(m);
         assertTrue(m == m2);
     }
 
-	@Test
-	public void parseTest() {
-		Money money = Money.parse("EUR 25.25");
-		assertEquals(money.getCurrency(), EURO);
-		assertEquals(money.getNumber().doubleValue(), 25.25);
-	}
+    @Test
+    public void parseTest() {
+        Money money = Money.parse("EUR 25.25");
+        assertEquals(money.getCurrency(), EURO);
+        assertEquals(money.getNumber().doubleValue(), 25.25);
+    }
 
     @Test
-    public void testSerialization() throws IOException, ClassNotFoundException{
+    public void testSerialization() throws IOException, ClassNotFoundException {
         Money m = Money.of(new BigDecimal("1.2345"), "XXX");
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -1085,7 +1082,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)} .
      */
     @Test(expectedExceptions = MonetaryException.class)
-    public void testAdd_WrongCurrency(){
+    public void testAdd_WrongCurrency() {
         Money m1 = Money.of(BigDecimal.TEN, EURO);
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
         m1.add(m2);
@@ -1095,7 +1092,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)} .
      */
     @Test(expectedExceptions = MonetaryException.class)
-    public void testSubtract_WrongCurrency(){
+    public void testSubtract_WrongCurrency() {
         Money m1 = Money.of(BigDecimal.TEN, EURO);
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
         m1.subtract(m2);
@@ -1105,7 +1102,7 @@ public class MoneyTest{
      * Test method for {@link org.javamoney.moneta.RoundedMoney#add(javax.money.MonetaryAmount)} .
      */
     @Test(expectedExceptions = MonetaryException.class)
-    public void testDivide_WrongCurrency(){
+    public void testDivide_WrongCurrency() {
         Money m1 = Money.of(BigDecimal.TEN, EURO);
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
         m1.subtract(m2);

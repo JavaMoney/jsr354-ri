@@ -24,7 +24,7 @@ import java.util.*;
  *
  * @author Anatole Tresch
  */
-public class CompoundRateProvider extends AbstractRateProvider{
+public class CompoundRateProvider extends AbstractRateProvider {
     /**
      * Kery used to store a list of child {@link javax.money.convert.ProviderContext} instances of the providers
      * contained within this instance.
@@ -41,18 +41,18 @@ public class CompoundRateProvider extends AbstractRateProvider{
      * @param providers The collection of child {@link ExchangeRateProvider}
      *                  instances this class delegates calls to.
      */
-    public CompoundRateProvider(Iterable<ExchangeRateProvider> providers){
+    public CompoundRateProvider(Iterable<ExchangeRateProvider> providers) {
         super(createContext(providers));
-        for(ExchangeRateProvider exchangeRateProvider : providers){
+        for (ExchangeRateProvider exchangeRateProvider : providers) {
             addProvider(exchangeRateProvider);
         }
     }
 
-    private static ProviderContext createContext(Iterable<ExchangeRateProvider> providers){
+    private static ProviderContext createContext(Iterable<ExchangeRateProvider> providers) {
         Set<RateType> rateTypeSet = new HashSet<>();
         StringBuilder providerName = new StringBuilder("Compound: ");
         List<ProviderContext> childContextList = new ArrayList<>();
-        for(ExchangeRateProvider exchangeRateProvider : providers){
+        for (ExchangeRateProvider exchangeRateProvider : providers) {
             childContextList.add(exchangeRateProvider.getProviderContext());
             providerName.append(exchangeRateProvider.getProviderContext().getProvider());
             providerName.append(',');
@@ -61,7 +61,7 @@ public class CompoundRateProvider extends AbstractRateProvider{
         providerName.setLength(providerName.length() - 1);
 
         ProviderContextBuilder builder = ProviderContextBuilder.of(providerName.toString(), rateTypeSet);
-        builder.set(CHILD_PROVIDER_CONTEXTS_KEY, childContextList, List.class);
+        builder.set(CHILD_PROVIDER_CONTEXTS_KEY, childContextList);
         return builder.build();
     }
 
@@ -74,9 +74,9 @@ public class CompoundRateProvider extends AbstractRateProvider{
      * @throws java.lang.NullPointerException if the provider is null.
      *                                        .
      */
-    private void addProvider(ExchangeRateProvider prov){
+    private void addProvider(ExchangeRateProvider prov) {
         providers.add(Optional.ofNullable(prov)
-                              .orElseThrow(() -> new NullPointerException("ConversionProvider required.")));
+                .orElseThrow(() -> new NullPointerException("ConversionProvider required.")));
     }
 
     /*
@@ -88,11 +88,11 @@ public class CompoundRateProvider extends AbstractRateProvider{
      * javax.money.convert.ConversionContext)
      */
     @Override
-    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
-        for(ExchangeRateProvider prov : this.providers){
-            if(prov.isAvailable(conversionQuery)){
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        for (ExchangeRateProvider prov : this.providers) {
+            if (prov.isAvailable(conversionQuery)) {
                 ExchangeRate rate = prov.getExchangeRate(conversionQuery);
-                if(Objects.nonNull(rate)){
+                if (Objects.nonNull(rate)) {
                     return rate;
                 }
             }

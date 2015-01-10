@@ -26,7 +26,7 @@ import java.util.Objects;
  * Builder for constructing new instances of {@link BuildableCurrencyUnit} using a fluent
  * API.
  */
-public final class CurrencyUnitBuilder{
+public final class CurrencyUnitBuilder {
     /**
      * The currency code.
      */
@@ -47,7 +47,7 @@ public final class CurrencyUnitBuilder{
     /**
      * Private constructor, use #of() methods.
      */
-    private CurrencyUnitBuilder(){
+    private CurrencyUnitBuilder() {
     }
 
     /**
@@ -56,7 +56,7 @@ public final class CurrencyUnitBuilder{
      * @param currencyCode    the (unique) and identifying currency code, not null.
      * @param currencyContext The currency context to be used.
      */
-    public static CurrencyUnitBuilder of(String currencyCode, javax.money.CurrencyContext currencyContext){
+    public static CurrencyUnitBuilder of(String currencyCode, javax.money.CurrencyContext currencyContext) {
         return new CurrencyUnitBuilder(currencyCode, currencyContext);
     }
 
@@ -66,7 +66,7 @@ public final class CurrencyUnitBuilder{
      * @param currencyCode the (unique) and identifying currency code, not null.
      * @param providerName the currency provider, not null.
      */
-    public static CurrencyUnitBuilder of(String currencyCode, String providerName){
+    public static CurrencyUnitBuilder of(String currencyCode, String providerName) {
         return new CurrencyUnitBuilder(currencyCode, CurrencyContextBuilder.of(providerName).build());
     }
 
@@ -75,7 +75,7 @@ public final class CurrencyUnitBuilder{
      *
      * @param currencyCode the (unique) and identifying currency code, not null.
      */
-    private CurrencyUnitBuilder(String currencyCode, javax.money.CurrencyContext currencyContext){
+    private CurrencyUnitBuilder(String currencyCode, javax.money.CurrencyContext currencyContext) {
         Objects.requireNonNull(currencyCode, "currencyCode required");
         this.currencyCode = currencyCode;
         Objects.requireNonNull(currencyContext, "currencyContext required");
@@ -83,13 +83,13 @@ public final class CurrencyUnitBuilder{
     }
 
     /**
-     * Allows to set the currency code, for creating multiple instances, using one Builder.
+     * Allows to setTyped the currency code, for creating multiple instances, using one Builder.
      *
      * @param currencyCode the (unique) and identifying currency code, not null.
      * @return the Builder, for chaining.
      * @see javax.money.CurrencyUnit#getCurrencyCode()
      */
-    public CurrencyUnitBuilder setCurrencyCode(String currencyCode){
+    public CurrencyUnitBuilder setCurrencyCode(String currencyCode) {
         Objects.requireNonNull(currencyCode, "currencyCode required");
         this.currencyCode = currencyCode;
         this.currencyContext = CurrencyContextBuilder.of(getClass().getSimpleName()).build();
@@ -103,8 +103,8 @@ public final class CurrencyUnitBuilder{
      * @return the Builder, for chaining.
      * @see javax.money.CurrencyUnit#getNumericCode()
      */
-    public CurrencyUnitBuilder setNumericCode(int numericCode){
-        if(numericCode < -1){
+    public CurrencyUnitBuilder setNumericCode(int numericCode) {
+        if (numericCode < -1) {
             throw new IllegalArgumentException("numericCode must be >= -1");
         }
         this.numericCode = numericCode;
@@ -118,8 +118,8 @@ public final class CurrencyUnitBuilder{
      * @return the Builder, for chaining.
      * @see javax.money.CurrencyUnit#getDefaultFractionDigits()
      */
-    public CurrencyUnitBuilder setDefaultFractionDigits(int defaultFractionDigits){
-        if(defaultFractionDigits < 0){
+    public CurrencyUnitBuilder setDefaultFractionDigits(int defaultFractionDigits) {
+        if (defaultFractionDigits < 0) {
             throw new IllegalArgumentException("defaultFractionDigits must be >= 0");
         }
         this.defaultFractionDigits = defaultFractionDigits;
@@ -132,7 +132,7 @@ public final class CurrencyUnitBuilder{
      * @return the new CurrencyUnit instance.
      * @throws javax.money.MonetaryException if creation fails
      */
-    public CurrencyUnit build(){
+    public CurrencyUnit build() {
         return build(false);
     }
 
@@ -145,9 +145,9 @@ public final class CurrencyUnitBuilder{
      * @return the new CurrencyUnit instance.
      * @see javax.money.MonetaryCurrencies#getCurrency(String, String...)
      */
-    public CurrencyUnit build(boolean register){
+    public CurrencyUnit build(boolean register) {
         BuildableCurrencyUnit cu = new BuildableCurrencyUnit(this);
-        if(register){
+        if (register) {
             ConfigurableCurrencyUnitProvider.registerCurrencyUnit(cu);
         }
         return cu;
@@ -164,9 +164,9 @@ public final class CurrencyUnitBuilder{
      * @see javax.money.MonetaryCurrencies#getCurrency(String, String...)
      * @see javax.money.MonetaryCurrencies#getCurrency(java.util.Locale, String...)
      */
-    public CurrencyUnit build(boolean register, Locale locale){
+    public CurrencyUnit build(boolean register, Locale locale) {
         BuildableCurrencyUnit cu = new BuildableCurrencyUnit(this);
-        if(register){
+        if (register) {
             ConfigurableCurrencyUnitProvider.registerCurrencyUnit(cu);
             ConfigurableCurrencyUnitProvider.registerCurrencyUnit(cu, locale);
         }

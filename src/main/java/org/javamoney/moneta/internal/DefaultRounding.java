@@ -33,7 +33,7 @@ import java.util.Optional;
  * @author Werner Keil
  * @see RoundingMode
  */
-final class DefaultRounding implements MonetaryRounding, Serializable{
+final class DefaultRounding implements MonetaryRounding, Serializable {
 
     /**
      * The scale key to be used.
@@ -55,17 +55,17 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
      *
      * @param roundingMode The {@link java.math.RoundingMode} to be used, not {@code null}.
      */
-    DefaultRounding(int scale, RoundingMode roundingMode){
+    DefaultRounding(int scale, RoundingMode roundingMode) {
         Objects.requireNonNull(roundingMode, "RoundingMode required.");
-        if(scale < 0){
+        if (scale < 0) {
             scale = 0;
         }
         this.context = RoundingContextBuilder.of("default", "default").
-                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).set(Optional.ofNullable(roundingMode)
-                                                                                           .orElseThrow(
-                                                                                                   () -> new
-                                                                                                           IllegalArgumentException(
-                                                                                                           "roundingMode missing")))
+                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).setTyped(Optional.ofNullable(roundingMode)
+                .orElseThrow(
+                        () -> new
+                                IllegalArgumentException(
+                                "roundingMode missing")))
                 .build();
     }
 
@@ -77,7 +77,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
      *                 is used.
      */
-    DefaultRounding(CurrencyUnit currency, RoundingMode roundingMode){
+    DefaultRounding(CurrencyUnit currency, RoundingMode roundingMode) {
         this(currency.getDefaultFractionDigits(), roundingMode);
     }
 
@@ -87,14 +87,14 @@ final class DefaultRounding implements MonetaryRounding, Serializable{
      * @see javax.money.MonetaryFunction#apply(java.lang.Object)
      */
     @Override
-    public MonetaryAmount apply(MonetaryAmount amount){
+    public MonetaryAmount apply(MonetaryAmount amount) {
         return amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
                 amount.getNumber().numberValue(BigDecimal.class)
-                        .setScale(this.context.getInt(SCALE_KEY), this.context.get(RoundingMode.class))).create();
+                        .setScale(this.context.getInt(SCALE_KEY), this.context.getTyped(RoundingMode.class))).create();
     }
 
     @Override
-    public RoundingContext getRoundingContext(){
+    public RoundingContext getRoundingContext() {
         return context;
     }
 }

@@ -26,15 +26,15 @@ import javax.money.*;
  *
  * @author Anatole Tresch
  */
-final class MajorUnits implements MonetaryQuery<Long>{
+final class MajorUnits implements MonetaryQuery<Long> {
 
     private MonetaryOperator downRounding =
-            MonetaryRoundings.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
+            MonetaryRoundings.getRounding(RoundingQueryBuilder.of().setScale(0).setTyped(RoundingMode.DOWN).build());
 
     /**
      * Access the shared instance of {@link MajorUnits} for use.
      */
-    MajorUnits(){
+    MajorUnits() {
     }
 
     /**
@@ -50,7 +50,7 @@ final class MajorUnits implements MonetaryQuery<Long>{
      * @throws ArithmeticException if the amount is too large for a {@code long}
      */
     @Override
-    public Long queryFrom(MonetaryAmount amount){
+    public Long queryFrom(MonetaryAmount amount) {
         Objects.requireNonNull(amount, "Amount required.");
         return amount.with(downRounding).getNumber().longValueExact();
     }

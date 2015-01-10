@@ -18,10 +18,13 @@ package org.javamoney.moneta.spi;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
@@ -100,7 +103,27 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
             throw new CurrencyConversionException(amount.getCurrency(),
                     Objects.isNull(rate) ? null : rate.getCurrency(), null);
         }
-        return amount.multiply(rate.getFactor()).getFactory().setCurrency(rate.getCurrency()).create();
+        NumberValue factor = rate.getFactor();
+        factor = roundFactor(amount, factor);
+        return amount.multiply(factor).getFactory().setCurrency(rate.getCurrency()).create();
+    }
+
+    /**
+     * Optionally rounds the factor to be used. By default this method will only round
+     * as much as its is needed, so the factor can be handled by the target amount instance based on its
+     * numeric capabilities.
+     *
+     * @param amount the amount, not null.
+     * @param factor the factor
+     * @return the new NumberValue, never null.
+     */
+    protected NumberValue roundFactor(MonetaryAmount amount, NumberValue factor) {
+        if (amount.getMonetaryContext().getMaxScale() > 0) {
+            if (factor.getScale() > amount.getMonetaryContext().getMaxScale()) {
+                return factor.round(new MathContext(amount.getMonetaryContext().getMaxScale(), RoundingMode.HALF_EVEN));
+            }
+        }
+        return factor;
     }
 
 

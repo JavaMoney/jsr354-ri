@@ -45,7 +45,7 @@ class DefaultMonetaryContextFactory {
         } catch (Exception e) {
             Logger.getLogger(DefaultMonetaryContextFactory.class.getName())
                     .log(Level.SEVERE, "Error evaluating default NumericContext, using default (NumericContext.NUM64).", e);
-            return MonetaryContextBuilder.of(Money.class).set(MathContext.DECIMAL64).build();
+            return MonetaryContextBuilder.of(Money.class).setTyped(MathContext.DECIMAL64).build();
         }
     }
 
@@ -57,32 +57,32 @@ class DefaultMonetaryContextFactory {
                 case "DECIMAL32":
                     Logger.getLogger(Money.class.getName()).info(
                             "Using MathContext.DECIMAL32");
-                    builder.set(MathContext.DECIMAL32);
+                    builder.setTyped(MathContext.DECIMAL32);
                     break;
                 case "DECIMAL64":
                     Logger.getLogger(Money.class.getName()).info(
                             "Using MathContext.DECIMAL64");
-                    builder.set(MathContext.DECIMAL64);
+                    builder.setTyped(MathContext.DECIMAL64);
                     break;
                 case "DECIMAL128":
                     Logger.getLogger(Money.class.getName()).info(
                             "Using MathContext.DECIMAL128");
-                    builder.set(MathContext.DECIMAL128);
+                    builder.setTyped(MathContext.DECIMAL128);
                     break;
                 case "UNLIMITED":
                     Logger.getLogger(Money.class.getName()).info(
                             "Using MathContext.UNLIMITED");
-                    builder.set(MathContext.UNLIMITED);
+                    builder.setTyped(MathContext.UNLIMITED);
                     break;
                 default:
                     Logger.getLogger(Money.class.getName()).warning(
                             "Found invalid MathContext: " + value + ", using default MathContext.DECIMAL64");
-                    builder.set(MathContext.DECIMAL64);
+                    builder.setTyped(MathContext.DECIMAL64);
             }
         } else {
             Logger.getLogger(Money.class.getName()).info(
                     "Using default MathContext.DECIMAL64");
-            builder.set(MathContext.DECIMAL64);
+            builder.setTyped(MathContext.DECIMAL64);
         }
         return builder.build();
     }
@@ -91,7 +91,7 @@ class DefaultMonetaryContextFactory {
         String value = config.get("org.javamoney.moneta.Money.defaults.roundingMode");
         RoundingMode rm = Objects.nonNull(value) ? RoundingMode.valueOf(value
                 .toUpperCase(Locale.ENGLISH)) : RoundingMode.HALF_UP;
-        MonetaryContext mc = MonetaryContextBuilder.of(Money.class).setPrecision(prec).set(rm).set(Money.class).build();
+        MonetaryContext mc = MonetaryContextBuilder.of(Money.class).setPrecision(prec).setTyped(rm).setTyped(Money.class).build();
         Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info("Using custom MathContext: precision=" + prec
                 + ", roundingMode=" + rm);
         return mc;

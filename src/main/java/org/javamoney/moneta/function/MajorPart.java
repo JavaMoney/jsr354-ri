@@ -24,15 +24,15 @@ import java.util.Objects;
  *
  * @author Anatole Tresch
  */
-final class MajorPart implements MonetaryOperator{
+final class MajorPart implements MonetaryOperator {
 
     private MonetaryRounding downRounding =
-            MonetaryRoundings.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
+            MonetaryRoundings.getRounding(RoundingQueryBuilder.of().setScale(0).setTyped(RoundingMode.DOWN).build());
 
     /**
      * Access the shared instance of {@link MajorPart} for use.
      */
-    MajorPart(){
+    MajorPart() {
     }
 
     /**
@@ -50,7 +50,7 @@ final class MajorPart implements MonetaryOperator{
      * @return the major units part of the amount, never {@code null}
      */
     @Override
-    public MonetaryAmount apply(MonetaryAmount amount){
+    public MonetaryAmount apply(MonetaryAmount amount) {
         Objects.requireNonNull(amount, "Amount required.");
         return amount.with(downRounding);
     }

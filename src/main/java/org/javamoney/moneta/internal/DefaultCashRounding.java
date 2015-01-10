@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @author Anatole Tresch
  */
-final class DefaultCashRounding implements MonetaryRounding, Serializable{
+final class DefaultCashRounding implements MonetaryRounding, Serializable {
 
     /**
      * The scale key to be used.
@@ -61,14 +61,14 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      * @param roundingMode The {@link RoundingMode} to be used, not {@code null}.
      * @param scale        The target scale.
      */
-    DefaultCashRounding(int scale, RoundingMode roundingMode, int minimalMinors){
-        if(scale < 0){
+    DefaultCashRounding(int scale, RoundingMode roundingMode, int minimalMinors) {
+        if (scale < 0) {
             throw new IllegalArgumentException("scale < 0");
         }
         this.context = RoundingContextBuilder.of("default", "default").set(CASHROUNDING_KEY, true).
                 set(PROVCLASS_KEY, getClass().getName()).set(MINMINORS_KEY, minimalMinors).set(SCALE_KEY, scale)
-                .set(Optional.ofNullable(roundingMode)
-                             .orElseThrow(() -> new IllegalArgumentException("roundingMode missing"))).build();
+                .setTyped(Optional.ofNullable(roundingMode)
+                        .orElseThrow(() -> new IllegalArgumentException("roundingMode missing"))).build();
     }
 
     /**
@@ -79,7 +79,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
      *                 is used.
      */
-    DefaultCashRounding(CurrencyUnit currency, RoundingMode roundingMode, int minimalMinors){
+    DefaultCashRounding(CurrencyUnit currency, RoundingMode roundingMode, int minimalMinors) {
         this(currency.getDefaultFractionDigits(), roundingMode, minimalMinors);
     }
 
@@ -91,7 +91,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      *                 {@link RoundingMode}, by default, {@link RoundingMode#HALF_UP}
      *                 is used.
      */
-    DefaultCashRounding(CurrencyUnit currency, int minimalMinors){
+    DefaultCashRounding(CurrencyUnit currency, int minimalMinors) {
         this(currency, RoundingMode.HALF_UP, minimalMinors);
     }
 
@@ -101,11 +101,11 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
      * @see javax.money.MonetaryFunction#apply(java.lang.Object)
      */
     @Override
-    public MonetaryAmount apply(MonetaryAmount value){
+    public MonetaryAmount apply(MonetaryAmount value) {
         Objects.requireNonNull(value, "Amount required.");
         // 1 extract BD value, round according the default fraction units
         int scale = this.context.getInt(SCALE_KEY);
-        RoundingMode roundingMode = this.context.get(RoundingMode.class);
+        RoundingMode roundingMode = this.context.getTyped(RoundingMode.class);
         BigDecimal num = value.getNumber().numberValue(BigDecimal.class).setScale(scale, roundingMode);
         // 2 evaluate minor units and remainder
         long minors = num.movePointRight(num.scale()).longValueExact();
@@ -113,12 +113,12 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
         long factor = minors / minimalMinors;
         long low = minimalMinors * factor;
         long high = minimalMinors * (factor + 1);
-        if(minors - low > high - minors){
+        if (minors - low > high - minors) {
             minors = high;
-        }else if(minors - low < high - minors){
+        } else if (minors - low < high - minors) {
             minors = low;
-        }else{
-            switch(roundingMode){
+        } else {
+            switch (roundingMode) {
                 case HALF_UP:
                 case UP:
                 case HALF_EVEN:
@@ -133,7 +133,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable{
     }
 
     @Override
-    public RoundingContext getRoundingContext(){
+    public RoundingContext getRoundingContext() {
         return context;
     }
 }

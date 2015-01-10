@@ -30,40 +30,40 @@ import org.javamoney.moneta.spi.AbstractAmountBuilder;
  *
  * @author Anatole Tresch
  */
-public class MoneyAmountBuilder extends AbstractAmountBuilder<Money>{
+public class MoneyAmountBuilder extends AbstractAmountBuilder<Money> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            MonetaryContextBuilder.of(Money.class).set(64).setMaxScale(63).set(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(Money.class).setTyped(64).setMaxScale(63).setTyped(RoundingMode.HALF_EVEN).build();
     static final MonetaryContext MAX_CONTEXT =
-            MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).setTyped(RoundingMode.HALF_EVEN).build();
 
     @Override
-    protected Money create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
+    protected Money create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {
         return Money.of(number, currency, MonetaryContext.from(monetaryContext, Money.class));
     }
 
     @Override
-    public NumberValue getMaxNumber(){
+    public NumberValue getMaxNumber() {
         return null;
     }
 
     @Override
-    public NumberValue getMinNumber(){
+    public NumberValue getMinNumber() {
         return null;
     }
 
     @Override
-    public Class<Money> getAmountType(){
+    public Class<Money> getAmountType() {
         return Money.class;
     }
 
     @Override
-    protected MonetaryContext loadDefaultMonetaryContext(){
+    protected MonetaryContext loadDefaultMonetaryContext() {
         return DEFAULT_CONTEXT;
     }
 
     @Override
-    protected MonetaryContext loadMaxMonetaryContext(){
+    protected MonetaryContext loadMaxMonetaryContext() {
         return MAX_CONTEXT;
     }
 

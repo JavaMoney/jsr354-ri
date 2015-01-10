@@ -34,10 +34,10 @@ import java.util.Objects;
  *
  * @author Anatole Tresch
  */
-public final class MoneyUtils{
+public final class MoneyUtils {
 
 
-    private MoneyUtils(){
+    private MoneyUtils() {
     }
 
 
@@ -50,7 +50,7 @@ public final class MoneyUtils{
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
      */
-    public static BigDecimal getBigDecimal(long num){
+    public static BigDecimal getBigDecimal(long num) {
         return BigDecimal.valueOf(num);
     }
 
@@ -61,7 +61,7 @@ public final class MoneyUtils{
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
      */
-    public static BigDecimal getBigDecimal(double num){
+    public static BigDecimal getBigDecimal(double num) {
         return new BigDecimal(String.valueOf(num));
     }
 
@@ -72,7 +72,7 @@ public final class MoneyUtils{
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
      */
-    public static BigDecimal getBigDecimal(Number num){
+    public static BigDecimal getBigDecimal(Number num) {
         return ConvertBigDecimal.of(num);
     }
 
@@ -84,9 +84,9 @@ public final class MoneyUtils{
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
      */
-    public static BigDecimal getBigDecimal(Number num, MonetaryContext moneyContext){
+    public static BigDecimal getBigDecimal(Number num, MonetaryContext moneyContext) {
         BigDecimal bd = getBigDecimal(num);
-        if(Objects.nonNull(moneyContext)){
+        if (Objects.nonNull(moneyContext)) {
             return new BigDecimal(bd.toString(), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
         }
         return bd;
@@ -96,22 +96,22 @@ public final class MoneyUtils{
      * Evaluates the {@link MathContext} from the given {@link MonetaryContext}.
      *
      * @param monetaryContext the {@link MonetaryContext}
-     * @param defaultMode     the default {@link RoundingMode}, to be used if no one is set
+     * @param defaultMode     the default {@link RoundingMode}, to be used if no one is setTyped
      *                        in {@link MonetaryContext}.
      * @return the corresponding {@link MathContext}
      */
-    public static MathContext getMathContext(MonetaryContext monetaryContext, RoundingMode defaultMode){
-        MathContext ctx = monetaryContext.get(MathContext.class);
-        if(Objects.nonNull(ctx)){
+    public static MathContext getMathContext(MonetaryContext monetaryContext, RoundingMode defaultMode) {
+        MathContext ctx = monetaryContext.getTyped(MathContext.class);
+        if (Objects.nonNull(ctx)) {
             return ctx;
         }
-        if(Objects.nonNull(defaultMode)){
+        if (Objects.nonNull(defaultMode)) {
             return new MathContext(monetaryContext.getPrecision(),
-                                   monetaryContext.get(RoundingMode.class, defaultMode)
+                    monetaryContext.getTyped(RoundingMode.class, defaultMode)
             );
         }
         return new MathContext(monetaryContext.getPrecision(),
-                               monetaryContext.get(RoundingMode.class, RoundingMode.HALF_EVEN)
+                monetaryContext.getTyped(RoundingMode.class, RoundingMode.HALF_EVEN)
         );
     }
 
@@ -124,10 +124,10 @@ public final class MoneyUtils{
      *                           compatible, meaning has a different value of
      *                           {@link CurrencyUnit#getCurrencyCode()}).
      */
-    public static void checkAmountParameter(MonetaryAmount amount, CurrencyUnit currencyUnit){
+    public static void checkAmountParameter(MonetaryAmount amount, CurrencyUnit currencyUnit) {
         Objects.requireNonNull(amount, "Amount must not be null.");
         final CurrencyUnit amountCurrency = amount.getCurrency();
-        if(!(currencyUnit.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))){
+        if (!(currencyUnit.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
             throw new MonetaryException("Currency mismatch: " + currencyUnit + '/' + amountCurrency);
         }
     }
@@ -138,7 +138,7 @@ public final class MoneyUtils{
      * @param number the number to be checked.
      * @throws IllegalArgumentException If the number is null
      */
-    public static void checkNumberParameter(Number number){
+    public static void checkNumberParameter(Number number) {
         Objects.requireNonNull(number, "Number is required.");
     }
 

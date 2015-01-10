@@ -73,7 +73,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     private static final long serialVersionUID = -7565813772046251748L;
 
     /**
-     * The default {@link MonetaryContext} applied, if not set explicitly on
+     * The default {@link MonetaryContext} applied, if not setTyped explicitly on
      * creation.
      */
     public static final MonetaryContext DEFAULT_MONETARY_CONTEXT = new DefaultMonetaryContextFactory().getContext();
@@ -92,12 +92,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * The numeric part of this amount.
      */
     private BigDecimal number;
-
-    /**
-     * The number value.
-     */
-    private transient NumberValue numberValue;
-
 
     /**
      * Creates a new instance os {@link Money}.
@@ -164,10 +158,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public NumberValue getNumber(){
-        if(Objects.isNull(numberValue)){
-            numberValue = new DefaultNumberValue(this.number);
-        }
-        return numberValue;
+        return new DefaultNumberValue(number);
     }
 
     /**

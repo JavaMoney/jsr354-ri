@@ -30,12 +30,12 @@ import java.math.RoundingMode;
  *
  * @author Anatole Tresch
  */
-public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMoney>{
+public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMoney> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).setTyped(RoundingMode.HALF_EVEN).build();
     static final MonetaryContext MAX_CONTEXT =
-            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).setTyped(RoundingMode.HALF_EVEN).build();
 
     /*
      * (non-Javadoc)
@@ -43,17 +43,17 @@ public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMone
      * java.lang.Number, javax.money.MonetaryContext)
      */
     @Override
-    protected RoundedMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext){
+    protected RoundedMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {
         return RoundedMoney.of(number, currency, monetaryContext);
     }
 
     @Override
-    public NumberValue getMaxNumber(){
+    public NumberValue getMaxNumber() {
         return null;
     }
 
     @Override
-    public NumberValue getMinNumber(){
+    public NumberValue getMinNumber() {
         return null;
     }
 
@@ -62,7 +62,7 @@ public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMone
      * @see javax.money.MonetaryAmountFactory#getAmountType()
      */
     @Override
-    public Class<RoundedMoney> getAmountType(){
+    public Class<RoundedMoney> getAmountType() {
         return RoundedMoney.class;
     }
 
@@ -71,7 +71,7 @@ public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMone
      * @see org.javamoney.moneta.spi.AbstractAmountFactory#loadDefaultMonetaryContext()
      */
     @Override
-    protected MonetaryContext loadDefaultMonetaryContext(){
+    protected MonetaryContext loadDefaultMonetaryContext() {
         return DEFAULT_CONTEXT;
     }
 
@@ -80,7 +80,7 @@ public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMone
      * @see org.javamoney.moneta.spi.AbstractAmountFactory#loadMaxMonetaryContext()
      */
     @Override
-    protected MonetaryContext loadMaxMonetaryContext(){
+    protected MonetaryContext loadMaxMonetaryContext() {
         return MAX_CONTEXT;
     }
 

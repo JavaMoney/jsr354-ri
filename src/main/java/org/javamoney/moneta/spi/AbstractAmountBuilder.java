@@ -24,15 +24,15 @@ import java.util.Objects;
  *
  * @param <T> the target class implementing {@link javax.money.MonetaryAmount}.
  */
-public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements MonetaryAmountFactory<T>{
+public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements MonetaryAmountFactory<T> {
 
     /**
-     * The default {@link MonetaryContext} applied, if not set explicitly on creation.
+     * The default {@link MonetaryContext} applied, if not setTyped explicitly on creation.
      */
     private MonetaryContext DEFAULT_MONETARY_CONTEXT = loadDefaultMonetaryContext();
 
     /**
-     * The default {@link MonetaryContext} applied, if not set explicitly on creation.
+     * The default {@link MonetaryContext} applied, if not setTyped explicitly on creation.
      */
     private MonetaryContext MAX_MONETARY_CONTEXT = loadMaxMonetaryContext();
 
@@ -48,14 +48,14 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      *                             used.
      */
     @Override
-    public T create(){
-        if(currency == null){
+    public T create() {
+        if (currency == null) {
             throw new MonetaryException("Cannot of FastMoney instance: missing currency.");
         }
-        if(number == null){
+        if (number == null) {
             throw new MonetaryException("Cannot of FastMoney instance: missing number.");
         }
-        if(monetaryContext == null){
+        if (monetaryContext == null) {
             throw new MonetaryException("Cannot of FastMoney instance: missing context.");
         }
         return create(number, currency, monetaryContext);
@@ -73,7 +73,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @see javax.money.MonetaryAmountFactory#withCurrency(javax.money.CurrencyUnit)
      */
     @Override
-    public MonetaryAmountFactory<T> setCurrency(CurrencyUnit currency){
+    public MonetaryAmountFactory<T> setCurrency(CurrencyUnit currency) {
         Objects.requireNonNull(currency);
         this.currency = currency;
         return this;
@@ -84,7 +84,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @see javax.money.MonetaryAmountFactory#with(java.lang.Number)
      */
     @Override
-    public MonetaryAmountFactory<T> setNumber(Number number){
+    public MonetaryAmountFactory<T> setNumber(Number number) {
         this.number = getBigDecimal(number);
         return this;
     }
@@ -94,7 +94,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @see javax.money.MonetaryAmountFactory#withCurrency(java.lang.String)
      */
     @Override
-    public MonetaryAmountFactory<T> setCurrency(String currencyCode){
+    public MonetaryAmountFactory<T> setCurrency(String currencyCode) {
         this.currency = MonetaryCurrencies.getCurrency(currencyCode);
         return this;
     }
@@ -109,7 +109,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @throws UnknownCurrencyException if the currency code can not be resolved to {@link CurrencyUnit}.
      */
     @Override
-    public MonetaryAmountFactory<T> setNumber(double number){
+    public MonetaryAmountFactory<T> setNumber(double number) {
         this.number = new BigDecimal(String.valueOf(number));
         return this;
     }
@@ -119,7 +119,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @see javax.money.MonetaryAmountFactory#with(long)
      */
     @Override
-    public MonetaryAmountFactory<T> setNumber(long number){
+    public MonetaryAmountFactory<T> setNumber(long number) {
         this.number = BigDecimal.valueOf(number);
         return this;
     }
@@ -129,15 +129,15 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @see javax.money.MonetaryAmountFactory#with(javax.money.MonetaryContext)
      */
     @Override
-    public MonetaryAmountFactory<T> setContext(MonetaryContext monetaryContext){
+    public MonetaryAmountFactory<T> setContext(MonetaryContext monetaryContext) {
         Objects.requireNonNull(monetaryContext);
         int maxScale = getMaximalMonetaryContext().getMaxScale();
-        if(maxScale != -1 && maxScale < monetaryContext.getMaxScale()){
+        if (maxScale != -1 && maxScale < monetaryContext.getMaxScale()) {
             throw new MonetaryException(
                     "Context exceeds maximal capabilities (scale) of this type: " + monetaryContext);
         }
         int precision = getMaximalMonetaryContext().getPrecision();
-        if(precision != 0 && precision < monetaryContext.getPrecision()){
+        if (precision != 0 && precision < monetaryContext.getPrecision()) {
             throw new MonetaryException(
                     "Contexts exceeds maximal capabilities (precision) of this type: " + monetaryContext);
         }
@@ -152,7 +152,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @return the default {@link MonetaryContext}, never {@code null}.
      */
     @Override
-    public MonetaryContext getDefaultMonetaryContext(){
+    public MonetaryContext getDefaultMonetaryContext() {
         return DEFAULT_MONETARY_CONTEXT;
     }
 
@@ -162,7 +162,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @return the maximal {@link MonetaryContext}, never {@code null}.
      */
     @Override
-    public MonetaryContext getMaximalMonetaryContext(){
+    public MonetaryContext getMaximalMonetaryContext() {
         return MAX_MONETARY_CONTEXT;
     }
 
@@ -174,7 +174,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @return an according Money instance.
      */
     @Override
-    public MonetaryAmountFactory<T> setAmount(MonetaryAmount amt){
+    public MonetaryAmountFactory<T> setAmount(MonetaryAmount amt) {
         this.currency = amt.getCurrency();
         this.number = amt.getNumber().numberValue(BigDecimal.class);
         this.monetaryContext = MonetaryContextBuilder.of(DEFAULT_MONETARY_CONTEXT.getAmountType())
@@ -189,7 +189,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
      */
-    protected static BigDecimal getBigDecimal(Number num){
+    protected static BigDecimal getBigDecimal(Number num) {
         return ConvertBigDecimal.of(num);
     }
 

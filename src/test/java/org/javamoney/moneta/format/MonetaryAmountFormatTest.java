@@ -32,13 +32,13 @@ import org.testng.annotations.Test;
 /**
  * @author Anatole
  */
-public class MonetaryAmountFormatTest{
+public class MonetaryAmountFormatTest {
 
     /**
      * Test method for {@link javax.money.format.MonetaryAmountFormat#getAmountFormatContext()} .
      */
     @Test
-    public void testGetAmountStyle(){
+    public void testGetAmountStyle() {
 
     }
 
@@ -48,21 +48,21 @@ public class MonetaryAmountFormatTest{
      * {@link javax.money.format.MonetaryAmountFormat#format(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testFormat(){
+    public void testFormat() {
         MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(Locale.GERMANY);
         assertEquals("12,50 CHF", defaultFormat
-                             .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50)
-                                             .create()));
+                .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50)
+                        .create()));
         assertEquals("123.456.789.101.112,12 INR", defaultFormat
-                             .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("INR")
-                                             .setNumber(123456789101112.123456).create()));
+                .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("INR")
+                        .setNumber(123456789101112.123456).create()));
         defaultFormat = MonetaryFormats.getAmountFormat(new Locale("", "IN"));
         assertEquals("CHF 1,211,112.50", defaultFormat
-                             .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(1211112.50)
-                                             .create()));
+                .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(1211112.50)
+                        .create()));
         assertEquals("INR 123,456,789,101,112.12", defaultFormat
-                             .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("INR")
-                                             .setNumber(123456789101112.123456).create()));
+                .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("INR")
+                        .setNumber(123456789101112.123456).create()));
         // Locale india = new Locale("", "IN");
         // defaultFormat = MonetaryFormats.getAmountFormatBuilder(india)
         // .setNumberGroupSizes(3, 2).of();
@@ -76,12 +76,12 @@ public class MonetaryAmountFormatTest{
      * {@link javax.money.format.MonetaryAmountFormat#format(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testFormatWithBuilder(){
+    public void testFormatWithBuilder() {
         MonetaryAmountFormat defaultFormat =
                 MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.of(Locale.JAPANESE).build());
         assertEquals("CHF 12.50", defaultFormat
-                             .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50)
-                                             .create()));
+                .format(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50)
+                        .create()));
     }
 
     /**
@@ -89,16 +89,16 @@ public class MonetaryAmountFormatTest{
      * {@link javax.money.format.MonetaryAmountFormat#format(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testFormatWithBuilder2(){
+    public void testFormatWithBuilder2() {
         MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.GERMANY).set(CurrencyStyle.NUMERIC_CODE).build());
+                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.GERMANY).setTyped(CurrencyStyle.NUMERIC_CODE).build());
         assertEquals("12,50 756", format.format(
-                             MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50).create()));
+                MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50).create()));
         format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.US).set(CurrencyStyle.SYMBOL).build());
+                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.US).setTyped(CurrencyStyle.SYMBOL).build());
         assertEquals("$123,456.56", format.format(
-                             MonetaryAmounts.getDefaultAmountFactory().setCurrency("USD").setNumber(123456.561)
-                                     .create()));
+                MonetaryAmounts.getDefaultAmountFactory().setCurrency("USD").setNumber(123456.561)
+                        .create()));
     }
 
     /**
@@ -109,7 +109,7 @@ public class MonetaryAmountFormatTest{
      * @throws IOException
      */
     @Test
-    public void testPrint() throws IOException{
+    public void testPrint() throws IOException {
         StringBuilder b = new StringBuilder();
         MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(Locale.GERMANY);
         defaultFormat.print(b, MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50).create());
@@ -144,16 +144,16 @@ public class MonetaryAmountFormatTest{
      * @throws ParseException
      */
     @Test
-    public void testParse() throws ParseException{
+    public void testParse() throws ParseException {
         MonetaryAmountFormat defaultFormat = MonetaryFormats.getAmountFormat(Locale.GERMANY);
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("EUR").setNumber(new BigDecimal("12.50"))
-                             .create(), defaultFormat.parse("12,50 EUR"));
+                .create(), defaultFormat.parse("12,50 EUR"));
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("EUR").setNumber(new BigDecimal("12.50"))
-                             .create(), defaultFormat.parse("  \t 12,50 EUR"));
+                .create(), defaultFormat.parse("  \t 12,50 EUR"));
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("EUR").setNumber(new BigDecimal("12.50"))
-                             .create(), defaultFormat.parse("  \t 12,50 \t\n EUR  \t\n\n "));
+                .create(), defaultFormat.parse("  \t 12,50 \t\n EUR  \t\n\n "));
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(new BigDecimal("12.50"))
-                             .create(), defaultFormat.parse("12,50 CHF"));
+                .create(), defaultFormat.parse("12,50 CHF"));
     }
 
 }
