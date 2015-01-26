@@ -62,6 +62,13 @@ public final class MoneyUtils {
      * @return the corresponding {@link BigDecimal}
      */
     public static BigDecimal getBigDecimal(double num) {
+        if (num == Double.NaN) {
+            throw new ArithmeticException("Invalid input Double.NaN.");
+        } else if (num == Double.POSITIVE_INFINITY) {
+            throw new ArithmeticException("Invalid input Double.POSITIVE_INFINITY.");
+        } else if (num == Double.NEGATIVE_INFINITY) {
+            throw new ArithmeticException("Invalid input Double.NEGATIVE_INFINITY.");
+        }
         return new BigDecimal(String.valueOf(num));
     }
 

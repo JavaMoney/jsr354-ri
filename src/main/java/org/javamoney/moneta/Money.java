@@ -222,6 +222,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money divide(double divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            return Money.of(0, getCurrency());
+        }
         if(divisor == 1.0){
             return this;
         }
@@ -250,6 +253,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money[] divideAndRemainder(double divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            Money zero = Money.of(0, getCurrency());
+            return new Money[]{zero, zero};
+        }
         return divideAndRemainder(new BigDecimal(String.valueOf(divisor)));
     }
 
@@ -273,6 +280,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money multiply(double multiplicand){
+        checkNoInfinityOrNaN(multiplicand);
         if(multiplicand == 1.0d){
             return this;
         }
@@ -299,6 +307,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money remainder(double divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            return Money.of(0, getCurrency());
+        }
         return remainder(new BigDecimal(String.valueOf(divisor)));
     }
 
@@ -412,6 +423,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money divide(Number divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            return Money.of(0, getCurrency());
+        }
         BigDecimal divisorBD = MoneyUtils.getBigDecimal(divisor);
         if(divisorBD.equals(BigDecimal.ONE)){
             return this;
@@ -423,6 +437,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     @Override
     public Money[] divideAndRemainder(Number divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            Money zero = Money.of(0, getCurrency());
+            return new Money[]{zero, zero};
+        }
         BigDecimal divisorBD = MoneyUtils.getBigDecimal(divisor);
         if(divisorBD.equals(BigDecimal.ONE)){
             return new Money[]{this, new Money(BigDecimal.ZERO, getCurrency())};
@@ -445,11 +463,17 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     @Override
     public Money divideToIntegralValue(double divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            return Money.of(0, getCurrency());
+        }
         return divideToIntegralValue(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
     public Money divideToIntegralValue(Number divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            return Money.of(0, getCurrency());
+        }
         BigDecimal divisorBD = MoneyUtils.getBigDecimal(divisor);
         BigDecimal dec = this.number.divideToIntegralValue(divisorBD);
         return new Money(dec, getCurrency());
@@ -462,6 +486,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money multiply(Number multiplicand){
+        checkNoInfinityOrNaN(multiplicand);
         BigDecimal multiplicandBD = MoneyUtils.getBigDecimal(multiplicand);
         if(multiplicandBD.equals(BigDecimal.ONE)){
             return this;
@@ -524,6 +549,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money remainder(Number divisor){
+        if (isInfinityAndNotNaN(divisor)) {
+            return new Money(BigDecimal.ZERO, getCurrency());
+        }
         BigDecimal bd = MoneyUtils.getBigDecimal(divisor);
         return new Money(this.number.remainder(bd), getCurrency());
     }
@@ -810,4 +838,27 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
 	private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
 			.of(ToStringMonetaryAmountFormatStyle.MONEY);
+
+    public static void checkNoInfinityOrNaN(Number number) {
+        if (Double.class == number.getClass() || Float.class == number.getClass()) {
+            double dValue = number.doubleValue();
+            if (Double.isNaN(dValue)) {
+                throw new ArithmeticException("Not a valid input: NaN.");
+            } else if (Double.isInfinite(dValue)) {
+                throw new ArithmeticException("Not a valid input: INFINITY: " + dValue);
+            }
+        }
+    }
+
+    public static boolean isInfinityAndNotNaN(Number number) {
+        if (Double.class == number.getClass() || Float.class == number.getClass()) {
+            double dValue = number.doubleValue();
+            if (Double.isNaN(dValue)) {
+                throw new ArithmeticException("Not a valid input: NaN.");
+            } else if (Double.isInfinite(dValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

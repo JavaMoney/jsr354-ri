@@ -322,6 +322,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
          */
     @Override
     public FastMoney divide(Number divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
+            return new FastMoney(0L, getCurrency());
+        }
         checkNumber(divisor);
         if (isOne(divisor)) {
             return this;
@@ -335,6 +338,10 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      */
     @Override
     public FastMoney[] divideAndRemainder(Number divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
+            FastMoney zero = new FastMoney(0L, getCurrency());
+            return new FastMoney[]{zero, zero};
+        }
         checkNumber(divisor);
         if (isOne(divisor)) {
             return new FastMoney[]{this, FastMoney.of(0, getCurrency())};
@@ -350,6 +357,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      */
     @Override
     public FastMoney divideToIntegralValue(Number divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
+            return new FastMoney(0L, getCurrency());
+        }
         checkNumber(divisor);
         if (isOne(divisor)) {
             return this;
@@ -360,6 +370,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney multiply(Number multiplicand) {
+        Money.checkNoInfinityOrNaN(multiplicand);
         checkNumber(multiplicand);
         if (isOne(multiplicand)) {
             return this;
@@ -729,6 +740,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney multiply(double amount) {
+        Money.checkNoInfinityOrNaN(amount);
         if (amount == 1.0) {
             return this;
         }
@@ -748,6 +760,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney divide(double number) {
+        if (Money.isInfinityAndNotNaN(number)) {
+            return new FastMoney(0L, getCurrency());
+        }
         if (number == 1.0d) {
             return this;
         }
@@ -761,6 +776,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney remainder(double amount) {
+        if (Money.isInfinityAndNotNaN(amount)) {
+            return new FastMoney(0L, getCurrency());
+        }
         return remainder(new BigDecimal(String.valueOf(amount)));
     }
 
@@ -771,6 +789,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney[] divideAndRemainder(double amount) {
+        if (Money.isInfinityAndNotNaN(amount)) {
+            FastMoney zero = new FastMoney(0L, getCurrency());
+            return new FastMoney[]{zero, zero};
+        } else if (amount == Double.NaN) {
+            throw new ArithmeticException("Not a number: NaN.");
+        }
         return divideAndRemainder(new BigDecimal(String.valueOf(amount)));
     }
 
@@ -800,6 +824,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney divideToIntegralValue(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
+            return new FastMoney(0L, getCurrency());
+        }
         if (divisor == 1.0) {
             return this;
         }

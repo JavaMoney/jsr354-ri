@@ -41,8 +41,13 @@ public enum ConvertBigDecimal {
     FLUCTUAGE {
 		@Override
 		BigDecimal getDecimal(Number num) {
-			return new BigDecimal(num.toString());
-		}
+            double d = num.doubleValue();
+            if (d == Double.NaN || d == Double.POSITIVE_INFINITY || d == Double.NEGATIVE_INFINITY) {
+                throw new ArithmeticException("NaN, POSITIVE_INFINITY and NEGATIVE_INFINITY cannot be used as " +
+                        "parameters for monetary operations.");
+            }
+            return new BigDecimal(num.toString());
+        }
 	},
     /** Conversion from BigInteger. */
     BIGINTEGER {

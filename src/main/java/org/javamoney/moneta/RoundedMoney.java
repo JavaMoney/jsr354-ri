@@ -817,6 +817,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
     @Override
     public RoundedMoney multiply(double amount) {
+        Money.checkNoInfinityOrNaN(amount);
         if (amount == 1.0d) {
             return this;
         }
@@ -833,7 +834,9 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
     @Override
     public RoundedMoney divide(double amount) {
-
+        if (Money.isInfinityAndNotNaN(amount)) {
+            return new RoundedMoney(0L, getCurrency(), this.monetaryContext, this.rounding);
+        }
         if (amount == 1.0d) {
             return this;
         }
@@ -847,6 +850,9 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
     @Override
     public RoundedMoney remainder(double amount) {
+        if (Money.isInfinityAndNotNaN(amount)) {
+            return new RoundedMoney(0L, getCurrency(), this.monetaryContext, this.rounding);
+        }
         return remainder(MoneyUtils.getBigDecimal(amount));
     }
 
@@ -857,6 +863,10 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
     @Override
     public RoundedMoney[] divideAndRemainder(double amount) {
+        if (Money.isInfinityAndNotNaN(amount)) {
+            RoundedMoney zero = new RoundedMoney(0L, getCurrency(), this.monetaryContext, this.rounding);
+            return new RoundedMoney[]{zero, zero};
+        }
         return divideAndRemainder(MoneyUtils.getBigDecimal(amount));
     }
 

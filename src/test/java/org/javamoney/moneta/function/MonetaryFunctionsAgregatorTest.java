@@ -105,8 +105,8 @@ public class MonetaryFunctionsAgregatorTest {
 	}
 
 	@Test
-	public void shouldMaxExchangeCorretly() {
-		Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO), Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
+    public void shouldMaxExchangeCorrectly() {
+        Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO), Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
 		MonetaryAmount max = stream.reduce(max(provider)).get();
 		Assert.assertEquals(Money.of(7, EURO), max);
 	}

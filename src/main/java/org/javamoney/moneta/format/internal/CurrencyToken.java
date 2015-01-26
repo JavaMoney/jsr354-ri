@@ -15,22 +15,18 @@
  */
 package org.javamoney.moneta.format.internal;
 
+import org.javamoney.moneta.format.CurrencyStyle;
+
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryCurrencies;
+import javax.money.MonetaryException;
+import javax.money.format.MonetaryParseException;
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
-
-import org.javamoney.moneta.format.CurrencyStyle;
-
-import javax.money.MonetaryException;
-import javax.money.format.MonetaryParseException;
-
-import org.javamoney.moneta.format.CurrencyStyle;
 
 /**
  * Implements a {@link FormatToken} that adds a localizable {@link String}, read
@@ -186,8 +182,15 @@ final class CurrencyToken implements FormatToken {
             CurrencyUnit cur;
             switch (style) {
                 case CODE:
-                    cur = MonetaryCurrencies.getCurrency(token);
-                    context.consume(token);
+                    if (!MonetaryCurrencies.isCurrencyAvailable(token)) {
+                        // Perhaps blank is missing between currency code and number...
+                        String subCurrency = parseCurrencyCode(token);
+                        cur = MonetaryCurrencies.getCurrency(subCurrency);
+                        context.consume(subCurrency);
+                    } else {
+                        cur = MonetaryCurrencies.getCurrency(token);
+                        context.consume(token);
+                    }
                     break;
                 case SYMBOL:
                     if (token.startsWith("$")) {
@@ -201,8 +204,8 @@ final class CurrencyToken implements FormatToken {
                         context.consume("£");
                     } else {
                         cur = MonetaryCurrencies.getCurrency(token);
+                        context.consume(token);
                     }
-                    context.consume(token);
                     context.setParsedCurrency(cur);
                     break;
                 case NAME:
@@ -216,6 +219,25 @@ final class CurrencyToken implements FormatToken {
         } catch (Exception e) {
             throw new MonetaryException("Error parsing CurrencyUnit.", e);
         }
+    }
+
+    /**
+     * Tries to split up a letter based first part, e.g. for evaluating a ISO currency code from an input as
+     * 'CHF100.34'.
+     * @param token the input token
+     * @return the first letter based part, or the full token.
+     */
+    private String parseCurrencyCode(String token) {
+        StringBuilder b = new StringBuilder();
+        int letterIndex = 0;
+        for (char ch : token.toCharArray()) {
+            if (Character.isLetter(ch)) {
+                letterIndex++;
+            } else {
+                return token.substring(0, letterIndex);
+            }
+        }
+        return token;
     }
 
     /**
