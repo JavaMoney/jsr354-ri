@@ -19,12 +19,11 @@
     <parent>
         <groupId>org.javamoney</groupId>
         <artifactId>javamoney-parent</artifactId>
-        <version>1.0-RC1</version>
+        <version>0.5</version>
     </parent>
 
     <artifactId>moneta</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC1</version>
 
     <name>Moneta (JSR 354 RI)</name>
     <url>http://javamoney.org</url>
@@ -630,4 +629,5 @@
         </plugins>
     </reporting>
 
+    <version>1.0-RC1</version>
 </project>
