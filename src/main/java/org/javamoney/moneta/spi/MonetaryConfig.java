@@ -66,21 +66,25 @@ public final class MonetaryConfig {
         for (Map.Entry<Object, Object> en : props.entrySet()) {
             String key = en.getKey().toString();
             String value = en.getValue().toString();
-            Integer existingPrio = priorities.get(key);
             int prio = 0;
-            if (value.startsWith("{prio=")) {
-                int index = value.indexOf('}');
+            if (key.startsWith("{")) {
+                int index = key.indexOf('}');
                 if (index > 0) {
-                    String prioString = value.substring("{prio=".length(),
-                            index);
-                    value = value.substring(index + 1);
-                    prio = Integer.parseInt(prioString);
-                    priorities.put(key, prio);
+                    String prioString = key.substring(1, index);
+                    try {
+                        prio = Integer.parseInt(prioString);
+                        key = key.substring(index + 1);
+                    } catch (NumberFormatException e) {
+                        LOG.warning("Invalid config key in javamoney.properties: " + key);
+                    }
                 }
             }
+            Integer existingPrio = priorities.get(key);
             if (Objects.isNull(existingPrio)) {
+                priorities.put(key, prio);
                 config.put(key, value);
             } else if (existingPrio < prio) {
+                priorities.put(key, prio);
                 config.put(key, value);
             } else if (existingPrio == prio) {
                 throw new IllegalStateException(

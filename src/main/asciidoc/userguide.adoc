@@ -894,3 +894,18 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
 
 }
 --------------------------------------------
+
+
+=== Overriding values in javamoney.properties
+
+The reference application supports overriding of the values in +javamoney.properties+ by prefexing the keys with
+a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
+classpath. If no priority is annotated, priority=0 is assumed:
+
+[source,listing]
+.Overriding a Configuration Value using a Priority
+--------------------------------------------
+{100}myKey=myValue
+--------------------------------------------
+
+If two entries have the same value an exeption is thrown.
