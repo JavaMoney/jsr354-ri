@@ -10,7 +10,7 @@ Or the GitHub page:
 http://javamoney.github.io/ri.html
 
 The current module contains the reference implementation of JSR 354, licenced under
-the Apache 2 Licence, see LICENCE.html.
+the Apache 2 Licence, see ./LICENCE.html.
 
 [![Build Status](https://api.travis-ci.org/JavaMoney/jsr354-ri.png?branch=master)](https://travis-ci.org/JavaMoney/jsr354-ri)
 [![Coverage Status](https://coveralls.io/repos/JavaMoney/jsr354-ri/badge.png)](https://coveralls.io/r/JavaMoney/jsr354-ri)
