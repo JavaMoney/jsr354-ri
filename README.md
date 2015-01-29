@@ -2,8 +2,9 @@ JSR 354: Money and Currency Reference Implementation
 ====================================================
 JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
 This module implements JSR 354 Money & Currency. Hereby basically implementations of amounts, currency and roundings are provided.
+
 See the JCP detail page:
-http://jcp.org/en/jsr/detail?name=354
+http://jcp.org/en/jsr/detail?id=354
 
 Or the GitHub page:
 http://javamoney.github.io/ri.html
