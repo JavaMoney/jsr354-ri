@@ -525,6 +525,67 @@ public class MoneyTest {
         assertEquals(Money.of(200, "CHF"), m.multiply(2));
         assertEquals(Money.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
     }
+    
+
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.Money#multiply(double)}.
+     */
+    @Test
+    public void testMultiplyBadDoubles(){
+        double[] values = new double[]{
+                Double.POSITIVE_INFINITY,
+                Double.NEGATIVE_INFINITY,
+                Double.NaN};
+        Money m = Money.of(new BigDecimal("50.0"), "USD");
+        for (double d : values) {
+            try {
+                m.multiply(d);
+                fail("multiplying with:" + d + "should not be allowed");
+            } catch (ArithmeticException e) {
+                // should reach here
+            }
+            try {
+                m.multiply(Double.valueOf(d));
+                fail("multiplying with:" + d + "should not be allowed");
+            } catch (ArithmeticException e) {
+                // should reach here
+            }
+        }
+    }
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.Money#divide(double)}.
+     */
+    @Test
+    public void testDivideBadDoubles(){
+        Money m = Money.of(new BigDecimal("50.0"), "USD");
+        try {
+            m.divide(Double.NaN);
+            fail("dividing with:NaN should not be allowed");
+        } catch (ArithmeticException e) {
+            // should reach here
+        }
+        try {
+            m.divide(Double.valueOf(Double.NaN));
+            fail("dividing with NaN should not be allowed");
+        } catch (ArithmeticException e) {
+            // should reach here
+        }
+    }
+    
+    /**
+     * Test method for {@link org.javamoney.moneta.Money#divide(double)}.
+     */
+    @Test
+    public void testDivideInfinityDoubles(){
+        double[] values = new double[]{Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
+        Money m = Money.of(new BigDecimal("50.0"), "USD");
+        for (double d : values) {
+            assertTrue(m.divide(d).isZero());
+            assertTrue(m.divide(Double.valueOf(d)).isZero());
+        }
+    }
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#negate()}.

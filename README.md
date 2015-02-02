@@ -1,14 +1,15 @@
 JSR 354: Money and Currency Reference Implementation
-=========
+====================================================
 JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
-See the home page for more details:
-http://jcp.org/en/jsr/detail?name=354
+This module implements JSR 354 Money & Currency. Hereby basic implementations of amounts, currency and roundings are provided.
+
+See the JCP detail page:
+http://jcp.org/en/jsr/detail?id=354
 
 Or the GitHub page:
 http://javamoney.github.io/ri.html
 
-The current module contains the reference implementation of JSR 354, licenced under
-the Apache 2 Licence, see LICENCE.html.
+This module is licenced under the the [Apache 2 Licence](https://www.apache.org/licenses/LICENSE-2.0.html).
 
 [![Build Status](https://api.travis-ci.org/JavaMoney/jsr354-ri.png?branch=master)](https://travis-ci.org/JavaMoney/jsr354-ri)
 [![Coverage Status](https://coveralls.io/repos/JavaMoney/jsr354-ri/badge.png)](https://coveralls.io/r/JavaMoney/jsr354-ri)
