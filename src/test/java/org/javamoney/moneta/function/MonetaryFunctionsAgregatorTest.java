@@ -24,7 +24,6 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryException;
 import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.Money;
 import org.testng.Assert;
@@ -41,7 +40,7 @@ public class MonetaryFunctionsAgregatorTest {
 
 	@Test
 	public void init() {
-		provider = MonetaryConversions.getExchangeRateProvider("ECB");
+		provider = new ExchangeRateProviderMock();
 	}
 
 	@Test
