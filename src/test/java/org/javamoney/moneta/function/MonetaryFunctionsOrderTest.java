@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 import javax.money.MonetaryAmount;
 import javax.money.convert.ExchangeRateProvider;
-import javax.money.convert.MonetaryConversions;
 
 import junit.framework.Assert;
 
@@ -29,7 +28,7 @@ public class MonetaryFunctionsOrderTest {
 
 	@Test
 	public void init() {
-		provider = MonetaryConversions.getExchangeRateProvider("ECB");
+		provider = new ExchangeRateProviderMock();
 	}
 
 	@Test
