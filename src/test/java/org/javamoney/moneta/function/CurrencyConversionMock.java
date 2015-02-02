@@ -17,124 +17,125 @@ import org.javamoney.moneta.Money;
 /**
  * This class mock the exchange rate to test some {@link MonetaryFunctions} that
  * needs an exchange provider
+ *
  * @author otaviojava
  */
 class CurrencyConversionMock implements CurrencyConversion {
 
-	private CurrencyUnit currency;
+    private CurrencyUnit currency;
 
-	private Conversation conversation;
+    private Conversation conversation;
 
 
-	public CurrencyConversionMock(CurrencyUnit currency) {
-		this.currency = currency;
-		if (DOLLAR.equals(currency)) {
-			this.conversation = new DollarConversation();
-		} else if (EURO.equals(currency)) {
-			this.conversation = new EuroConversation();
-		} else if (BRAZILIAN_REAL.equals(currency)) {
-			this.conversation = new RealConversation();
-		}
-	}
+    public CurrencyConversionMock(CurrencyUnit currency) {
+        this.currency = currency;
+        if (DOLLAR.equals(currency)) {
+            this.conversation = new DollarConversation();
+        } else if (EURO.equals(currency)) {
+            this.conversation = new EuroConversation();
+        } else if (BRAZILIAN_REAL.equals(currency)) {
+            this.conversation = new RealConversation();
+        }
+    }
 
-	@Override
-	public MonetaryAmount apply(MonetaryAmount monetaryAmount) {
-		return conversation.convert(monetaryAmount);
-	}
+    @Override
+    public MonetaryAmount apply(MonetaryAmount monetaryAmount) {
+        return conversation.convert(monetaryAmount);
+    }
 
-	@Override
-	public CurrencyUnit getCurrency() {
-		return currency;
-	}
+    @Override
+    public CurrencyUnit getCurrency() {
+        return currency;
+    }
 
-	@Override
-	public ConversionContext getConversionContext() {
-		return null;
-	}
+    @Override
+    public ConversionContext getConversionContext() {
+        return null;
+    }
 
-	@Override
-	public ExchangeRate getExchangeRate(MonetaryAmount sourceAmount) {
-		return null;
-	}
+    @Override
+    public ExchangeRate getExchangeRate(MonetaryAmount sourceAmount) {
+        return null;
+    }
 
-	private class DollarConversation implements Conversation {
-		private CurrencyUnit currency = DOLLAR;
+    private class DollarConversation implements Conversation {
+        private CurrencyUnit currency = DOLLAR;
 
-		@Override
-		public MonetaryAmount convert(MonetaryAmount monetaryAmount) {
+        @Override
+        public MonetaryAmount convert(MonetaryAmount monetaryAmount) {
 
-			CurrencyUnit currencyUnit = Objects.requireNonNull(monetaryAmount)
-					.getCurrency();
+            CurrencyUnit currencyUnit = Objects.requireNonNull(monetaryAmount)
+                    .getCurrency();
 
-			if (currencyUnit.equals(currency)) {
-				return monetaryAmount;
-			}
+            if (currencyUnit.equals(currency)) {
+                return monetaryAmount;
+            }
 
-			if (BRAZILIAN_REAL.equals(currencyUnit)) {
-				double val = monetaryAmount.getNumber().doubleValue() / 2.42;
-				return Money.of(val, this.currency);
-			} else if (EURO.equals(currencyUnit)) {
-				double val = monetaryAmount.getNumber().doubleValue() / 0.79;
-				return Money.of(val, this.currency);
-			}
-			return null;
-		}
+            if (BRAZILIAN_REAL.equals(currencyUnit)) {
+                double val = monetaryAmount.getNumber().doubleValue() / 2.42;
+                return Money.of(val, this.currency);
+            } else if (EURO.equals(currencyUnit)) {
+                double val = monetaryAmount.getNumber().doubleValue() / 0.79;
+                return Money.of(val, this.currency);
+            }
+            return null;
+        }
 
-	}
+    }
 
-	private class EuroConversation implements Conversation {
+    private class EuroConversation implements Conversation {
 
-		private CurrencyUnit currency = EURO;
+        private CurrencyUnit currency = EURO;
 
-		@Override
-		public MonetaryAmount convert(MonetaryAmount monetaryAmount) {
+        @Override
+        public MonetaryAmount convert(MonetaryAmount monetaryAmount) {
 
-			CurrencyUnit currencyUnit = Objects.requireNonNull(monetaryAmount)
-					.getCurrency();
+            CurrencyUnit currencyUnit = Objects.requireNonNull(monetaryAmount)
+                    .getCurrency();
 
-			if (currencyUnit.equals(currency)) {
-				return monetaryAmount;
-			}
+            if (currencyUnit.equals(currency)) {
+                return monetaryAmount;
+            }
 
-			if (BRAZILIAN_REAL.equals(currencyUnit)) {
-				double val = monetaryAmount.getNumber().doubleValue() / 2.42;
-				return Money.of(val, this.currency);
-			} else if (DOLLAR.equals(currencyUnit)) {
-				double val = monetaryAmount.getNumber().doubleValue() / 1.79;
-				return Money.of(val, this.currency);
-			}
-			return null;
-		}
-	}
+            if (BRAZILIAN_REAL.equals(currencyUnit)) {
+                double val = monetaryAmount.getNumber().doubleValue() / 2.42;
+                return Money.of(val, this.currency);
+            } else if (DOLLAR.equals(currencyUnit)) {
+                double val = monetaryAmount.getNumber().doubleValue() / 1.79;
+                return Money.of(val, this.currency);
+            }
+            return null;
+        }
+    }
 
-	private class RealConversation implements Conversation {
+    private class RealConversation implements Conversation {
 
-		private CurrencyUnit currency = BRAZILIAN_REAL;
+        private CurrencyUnit currency = BRAZILIAN_REAL;
 
-		@Override
-		public MonetaryAmount convert(MonetaryAmount monetaryAmount) {
+        @Override
+        public MonetaryAmount convert(MonetaryAmount monetaryAmount) {
 
-			CurrencyUnit currencyUnit = Objects.requireNonNull(monetaryAmount)
-					.getCurrency();
+            CurrencyUnit currencyUnit = Objects.requireNonNull(monetaryAmount)
+                    .getCurrency();
 
-			if (currencyUnit.equals(currency)) {
-				return monetaryAmount;
-			}
+            if (currencyUnit.equals(currency)) {
+                return monetaryAmount;
+            }
 
-			if (DOLLAR.equals(currencyUnit)) {
-				double val = monetaryAmount.getNumber().doubleValue() * 2.42;
-				return Money.of(val, this.currency);
-			} else if (EURO.equals(currencyUnit)) {
-				double val = monetaryAmount.getNumber().doubleValue() * 1.79;
-				return Money.of(val, this.currency);
-			}
-			return null;
-		}
+            if (DOLLAR.equals(currencyUnit)) {
+                double val = monetaryAmount.getNumber().doubleValue() * 2.42;
+                return Money.of(val, this.currency);
+            } else if (EURO.equals(currencyUnit)) {
+                double val = monetaryAmount.getNumber().doubleValue() * 1.79;
+                return Money.of(val, this.currency);
+            }
+            return null;
+        }
 
-	}
+    }
 
-	private interface Conversation {
-		MonetaryAmount convert(MonetaryAmount monetaryAmount);
-	}
+    private interface Conversation {
+        MonetaryAmount convert(MonetaryAmount monetaryAmount);
+    }
 
 }

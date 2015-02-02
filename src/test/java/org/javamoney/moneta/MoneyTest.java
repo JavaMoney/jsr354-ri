@@ -525,14 +525,13 @@ public class MoneyTest {
         assertEquals(Money.of(200, "CHF"), m.multiply(2));
         assertEquals(Money.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
     }
-    
 
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.Money#multiply(double)}.
      */
     @Test
-    public void testMultiplyBadDoubles(){
+    public void testMultiplyBadDoubles() {
         double[] values = new double[]{
                 Double.POSITIVE_INFINITY,
                 Double.NEGATIVE_INFINITY,
@@ -553,12 +552,12 @@ public class MoneyTest {
             }
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.Money#divide(double)}.
      */
     @Test
-    public void testDivideBadDoubles(){
+    public void testDivideBadDoubles() {
         Money m = Money.of(new BigDecimal("50.0"), "USD");
         try {
             m.divide(Double.NaN);
@@ -573,12 +572,12 @@ public class MoneyTest {
             // should reach here
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.Money#divide(double)}.
      */
     @Test
-    public void testDivideInfinityDoubles(){
+    public void testDivideInfinityDoubles() {
         double[] values = new double[]{Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
         Money m = Money.of(new BigDecimal("50.0"), "USD");
         for (double d : values) {

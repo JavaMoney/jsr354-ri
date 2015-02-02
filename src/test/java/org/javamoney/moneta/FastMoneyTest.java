@@ -32,7 +32,7 @@ import static org.testng.Assert.*;
  * @author Anatole
  */
 public class FastMoneyTest{
-    
+
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
     private static final BigDecimal TEN = new BigDecimal(10.0d);
@@ -421,12 +421,12 @@ public class FastMoneyTest{
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(double)}.
      */
     @Test
-    public void testMultiplyDoublePositiveInfinity(){
+    public void testMultiplyDoublePositiveInfinity() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.multiply(Double.POSITIVE_INFINITY);
@@ -435,12 +435,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "multiplying with POSITIVE_INFINITY fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(double)}.
      */
     @Test
-    public void testMultiplyDoubleNegativeInfinity(){
+    public void testMultiplyDoubleNegativeInfinity() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.multiply(Double.NEGATIVE_INFINITY);
@@ -449,12 +449,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "multiplying with NEGATIVE_INFINITY fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(double)}.
      */
     @Test
-    public void testMultiplyDoubleNaN(){
+    public void testMultiplyDoubleNaN() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.multiply(Double.NaN);
@@ -463,12 +463,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "multiplying with NaN fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(Number)}.
      */
     @Test
-    public void testMultiplyNumberPositiveInfinity(){
+    public void testMultiplyNumberPositiveInfinity() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.multiply(Double.valueOf(Double.POSITIVE_INFINITY));
@@ -477,12 +477,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "multiplying with POSITIVE_INFINITY fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(Number)}.
      */
     @Test
-    public void testMultiplyNumberNegativeInfinity(){
+    public void testMultiplyNumberNegativeInfinity() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.multiply(Double.valueOf(Double.NEGATIVE_INFINITY));
@@ -491,12 +491,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "multiplying with NEGATIVE_INFINITY fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(Number)}.
      */
     @Test
-    public void testMultiplyNumberNaN(){
+    public void testMultiplyNumberNaN() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.multiply(Double.valueOf(Double.NaN));
@@ -505,12 +505,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "multiplying with NaN fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
      */
     @Test
-    public void testDivideBadNaN(){
+    public void testDivideBadNaN() {
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         try {
             m.divide(Double.NaN);
@@ -525,12 +525,12 @@ public class FastMoneyTest{
             LOG.log(Level.FINE, "dividing by NaN fails as expected", e);
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
      */
     @Test
-    public void testDivideInfinityDoubles(){
+    public void testDivideInfinityDoubles() {
         double[] values = new double[]{Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
         FastMoney m = FastMoney.of(new BigDecimal("50.0"), "USD");
         for (double d : values) {

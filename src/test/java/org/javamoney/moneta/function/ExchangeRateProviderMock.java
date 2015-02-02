@@ -10,28 +10,29 @@ import javax.money.convert.ProviderContext;
 /**
  * This class mock the exchange rate to test some {@link MonetaryFunctions} that
  * needs an exchange provider
+ *
  * @author otaviojava
  */
 class ExchangeRateProviderMock implements ExchangeRateProvider {
 
-	@Override
-	public ProviderContext getProviderContext() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ProviderContext getProviderContext() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public CurrencyConversion getCurrencyConversion(
-			ConversionQuery conversionQuery) {
-		CurrencyUnit currencyUnit = conversionQuery.get("Query.termCurrency",
-				CurrencyUnit.class);
-		return new CurrencyConversionMock(currencyUnit);
-	}
+    @Override
+    public CurrencyConversion getCurrencyConversion(
+            ConversionQuery conversionQuery) {
+        CurrencyUnit currencyUnit = conversionQuery.get("Query.termCurrency",
+                CurrencyUnit.class);
+        return new CurrencyConversionMock(currencyUnit);
+    }
 
 }
