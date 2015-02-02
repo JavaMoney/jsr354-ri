@@ -67,7 +67,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable {
         }
         this.context = RoundingContextBuilder.of("default", "default").set(CASHROUNDING_KEY, true).
                 set(PROVCLASS_KEY, getClass().getName()).set(MINMINORS_KEY, minimalMinors).set(SCALE_KEY, scale)
-                .setTyped(Optional.ofNullable(roundingMode)
+                .set(Optional.ofNullable(roundingMode)
                         .orElseThrow(() -> new IllegalArgumentException("roundingMode missing"))).build();
     }
 
@@ -105,7 +105,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable {
         Objects.requireNonNull(value, "Amount required.");
         // 1 extract BD value, round according the default fraction units
         int scale = this.context.getInt(SCALE_KEY);
-        RoundingMode roundingMode = this.context.getTyped(RoundingMode.class);
+        RoundingMode roundingMode = this.context.get(RoundingMode.class);
         BigDecimal num = value.getNumber().numberValue(BigDecimal.class).setScale(scale, roundingMode);
         // 2 evaluate minor units and remainder
         long minors = num.movePointRight(num.scale()).longValueExact();

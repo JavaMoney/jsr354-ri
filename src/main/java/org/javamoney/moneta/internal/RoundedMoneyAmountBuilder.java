@@ -33,9 +33,9 @@ import java.math.RoundingMode;
 public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMoney> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).setTyped(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN).build();
     static final MonetaryContext MAX_CONTEXT =
-            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).setTyped(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN).build();
 
     /*
      * (non-Javadoc)

@@ -72,7 +72,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
         @Override
         public MonetaryAmount apply(MonetaryAmount amount) {
             MonetaryOperator minorRounding = MonetaryRoundings
-                    .getRounding(RoundingQueryBuilder.of().set("scale", 2).setTyped(RoundingMode.HALF_UP).build());
+                    .getRounding(RoundingQueryBuilder.of().set("scale", 2).set(RoundingMode.HALF_UP).build());
             MonetaryAmount amt = amount.with(minorRounding);
             MonetaryAmount mp = amt.with(MonetaryUtil.minorPart());
             if (mp.isGreaterThanOrEqualTo(
@@ -111,7 +111,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
                     } else {
                         return zeroRounding;
                     }
-                } else if (roundingQuery.getBoolean("cashRounding", false)) {
+                } else if (Optional.ofNullable(roundingQuery.getBoolean("cashRounding")).orElse(Boolean.FALSE)) {
                     if (currency.getCurrencyCode().equals("CHF")) {
                         return chfCashRounding;
                     }

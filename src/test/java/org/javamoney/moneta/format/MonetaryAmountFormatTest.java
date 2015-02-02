@@ -91,11 +91,11 @@ public class MonetaryAmountFormatTest {
     @Test
     public void testFormatWithBuilder2() {
         MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.GERMANY).setTyped(CurrencyStyle.NUMERIC_CODE).build());
+                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.GERMANY).set(CurrencyStyle.NUMERIC_CODE).build());
         assertEquals("12,50 756", format.format(
                 MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50).create()));
         format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.US).setTyped(CurrencyStyle.SYMBOL).build());
+                .getAmountFormat(AmountFormatQueryBuilder.of(Locale.US).set(CurrencyStyle.SYMBOL).build());
         assertEquals("$123,456.56", format.format(
                 MonetaryAmounts.getDefaultAmountFactory().setCurrency("USD").setNumber(123456.561)
                         .create()));

@@ -174,7 +174,7 @@ public class MoneyTest {
         Money m = Money.of(
 
                 BigDecimal.valueOf(2.15), EURO,
-                MonetaryContextBuilder.of(Money.class).setPrecision(2).setFixedScale(true).setTyped(RoundingMode.DOWN)
+                MonetaryContextBuilder.of(Money.class).setPrecision(2).setFixedScale(true).set(RoundingMode.DOWN)
                         .build());
         Money m2 = Money.of(BigDecimal.valueOf(2.1), EURO);
         assertEquals(m, m2);
@@ -232,7 +232,7 @@ public class MoneyTest {
     @Test
     public void testOfCurrencyUnitNumberMathContext() {
         MonetaryContext mc =
-                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).setTyped(RoundingMode.CEILING)
+                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).set(RoundingMode.CEILING)
                         .build();
         Money m = Money.of((byte) 2, EURO, mc);
         assertNotNull(m);
@@ -326,7 +326,7 @@ public class MoneyTest {
     @Test
     public void testOfStringNumberMathContext() {
         MonetaryContext mc =
-                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).setTyped(RoundingMode.CEILING)
+                MonetaryContextBuilder.of(Money.class).setMaxScale(2345).setFixedScale(true).set(RoundingMode.CEILING)
                         .build();
         Money m = Money.of((byte) 2, "EUR", mc);
         assertNotNull(m);
@@ -449,7 +449,7 @@ public class MoneyTest {
         Money m = Money.of(10, "CHF");
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
         MonetaryContext mc =
-                MonetaryContextBuilder.of(Money.class).setPrecision(128).setTyped(RoundingMode.HALF_EVEN).build();
+                MonetaryContextBuilder.of(Money.class).setPrecision(128).set(RoundingMode.HALF_EVEN).build();
         MonetaryAmount m2 = m.getFactory().setContext(mc).create();
         assertNotNull(m2);
         assertTrue(m != m2);

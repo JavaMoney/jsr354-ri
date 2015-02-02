@@ -33,9 +33,9 @@ import org.javamoney.moneta.spi.AbstractAmountBuilder;
 public class MoneyAmountBuilder extends AbstractAmountBuilder<Money> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            MonetaryContextBuilder.of(Money.class).setTyped(64).setMaxScale(63).setTyped(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(Money.class).set(64).setMaxScale(63).set(RoundingMode.HALF_EVEN).build();
     static final MonetaryContext MAX_CONTEXT =
-            MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).setTyped(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
 
     @Override
     protected Money create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {

@@ -61,7 +61,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable {
             scale = 0;
         }
         this.context = RoundingContextBuilder.of("default", "default").
-                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).setTyped(Optional.ofNullable(roundingMode)
+                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).set(Optional.ofNullable(roundingMode)
                 .orElseThrow(
                         () -> new
                                 IllegalArgumentException(
@@ -90,7 +90,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable {
     public MonetaryAmount apply(MonetaryAmount amount) {
         return amount.getFactory().setCurrency(amount.getCurrency()).setNumber(
                 amount.getNumber().numberValue(BigDecimal.class)
-                        .setScale(this.context.getInt(SCALE_KEY), this.context.getTyped(RoundingMode.class))).create();
+                        .setScale(this.context.getInt(SCALE_KEY), this.context.get(RoundingMode.class))).create();
     }
 
     @Override

@@ -48,7 +48,7 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class IMFRateProvider extends AbstractRateProvider implements LoaderListener{
+public class IMFRateProvider extends AbstractRateProvider implements LoaderListener {
 
     /**
      * The data id used for the LoaderService.
@@ -64,16 +64,16 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             CurrencyUnitBuilder.of("SDR", CurrencyContextBuilder.of(IMFRateProvider.class.getSimpleName()).build())
                     .setDefaultFractionDigits(3).build(true);
 
-    private Map<CurrencyUnit,List<ExchangeRate>> currencyToSdr = new HashMap<>();
+    private Map<CurrencyUnit, List<ExchangeRate>> currencyToSdr = new HashMap<>();
 
-    private Map<CurrencyUnit,List<ExchangeRate>> sdrToCurrency = new HashMap<>();
+    private Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = new HashMap<>();
 
-    private static Map<String,CurrencyUnit> currenciesByName = new HashMap<>();
+    private static Map<String, CurrencyUnit> currenciesByName = new HashMap<>();
 
-    static{
-        for(Currency currency : Currency.getAvailableCurrencies()){
+    static {
+        for (Currency currency : Currency.getAvailableCurrencies()) {
             currenciesByName.put(currency.getDisplayName(Locale.ENGLISH),
-                                 MonetaryCurrencies.getCurrency(currency.getCurrencyCode()));
+                    MonetaryCurrencies.getCurrency(currency.getCurrencyCode()));
         }
         // Additional IMF differing codes:
         // This mapping is required to fix data issues in the input stream, it has nothing to do with i18n
@@ -95,7 +95,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         currenciesByName.put("Bolivar Fuerte", MonetaryCurrencies.getCurrency("VEF"));
     }
 
-    public IMFRateProvider() throws MalformedURLException{
+    public IMFRateProvider() throws MalformedURLException {
         super(CONTEXT);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
         loader.addLoaderListener(this, DATA_ID);
@@ -103,18 +103,17 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     @Override
-    public void newDataLoaded(String data, InputStream is){
-        try{
+    public void newDataLoaded(String data, InputStream is) {
+        try {
             loadRatesTSV(is);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error", e);
         }
     }
 
-    private void loadRatesTSV(InputStream inputStream) throws IOException, ParseException{
-        Map<CurrencyUnit,List<ExchangeRate>> newCurrencyToSdr = new HashMap<>();
-        Map<CurrencyUnit,List<ExchangeRate>> newSdrToCurrency = new HashMap<>();
+    private void loadRatesTSV(InputStream inputStream) throws IOException, ParseException {
+        Map<CurrencyUnit, List<ExchangeRate>> newCurrencyToSdr = new HashMap<>();
+        Map<CurrencyUnit, List<ExchangeRate>> newSdrToCurrency = new HashMap<>();
         NumberFormat f = new DecimalFormat("#0.0000000000");
         f.setGroupingUsed(false);
         BufferedReader pr = new BufferedReader(new InputStreamReader(inputStream));
@@ -134,48 +133,48 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         // January 28, 2013 January 25, 2013
         // Euro 1.137520 1.137760 1.143840 1.142570 1.140510
         List<Long> timestamps = null;
-        while(Objects.nonNull(line)){
-            if(line.trim().isEmpty()){
+        while (Objects.nonNull(line)) {
+            if (line.trim().isEmpty()) {
                 line = pr.readLine();
                 continue;
             }
-            if(line.startsWith("SDRs per Currency unit")){
+            if (line.startsWith("SDRs per Currency unit")) {
                 currencyToSdr = false;
                 line = pr.readLine();
                 continue;
-            }else if(line.startsWith("Currency units per SDR")){
+            } else if (line.startsWith("Currency units per SDR")) {
                 currencyToSdr = true;
                 line = pr.readLine();
                 continue;
-            }else if(line.startsWith("Currency")){
+            } else if (line.startsWith("Currency")) {
                 timestamps = readTimestamps(line);
                 line = pr.readLine();
                 continue;
             }
             String[] parts = line.split("\\t");
             CurrencyUnit currency = currenciesByName.get(parts[0]);
-            if(Objects.isNull(currency)){
+            if (Objects.isNull(currency)) {
                 LOGGER.warning("Unknown currency from, IMF data feed: " + parts[0]);
                 line = pr.readLine();
                 continue;
             }
             Double[] values = parseValues(f, parts);
-            for(int i = 0; i < values.length; i++){
-                if(Objects.isNull(values[i])){
+            for (int i = 0; i < values.length; i++) {
+                if (Objects.isNull(values[i])) {
                     continue;
                 }
                 Long fromTS = timestamps != null ? timestamps.get(i) : null;
-                if(fromTS == null){
+                if (fromTS == null) {
                     continue;
                 }
                 Long toTS = fromTS + 3600L * 1000L * 24L; // One day
                 RateType rateType = RateType.HISTORIC;
-                if(toTS > System.currentTimeMillis()){
+                if (toTS > System.currentTimeMillis()) {
                     rateType = RateType.DEFERRED;
                 }
-                if(currencyToSdr){ // Currency -> SDR
+                if (currencyToSdr) { // Currency -> SDR
                     List<ExchangeRate> rates = this.currencyToSdr.get(currency);
-                    if(Objects.isNull(rates)){
+                    if (Objects.isNull(rates)) {
                         rates = new ArrayList<>(5);
                         newCurrencyToSdr.put(currency, rates);
                     }
@@ -183,9 +182,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                             ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(toTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
                     rates.add(rate);
-                }else{ // SDR -> Currency
+                } else { // SDR -> Currency
                     List<ExchangeRate> rates = this.sdrToCurrency.get(currency);
-                    if(Objects.isNull(rates)){
+                    if (Objects.isNull(rates)) {
                         rates = new ArrayList<>(5);
                         newSdrToCurrency.put(currency, rates);
                     }
@@ -204,10 +203,10 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         this.currencyToSdr = newCurrencyToSdr;
     }
 
-    private Double[] parseValues(NumberFormat f, String[] parts) throws ParseException{
+    private Double[] parseValues(NumberFormat f, String[] parts) throws ParseException {
         Double[] result = new Double[parts.length - 1];
-        for(int i = 1; i < parts.length; i++){
-            if(parts[i].isEmpty()){
+        for (int i = 1; i < parts.length; i++) {
+            if (parts[i].isEmpty()) {
                 continue;
             }
             result[i - 1] = f.parse(parts[i]).doubleValue();
@@ -215,20 +214,20 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return result;
     }
 
-    private List<Long> readTimestamps(String line) throws ParseException{
+    private List<Long> readTimestamps(String line) throws ParseException {
         // Currency May 01, 2013 April 30, 2013 April 29, 2013 April 26, 2013
         // April 25, 2013
         SimpleDateFormat sdf = new SimpleDateFormat("MMM DD, yyyy", Locale.ENGLISH);
         String[] parts = line.split("\\\t");
         List<Long> dates = new ArrayList<>(parts.length);
-        for(int i = 1; i < parts.length; i++){
+        for (int i = 1; i < parts.length; i++) {
             dates.add(sdf.parse(parts[i]).getTime());
         }
         return dates;
     }
 
-    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
-        if(!isAvailable(conversionQuery)){
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        if (!isAvailable(conversionQuery)) {
             return null;
         }
         CurrencyUnit base = conversionQuery.getBaseCurrency();
@@ -236,12 +235,12 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         Long timestamp = conversionQuery.getTimestampMillis();
         ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), timestamp);
         ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), timestamp);
-        if(base.equals(SDR)){
+        if (base.equals(SDR)) {
             return rate2;
-        }else if(term.equals(SDR)){
+        } else if (term.equals(SDR)) {
             return rate1;
         }
-        if(Objects.isNull(rate1) || Objects.isNull(rate2)){
+        if (Objects.isNull(rate1) || Objects.isNull(rate2)) {
             return null;
         }
         ExchangeRateBuilder builder =
@@ -253,28 +252,28 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return builder.build();
     }
 
-    private ExchangeRate lookupRate(List<ExchangeRate> list, Long timestamp){
-        if(Objects.isNull(list)){
+    private ExchangeRate lookupRate(List<ExchangeRate> list, Long timestamp) {
+        if (Objects.isNull(list)) {
             return null;
         }
         ExchangeRate found = null;
-        for(ExchangeRate rate : list){
-            if(Objects.isNull(timestamp)){
+        for (ExchangeRate rate : list) {
+            if (Objects.isNull(timestamp)) {
                 timestamp = System.currentTimeMillis();
             }
-            if(isValid(rate.getConversionContext(), timestamp)){
+            if (isValid(rate.getConversionContext(), timestamp)) {
                 return rate;
             }
-            if(Objects.isNull(found)){
+            if (Objects.isNull(found)) {
                 found = rate;
             }
         }
         return found;
     }
 
-    private boolean isValid(ConversionContext conversionContext, Long timestamp){
-        Long validFrom = conversionContext.getLong("validFrom", null);
-        Long validTo = conversionContext.getLong("validTo", null);
+    private boolean isValid(ConversionContext conversionContext, Long timestamp) {
+        Long validFrom = conversionContext.getLong("validFrom");
+        Long validTo = conversionContext.getLong("validTo");
         return !(Objects.nonNull(validFrom) && validFrom > timestamp) &&
                 !(Objects.nonNull(validTo) && validTo < timestamp);
     }

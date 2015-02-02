@@ -103,23 +103,23 @@ public final class MoneyUtils {
      * Evaluates the {@link MathContext} from the given {@link MonetaryContext}.
      *
      * @param monetaryContext the {@link MonetaryContext}
-     * @param defaultMode     the default {@link RoundingMode}, to be used if no one is setTyped
+     * @param defaultMode     the default {@link RoundingMode}, to be used if no one is set
      *                        in {@link MonetaryContext}.
      * @return the corresponding {@link MathContext}
      */
     public static MathContext getMathContext(MonetaryContext monetaryContext, RoundingMode defaultMode) {
-        MathContext ctx = monetaryContext.getTyped(MathContext.class);
+        MathContext ctx = monetaryContext.get(MathContext.class);
         if (Objects.nonNull(ctx)) {
             return ctx;
         }
-        if (Objects.nonNull(defaultMode)) {
-            return new MathContext(monetaryContext.getPrecision(),
-                    monetaryContext.getTyped(RoundingMode.class, defaultMode)
-            );
+        RoundingMode roundingMode = monetaryContext.get(RoundingMode.class);
+        if (roundingMode == null) {
+            roundingMode = defaultMode;
         }
-        return new MathContext(monetaryContext.getPrecision(),
-                monetaryContext.getTyped(RoundingMode.class, RoundingMode.HALF_EVEN)
-        );
+        if (roundingMode == null) {
+            roundingMode = RoundingMode.HALF_EVEN;
+        }
+        return new MathContext(monetaryContext.getPrecision(), roundingMode);
     }
 
     /**

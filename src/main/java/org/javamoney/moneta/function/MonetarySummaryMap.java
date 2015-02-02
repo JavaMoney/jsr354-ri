@@ -10,7 +10,7 @@ import javax.money.CurrencyUnit;
 
 /**
  * This map is decorator of HashMap that returns an empty Summary when there
- * isn't currency in getTyped's method
+ * isn't currency in get's method
  *
  * @author otaviojava
  */

@@ -31,10 +31,10 @@ public class FastMoneyAmountBuilder extends AbstractAmountBuilder<FastMoney> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
             MonetaryContextBuilder.of(FastMoney.class).setPrecision(19).setMaxScale(5).setFixedScale(true)
-                    .setTyped(RoundingMode.HALF_EVEN).build();
+                    .set(RoundingMode.HALF_EVEN).build();
     static final MonetaryContext MAX_CONTEXT =
             MonetaryContextBuilder.of(FastMoney.class).setPrecision(19).setMaxScale(5).setFixedScale(true)
-                    .setTyped(RoundingMode.HALF_EVEN).build();
+                    .set(RoundingMode.HALF_EVEN).build();
 
     @Override
     protected FastMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {

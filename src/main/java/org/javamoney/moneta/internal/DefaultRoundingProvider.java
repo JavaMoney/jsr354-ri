@@ -52,8 +52,11 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
         }
         CurrencyUnit currency = roundingQuery.getCurrency();
         if (currency != null) {
-            RoundingMode roundingMode = roundingQuery.getTyped(RoundingMode.class, RoundingMode.HALF_EVEN);
-            if (roundingQuery.getBoolean("cashRounding", false)) {
+            RoundingMode roundingMode = roundingQuery.get(RoundingMode.class);
+            if (roundingMode == null) {
+                roundingMode = RoundingMode.HALF_EVEN;
+            }
+            if (Boolean.TRUE.equals(roundingQuery.getBoolean("cashRounding"))) {
                 if (currency.getCurrencyCode().equals("CHF")) {
                     return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
                 } else {
@@ -66,8 +69,8 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
         if (scale == null) {
             scale = 2;
         }
-        MathContext mc = roundingQuery.get(MathContext.class, null);
-        RoundingMode roundingMode = roundingQuery.get(RoundingMode.class, null);
+        MathContext mc = roundingQuery.get(MathContext.class);
+        RoundingMode roundingMode = roundingQuery.get(RoundingMode.class);
         if (roundingMode != null || mc != null) {
             if (mc != null) {
                 return new DefaultRounding(scale, mc.getRoundingMode());

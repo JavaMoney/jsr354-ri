@@ -83,7 +83,7 @@ public final class CurrencyUnitBuilder {
     }
 
     /**
-     * Allows to setTyped the currency code, for creating multiple instances, using one Builder.
+     * Allows to set the currency code, for creating multiple instances, using one Builder.
      *
      * @param currencyCode the (unique) and identifying currency code, not null.
      * @return the Builder, for chaining.

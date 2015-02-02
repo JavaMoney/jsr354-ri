@@ -27,12 +27,12 @@ import java.util.Objects;
 public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements MonetaryAmountFactory<T> {
 
     /**
-     * The default {@link MonetaryContext} applied, if not setTyped explicitly on creation.
+     * The default {@link MonetaryContext} applied, if not set explicitly on creation.
      */
     private MonetaryContext DEFAULT_MONETARY_CONTEXT = loadDefaultMonetaryContext();
 
     /**
-     * The default {@link MonetaryContext} applied, if not setTyped explicitly on creation.
+     * The default {@link MonetaryContext} applied, if not set explicitly on creation.
      */
     private MonetaryContext MAX_MONETARY_CONTEXT = loadMaxMonetaryContext();
 
