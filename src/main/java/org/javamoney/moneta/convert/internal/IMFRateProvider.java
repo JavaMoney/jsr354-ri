@@ -99,7 +99,11 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         super(CONTEXT);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
         loader.addLoaderListener(this, DATA_ID);
-        loader.loadDataAsync(DATA_ID);
+        try {
+            loader.loadData(DATA_ID);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Error loading initial data from IMF provider...", e);
+        }
     }
 
     @Override
@@ -154,7 +158,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             String[] parts = line.split("\\t");
             CurrencyUnit currency = currenciesByName.get(parts[0]);
             if (Objects.isNull(currency)) {
-                LOGGER.warning("Unknown currency from, IMF data feed: " + parts[0]);
+                LOGGER.finest(() -> "Uninterpretable data from IMF data feed: " + parts[0]);
                 line = pr.readLine();
                 continue;
             }
@@ -173,24 +177,16 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                     rateType = RateType.DEFERRED;
                 }
                 if (currencyToSdr) { // Currency -> SDR
-                    List<ExchangeRate> rates = this.currencyToSdr.get(currency);
-                    if (Objects.isNull(rates)) {
-                        rates = new ArrayList<>(5);
-                        newCurrencyToSdr.put(currency, rates);
-                    }
                     ExchangeRate rate = new ExchangeRateBuilder(
                             ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(toTS).build())
-                            .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(values[i])).build();
+                            .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(1d / values[i])).build();
+                    List<ExchangeRate> rates = newCurrencyToSdr.computeIfAbsent(currency, c -> new ArrayList<>(5));
                     rates.add(rate);
                 } else { // SDR -> Currency
-                    List<ExchangeRate> rates = this.sdrToCurrency.get(currency);
-                    if (Objects.isNull(rates)) {
-                        rates = new ArrayList<>(5);
-                        newSdrToCurrency.put(currency, rates);
-                    }
                     ExchangeRate rate = new ExchangeRateBuilder(
                             ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(fromTS).build())
-                            .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(values[i])).build();
+                            .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(1d / values[i])).build();
+                    List<ExchangeRate> rates = newSdrToCurrency.computeIfAbsent(currency, (c) -> new ArrayList<>(5));
                     rates.add(rate);
                 }
             }
@@ -201,6 +197,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         newCurrencyToSdr.values().forEach((c) -> Collections.sort(List.class.cast(c)));
         this.sdrToCurrency = newSdrToCurrency;
         this.currencyToSdr = newCurrencyToSdr;
+        this.sdrToCurrency.forEach((c, l) -> LOGGER.finest(() -> "SDR -> " + c.getCurrencyCode() + ": " + l));
+        this.currencyToSdr.forEach((c, l) -> LOGGER.finest(() -> c.getCurrencyCode() + " -> SDR: " + l));
     }
 
     private Double[] parseValues(NumberFormat f, String[] parts) throws ParseException {
