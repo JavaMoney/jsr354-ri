@@ -113,16 +113,14 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     }
 
     @Override
-    public boolean isAvailable(ConversionQuery conversionQuery){
+    public boolean isAvailable(ConversionQuery conversionQuery) {
         String baseCode = conversionQuery.getBaseCurrency().getCurrencyCode();
         String termCode = conversionQuery.getCurrency().getCurrencyCode();
-        if(!"EUR".equals(baseCode) && !currentRates.containsKey(baseCode)){
+        if (!"EUR".equals(baseCode) && !currentRates.containsKey(baseCode)) {
             return false;
         }
-        if(!"EUR".equals(termCode) && !currentRates.containsKey(termCode)){
-            return false;
-        }
-        return Objects.isNull(conversionQuery.getTimestampMillis());
+        return !(!"EUR".equals(termCode) && !currentRates.containsKey(termCode))
+                    && Objects.isNull(conversionQuery.getTimestampMillis());
     }
 
     @Override

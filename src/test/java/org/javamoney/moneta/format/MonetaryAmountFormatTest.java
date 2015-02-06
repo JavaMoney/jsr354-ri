@@ -34,14 +34,6 @@ import org.testng.annotations.Test;
  */
 public class MonetaryAmountFormatTest {
 
-    /**
-     * Test method for {@link javax.money.format.MonetaryAmountFormat#getAmountFormatContext()} .
-     */
-    @Test
-    public void testGetAmountStyle() {
-
-    }
-
 
     /**
      * Test method for

@@ -120,11 +120,8 @@ class LoaderConfigurator {
     private Map<String, String> mapProperties(Map<String, String> allProps, String name) {
         Map<String, String> props = new HashMap<>();
         String start = LOAD + name;
-        for (Map.Entry<String, String> entry : allProps.entrySet()) {
-            if (entry.getKey().startsWith(start)) {
-                props.put(entry.getKey().substring(start.length() + 1), entry.getValue());
-            }
-        }
+        allProps.entrySet().stream().filter(entry -> entry.getKey().startsWith(start)).forEach(
+                entry -> props.put(entry.getKey().substring(start.length() + 1), entry.getValue()));
         return props;
     }
 
