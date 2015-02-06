@@ -141,11 +141,11 @@ public class FastMoneyTest{
         m = FastMoney.of((float) 12.23, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(Float.valueOf((float) 12.23), m.getNumber().numberValue(Float.class));
+        assertEquals((float) 12.23, m.getNumber().numberValue(Float.class));
         m = FastMoney.of(-12.23, DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Double.valueOf(-12.23), m.getNumber().numberValue(Double.class));
+        assertEquals(-12.23, m.getNumber().numberValue(Double.class));
         m = FastMoney.of(BigDecimal.valueOf(234.2345), EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -182,11 +182,11 @@ public class FastMoneyTest{
         m = FastMoney.of((float) 12.23, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(Float.valueOf((float) 12.23), m.getNumber().numberValue(Float.class));
+        assertEquals((float) 12.23, m.getNumber().numberValue(Float.class));
         m = FastMoney.of(-12.23, "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Double.valueOf(-12.23), m.getNumber().numberValue(Double.class));
+        assertEquals(-12.23, m.getNumber().numberValue(Double.class));
         m = FastMoney.of(BigDecimal.valueOf(234.2345), "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -1022,12 +1022,7 @@ public class FastMoneyTest{
      */
     @Test
     public void testQuery(){
-        MonetaryQuery<Integer> q = new MonetaryQuery<Integer>(){
-            @Override
-            public Integer queryFrom(MonetaryAmount amount){
-                return FastMoney.from(amount).getPrecision();
-            }
-        };
+        MonetaryQuery<Integer> q = amount -> FastMoney.from(amount).getPrecision();
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "USD"),
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
@@ -1046,8 +1041,8 @@ public class FastMoneyTest{
         assertEquals(m.getNumber().numberValue(Short.class), Short.valueOf((short) 13));
         assertEquals(m.getNumber().numberValue(Integer.class), Integer.valueOf(13));
         assertEquals(m.getNumber().numberValue(Long.class), Long.valueOf(13L));
-        assertEquals(m.getNumber().numberValue(Float.class), Float.valueOf(13.656f));
-        assertEquals(m.getNumber().numberValue(Double.class), Double.valueOf(13.656));
+        assertEquals(m.getNumber().numberValue(Float.class), 13.656f);
+        assertEquals(m.getNumber().numberValue(Double.class), 13.656);
         assertEquals(m.getNumber().numberValue(BigDecimal.class), new BigDecimal("13.656"));
     }
 
@@ -1079,24 +1074,14 @@ public class FastMoneyTest{
      */
     @Test
     public void testWithMonetaryOperator(){
-        MonetaryOperator adj = new MonetaryOperator(){
-            @Override
-            public MonetaryAmount apply(MonetaryAmount amount){
-                return FastMoney.of(-100, amount.getCurrency());
-            }
-        };
+        MonetaryOperator adj = amount -> FastMoney.of(-100, amount.getCurrency());
         FastMoney m = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         FastMoney a = m.with(adj);
         assertNotNull(a);
         assertNotSame(m, a);
         assertEquals(m.getCurrency(), a.getCurrency());
         assertEquals(FastMoney.of(-100, m.getCurrency()), a);
-        adj = new MonetaryOperator(){
-            @Override
-            public MonetaryAmount apply(MonetaryAmount amount){
-                return amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
-            }
-        };
+        adj = amount -> amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
         a = m.with(adj);
         assertNotNull(a);
         assertNotSame(m, a);
