@@ -15,18 +15,24 @@
  */
 package org.javamoney.moneta.convert.internal;
 
-import org.javamoney.moneta.spi.CompoundRateProvider;
-import org.javamoney.moneta.spi.MonetaryConfig;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.MonetaryException;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.MonetaryConversionsSingletonSpi;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.javamoney.moneta.spi.CompoundRateProvider;
+import org.javamoney.moneta.spi.MonetaryConfig;
 
 /**
  * This is the default implementation of the {@link javax.money.spi.MonetaryConversionsSingletonSpi} interface, backing
