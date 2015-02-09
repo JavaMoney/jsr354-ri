@@ -5,6 +5,7 @@ import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.RateType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -173,4 +174,16 @@ public class ExchangeRateBuilder{
         this.term = rate.getCurrency();
         return this;
     }
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("org.javamoney.moneta.ExchangeRateBuilder: ");
+		sb.append("[conversionContext").append(conversionContext).append(',');
+		sb.append("base").append(base).append(',');
+		sb.append("term").append(term).append(',');
+		sb.append("factor").append(factor).append(',');
+		sb.append("rateChain").append(rateChain).append(']');
+		return sb.toString();
+	}
 }

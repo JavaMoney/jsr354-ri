@@ -21,13 +21,26 @@ import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.convert.*;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionContextBuilder;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -42,21 +55,35 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * This class implements an {@link javax.money.convert.ExchangeRateProvider} that loads data from
- * the European Central Bank data feed (XML). It loads the current exchange
- * rates, as well as historic rates for the past 90 days. The provider loads all data up to 1999 into its
- * historic data cache.
+ * <p>
+ * This class implements an {@link javax.money.convert.ExchangeRateProvider}
+ * that loads data from the European Central Bank data feed (XML). It loads the
+ * current exchange rates, as well as historic rates for the past 90 days. The
+ * provider loads all data up to 1999 into its historic data cache.
+ * </p>
+ * <p>The default date is yesterday. To uses exchange rate from a specific date, you can use this way:</p>
+ * <p><code>CurrencyUnit termCurrency = ...;</code></p>
+ * <p><code>LocalDate localDate = ...;</code></p>
+ * <p><code>ConversionQuery conversionQuery = ConversionQueryBuilder.of().setTermCurrency(euro).setTimestamp(localDate).build();</code>v
+ * <p><code>CurrencyConversion currencyConversion = provider.getCurrencyConversion(conversionQuery);</code></p>
+ * <p><code>MonetaryAmount money = ...;</code></p>
+ * <p><code>MonetaryAmount result = currencyConversion.apply(money);</code></p>
  *
  * @author Anatole Tresch
  * @author Werner Keil
+ * @author otaviojava
  */
-public class ECBHistoricRateProvider extends AbstractRateProvider implements LoaderListener{
+public class ECBHistoricRateProvider extends AbstractRateProvider implements
+		LoaderListener {
 
     /**
      * The data id used for the LoaderService.
      */
     private static final String DATA_ID = ECBHistoricRateProvider.class.getSimpleName();
     private static final String BASE_CURRENCY_CODE = "EUR";
+	private static final LocalDate DEFAULT_TIMESTAMP_MILLIS = YearMonth.of(
+			2014, Month.JANUARY).atDay(9);
+
     /**
      * Base currency of the loaded rates is always EUR.
      */
@@ -65,7 +92,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-    private final Map<Long,Map<String,ExchangeRate>> historicRates = new ConcurrentHashMap<>();
+	private final Map<Long, Map<String, ExchangeRate>> historicRates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -77,7 +104,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
             ProviderContextBuilder.of("ECB-HIST", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
-    /**
+    /*
      * Constructor, also loads initial data.
      *
      * @throws MalformedURLException
@@ -116,33 +143,32 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
         return CONTEXT;
     }
 
-    public ExchangeRate getExchangeRate(ConversionQuery query){
-        if(Objects.isNull(query.getTimestampMillis())){
-            return null;
-        }
+    @Override
+	public ExchangeRate getExchangeRate(ConversionQuery query){
+		LocalDate timeStamp = Optional.ofNullable(query.getTimestamp())
+				.orElse(DEFAULT_TIMESTAMP_MILLIS.atStartOfDay()).toLocalDate();
+
+		Date date = Date.from(timeStamp.atStartOfDay()
+				.atZone(ZoneId.systemDefault()).toInstant());
+		Long timeStampMillis = date.getTime();
         ExchangeRateBuilder builder = new ExchangeRateBuilder(
                 ConversionContextBuilder.create(CONTEXT, RateType.HISTORIC)
-                        .setTimestampMillis(query.getTimestampMillis()).build());
+						.setTimestampMillis(timeStampMillis).build());
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getCurrency());
-        ExchangeRate sourceRate;
-        ExchangeRate target;
+
         if(historicRates.isEmpty()){
             return null;
         }
-        final Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        cal.setTimeInMillis(query.getTimestampMillis());
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        Long targetTS = cal.getTimeInMillis();
-        Map<String,ExchangeRate> targets = this.historicRates.get(targetTS);
+		Map<String, ExchangeRate> targets = this.historicRates
+				.get(timeStampMillis);
         if(Objects.isNull(targets)){
             return null;
         }
-        sourceRate = targets.get(query.getBaseCurrency().getCurrencyCode());
-        target = targets.get(query.getCurrency().getCurrencyCode());
+		ExchangeRate sourceRate = targets.get(query.getBaseCurrency()
+				.getCurrencyCode());
+		ExchangeRate target = targets
+				.get(query.getCurrency().getCurrencyCode());
         if(BASE_CURRENCY_CODE.equals(query.getBaseCurrency().getCurrencyCode()) &&
                 BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode())){
             builder.setFactor(DefaultNumberValue.ONE);
@@ -198,23 +224,17 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
     private class RateReadingHandler extends DefaultHandler{
 
         /**
-         * Date parser.
-         */
-        private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        /**
-         * Current timestamp for the given section.
-         */
-        private Long timestamp;
+		 * Date parser.
+		 */
+		private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		/**
+		 * Current timestamp for the given section.
+		 */
+		private Long timestamp;
 
-        /** Flag, if current or historic data is loaded. */
-        // private boolean loadCurrent;
+		/** Flag, if current or historic data is loaded. */
+		// private boolean loadCurrent;
 
-        /**
-         * Creates a new parser.
-         */
-        public RateReadingHandler(){
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        }
 
         /*
          * (non-Javadoc)
@@ -225,24 +245,25 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
          */
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
-            try{
+			try {
                 if("Cube".equals(qName)){
                     if(Objects.nonNull(attributes.getValue("time"))){
-                        Date date = dateFormat.parse(attributes.getValue("time"));
-                        timestamp = date.getTime();
+						Date date = dateFormat.parse(attributes
+								.getValue("time"));
+						timestamp = date.getTime();
                     }else if(Objects.nonNull(attributes.getValue("currency"))){
                         // read data <Cube currency="USD" rate="1.3349"/>
                         CurrencyUnit tgtCurrency = MonetaryCurrencies.getCurrency(attributes.getValue("currency"));
-                        addRate(tgtCurrency, timestamp,
+						addRate(tgtCurrency, timestamp,
                                 BigDecimal.valueOf(Double.parseDouble(attributes.getValue("rate"))));
                     }
                 }
                 super.startElement(uri, localName, qName, attributes);
             }
-            catch(ParseException e){
-                throw new SAXException("Failed to read.", e);
-            }
-        }
+ catch (ParseException e) {
+				throw new SAXException("Failed to read.", e);
+			}
+		}
 
     }
 
@@ -253,11 +274,11 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements Loa
      * @param timestamp The target day.
      * @param rate      The rate.
      */
-    void addRate(CurrencyUnit term, Long timestamp, Number rate){
+	void addRate(CurrencyUnit term, Long timestamp, Number rate) {
         RateType rateType = RateType.HISTORIC;
         ExchangeRateBuilder builder;
         if(Objects.nonNull(timestamp)){
-            if(timestamp > System.currentTimeMillis()){
+			if (timestamp > System.currentTimeMillis()) {
                 rateType = RateType.DEFERRED;
             }
             builder = new ExchangeRateBuilder(
