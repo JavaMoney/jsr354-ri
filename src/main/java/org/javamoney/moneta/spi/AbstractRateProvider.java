@@ -68,10 +68,11 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider{
     @Override
     public CurrencyConversion getCurrencyConversion(ConversionQuery conversionQuery){
         if(getProviderContext().getRateTypes().size() == 1){
-            return new LazyBoundCurrencyConversion(conversionQuery.getCurrency(), this, ConversionContext
+			return new LazyBoundCurrencyConversion(conversionQuery, this,
+					ConversionContext
                     .of(getProviderContext().getProvider(), getProviderContext().getRateTypes().iterator().next()));
         }
-        return new LazyBoundCurrencyConversion(conversionQuery.getCurrency(), this,
+		return new LazyBoundCurrencyConversion(conversionQuery, this,
                                                ConversionContext.of(getProviderContext().getProvider(), RateType.ANY));
     }
 

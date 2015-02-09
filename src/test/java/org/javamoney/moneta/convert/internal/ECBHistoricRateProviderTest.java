@@ -6,11 +6,16 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryCurrencies;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ConversionQueryBuilder;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
@@ -19,12 +24,13 @@ import org.javamoney.moneta.Money;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class ECBCurrentRateProviderTest {
+public class ECBHistoricRateProviderTest {
 
 	private static final CurrencyUnit EURO = MonetaryCurrencies
 			.getCurrency("EUR");
 	private static final CurrencyUnit DOLLAR = MonetaryCurrencies
 			.getCurrency("USD");
+
 	private static final CurrencyUnit BRAZILIAN_REAL = MonetaryCurrencies
 			.getCurrency("BRL");
 
@@ -32,15 +38,15 @@ public class ECBCurrentRateProviderTest {
 
 	@BeforeTest
 	public void setup() throws InterruptedException {
-		provider = getExchangeRateProvider(ExchangeRateType.ECB);
+		provider = getExchangeRateProvider(ExchangeRateType.ECB_HIST);
+		Thread.sleep(20_000L);
 	}
 
 	@Test
-	public void shouldReturnsECBCurrentRateProvider() {
+	public void shouldReturnsECBHistoricRateProvider() {
 		assertTrue(Objects.nonNull(provider));
-		assertEquals(provider.getClass(), ECBCurrentRateProvider.class);
+		assertEquals(provider.getClass(), ECBHistoricRateProvider.class);
 	}
-
 	@Test
 	public void shouldReturnsSameDollarValue() {
 		CurrencyConversion currencyConversion = provider.getCurrencyConversion(DOLLAR);
@@ -130,6 +136,23 @@ public class ECBCurrentRateProviderTest {
 		MonetaryAmount result = currencyConversion.apply(money);
 
 		assertEquals(result.getCurrency(), BRAZILIAN_REAL);
+		assertTrue(result.getNumber().doubleValue() > 0);
+
+	}
+
+	@Test
+	public void shouldSetTimeInLocalDateTime() {
+
+		LocalDate localDate = YearMonth.of(2014, Month.JANUARY).atDay(9);
+		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
+				.setTermCurrency(EURO).setTimestamp(localDate).build();
+		CurrencyConversion currencyConversion = provider
+				.getCurrencyConversion(conversionQuery);
+		assertNotNull(currencyConversion);
+		MonetaryAmount money = Money.of(BigDecimal.TEN, DOLLAR);
+		MonetaryAmount result = currencyConversion.apply(money);
+
+		assertEquals(result.getCurrency(), EURO);
 		assertTrue(result.getNumber().doubleValue() > 0);
 
 	}

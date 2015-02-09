@@ -18,6 +18,8 @@ package org.javamoney.moneta.spi;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ConversionQueryBuilder;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
@@ -34,9 +36,13 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
 
     private ExchangeRateProvider rateProvider;
 
-    public LazyBoundCurrencyConversion(CurrencyUnit termCurrency, ExchangeRateProvider rateProvider,
+	private ConversionQuery conversionQuery;
+
+    public LazyBoundCurrencyConversion(ConversionQuery conversionQuery, ExchangeRateProvider rateProvider,
                                        ConversionContext conversionContext) {
-        super(termCurrency, conversionContext);
+
+		super(conversionQuery.getCurrency(), conversionContext);
+		this.conversionQuery = conversionQuery;
         this.rateProvider = rateProvider;
     }
 
@@ -48,7 +54,11 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      */
     @Override
     public ExchangeRate getExchangeRate(MonetaryAmount amount) {
-        return this.rateProvider.getExchangeRate(amount.getCurrency(), getCurrency());
+		return this.rateProvider.getExchangeRate(ConversionQueryBuilder
+				.of(conversionQuery).setBaseCurrency(amount.getCurrency())
+				.build());
+		// return this.rateProvider.getExchangeRate(amount.getCurrency(),
+		// getCurrency());
     }
 
     @Override
@@ -63,8 +73,10 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      * org.javamoney.moneta.conversion.AbstractCurrencyConversion#with(javax
      * .money.convert.ConversionContext)
      */
-    public CurrencyConversion with(ConversionContext conversionContext) {
-        return new LazyBoundCurrencyConversion(getCurrency(), rateProvider, conversionContext);
+    @Override
+	public CurrencyConversion with(ConversionContext conversionContext) {
+		return new LazyBoundCurrencyConversion(conversionQuery, rateProvider,
+				conversionContext);
     }
 
     /*
