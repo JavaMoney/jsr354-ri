@@ -90,7 +90,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements
     /**
      * The {@link ConversionContext} of this provider.
      */
-    static final ProviderContext CONTEXT =
+    private static final ProviderContext CONTEXT =
             ProviderContextBuilder.of("ECB-HIST", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
@@ -115,7 +115,7 @@ public class ECBHistoricRateProvider extends AbstractRateProvider implements
         final int oldSize = this.historicRates.size();
         try{
             SAXParser parser = saxParserFactory.newSAXParser();
-            parser.parse(is, new RateReadingHandler(historicRates));
+            parser.parse(is, new RateReadingHandler(historicRates, CONTEXT));
             recentKey = null;
         }
         catch(Exception e){
