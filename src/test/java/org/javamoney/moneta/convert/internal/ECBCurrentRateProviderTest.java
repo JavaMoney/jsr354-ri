@@ -94,4 +94,43 @@ public class ECBCurrentRateProviderTest {
 		assertTrue(result.getNumber().doubleValue() > 0);
 
 	}
+
+	@Test
+	public void shouldConvertsEuroToDollar() {
+		CurrencyConversion currencyConversion = provider
+				.getCurrencyConversion(DOLLAR);
+		assertNotNull(currencyConversion);
+		MonetaryAmount money = Money.of(BigDecimal.TEN, EURO);
+		MonetaryAmount result = currencyConversion.apply(money);
+
+		assertEquals(result.getCurrency(), DOLLAR);
+		assertTrue(result.getNumber().doubleValue() > 0);
+
+	}
+
+	@Test
+	public void shouldConvertsBrazilianToDollar() {
+		CurrencyConversion currencyConversion = provider
+				.getCurrencyConversion(DOLLAR);
+		assertNotNull(currencyConversion);
+		MonetaryAmount money = Money.of(BigDecimal.TEN, BRAZILIAN_REAL);
+		MonetaryAmount result = currencyConversion.apply(money);
+
+		assertEquals(result.getCurrency(), DOLLAR);
+		assertTrue(result.getNumber().doubleValue() > 0);
+
+	}
+
+	@Test
+	public void shouldConvertsDollarToBrazilian() {
+		CurrencyConversion currencyConversion = provider
+				.getCurrencyConversion(BRAZILIAN_REAL);
+		assertNotNull(currencyConversion);
+		MonetaryAmount money = Money.of(BigDecimal.TEN, DOLLAR);
+		MonetaryAmount result = currencyConversion.apply(money);
+
+		assertEquals(result.getCurrency(), BRAZILIAN_REAL);
+		assertTrue(result.getNumber().doubleValue() > 0);
+
+	}
 }
