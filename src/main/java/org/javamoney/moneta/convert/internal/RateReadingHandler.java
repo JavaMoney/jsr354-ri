@@ -13,6 +13,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ExchangeRate;
+import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 
 import org.javamoney.moneta.ExchangeRateBuilder;
@@ -47,8 +48,11 @@ class RateReadingHandler extends DefaultHandler{
 
 	private final Map<Long, Map<String, ExchangeRate>> historicRates;
 
-	public RateReadingHandler(Map<Long, Map<String, ExchangeRate>> historicRates) {
+	private ProviderContext context;
+
+	public RateReadingHandler(Map<Long, Map<String, ExchangeRate>> historicRates, ProviderContext context) {
 		this.historicRates = historicRates;
+		this.context = context;
 	}
 
 	@Override
@@ -86,9 +90,9 @@ class RateReadingHandler extends DefaultHandler{
                 rateType = RateType.DEFERRED;
             }
             builder = new ExchangeRateBuilder(
-                    ConversionContextBuilder.create(ECBHistoricRateProvider.CONTEXT, rateType).setTimestampMillis(timestamp).build());
+                    ConversionContextBuilder.create(context, rateType).setTimestampMillis(timestamp).build());
         }else{
-            builder = new ExchangeRateBuilder(ConversionContextBuilder.create(ECBHistoricRateProvider.CONTEXT, rateType).build());
+            builder = new ExchangeRateBuilder(ConversionContextBuilder.create(context, rateType).build());
         }
         builder.setBase(ECBHistoricRateProvider.BASE_CURRENCY);
         builder.setTerm(term);
