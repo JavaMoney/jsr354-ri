@@ -36,8 +36,6 @@ import java.util.logging.Logger;
  * internal file cache. Default loading tasks can be configured within the javamoney.properties
  * file, @see org.javamoney.moneta.loader.internal.LoaderConfigurator .
  * <p>
- * TODO This class seems to have some issues and also not really good tests!
- *
  * @author Anatole Tresch
  */
 public class DefaultLoaderService implements LoaderService {
@@ -98,7 +96,8 @@ public class DefaultLoaderService implements LoaderService {
      */
     private static ResourceCache loadResourceCache() {
         try {
-            return Bootstrap.getService(ResourceCache.class, new DefaultResourceCache());
+            return Optional.ofNullable(Bootstrap.getService(ResourceCache.class)).orElseGet(
+                    () -> new DefaultResourceCache());
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
             return new DefaultResourceCache();

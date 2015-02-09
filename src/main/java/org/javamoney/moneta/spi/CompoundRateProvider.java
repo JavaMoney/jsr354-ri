@@ -54,7 +54,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
         List<ProviderContext> childContextList = new ArrayList<>();
         for (ExchangeRateProvider exchangeRateProvider : providers) {
             childContextList.add(exchangeRateProvider.getProviderContext());
-            providerName.append(exchangeRateProvider.getProviderContext().getProvider());
+            providerName.append(exchangeRateProvider.getProviderContext().getProviderName());
             providerName.append(',');
             rateTypeSet.addAll(exchangeRateProvider.getProviderContext().getRateTypes());
         }

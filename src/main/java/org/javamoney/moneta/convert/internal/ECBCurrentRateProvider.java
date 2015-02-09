@@ -51,7 +51,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class ECBCurrentRateProvider extends AbstractRateProvider implements LoaderListener{
+public class ECBCurrentRateProvider extends AbstractRateProvider implements LoaderListener {
 
     private static final String BASE_CURRENCY_CODE = "EUR";
     /**
@@ -66,7 +66,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
     /**
      * Current exchange rates.
      */
-    private Map<String,ExchangeRate> currentRates = new ConcurrentHashMap<>();
+    private Map<String, ExchangeRate> currentRates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -83,16 +83,15 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      *
      * @throws MalformedURLException
      */
-    public ECBCurrentRateProvider() throws MalformedURLException{
+    public ECBCurrentRateProvider() throws MalformedURLException {
         super(CONTEXT);
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
         loader.addLoaderListener(this, DATA_ID);
-        try{
+        try {
             loader.loadData(DATA_ID);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading ECB data.", e);
         }
     }
@@ -101,13 +100,12 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * (Re)load the given data feed. Logs an error if loading fails.
      */
     @Override
-    public void newDataLoaded(String data, InputStream is){
-        try{
+    public void newDataLoaded(String data, InputStream is) {
+        try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new RateReadingHandler());
             LOGGER.info("Loaded current " + DATA_ID + " exchange rates.");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error reading resource for ECB currencies: ", e);
         }
     }
@@ -120,44 +118,44 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
             return false;
         }
         return !(!"EUR".equals(termCode) && !currentRates.containsKey(termCode))
-                    && Objects.isNull(conversionQuery.getTimestampMillis());
+                && Objects.isNull(conversionQuery.getTimestampMillis());
     }
 
     @Override
-    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery){
-        if(!isAvailable(conversionQuery)){
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        if (!isAvailable(conversionQuery)) {
             return null;
         }
         return getExchangeRateInternal(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency());
     }
 
-    private ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term){
+    private ExchangeRate getExchangeRateInternal(CurrencyUnit base, CurrencyUnit term) {
         ExchangeRateBuilder builder =
                 new ExchangeRateBuilder(ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
         builder.setBase(base);
         builder.setTerm(term);
         ExchangeRate sourceRate;
         ExchangeRate target;
-        if(currentRates.isEmpty()){
+        if (currentRates.isEmpty()) {
             return null;
         }
         sourceRate = currentRates.get(base.getCurrencyCode());
         target = currentRates.get(term.getCurrencyCode());
-        if(base.getCurrencyCode().equals(term.getCurrencyCode())){
+        if (base.getCurrencyCode().equals(term.getCurrencyCode())) {
             return null;
         }
-        if(BASE_CURRENCY_CODE.equals(term.getCurrencyCode())){
-            if(Objects.isNull(sourceRate)){
+        if (BASE_CURRENCY_CODE.equals(term.getCurrencyCode())) {
+            if (Objects.isNull(sourceRate)) {
                 return null;
             }
             return getReversed(sourceRate);
-        }else if(BASE_CURRENCY_CODE.equals(base.getCurrencyCode())){
+        } else if (BASE_CURRENCY_CODE.equals(base.getCurrencyCode())) {
             return target;
-        }else{
+        } else {
             // Get Conversion base as derived rate: base -> EUR -> term
             ExchangeRate rate1 = getExchangeRateInternal(base, MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE));
             ExchangeRate rate2 = getExchangeRateInternal(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE), term);
-            if(Objects.nonNull(rate1) && Objects.nonNull(rate2)){
+            if (Objects.nonNull(rate1) && Objects.nonNull(rate2)) {
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
                 return builder.build();
@@ -175,14 +173,14 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
          * .ExchangeRate)
          */
     @Override
-    public ExchangeRate getReversed(ExchangeRate rate){
-        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
+    public ExchangeRate getReversed(ExchangeRate rate) {
+        if (rate.getConversionContext().getProviderName().equals(CONTEXT.getProviderName())) {
             return new ExchangeRateBuilder(rate.getConversionContext()).setTerm(rate.getBaseCurrency())
                     .setBase(rate.getCurrency()).setFactor(new DefaultNumberValue(BigDecimal.ONE.divide(rate.getFactor()
-                                                                                                                .numberValue(
-                                                                                                                        BigDecimal.class),
-                                                                                                        MathContext
-                                                                                                                .DECIMAL64)))
+                                    .numberValue(
+                                            BigDecimal.class),
+                            MathContext
+                                    .DECIMAL64)))
                     .build();
         }
         return null;
@@ -205,7 +203,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      *
      * @author Anatole Tresch
      */
-    private class RateReadingHandler extends DefaultHandler{
+    private class RateReadingHandler extends DefaultHandler {
 
         /**
          * Date parser.
@@ -219,7 +217,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
         /**
          * Creates a new parser.
          */
-        public RateReadingHandler(){
+        public RateReadingHandler() {
             dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
 
@@ -231,13 +229,13 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
          * java.lang.String, java.lang.String, org.xml.sax.Attributes)
          */
         @Override
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException{
-            try{
-                if("Cube".equals(qName)){
-                    if(Objects.nonNull(attributes.getValue("time"))){
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            try {
+                if ("Cube".equals(qName)) {
+                    if (Objects.nonNull(attributes.getValue("time"))) {
                         Date date = dateFormat.parse(attributes.getValue("time"));
                         timestamp = date.getTime();
-                    }else if(Objects.nonNull(attributes.getValue("currency"))){
+                    } else if (Objects.nonNull(attributes.getValue("currency"))) {
                         // read data <Cube currency="USD" rate="1.3349"/>
                         CurrencyUnit tgtCurrency = MonetaryCurrencies.getCurrency(attributes.getValue("currency"));
                         addRate(tgtCurrency, timestamp,
@@ -245,8 +243,7 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
                     }
                 }
                 super.startElement(uri, localName, qName, attributes);
-            }
-            catch(ParseException e){
+            } catch (ParseException e) {
                 throw new SAXException("Failed to read.", e);
             }
         }
@@ -260,11 +257,11 @@ public class ECBCurrentRateProvider extends AbstractRateProvider implements Load
      * @param timestamp The target day.
      * @param factor    The conversion factor.
      */
-    void addRate(CurrencyUnit term, Long timestamp, Number factor){
+    void addRate(CurrencyUnit term, Long timestamp, Number factor) {
         ExchangeRateBuilder builder;
-        if(timestamp == null){
+        if (timestamp == null) {
             builder = new ExchangeRateBuilder(ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).build());
-        }else{
+        } else {
             builder = new ExchangeRateBuilder(
                     ConversionContextBuilder.create(CONTEXT, RateType.DEFERRED).setTimestampMillis(timestamp).build());
         }

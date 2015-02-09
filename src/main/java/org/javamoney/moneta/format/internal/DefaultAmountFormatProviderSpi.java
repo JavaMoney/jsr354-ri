@@ -35,7 +35,7 @@ import javax.money.spi.MonetaryAmountFormatProviderSpi;
  *
  * @author Anatole Tresch
  */
-public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
+public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProviderSpi {
 
     private static final String DEFAULT_STYLE = "default";
     private static final String PROVIDER_NAME = "default";
@@ -43,7 +43,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     private Set<Locale> supportedSets = new HashSet<>();
     private Set<String> formatNames = new HashSet<>();
 
-    public DefaultAmountFormatProviderSpi(){
+    public DefaultAmountFormatProviderSpi() {
         supportedSets.addAll(Arrays.asList(DecimalFormat.getAvailableLocales()));
         supportedSets = Collections.unmodifiableSet(supportedSets);
         formatNames.add(DEFAULT_STYLE);
@@ -51,7 +51,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     }
 
     @Override
-    public String getProviderName(){
+    public String getProviderName() {
         return PROVIDER_NAME;
     }
 
@@ -61,17 +61,17 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
          * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
          */
     @Override
-    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
+    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery) {
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-        if(!amountFormatQuery.getProviders().isEmpty() &&
-                !amountFormatQuery.getProviders().contains(getProviderName())){
+        if (!amountFormatQuery.getProviderNames().isEmpty() &&
+                !amountFormatQuery.getProviderNames().contains(getProviderName())) {
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getFormatName() == null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+        if (!(amountFormatQuery.getFormatName() == null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))) {
             return Collections.emptySet();
         }
         AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(DEFAULT_STYLE);
-        if(amountFormatQuery.getLocale() != null){
+        if (amountFormatQuery.getLocale() != null) {
             builder.setLocale(amountFormatQuery.getLocale());
         }
         builder.importContext(amountFormatQuery, false);
@@ -80,12 +80,12 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     }
 
     @Override
-    public Set<Locale> getAvailableLocales(){
+    public Set<Locale> getAvailableLocales() {
         return supportedSets;
     }
 
     @Override
-    public Set<String> getAvailableFormatNames(){
+    public Set<String> getAvailableFormatNames() {
         return formatNames;
     }
 

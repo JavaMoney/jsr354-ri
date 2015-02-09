@@ -224,7 +224,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
             compare = this.getCurrency().getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
         }
         if (compare == 0) {
-            compare = this.getConversionContext().getProvider().compareTo(o.getConversionContext().getProvider());
+            compare = this.getConversionContext().getProviderName().compareTo(o.getConversionContext().getProviderName());
         }
         return compare;
     }

@@ -242,7 +242,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             return null;
         }
         ExchangeRateBuilder builder =
-                new ExchangeRateBuilder(ConversionContext.of(CONTEXT.getProvider(), RateType.HISTORIC));
+                new ExchangeRateBuilder(ConversionContext.of(CONTEXT.getProviderName(), RateType.HISTORIC));
         builder.setBase(base);
         builder.setTerm(term);
         builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));

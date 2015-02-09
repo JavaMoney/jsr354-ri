@@ -31,7 +31,7 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class IdentityRateProvider extends AbstractRateProvider{
+public class IdentityRateProvider extends AbstractRateProvider {
 
     /**
      * The {@link javax.money.convert.ConversionContext} of this provider.
@@ -44,7 +44,7 @@ public class IdentityRateProvider extends AbstractRateProvider{
      *
      * @throws java.net.MalformedURLException
      */
-    public IdentityRateProvider() throws MalformedURLException{
+    public IdentityRateProvider() throws MalformedURLException {
         super(CONTEXT);
     }
 
@@ -54,14 +54,14 @@ public class IdentityRateProvider extends AbstractRateProvider{
      * @param conversionQuery the required {@link ConversionQuery}, not {@code null}
      * @return true, if the contained base and term currencies are known to this provider.
      */
-    public boolean isAvailable(ConversionQuery conversionQuery){
+    public boolean isAvailable(ConversionQuery conversionQuery) {
         return conversionQuery.getBaseCurrency().getCurrencyCode()
                 .equals(conversionQuery.getCurrency().getCurrencyCode());
     }
 
-    public ExchangeRate getExchangeRate(ConversionQuery query){
-        if(query.getBaseCurrency().getCurrencyCode().equals(query.getCurrency().getCurrencyCode())){
-            ExchangeRateBuilder builder = new ExchangeRateBuilder(getProviderContext().getProvider(), RateType.OTHER)
+    public ExchangeRate getExchangeRate(ConversionQuery query) {
+        if (query.getBaseCurrency().getCurrencyCode().equals(query.getCurrency().getCurrencyCode())) {
+            ExchangeRateBuilder builder = new ExchangeRateBuilder(getProviderContext().getProviderName(), RateType.OTHER)
                     .setBase(query.getBaseCurrency());
             builder.setTerm(query.getCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
@@ -78,8 +78,8 @@ public class IdentityRateProvider extends AbstractRateProvider{
 	 * .ExchangeRate)
 	 */
     @Override
-    public ExchangeRate getReversed(ExchangeRate rate){
-        if(rate.getConversionContext().getProvider().equals(CONTEXT.getProvider())){
+    public ExchangeRate getReversed(ExchangeRate rate) {
+        if (rate.getConversionContext().getProviderName().equals(CONTEXT.getProviderName())) {
             return new ExchangeRateBuilder(rate.getConversionContext()).setTerm(rate.getBaseCurrency())
                     .setBase(rate.getCurrency()).setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
