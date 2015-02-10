@@ -31,6 +31,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ConversionQuery;
+import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
@@ -98,6 +99,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
 
     @Override
 	public ExchangeRate getExchangeRate(ConversionQuery query){
+    	Objects.requireNonNull(query);
     	if(historicRates.isEmpty()){
             return null;
         }
@@ -140,12 +142,13 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
             ExchangeRate rate2 = getExchangeRate(
                     query.toBuilder().setBaseCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE))
                             .setTermCurrency(query.getCurrency()).build());
-            if(Objects.nonNull(rate1) || Objects.nonNull(rate2)){
+            if(Objects.nonNull(rate1) && Objects.nonNull(rate2)){
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
                 return builder.build();
             }
-            return null;
+			throw new CurrencyConversionException(query.getBaseCurrency(),
+					query.getCurrency(), sourceRate.getConversionContext());
         }
 	}
 
