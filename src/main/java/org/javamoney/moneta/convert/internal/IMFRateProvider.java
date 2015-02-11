@@ -24,13 +24,27 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
-import javax.money.convert.*;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionContextBuilder;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
@@ -224,7 +238,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return dates;
     }
 
-    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+    @Override
+	public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
         if (!isAvailable(conversionQuery)) {
             return null;
         }

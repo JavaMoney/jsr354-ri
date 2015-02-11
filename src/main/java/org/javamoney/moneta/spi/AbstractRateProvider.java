@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public abstract class AbstractRateProvider implements ExchangeRateProvider {
+public abstract class AbstractRateProvider implements ExchangeRateProvider{
 
     /**
      * The logger used.
@@ -46,7 +46,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      *
      * @param providerContext the {@link ProviderContext}, not null.
      */
-    public AbstractRateProvider(ProviderContext providerContext) {
+    public AbstractRateProvider(ProviderContext providerContext){
         Objects.requireNonNull(providerContext);
         this.providerContext = providerContext;
     }
@@ -58,7 +58,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      * ()
      */
     @Override
-    public ProviderContext getProviderContext() {
+    public ProviderContext getProviderContext(){
         return providerContext;
     }
 
@@ -84,11 +84,11 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      * @param multiplier   the second value to be multiplied
      * @return the result of the multiplication as {@link NumberValue}
      */
-    protected static NumberValue multiply(NumberValue multiplicand, NumberValue multiplier) {
-        if (Objects.isNull(multiplicand)) {
+    protected static NumberValue multiply(NumberValue multiplicand, NumberValue multiplier){
+        if(Objects.isNull(multiplicand)){
             throw new ArithmeticException("The multiplicand cannot be null");
         }
-        if (Objects.isNull(multiplier)) {
+        if(Objects.isNull(multiplier)){
             throw new ArithmeticException("The multiplier cannot be null");
         }
         return new DefaultNumberValue(
@@ -103,11 +103,11 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      * @param divisor  the value to be divided by
      * @return the result of the division as {@link NumberValue}
      */
-    protected static NumberValue divide(NumberValue dividend, NumberValue divisor) {
-        if (Objects.isNull(dividend)) {
+    protected static NumberValue divide(NumberValue dividend, NumberValue divisor){
+        if(Objects.isNull(dividend)){
             throw new ArithmeticException("The dividend cannot be null");
         }
-        if (Objects.isNull(divisor)) {
+        if(Objects.isNull(divisor)){
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
@@ -123,11 +123,11 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      * @param context  the {@link MathContext} to use
      * @return the result of the division as {@link NumberValue}
      */
-    protected static NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context) {
-        if (Objects.isNull(dividend)) {
+    protected static NumberValue divide(NumberValue dividend, NumberValue divisor, MathContext context){
+        if(Objects.isNull(dividend)){
             throw new ArithmeticException("The dividend cannot be null");
         }
-        if (Objects.isNull(divisor)) {
+        if(Objects.isNull(divisor)){
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
