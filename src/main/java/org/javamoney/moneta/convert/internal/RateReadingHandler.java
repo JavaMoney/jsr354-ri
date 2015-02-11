@@ -13,6 +13,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryCurrencies;
 import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ExchangeRate;
+import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 
 import org.javamoney.moneta.ExchangeRateBuilder;
@@ -39,37 +40,40 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Anatole Tresch
  * @author otaviojava
  */
-class RateReadingHandler extends DefaultHandler {
-    /**
-     * Current timestamp for the given section.
-     */
-    private long timestamp;
+class RateReadingHandler extends DefaultHandler{
+	/**
+	 * Current timestamp for the given section.
+	 */
+	private long timestamp;
 
-    private final Map<Long, Map<String, ExchangeRate>> historicRates;
+	private final Map<Long, Map<String, ExchangeRate>> historicRates;
 
-    public RateReadingHandler(Map<Long, Map<String, ExchangeRate>> historicRates) {
-        this.historicRates = historicRates;
-    }
+	private ProviderContext context;
 
-    @Override
-    public void startElement(String uri, String localName, String qName,
-                             Attributes attributes) throws SAXException {
-        if ("Cube".equals(qName)) {
-            if (Objects.nonNull(attributes.getValue("time"))) {
+	public RateReadingHandler(Map<Long, Map<String, ExchangeRate>> historicRates, ProviderContext context) {
+		this.historicRates = historicRates;
+		this.context = context;
+	}
 
-                Date date = Date.from(LocalDate.parse(attributes.getValue("time")).atStartOfDay()
-                        .atZone(ZoneId.systemDefault()).toInstant());
-                timestamp = date.getTime();
-            } else if (Objects.nonNull(attributes.getValue("currency"))) {
-                // read data <Cube currency="USD" rate="1.3349"/>
-                CurrencyUnit tgtCurrency = MonetaryCurrencies
-                        .getCurrency(attributes.getValue("currency"));
-                addRate(tgtCurrency, timestamp, BigDecimal.valueOf(Double
-                        .parseDouble(attributes.getValue("rate"))));
-            }
-        }
-        super.startElement(uri, localName, qName, attributes);
-    }
+	@Override
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) throws SAXException {
+		if ("Cube".equals(qName)) {
+			if (Objects.nonNull(attributes.getValue("time"))) {
+
+				Date date = Date.from(LocalDate.parse(attributes.getValue("time")).atStartOfDay()
+						.atZone(ZoneId.systemDefault()).toInstant());
+				timestamp = date.getTime();
+			} else if (Objects.nonNull(attributes.getValue("currency"))) {
+				// read data <Cube currency="USD" rate="1.3349"/>
+				CurrencyUnit tgtCurrency = MonetaryCurrencies
+						.getCurrency(attributes.getValue("currency"));
+				addRate(tgtCurrency, timestamp, BigDecimal.valueOf(Double
+						.parseDouble(attributes.getValue("rate"))));
+			}
+		}
+		super.startElement(uri, localName, qName, attributes);
+	}
 
     /**
      * Method to add a currency exchange rate.
@@ -78,25 +82,25 @@ class RateReadingHandler extends DefaultHandler {
      * @param timestamp The target day.
      * @param rate      The rate.
      */
-    void addRate(CurrencyUnit term, long timestamp, Number rate) {
+	void addRate(CurrencyUnit term, long timestamp, Number rate) {
         RateType rateType = RateType.HISTORIC;
         ExchangeRateBuilder builder;
-        if (Objects.nonNull(timestamp)) {
-            if (timestamp > System.currentTimeMillis()) {
+        if(Objects.nonNull(timestamp)){
+			if (timestamp > System.currentTimeMillis()) {
                 rateType = RateType.DEFERRED;
             }
             builder = new ExchangeRateBuilder(
-                    ConversionContextBuilder.create(ECBHistoricRateProvider.CONTEXT, rateType).setTimestampMillis(timestamp).build());
-        } else {
-            builder = new ExchangeRateBuilder(ConversionContextBuilder.create(ECBHistoricRateProvider.CONTEXT, rateType).build());
+                    ConversionContextBuilder.create(context, rateType).setTimestampMillis(timestamp).build());
+        }else{
+            builder = new ExchangeRateBuilder(ConversionContextBuilder.create(context, rateType).build());
         }
         builder.setBase(ECBHistoricRateProvider.BASE_CURRENCY);
         builder.setTerm(term);
         builder.setFactor(DefaultNumberValue.of(rate));
         ExchangeRate exchangeRate = builder.build();
-        Map<String, ExchangeRate> rateMap = this.historicRates.get(timestamp);
-        if (Objects.isNull(rateMap)) {
-            synchronized (this.historicRates) {
+        Map<String,ExchangeRate> rateMap = this.historicRates.get(timestamp);
+        if(Objects.isNull(rateMap)){
+            synchronized(this.historicRates){
                 rateMap = Optional.ofNullable(this.historicRates.get(timestamp)).orElse(new ConcurrentHashMap<>());
                 this.historicRates.putIfAbsent(timestamp, rateMap);
 
