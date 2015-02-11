@@ -130,7 +130,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     @SuppressWarnings("unchecked")
-	private void loadRatesTSV(InputStream inputStream) throws IOException, ParseException {
+    private void loadRatesTSV(InputStream inputStream) throws IOException, ParseException {
         Map<CurrencyUnit, List<ExchangeRate>> newCurrencyToSdr = new HashMap<>();
         Map<CurrencyUnit, List<ExchangeRate>> newSdrToCurrency = new HashMap<>();
         NumberFormat f = new DecimalFormat("#0.0000000000");

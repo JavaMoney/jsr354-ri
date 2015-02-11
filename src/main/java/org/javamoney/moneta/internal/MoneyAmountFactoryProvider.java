@@ -15,12 +15,12 @@
  */
 package org.javamoney.moneta.internal;
 
+import javax.annotation.Priority;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.spi.ServicePriority;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
@@ -28,7 +28,7 @@ import org.javamoney.moneta.spi.ServicePriority;
  *
  * @author Anatole Tresch
  */
-@ServicePriority(10)
+@Priority(10)
 public final class MoneyAmountFactoryProvider implements MonetaryAmountFactoryProviderSpi<Money>{
 
     @Override

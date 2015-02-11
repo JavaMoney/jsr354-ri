@@ -47,10 +47,11 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 
 /**
  * Base to all Europe Central Bank implementation.
+ *
  * @author otaviojava
  */
 abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider implements
-		LoaderListener {
+        LoaderListener {
 
     static final String BASE_CURRENCY_CODE = "EUR";
 
@@ -62,7 +63,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-	private final Map<Long, Map<String, ExchangeRate>> historicRates = new ConcurrentHashMap<>();
+    private final Map<Long, Map<String, ExchangeRate>> historicRates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
@@ -70,7 +71,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
 
     private Long recentKey;
 
-    public AbstractECBCurrentRateProvider(ProviderContext context) throws MalformedURLException{
+    public AbstractECBCurrentRateProvider(ProviderContext context) throws MalformedURLException {
         super(context);
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
@@ -82,14 +83,13 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
     public abstract String getDataId();
 
     @Override
-    public void newDataLoaded(String data, InputStream is){
+    public void newDataLoaded(String data, InputStream is) {
         final int oldSize = this.historicRates.size();
-        try{
+        try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new RateReadingHandler(historicRates, getProviderContext()));
             recentKey = null;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             LOGGER.log(Level.FINEST, "Error during data load.", e);
         }
         int newSize = this.historicRates.size();
@@ -98,98 +98,98 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
 
 
     @Override
-	public ExchangeRate getExchangeRate(ConversionQuery query){
-    	Objects.requireNonNull(query);
-    	if(historicRates.isEmpty()){
+    public ExchangeRate getExchangeRate(ConversionQuery query) {
+        Objects.requireNonNull(query);
+        if (historicRates.isEmpty()) {
             return null;
         }
 
-		Long timeStampMillis = getMillisSeconds(query);
+        Long timeStampMillis = getMillisSeconds(query);
         ExchangeRateBuilder builder = getBuilder(query, timeStampMillis);
 
 
-		Map<String, ExchangeRate> targets = this.historicRates
-				.get(timeStampMillis);
-        if(Objects.isNull(targets)){
+        Map<String, ExchangeRate> targets = this.historicRates
+                .get(timeStampMillis);
+        if (Objects.isNull(targets)) {
             return null;
         }
-		ExchangeRate sourceRate = targets.get(query.getBaseCurrency()
-				.getCurrencyCode());
-		ExchangeRate target = targets
-				.get(query.getCurrency().getCurrencyCode());
+        ExchangeRate sourceRate = targets.get(query.getBaseCurrency()
+                .getCurrencyCode());
+        ExchangeRate target = targets
+                .get(query.getCurrency().getCurrencyCode());
         return createExchangeRate(query, builder, sourceRate, target);
     }
 
-	private ExchangeRate createExchangeRate(ConversionQuery query,
-			ExchangeRateBuilder builder, ExchangeRate sourceRate,
-			ExchangeRate target) {
+    private ExchangeRate createExchangeRate(ConversionQuery query,
+                                            ExchangeRateBuilder builder, ExchangeRate sourceRate,
+                                            ExchangeRate target) {
 
-		if(areBothBaseCurrencies(query)){
+        if (areBothBaseCurrencies(query)) {
             builder.setFactor(DefaultNumberValue.ONE);
             return builder.build();
-        } else if(BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode())){
-            if(Objects.isNull(sourceRate)){
+        } else if (BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode())) {
+            if (Objects.isNull(sourceRate)) {
                 return null;
             }
             return reverse(sourceRate);
-		} else if (BASE_CURRENCY_CODE.equals(query.getBaseCurrency()
-				.getCurrencyCode())) {
+        } else if (BASE_CURRENCY_CODE.equals(query.getBaseCurrency()
+                .getCurrencyCode())) {
             return target;
-        } else{
+        } else {
             // Get Conversion base as derived rate: base -> EUR -> term
             ExchangeRate rate1 = getExchangeRate(
                     query.toBuilder().setTermCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE)).build());
             ExchangeRate rate2 = getExchangeRate(
                     query.toBuilder().setBaseCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE))
                             .setTermCurrency(query.getCurrency()).build());
-            if(Objects.nonNull(rate1) && Objects.nonNull(rate2)){
+            if (Objects.nonNull(rate1) && Objects.nonNull(rate2)) {
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
                 builder.setRateChain(rate1, rate2);
                 return builder.build();
             }
-			throw new CurrencyConversionException(query.getBaseCurrency(),
-					query.getCurrency(), sourceRate.getConversionContext());
+            throw new CurrencyConversionException(query.getBaseCurrency(),
+                    query.getCurrency(), sourceRate.getConversionContext());
         }
-	}
+    }
 
-	private boolean areBothBaseCurrencies(ConversionQuery query) {
-		return BASE_CURRENCY_CODE.equals(query.getBaseCurrency().getCurrencyCode()) &&
+    private boolean areBothBaseCurrencies(ConversionQuery query) {
+        return BASE_CURRENCY_CODE.equals(query.getBaseCurrency().getCurrencyCode()) &&
                 BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode());
-	}
+    }
 
-	private Long getMillisSeconds(ConversionQuery query) {
-		if (Objects.nonNull(query.getTimestamp())) {
-			LocalDate timeStamp = query.getTimestamp().toLocalDate();
+    private Long getMillisSeconds(ConversionQuery query) {
+        if (Objects.nonNull(query.getTimestamp())) {
+            LocalDate timeStamp = query.getTimestamp().toLocalDate();
 
-			Date date = Date.from(timeStamp.atStartOfDay()
-					.atZone(ZoneId.systemDefault()).toInstant());
-			Long timeStampMillis = date.getTime();
-			return timeStampMillis;
-		} else {
-			return getRecentKey();
-		}
-	}
+            Date date = Date.from(timeStamp.atStartOfDay()
+                    .atZone(ZoneId.systemDefault()).toInstant());
+            Long timeStampMillis = date.getTime();
+            return timeStampMillis;
+        } else {
+            return getRecentKey();
+        }
+    }
 
-	private Long getRecentKey() {
-		if(Objects.isNull(recentKey)) {
-			Comparator<Long> reversed = Comparator.<Long>naturalOrder().reversed();
-			recentKey =  historicRates.keySet().stream().sorted(reversed).findFirst().get();
-		}
-		return recentKey;
-	}
+    private Long getRecentKey() {
+        if (Objects.isNull(recentKey)) {
+            Comparator<Long> reversed = Comparator.<Long>naturalOrder().reversed();
+            recentKey = historicRates.keySet().stream().sorted(reversed).findFirst().get();
+        }
+        return recentKey;
+    }
 
-	private ExchangeRateBuilder getBuilder(ConversionQuery query,
-			Long timeStampMillis) {
-		ExchangeRateBuilder builder = new ExchangeRateBuilder(
+    private ExchangeRateBuilder getBuilder(ConversionQuery query,
+                                           Long timeStampMillis) {
+        ExchangeRateBuilder builder = new ExchangeRateBuilder(
                 ConversionContextBuilder.create(getProviderContext(), RateType.HISTORIC)
-						.setTimestampMillis(timeStampMillis).build());
+                        .setTimestampMillis(timeStampMillis).build());
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getCurrency());
-		return builder;
-	}
+        return builder;
+    }
 
-    private ExchangeRate reverse(ExchangeRate rate){
-        if(Objects.isNull(rate)){
+    private ExchangeRate reverse(ExchangeRate rate) {
+        if (Objects.isNull(rate)) {
             throw new IllegalArgumentException("Rate null is not reversable.");
         }
         return new ExchangeRateBuilder(rate).setRate(rate).setBase(rate.getCurrency()).setTerm(rate.getBaseCurrency())

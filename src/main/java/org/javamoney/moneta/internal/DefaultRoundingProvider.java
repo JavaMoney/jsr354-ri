@@ -71,16 +71,11 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
         }
         MathContext mc = roundingQuery.get(MathContext.class);
         RoundingMode roundingMode = roundingQuery.get(RoundingMode.class);
-        if (roundingMode != null || mc != null) {
-            if (mc != null) {
-                return new DefaultRounding(scale, mc.getRoundingMode());
-            }
-            if (roundingMode == null) {
-                roundingMode = RoundingMode.HALF_EVEN;
-            }
+        if (mc != null) {
+            return new DefaultRounding(scale, mc.getRoundingMode());
+        } else if (roundingMode != null) {
             return new DefaultRounding(scale, roundingMode);
-        }
-        if (roundingQuery.getRoundingName() != null && DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())) {
+        } else if (roundingQuery.getRoundingName() != null && DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())) {
             return MonetaryRoundings.getDefaultRounding();
         }
         return null;

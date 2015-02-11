@@ -43,20 +43,20 @@ import javax.money.convert.RateType;
 public class ECBHistoric90RateProvider extends AbstractECBCurrentRateProvider {
 
 
-	private static final String DATA_ID = ECBHistoric90RateProvider.class.getSimpleName();
+    private static final String DATA_ID = ECBHistoric90RateProvider.class.getSimpleName();
 
     private static final ProviderContext CONTEXT =
             ProviderContextBuilder.of("ECB-HIST90", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank (last 90 days)").set("days", 90).build();
 
-    public ECBHistoric90RateProvider()	throws MalformedURLException {
-		super(CONTEXT);
-	}
+    public ECBHistoric90RateProvider() throws MalformedURLException {
+        super(CONTEXT);
+    }
 
-	@Override
-	public String getDataId() {
-		return DATA_ID;
-	}
+    @Override
+    public String getDataId() {
+        return DATA_ID;
+    }
 
 
 }

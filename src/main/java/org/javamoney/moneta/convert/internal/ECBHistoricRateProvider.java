@@ -43,7 +43,7 @@ import javax.money.convert.RateType;
  */
 public class ECBHistoricRateProvider extends AbstractECBCurrentRateProvider {
 
-	/**
+    /**
      * The data id used for the LoaderService.
      */
     private static final String DATA_ID = ECBHistoricRateProvider.class.getSimpleName();
@@ -56,17 +56,14 @@ public class ECBHistoricRateProvider extends AbstractECBCurrentRateProvider {
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
 
-	public ECBHistoricRateProvider() throws MalformedURLException {
-		super(CONTEXT);
-	}
+    public ECBHistoricRateProvider() throws MalformedURLException {
+        super(CONTEXT);
+    }
 
-	@Override
-	public String getDataId() {
-		return DATA_ID;
-	}
-
-
-
+    @Override
+    public String getDataId() {
+        return DATA_ID;
+    }
 
 
 }
