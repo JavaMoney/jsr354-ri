@@ -149,7 +149,7 @@ public class ECBHistoric90RateProviderTest {
                 .with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
 
         ConversionQuery conversionQuery = ConversionQueryBuilder.of()
-                .setTermCurrency(EURO).setTimestamp(localDate).build();
+                .setTermCurrency(EURO).set(localDate).build();
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(conversionQuery);
         assertNotNull(currencyConversion);

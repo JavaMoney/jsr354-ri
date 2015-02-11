@@ -19,6 +19,8 @@ import javax.money.*;
 import javax.money.spi.RoundingProviderSpi;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -47,7 +49,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
      * @return the (shared) default rounding instances matching, never null.
      */
     public MonetaryRounding getRounding(RoundingQuery roundingQuery) {
-        if (roundingQuery.getTimestamp() != null) {
+        if (roundingQuery.get(LocalDateTime.class) != null || roundingQuery.get(LocalDate.class) != null) {
             return null;
         }
         CurrencyUnit currency = roundingQuery.getCurrency();

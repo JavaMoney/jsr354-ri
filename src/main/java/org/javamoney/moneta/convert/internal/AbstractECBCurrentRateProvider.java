@@ -19,9 +19,7 @@ import java.io.InputStream;
 import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,13 +61,11 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
     /**
      * Historic exchange rates, rate timestamp as UTC long.
      */
-    private final Map<Long, Map<String, ExchangeRate>> historicRates = new ConcurrentHashMap<>();
+    private final Map<LocalDate, Map<String, ExchangeRate>> historicRates = new ConcurrentHashMap<>();
     /**
      * Parser factory.
      */
     private SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-
-    private Long recentKey;
 
     public AbstractECBCurrentRateProvider(ProviderContext context) throws MalformedURLException {
         super(context);
@@ -88,7 +84,6 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new RateReadingHandler(historicRates, getProviderContext()));
-            recentKey = null;
         } catch (Exception e) {
             LOGGER.log(Level.FINEST, "Error during data load.", e);
         }
@@ -103,13 +98,19 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
         if (historicRates.isEmpty()) {
             return null;
         }
-
-        Long timeStampMillis = getMillisSeconds(query);
-        ExchangeRateBuilder builder = getBuilder(query, timeStampMillis);
-
+        LocalDate date = query.get(LocalDate.class);
+        if (date == null) {
+            LocalDateTime dateTime = query.get(LocalDateTime.class);
+            if (dateTime != null) {
+                date = dateTime.toLocalDate();
+            } else {
+                date = LocalDate.now();
+            }
+        }
+        ExchangeRateBuilder builder = getBuilder(query, date);
 
         Map<String, ExchangeRate> targets = this.historicRates
-                .get(timeStampMillis);
+                .get(date);
         if (Objects.isNull(targets)) {
             return null;
         }
@@ -157,32 +158,11 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
                 BASE_CURRENCY_CODE.equals(query.getCurrency().getCurrencyCode());
     }
 
-    private Long getMillisSeconds(ConversionQuery query) {
-        if (Objects.nonNull(query.getTimestamp())) {
-            LocalDate timeStamp = query.getTimestamp().toLocalDate();
 
-            Date date = Date.from(timeStamp.atStartOfDay()
-                    .atZone(ZoneId.systemDefault()).toInstant());
-            Long timeStampMillis = date.getTime();
-            return timeStampMillis;
-        } else {
-            return getRecentKey();
-        }
-    }
-
-    private Long getRecentKey() {
-        if (Objects.isNull(recentKey)) {
-            Comparator<Long> reversed = Comparator.<Long>naturalOrder().reversed();
-            recentKey = historicRates.keySet().stream().sorted(reversed).findFirst().get();
-        }
-        return recentKey;
-    }
-
-    private ExchangeRateBuilder getBuilder(ConversionQuery query,
-                                           Long timeStampMillis) {
+    private ExchangeRateBuilder getBuilder(ConversionQuery query, LocalDate localDate) {
         ExchangeRateBuilder builder = new ExchangeRateBuilder(
                 ConversionContextBuilder.create(getProviderContext(), RateType.HISTORIC)
-                        .setTimestampMillis(timeStampMillis).build());
+                        .set(localDate).build());
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getCurrency());
         return builder;

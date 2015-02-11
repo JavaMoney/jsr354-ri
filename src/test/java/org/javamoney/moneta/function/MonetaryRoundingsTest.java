@@ -20,6 +20,9 @@ import org.testng.annotations.Test;
 import javax.money.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 
 import static org.testng.Assert.*;
@@ -160,7 +163,7 @@ public class MonetaryRoundingsTest {
     public void testGetRoundingCurrencyUnitLong() {
         MonetaryOperator r = MonetaryRoundings.getRounding(
                 RoundingQueryBuilder.of().setCurrency(MonetaryCurrencies.getCurrency("XXX"))
-                        .setTimestampMillis(System.currentTimeMillis() + 20000L).build());
+                        .set(LocalDate.now().plus(1, ChronoUnit.DAYS)).build());
         assertNotNull(r);
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("XXX").setNumber(-1).create(),
                 MonetaryAmounts.getDefaultAmountFactory().setCurrency("XXX").setNumber(2.0234343).create()
@@ -176,7 +179,7 @@ public class MonetaryRoundingsTest {
     public void testGetCashRoundingCurrencyUnitLong() {
         MonetaryOperator r = MonetaryRoundings.getRounding(
                 RoundingQueryBuilder.of().setCurrency(MonetaryCurrencies.getCurrency("XXX"))
-                        .setTimestampMillis(System.currentTimeMillis() + 20000L).set("cashRounding", true).build());
+                        .set(LocalDate.now().plus(1, ChronoUnit.DAYS)).set("cashRounding", true).build());
         assertNotNull(r);
         assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(-1).create(),
                 MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(2.0234343).create()

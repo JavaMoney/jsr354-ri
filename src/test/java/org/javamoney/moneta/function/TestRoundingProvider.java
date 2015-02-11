@@ -19,6 +19,7 @@ import javax.money.*;
 import javax.money.spi.RoundingProviderSpi;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 
 public class TestRoundingProvider implements RoundingProviderSpi {
@@ -90,7 +91,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 
     @Override
     public MonetaryRounding getRounding(RoundingQuery roundingQuery) {
-        Long timestamp = roundingQuery.getTimestampMillis();
+        LocalDate timestamp = roundingQuery.get(LocalDate.class);
         if (roundingQuery.getRoundingName() == null) {
             return getRounding(roundingQuery, timestamp, "default");
         } else {
@@ -98,7 +99,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
         }
     }
 
-    private MonetaryRounding getRounding(RoundingQuery roundingQuery, Long timestamp, String roundingId) {
+    private MonetaryRounding getRounding(RoundingQuery roundingQuery, LocalDate timestamp, String roundingId) {
         if ("foo".equals(roundingId)) {
             return null;
         }
@@ -106,7 +107,7 @@ public class TestRoundingProvider implements RoundingProviderSpi {
             CurrencyUnit currency = roundingQuery.getCurrency();
             if (Objects.nonNull(currency)) {
                 if (currency.getCurrencyCode().equals("XXX")) {
-                    if (timestamp > System.currentTimeMillis()) {
+                    if (timestamp != null && timestamp.isAfter(LocalDate.now())) {
                         return minusOneRounding;
                     } else {
                         return zeroRounding;

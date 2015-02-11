@@ -18,6 +18,8 @@ package org.javamoney.moneta.internal;
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
 import javax.money.spi.CurrencyProviderSpi;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,7 +48,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery currencyQuery) {
         Set<CurrencyUnit> result = new HashSet<>(currencyUnits.size());
-        if (currencyQuery.getTimestamp() != null) {
+        if (currencyQuery.get(LocalDateTime.class) != null || currencyQuery.get(LocalDate.class) != null) {
             return Collections.emptySet();
         }
         if (!currencyQuery.getCurrencyCodes().isEmpty()) {

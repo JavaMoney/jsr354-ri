@@ -23,7 +23,9 @@ import java.net.MalformedURLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
@@ -151,7 +153,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         // Currency January 31, 2013 January 30, 2013 January 29, 2013
         // January 28, 2013 January 25, 2013
         // Euro 1.137520 1.137760 1.143840 1.142570 1.140510
-        List<Long> timestamps = null;
+        List<LocalDate> timestamps = null;
         while (Objects.nonNull(line)) {
             if (line.trim().isEmpty()) {
                 line = pr.readLine();
@@ -182,24 +184,23 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                 if (Objects.isNull(values[i])) {
                     continue;
                 }
-                Long fromTS = timestamps != null ? timestamps.get(i) : null;
+                LocalDate fromTS = timestamps != null ? timestamps.get(i) : null;
                 if (fromTS == null) {
                     continue;
                 }
-                Long toTS = fromTS + 3600L * 1000L * 24L; // One day
                 RateType rateType = RateType.HISTORIC;
-                if (toTS > System.currentTimeMillis()) {
+                if (fromTS.equals(LocalDate.now())) {
                     rateType = RateType.DEFERRED;
                 }
                 if (currencyToSdr) { // Currency -> SDR
                     ExchangeRate rate = new ExchangeRateBuilder(
-                            ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(toTS).build())
+                            ConversionContextBuilder.create(CONTEXT, rateType).set(fromTS).build())
                             .setBase(currency).setTerm(SDR).setFactor(new DefaultNumberValue(1d / values[i])).build();
                     List<ExchangeRate> rates = newCurrencyToSdr.computeIfAbsent(currency, c -> new ArrayList<>(5));
                     rates.add(rate);
                 } else { // SDR -> Currency
                     ExchangeRate rate = new ExchangeRateBuilder(
-                            ConversionContextBuilder.create(CONTEXT, rateType).setTimestampMillis(fromTS).build())
+                            ConversionContextBuilder.create(CONTEXT, rateType).set(fromTS).build())
                             .setBase(SDR).setTerm(currency).setFactor(DefaultNumberValue.of(1d / values[i])).build();
                     List<ExchangeRate> rates = newSdrToCurrency.computeIfAbsent(currency, (c) -> new ArrayList<>(5));
                     rates.add(rate);
@@ -227,14 +228,14 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return result;
     }
 
-    private List<Long> readTimestamps(String line) throws ParseException {
+    private List<LocalDate> readTimestamps(String line) throws ParseException {
         // Currency May 01, 2013 April 30, 2013 April 29, 2013 April 26, 2013
         // April 25, 2013
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM DD, yyyy", Locale.ENGLISH);
+        DateTimeFormatter sdf = DateTimeFormatter.ofPattern("MMMM dd, uuuu").withLocale(Locale.ENGLISH);
         String[] parts = line.split("\\\t");
-        List<Long> dates = new ArrayList<>(parts.length);
+        List<LocalDate> dates = new ArrayList<>(parts.length);
         for (int i = 1; i < parts.length; i++) {
-            dates.add(sdf.parse(parts[i]).getTime());
+            dates.add(LocalDate.parse(parts[i], sdf));
         }
         return dates;
     }
@@ -246,7 +247,13 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         }
         CurrencyUnit base = conversionQuery.getBaseCurrency();
         CurrencyUnit term = conversionQuery.getCurrency();
-        Long timestamp = conversionQuery.getTimestampMillis();
+        LocalDate timestamp = conversionQuery.get(LocalDate.class);
+        if (timestamp == null) {
+            LocalDateTime dateTime = conversionQuery.get(LocalDateTime.class);
+            if (dateTime != null) {
+                timestamp = dateTime.toLocalDate();
+            }
+        }
         ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), timestamp);
         ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), timestamp);
         if (base.equals(SDR)) {
@@ -266,16 +273,16 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return builder.build();
     }
 
-    private ExchangeRate lookupRate(List<ExchangeRate> list, Long timestamp) {
+    private ExchangeRate lookupRate(List<ExchangeRate> list, LocalDate localDate) {
         if (Objects.isNull(list)) {
             return null;
         }
         ExchangeRate found = null;
         for (ExchangeRate rate : list) {
-            if (Objects.isNull(timestamp)) {
-                timestamp = System.currentTimeMillis();
+            if (Objects.isNull(localDate)) {
+                localDate = LocalDate.now();
             }
-            if (isValid(rate.getConversionContext(), timestamp)) {
+            if (isValid(rate.getConversionContext(), localDate)) {
                 return rate;
             }
             if (Objects.isNull(found)) {
@@ -285,11 +292,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return found;
     }
 
-    private boolean isValid(ConversionContext conversionContext, Long timestamp) {
-        Long validFrom = conversionContext.getLong("validFrom");
-        Long validTo = conversionContext.getLong("validTo");
-        return !(Objects.nonNull(validFrom) && validFrom > timestamp) &&
-                !(Objects.nonNull(validTo) && validTo < timestamp);
+    private boolean isValid(ConversionContext conversionContext, LocalDate timestamp) {
+        LocalDate validAt = conversionContext.get(LocalDate.class);
+        return !(Objects.nonNull(validAt)) && validAt.equals(timestamp);
     }
 
 }

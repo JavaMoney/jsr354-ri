@@ -146,7 +146,7 @@ public class ECBHistoricRateProviderTest {
 
         LocalDate localDate = YearMonth.of(2014, Month.JANUARY).atDay(9);
         ConversionQuery conversionQuery = ConversionQueryBuilder.of()
-                .setTermCurrency(EURO).setTimestamp(localDate).build();
+                .setTermCurrency(EURO).set(localDate).build();
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(conversionQuery);
         assertNotNull(currencyConversion);
