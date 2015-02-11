@@ -18,44 +18,44 @@ import org.testng.annotations.Test;
 
 public class ExchangeRateTypeTest {
 
-	@Test
-	public void shouldReturnsECBCurrentRateProvider() {
-		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider(ExchangeRateType.ECB);
-		assertTrue(Objects.nonNull(prov));
-		assertEquals(ECBCurrentRateProvider.class, prov.getClass());
-	}
+    @Test
+    public void shouldReturnsECBCurrentRateProvider() {
+        ExchangeRateProvider prov = MonetaryConversions
+                .getExchangeRateProvider(ExchangeRateType.ECB);
+        assertTrue(Objects.nonNull(prov));
+        assertEquals(ECBCurrentRateProvider.class, prov.getClass());
+    }
 
-	@Test
-	public void shouldReturnsECBHistoricRateProvider() {
-		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider(ExchangeRateType.ECB_HIST);
-		assertTrue(Objects.nonNull(prov));
-		assertEquals(ECBHistoricRateProvider.class, prov.getClass());
-	}
+    @Test
+    public void shouldReturnsECBHistoricRateProvider() {
+        ExchangeRateProvider prov = MonetaryConversions
+                .getExchangeRateProvider(ExchangeRateType.ECB_HIST);
+        assertTrue(Objects.nonNull(prov));
+        assertEquals(ECBHistoricRateProvider.class, prov.getClass());
+    }
 
-	@Test
-	public void shouldReturnsECBHistoric90RateProvider() {
-		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider(ExchangeRateType.ECB_HIST90);
-		assertTrue(Objects.nonNull(prov));
-		assertEquals(ECBHistoric90RateProvider.class, prov.getClass());
-	}
+    @Test
+    public void shouldReturnsECBHistoric90RateProvider() {
+        ExchangeRateProvider prov = MonetaryConversions
+                .getExchangeRateProvider(ExchangeRateType.ECB_HIST90);
+        assertTrue(Objects.nonNull(prov));
+        assertEquals(ECBHistoric90RateProvider.class, prov.getClass());
+    }
 
-	@Test
-	public void shouldReturnsIMFRateProvider() {
-		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider(ExchangeRateType.IMF);
-		assertTrue(Objects.nonNull(prov));
-		assertEquals(IMFRateProvider.class, prov.getClass());
-	}
+    @Test
+    public void shouldReturnsIMFRateProvider() {
+        ExchangeRateProvider prov = MonetaryConversions
+                .getExchangeRateProvider(ExchangeRateType.IMF);
+        assertTrue(Objects.nonNull(prov));
+        assertEquals(IMFRateProvider.class, prov.getClass());
+    }
 
-	@Test
-	public void shouldReturnsIdentityRateProvider() {
-		ExchangeRateProvider prov = MonetaryConversions
-				.getExchangeRateProvider(ExchangeRateType.IDENTITY);
-		assertTrue(Objects.nonNull(prov));
-		assertEquals(IdentityRateProvider.class, prov.getClass());
-	}
+    @Test
+    public void shouldReturnsIdentityRateProvider() {
+        ExchangeRateProvider prov = MonetaryConversions
+                .getExchangeRateProvider(ExchangeRateType.IDENTITY);
+        assertTrue(Objects.nonNull(prov));
+        assertEquals(IdentityRateProvider.class, prov.getClass());
+    }
 
 }

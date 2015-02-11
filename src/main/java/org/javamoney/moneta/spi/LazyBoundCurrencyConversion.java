@@ -36,13 +36,13 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
 
     private ExchangeRateProvider rateProvider;
 
-	private ConversionQuery conversionQuery;
+    private ConversionQuery conversionQuery;
 
     public LazyBoundCurrencyConversion(ConversionQuery conversionQuery, ExchangeRateProvider rateProvider,
                                        ConversionContext conversionContext) {
 
-		super(conversionQuery.getCurrency(), conversionContext);
-		this.conversionQuery = conversionQuery;
+        super(conversionQuery.getCurrency(), conversionContext);
+        this.conversionQuery = conversionQuery;
         this.rateProvider = rateProvider;
     }
 
@@ -54,11 +54,11 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      */
     @Override
     public ExchangeRate getExchangeRate(MonetaryAmount amount) {
-		return this.rateProvider.getExchangeRate(ConversionQueryBuilder
-				.of(conversionQuery).setBaseCurrency(amount.getCurrency())
-				.build());
-		// return this.rateProvider.getExchangeRate(amount.getCurrency(),
-		// getCurrency());
+        return this.rateProvider.getExchangeRate(ConversionQueryBuilder
+                .of(conversionQuery).setBaseCurrency(amount.getCurrency())
+                .build());
+        // return this.rateProvider.getExchangeRate(amount.getCurrency(),
+        // getCurrency());
     }
 
     @Override
@@ -74,9 +74,9 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
      * .money.convert.ConversionContext)
      */
     @Override
-	public CurrencyConversion with(ConversionContext conversionContext) {
-		return new LazyBoundCurrencyConversion(conversionQuery, rateProvider,
-				conversionContext);
+    public CurrencyConversion with(ConversionContext conversionContext) {
+        return new LazyBoundCurrencyConversion(conversionQuery, rateProvider,
+                conversionContext);
     }
 
     /*

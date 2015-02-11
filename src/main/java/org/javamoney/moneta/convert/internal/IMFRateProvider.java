@@ -239,7 +239,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     }
 
     @Override
-	public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
         if (!isAvailable(conversionQuery)) {
             return null;
         }

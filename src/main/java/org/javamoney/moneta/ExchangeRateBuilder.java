@@ -18,7 +18,7 @@ import java.util.Objects;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class ExchangeRateBuilder{
+public class ExchangeRateBuilder {
 
     /**
      * The {@link javax.money.convert.ConversionContext}.
@@ -46,7 +46,7 @@ public class ExchangeRateBuilder{
      *
      * @param rateType the {@link javax.money.convert.RateType} contained
      */
-    public ExchangeRateBuilder(String provider, RateType rateType){
+    public ExchangeRateBuilder(String provider, RateType rateType) {
         this(ConversionContext.of(provider, rateType));
     }
 
@@ -55,7 +55,7 @@ public class ExchangeRateBuilder{
      *
      * @param context the {@link javax.money.convert.ConversionContext} to be applied
      */
-    public ExchangeRateBuilder(ConversionContext context){
+    public ExchangeRateBuilder(ConversionContext context) {
         setContext(context);
     }
 
@@ -64,7 +64,7 @@ public class ExchangeRateBuilder{
      *
      * @param rate the {@link javax.money.convert.ExchangeRate} to be applied
      */
-    public ExchangeRateBuilder(ExchangeRate rate){
+    public ExchangeRateBuilder(ExchangeRate rate) {
         setContext(rate.getConversionContext());
         setFactor(rate.getFactor());
         setTerm(rate.getCurrency());
@@ -78,7 +78,7 @@ public class ExchangeRateBuilder{
      * @param base to base (source) {@link javax.money.CurrencyUnit} to be applied
      * @return the builder instance
      */
-    public ExchangeRateBuilder setBase(CurrencyUnit base){
+    public ExchangeRateBuilder setBase(CurrencyUnit base) {
         this.base = base;
         return this;
     }
@@ -89,7 +89,7 @@ public class ExchangeRateBuilder{
      * @param term to terminating {@link javax.money.CurrencyUnit} to be applied
      * @return the builder instance
      */
-    public ExchangeRateBuilder setTerm(CurrencyUnit term){
+    public ExchangeRateBuilder setTerm(CurrencyUnit term) {
         this.term = term;
         return this;
     }
@@ -100,9 +100,9 @@ public class ExchangeRateBuilder{
      * @param exchangeRates the {@link javax.money.convert.ExchangeRate} chain to be applied
      * @return the builder instance
      */
-    public ExchangeRateBuilder setRateChain(ExchangeRate... exchangeRates){
+    public ExchangeRateBuilder setRateChain(ExchangeRate... exchangeRates) {
         this.rateChain.clear();
-        if(Objects.nonNull(exchangeRates)){
+        if (Objects.nonNull(exchangeRates)) {
             this.rateChain.addAll(Arrays.asList(exchangeRates.clone()));
         }
         return this;
@@ -114,9 +114,9 @@ public class ExchangeRateBuilder{
      * @param exchangeRates the {@link javax.money.convert.ExchangeRate} chain to be applied
      * @return the builder instance
      */
-    public ExchangeRateBuilder setRateChain(List<ExchangeRate> exchangeRates){
+    public ExchangeRateBuilder setRateChain(List<ExchangeRate> exchangeRates) {
         this.rateChain.clear();
-        if(Objects.nonNull(exchangeRates)){
+        if (Objects.nonNull(exchangeRates)) {
             this.rateChain.addAll(exchangeRates);
         }
         return this;
@@ -130,7 +130,7 @@ public class ExchangeRateBuilder{
      * @param factor the factor.
      * @return The builder instance.
      */
-    public ExchangeRateBuilder setFactor(NumberValue factor){
+    public ExchangeRateBuilder setFactor(NumberValue factor) {
         this.factor = factor;
         return this;
     }
@@ -141,7 +141,7 @@ public class ExchangeRateBuilder{
      * @param conversionContext the {@link javax.money.convert.ConversionContext}, not null.
      * @return The builder.
      */
-    public ExchangeRateBuilder setContext(ConversionContext conversionContext){
+    public ExchangeRateBuilder setContext(ConversionContext conversionContext) {
         Objects.requireNonNull(conversionContext);
         this.conversionContext = conversionContext;
         return this;
@@ -153,7 +153,7 @@ public class ExchangeRateBuilder{
      * @return a new instance of {@link javax.money.convert.ExchangeRate}.
      * @throws IllegalArgumentException if the rate could not be built.
      */
-    public ExchangeRate build(){
+    public ExchangeRate build() {
         return new DefaultExchangeRate(this);
     }
 
@@ -165,7 +165,7 @@ public class ExchangeRateBuilder{
      * @param rate the base rate
      * @return the Builder, for chaining.
      */
-    public ExchangeRateBuilder setRate(ExchangeRate rate){
+    public ExchangeRateBuilder setRate(ExchangeRate rate) {
         this.base = rate.getBaseCurrency();
         this.term = rate.getCurrency();
         this.conversionContext = rate.getConversionContext();
@@ -175,15 +175,15 @@ public class ExchangeRateBuilder{
         return this;
     }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("org.javamoney.moneta.ExchangeRateBuilder: ");
-		sb.append("[conversionContext").append(conversionContext).append(',');
-		sb.append("base").append(base).append(',');
-		sb.append("term").append(term).append(',');
-		sb.append("factor").append(factor).append(',');
-		sb.append("rateChain").append(rateChain).append(']');
-		return sb.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("org.javamoney.moneta.ExchangeRateBuilder: ");
+        sb.append("[conversionContext").append(conversionContext).append(',');
+        sb.append("base").append(base).append(',');
+        sb.append("term").append(term).append(',');
+        sb.append("factor").append(factor).append(',');
+        sb.append("rateChain").append(rateChain).append(']');
+        return sb.toString();
+    }
 }
