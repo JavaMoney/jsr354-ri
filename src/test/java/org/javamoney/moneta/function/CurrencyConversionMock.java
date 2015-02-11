@@ -50,7 +50,7 @@ class CurrencyConversionMock implements CurrencyConversion {
     }
 
     @Override
-    public ConversionContext getConversionContext() {
+    public ConversionContext getContext() {
         return null;
     }
 

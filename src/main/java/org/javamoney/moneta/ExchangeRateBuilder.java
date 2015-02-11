@@ -65,7 +65,7 @@ public class ExchangeRateBuilder {
      * @param rate the {@link javax.money.convert.ExchangeRate} to be applied
      */
     public ExchangeRateBuilder(ExchangeRate rate) {
-        setContext(rate.getConversionContext());
+        setContext(rate.getContext());
         setFactor(rate.getFactor());
         setTerm(rate.getCurrency());
         setBase(rate.getBaseCurrency());
@@ -168,7 +168,7 @@ public class ExchangeRateBuilder {
     public ExchangeRateBuilder setRate(ExchangeRate rate) {
         this.base = rate.getBaseCurrency();
         this.term = rate.getCurrency();
-        this.conversionContext = rate.getConversionContext();
+        this.conversionContext = rate.getContext();
         this.factor = rate.getFactor();
         this.rateChain = rate.getExchangeRateChain();
         this.term = rate.getCurrency();

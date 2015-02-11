@@ -31,7 +31,7 @@ import javax.money.CurrencyUnit;
  * @author Werner Keil
  * @version 0.6
  */
-public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Comparable<CurrencyUnit>{
+public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Comparable<CurrencyUnit> {
 
     /**
      * serialVersionUID.
@@ -50,7 +50,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      *
      * @param currency the Currency instance, not {@code null}.
      */
-    JDKCurrencyAdapter(Currency currency){
+    JDKCurrencyAdapter(Currency currency) {
         this.baseCurrency = currency;
     }
 
@@ -72,7 +72,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * the currency codes must be unique.
      * @see javax.money.CurrencyUnit#getCurrencyCode()
      */
-    public String getCurrencyCode(){
+    public String getCurrencyCode() {
         return baseCurrency.getCurrencyCode();
     }
 
@@ -89,7 +89,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * @return the numeric currency code
      * @see CurrencyUnit#getNumericCode()
      */
-    public int getNumericCode(){
+    public int getNumericCode() {
         return baseCurrency.getNumericCode();
     }
 
@@ -106,12 +106,12 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * @return the fractional digits, from 0 to 9 (normally 0, 2 or 3), or 0 for
      * pseudo-currencies.
      */
-    public int getDefaultFractionDigits(){
+    public int getDefaultFractionDigits() {
         return baseCurrency.getDefaultFractionDigits();
     }
 
     @Override
-    public CurrencyContext getCurrencyContext(){
+    public CurrencyContext getContext() {
         return CONTEXT;
     }
 
@@ -122,7 +122,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     @Override
-    public int compareTo(CurrencyUnit currency){
+    public int compareTo(CurrencyUnit currency) {
         Objects.requireNonNull(currency);
         return getCurrencyCode().compareTo(currency.getCurrencyCode());
     }
@@ -133,7 +133,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hashCode(baseCurrency);
     }
 
@@ -143,11 +143,11 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj){
-        if(obj == this){
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
-        if(obj instanceof CurrencyUnit){
+        if (obj instanceof CurrencyUnit) {
             CurrencyUnit other = (CurrencyUnit) obj;
             return Objects.equals(getCurrencyCode(), other.getCurrencyCode());
         }
@@ -160,7 +160,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      * @see java.lang.Object#toString()
      */
     @Override
-    public String toString(){
+    public String toString() {
         return baseCurrency.toString();
     }
 

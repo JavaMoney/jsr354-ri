@@ -83,7 +83,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
         final int oldSize = this.historicRates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
-            parser.parse(is, new RateReadingHandler(historicRates, getProviderContext()));
+            parser.parse(is, new RateReadingHandler(historicRates, getContext()));
         } catch (Exception e) {
             LOGGER.log(Level.FINEST, "Error during data load.", e);
         }
@@ -149,7 +149,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
                 return builder.build();
             }
             throw new CurrencyConversionException(query.getBaseCurrency(),
-                    query.getCurrency(), sourceRate.getConversionContext());
+                    query.getCurrency(), sourceRate.getContext());
         }
     }
 
@@ -161,7 +161,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
 
     private ExchangeRateBuilder getBuilder(ConversionQuery query, LocalDate localDate) {
         ExchangeRateBuilder builder = new ExchangeRateBuilder(
-                ConversionContextBuilder.create(getProviderContext(), RateType.HISTORIC)
+                ConversionContextBuilder.create(getContext(), RateType.HISTORIC)
                         .set(localDate).build());
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getCurrency());

@@ -293,7 +293,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @return the {@link MathContext} used, never null.
      */
     @Override
-    public MonetaryContext getMonetaryContext() {
+    public MonetaryContext getContext() {
         return this.monetaryContext;
     }
 

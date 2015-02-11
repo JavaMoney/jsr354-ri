@@ -109,7 +109,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
     }
 
     @Override
-    public CurrencyContext getCurrencyContext() {
+    public CurrencyContext getContext() {
         return CONTEXT;
     }
 
@@ -249,7 +249,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
         }
 
         @Override
-        public CurrencyContext getCurrencyContext() {
+        public CurrencyContext getContext() {
             return CONTEXT;
         }
 

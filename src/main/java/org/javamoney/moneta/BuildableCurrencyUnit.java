@@ -87,7 +87,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
     }
 
     @Override
-    public CurrencyContext getCurrencyContext() {
+    public CurrencyContext getContext() {
         return currencyContext;
     }
 

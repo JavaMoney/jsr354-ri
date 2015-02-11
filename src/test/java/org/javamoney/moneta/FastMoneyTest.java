@@ -1012,9 +1012,9 @@ public class FastMoneyTest{
      */
     @Test
     public void testGetImplementationType(){
-        assertEquals(FastMoney.of(0, "CHF").getMonetaryContext().getAmountType(), FastMoney.class);
-        assertEquals(FastMoney.of(0.34746d, "CHF").getMonetaryContext().getAmountType(), FastMoney.class);
-        assertEquals(FastMoney.of(100034L, "CHF").getMonetaryContext().getAmountType(), FastMoney.class);
+        assertEquals(FastMoney.of(0, "CHF").getContext().getAmountType(), FastMoney.class);
+        assertEquals(FastMoney.of(0.34746d, "CHF").getContext().getAmountType(), FastMoney.class);
+        assertEquals(FastMoney.of(100034L, "CHF").getContext().getAmountType(), FastMoney.class);
     }
 
     /**

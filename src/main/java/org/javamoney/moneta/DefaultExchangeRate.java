@@ -153,7 +153,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the conversion context, never null.
      */
-    public final ConversionContext getConversionContext() {
+    public final ConversionContext getContext() {
         return this.conversionContext;
     }
 
@@ -224,7 +224,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
             compare = this.getCurrency().getCurrencyCode().compareTo(o.getCurrency().getCurrencyCode());
         }
         if (compare == 0) {
-            compare = this.getConversionContext().getProviderName().compareTo(o.getConversionContext().getProviderName());
+            compare = this.getContext().getProviderName().compareTo(o.getContext().getProviderName());
         }
         return compare;
     }
@@ -274,7 +274,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * @return a new {@link ExchangeRateBuilder}, never {@code null}.
      */
     public ExchangeRateBuilder toBuilder() {
-        return new ExchangeRateBuilder(getConversionContext()).setBase(getBaseCurrency()).setTerm(getCurrency())
+        return new ExchangeRateBuilder(getContext()).setBase(getBaseCurrency()).setTerm(getCurrency())
                 .setFactor(getFactor()).setRateChain(getExchangeRateChain());
     }
 }

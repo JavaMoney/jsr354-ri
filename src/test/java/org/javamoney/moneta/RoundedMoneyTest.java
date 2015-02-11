@@ -124,7 +124,7 @@ public class RoundedMoneyTest {
     @Test
     public void testGetDefaultMathContext() {
         RoundedMoney money1 = RoundedMoney.of(BigDecimal.ONE, EURO);
-        assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT, money1.getMonetaryContext());
+        assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT, money1.getContext());
     }
 
     /**
@@ -194,53 +194,53 @@ public class RoundedMoneyTest {
                 MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(2345).set(RoundingMode.CEILING).build();
         RoundedMoney m = RoundedMoney.of((byte) 2, EURO, mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(EURO, m.getCurrency());
         assertEquals(Byte.valueOf((byte) 2), m.getNumber().numberValue(Byte.class));
         m = RoundedMoney.of((short) -2, DOLLAR, mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Short.valueOf((short) -2), m.getNumber().numberValue(Short.class));
         m = RoundedMoney.of(-12, EURO, mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(EURO, m.getCurrency());
         assertEquals(Integer.valueOf(-12), m.getNumber().numberValue(Integer.class));
         m = RoundedMoney.of((long) 12, DOLLAR, mc);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = RoundedMoney.of((float) 12.23, EURO, mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(EURO, m.getCurrency());
         assertEquals((float) 12.23, m.getNumber().numberValue(Float.class));
         m = RoundedMoney.of(-12.23, DOLLAR, mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(-12.23, m.getNumber().numberValue(Double.class));
         m = RoundedMoney.of(BigDecimal.valueOf(234.2345), EURO, mc);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(BigDecimal.valueOf(234.2345), m.getNumber().numberValue(BigDecimal.class));
         m = RoundedMoney.of(BigInteger.valueOf(23232312321432432L), DOLLAR, mc);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(Long.valueOf(23232312321432432L), m.getNumber().numberValue(Long.class));
         assertEquals(BigInteger.valueOf(23232312321432432L), m.getNumber().numberValue(BigInteger.class));
     }
@@ -309,53 +309,53 @@ public class RoundedMoneyTest {
                 MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(2345).set(RoundingMode.CEILING).build();
         RoundedMoney m = RoundedMoney.of((byte) 2, "EUR", mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(EURO, m.getCurrency());
         assertEquals(Byte.valueOf((byte) 2), m.getNumber().numberValue(Byte.class));
         m = RoundedMoney.of((short) -2, "USD", mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Short.valueOf((short) -2), m.getNumber().numberValue(Short.class));
         m = RoundedMoney.of(-12, "EUR", mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(EURO, m.getCurrency());
         assertEquals(Integer.valueOf(-12), m.getNumber().numberValue(Integer.class));
         m = RoundedMoney.of((long) 12, "USD", mc);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = RoundedMoney.of((float) 12.23, "EUR", mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(EURO, m.getCurrency());
         assertEquals((float) 12.23, m.getNumber().numberValue(Float.class));
         m = RoundedMoney.of(-12.23, "USD", mc);
         assertNotNull(m);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(-12.23, m.getNumber().numberValue(Double.class));
         m = RoundedMoney.of(BigDecimal.valueOf(234.2345), "EUR", mc);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(BigDecimal.valueOf(234.2345), m.getNumber().numberValue(BigDecimal.class));
         m = RoundedMoney.of(BigInteger.valueOf(23232312321432432L), "USD", mc);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals(m.getMonetaryContext().getInt("precision"), Integer.valueOf(2345));
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals(m.getContext().getInt("precision"), Integer.valueOf(2345));
         assertEquals(Long.valueOf(23232312321432432L), m.getNumber().numberValue(Long.class));
         assertEquals(BigInteger.valueOf(23232312321432432L), m.getNumber().numberValue(BigInteger.class));
     }
@@ -407,17 +407,17 @@ public class RoundedMoneyTest {
 
     /**
      * Test method for
-     * {@link RoundedMoney#getMonetaryContext()} .
+     * {@link RoundedMoney#getContext()} .
      */
     @Test
     public void testGetMonetaryContext() {
         RoundedMoney m = RoundedMoney.of(10, "CHF");
-        assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
+        assertEquals(RoundedMoney.DEFAULT_MONETARY_CONTEXT, m.getContext());
         MonetaryContext mc =
                 MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(2345).set(RoundingMode.CEILING).build();
         m = RoundedMoney.of(10, "CHF", mc);
-        assertEquals(m.getMonetaryContext().get(RoundingMode.class), RoundingMode.CEILING);
-        assertEquals((int) m.getMonetaryContext().getInt("precision"), 2345);
+        assertEquals(m.getContext().get(RoundingMode.class), RoundingMode.CEILING);
+        assertEquals((int) m.getContext().getInt("precision"), 2345);
     }
 
     /**

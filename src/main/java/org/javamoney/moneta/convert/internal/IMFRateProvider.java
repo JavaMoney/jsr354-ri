@@ -282,7 +282,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
             if (Objects.isNull(localDate)) {
                 localDate = LocalDate.now();
             }
-            if (isValid(rate.getConversionContext(), localDate)) {
+            if (isValid(rate.getContext(), localDate)) {
                 return rate;
             }
             if (Objects.isNull(found)) {

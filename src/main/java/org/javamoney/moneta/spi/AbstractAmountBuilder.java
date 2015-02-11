@@ -178,7 +178,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
         this.currency = amt.getCurrency();
         this.number = amt.getNumber().numberValue(BigDecimal.class);
         this.monetaryContext = MonetaryContextBuilder.of(DEFAULT_MONETARY_CONTEXT.getAmountType())
-                .importContext(amt.getMonetaryContext()).build();
+                .importContext(amt.getContext()).build();
         return this;
     }
 

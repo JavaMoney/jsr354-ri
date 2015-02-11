@@ -144,10 +144,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * Access the {@link MonetaryContext} used by this instance.
      *
      * @return the {@link MonetaryContext} used, never null.
-     * @see javax.money.MonetaryAmount#getMonetaryContext()
+     * @see javax.money.MonetaryAmount#getContext()
      */
     @Override
-    public MonetaryContext getMonetaryContext() {
+    public MonetaryContext getContext() {
         return monetaryContext;
     }
 
@@ -427,7 +427,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
             return this;
         }
         BigDecimal dec =
-                this.number.divide(divisorBD, MoneyUtils.getMathContext(getMonetaryContext(), RoundingMode.HALF_EVEN));
+                this.number.divide(divisorBD, MoneyUtils.getMathContext(getContext(), RoundingMode.HALF_EVEN));
         return new Money(dec, getCurrency());
     }
 
@@ -807,7 +807,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (amt.getClass() == Money.class) {
             return (Money) amt;
         }
-        return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), amt.getMonetaryContext());
+        return Money.of(amt.getNumber().numberValue(BigDecimal.class), amt.getCurrency(), amt.getContext());
     }
 
     /**
@@ -859,4 +859,5 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         }
         return false;
     }
+
 }

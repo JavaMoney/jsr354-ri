@@ -155,12 +155,12 @@ public class MoneyTest {
     }
 
     /**
-     * Test method for {@link org.javamoney.moneta.Money#getMonetaryContext()}.
+     * Test method for {@link org.javamoney.moneta.Money#getContext()}.
      */
     @Test
     public void testGetDefaultMathContext() {
         Money money1 = Money.of(BigDecimal.ONE, EURO);
-        assertEquals(Money.DEFAULT_MONETARY_CONTEXT, money1.getMonetaryContext());
+        assertEquals(Money.DEFAULT_MONETARY_CONTEXT, money1.getContext());
     }
 
     /**
@@ -236,44 +236,44 @@ public class MoneyTest {
                         .build();
         Money m = Money.of((byte) 2, EURO, mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(EURO, m.getCurrency());
         assertEquals(Byte.valueOf((byte) 2), m.getNumber().numberValue(Byte.class));
         m = Money.of((short) -2, DOLLAR, mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Short.valueOf((short) -2), m.getNumber().numberValue(Short.class));
         m = Money.of(-12, EURO, mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(EURO, m.getCurrency());
         assertEquals(Integer.valueOf(-12), m.getNumber().numberValue(Integer.class));
         m = Money.of((long) 12, DOLLAR, mc);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = Money.of((float) 12.23, EURO, mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(EURO, m.getCurrency());
         assertEquals((float) 12.23, m.getNumber().numberValue(Float.class));
         m = Money.of(-12.23, DOLLAR, mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(-12.23, m.getNumber().numberValue(Double.class));
         m = Money.of((Number) BigDecimal.valueOf(234.2345), EURO, mc);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(BigDecimal.valueOf(234.2345), m.getNumber().numberValue(BigDecimal.class));
         m = Money.of(BigInteger.valueOf(23232312321432432L), DOLLAR, mc);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(Long.valueOf(23232312321432432L), m.getNumber().numberValue(Long.class));
         assertEquals(BigInteger.valueOf(23232312321432432L), m.getNumber().numberValue(BigInteger.class));
     }
@@ -330,44 +330,44 @@ public class MoneyTest {
                         .build();
         Money m = Money.of((byte) 2, "EUR", mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(EURO, m.getCurrency());
         assertEquals(Byte.valueOf((byte) 2), m.getNumber().numberValue(Byte.class));
         m = Money.of((short) -2, "USD", mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Short.valueOf((short) -2), m.getNumber().numberValue(Short.class));
         m = Money.of(-12, "EUR", mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(EURO, m.getCurrency());
         assertEquals(Integer.valueOf(-12), m.getNumber().numberValue(Integer.class));
         m = Money.of((long) 12, "USD", mc);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
         assertEquals(Long.valueOf(12), m.getNumber().numberValue(Long.class));
         m = Money.of((float) 12.23, "EUR", mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(EURO, m.getCurrency());
         assertEquals(m.getNumber().numberValue(Float.class), (float) 12.23);
         m = Money.of(-12.23, "USD", mc);
         assertNotNull(m);
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(m.getNumber().numberValue(Double.class), -12.23);
         m = Money.of((Number) BigDecimal.valueOf(234.2345), "EUR", mc);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(m.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(234.2345));
         m = Money.of(BigInteger.valueOf(23232312321432432L), "USD", mc);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(mc, m.getMonetaryContext());
+        assertEquals(mc, m.getContext());
         assertEquals(Long.valueOf(23232312321432432L), m.getNumber().numberValue(Long.class));
         assertEquals(BigInteger.valueOf(23232312321432432L), m.getNumber().numberValue(BigInteger.class));
     }
@@ -447,14 +447,14 @@ public class MoneyTest {
     @Test
     public void testWithMonetaryContext() {
         Money m = Money.of(10, "CHF");
-        assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
+        assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getContext());
         MonetaryContext mc =
                 MonetaryContextBuilder.of(Money.class).setPrecision(128).set(RoundingMode.HALF_EVEN).build();
         MonetaryAmount m2 = m.getFactory().setContext(mc).create();
         assertNotNull(m2);
         assertTrue(m != m2);
-        assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getMonetaryContext());
-        assertEquals(mc, m2.getMonetaryContext());
+        assertEquals(Money.DEFAULT_MONETARY_CONTEXT, m.getContext());
+        assertEquals(mc, m2.getContext());
     }
 
     /**
@@ -1015,9 +1015,9 @@ public class MoneyTest {
      */
     @Test
     public void testGetImplementationType() {
-        assertEquals(Money.of(0, "CHF").getMonetaryContext().getAmountType(), Money.class);
-        assertEquals(Money.of(0.34738746d, "CHF").getMonetaryContext().getAmountType(), Money.class);
-        assertEquals(Money.of(100034L, "CHF").getMonetaryContext().getAmountType(), Money.class);
+        assertEquals(Money.of(0, "CHF").getContext().getAmountType(), Money.class);
+        assertEquals(Money.of(0.34738746d, "CHF").getContext().getAmountType(), Money.class);
+        assertEquals(Money.of(100034L, "CHF").getContext().getAmountType(), Money.class);
     }
 
     /**

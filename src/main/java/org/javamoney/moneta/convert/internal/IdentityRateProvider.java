@@ -61,7 +61,7 @@ public class IdentityRateProvider extends AbstractRateProvider {
 
     public ExchangeRate getExchangeRate(ConversionQuery query) {
         if (query.getBaseCurrency().getCurrencyCode().equals(query.getCurrency().getCurrencyCode())) {
-            ExchangeRateBuilder builder = new ExchangeRateBuilder(getProviderContext().getProviderName(), RateType.OTHER)
+            ExchangeRateBuilder builder = new ExchangeRateBuilder(getContext().getProviderName(), RateType.OTHER)
                     .setBase(query.getBaseCurrency());
             builder.setTerm(query.getCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
@@ -79,8 +79,8 @@ public class IdentityRateProvider extends AbstractRateProvider {
 	 */
     @Override
     public ExchangeRate getReversed(ExchangeRate rate) {
-        if (rate.getConversionContext().getProviderName().equals(CONTEXT.getProviderName())) {
-            return new ExchangeRateBuilder(rate.getConversionContext()).setTerm(rate.getBaseCurrency())
+        if (rate.getContext().getProviderName().equals(CONTEXT.getProviderName())) {
+            return new ExchangeRateBuilder(rate.getContext()).setTerm(rate.getBaseCurrency())
                     .setBase(rate.getCurrency()).setFactor(new DefaultNumberValue(BigDecimal.ONE)).build();
         }
         return null;

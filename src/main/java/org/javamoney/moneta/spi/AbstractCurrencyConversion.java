@@ -61,7 +61,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
      * @return the target {@link ConversionContext}.
      */
     @Override
-    public ConversionContext getConversionContext() {
+    public ConversionContext getContext() {
         return conversionContext;
     }
 
@@ -118,9 +118,9 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
      * @return the new NumberValue, never null.
      */
     protected NumberValue roundFactor(MonetaryAmount amount, NumberValue factor) {
-        if (amount.getMonetaryContext().getMaxScale() > 0) {
-            if (factor.getScale() > amount.getMonetaryContext().getMaxScale()) {
-                return factor.round(new MathContext(amount.getMonetaryContext().getMaxScale(), RoundingMode.HALF_EVEN));
+        if (amount.getContext().getMaxScale() > 0) {
+            if (factor.getScale() > amount.getContext().getMaxScale()) {
+                return factor.round(new MathContext(amount.getContext().getMaxScale(), RoundingMode.HALF_EVEN));
             }
         }
         return factor;

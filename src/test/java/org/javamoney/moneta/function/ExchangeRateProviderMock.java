@@ -16,7 +16,7 @@ import javax.money.convert.ProviderContext;
 class ExchangeRateProviderMock implements ExchangeRateProvider {
 
     @Override
-    public ProviderContext getProviderContext() {
+    public ProviderContext getContext() {
         // TODO Auto-generated method stub
         return null;
     }

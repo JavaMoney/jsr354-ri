@@ -39,8 +39,8 @@ import java.util.logging.Logger;
  * different results:
  * </p>
  * <pre><code>
- * Money money1 = money1.add(Money.of(EURO, 1234567.3444));
- * money1 = money1.subtract(Money.of(EURO, 232323));
+ * Money money1 = money1.add(Money.of("EUR", 1234567.3444));
+ * money1 = money1.subtract(Money.of("EUR", 232323));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </code></pre>
@@ -51,8 +51,8 @@ import java.util.logging.Logger;
  * whereas
  * </p>
  * <pre><code>
- * FastMoney money1 = money1.add(FastMoney.of(EURO, 1234567.3444));
- * money1 = money1.subtract(FastMoney.of(EURO, 232323));
+ * FastMoney money1 = money1.add(FastMoney.of("EUR", 1234567.3444));
+ * money1 = money1.subtract(FastMoney.of("EUR", 232323));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </code></pre>
@@ -64,8 +64,8 @@ import java.util.logging.Logger;
  * code above with the following: *
  * </p>
  * <pre><code>
- * FastMoney money1 = money1.add(Money.of(EURO, 1234567.3444));
- * money1 = money1.subtract(FastMoney.of(EURO, 232323));
+ * FastMoney money1 = money1.add(Money.of("EUR", 1234567.3444));
+ * money1 = money1.subtract(FastMoney.of("EUR", 232323));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </code></pre>
@@ -183,10 +183,10 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * Access the {@link MonetaryContext} used by this instance.
      *
      * @return the {@link MonetaryContext} used, never null.
-     * @see javax.money.MonetaryAmount#getMonetaryContext()
+     * @see javax.money.MonetaryAmount#getContext()
      */
     @Override
-    public MonetaryContext getMonetaryContext() {
+    public MonetaryContext getContext() {
         return MONETARY_CONTEXT;
     }
 

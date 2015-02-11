@@ -216,7 +216,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     @Override
-    public AmountFormatContext getAmountFormatContext() {
+    public AmountFormatContext getContext() {
         return this.amountFormatContext;
     }
 

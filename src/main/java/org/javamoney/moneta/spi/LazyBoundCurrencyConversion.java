@@ -87,7 +87,7 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
     @Override
     public String toString() {
         return "CurrencyConversion [MonetaryAmount -> MonetaryAmount; provider=" + rateProvider + ", context=" +
-                getConversionContext() + ", termCurrency=" + getCurrency() + ']';
+                getContext() + ", termCurrency=" + getCurrency() + ']';
     }
 
 }
