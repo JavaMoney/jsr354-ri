@@ -1137,4 +1137,18 @@ public class FastMoneyTest{
         assertEquals(m, m2);
     }
 
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoubleNan(){
+        FastMoney.of(Double.NaN, "XXX");
+    }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoublePositiveInfinity(){
+        FastMoney.of(Double.POSITIVE_INFINITY, "XXX");
+    }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoubleNegativeInfinity(){
+        FastMoney.of(Double.NEGATIVE_INFINITY, "XXX");
+    }
 }

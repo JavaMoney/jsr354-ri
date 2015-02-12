@@ -42,7 +42,7 @@ public enum ConvertBigDecimal {
 		@Override
 		BigDecimal getDecimal(Number num) {
             double d = num.doubleValue();
-            if (d == Double.NaN || d == Double.POSITIVE_INFINITY || d == Double.NEGATIVE_INFINITY) {
+            if (Double.isNaN(d)|| Double.isInfinite(d)) {
                 throw new ArithmeticException("NaN, POSITIVE_INFINITY and NEGATIVE_INFINITY cannot be used as " +
                         "parameters for monetary operations.");
             }
