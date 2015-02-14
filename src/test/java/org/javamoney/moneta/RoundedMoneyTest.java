@@ -1109,4 +1109,19 @@ public class RoundedMoneyTest {
         m1.subtract(m2);
     }
 
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoubleNan(){
+    	RoundedMoney.of(Double.NaN, "XXX");
+    }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoublePositiveInfinity(){
+    	RoundedMoney.of(Double.POSITIVE_INFINITY, "XXX");
+    }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoubleNegativeInfinity(){
+    	RoundedMoney.of(Double.NEGATIVE_INFINITY, "XXX");
+    }
+
 }
