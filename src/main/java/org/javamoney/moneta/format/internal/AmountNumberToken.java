@@ -86,8 +86,6 @@ final class AmountNumberToken implements FormatToken {
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
         int digits = amount.getCurrency().getDefaultFractionDigits();
-        this.formatFormat.setMinimumFractionDigits(digits);
-        this.formatFormat.setMaximumFractionDigits(digits);
         if (amountFormatContext.get("groupingSizes", int[].class) == null ||
                 amountFormatContext.get("groupingSizes", int[].class).length == 0) {
             appendable.append(this.formatFormat.format(amount.getNumber()

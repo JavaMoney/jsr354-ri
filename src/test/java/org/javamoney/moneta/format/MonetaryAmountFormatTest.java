@@ -27,6 +27,7 @@ import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
+import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 /**
@@ -148,4 +149,26 @@ public class MonetaryAmountFormatTest {
                 .create(), defaultFormat.parse("12,50 CHF"));
     }
 
+
+    /**
+     * Test related to {@link https://java.net/jira/browse/JAVAMONEY-92}.
+     */
+    @Test
+    public void testWithCustomPattern() {
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
+                AmountFormatQueryBuilder.of(Locale.GERMANY)
+                        .set(CurrencyStyle.SYMBOL)
+                        .set("pattern", "#,##0.00### ¤")
+                        .build());
+        Money money = Money.of(12345.23456789, "EUR");
+        assertEquals("12.345,23457 €", format.format(money));
+
+        format = MonetaryFormats.getAmountFormat(
+                AmountFormatQueryBuilder.of(Locale.GERMANY)
+                        .set(CurrencyStyle.SYMBOL)
+                        .build());
+        assertEquals("12.345,23 €", format.format(money));
+
+
+    }
 }
