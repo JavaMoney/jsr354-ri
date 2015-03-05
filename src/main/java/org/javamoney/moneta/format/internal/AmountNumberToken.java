@@ -15,6 +15,8 @@
  */
 package org.javamoney.moneta.format.internal;
 
+import org.javamoney.moneta.format.AmountFormatParams;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -86,8 +88,8 @@ final class AmountNumberToken implements FormatToken {
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
         int digits = amount.getCurrency().getDefaultFractionDigits();
-        if (amountFormatContext.get("groupingSizes", int[].class) == null ||
-                amountFormatContext.get("groupingSizes", int[].class).length == 0) {
+        if (amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class) == null ||
+                amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class).length == 0) {
             appendable.append(this.formatFormat.format(amount.getNumber()
                     .numberValue(BigDecimal.class)));
             return;
@@ -101,12 +103,12 @@ final class AmountNumberToken implements FormatToken {
             appendable.append(preformattedValue);
         } else {
             if (Objects.isNull(numberGroup)) {
-                char[] groupChars = amountFormatContext.get("groupingSeparators", char[].class);
+                char[] groupChars = amountFormatContext.get(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, char[].class);
                 if (groupChars == null || groupChars.length == 0) {
                     groupChars = new char[]{this.formatFormat
                             .getDecimalFormatSymbols().getGroupingSeparator()};
                 }
-                int[] groupSizes = amountFormatContext.get("groupingSizes", int[].class);
+                int[] groupSizes = amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class);
                 if (groupSizes == null) {
                     groupSizes = new int[0];
                 }
