@@ -1167,4 +1167,19 @@ public class MoneyTest {
         Money m2 = Money.of(BigDecimal.TEN, "CHF");
         m1.subtract(m2);
     }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoubleNan(){
+    	Money.of(Double.NaN, "XXX");
+    }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoublePositiveInfinity(){
+    	Money.of(Double.POSITIVE_INFINITY, "XXX");
+    }
+
+    @Test(expectedExceptions = ArithmeticException.class)
+    public void testCreatingFromDoubleNegativeInfinity(){
+    	Money.of(Double.NEGATIVE_INFINITY, "XXX");
+    }
 }
