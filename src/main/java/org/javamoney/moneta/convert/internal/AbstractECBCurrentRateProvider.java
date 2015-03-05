@@ -18,11 +18,15 @@ package org.javamoney.moneta.convert.internal;
 import java.io.InputStream;
 import java.math.MathContext;
 import java.net.MalformedURLException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.TemporalUnit;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
@@ -104,7 +108,7 @@ abstract class AbstractECBCurrentRateProvider extends AbstractRateProvider imple
             if (dateTime != null) {
                 date = dateTime.toLocalDate();
             } else {
-                date = LocalDate.now();
+                date = LocalDate.now().minus(Period.ofDays(1));
             }
         }
         ExchangeRateBuilder builder = getBuilder(query, date);
