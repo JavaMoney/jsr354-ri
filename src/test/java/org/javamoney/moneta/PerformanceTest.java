@@ -62,8 +62,8 @@ public class PerformanceTest {
 		end = System.currentTimeMillis();
 		duration = end - start;
 		System.out.println("Duration for " + NUM
-				+ " operations (IntegralMoney/long): "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
+                + " operations (FastMoney/long): "
+                + duration + " ms (" + ((duration * 1000) / NUM)
 				+ " ns per loop) -> "
 				+ money2);
 
@@ -78,8 +78,8 @@ public class PerformanceTest {
 		end = System.currentTimeMillis();
 		duration = end - start;
 		System.out.println("Duration for " + NUM
-				+ " operations (IntegralMoney/FastMoney mixed): "
-				+ duration + " ms (" + ((duration * 1000) / NUM)
+                + " operations (FastMoney/FastMoney mixed): "
+                + duration + " ms (" + ((duration * 1000) / NUM)
 				+ " ns per loop) -> "
 				+ money3);
 	}
