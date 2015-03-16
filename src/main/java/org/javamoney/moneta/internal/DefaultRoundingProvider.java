@@ -24,8 +24,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Defaulr implementation of a {@link javax.money.spi.RoundingProviderSpi} that creates instances of {@link org
- * .javamoney.moneta.internal.DefaultRounding} that relies on the default fraction units defined by {@link java.util
+ * Default implementation of a {@link javax.money.spi.RoundingProviderSpi} that creates instances of {@link org
+ * .javamoney.moneta.format.DefaultRounding} that relies on the default fraction units defined by {@link java.util
  * .Currency#getDefaultFractionDigits()}.
  */
 public class DefaultRoundingProvider implements RoundingProviderSpi {

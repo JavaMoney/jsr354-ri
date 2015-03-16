@@ -157,7 +157,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /**
      * Creates a new instance os {@link FastMoney}.
      *
-     * @param number   The internal number value
+     * @param number   The format number value
      * @param currency the currency, not null.
      */
     private FastMoney(long number, CurrencyUnit currency) {
@@ -627,7 +627,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /**
      * Gets the number representation of the numeric value of this item.
      *
-     * @return The {@link Number} represention matching best.
+     * @return The {@link Number} representation matching best.
      */
     @Override
     public NumberValue getNumber() {

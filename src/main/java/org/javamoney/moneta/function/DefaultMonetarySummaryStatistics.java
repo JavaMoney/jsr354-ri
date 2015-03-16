@@ -90,10 +90,10 @@ class DefaultMonetarySummaryStatistics implements MonetarySummaryStatistics {
         return this;
     }
 
-    private void doSummary(MonetaryAmount moneraty) {
-        min = MonetaryFunctions.min(min, moneraty);
-        max = MonetaryFunctions.max(max, moneraty);
-        sum = sum.add(moneraty);
+    private void doSummary(MonetaryAmount monetaryAmount) {
+        min = MonetaryFunctions.min(min, monetaryAmount);
+        max = MonetaryFunctions.max(max, monetaryAmount);
+        sum = sum.add(monetaryAmount);
         average = sum.divide(++count);
     }
 

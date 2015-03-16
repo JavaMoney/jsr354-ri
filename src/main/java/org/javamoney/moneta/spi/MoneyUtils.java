@@ -28,7 +28,7 @@ import java.util.Objects;
  * Platform RI: This utility class simplifies implementing {@link MonetaryAmount},
  * by providing the common functionality. The different explicitly typed methods
  * are all reduced to methods using {@link BigDecimal} as input, hereby
- * performing any conversion to {@link BigDecimal} as needed. Obviosly this
+ * performing any conversion to {@link BigDecimal} as needed. Obviously this
  * takes some time, so implementors that want to avoid this overhead should
  * implement {@link MonetaryAmount} directly.
  *

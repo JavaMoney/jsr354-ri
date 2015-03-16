@@ -72,7 +72,7 @@ public enum ConvertBigDecimal {
 			return isScaleZero(result);
 		}
 	},
-    /** COnversion from BigDecimal, extended. */
+    /** Conversion from BigDecimal, extended. */
     BIGDECIMAL_EXTENDS {
 		@Override
 		BigDecimal getDecimal(Number num) {

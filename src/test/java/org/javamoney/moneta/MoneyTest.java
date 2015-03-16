@@ -409,7 +409,7 @@ public class MoneyTest {
      * {@link org.javamoney.moneta.Money#equals(Object)}.
      */
     @Test
-    public void testEqualsMonetarAmount() {
+    public void testEqualsMonetaryAmount() {
         MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(100).create();
         MonetaryAmount m2 = Money.of(100, "CHF");
         Money m3 = Money.of(100, "CHF");
@@ -491,6 +491,7 @@ public class MoneyTest {
     @Test
     public void testDivideNumber() {
         Money m = Money.of(100, "CHF");
+        //noinspection BigDecimalMethodWithoutRoundingCalled
         assertEquals(Money.of(BigDecimal.valueOf(100).divide(BigDecimal.valueOf(5)), "CHF"),
                 m.divide(BigDecimal.valueOf(5)));
     }

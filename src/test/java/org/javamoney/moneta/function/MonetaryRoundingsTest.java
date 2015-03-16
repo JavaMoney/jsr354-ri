@@ -21,7 +21,6 @@ import javax.money.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 
@@ -128,14 +127,14 @@ public class MonetaryRoundingsTest {
                 }
                 MonetaryAmount r = sample.with(rounding);
                 assertEquals(MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(expected).create(),
-                        r, "Rouding for: " + sample);
+                        r, "Rounding for: " + sample);
             }
         }
     }
 
     /**
      * Test method for
-     * {@link javax.money.MonetaryRoundings#getRounding(javax.money.CurrencyUnit, String...)} for cash ropundings.
+     * {@link javax.money.MonetaryRoundings#getRounding(javax.money.CurrencyUnit, String...)} for cash roundings.
      * .
      */
     @Test
@@ -206,7 +205,7 @@ public class MonetaryRoundingsTest {
      * {@link javax.money.MonetaryRoundings#getRoundingNames(String...)}  .
      */
     @Test
-    public void testGetCustomRoundinNames() {
+    public void testGetCustomRoundingNames() {
         assertNotNull(MonetaryRoundings.getRoundingNames());
         assertTrue(MonetaryRoundings.getRoundingNames().size() >= 3);
         assertTrue(MonetaryRoundings.getRoundingNames().contains("zero"));

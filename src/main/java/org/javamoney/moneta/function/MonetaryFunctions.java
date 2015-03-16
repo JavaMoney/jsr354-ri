@@ -84,23 +84,23 @@ public final class MonetaryFunctions {
 	/**
 	 * comparator to sort the {@link MonetaryAmount} considering the
 	 * {@link ExchangeRate}
-	 * @param provider
+	 * @param provider the rate provider to be used, not null.
 	 * @return the sort of {@link MonetaryAmount} using {@link ExchangeRate}
 	 */
 	public static Comparator<? super MonetaryAmount> sortValiable(
 			ExchangeRateProvider provider) {
 
 		return (m1, m2) -> {
-			CurrencyConversion conversor = provider.getCurrencyConversion(m1
+			CurrencyConversion conversion = provider.getCurrencyConversion(m1
 					.getCurrency());
-			return m1.compareTo(conversor.apply(m2));
+			return m1.compareTo(conversion.apply(m2));
 		};
 	}
 
 	/**
 	 * Descending order of
 	 * {@link MonetaryFunctions#sortValiable(ExchangeRateProvider)}
-	 * @param provider
+	 * @param provider the rate provider to be used, not null.
 	 * @return the Descending order of
 	 *         {@link MonetaryFunctions#sortValiable(ExchangeRateProvider)}
 	 */
@@ -160,11 +160,11 @@ public final class MonetaryFunctions {
 
     /**
      * Create predicate that filters by CurrencyUnit.
-     * @param currencyUnit the target {@link javax.money.CurrencyUnit}
+     * @param currencies the target {@link javax.money.CurrencyUnit} instances
      * @return the predicate from CurrencyUnit
      */
-	public static Predicate<MonetaryAmount> fiterByExcludingCurrency(
-			CurrencyUnit... currencies) {
+	public static Predicate<MonetaryAmount> filterByExcludingCurrency(
+            CurrencyUnit... currencies) {
 
 		if (Objects.isNull(currencies) || currencies.length == 0) {
 			return m -> true;
@@ -174,7 +174,7 @@ public final class MonetaryFunctions {
 
     /**
      * Creates filter using isGreaterThan in MonetaryAmount.
-     * @param amount
+     * @param amount the amount to be compared to.
      * @return the filter with isGreaterThan conditions
      */
     public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount){
@@ -183,7 +183,7 @@ public final class MonetaryFunctions {
 
     /**
      * Creates filter using isGreaterThanOrEqualTo in MonetaryAmount
-     * @param amount
+     * @param amount the amount to be compared to.
      * @return the filter with isGreaterThanOrEqualTo conditions
      */
     public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(MonetaryAmount amount){
@@ -192,7 +192,7 @@ public final class MonetaryFunctions {
 
     /**
      * Creates filter using isLessThan in MonetaryAmount
-     * @param amount
+     * @param amount the amount to be compared to.
      * @return the filter with isLessThan conditions
      */
     public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount){
@@ -201,7 +201,7 @@ public final class MonetaryFunctions {
 
     /**
      * Creates filter using isLessThanOrEqualTo in MonetaryAmount
-     * @param amount
+     * @param amount the amount to be compared to.
      * @return the filter with isLessThanOrEqualTo conditions
      */
     public static Predicate<MonetaryAmount> isLessThanOrEqualTo(MonetaryAmount amount){
@@ -266,7 +266,7 @@ public final class MonetaryFunctions {
 	/**
 	 * return the sum and convert all values to specific currency using the
 	 * provider, if necessary
-	 * @param provider
+	 * @param provider the rate provider to be used, not null.
 	 * @param currency
 	 *            currency
 	 * @return the list convert to specific currency unit
@@ -299,10 +299,10 @@ public final class MonetaryFunctions {
 			ExchangeRateProvider provider) {
 
 		return (m1, m2) -> {
-			CurrencyConversion convertion = provider.getCurrencyConversion(m1
+			CurrencyConversion conversion = provider.getCurrencyConversion(m1
 					.getCurrency());
 
-			if (m1.isGreaterThan(convertion.apply(m2))) {
+			if (m1.isGreaterThan(conversion.apply(m2))) {
 				return m2;
 			}
 			return m1;
@@ -328,10 +328,10 @@ public final class MonetaryFunctions {
 			ExchangeRateProvider provider) {
 
 		return (m1, m2) -> {
-			CurrencyConversion convertion = provider
+			CurrencyConversion conversion = provider
 					.getCurrencyConversion(m1.getCurrency());
 
-			if (m1.isGreaterThan(convertion.apply(m2))) {
+			if (m1.isGreaterThan(conversion.apply(m2))) {
 				return m1;
 			}
 			return m2;

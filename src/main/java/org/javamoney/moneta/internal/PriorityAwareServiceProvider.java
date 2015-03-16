@@ -38,7 +38,7 @@ public class PriorityAwareServiceProvider implements ServiceProvider {
     private final ConcurrentHashMap<Class, List<Object>> servicesLoaded = new ConcurrentHashMap<>();
 
     /**
-     * Returns a prioritx value of 10.
+     * Returns a priority value of 10.
      *
      * @return 10, overriding the default provider.
      */

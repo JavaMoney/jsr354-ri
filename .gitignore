@@ -1,7 +1,6 @@
 target/
 /doc
-moneta.iml
-jsr354-ri.iml
+*.iml
 .classpath
 -project
 /.resourceCache

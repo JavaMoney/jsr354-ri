@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 /**
  * Tests for {@link org.javamoney.moneta.spi.ConvertBigDecimal}.
  */
+@SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
 public class ConvertBigDecimalTest {
 
 	private BigDecimal expectValue = BigDecimal.TEN;

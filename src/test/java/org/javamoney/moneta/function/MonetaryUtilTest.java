@@ -43,7 +43,8 @@ public class MonetaryUtilTest {
 		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
 				.setCurrency("CHF").setNumber(200).create();
 		MonetaryAmount r = m.with(MonetaryUtil.reciprocal());
-		assertEquals(
+        //noinspection BigDecimalMethodWithoutRoundingCalled
+        assertEquals(
 				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(BigDecimal.ONE.divide(BigDecimal.valueOf(200)))
 						.create(),

@@ -77,7 +77,7 @@ public final class MonetaryUtil {
     }
 
     /**
-     * Return a {@link MonetaryOperator} realizing the recorpocal value of
+     * Return a {@link MonetaryOperator} realizing the reciprocal value of
      * {@code f(R) = 1/R}.
      *
      * @return the reciprocal operator, never {@code null}

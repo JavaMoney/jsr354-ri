@@ -41,7 +41,7 @@ class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
     @Override
     public AmountFormatContext getContext() {
         throw new UnsupportedOperationException(
-                "ToStringMonetaryAmountFormat does not the method suport getContext()");
+                "ToStringMonetaryAmountFormat does not the method support getContext()");
     }
 
     @Override

@@ -111,7 +111,8 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
             throw new ArithmeticException("The divisor cannot be null");
         }
         return new DefaultNumberValue(
-                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class)));
+                dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class),
+                        MathContext.DECIMAL64));
     }
 
     /**

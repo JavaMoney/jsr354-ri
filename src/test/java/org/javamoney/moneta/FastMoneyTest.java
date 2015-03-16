@@ -310,7 +310,7 @@ public class FastMoneyTest{
         BigDecimal baseValue = new BigDecimal("90000000000");
         // the argument exceeds the numeric capabilities but the result will not
         BigDecimal divisor = new BigDecimal("1000000");
-        BigDecimal expectedValue = baseValue.divide(divisor);
+        @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled") BigDecimal expectedValue = baseValue.divide(divisor);
 
         m = FastMoney.of(baseValue, "CHF");
         assertEquals(FastMoney.of(expectedValue, "CHF"), m.divide(divisor));
@@ -329,7 +329,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
      */
     @Test
-    public void testDividedouble(){
+    public void testDivideDouble(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(5.0d));
     }

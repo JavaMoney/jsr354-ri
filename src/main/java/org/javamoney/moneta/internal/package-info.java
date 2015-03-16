@@ -14,7 +14,7 @@
  * the License.
  */
 /**
- * Contains internal artifacts implementing {@link javax.money.spi.CurrencyProviderSpi},
+ * Contains format artifacts implementing {@link javax.money.spi.CurrencyProviderSpi},
  * {@link javax.money.MonetaryAmountFactory},
  * {@link javax.money.spi.MonetaryAmountFactoryProviderSpi} and {@link javax.money.spi.RoundingProviderSpi}.
  */

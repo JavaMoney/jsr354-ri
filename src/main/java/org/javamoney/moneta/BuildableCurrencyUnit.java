@@ -92,7 +92,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
     }
 
     @Override
-    public int compareTo(CurrencyUnit o) {
+    public int compareTo(@SuppressWarnings("NullableProblems") CurrencyUnit o) {
         Objects.requireNonNull(o);
         return this.currencyCode.compareTo(o.getCurrencyCode());
     }

@@ -34,7 +34,7 @@ public class CurrencyProviderTest {
         ExchangeRateProvider ecbRateProvider = MonetaryConversions.getExchangeRateProvider("ECB");
         ExchangeRateProvider imfRateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
 
-        CurrencyConversion ecbDollarConvertion = ecbRateProvider.getCurrencyConversion("USD");
+        CurrencyConversion ecbDollarConversion = ecbRateProvider.getCurrencyConversion("USD");
         CurrencyConversion imfDollarConversion = imfRateProvider.getCurrencyConversion("USD");
 
         try {
@@ -42,9 +42,9 @@ public class CurrencyProviderTest {
             Thread.sleep(10000L);
             for (String currency : new String[]{"INR", "CHF", "BRL"}) {
                 Money money = Money.of(10, currency);
-                System.out.println("ECB : " + money.with(ecbDollarConvertion));
+                System.out.println("ECB : " + money.with(ecbDollarConversion));
                 System.out.println("IMF : " + money.with(imfDollarConversion));
-                assertEquals(money.with(ecbDollarConvertion).getNumber().doubleValue(), money.with(imfDollarConversion).getNumber().doubleValue(), 0.1d);
+                assertEquals(money.with(ecbDollarConversion).getNumber().doubleValue(), money.with(imfDollarConversion).getNumber().doubleValue(), 0.1d);
             }
         } catch (InterruptedException e) {
             // This test may fail, if the network is slow or not available, so only write the exception as of now...

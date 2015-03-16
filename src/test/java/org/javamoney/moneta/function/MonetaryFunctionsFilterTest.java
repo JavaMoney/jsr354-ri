@@ -26,7 +26,7 @@ public class MonetaryFunctionsFilterTest {
 
 	@Test
 	public void isNotCurrencyTest() {
-		List<MonetaryAmount> justRealList = currencies().filter(fiterByExcludingCurrency(BRAZILIAN_REAL)).collect(
+		List<MonetaryAmount> justRealList = currencies().filter(filterByExcludingCurrency(BRAZILIAN_REAL)).collect(
 				Collectors.toList());
 		Assert.assertEquals(6, justRealList.size());
 	}
@@ -50,7 +50,7 @@ public class MonetaryFunctionsFilterTest {
 	@Test
 	public void shouldReturnAllfiterByExcludingCurrencyEmptyTest() {
 		List<MonetaryAmount> justRealList = currencies().filter(
-				fiterByExcludingCurrency()).collect(Collectors.toList());
+				filterByExcludingCurrency()).collect(Collectors.toList());
 		Assert.assertEquals(9, justRealList.size());
 	}
 	@Test

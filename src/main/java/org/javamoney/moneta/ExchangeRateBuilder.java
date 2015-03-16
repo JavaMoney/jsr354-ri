@@ -37,7 +37,7 @@ public class ExchangeRateBuilder {
      */
     NumberValue factor;
     /**
-     * The chain of invovled rates.
+     * The chain of involved rates.
      */
     List<ExchangeRate> rateChain = new ArrayList<>();
 

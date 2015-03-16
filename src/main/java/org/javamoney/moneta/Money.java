@@ -154,7 +154,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /**
      * Gets the number representation of the numeric value of this item.
      *
-     * @return The {@link Number} represention matching best.
+     * @return The {@link Number} representation matching best.
      */
     @Override
     public NumberValue getNumber() {
