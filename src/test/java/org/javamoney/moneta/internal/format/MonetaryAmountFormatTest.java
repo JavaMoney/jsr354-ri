@@ -28,6 +28,7 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.format.CurrencyStyle;
 import org.testng.annotations.Test;
 
 /**

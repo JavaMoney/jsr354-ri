@@ -15,6 +15,8 @@
  */
 package org.javamoney.moneta.internal.format;
 
+import org.javamoney.moneta.format.AmountFormatParams;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
