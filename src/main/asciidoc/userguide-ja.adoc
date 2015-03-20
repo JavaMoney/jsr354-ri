@@ -13,12 +13,22 @@ Anatole Tresch <atsticks@gmail.com>, and Miyakawa Taku <miyakawa.taku@gmail.com>
 :data-uri:
 
 
+////
 'Moneta' is an implementation of the JSR 354 'Java Money API'. The API is separated
 so also other can provide their own implementations. This document will
 mainly focus on the overall library usage from a user's perspective, when using 'Moneta'. Normally this document
 will not explicitly differentiate between the JSR 354 API and this implementation, unless it is useful for the
 common understanding.
+////
 
+'Moneta' はJSR 354 'java Money API' の実装です。
+APIと実装は分離されているので、他の誰でも自前の実装が提供できます。
+この文書は主に、ユーザ目線から見た 'Moneta' ライブラリの使い方を書きます。
+通常このドキュメントはJSR 354 APIと、実装である 'Moneta' を明示的に区別して扱いません。
+ただし、区別することが理解の上で有用である場合を除きます。
+
+
+////
 .This document
 **********************************************************************
 This is a user guide that describes all relevant aspects of
@@ -27,39 +37,106 @@ Java Money, for using this API along with the 'Moneta' reference implementation.
 For a shorter introduction you may check out the quick start guide (tbd).
 
 **********************************************************************
+////
+
+.この文書について
+**********************************************************************
+この文書は、Java MoneyのAPIと、参照実装である 'Moneta' を使う上で、
+関連するすべての側面を記述するユーザーガイドです。
+
+For a shorter introduction you may check out the quick start guide (tbd).
+
+より簡潔な入門編が読みたい場合は、クイックスタートガイド (TBD) を参照してください。
+
+**********************************************************************
 
 
+////
 == Introduction to Java Money
+////
 
+== Java Moneyの紹介
+
+////
 Java Money is a initiative lead by Credit Suisse to standardize monetary aspects in Java. The main part hereby is
 JSR 354, which defines the money and currency API covering currencies, monetary amounts, rounding, currency conversion
 and formatting. _Moneta_ is the JSR 354 reference implementation, also adding some additional aspects like
 extended Lambda-Support and multiple amount implementation classes. Additionally there is the JavaMoney OSS library,
 which contains additionally financial calculations and formulas, additional currency mapping, regions, historic
 currencies, currency/region mapping and last but not least EE/CDI support. Below given the most important links:
+////
 
+Java Moneyは、金銭に関するJavaの機能 (aspects) を標準化するための構想で、クレディ・スイスによって主導されています。
+Java Moneyの主要部分はJSR 354です。
+このJSRは、通貨(currencies)・金額(monetary amounts)・丸め(rounding)・通貨換算(currency conversion)
+・書式化(formatting)など、お金(money)と通貨に関わるAPIを定義するものです。
+_Moneta_ はJSR 354の参照実装です。
+また、ラムダ式のサポート強化や複数の金額実装クラスなど、いくつかの追加機能も提供しています。
+_Moneta_ の他に、JavaMoney OSSライブラリも存在しています。
+JavaMoney OSSライブラリが提供する機能は、財務計算や公式、追加的な通貨マッピング、地域、歴史的通貨、
+通貨・地域のマッピング、そして最後に重要な、Java EEとCDIのサポートといったものです。
+以下に重要な文書へのリンクを挙げます。
+
+////
 * JSR 354 API specification available https://jcp.org/en/jsr/detail?id=354[here].
 * JSR 354 on GitHub https://github.com/4[here].
 * JavaMoney Umbrella Site: http://javamoney.org
+////
 
+* https://jcp.org/en/jsr/detail?id=354[JSR 354 API 仕様].
+* https://github.com/4[GitHub上のJSR 354リポジトリ].
+* JavaMoneyの全体に関するサイト: http://javamoney.org
+
+////
 Basically the API of JSR 354 provides the following packages:
+////
 
+JSR 354のAPIは次のパッケージから構成されます:
+
+////
 +javax.money+:: contains the main artifacts, such as +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
 MonetaryQuery, MonetaryRounding+, and the singleton accessors +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+..
+////
 
++javax.money+:: +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator, MonetaryQuery, MonetaryRounding+
+といった核となる部品と、シングルトンのアクセサである +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+
+を提供。
+
+////
 +javax.money.conversion+:: contains the conversion artifacts +ExchangeRate, ExchangeRateProvider, CurrencyConversion+
 and the according +MonetaryConversions+ accessor singleton..
+////
 
++javax.money.conversion+:: +ExchangeRate, ExchangeRateProvider, CurrencyConversion+ といった通過換算の部品と、
+付随するシングルトンのアクセサである +MonetaryConversions+ を提供。
+
+////
 +javax.money.format+:: contains the formatting artifacts +MonetaryAmountFormat, AmountFormatContext+ and the according
 +MonetaryFormats+ accessor singleton.
+////
 
++javax.money.format+:: 書式化の部品である +MonetaryAmountFormat, AmountFormatContext+ と、
+付随するシングルトンのアクセサである +MonetaryFormats+ を提供。
+
+////
 +javax.money.spi+:: contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
 different runtime environments and component loading mechanisms.
+////
 
++javax.money.spi+:: JSR 354 API用のSPIインタフェースと起動処理を提供。
+これらによって、多様な実行環境とコンポーネント・ローディングの機構がサポートされる。
+
+////
 Basically the JSR 354 API is complete, meaning users won't have to reference anything other than what is already part of
 the JSR's API. As a consequence this reference implementation contains mostly components that are registered into the
 API using the JSR's SPI mechanism. Only a few additions to the API are done, e.g. singletons providing Lambda-supporting
 methods (+MonetaryFunctions+).
+////
+
+基本的に、JSR 354のAPIは自己完結的(complete)です。
+これはつまり、ユーザがJSRのAPIに含まれるもの以外を参照する必要がない、ということを意味します。
+必然的に、この参照実装のコンポーネントのほとんどは、SPIを使ってAPIに登録されるものになっています。
+API自体への拡張は、ラムダ式サポート用のメソッド (+MonetaryFunctions+) など、ほんの少数にとどまります。
 
 
 == Working with Currency Units
