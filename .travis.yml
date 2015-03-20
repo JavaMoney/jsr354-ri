@@ -3,4 +3,5 @@ jdk:
   - oraclejdk8
 
 after_success:
+  - mvn deploy -Dmaven.test.skip -DcreateDocs=true -s settings.xml
   - mvn clean test jacoco:report org.eluder.coveralls:coveralls-maven-plugin:jacoco -DsourceEncoding=UTF-8
