@@ -139,16 +139,35 @@ methods (+MonetaryFunctions+).
 API自体への拡張は、ラムダ式サポート用のメソッド (+MonetaryFunctions+) など、ほんの少数にとどまります。
 
 
+////
 == Working with Currency Units
 === Accessing Currency Units
+////
 
+== 通貨単位の操作
+=== 通貨単位を取得する
+
+////
 Basically access to  currency units is based on the +javax.money.MonetaryCurrencies+ singleton. Hereby you can access
 currencies in different ways:
+////
 
+基本的に、通貨単位の取得は +javax.money.MonetaryCurrencies+ シングルトンを介して行います。
+以下に挙げる方法で通貨単位が取得できます。
+
+////
 ==== Access currencies by currency code
+////
 
+==== 通貨コードで通貨を取得する
+
+////
 You can use the currency code to access currencies.
+////
 
+通貨コードで通貨が取得できます。
+
+////
 [source,java]
 .Accessing currencies by currency code
 --------------------------------------------
@@ -156,22 +175,53 @@ CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit("CHF");
 CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit("USD");
 CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit("EUR");
 --------------------------------------------
+////
 
+[source,java]
+.通貨コードで通貨を取得する
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit("CHF");
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit("USD");
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit("EUR");
+--------------------------------------------
+
+////
 Hereby all codes available in the underlying JDK are mapped by default.
+////
 
+使用中のJDKで使用可能なすべての通貨コードが、デフォルトでマッピングされています。
+（訳注:なんのことか？要調査）
+
+////
 ==== Access currencies by Locale
+////
 
+==== ロケールで通貨を取得する
+
+////
 You can use +java.util.Locale+ to access currencies. Hereby the +Locale+ instance, represents a
 country. All available countries can be accessed by calling +Locale.getISOCountries()+. With the
 given ISO country code a corresponding +Locale+ can be created:
+////
+
++java.util.Locale+ で通貨ができます。
+ここで +Locale+ クラスのインスタンスは、国 (country) を指し示すために使われます（訳注:かなり意訳）。
+なお、使用できる国のリストは、 +Locale.getISOCountries()+ メソッドで取得できます。
+また、ISO国名コードを使って、 +Locale+ クラスのインスタンスが生成できます:
+
 [source,java]
 --------------------------------------------
 String isoCountry = "USA";
 Locale country = new Locale("", isoCountry);
 --------------------------------------------
 
+////
 Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +Locale+:
+////
 
++java.util.Currency+ クラスと同じように、 +CurrencyUnit+ クラスのインスタンスはロケールを使って取得できます。
+
+////
 [source,java]
 .Accessing currencies by Locale
 --------------------------------------------
@@ -179,19 +229,47 @@ CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit(new Locale("", "SU
 CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit(new Locale("", "USA")); // United States of America
 CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit(new Locale("", "GER")); // Germany
 --------------------------------------------
+////
 
+[source,java]
+.ロケールを使って通貨を取得する
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit(new Locale("", "SUI")); // スイス
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit(new Locale("", "USA")); // アメリカ合衆国
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit(new Locale("", "GER")); // ドイツ
+--------------------------------------------
+
+////
 Hereby all codes available in the underlying JDK are mapped by default.
+////
 
+使用中のJDKで使用可能なすべての国名コードについて、通貨へのマッピングが存在します。
+
+////
 ==== Accessing all currencies
 
 Also all currently known currencies can be accessed:
+////
 
+==== すべての通貨を取得する
+
+現在知られているすべての通貨を取得することもできます。
+
+////
 [source,java]
 .Accessing all currencies
 --------------------------------------------
 Collection<CurrencyUnit> allCurrencies = MonetaryCurrencies.getCurrencies();
 --------------------------------------------
+////
 
+[source,java]
+.すべての通貨を取得する
+--------------------------------------------
+Collection<CurrencyUnit> allCurrencies = MonetaryCurrencies.getCurrencies();
+--------------------------------------------
+
+////
 Similarly to other access methods you can also explicitly specifiy the provider chain to be used. The _Moneta_
 reference implementation provides the following currency providers:
 
@@ -199,7 +277,19 @@ reference implementation provides the following currency providers:
 * _ConfigurableCurrencyUnitProvider_ (implemented by +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+)
   provides a configuration hook for programmatically add instances. This provider is autoconfigured. Ir provides
   static hooks for adding additional +CurrencyUnit+ instances:
+////
 
+他のアクセス方法と同じように、プロバイダ・チェーンを明示的に用いることも可能です。
+参照実装である _Moneta_ は、次の通貨プロバイダを提供しています:
+
+* _デフォルト_: +org.javamoney.moneta.internal.JDKCurrencyProvider+ クラスとして実装されています。
+  この通貨プロバイダは、単純に +java.util.Currency+ クラスのアダプタとして機能します。
+* _ConfigurableCurrencyUnitProvider_: +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+ クラスとして実装されています。
+  この通貨プロバイダは、プログラム上で通貨のインスタンスを追加するためのフックを提供します。
+  この通貨プロバイダは自動設定されます（訳注:？？？）。
+  また、 +CurrencyUnit+ クラスのインスタンスを追加するためのフックも提供します。
+
+////
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically.
 --------------------------------------------
@@ -232,16 +322,72 @@ public static CurrencyUnit removeCurrencyUnit(String currencyCode);
  */
 public static CurrencyUnit removeCurrencyUnit(Locale locale);
 --------------------------------------------
+////
 
+[source,java]
+.+CurrencyUnit+ クラスのインスタンスをプログラム上で登録する例:
+--------------------------------------------
+/**
+ * 新しい通貨単位を、その通貨コードに対応するものとして登録する.
+ * @param currencyUnit 登録される通貨。非null。
+ * @return 通貨コードに対応する通貨単位が既に登録されていれば、そのインスタンス。
+ *         登録されていなければ、null。
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit);
+
+/**
+ * 新しい通貨単位を、ロケールに対応するものとして登録する.
+ * @param currencyUnit 登録される通貨。非null。
+ * @param locale ロケール。非null。
+ * @return ロケールに対応する通貨単位が既に登録されていれば、そのインスタンス。
+ *         登録されていなければ、null。
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit, Locale locale);
+
+/**
+ * 通貨単位を削除する.
+ * @param currencyCode 通貨コード。非null。
+ * @return 削除される通貨単位のインスタンス。削除される通貨単位がない場合、null。
+ */
+public static CurrencyUnit removeCurrencyUnit(String currencyCode);
+
+/**
+ * 通貨単位を削除する.
+ * @param locale ロケール。非null。
+ * @return 削除される通貨単位のインスタンス。削除される通貨単位がない場合、null。
+ */
+public static CurrencyUnit removeCurrencyUnit(Locale locale);
+--------------------------------------------
+
+////
 The API is straightforward so far. For most cases the +BuildableCurrencyUnit+ class can be used to create additional
 currency instances that then can be registered using the static methods:
+////
 
+これまでのところ、APIは単純明快です。
+上述のstaticメソッドで登録するべき追加的な通貨単位のインスタンスは、
+大抵の場合、次節で紹介する +BuildableCurrencyUnit+ クラスから生成できます。
+
+////
 ==== Registering Additional Currency Units
+////
 
+==== 追加的な通貨単位を登録する
+
+////
 For adding additional CurrencyUnit instances to the +MonetaryCurrencies+ singleton, you must implement an instance
 of +CurrencyProvider+. Following a minimal example, hereby also reusing the +BuildableCurrencyUnit+ class, that
 also provides currencies for Bitcoin:
+訳注: CurrencyProvider -> CurrencyProviderSpi
+訳注: reusingしてない
+////
 
+CurrencyUnitクラスのインスタンスを +MonetaryCurrencies+ シングルトンに追加するためには、
++CurrencyProviderSpi+ インタフェースを実装したクラスを作る必要があります。
+次に挙げる最小限の実装では、+BuildableCurrencyUnit+ クラスを使って
+Bitcoinの通貨単位を生成しています。
+
+////
 [source,java]
 .Implementing a Bitcoin currency provider
 --------------------------------------------
@@ -256,7 +402,7 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
 
     /**
      * Return a {@link CurrencyUnit} instances matching the given
-     * {@link javax.money.CurrencyContext}.
+     * {@link javax.money.CurrencyContext}. 訳注→CurrencyQuery
      *
      * @param query the {@link javax.money.CurrencyQuery} containing the parameters determining the query. not null.
      * @return the corresponding {@link CurrencyUnit}s matching, never null.
@@ -274,21 +420,75 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
 
 }
 --------------------------------------------
+////
 
+[source,java]
+.Bitcoinの通貨プロバイダを実装する
+--------------------------------------------
+public final class BitCoinProvider implements CurrencyProviderSpi{
+
+    private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
+
+    public BitCoinProvider(){
+       bitcoinSet.add(new BuildableCurrencyUnit.Builder("BTC").build());
+       bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
+    }
+
+    /**
+     * 通貨クエリに合致するCurrencyUnitのインスタンスを戻す.
+     *
+     * @param query クエリを表す{@link javax.money.CurrencyQuery}。非null。
+     * @return 対応するCurrencyUnitの集合。非null。
+     */
+    @Override
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
+       // クエリがデフォルトのものであるか、通貨コードにBTCが指定された時だけ戻す
+       if(query.isDefault()){
+         if(query.getCurrencyCodes().contains("BTC") || query.getCurrencyCodes().isEmpty()){
+           return bitcoinSet;
+         }
+       }
+       return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
+
+////
 By default, the +BitCoinProvider+ class must be configured as service to be loadable by +java.util.ServiceLoader+.
 This can be achieved by adding a file +META-INF/services/javax.money.spi.CurrencyProviderSpi+ with the following content
 to your classpath:
+////
 
+通常 +BitCoinProvider+ クラスは +java.util.ServiceLoader+ クラスでロードできるように設定する必要があります。
+このために、次の内容を含む +META-INF/services/javax.money.spi.CurrencyProviderSpi+
+ファイルをクラスパス上に配置する必要があります。
+
+////
 [source,listing]
 .Contents of +META-INF/services/javax.money.spi.CurrencyProviderSpi+
 --------------------------------------------
 # assuming the class BitCoinProvider is in the package my.fully.qualified
 my.fully.qualified.BitCoinProvider
 --------------------------------------------
+////
 
+[source,listing]
+.+META-INF/services/javax.money.spi.CurrencyProviderSpi+ ファイルの内容
+--------------------------------------------
+# BitCoinProviderクラスがmy.fully.qualifiedパッケージに含まれていることを前提とする
+my.fully.qualified.BitCoinProvider
+--------------------------------------------
+
+////
 Alternatively, if the JSR's +Bootstrap+ logic uses CDI, it would also be possible to register the provider class as
 normal CDI bean, e.g.
+////
 
+JSRの +Bootstrap+ 処理がCDIを使っている場合、ServiceLoaderの代わりに、
+プロバイダのクラスを通常のCDI Beanとして登録することもできます。
+
+////
 [source,java]
 .Implementing a Bitcoin currency provider
 --------------------------------------------
@@ -297,15 +497,42 @@ public class BitCoinProvider implements CurrencyProviderSpi{
   ...
 }
 --------------------------------------------
+////
 
+[source,java]
+.Bitcoinの通貨プロバイダを実装
+--------------------------------------------
+@Singleton
+public class BitCoinProvider implements CurrencyProviderSpi{
+  ...
+}
+--------------------------------------------
+
+////
 Now given this example it is obvious that the tricky part is to define, when exactly a given +CurrencyQuery+
 should be targeted by this provider, or otherwise, be simply ignored. In our case just provide an additional
 ISO code, so it is a good idea to just only return data for _default_ query types. Additionally we only return our code
 sublist, when the according code is requested, or a unspecified request is performed.
+訳注: In our case -> because our case
+訳注: our code sublistではない
+訳注: default = 国名コードってこと？
+訳注: 通貨コードであってISOコードではないのでは。
+////
 
+通貨プロバイダを提供するにあたって一番やっかいなことは、 +CurrencyQuery+ に対して通貨単位を戻すか、
+あるいは単にクエリを無視するかを決めることです。
+上記の例は、追加的な通貨コードに対して通貨単位を登録するだけなので、
+_default_ クエリタイプに対してデータを返すだけで充分です。
+また上記の例は、対応する通貨コードがリクエストされた場合、
+あるいは条件を指定しないクエリに限って通貨単位を戻しています。
 
+////
 ==== Building Custom Currency Units
+////
 
+==== カスタムの通貨単位を作る
+
+////
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically.
 --------------------------------------------
@@ -315,18 +542,50 @@ CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).b
 MonetaryCurrencies.registerCurrency(unit);
 MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
 --------------------------------------------
+////
 
+[source,java]
+.+CurrencyUnit+ のインスタンスをプログラム上で登録する例
+--------------------------------------------
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+
+// 通貨単位を登録する
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+
+////
 Fortunately +CurrencyUnitBuilder+ is also capable of registering a currency on creation, by just passing
 a register flag to the call: So the same can be rewritten as follows:
+////
 
+幸いなことに +CurrencyUnitBuilder+ 自体、通貨を生成すると同時に登録する機能を有しています。
+これは、登録することを表すフラグを渡すことによって可能です。
+したがって、上記のプログラムは次のように書き直せます:
+
+////
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically, using +CurrencyUnitBuilder+.
 --------------------------------------------
 CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* register */);
 --------------------------------------------
+////
 
+[source,java]
+.+CurrencyUnitBuilder+ を使って +CurrencyUnit+ のインスタンスをプログラム上で登録する例
+--------------------------------------------
+CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* 登録する */);
+--------------------------------------------
+
+////
 Alternatively one may use the +MonetaryCurrencies+ static methods as follows:
 
+上とかぶってる！
+////
+
+あるいは、 +MonetaryCurrencies+ クラスのstaticメソッドを使って、次のように登録することも可能です。
+
+////
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically, using +MonetaryCurrencies+ .
 --------------------------------------------
@@ -337,11 +596,33 @@ MonetaryCurrencies.registerCurrency(unit);
 MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
 --------------------------------------------
 
+訳注: たぶん間違ってる。new ... じゃないはず。
+////
+
+[source,java]
+.+MonetaryCurrencies+ を使って +CurrencyUnit+ のインスタンスをプログラム上で登録する例
+--------------------------------------------
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+
+// 登録する
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+
+////
 ==== Provided Currencies
 
 _Moneta_, by default provides only the same currencies as defined by +java.util.Currency+. Use the extended currency
 module from the JavaMoney OSS library for additional currency support, e.g. current overloading of currencies
 based on the actual input from the online ISO-4217 resources.
+訳注: e.g. 以下が意味不明瞭。
+////
+
+==== 提供される通貨
+
+_Moneta_ がデフォルトで提供する通貨は、 +java.util.Currency+ が提供しているものだけです。
+追加の通貨サポートを得るためには、JavaMoney OSSライブラリの拡張通貨モジュールを使ってください。
+たとえば、オンラインのISO-4217リソースに基づく通貨のオーバーロードが存在します。
 
 === Monetary Amounts
 
