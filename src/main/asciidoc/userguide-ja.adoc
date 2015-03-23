@@ -624,6 +624,7 @@ _Moneta_ がデフォルトで提供する通貨は、 +java.util.Currency+ が�
 追加の通貨サポートを得るためには、JavaMoney OSSライブラリの拡張通貨モジュールを使ってください。
 たとえば、オンラインのISO-4217リソースに基づく通貨のオーバーロードが存在します。
 
+////
 === Monetary Amounts
 
 Monetary amounts are the key abstraction of JSR 354. _Moneta_ hereby provides different implementations of amounts:
@@ -634,24 +635,63 @@ Monetary amounts are the key abstraction of JSR 354. _Moneta_ hereby provides di
 * +FastMoney+ represents numeric representation that was optimized for speed. It represents a monetary amount only
   as a integral number of type +long+, hereby using a number scale of 100'000 (10^5).
 * +RoundedMoney+ finally provides an amount implementation thar is implicitly rounded after each operation.
+訳注: arithmetic operation → 計算
+////
 
+=== 金額
+
+金額はJSR 354が提供する抽象化のうち、核となるもののひとつです。
+_Moneta_ は次に挙げるような金額の実装を提供します:
+
+* +Money+ は、内部で +java.math.BigDecimal+ を使って計算を行います。
+  この実装は任意精度・スケールをサポートします。
+* +FastMoney+ は計算速度が最適化された実装です。
+  この実装は +long+ 型の整数を10^5=100,000のスケールで保持することにより、金額の数値を表現します。
+* +RoundedMoney+ は一回の計算ごとに暗黙的な丸めを行う実装です。
+
+////
 ==== Choosing an Implementation
 
 Basically, if the numeric capabilities of +FastMoney+ are sufficient for your use cases, you may use this type. If
 not sure, using +Money+ is in general safe. +RoundedMoney+ should only be used, if you are well aware of its usage,
 since the immediate rounding may produce unwanted side effects (invalid values).
+////
 
+==== 実装の選択
+
++FastMoney+ の計算方法で用が足りるのであれば、この実装が使えます。
+用が足りるかどうか定かでない場合は、 +Money+ を使うのが安全です。
++RoundedMoney+ は、使い方をよく理解している場合に限って使うべきです。
+なぜなら、計算ごとの丸め処理によって、誤った結果が生じるかもしれないからです。
+
+////
 ==== Creating new Amounts
 
 As defined by the JSR's API you can access according +MonetaryAmountFactory+ for all types listed above to create
 new instances of amounts. E.g. instances of +FastMoney+ can be created as follows:
+////
 
+==== 新しく金額を作る
+
+上述したような金額実装クラスのインスタンスは、 +MonetaryAmountFactory+ で生成できます。
++MonetaryAmountFactory+ のインスタンスは、JSRのAPIで取得できます。
+たとえば、 +FastMoney+ のインスタンスは次のように生成できます。
+
+////
 [source,java]
 .Creating instances of +FastMoney+ using the +MonetaryAmounts+ singleton:
 --------------------------------------------
 FastMoney m = MonetaryAmounts.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
 --------------------------------------------
+////
 
+[source,java]
+.+MonetaryAmounts+ シングルトンを使って +FastMoney+ のインスタンスを生成する:
+--------------------------------------------
+FastMoney m = MonetaryAmounts.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
+--------------------------------------------
+
+////
 Additionally _Moneta_ also supports static factory methods on the types directly. So the following code is equivalent:
 
 [source,java]
@@ -660,6 +700,19 @@ Additionally _Moneta_ also supports static factory methods on the types directly
 FastMoney m = FastMoney.of("USD", 200.20);
 --------------------------------------------
 
+訳注: キャプションが間違ってる
+////
+
+これに加えて、 _Moneta_ の金額実装クラスは、staticなファクトリメソッドを提供しています。
+したがって、上述のコードは次のコードと等価です。
+
+[source,java]
+.+FastMoney+ のファクトリメソッドを使って +FastMoney+ のインスタンスを生成する
+--------------------------------------------
+FastMoney m = FastMoney.of("USD", 200.20);
+--------------------------------------------
+
+////
 Creation of +Money+ instances is similar:
 
 [source,java]
@@ -668,20 +721,48 @@ Creation of +Money+ instances is similar:
 Money m1 = MonetaryAmounts.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
 Money m2 = Money.of("USD", 200.20);
 --------------------------------------------
+////
 
++Money+ の生成も同様です:
+
+[source,java]
+.+Money+ のインスタンスを生成する
+--------------------------------------------
+Money m1 = MonetaryAmounts.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
+Money m2 = Money.of("USD", 200.20);
+--------------------------------------------
+
+////
 ===== Configuring Instances of Money
 
 The +Money+ class is internally based on +java.math.BigDecimal+. Therefore the arithmetic precision and rounding
 capabilities of +BigDecimal+ are also usable with +Money+. Hereby, by default, instances
 of +Money+ internally are initialized with +MathContext.DECIMAL64+. Nevertheless instance also can be configured
 explicitly by passing a +MathContext+ as part of a +MonetaryContext+:
+////
 
+===== Moneyのインスタンスを設定を変更する
+
++Money+ クラスは +java.math.BigDecimal+ に基づいています。
+したがって、 +BigDecimal+ の提供する精度と丸めの制御機能は +Money+ でも使えます。
+デフォルトでは、 +Money+ のインスタンスは +MathContext.DECIMAL64+ を使うように初期化されます。
+しかしながら、 +MathContext+ を +MonetaryContext+ に設定することも可能です。
+
+////
 [source,java]
 .Creating instances of +Money+ configuring the +MathContext+ to be used.
 --------------------------------------------
 Money money = Money.of("CHF", 200, MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build());
 --------------------------------------------
+////
 
+[source,java]
+.+Money+ が +MathContext+ を使うように設定する
+--------------------------------------------
+Money money = Money.of("CHF", 200, MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build());
+--------------------------------------------
+
+////
 Using the JSR's main API allows to achieve the same as follows:
 
 [source,java]
@@ -692,7 +773,20 @@ Money money = MonetaryAmounts.getAmountFactory(Money.class)
                               ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
                               .create();
 --------------------------------------------
+////
 
+JSRのAPIを使うと、同じ処理は次のように書けます。
+
+[source,java]
+.+Money+ が +MathContext+ を使うように、 +MonetaryAmountFactory+ を使って設定する
+--------------------------------------------
+Money money = MonetaryAmounts.getAmountFactory(Money.class)
+                              .setCurrencyUnit("CHF").setNumber(200).
+                              ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
+                              .create();
+--------------------------------------------
+
+////
 Additionally the default +MathContext+ can be configured with the +javamoney.properties+ located in your classpath:
 
 [source,listing]
@@ -700,7 +794,17 @@ Additionally the default +MathContext+ can be configured with the +javamoney.pro
 --------------------------------------------
 org.javamoney.moneta.Money.defaults.mathContext=DECIMAL128
 --------------------------------------------
+////
 
++javamoney.properties+ ファイルをクラスパス上に配置することで、デフォルトの +MathContext+ を設定することも可能です。
+
+[source,listing]
+.+Money+ が使うデフォルトの +MathContext+ を設定する
+--------------------------------------------
+org.javamoney.moneta.Money.defaults.mathContext=DECIMAL128
+--------------------------------------------
+
+////
 Alternatively you also can configure the precision and +RoundingMode+ to be used:
 
 [source,listing]
@@ -709,7 +813,18 @@ Alternatively you also can configure the precision and +RoundingMode+ to be used
 org.javamoney.moneta.Money.defaults.precision=DECIMAL128
 org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
 --------------------------------------------
+////
 
+同じことを行うための別の方法として、精度と +RoundingMode+ を個別に設定することもできます。
+
+[source,listing]
+.+Money+ が使うデフォルトの +MathContext+ を設定する（別の方法）
+--------------------------------------------
+org.javamoney.moneta.Money.defaults.precision=DECIMAL128
+org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
+--------------------------------------------
+
+////
 ==== Configuring Internal Rounding of FastMoney
 
 The class +FastMoney+ internally uses a single +long+ value to model a monetary amount. Hereby it uses a fixed scale of
@@ -718,26 +833,63 @@ The class +FastMoney+ internally uses a single +long+ value to model a monetary 
 this class easy and straight forward. Nevertheless there might be scenarios, where you want to throw
 +ArithmeticException+ if an entry value exceeds the maximal scale. This alternate, more rigid behaviour, can be
 activated by adding the following configuration to +javamoney.properties+:
+////
 
+==== FastMoneyの内部的な丸め方法を設定する
+
++FastMoney+ は内部で単一の +long+ 値を使って、5桁の固定スケールで金額を表します。
+もちろん計算によっては、丸めが必要になることがあります。
++FastMoney+ はデフォルトで、入力値となる +MonetaryAmount+, あるいは数値を、内部的なスケールである5桁に丸めます。
+多くの場合、これはは便利で素直で有用な挙動です。
+しかしながら、入力値が5桁のスケールを超える場合、 +ArithmeticException+ を投げて欲しい、というシナリオも考えられます。
++javamoney.properties+ ファイルに次の設定を追加することで、このような厳格な挙動が実現できます。
+
+////
 [source,listing]
 .Activating strict input number validation for +FastMoney+
 --------------------------------------------
 org.javamoney.moneta.FastMoney.enforceScaleCompatibility=true
 --------------------------------------------
+////
 
+[source,listing]
+.+FastMoney+ が入力値を厳格に検査するように設定
+--------------------------------------------
+org.javamoney.moneta.FastMoney.enforceScaleCompatibility=true
+--------------------------------------------
 
+////
 ==== Registering Additional Amount Implementations
 
 By default, additional implementation classes are added, by registering an instance of
 +MonetaryAmountFactoryProviderSpi+ as JDK services loaded by +java.util.ServiceLoader+.
 For this you have to add the following contents to +META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi+:
+////
 
+==== 追加的な金額実装クラスを登録する
+
++MonetaryAmountFactoryProviderSpi+ のインスタンスが +java.util.ServiceLoader+
+でロードされるように設定することで、追加的な金額実装クラスが登録できます。
+この設定を行うためには、 +META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi+
+ファイルが次のような行を含むようにします。
+
+////
 [source,listing]
 .Creating instances of +Money+:
 --------------------------------------------
 my.fully.qualified.MonetaryAmountFactoryProviderImplClass
 --------------------------------------------
 
+訳注: キャプションが間違っている
+////
+
+[source,listing]
+.金額のファクトリを登録する
+--------------------------------------------
+my.fully.qualified.MonetaryAmountFactoryProviderImplClass
+--------------------------------------------
+
+////
 For further ease of use, your implementations may furthermore provide static factory methods, e.g.
 
 [source,java]
@@ -748,12 +900,34 @@ public static MyMoney of(String currencyCode, long number);
 public static MyMoney of(String currencyCode, Number number);
 --------------------------------------------
 
+訳注: キャプションが間違っている
+////
+
+より使いやすくするため、金額実装クラスにstaticなファクトリメソッドを含ませるのが良いかもしれません。
+
+[source,java]
+.金額実装クラスのstaticファクトリメソッド
+--------------------------------------------
+public static MyMoney of(String currencyCode, double number);
+public static MyMoney of(String currencyCode, long number);
+public static MyMoney of(String currencyCode, Number number);
+--------------------------------------------
+
+////
 Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK nubber type
 to +BigDecimal+ is available on +MoneyUtils+, along with additional helpful methods.
+////
 
+参照実装であるMonetaは、再利用可能な共通機能を含んでいます。
+たとえば +MoneyUtils+ クラスは、任意の数値型からBigDecimalへの安全な変換のような有用な機能を提供しています。
 
+////
 ==== Mixing Amount Implementation Types
+////
 
+==== 金額実装クラスを混用する
+
+////
 Basically the JSR supports mixing of different implementation types. Nevertheless there are some effects that are
 important to mention, if doing so:
 
@@ -761,11 +935,30 @@ important to mention, if doing so:
   type on which the operations are performed), is the type that basically determines overall performance.
 * mixing of different amount implementation types may require internal rounding to be performed. Whereas the
   compatibility of precision is ensured, scale may be reduced silently as needed.
+////
 
+複数の金額実装クラスを混用することは可能です。
+ただし、いくつか注意するべきことがあります。
+
+* 遅い方の実装のために性能が劣化するかもしれません。
+  基本的には、計算を行うメソッドを提供するクラスによって性能が決まります。
+* 異なる実装の混用によって、丸めが行われる場合があります。
+  精度は保持されますが、スケールは暗黙的に切り詰められることがあり得ます。
+
+////
 Nevertheless there are strategies to mitigate these possible issues. The most easy and obvious strategy hereby is
 simply explicitly *converting explicitly to the required target type, before performing any operations*. This can
 be easily achieved, since every implementation in _moneta_ provides corresponding static +from()+ methods:
 
+訳注: explicitlyが重複
+////
+
+上述の問題を緩和するためには、いくつかの方法があります。
+最も簡単で分かりやすい方法は、 *計算を行う前に、明示的に対象のクラスへの変換を行う* ことです。
+_Moneta_ の金額実装クラスは、いずれもstaticな
++from()+ メソッドを含んでいるため、このような処理は容易に実現できます。
+
+////
 [source,java]
 .Creating instances of +Money+:
 --------------------------------------------
@@ -777,15 +970,43 @@ money = Money.from(fastMoney);
 fastMoney = FastMoney.from(money);
 --------------------------------------------
 
+訳注: キャプションが間違っている
+////
+
+[source,java]
+.計算の前に変換を行う
+--------------------------------------------
+MyMoney money1;
+Money money = Money.from(myMoney);
+FastMoney fastMoney = FastMoney.from(myMoney);
+
+money = Money.from(fastMoney);
+fastMoney = FastMoney.from(money);
+--------------------------------------------
+
+////
 In the above example, as long as the scale of 5 is never exceeded, no implicit rounding is performed. Bigger scales
 require rounding, when creating new instances of +FastMoney+.
+////
 
+上述の例では、5桁のスケールを上回らない限り、暗黙の丸め処理は行われません。
+5桁のスケールを上回る場合は、 +FastMoney+ への変換で丸めが行われます。
 
+////
 ==== Additional Provided Extension Points
 
 The _moneta_ reference implementation also provides implementations for several commonly used simple monetary functions
 in the +org.javamoney.moneta.functions_ package:
 
+訳注: 「拡張ポイント」ではないだろう
+////
+
+==== その他の共通機能
+
+参照実装である _Moneta_ は、 +org.javamoney.moneta.functions+
+パッケージにて、単純な共通機能を提供しています。
+
+////
 * +MonetaryUtil.reciprocal()+ provides an operator for calculating the reciprocal value of an amount (1/amount).
 * +MonetaryUtil.permil(BigDecimal decimal), MonetaryUtil.permil(Number number),
   MonetaryUtil.permil(Number number, MathContext mathContext)+ provides an operator for calculating permils.
@@ -796,9 +1017,34 @@ in the +org.javamoney.moneta.functions_ package:
 * +MonetaryUtil.minorUnits()+ provides a query for extracting only the minor units of an amount.
 * +MonetaryUtil.majorUnits()+ provides a query for extracting only the major units of an amount.
 
+訳注: minorUnitsの説明が怪しい。
+////
+
+* +MonetaryUtil.reciprocal()+:
+  逆数 (1/amount) を計算する演算子を戻す。
+* +MonetaryUtil.permil(BigDecimal decimal), MonetaryUtil.permil(Number number),
+  MonetaryUtil.permil(Number number, MathContext mathContext)+:
+  千分率を計算する演算子を戻す。
+* +MonetaryUtil.percent(BigDecimal decimal), MonetaryUtil.percent(Number number)+:
+  パーセンテージを計算する演算子を戻す。
+* +MonetaryUtil.minorPart()+:
+  補助通貨単位部分だけを抜き出す演算子を戻す。
+* +MonetaryUtil.majorPart()+
+  主要通貨単位部分だけを抜き出す演算子を戻す。
+* +MonetaryUtil.minorUnits()+
+  補助通貨単位で金額の数値を表すためのクエリを戻す。
+* +MonetaryUtil.majorUnits()+
+  主要通貨単位に金額の数値を切り詰めるためのクエリを戻す。
+
+////
 Additionally several aggregate functions are provided on +MonetaryFunctions+, they are specially useful
 when combined with the new Java 8 Lambda/Streaming features:
+////
 
++MonetaryFunctions+ クラスはいくつかの集計関数を提供しています。
+これらの関数は、Java 8のラムダ式・ストリームAPIと組み合わせることで便利に使えます。
+
+////
 * +public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit()+
  provides a +Collector+ to group by +CurrencyUnit+.
 * +public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary()+
@@ -834,11 +1080,66 @@ when combined with the new Java 8 Lambda/Streaming features:
 * +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the mininum amount
 * +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to caclulate the maximum amount.
 
+訳注: isBetweenの説明が怪しい
+////
+
+* +public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit()+
+  +CurrencyUnit+ ごとにグルーピングを行う +Collector+ を戻す。
+* +public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary()+
+  +MonetaryAmount+ を集計する +Collector+ を戻す。
+* +public static Collector<MonetaryAmount, GroupMonetarySummaryStatistics, GroupMonetarySummaryStatistics> groupBySummarizingMonetary()+
+  +MonetaryAmount+ をMonetarySummaryごとにグルーピングする +Collector+ を戻す。
+* +public static Comparator<MonetaryAmount> sortCurrencyUnit()+
+  通貨単位の昇順で金額を並び替えるComparatorを戻す。
+* +public static Comparator<MonetaryAmount> sortCurrencyUnitDesc()+
+  通貨単位の降順で金額を並び替えるComparatorを戻す。
+* +public static Comparator<MonetaryAmount> sortNumber()+
+  金額の昇順で並び替えるComparatorを戻す。
+* +public static Comparator<MonetaryAmount> sortNumberDesc()+
+  金額の降順で並び替えるComparatorを戻す。
+* +public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit currencyUnit)+
+  金額がCurrencyUnitの通貨のものかどうかを判別する述語を戻す。
+* +public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit currencyUnit)+
+  金額がCurrencyUnitの通貨のものでないかどうかを判別する述語を戻す。
+* +public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit requiredUnit, CurrencyUnit... otherUnits)+
+  金額がいずれかの通貨のものかどうかを判別する述語を戻す。
+* +public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount)+
+  +MonetaryAmount.isGreaterThan+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(MonetaryAmount amount)+
+  +MonetaryAmount.isGreaterThanOrEqualTo+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount)+
+  +MonetaryAmount.isLess+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isLessThanOrEqualTo(MonetaryAmount amount)+
+  +MonetaryAmount.isLessThanOrEqualTo+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min, MonetaryAmount max)+
+  金額がminとmaxの間かどうかを判別する述語を戻す。
+* +public static MonetaryAmount sum(MonetaryAmount a, MonetaryAmount b)+
+  金額を足し合わせる。
+* +public static MonetaryAmount min(MonetaryAmount a, MonetaryAmount b)+
+  小さい方の金額を戻す。もしa, bが同じ金額の場合、結果はその同じ金額。
+* +public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b)+
+  大きい方の金額を戻す。もしa, bが同じ金額の場合、結果はその同じ金額。
+* +public static BinaryOperator<MonetaryAmount> sum()+
+  足し算するBinaryOperatorを戻す。
+* +public static BinaryOperator<MonetaryAmount> min()+
+  小さい方の金額を戻すBinaryOperatorを戻す。
+* +public static BinaryOperator<MonetaryAmount> max()+
+  大さい方の金額を戻すBinaryOperatorを戻す。
+
+////
 ==== Performance Aspects
 
 Performance was not measured in deep. Nevertheless we have a simple test in place, which is executed during all
 component test runs, which performs different monetary operations on the different implementation types provided:
+////
 
+==== 性能
+
+性能はまだ厳密に計測されていません。
+ただし、全コンポーネントのテストと同時に実行される単純な性能テストが実装されています。
+このテストは、異なる金額実装クラスに対していくつかの計算を行うものです。
+
+////
 [source,java]
 .Simple Performance Test Code
 --------------------------------------------
@@ -848,7 +1149,19 @@ money1 = money1.multiply(3.4);
 money1 = money1.divide(5.456);
 money1 = money1.with(MonetaryRoundings.getRounding());
 --------------------------------------------
+////
 
+[source,java]
+.単純な性能テストコード
+--------------------------------------------
+M money1 = money1.add(M.of(EURO, 1234567.3444));
+money1 = money1.subtract(M.of(EURO, 232323));
+money1 = money1.multiply(3.4);
+money1 = money1.divide(5.456);
+money1 = money1.with(MonetaryRoundings.getRounding());
+--------------------------------------------
+
+////
 All tests were executed on a notebook with an +Intel i7 2.6GHz+ processor with SSD.
 The VM was not configured in any special way.
 
@@ -860,7 +1173,21 @@ This test is executed 100000 times for each monetary amount class +M+:
 Duration for 100000 operations (Money,BD): 2107 ms (21 ns per loop) -> EUR 1657407.95
 Duration for 100000 operations (FastMoney,long): 1011 ms (10 ns per loop) -> EUR 1657407.95000
 --------------------------------------------
+////
 
+すべてのテストは +Intel i7 2.6GHz+ のSSD付きノートPCで実行されています。
+VMは特に設定変更されていません。
+
+このテストは金額クラス +M+ ごとに100000回ずつ実行されます。
+
+[source,listing]
+.金額計算の性能テスト結果（金額実装クラスの混用なし）
+--------------------------------------------
+Duration for 100000 operations (Money,BD): 2107 ms (21 ns per loop) -> EUR 1657407.95
+Duration for 100000 operations (FastMoney,long): 1011 ms (10 ns per loop) -> EUR 1657407.95000
+--------------------------------------------
+
+////
 The same test is also done, hereby mixing different implementation types. Also this test is executed 100000 times for
 each monetary amount class +M+:
 
@@ -871,6 +1198,18 @@ Duration for 100000 operations (FastMoney/Money mixed): 899 ms (8 ns per loop) -
 Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop) -> EUR 1657407.95
 --------------------------------------------
 
+訳注 「M」は正しいか？
+////
+
+金額実装クラスを混用した状態でも同じテストを行っています。
+このテストも同じように金額実装クラスごとに100000回ずつ実行されます。
+
+[source,listing]
+.金額計算の性能テスト結果（金額実装クラスを混用）
+--------------------------------------------
+Duration for 100000 operations (FastMoney/Money mixed): 899 ms (8 ns per loop) -> EUR 1657407.95000
+Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop) -> EUR 1657407.95
+--------------------------------------------
 
 === Rounding
 
