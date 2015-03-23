@@ -1496,6 +1496,7 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 }
 --------------------------------------------
 
+////
 == Currency Conversion
 
 === Basics
@@ -1506,14 +1507,37 @@ that defines the transformation between amount A in currency Ca to amount B in c
 
 Hereby exchange rates can be accessed through an instanceof +ExchangeRateProvider+, which can be accessed from
 the +MonetaryConversions+ singleton:
+////
 
+== 通貨換算
+
+=== 基本
+
+金額を異なる通貨に換算するためには、 +MonetaryOperator+ を使います。
++MonetaryOperator+ は、金額を、実装クラスを同じくする他の金額へと変換する演算子です。
+換算のレートは +ExchangeRate+ にしたがって行われます。
++ExchangeRate+ は、通貨Caにおける金額Aから、通貨Cbにおける金額Bのような変換を定義するものです。
+
+換算レートは +ExchangeRateProvider+ のインスタンスから取得できます。
++ExchangeRateProvider+ は +MonetaryConversions+ シングルトンから取得できます。
+
+////
 [source,java]
 .Access an +ExchangeRateProvider+ and get an +ExchangeRate+
 --------------------------------------------
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
 ExchangeRate chfToUsdRate = rateProvider.getExchangeRate("CHF", "USD");
 --------------------------------------------
+////
 
+[source,java]
+.+ExchangeRateProvider+ から +ExchangeRate+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
+ExchangeRate chfToUsdRate = rateProvider.getExchangeRate("CHF", "USD");
+--------------------------------------------
+
+////
 As you see above we can access a provider by passing its (unique) name. But we can also combine multiple providers
 to an compound provider, by passing a chain of provider names. This defines the chain of providers to be used
 to evaluate a rate required. By default, the first result returned by a provider in the chain is returned. So if we
@@ -1526,7 +1550,23 @@ we can write the following code:
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
 ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
 --------------------------------------------
+////
 
+上の例で見たように、プロバイダは一意の名前によって取得できます。
+また、名前を複数指定することで、複数のプロバイダを合成して複合的なプロバイダを作ることもできます。
+複合的なプロバイダは、プロバイダのチェーンを使って換算レートを決めます。
+デフォルトでは、チェーンの最初のプロバイダによるレートが戻ります。
+したがって、 "ECB" プロバイダを最初のプロバイダとして使い、
+"ECB" プロバイダがサポートしない通貨のためのフォールバック先として "IMF" プロバイダを使う場合は、次のように書きます。
+
+[source,java]
+.複合的な +ExchangeRateProvider+ から +ExchangeRate+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
+ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
+--------------------------------------------
+
+////
 Finally we can also omit the definition of a provider chain. This will use the default provider chain:
 
 [source,java]
@@ -1535,13 +1575,35 @@ Finally we can also omit the definition of a provider chain. This will use the d
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
 ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
 --------------------------------------------
+////
 
+最後に、プロバイダチェーンの定義は完全に省くこともできます。
+この場合、デフォルトのプロバイダチェーンが使われます。
+
+[source,java]
+.デフォルトのプロバイダチェーンから +ExchangeRate+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
+ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
+--------------------------------------------
+
+////
 ==== Extracting a +CurrencyConversion+
 
 A +CurrencyConversion+ extends +MonetaryOperator+ and is therefore directly applicable on every +MonetaryAmount+.
 Hereby a +CurrencyConversion+ instance is always bound to a terminating currency and an underlying +ExchangeRateProvider+.
 As a consequence each +ExchangeRateProvider+ allows to get a +CurrencyConversion+ instance by passing the terminating
 currency:
+////
+
+==== +CurrencyConversion+ を取得する
+
++CurrencyConversion+ は +MonetaryOperator+ を継承しています。
+したがって、 +MonetaryAmount+ に対する演算子として使えます。
++CurrencyConversion+ のインスタンスには、換算先の通貨と、用いられる +ExchangeRateProvider+ が紐付いています。
++ExchangeRateProvider+ に換算先の通貨を渡すことで、 +CurrencyConversion+ のインスタンスが取得できます。
+
+////
 
 [source,java]
 .Getting a +CurrencyConversion+ from an +ExchangeRateProvider+
@@ -1552,7 +1614,17 @@ CurrencyConversion conversion = rateProvider.getConversion("CHF");
 MonetaryAmount amountInUSD = ...;
 MonetaryAmount amountInCHF = amountInUSD.with(conversion);
 --------------------------------------------
+////
 
+[source,java]
+.+ExchangeRateProvider+ から +CurrencyConversion+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
+CurrencyConversion conversion = rateProvider.getConversion("CHF");
+
+MonetaryAmount amountInUSD = ...;
+MonetaryAmount amountInCHF = amountInUSD.with(conversion);
+--------------------------------------------
 
 === Exchange Rate Providers
 
