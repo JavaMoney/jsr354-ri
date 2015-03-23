@@ -1211,10 +1211,18 @@ Duration for 100000 operations (FastMoney/Money mixed): 899 ms (8 ns per loop) -
 Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop) -> EUR 1657407.95
 --------------------------------------------
 
+////
 === Rounding
 
 _Moneta_ provides different roundings, all accessible from the +MonetaryRoundings+ singleton.
+////
 
+=== 丸め方
+
+_Moneta_ は複数の丸め方をサポートします。
+具体的には、 +MonetaryRoundings+ シングルトンを使うことで丸め方を表すオブジェクトが取得できます。
+
+////
 ==== Arithmetic Roundings
 
 You can acquire instances of arithmetic roundings by passing the target scale and +RoundingMode+ to be used within
@@ -1228,7 +1236,23 @@ MonetaryRounding rounding = MonetaryRoundings.getRounding(
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding);
 --------------------------------------------
+////
 
+==== 算術的丸め方
+
+計算結果のスケールと +RoundingMode+ を +RoundingQuery+ に設定することで、
+算術的丸め方のインスタンスが取得できます。
+
+[source,java]
+.算術的丸め方を取得・使用する
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getRounding(
+                               RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding);
+--------------------------------------------
+
+////
 ==== Default Roundings
 
 Also a _default_ +MonetaryRounding+ can be accessed, which basically falls back to the according _default_ rounding
@@ -1241,7 +1265,22 @@ MonetaryRounding rounding = MonetaryRoundings.getDefaultRounding();
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
 --------------------------------------------
+////
 
+==== デフォルトの丸め方
+
+デフォルトの +MonetaryRounding+ も取得できます。
+この丸め方は、は丸め対象の金額のインスタンスの、デフォルトの丸め方にフォールバックします。
+
+[source,java]
+.デフォルトの丸め方を取得・使用する
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getDefaultRounding();
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
+--------------------------------------------
+
+////
 Also you can access the default rounding for a given +CurrencyUnit+. Be default this will return an arithmetic rounding
 based on the currency's _default fraction digits_, but it may also return a non standard rounding, where useful.
 
@@ -1254,6 +1293,24 @@ MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
 --------------------------------------------
 
+訳注: this will return ...が怪しい
+訳注: implicitlyでない。上のコードのコピペ
+////
+
++CurrencyUnit+ が表す通貨のデフォルトの丸め方も取得できます。
+通常これは、通貨の「デフォルトの小数部桁数」に基づいた算術的丸め方を適用します。
+ただし、標準的でない有用な丸め方を適用する場合もあります。
+
+[source,java]
+.通貨のデフォルトの丸め方を取得・使用する
+--------------------------------------------
+CurrencyUnit currency = ...;
+MonetaryRounding rounding = MonetaryRoundings.getRounding(currency);
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding);
+--------------------------------------------
+
+////
 For Swiss Francs also a corresponding cash rounding is accessible. In Switzerland the smallest minor in cash are
 5 Rappen, so everything must be rounded to minors dividable by 5. This rounding can be accessed by setting the
 +cashRounding=tru+ property, when accessing a currency rounding for CHF:
@@ -1267,12 +1324,39 @@ MonetaryRounding rounding = MonetaryRoundings.getRounding(MonetaryCurrencies.get
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // amount rounded in CHF cash rounding
 --------------------------------------------
+////
 
+スイスフランについては、この通貨特有の丸め方が取得できます。
+スイスで現金を扱う際の最小の補助通貨単位は5ラッペンです。
+このため、現金決済の金額は補助通貨単位が5で割り切れるように丸める必要があります。
+CHF（スイスフラン）用の丸め方を取得する際に、
++cashRounding+ プロパティをtrueに設定することにより、このような丸め方が可能になります。
+
+[source,java]
+.スイスフランの現金決済用の丸め方を取得する
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getRounding(MonetaryCurrencies.getCurrency("CHF"),
+  RoundingQueryBuilder.create().set("cashRounding", true).build()
+);
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // CHFの現金決済用に丸められた金額
+--------------------------------------------
+
+////
 ==== Custom Roundings
 
 _Moneta_ does not provide any custom roundings by default. Nevertheless you can add custom roundings by registering
 instances of +RoundingProviderSpi+.
+////
 
+==== カスタムの丸め方
+
+（訳注: この節は次節と同内容です）
+
+_Moneta_ はデフォルトではカスタムの丸め方を提供していません。
+その代わり、自身のカスタムの丸め方を、 +RoundingProviderSpi+ のインスタンスを通して登録することができます。
+
+////
 [source,java]
 .Implement a custom +RoundingProviderSpi+, registered as "myPersonalRounding"
 --------------------------------------------
@@ -1304,11 +1388,53 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 }
 --------------------------------------------
 
+訳注: この節不要
+////
+
+[source,java]
+.カスタムの +RoundingProviderSpi+ を実装し、 "myPersonalRounding" として登録
+--------------------------------------------
+public final class TestRoundingProvider implements RoundingProviderSpi{
+
+    private static final MonetaryRounding ROUNDING = new MyCustomRounding();
+
+    private final Set<String> roundingNames;
+
+    public TestRoundingProvider(){
+        Set<String> names = new HashSet<>();
+        names.add("myPersonalRounding");
+        this.roundingNames = Collections.unmodifiableSet(names);
+    }
+
+    @Override
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+        if("myPersonalRounding".equals(roundingQuery.getRoundingName())){
+            return ROUNDING;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> getRoundingNames(){
+        return roundingNames;
+    }
+
+}
+--------------------------------------------
+
+////
 ==== Register your own Roundings
 
 You can add additional roundings by registering instances of +RoundingProviderSpi+. Be default this has to be done
 based on the mechanism as defined by the Java +ServiceLoader+.
+////
 
+==== 自身の丸め方を登録する
+
++RoundingProviderSpi+ を登録することで、自身のカスタムの丸め方が使えるようになります。
+通常これは、Javaの +ServiceLoader+ の仕組みを用いて登録します。
+
+////
 [source,java]
 .Implement a +RoundingProviderSpi+ providing a currency rounding for "BTC" (Bitcoin)
 --------------------------------------------
@@ -1338,7 +1464,37 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 
 }
 --------------------------------------------
+////
 
+[source,java]
+."BTC" (Bitcoin) 用の丸め方を +RoundingProviderSpi+ によって提供する
+--------------------------------------------
+public final class TestRoundingProvider implements RoundingProviderSpi{
+
+    private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
+
+    public TestRoundingProvider(){
+        Set<String> names = new HashSet<>();
+        names.add("custom1");
+        this.roundingNames = Collections.unmodifiableSet(names);
+    }
+
+    @Override
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+        CurrencyUnit cu = roundingQuery.getCurrencyUnit();
+        if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
+            return ROUNDING;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> getRoundingNames(){
+        return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
 
 == Currency Conversion
 
