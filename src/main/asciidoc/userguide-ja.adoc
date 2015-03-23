@@ -1626,11 +1626,20 @@ MonetaryAmount amountInUSD = ...;
 MonetaryAmount amountInCHF = amountInUSD.with(conversion);
 --------------------------------------------
 
+////
 === Exchange Rate Providers
 
 _Moneta_ provides quite powerful conversion providers, which allows you to perform currency conversion for most commonly used
 currencies, in some cases event back until 1995:
+////
 
+=== 換算レートのプロバイダ
+
+_Moneta_ は強力な通貨換算のプロバイダを提供します。
+これによって、一般に使われるほとんどの通貨について換算を行うことができます。
+またいくつかの場合には、1995年時点までさかのぼって換算を行うことができます。
+
+////
 * *ECB* connects to the online resources of the European Central Bank, which provides dayily exchange rates related
   to EURO.
 * *ECB-HIST90* connects the historic currencies feed of the European Central Bank, which provides exchange rates back
@@ -1642,6 +1651,20 @@ almost all important currencies. Hereby the IMF feeds are internally build up as
 provides data using the intermediate +SDR+ currency unit.
 * *IDENT* provides rates with a factor of 1.0, where base and target currency are the same.
 
+訳注: ECB-HISTの実装に「直近1500日」と書かれている。
+訳注: ECBのプロバイダは実装されていない？http://www.ecb.int/vocabulary/2002-08-01/eurofxrefの文書タイプをロードするらしいが。
+訳注: ECBCurrentRateProviderのコメントがhistoricとして書かれている。おそらく間違っている。
+////
+
+* *ECB* は、欧州中央銀行がオンラインで提供する、日次の対ユーロ換算レートを使います。
+* *ECB-HIST90* は、欧州中央銀行がオンラインで提供する、直近90日間の対ユーロ換算レートを使います。
+* *ECB-HIST* は、欧州中央銀行がオンラインで提供する、1999年以降の対ユーロ換算レートを使います。
+* *IMF* は、国際通貨基金がオンラインで提供する、ほとんどすべての重要な通貨に関する日次換算レートを使います。
+  国際通貨基金は +SDR+ という中間的な通貨単位を使ってレートを提供しています。
+  このプロバイダは、対SDRレートを組み合わせて換算レートを作ります。
+* *IDENT* は、換算元と換算先が同じ通貨である場合に限り、係数を1.0とする換算レートを提供します。
+
+////
 By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST+. As defined by the JSR the conversion
 provider chain can be configured in +javamoney.properties+ as follows:
 
@@ -1651,7 +1674,21 @@ provider chain can be configured in +javamoney.properties+ as follows:
 #Currency Conversion
 conversion.default-chain=IDENT,ECB,IMF,ECB-HIST
 --------------------------------------------
+訳注: キャプションが間違っている
+////
 
+デフォルトのプロバイダチェーンは +IDENT,ECB,IMF,ECB-HIST+ です。
+通貨換算のプロバイダのチェーンは、
++javamoney.properties+ ファイルで次のように設定変更できるよう、JSRに定義されています。
+
+[source,listing]
+.デフォルトの通貨換算のプロバイダチェーンを変更する
+--------------------------------------------
+#Currency Conversion
+conversion.default-chain=IDENT,ECB,IMF,ECB-HIST
+--------------------------------------------
+
+////
 ==== Configuring the Exchange Rate Providers
 
 The exchange rate providers provided provide several options to be configured, especially also the locations of
@@ -1689,6 +1726,46 @@ load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.xls
 load.IMFRateProvider.urls=http://www.imf.org/external/np/fin/data/rms_five.aspx?tsvflag=Y
 --------------------------------------------
 
+訳注: javamoney.propertiesに、ということを書く必要がある
+////
+
+==== 換算レートのプロバイダを設定変更する
+
+換算レートのプロバイダは設定可能なオプションを提供しています。
+特に、データフィードの場所とロード・リロード・更新に関する設定が変更できます。
+
+[source,listing]
+.換算レートのプロバイダを設定変更する
+--------------------------------------------
+# リソースローダーの設定（省略可能）
+
+# ECBレート
+load.ECBCurrentRateProvider.type=SCHEDULED
+load.ECBCurrentRateProvider.period=03:00
+load.ECBCurrentRateProvider.resource=/java-money/defaults/ECB/eurofxref-daily.xml
+load.ECBCurrentRateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+
+load.ECBHistoric90RateProvider.type=SCHEDULED
+load.ECBHistoric90RateProvider.period=03:00
+#load.ECBHistoric90RateProvider.at=12:00
+load.ECBHistoric90RateProvider.resource=/java-money/defaults/ECB/eurofxref-hist-90d.xml
+load.ECBHistoric90RateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml
+
+load.ECBHistoricRateProvider.type=SCHEDULED
+load.ECBHistoricRateProvider.period=24:00
+load.ECBHistoricRateProvider.delay=01:00
+load.ECBHistoricRateProvider.at=07:00
+load.ECBHistoricRateProvider.resource=/java-money/defaults/ECB/eurofxref-hist.xml
+load.ECBHistoricRateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml
+
+# IMFレート
+load.IMFRateProvider.type=SCHEDULED
+load.IMFRateProvider.period=06:00
+#load.IMFRateProvider.delay=12:00
+#load.IMFRateProvider.at=12:00
+load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.xls
+load.IMFRateProvider.urls=http://www.imf.org/external/np/fin/data/rms_five.aspx?tsvflag=Y
+--------------------------------------------
 
 == Formatting Monetary Amounts
 
