@@ -1775,16 +1775,16 @@ platform, formats can be accessed by passing a country +Locale+. But JSR 354 als
 a (unique) name or even given a complex query, that allows to pass any number of parameters to configure the
 format to use. Also compared to the Java platform, the formats are thread-safe and immutable.
 
-訳注: ここでいうJava platformは、java.util.Currency / NumberFormatのことか？
+訳注: ここでいうJava platformは、java.util.Currency / DecimalFormatのことか？
 ////
 
 == 金額を書式化する
 
 +MonetaryFormats+ シングルトンを使って +MonetaryAmountFormat+ のインスタンスが取得できます。
-NumberFormatと同じように、書式はロケールを使って取得できます。
+DecimalFormatと同じように、書式はロケールを使って取得できます。
 これに加えてJSR 354では、一意の名前によって書式を取得したり、複合的なクエリによって書式を取得したりできます。
 書式のクエリには、任意の数のパラメータが指定できます。
-NumberFormatと異なり、JSR 354の書式は不変でスレッドセーフです。
+DecimalFormatと異なり、JSR 354の書式は不変でスレッドセーフです。
 
 ////
 [source,java]
@@ -1853,10 +1853,19 @@ NOTE: 書式化された文字列のパースは常にうまく行くとは限�
       フォーマッタが金額から文字列への書式化の一方向だけを実装している場合、
       +MonetaryFormatException+ が発生します。
 
+////
 === Customizing the Default Amount Formatters
 
 _Moneta_ basically provides similar formatting options as Java. It is possible to pass a +DecimalFormat+ instance
 as parameter for a +Locale+ vased format query:
+
+訳注: ここでの「Java」はDecimalFormatか
+////
+
+=== デフォルトの金額フォーマッタをカスタマイズする
+
+_Moneta_ はDecimalFormatと同じようなオプションを提供しています。
+書式にクエリにロケールと合わせて +DecimalFormat+ を指定することも可能です。
 
 [source,java]
 --------------------------------------------
