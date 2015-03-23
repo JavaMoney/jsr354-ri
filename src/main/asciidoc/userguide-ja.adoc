@@ -1767,6 +1767,7 @@ load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.xls
 load.IMFRateProvider.urls=http://www.imf.org/external/np/fin/data/rms_five.aspx?tsvflag=Y
 --------------------------------------------
 
+////
 == Formatting Monetary Amounts
 
 +MonetaryAmountFormat+ instances can be accessed from the +MonetaryFormats+ singleton. Similar to the Java
@@ -1774,6 +1775,18 @@ platform, formats can be accessed by passing a country +Locale+. But JSR 354 als
 a (unique) name or even given a complex query, that allows to pass any number of parameters to configure the
 format to use. Also compared to the Java platform, the formats are thread-safe and immutable.
 
+訳注: ここでいうJava platformは、java.util.Currency / NumberFormatのことか？
+////
+
+== 金額を書式化する
+
++MonetaryFormats+ シングルトンを使って +MonetaryAmountFormat+ のインスタンスが取得できます。
+NumberFormatと同じように、書式はロケールを使って取得できます。
+これに加えてJSR 354では、一意の名前によって書式を取得したり、複合的なクエリによって書式を取得したりできます。
+書式のクエリには、任意の数のパラメータが指定できます。
+NumberFormatと異なり、JSR 354の書式は不変でスレッドセーフです。
+
+////
 [source,java]
 .Accessing Amount Formats
 --------------------------------------------
@@ -1787,8 +1800,27 @@ MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
     .build()
 );
 --------------------------------------------
+////
 
+[source,java]
+.金額の書式を取得する
+--------------------------------------------
+MonetaryAmountFormat formatCountry = MonetaryFormats.getAmountFormat(Locale.GERMANY);
+MonetaryAmountFormat formatNamed = MonetaryFormats.getAmountFormat("MyCustomFormat");
+MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
+  AmountFormatQueryBuilder.create()
+    .set("strict", true)
+    .set("omitNegative", true)
+    .set("omitNegativeSign" "N/A")
+    .build()
+);
+--------------------------------------------
+
+////
 Given a +MonetaryAmountFormat+ instance we can use it to format amounts:
+////
+
++MonetaryAmountFormat+ を使って、金額が書式化できます。
 
 [source,java]
 --------------------------------------------
@@ -1798,7 +1830,11 @@ MonetaryAmount amount = ...;
 String formattedString = format.format(amount);
 --------------------------------------------
 
+////
 Basically a +MonetaryAmountFormat+ instance can also reverse the operation by parsing an amount back:
+////
+
++MonetaryAmountFormat+ を逆向きに使って、文字列から金額をパースすることも可能です。
 
 [source,java]
 --------------------------------------------
@@ -1808,9 +1844,14 @@ String formattedString = ...;
 MonetaryAmount amount = format.parse(formattedString);
 --------------------------------------------
 
+////
 NOTE: Be aware that parsing back an amount in a reverse operation may not always work. If a formatter implements
       only a unidirectional formatting operation, a +MonetaryFormatException+ will be thrown.
+////
 
+NOTE: 書式化された文字列のパースは常にうまく行くとは限りません。
+      フォーマッタが金額から文字列への書式化の一方向だけを実装している場合、
+      +MonetaryFormatException+ が発生します。
 
 === Customizing the Default Amount Formatters
 
