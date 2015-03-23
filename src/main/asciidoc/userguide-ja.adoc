@@ -2020,16 +2020,41 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
 --------------------------------------------
 
 
+////
 === Overriding values in javamoney.properties
 
 The reference application supports overriding of the values in +javamoney.properties+ by prefexing the keys with
 a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
 classpath. If no priority is annotated, priority=0 is assumed:
 
+訳注: "reference application" → "reference implementation" の誤記か？
+////
+
+=== javamoney.propertiesの値をオーバーライドする
+
+参照実装であるMonetaは、 +javamoney.properties+ ファイルの値をオーバーライドする方法を提供しています。
+具体的には、キーの名前の前に波括弧で優先度を付加します。
+クラスパス上にあるすべての +javamoney.properties+ ファイルが読み込み対象となります。
+優先度が明示されていない場合、優先度は0とみなされます。
+
+////
 [source,listing]
 .Overriding a Configuration Value using a Priority
 --------------------------------------------
 {100}myKey=myValue
 --------------------------------------------
+////
 
+[source,listing]
+.優先度によって設定値をオーバーライドする
+--------------------------------------------
+{100}myKey=myValue
+--------------------------------------------
+
+////
 If two entries have the same value an exeption is thrown.
+
+訳注: "value"は曖昧。 "priority"の方が良い
+////
+
+2つのエントリが同じ優先度を持っていた場合、例外が発生します。
