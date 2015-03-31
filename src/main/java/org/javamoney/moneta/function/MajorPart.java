@@ -27,7 +27,7 @@ import java.util.Objects;
 final class MajorPart implements MonetaryOperator {
 
     private static final MonetaryRounding downRounding =
-            MonetaryRoundings.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
+            Monetary.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
 
     /**
      * Access the shared instance of {@link MajorPart} for use.

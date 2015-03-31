@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class provides a programmatic singleton for globally registering new {@link java.util.Currency}  into the
- * {@link javax.money.MonetaryCurrencies} singleton either by currency code, locale, or both.
+ * {@link javax.money.Monetary} singleton either by currency code, locale, or both.
  */
 public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
     /**

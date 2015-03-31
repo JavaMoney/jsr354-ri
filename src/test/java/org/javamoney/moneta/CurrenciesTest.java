@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 
 import org.testng.annotations.Test;
 
@@ -38,12 +38,12 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)} .
+	 * {@link javax.money.Monetary#getCurrency(java.lang.String, String...)} .
 	 */
 	@Test
 	public void testCurrencyValues() {
 		Currency jdkCurrency = Currency.getInstance("CHF");
-		CurrencyUnit cur = MonetaryCurrencies.getCurrency("CHF");
+		CurrencyUnit cur = Monetary.getCurrency("CHF");
 		assertNotNull(cur);
 		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
 		assertEquals(jdkCurrency.getNumericCode(), cur.getNumericCode());
@@ -53,11 +53,11 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)} .
+	 * {@link javax.money.Monetary#getCurrency(java.lang.String, String...)} .
 	 */
 	@Test
 	public void testGetCurrencyString() {
-		CurrencyUnit cur = MonetaryCurrencies.getCurrency("CHF");
+		CurrencyUnit cur = Monetary.getCurrency("CHF");
 		assertNotNull(cur);
 		Currency jdkCurrency = Currency.getInstance("CHF");
 		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
@@ -68,11 +68,11 @@ public class CurrenciesTest {
 
     /**
      * Test method for
-     * {@link MonetaryCurrencies#getCurrencies(java.util.Locale, String...)}.
+     * {@link javax.money.Monetary#getCurrencies(java.util.Locale, String...)}.
      */
     @Test
     public void testGetCurrencyLocale() {
-        Set<CurrencyUnit> cur = MonetaryCurrencies.getCurrencies(Locale.US);
+        Set<CurrencyUnit> cur = Monetary.getCurrencies(Locale.US);
         assertNotNull(cur);
         assertTrue(cur.size()==1);
         Currency jdkCurrency = Currency.getInstance(Locale.US);
@@ -85,13 +85,13 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)}.
+	 * {@link javax.money.Monetary#getCurrency(java.lang.String, String...)}.
 	 * .
 	 */
 	@Test
 	public void testGetMultipleInstancesString() {
-		CurrencyUnit cur = MonetaryCurrencies.getCurrency("USD");
-		CurrencyUnit cur2 = MonetaryCurrencies.getCurrency("USD");
+		CurrencyUnit cur = Monetary.getCurrency("USD");
+		CurrencyUnit cur2 = Monetary.getCurrency("USD");
 		assertNotNull(cur2);
 		assertTrue(cur == cur2);
 		Currency jdkCurrency = Currency.getInstance("USD");
@@ -103,13 +103,13 @@ public class CurrenciesTest {
 
 	/**
 	 * Test method for
-	 * {@link MonetaryCurrencies#getCurrency(java.lang.String, String...)}.
+	 * {@link javax.money.Monetary#getCurrency(java.lang.String, String...)}.
 	 */
 	@Test
 	public void testGetDifferentCurrencyCodes() {
-		CurrencyUnit cur = MonetaryCurrencies.getCurrency("USD");
+		CurrencyUnit cur = Monetary.getCurrency("USD");
 		assertEquals("USD", cur.getCurrencyCode());
-		cur = MonetaryCurrencies.getCurrency("EUR");
+		cur = Monetary.getCurrency("EUR");
 		assertEquals("EUR", cur.getCurrencyCode());
 	}
 
@@ -119,8 +119,8 @@ public class CurrenciesTest {
 	 */
 	@Test
 	public void testCompareTo() {
-		CurrencyUnit cur1 = MonetaryCurrencies.getCurrency("USD");
-		CurrencyUnit cur2 = MonetaryCurrencies.getCurrency("EUR");
+		CurrencyUnit cur1 = Monetary.getCurrency("USD");
+		CurrencyUnit cur2 = Monetary.getCurrency("EUR");
 		assertNotNull(cur1);
         assertNotNull(cur2);
 		assertTrue(0 < cur1.compareTo(cur2));
@@ -135,7 +135,7 @@ public class CurrenciesTest {
 	 */
 	@Test
 	public void testToString() {
-		CurrencyUnit cur1 = MonetaryCurrencies.getCurrency("USD");
+		CurrencyUnit cur1 = Monetary.getCurrency("USD");
 		String toString = cur1.toString();
 		assertNotNull(toString);
 		assertTrue(toString.contains("USD"), "Does not contain currency code.");

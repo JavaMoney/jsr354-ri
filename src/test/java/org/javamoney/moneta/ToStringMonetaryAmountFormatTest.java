@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.UnknownCurrencyException;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
@@ -14,7 +14,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 public class ToStringMonetaryAmountFormatTest {
-	private static final CurrencyUnit BRAZILIAN_REAL = MonetaryCurrencies
+	private static final CurrencyUnit BRAZILIAN_REAL = Monetary
 			.getCurrency("BRL");
 
 	private MonetaryAmount money;

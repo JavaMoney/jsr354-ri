@@ -19,8 +19,8 @@ import java.math.BigDecimal;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
-import javax.money.MonetaryRoundings;
+import javax.money.Monetary;
+
 
 import org.testng.annotations.Test;
 
@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
  */
 public class PerformanceTest {
 
-	protected static final CurrencyUnit EURO = MonetaryCurrencies
+	protected static final CurrencyUnit EURO = Monetary
 			.getCurrency("EUR");
 
 	@Test(enabled = true)
@@ -94,7 +94,7 @@ public class PerformanceTest {
 		b.append("money1 = money1.subtract(Money.of(EURO, 232323));\n");
 		b.append("money1 = money1.multiply(3.4);\n");
 		b.append("money1 = money1.divide(5.456);\n");
-		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
+		b.append("money1 = money1.with(Monetary.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
 		Money money1 = Money.of(BigDecimal.ONE,EURO);
@@ -107,7 +107,7 @@ public class PerformanceTest {
 			money1 = money1.subtract(subtracting);
 			money1 = money1.multiply(3.4);
 			money1 = money1.divide(5.456);
-			money1 = money1.with(MonetaryRoundings.getDefaultRounding());
+			money1 = money1.with(Monetary.getDefaultRounding());
 		}
 		long end = System.currentTimeMillis();
 		long duration = end - start;
@@ -122,7 +122,7 @@ public class PerformanceTest {
 		b.append("money1 = money1.subtract(FastMoney.of(EURO, 232323));\n");
 		b.append("money1 = money1.multiply(3.4);\n");
 		b.append("money1 = money1.divide(5.456);\n");
-		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
+		b.append("money1 = money1.with(Monetary.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
 		FastMoney money2 = FastMoney.of( BigDecimal.ONE,EURO);
@@ -134,7 +134,7 @@ public class PerformanceTest {
 			money2 = money2.subtract(subtracting);
 			money2 = money2.multiply(3.4);
 			money2 = money2.divide(5.456);
-			money2 = money2.with(MonetaryRoundings.getDefaultRounding());
+			money2 = money2.with(Monetary.getDefaultRounding());
 		}
 		end = System.currentTimeMillis();
 		duration = end - start;
@@ -151,7 +151,7 @@ public class PerformanceTest {
 		b.append("money1 = money1.subtract(Money.of(EURO, 232323));\n");
 		b.append("money1 = money1.multiply(3.4);\n");
 		b.append("money1 = money1.divide(5.456);\n");
-		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
+		b.append("money1 = money1.with(Monetary.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
 		adding = Money.of( 1234567.3444,EURO);
@@ -163,7 +163,7 @@ public class PerformanceTest {
 			money3 = money3.subtract(subtracting);
 			money3 = money3.multiply(3.4);
 			money3 = money3.divide(5.456);
-			money3 = money3.with(MonetaryRoundings.getDefaultRounding());
+			money3 = money3.with(Monetary.getDefaultRounding());
 		}
 		end = System.currentTimeMillis();
 		duration = end - start;
@@ -179,7 +179,7 @@ public class PerformanceTest {
 		b.append("money1 = money1.subtract(FastMoney.of(EURO, 232323));\n");
 		b.append("money1 = money1.multiply(3.4);\n");
 		b.append("money1 = money1.divide(5.456);\n");
-		b.append("money1 = money1.with(MonetaryRoundings.getRounding());\n");
+		b.append("money1 = money1.with(Monetary.getRounding());\n");
 		System.out.println(b);
 		b.setLength(0);
 		adding = FastMoney.of( 1234567.3444,EURO);
@@ -191,7 +191,7 @@ public class PerformanceTest {
 			money4 = money4.subtract(subtracting);
 			money4 = money4.multiply(3.4);
 			money4 = money4.divide(5.456);
-			money4 = money4.with(MonetaryRoundings.getDefaultRounding());
+			money4 = money4.with(Monetary.getDefaultRounding());
 		}
 		end = System.currentTimeMillis();
 		duration = end - start;

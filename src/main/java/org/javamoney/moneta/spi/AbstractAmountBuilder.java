@@ -95,7 +95,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      */
     @Override
     public MonetaryAmountFactory<T> setCurrency(String currencyCode) {
-        this.currency = MonetaryCurrencies.getCurrency(currencyCode);
+        this.currency = Monetary.getCurrency(currencyCode);
         return this;
     }
 

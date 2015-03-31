@@ -113,7 +113,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /**
      * Maximum possible value supported, using XX (no currency).
      */
-    public static final FastMoney MAX_VALUE = new FastMoney(Long.MAX_VALUE, MonetaryCurrencies.getCurrency("XXX"));
+    public static final FastMoney MAX_VALUE = new FastMoney(Long.MAX_VALUE, Monetary.getCurrency("XXX"));
     /**
      * Maximum possible numeric value supported.
      */
@@ -121,7 +121,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     /**
      * Minimum possible value supported, using XX (no currency).
      */
-    public static final FastMoney MIN_VALUE = new FastMoney(Long.MIN_VALUE, MonetaryCurrencies.getCurrency("XXX"));
+    public static final FastMoney MIN_VALUE = new FastMoney(Long.MIN_VALUE, Monetary.getCurrency("XXX"));
     /**
      * Minimum possible numeric value supported.
      */
@@ -234,7 +234,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @return A new instance of {@link FastMoney}.
      */
     public static FastMoney of(Number number, String currencyCode) {
-        CurrencyUnit currency = MonetaryCurrencies.getCurrency(currencyCode);
+        CurrencyUnit currency = Monetary.getCurrency(currencyCode);
         return of(number, currency);
     }
 

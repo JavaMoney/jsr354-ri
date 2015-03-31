@@ -23,7 +23,7 @@ import java.util.Objects;
 /**
  * Implementation of {@link javax.money.CurrencyUnit} that allows to of new instances using a fluent API.
  * Instances created also can be added to the {@link org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider}
- * singleton, which publishes the instances, so they are visible from the {@link javax.money.MonetaryCurrencies}
+ * singleton, which publishes the instances, so they are visible from the {@link javax.money.Monetary}
  * singleton.
  */
 final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUnit>, Serializable {

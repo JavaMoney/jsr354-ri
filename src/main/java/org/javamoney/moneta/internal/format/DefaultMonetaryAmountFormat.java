@@ -200,7 +200,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         }
         MonetaryAmountFactory<?> factory = this.amountFormatContext.getParseFactory();
         if (factory == null) {
-            factory = MonetaryAmounts.getDefaultAmountFactory();
+            factory = Monetary.getDefaultAmountFactory();
         }
         return factory.setCurrency(unit).setNumber(num).create();
     }

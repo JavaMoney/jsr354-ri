@@ -72,15 +72,15 @@ public class TestRoundingProvider implements RoundingProviderSpi {
 
         @Override
         public MonetaryAmount apply(MonetaryAmount amount) {
-            MonetaryOperator minorRounding = MonetaryRoundings
+            MonetaryOperator minorRounding = Monetary
                     .getRounding(RoundingQueryBuilder.of().set("scale", 2).set(RoundingMode.HALF_UP).build());
             MonetaryAmount amt = amount.with(minorRounding);
             MonetaryAmount mp = amt.with(MonetaryUtil.minorPart());
             if (mp.isGreaterThanOrEqualTo(
-                    MonetaryAmounts.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03)
+                    Monetary.getDefaultAmountFactory().setCurrency(amount.getCurrency()).setNumber(0.03)
                             .create())) {
                 // add
-                return amt.add(MonetaryAmounts.getDefaultAmountFactory().setCurrency(amt.getCurrency())
+                return amt.add(Monetary.getDefaultAmountFactory().setCurrency(amt.getCurrency())
                         .setNumber(new BigDecimal("0.05")).create().subtract(mp));
             } else {
                 // subtract

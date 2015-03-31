@@ -78,7 +78,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
         } else if (roundingMode != null) {
             return new DefaultRounding(scale, roundingMode);
         } else if (roundingQuery.getRoundingName() != null && DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())) {
-            return MonetaryRoundings.getDefaultRounding();
+            return Monetary.getDefaultRounding();
         }
         return null;
     }

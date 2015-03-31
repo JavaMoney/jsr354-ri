@@ -36,8 +36,8 @@ public class FastMoneyTest{
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
     private static final BigDecimal TEN = new BigDecimal(10.0d);
-    protected static final CurrencyUnit EURO = MonetaryCurrencies.getCurrency("EUR");
-    protected static final CurrencyUnit DOLLAR = MonetaryCurrencies.getCurrency("USD");
+    protected static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
+    protected static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
 
     /**
      * Test method for
@@ -45,13 +45,13 @@ public class FastMoneyTest{
      */
     @Test
     public void testOfCurrencyUnitBigDecimal(){
-        FastMoney m = FastMoney.of(TEN, MonetaryCurrencies.getCurrency("EUR"));
+        FastMoney m = FastMoney.of(TEN, Monetary.getCurrency("EUR"));
         assertEquals(new BigDecimal("10").intValue(), m.getNumber().numberValue(BigDecimal.class).intValue());
     }
 
     @Test
     public void testOfCurrencyUnitDouble(){
-        FastMoney m = FastMoney.of(10.0d, MonetaryCurrencies.getCurrency("EUR"));
+        FastMoney m = FastMoney.of(10.0d, Monetary.getCurrency("EUR"));
         assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
     }
 
@@ -779,14 +779,14 @@ public class FastMoneyTest{
                 FastMoney.of(0, "GBP")};
         FastMoney s = FastMoney.of(10, "XXX");
         MonetaryAmount[] moneys2 = new MonetaryAmount[]{
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).setNumber(100).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USD")).setNumber(34242344).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("EUR"))
+                s.getFactory().setCurrency(Monetary.getCurrency("CHF")).setNumber(100).create(),
+                s.getFactory().setCurrency(Monetary.getCurrency("USD")).setNumber(34242344).create(),
+                s.getFactory().setCurrency(Monetary.getCurrency("EUR"))
                         .setNumber(new BigDecimal("23123213.435")).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USS"))
+                s.getFactory().setCurrency(Monetary.getCurrency("USS"))
                         .setNumber(new BigDecimal("-23123213.435")).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USN")).setNumber(-23123213).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("GBP")).setNumber(0).create()};
+                s.getFactory().setCurrency(Monetary.getCurrency("USN")).setNumber(-23123213).create(),
+                s.getFactory().setCurrency(Monetary.getCurrency("GBP")).setNumber(0).create()};
         for(int i = 0; i < moneys.length; i++){
             assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
@@ -1081,11 +1081,11 @@ public class FastMoneyTest{
         assertNotSame(m, a);
         assertEquals(m.getCurrency(), a.getCurrency());
         assertEquals(FastMoney.of(-100, m.getCurrency()), a);
-        adj = amount -> amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
+        adj = amount -> amount.multiply(2).getFactory().setCurrency(Monetary.getCurrency("CHF")).create();
         a = m.with(adj);
         assertNotNull(a);
         assertNotSame(m, a);
-        assertEquals(MonetaryCurrencies.getCurrency("CHF"), a.getCurrency());
+        assertEquals(Monetary.getCurrency("CHF"), a.getCurrency());
         assertEquals(FastMoney.of(1.2345 * 2, a.getCurrency()), a);
     }
 

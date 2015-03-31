@@ -25,7 +25,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
@@ -753,7 +753,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @return A new instance of {@link Money}.
      */
     public static Money of(Number number, String currencyCode) {
-        return new Money(MoneyUtils.getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode));
+        return new Money(MoneyUtils.getBigDecimal(number), Monetary.getCurrency(currencyCode));
     }
 
     /**
@@ -764,7 +764,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @return A new instance of {@link Money}.
      */
     public static Money of(BigDecimal number, String currencyCode) {
-        return new Money(number, MonetaryCurrencies.getCurrency(currencyCode));
+        return new Money(number, Monetary.getCurrency(currencyCode));
     }
 
     /**
@@ -777,7 +777,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @return A new instance of {@link Money}.
      */
     public static Money of(Number number, String currencyCode, MonetaryContext monetaryContext) {
-        return new Money(MoneyUtils.getBigDecimal(number), MonetaryCurrencies.getCurrency(currencyCode),
+        return new Money(MoneyUtils.getBigDecimal(number), Monetary.getCurrency(currencyCode),
                 monetaryContext);
     }
 
@@ -791,7 +791,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @return A new instance of {@link Money}.
      */
     public static Money of(BigDecimal number, String currencyCode, MonetaryContext monetaryContext) {
-        return new Money(number, MonetaryCurrencies.getCurrency(currencyCode), monetaryContext);
+        return new Money(number, Monetary.getCurrency(currencyCode), monetaryContext);
     }
 
     /**

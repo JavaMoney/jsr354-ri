@@ -19,7 +19,7 @@ import org.javamoney.moneta.format.CurrencyStyle;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.MonetaryException;
 import javax.money.format.MonetaryParseException;
 import java.io.IOException;
@@ -182,28 +182,28 @@ final class CurrencyToken implements FormatToken {
             CurrencyUnit cur;
             switch (style) {
                 case CODE:
-                    if (!MonetaryCurrencies.isCurrencyAvailable(token)) {
+                    if (!Monetary.isCurrencyAvailable(token)) {
                         // Perhaps blank is missing between currency code and number...
                         String subCurrency = parseCurrencyCode(token);
-                        cur = MonetaryCurrencies.getCurrency(subCurrency);
+                        cur = Monetary.getCurrency(subCurrency);
                         context.consume(subCurrency);
                     } else {
-                        cur = MonetaryCurrencies.getCurrency(token);
+                        cur = Monetary.getCurrency(token);
                         context.consume(token);
                     }
                     break;
                 case SYMBOL:
                     if (token.startsWith("$")) {
-                        cur = MonetaryCurrencies.getCurrency("USD");
+                        cur = Monetary.getCurrency("USD");
                         context.consume("$");
                     } else if (token.startsWith("€")) {
-                        cur = MonetaryCurrencies.getCurrency("EUR");
+                        cur = Monetary.getCurrency("EUR");
                         context.consume("€");
                     } else if (token.startsWith("£")) {
-                        cur = MonetaryCurrencies.getCurrency("GBP");
+                        cur = Monetary.getCurrency("GBP");
                         context.consume("£");
                     } else {
-                        cur = MonetaryCurrencies.getCurrency(token);
+                        cur = Monetary.getCurrency(token);
                         context.consume(token);
                     }
                     context.setParsedCurrency(cur);

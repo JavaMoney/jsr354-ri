@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversionException;
@@ -57,7 +57,7 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
     /**
      * Base currency of the loaded rates is always EUR.
      */
-    public static final CurrencyUnit BASE_CURRENCY = MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE);
+    public static final CurrencyUnit BASE_CURRENCY = Monetary.getCurrency(BASE_CURRENCY_CODE);
 
     /**
      * Historic exchange rates, rate timestamp as UTC long.
@@ -153,9 +153,9 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         } else {
             // Get Conversion base as derived rate: base -> EUR -> term
             ExchangeRate rate1 = getExchangeRate(
-                    query.toBuilder().setTermCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE)).build());
+                    query.toBuilder().setTermCurrency(Monetary.getCurrency(BASE_CURRENCY_CODE)).build());
             ExchangeRate rate2 = getExchangeRate(
-                    query.toBuilder().setBaseCurrency(MonetaryCurrencies.getCurrency(BASE_CURRENCY_CODE))
+                    query.toBuilder().setBaseCurrency(Monetary.getCurrency(BASE_CURRENCY_CODE))
                             .setTermCurrency(query.getCurrency()).build());
             if (Objects.nonNull(rate1) && Objects.nonNull(rate2)) {
                 builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));

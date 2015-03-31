@@ -75,9 +75,9 @@ You can use the currency code to access currencies.
 [source,java]
 .Accessing currencies by currency code
 --------------------------------------------
-CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit("CHF");
-CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit("USD");
-CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit("EUR");
+CurrencyUnit currencyCHF = Monetary.getCurrencyUnit("CHF");
+CurrencyUnit currencyUSD = Monetary.getCurrencyUnit("USD");
+CurrencyUnit currencyEUR = Monetary.getCurrencyUnit("EUR");
 --------------------------------------------
 
 Hereby all codes available in the underlying JDK are mapped by default.
@@ -98,9 +98,9 @@ Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +L
 [source,java]
 .Accessing currencies by Locale
 --------------------------------------------
-CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit(new Locale("", "SUI")); // Switzerland
-CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit(new Locale("", "USA")); // United States of America
-CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit(new Locale("", "GER")); // Germany
+CurrencyUnit currencyCHF = Monetary.getCurrencyUnit(new Locale("", "SUI")); // Switzerland
+CurrencyUnit currencyUSD = Monetary.getCurrencyUnit(new Locale("", "USA")); // United States of America
+CurrencyUnit currencyEUR = Monetary.getCurrencyUnit(new Locale("", "GER")); // Germany
 --------------------------------------------
 
 Hereby all codes available in the underlying JDK are mapped by default.
@@ -112,7 +112,7 @@ Also all currently known currencies can be accessed:
 [source,java]
 .Accessing all currencies
 --------------------------------------------
-Collection<CurrencyUnit> allCurrencies = MonetaryCurrencies.getCurrencies();
+Collection<CurrencyUnit> allCurrencies = Monetary.getCurrencies();
 --------------------------------------------
 
 Similarly to other access methods you can also explicitly specifiy the provider chain to be used. The _Moneta_
@@ -235,8 +235,8 @@ sublist, when the according code is requested, or a unspecified request is perfo
 CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
 
 // registering it
-MonetaryCurrencies.registerCurrency(unit);
-MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+Monetary.registerCurrency(unit);
+Monetary.registerCurrency(unit, Locale.MyCOUNTRY);
 --------------------------------------------
 
 Fortunately +CurrencyUnitBuilder+ is also capable of registering a currency on creation, by just passing
@@ -256,8 +256,8 @@ Alternatively one may use the +MonetaryCurrencies+ static methods as follows:
 CurrencyUnit unit = new CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
 
 // registering it
-MonetaryCurrencies.registerCurrency(unit);
-MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+Monetary.registerCurrency(unit);
+Monetary.registerCurrency(unit, Locale.MyCOUNTRY);
 --------------------------------------------
 
 ==== Provided Currencies
@@ -291,7 +291,7 @@ new instances of amounts. E.g. instances of +FastMoney+ can be created as follow
 [source,java]
 .Creating instances of +FastMoney+ using the +MonetaryAmounts+ singleton:
 --------------------------------------------
-FastMoney m = MonetaryAmounts.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
+FastMoney m = Monetary.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
 --------------------------------------------
 
 Additionally _Moneta_ also supports static factory methods on the types directly. So the following code is equivalent:
@@ -307,7 +307,7 @@ Creation of +Money+ instances is similar:
 [source,java]
 .Creating instances of +Money+:
 --------------------------------------------
-Money m1 = MonetaryAmounts.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
+Money m1 = Monetary.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
 Money m2 = Money.of("USD", 200.20);
 --------------------------------------------
 
@@ -329,7 +329,7 @@ Using the JSR's main API allows to achieve the same as follows:
 [source,java]
 .Creating instances of +Money+ configuring the +MathContext+ to be used, using the +MonetaryAmountFactory+.
 --------------------------------------------
-Money money = MonetaryAmounts.getAmountFactory(Money.class)
+Money money = Monetary.getAmountFactory(Money.class)
                               .setCurrencyUnit("CHF").setNumber(200).
                               ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
                               .create();
@@ -488,7 +488,7 @@ M money1 = money1.add(M.of(EURO, 1234567.3444));
 money1 = money1.subtract(M.of(EURO, 232323));
 money1 = money1.multiply(3.4);
 money1 = money1.divide(5.456);
-money1 = money1.with(MonetaryRoundings.getRounding());
+money1 = money1.with(Monetary.getRounding());
 --------------------------------------------
 
 All tests were executed on a notebook with an +Intel i7 2.6GHz+ processor with SSD.
@@ -526,7 +526,7 @@ the +RoundingQuery+ passed:
 [source,java]
 .Access and apply arithmetic rounding.
 --------------------------------------------
-MonetaryRounding rounding = MonetaryRoundings.getRounding(
+MonetaryRounding rounding = Monetary.getRounding(
                                RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding);
@@ -540,9 +540,9 @@ based on the current amount instance to be rounded:
 [source,java]
 .Access and apply default rounding.
 --------------------------------------------
-MonetaryRounding rounding = MonetaryRoundings.getDefaultRounding();
+MonetaryRounding rounding = Monetary.getDefaultRounding();
 MonetaryAmount amt = ...;
-MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
+MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses Monetary.getRounding(CurrencyUnit);
 --------------------------------------------
 
 Also you can access the default rounding for a given +CurrencyUnit+. Be default this will return an arithmetic rounding
@@ -552,9 +552,9 @@ based on the currency's _default fraction digits_, but it may also return a non 
 .Access and apply default currency rounding.
 --------------------------------------------
 CurrencyUnit currency = ...;
-MonetaryRounding rounding = MonetaryRoundings.getRounding(currency);
+MonetaryRounding rounding = Monetary.getRounding(currency);
 MonetaryAmount amt = ...;
-MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
+MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses Monetary.getRounding(CurrencyUnit);
 --------------------------------------------
 
 For Swiss Francs also a corresponding cash rounding is accessible. In Switzerland the smallest minor in cash are
@@ -564,7 +564,7 @@ For Swiss Francs also a corresponding cash rounding is accessible. In Switzerlan
 [source,java]
 .Access Swiss Francs Cash Rounding
 --------------------------------------------
-MonetaryRounding rounding = MonetaryRoundings.getRounding(MonetaryCurrencies.getCurrency("CHF"),
+MonetaryRounding rounding = Monetary.getRounding(Monetary.getCurrency("CHF"),
   RoundingQueryBuilder.create().set("cashRounding", true).build()
 );
 MonetaryAmount amt = ...;

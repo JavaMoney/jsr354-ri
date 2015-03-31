@@ -5,15 +5,15 @@ import java.util.stream.Stream;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 
 import org.javamoney.moneta.Money;
 
 public class StreamFactory {
 
-	static final CurrencyUnit EURO = MonetaryCurrencies.getCurrency("EUR");
-	static final CurrencyUnit DOLLAR = MonetaryCurrencies.getCurrency("USD");
-	static final CurrencyUnit BRAZILIAN_REAL = MonetaryCurrencies
+	static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
+	static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
+	static final CurrencyUnit BRAZILIAN_REAL = Monetary
 			.getCurrency("BRL");
 
 	public static Stream<MonetaryAmount> streamCurrencyDifferent() {

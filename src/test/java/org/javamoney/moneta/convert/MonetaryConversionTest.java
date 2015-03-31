@@ -23,7 +23,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.Collection;
 import java.util.Objects;
 
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
@@ -60,20 +60,20 @@ public class MonetaryConversionTest {
 		// Test rate provided by IMF (derived)
 		Thread.sleep(5000L); // wait for provider to load...
 		ExchangeRate r = prov.getExchangeRate(
-				MonetaryCurrencies.getCurrency("USD"),
-				MonetaryCurrencies.getCurrency("INR"));
+				Monetary.getCurrency("USD"),
+				Monetary.getCurrency("INR"));
 		assertTrue(Objects.nonNull(r));
 		assertTrue(r.isDerived());
 		// Test rate provided by ECB
-		r = prov.getExchangeRate(MonetaryCurrencies.getCurrency("EUR"),
-				MonetaryCurrencies.getCurrency("CHF"));
+		r = prov.getExchangeRate(Monetary.getCurrency("EUR"),
+				Monetary.getCurrency("CHF"));
 		assertTrue(Objects.nonNull(r));
 		assertFalse(r.isDerived());
 	}
 
 	@Test
 	public void testGetSupportedProviderContexts() {
-		Collection<String> types = MonetaryConversions.getProviderNames();
+		Collection<String> types = MonetaryConversions.getConversionProviderNames();
 		assertNotNull(types);
 		assertTrue(types.size() >= 1);
 		assertTrue(types.contains("IMF"));

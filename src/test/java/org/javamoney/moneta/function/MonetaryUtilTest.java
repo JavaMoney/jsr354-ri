@@ -17,8 +17,8 @@ package org.javamoney.moneta.function;
 
 import org.testng.annotations.Test;
 
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmounts;
 import javax.money.MonetaryOperator;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -40,12 +40,12 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testReciprocal() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency("CHF").setNumber(200).create();
 		MonetaryAmount r = m.with(MonetaryUtil.reciprocal());
         //noinspection BigDecimalMethodWithoutRoundingCalled
         assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(BigDecimal.ONE.divide(BigDecimal.valueOf(200)))
 						.create(),
 				r);
@@ -58,13 +58,13 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testPermilBigDecimal() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(100).create();
 		MonetaryAmount r = m.with(MonetaryUtil.permil(BigDecimal
 				.valueOf(25)));
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(
 								new BigDecimal("2.5")).create(),
 				r);
@@ -77,12 +77,12 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testPermilNumber() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(100).create();
 		MonetaryAmount r = m.with(MonetaryUtil.permil(25));
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(
 								new BigDecimal("2.5")).create(),
 				r);
@@ -95,13 +95,13 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testPermilNumberMathContext() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(100).create();
 		MonetaryAmount r = m.with(MonetaryUtil.permil(25,
 				MathContext.DECIMAL64));
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(
 								new BigDecimal("2.5")).create(),
 				r);
@@ -114,13 +114,13 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testPercentBigDecimal() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(100L).create();
 		MonetaryAmount r = m.with(MonetaryUtil.percent(BigDecimal
 				.valueOf(25)));
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(
 								new BigDecimal("25")).create(),
 				r);
@@ -133,12 +133,12 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testPercentNumber() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(100).create();
 		MonetaryAmount r = m.with(MonetaryUtil.percent((long) 25));
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(
 								new BigDecimal("25")).create(),
 				r);
@@ -173,13 +173,13 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testMinorPart() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(new BigDecimal(
 						"1234.56789")).create();
 		MonetaryAmount r = m.with(MonetaryUtil.minorPart());
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF")
+				Monetary.getDefaultAmountFactory().setCurrency("CHF")
 						.setNumber(
 								new BigDecimal("0.56789")).create(),
 				r);
@@ -191,13 +191,13 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testMajorPart() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(new BigDecimal(
 						"1234.56789")).create();
 		MonetaryAmount r = m.with(MonetaryUtil.majorPart());
 		assertEquals(
-				MonetaryAmounts.getDefaultAmountFactory().setCurrency(
+				Monetary.getDefaultAmountFactory().setCurrency(
 						"CHF").setNumber(new BigDecimal("1234")).create(),
 				r);
 	}
@@ -208,7 +208,7 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testMinorUnits() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency(
 						"CHF").setNumber(new BigDecimal(
 						"1234.56789")).create();
@@ -222,7 +222,7 @@ public class MonetaryUtilTest {
 	 */
 	@Test
 	public void testMajorUnits() {
-		MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory()
+		MonetaryAmount m = Monetary.getDefaultAmountFactory()
 				.setCurrency("CHF").setNumber(new BigDecimal(
 						"1234.56789")).create();
 		Long units = m.query(MonetaryUtil.majorUnits());

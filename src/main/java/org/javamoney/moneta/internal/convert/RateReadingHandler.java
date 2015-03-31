@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
@@ -62,7 +62,7 @@ class RateReadingHandler extends DefaultHandler {
                 this.localDate = LocalDate.parse(attributes.getValue("time")).atStartOfDay().toLocalDate();
             } else if (Objects.nonNull(attributes.getValue("currency"))) {
                 // read data <Cube currency="USD" rate="1.3349"/>
-                CurrencyUnit tgtCurrency = MonetaryCurrencies
+                CurrencyUnit tgtCurrency = Monetary
                         .getCurrency(attributes.getValue("currency"));
                 addRate(tgtCurrency, this.localDate, BigDecimal.valueOf(Double
                         .parseDouble(attributes.getValue("rate"))));

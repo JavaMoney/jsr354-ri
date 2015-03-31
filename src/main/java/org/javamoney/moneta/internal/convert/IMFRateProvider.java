@@ -38,7 +38,7 @@ import java.util.logging.Level;
 
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ConversionQuery;
@@ -89,26 +89,26 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
     static {
         for (Currency currency : Currency.getAvailableCurrencies()) {
             currenciesByName.put(currency.getDisplayName(Locale.ENGLISH),
-                    MonetaryCurrencies.getCurrency(currency.getCurrencyCode()));
+                    Monetary.getCurrency(currency.getCurrencyCode()));
         }
         // Additional IMF differing codes:
         // This mapping is required to fix data issues in the input stream, it has nothing to do with i18n
-        currenciesByName.put("U.K. Pound Sterling", MonetaryCurrencies.getCurrency("GBP"));
-        currenciesByName.put("U.S. Dollar", MonetaryCurrencies.getCurrency("USD"));
-        currenciesByName.put("Bahrain Dinar", MonetaryCurrencies.getCurrency("BHD"));
-        currenciesByName.put("Botswana Pula", MonetaryCurrencies.getCurrency("BWP"));
-        currenciesByName.put("Czech Koruna", MonetaryCurrencies.getCurrency("CZK"));
-        currenciesByName.put("Icelandic Krona", MonetaryCurrencies.getCurrency("ISK"));
-        currenciesByName.put("Korean Won", MonetaryCurrencies.getCurrency("KRW"));
-        currenciesByName.put("Rial Omani", MonetaryCurrencies.getCurrency("OMR"));
-        currenciesByName.put("Nuevo Sol", MonetaryCurrencies.getCurrency("PEN"));
-        currenciesByName.put("Qatar Riyal", MonetaryCurrencies.getCurrency("QAR"));
-        currenciesByName.put("Saudi Arabian Riyal", MonetaryCurrencies.getCurrency("SAR"));
-        currenciesByName.put("Sri Lanka Rupee", MonetaryCurrencies.getCurrency("LKR"));
-        currenciesByName.put("Trinidad And Tobago Dollar", MonetaryCurrencies.getCurrency("TTD"));
-        currenciesByName.put("U.A.E. Dirham", MonetaryCurrencies.getCurrency("AED"));
-        currenciesByName.put("Peso Uruguayo", MonetaryCurrencies.getCurrency("UYU"));
-        currenciesByName.put("Bolivar Fuerte", MonetaryCurrencies.getCurrency("VEF"));
+        currenciesByName.put("U.K. Pound Sterling", Monetary.getCurrency("GBP"));
+        currenciesByName.put("U.S. Dollar", Monetary.getCurrency("USD"));
+        currenciesByName.put("Bahrain Dinar", Monetary.getCurrency("BHD"));
+        currenciesByName.put("Botswana Pula", Monetary.getCurrency("BWP"));
+        currenciesByName.put("Czech Koruna", Monetary.getCurrency("CZK"));
+        currenciesByName.put("Icelandic Krona", Monetary.getCurrency("ISK"));
+        currenciesByName.put("Korean Won", Monetary.getCurrency("KRW"));
+        currenciesByName.put("Rial Omani", Monetary.getCurrency("OMR"));
+        currenciesByName.put("Nuevo Sol", Monetary.getCurrency("PEN"));
+        currenciesByName.put("Qatar Riyal", Monetary.getCurrency("QAR"));
+        currenciesByName.put("Saudi Arabian Riyal", Monetary.getCurrency("SAR"));
+        currenciesByName.put("Sri Lanka Rupee", Monetary.getCurrency("LKR"));
+        currenciesByName.put("Trinidad And Tobago Dollar", Monetary.getCurrency("TTD"));
+        currenciesByName.put("U.A.E. Dirham", Monetary.getCurrency("AED"));
+        currenciesByName.put("Peso Uruguayo", Monetary.getCurrency("UYU"));
+        currenciesByName.put("Bolivar Fuerte", Monetary.getCurrency("VEF"));
     }
 
     public IMFRateProvider() throws MalformedURLException {

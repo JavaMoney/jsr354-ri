@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
@@ -61,7 +61,7 @@ class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
     private ParserMonetaryAmount parserMonetaryAmount(CharSequence text) {
         String[] array = Objects.requireNonNull(text).toString().split(" ");
-        CurrencyUnit currencyUnit = MonetaryCurrencies.getCurrency(array[0]);
+        CurrencyUnit currencyUnit = Monetary.getCurrency(array[0]);
         BigDecimal number = new BigDecimal(array[1]);
         return new ParserMonetaryAmount(currencyUnit, number);
     }

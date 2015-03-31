@@ -33,10 +33,10 @@ import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmounts;
+import javax.money.Monetary;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContextBuilder;
-import javax.money.MonetaryCurrencies;
+import javax.money.Monetary;
 import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
@@ -51,9 +51,9 @@ public class MoneyTest {
     // TODO break this down into smaller test classes, 1.5k LOC seems a bit large;-)
 
     private static final BigDecimal TEN = new BigDecimal(10.0d);
-    protected static final CurrencyUnit EURO = MonetaryCurrencies.getCurrency("EUR");
-    protected static final CurrencyUnit DOLLAR = MonetaryCurrencies.getCurrency("USD");
-    protected static final CurrencyUnit BRAZILIAN_REAL = MonetaryCurrencies.getCurrency("BRL");
+    protected static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
+    protected static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
+    protected static final CurrencyUnit BRAZILIAN_REAL = Monetary.getCurrency("BRL");
 
     /**
      * Test method for
@@ -61,13 +61,13 @@ public class MoneyTest {
      */
     @Test
     public void testOfCurrencyUnitBigDecimal() {
-        Money m = Money.of(TEN, MonetaryCurrencies.getCurrency("EUR"));
+        Money m = Money.of(TEN, Monetary.getCurrency("EUR"));
         assertEquals(TEN, m.getNumber().numberValue(BigDecimal.class));
     }
 
     @Test
     public void testOfCurrencyUnitDouble() {
-        Money m = Money.of(10.0d, MonetaryCurrencies.getCurrency("EUR"));
+        Money m = Money.of(10.0d, Monetary.getCurrency("EUR"));
         assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
     }
 
@@ -410,7 +410,7 @@ public class MoneyTest {
      */
     @Test
     public void testEqualsMonetaryAmount() {
-        MonetaryAmount m = MonetaryAmounts.getDefaultAmountFactory().setCurrency("CHF").setNumber(100).create();
+        MonetaryAmount m = Monetary.getDefaultAmountFactory().setCurrency("CHF").setNumber(100).create();
         MonetaryAmount m2 = Money.of(100, "CHF");
         Money m3 = Money.of(100, "CHF");
         assertTrue(m.equals(m2));
@@ -796,14 +796,14 @@ public class MoneyTest {
                 Money.of(-23123213.435, "USS"), Money.of(-23123213, "USN"), Money.of(0, "GBP")};
         Money s = Money.of(10, "XXX");
         MonetaryAmount[] moneys2 = new MonetaryAmount[]{
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).setNumber(100).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USD")).setNumber(34242344).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("EUR"))
+                s.getFactory().setCurrency(Monetary.getCurrency("CHF")).setNumber(100).create(),
+                s.getFactory().setCurrency(Monetary.getCurrency("USD")).setNumber(34242344).create(),
+                s.getFactory().setCurrency(Monetary.getCurrency("EUR"))
                         .setNumber(new BigDecimal("23123213.435")).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USS"))
+                s.getFactory().setCurrency(Monetary.getCurrency("USS"))
                         .setNumber(new BigDecimal("-23123213.435")).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("USN")).setNumber(-23123213).create(),
-                s.getFactory().setCurrency(MonetaryCurrencies.getCurrency("GBP")).setNumber(0).create()};
+                s.getFactory().setCurrency(Monetary.getCurrency("USN")).setNumber(-23123213).create(),
+                s.getFactory().setCurrency(Monetary.getCurrency("GBP")).setNumber(0).create()};
         for (int i = 0; i < moneys.length; i++) {
             assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
@@ -1099,11 +1099,11 @@ public class MoneyTest {
         assertNotSame(m, a);
         assertEquals(m.getCurrency(), a.getCurrency());
         assertEquals(Money.of(-100, m.getCurrency()), a);
-        adj = amount -> amount.multiply(2).getFactory().setCurrency(MonetaryCurrencies.getCurrency("CHF")).create();
+        adj = amount -> amount.multiply(2).getFactory().setCurrency(Monetary.getCurrency("CHF")).create();
         a = m.with(adj);
         assertNotNull(a);
         assertNotSame(m, a);
-        assertEquals(MonetaryCurrencies.getCurrency("CHF"), a.getCurrency());
+        assertEquals(Monetary.getCurrency("CHF"), a.getCurrency());
         assertEquals(Money.of(1.23455645d * 2, a.getCurrency()), a);
     }
 

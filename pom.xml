@@ -146,8 +146,8 @@
     </developers>
 
     <ciManagement>
-        <system>Jenkins</system>
-        <url>https://jsr354.ci.cloudbees.com/</url>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
     </ciManagement>
 
     <mailingLists>
