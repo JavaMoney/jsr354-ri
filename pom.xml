@@ -19,11 +19,11 @@
     <parent>
         <groupId>org.javamoney</groupId>
         <artifactId>javamoney-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
 
     <artifactId>moneta</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>Moneta (JSR 354 RI)</name>
@@ -61,89 +61,6 @@
         <testng.version>6.8.5</testng.version>
         <additionalparam>-Xdoclint:none</additionalparam>
     </properties>
-
-    <developers>
-        <developer>
-            <id>atsticks</id>
-            <name>Anatole Tresch</name>
-            <organization>Credit Suisse</organization>
-            <roles>
-                <role>Specification Lead</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>keilw</id>
-            <name>Werner Keil</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>tom-huesler</id>
-            <name>Thomas Hüsler</name>
-            <organization>Espalier Technologies</organization>
-            <timezone>GMT+1</timezone>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>jodastephen</id>
-            <name>Stephen Colebourne</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>chrisphe</id>
-            <name>Christopher Pheby</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>jeffprestes</id>
-            <name>Jefferson Prestes</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>jezdavies</id>
-            <name>Jeremy Davies</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>-</id>
-            <name>Benjamin Cotton</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>-</id>
-            <name>Simon Martinelli</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>-</id>
-            <name>Greg Bakos</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>-</id>
-            <name>Tony Jewell</name>
-            <roles>
-                <role>Expert Group Member</role>
-            </roles>
-        </developer>
-    </developers>
 
     <ciManagement>
         <system>Travis CI</system>
