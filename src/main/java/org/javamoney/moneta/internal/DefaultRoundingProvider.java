@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -31,7 +31,7 @@ import java.util.*;
 public class DefaultRoundingProvider implements RoundingProviderSpi {
 
     public static final String DEFAULT_ROUNDING_ID = "default";
-    private Set<String> roundingsIds = new HashSet<>();
+    private final Set<String> roundingsIds = new HashSet<>();
 
     public DefaultRoundingProvider() {
         roundingsIds.add(DEFAULT_ROUNDING_ID);
