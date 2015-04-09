@@ -30,12 +30,12 @@ import java.util.*;
  */
 public class DefaultRoundingProvider implements RoundingProviderSpi {
 
-    private static final String DEFAULT_ROUNDING_ID = "default";
-    private Set<String> roundingsIds = new HashSet<>();
+    private static final String DEFAULT_ROUNDING_NAME = "default";
+    private Set<String> roundingsNames = new HashSet<>();
 
     public DefaultRoundingProvider() {
-        roundingsIds.add(DEFAULT_ROUNDING_ID);
-        roundingsIds = Collections.unmodifiableSet(roundingsIds);
+        roundingsNames.add(DEFAULT_ROUNDING_NAME);
+        roundingsNames = Collections.unmodifiableSet(roundingsNames);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
             return new DefaultRounding(scale, mc.getRoundingMode());
         } else if (roundingMode != null) {
             return new DefaultRounding(scale, roundingMode);
-        } else if (roundingQuery.getRoundingName() != null && DEFAULT_ROUNDING_ID.equals(roundingQuery.getRoundingName())) {
+        } else if (roundingQuery.getRoundingName() != null && DEFAULT_ROUNDING_NAME.equals(roundingQuery.getRoundingName())) {
             return Monetary.getDefaultRounding();
         }
         return null;
@@ -86,7 +86,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
 
     @Override
     public Set<String> getRoundingNames() {
-        return roundingsIds;
+        return roundingsNames;
     }
 
 }
