@@ -289,7 +289,7 @@ As defined by the JSR's API you can access according +MonetaryAmountFactory+ for
 new instances of amounts. E.g. instances of +FastMoney+ can be created as follows:
 
 [source,java]
-.Creating instances of +FastMoney+ using the +MonetaryAmounts+ singleton:
+.Creating instances of +FastMoney+ using the +Monetary+ singleton:
 --------------------------------------------
 FastMoney m = Monetary.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
 --------------------------------------------
@@ -297,9 +297,9 @@ FastMoney m = Monetary.getAmountFactory(FastMoney.class).setCurrency("USD").setN
 Additionally _Moneta_ also supports static factory methods on the types directly. So the following code is equivalent:
 
 [source,java]
-.Creating instances of +FastMoney+ using the +MonetaryAmounts+ singleton:
+.Creating instances of +FastMoney+ using the static factory method:
 --------------------------------------------
-FastMoney m = FastMoney.of(200.20, "USD");
+FastMoney m = FastMoney.of("USD", 200.20);
 --------------------------------------------
 
 Creation of +Money+ instances is similar:
@@ -308,7 +308,7 @@ Creation of +Money+ instances is similar:
 .Creating instances of +Money+:
 --------------------------------------------
 Money m1 = Monetary.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
-Money m2 = Money.of(200.20, "USD");
+Money m2 = Money.of("USD", 200.20);
 --------------------------------------------
 
 ===== Configuring Instances of Money
