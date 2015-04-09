@@ -134,15 +134,23 @@
 
     <profiles>
         <profile>
-            <id>release-createDocs</id>
+            <id>travis</id>
             <activation>
                 <property>
-                    <name>createDocs</name>
+                    <name>env.TRAVIS</name>
                     <value>true</value>
                 </property>
             </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
