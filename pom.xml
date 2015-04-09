@@ -102,13 +102,13 @@
 
     <distributionManagement>
         <repository>
-            <id>bintray</id>
-            <name>oss-jfrog-artifactory-snapshots</name>
+            <id>bintray-release</id>
+            <name>oss-jfrog-artifactory-release</name>
             <url>https://oss.jfrog.org/artifactory/oss-release-local</url>
         </repository>
         <snapshotRepository>
-            <id>bintray</id>
-            <name>oss-jfrog-artifactory-snapshots</name>
+            <id>bintray-snapshot</id>
+            <name>oss-jfrog-artifactory-snapshot</name>
             <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
         </snapshotRepository>
     </distributionManagement>
@@ -118,13 +118,15 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>central</id>
+            <id>bintray-release</id>
             <name>libs-release</name>
             <url>http://oss.jfrog.org/artifactory/libs-release</url>
         </repository>
         <repository>
-            <snapshots />
-            <id>snapshots</id>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>bintray-snapshot</id>
             <name>libs-snapshot</name>
             <url>http://oss.jfrog.org/artifactory/libs-snapshot</url>
         </repository>
