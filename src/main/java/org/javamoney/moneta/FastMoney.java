@@ -39,8 +39,8 @@ import java.util.logging.Logger;
  * different results:
  * </p>
  * <pre><code>
- * Money money1 = money1.add(Money.of("EUR", 1234567.3444));
- * money1 = money1.subtract(Money.of("EUR", 232323));
+ * Money money1 = money1.add(Money.of(1234567.3444, "EUR"));
+ * money1 = money1.subtract(Money.of(232323, "EUR"));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </code></pre>
@@ -51,8 +51,8 @@ import java.util.logging.Logger;
  * whereas
  * </p>
  * <pre><code>
- * FastMoney money1 = money1.add(FastMoney.of("EUR", 1234567.3444));
- * money1 = money1.subtract(FastMoney.of("EUR", 232323));
+ * FastMoney money1 = money1.add(FastMoney.of(1234567.3444, "EUR"));
+ * money1 = money1.subtract(FastMoney.of(232323, "EUR"));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </code></pre>
@@ -64,8 +64,8 @@ import java.util.logging.Logger;
  * code above with the following: *
  * </p>
  * <pre><code>
- * FastMoney money1 = money1.add(Money.of("EUR", 1234567.3444));
- * money1 = money1.subtract(FastMoney.of("EUR", 232323));
+ * FastMoney money1 = money1.add(Money.of(1234567.3444, "EUR"));
+ * money1 = money1.subtract(FastMoney.of(232323, "EUR"));
  * money1 = money1.multiply(3.4);
  * money1 = money1.divide(5.456);
  * </code></pre>
@@ -78,7 +78,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 0.5.2
+ * @version 1.0
  */
 public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 

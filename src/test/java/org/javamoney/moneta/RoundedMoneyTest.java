@@ -971,7 +971,7 @@ public class RoundedMoneyTest {
     // */
     // @Test
     // public void testGetAmountWhole() {
-    // assertEquals(1, RoundedMoney.of("XXX", 1.23455645d).getAmountWhole());
+    // assertEquals(1, RoundedMoney.of(1.23455645d).getAmountWhole(), "XXX");
     // assertEquals(1, RoundedMoney.of( 1).getAmountWhole());
     // assertEquals(11, RoundedMoney.of( 11.0d).getAmountWhole());
     // assertEquals(1234, RoundedMoney.of( 1234.1d).getAmountWhole());
@@ -984,7 +984,7 @@ public class RoundedMoneyTest {
     // */
     // @Test
     // public void testGetAmountFractionNumerator() {
-    // assertEquals(0, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
+    // assertEquals(0, RoundedMoney.of(new BigDecimal("1.23455645"), "XXX")
     // .getAmountFractionNumerator());
     // assertEquals(0, RoundedMoney.of( 1).getAmountFractionNumerator());
     // assertEquals(0, RoundedMoney.of( new BigDecimal("11.0"))
@@ -1002,7 +1002,7 @@ public class RoundedMoneyTest {
     // */
     // @Test
     // public void testGetAmountFractionDenominator() {
-    // assertEquals(1, RoundedMoney.of("XXX", new BigDecimal("1.23455645"))
+    // assertEquals(1, RoundedMoney.of(new BigDecimal("1.23455645"), "XXX")
     // .getAmountFractionDenominator());
     // assertEquals(100, RoundedMoney.of( 1)
     // .getAmountFractionDenominator());
