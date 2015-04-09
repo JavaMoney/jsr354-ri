@@ -36,7 +36,6 @@ import javax.money.MonetaryAmount;
 import javax.money.Monetary;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContextBuilder;
-import javax.money.Monetary;
 import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;

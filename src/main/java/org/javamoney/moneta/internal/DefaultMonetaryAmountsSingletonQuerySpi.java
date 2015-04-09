@@ -112,20 +112,20 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
         return factories;
     }
 
-    private boolean isPrecisionOK(MonetaryAmountFactoryQuery requiredContext, MonetaryContext maximalMonetaryContext){
-        if(maximalMonetaryContext.getPrecision() == 0){
+    private boolean isPrecisionOK(MonetaryAmountFactoryQuery requiredContext, MonetaryContext maxMonetaryContext){
+        if(maxMonetaryContext.getPrecision() == 0){
             return true;
         }
         if(requiredContext.getPrecision() != null){
             if(requiredContext.getPrecision() == 0){
                 return false;
             }
-            if(requiredContext.getPrecision() > maximalMonetaryContext.getPrecision()){
+            if(requiredContext.getPrecision() > maxMonetaryContext.getPrecision()){
                 return false;
             }
         }
         return null == requiredContext.getMaxScale() ||
-                requiredContext.getMaxScale() <= maximalMonetaryContext.getMaxScale();
+                requiredContext.getMaxScale() <= maxMonetaryContext.getMaxScale();
     }
 
 }

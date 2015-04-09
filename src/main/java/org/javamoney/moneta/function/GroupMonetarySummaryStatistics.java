@@ -26,7 +26,7 @@ import javax.money.MonetaryAmount;
  */
 public class GroupMonetarySummaryStatistics {
 
-	private Map<CurrencyUnit, MonetarySummaryStatistics> groupSummary = new MonetarySummaryMap();
+	private final Map<CurrencyUnit, MonetarySummaryStatistics> groupSummary = new MonetarySummaryMap();
 
     GroupMonetarySummaryStatistics() {
 

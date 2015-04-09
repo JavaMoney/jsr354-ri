@@ -91,7 +91,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /**
      * The numeric part of this amount.
      */
-    private BigDecimal number;
+    private final BigDecimal number;
 
     /**
      * Creates a new instance os {@link Money}.
@@ -517,12 +517,12 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
      */
     @Override
-    public Money subtract(MonetaryAmount subtrahend) {
-        MoneyUtils.checkAmountParameter(subtrahend, this.currency);
-        if (subtrahend.isZero()) {
+    public Money subtract(MonetaryAmount amount) {
+        MoneyUtils.checkAmountParameter(amount, this.currency);
+        if (amount.isZero()) {
             return this;
         }
-        return new Money(this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class)), getCurrency());
+        return new Money(this.number.subtract(amount.getNumber().numberValue(BigDecimal.class)), getCurrency());
     }
 
     /*
@@ -558,8 +558,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
      */
     @Override
-    public Money scaleByPowerOfTen(int n) {
-        return new Money(this.number.scaleByPowerOfTen(n), getCurrency());
+    public Money scaleByPowerOfTen(int power) {
+        return new Money(this.number.scaleByPowerOfTen(power), getCurrency());
     }
 
     /*
@@ -834,7 +834,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         return from(formatter.parse(text));
     }
 
-    private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
+    private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
             .of(ToStringMonetaryAmountFormatStyle.MONEY);
 
     public static void checkNoInfinityOrNaN(Number number) {

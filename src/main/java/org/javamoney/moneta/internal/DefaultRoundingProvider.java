@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class DefaultRoundingProvider implements RoundingProviderSpi {
 
-    public static final String DEFAULT_ROUNDING_ID = "default";
+    private static final String DEFAULT_ROUNDING_ID = "default";
     private Set<String> roundingsIds = new HashSet<>();
 
     public DefaultRoundingProvider() {
@@ -59,7 +59,7 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
                 roundingMode = RoundingMode.HALF_EVEN;
             }
             if (Boolean.TRUE.equals(roundingQuery.getBoolean("cashRounding"))) {
-                if (currency.getCurrencyCode().equals("CHF")) {
+                if ("CHF".equals(currency.getCurrencyCode())) {
                     return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
                 } else {
                     return new DefaultCashRounding(currency, 1);

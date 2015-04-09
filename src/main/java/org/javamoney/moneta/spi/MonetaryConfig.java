@@ -38,8 +38,8 @@ public final class MonetaryConfig {
 
     private static final MonetaryConfig INSTANCE = new MonetaryConfig();
 
-    private Map<String, String> config = new HashMap<>();
-    private Map<String, Integer> priorities = new HashMap<>();
+    private final Map<String, String> config = new HashMap<>();
+    private final Map<String, Integer> priorities = new HashMap<>();
 
     private MonetaryConfig() {
         try {

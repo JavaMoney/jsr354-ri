@@ -35,9 +35,9 @@ class LoaderConfigurator {
 
     private static final Logger LOG = Logger.getLogger(LoaderConfigurator.class.getName());
 
-    private LoaderService loaderService;
+    private final LoaderService loaderService;
 
-    public LoaderConfigurator(LoaderService loaderService) {
+    LoaderConfigurator(LoaderService loaderService) {
         Objects.requireNonNull(loaderService);
         this.loaderService = loaderService;
     }

@@ -73,7 +73,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     /**
      * The rounding to be done.
      */
-    private MonetaryOperator rounding;
+    private final MonetaryOperator rounding;
 
 
     /**
@@ -119,15 +119,18 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
                         this.rounding = Monetary
                                 .getRounding(RoundingQueryBuilder.of().setScale(scale).set(rm).build());
                     }
+                    else{
+                        this.rounding = Monetary.getDefaultRounding();
+                    }
                 } else {
                     b.set(mc.getRoundingMode());
                     b.set("scale", 2);
                     this.rounding =
                             Monetary.getRounding(RoundingQueryBuilder.of().set(mc).setScale(2).build());
                 }
-                if (this.rounding == null) {
-                    this.rounding = Monetary.getDefaultRounding();
-                }
+            }
+            else{
+                this.rounding = Monetary.getDefaultRounding();
             }
         }
         b.set("MonetaryRounding", this.rounding);
@@ -401,12 +404,12 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
      */
     @Override
-    public RoundedMoney subtract(MonetaryAmount subtrahend) {
-        MoneyUtils.checkAmountParameter(subtrahend, this.currency);
-        if (subtrahend.isZero()) {
+    public RoundedMoney subtract(MonetaryAmount amount) {
+        MoneyUtils.checkAmountParameter(amount, this.currency);
+        if (amount.isZero()) {
             return this;
         }
-        return new RoundedMoney(this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class),
+        return new RoundedMoney(this.number.subtract(amount.getNumber().numberValue(BigDecimal.class),
                 Optional.ofNullable(
                         this.monetaryContext.get(MathContext.class)).orElse(MathContext.DECIMAL64)),
                 this.currency, this.rounding);
@@ -446,8 +449,8 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
      */
     @Override
-    public RoundedMoney scaleByPowerOfTen(int n) {
-        return new RoundedMoney(this.number.scaleByPowerOfTen(n), this.currency, this.rounding);
+    public RoundedMoney scaleByPowerOfTen(int power) {
+        return new RoundedMoney(this.number.scaleByPowerOfTen(power), this.currency, this.rounding);
     }
 
     /*
@@ -669,7 +672,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         return from(formatter.parse(text));
     }
 
-    private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
+    private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
             .of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
 
     /*
@@ -815,66 +818,66 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     }
 
     @Override
-    public RoundedMoney multiply(long amount) {
-        if (amount == 1L) {
+    public RoundedMoney multiply(long multiplicand) {
+        if (multiplicand == 1L) {
             return this;
         }
-        return multiply(MoneyUtils.getBigDecimal(amount));
+        return multiply(MoneyUtils.getBigDecimal(multiplicand));
     }
 
     @Override
-    public RoundedMoney multiply(double amount) {
-        Money.checkNoInfinityOrNaN(amount);
-        if (amount == 1.0d) {
+    public RoundedMoney multiply(double multiplicand) {
+        Money.checkNoInfinityOrNaN(multiplicand);
+        if (multiplicand == 1.0d) {
             return this;
         }
-        return multiply(MoneyUtils.getBigDecimal(amount));
+        return multiply(MoneyUtils.getBigDecimal(multiplicand));
     }
 
     @Override
-    public RoundedMoney divide(long amount) {
-        if (amount == 1L) {
+    public RoundedMoney divide(long divisor) {
+        if (divisor == 1L) {
             return this;
         }
-        return divide(MoneyUtils.getBigDecimal(amount));
+        return divide(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public RoundedMoney divide(double amount) {
-        if (Money.isInfinityAndNotNaN(amount)) {
+    public RoundedMoney divide(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
             return new RoundedMoney(0L, getCurrency(), this.monetaryContext, this.rounding);
         }
-        if (amount == 1.0d) {
+        if (divisor == 1.0d) {
             return this;
         }
-        return divide(MoneyUtils.getBigDecimal(amount));
+        return divide(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public RoundedMoney remainder(long amount) {
-        return remainder(MoneyUtils.getBigDecimal(amount));
+    public RoundedMoney remainder(long divisor) {
+        return remainder(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public RoundedMoney remainder(double amount) {
-        if (Money.isInfinityAndNotNaN(amount)) {
+    public RoundedMoney remainder(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
             return new RoundedMoney(0L, getCurrency(), this.monetaryContext, this.rounding);
         }
-        return remainder(MoneyUtils.getBigDecimal(amount));
+        return remainder(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public RoundedMoney[] divideAndRemainder(long amount) {
-        return divideAndRemainder(MoneyUtils.getBigDecimal(amount));
+    public RoundedMoney[] divideAndRemainder(long divisor) {
+        return divideAndRemainder(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override
-    public RoundedMoney[] divideAndRemainder(double amount) {
-        if (Money.isInfinityAndNotNaN(amount)) {
+    public RoundedMoney[] divideAndRemainder(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
             RoundedMoney zero = new RoundedMoney(0L, getCurrency(), this.monetaryContext, this.rounding);
             return new RoundedMoney[]{zero, zero};
         }
-        return divideAndRemainder(MoneyUtils.getBigDecimal(amount));
+        return divideAndRemainder(MoneyUtils.getBigDecimal(divisor));
     }
 
     @Override

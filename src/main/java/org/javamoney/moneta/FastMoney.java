@@ -443,8 +443,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @see javax.money.MonetaryAmount#scaleByPowerOfTen(int)
      */
     @Override
-    public FastMoney scaleByPowerOfTen(int n) {
-        return new FastMoney(getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(n), getCurrency(), true);
+    public FastMoney scaleByPowerOfTen(int power) {
+        return new FastMoney(getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(power), getCurrency(), true);
     }
 
     /*
@@ -648,7 +648,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @throws NullPointerException          If the number is null
      * @throws java.lang.ArithmeticException If the number exceeds the capabilities of this class.
      */
-    protected void checkNumber(Number number) {
+    private void checkNumber(Number number) {
         Objects.requireNonNull(number, "Number is required.");
         // numeric check for overflow...
         if (number.longValue() > MAX_BD.longValue()) {
@@ -731,7 +731,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return from(formatter.parse(text));
     }
 
-    private static ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
+    private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
             .of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
 
     private BigDecimal getBigDecimal() {
@@ -739,63 +739,63 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
     @Override
-    public FastMoney multiply(double amount) {
-        Money.checkNoInfinityOrNaN(amount);
-        if (amount == 1.0) {
+    public FastMoney multiply(double multiplicand) {
+        Money.checkNoInfinityOrNaN(multiplicand);
+        if (multiplicand == 1.0) {
             return this;
         }
-        if (amount == 0.0) {
+        if (multiplicand == 0.0) {
             return new FastMoney(0, this.currency);
         }
-        return new FastMoney(Math.round(this.number * amount), this.currency);
+        return new FastMoney(Math.round(this.number * multiplicand), this.currency);
     }
 
     @Override
-    public FastMoney divide(long amount) {
-        if (amount == 1L) {
+    public FastMoney divide(long divisor) {
+        if (divisor == 1L) {
             return this;
         }
-        return new FastMoney(this.number / amount, this.currency);
+        return new FastMoney(this.number / divisor, this.currency);
     }
 
     @Override
-    public FastMoney divide(double number) {
-        if (Money.isInfinityAndNotNaN(number)) {
+    public FastMoney divide(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
             return new FastMoney(0L, getCurrency());
         }
-        if (number == 1.0d) {
+        if (divisor == 1.0d) {
             return this;
         }
-        return new FastMoney(Math.round(this.number / number), getCurrency());
+        return new FastMoney(Math.round(this.number / divisor), getCurrency());
     }
 
     @Override
-    public FastMoney remainder(long number) {
-        return remainder(BigDecimal.valueOf(number));
+    public FastMoney remainder(long divisor) {
+        return remainder(BigDecimal.valueOf(divisor));
     }
 
     @Override
-    public FastMoney remainder(double amount) {
-        if (Money.isInfinityAndNotNaN(amount)) {
+    public FastMoney remainder(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
             return new FastMoney(0L, getCurrency());
         }
-        return remainder(new BigDecimal(String.valueOf(amount)));
+        return remainder(new BigDecimal(String.valueOf(divisor)));
     }
 
     @Override
-    public FastMoney[] divideAndRemainder(long amount) {
-        return divideAndRemainder(BigDecimal.valueOf(amount));
+    public FastMoney[] divideAndRemainder(long divisor) {
+        return divideAndRemainder(BigDecimal.valueOf(divisor));
     }
 
     @Override
-    public FastMoney[] divideAndRemainder(double amount) {
-        if (Money.isInfinityAndNotNaN(amount)) {
+    public FastMoney[] divideAndRemainder(double divisor) {
+        if (Money.isInfinityAndNotNaN(divisor)) {
             FastMoney zero = new FastMoney(0L, getCurrency());
             return new FastMoney[]{zero, zero};
-        } else if (amount == Double.NaN) {
+        } else if (divisor == Double.NaN) {
             throw new ArithmeticException("Not a number: NaN.");
         }
-        return divideAndRemainder(new BigDecimal(String.valueOf(amount)));
+        return divideAndRemainder(new BigDecimal(String.valueOf(divisor)));
     }
 
     @Override

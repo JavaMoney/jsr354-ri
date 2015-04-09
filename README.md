@@ -1,7 +1,8 @@
-JSR 354: Money and Currency Reference Implementation
-====================================================
+JSR 354: Money and Currency Moneta Reference Implementation
+===========================================================
 JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
-This module implements JSR 354 Money & Currency. Hereby basic implementations of amounts, currency and roundings are provided.
+This module (moneta) implements JSR 354 Money & Currency. Hereby basic implementations of amounts, currency and roundings 
+are provided.
 
 See the JCP detail page:
 http://jcp.org/en/jsr/detail?id=354

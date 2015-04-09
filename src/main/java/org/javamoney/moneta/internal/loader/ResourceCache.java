@@ -35,7 +35,7 @@ public interface ResourceCache {
      * @throws IOException
      *             when an IO error occurs.
      */
-    void write(String resourceId, byte[] data);
+    void write(String resourceId, byte[] data)throws IOException;
 
     /**
      * Allows to query if a resource with the given id is present within the

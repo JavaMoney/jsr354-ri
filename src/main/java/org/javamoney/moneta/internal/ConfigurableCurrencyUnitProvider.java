@@ -31,11 +31,11 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
     /**
      * The currency units, identified by currency code.
      */
-    private static Map<String, CurrencyUnit> currencyUnits = new ConcurrentHashMap<>();
+    private static final Map<String, CurrencyUnit> CURRENCY_UNITS = new ConcurrentHashMap<>();
     /**
      * The currency units identified by Locale.
      */
-    private static Map<Locale, CurrencyUnit> currencyUnitsByLocale = new ConcurrentHashMap<>();
+    private static final Map<Locale, CurrencyUnit> CURRENCY_UNITS_BY_LOCALE = new ConcurrentHashMap<>();
 
 
     /**
@@ -47,13 +47,13 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      * is provided by this provider.
      */
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery currencyQuery) {
-        Set<CurrencyUnit> result = new HashSet<>(currencyUnits.size());
+        Set<CurrencyUnit> result = new HashSet<>(CURRENCY_UNITS.size());
         if (currencyQuery.get(LocalDateTime.class) != null || currencyQuery.get(LocalDate.class) != null) {
             return Collections.emptySet();
         }
         if (!currencyQuery.getCurrencyCodes().isEmpty()) {
             for (String code : currencyQuery.getCurrencyCodes()) {
-                CurrencyUnit cu = currencyUnits.get(code);
+                CurrencyUnit cu = CURRENCY_UNITS.get(code);
                 if (cu != null) {
                     result.add(cu);
                 }
@@ -62,14 +62,14 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
         }
         if (!currencyQuery.getCountries().isEmpty()) {
             for (Locale locale : currencyQuery.getCountries()) {
-                CurrencyUnit cu = currencyUnitsByLocale.get(locale);
+                CurrencyUnit cu = CURRENCY_UNITS_BY_LOCALE.get(locale);
                 if (cu != null) {
                     result.add(cu);
                 }
             }
             return result;
         }
-        result.addAll(currencyUnits.values());
+        result.addAll(CURRENCY_UNITS.values());
         return result;
     }
 
@@ -81,7 +81,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit) {
         Objects.requireNonNull(currencyUnit);
-        return ConfigurableCurrencyUnitProvider.currencyUnits.put(currencyUnit.getCurrencyCode(), currencyUnit);
+        return ConfigurableCurrencyUnitProvider.CURRENCY_UNITS.put(currencyUnit.getCurrencyCode(), currencyUnit);
     }
 
     /**
@@ -94,7 +94,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
     public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit, Locale locale) {
         Objects.requireNonNull(locale);
         Objects.requireNonNull(currencyUnit);
-        return ConfigurableCurrencyUnitProvider.currencyUnitsByLocale.put(locale, currencyUnit);
+        return ConfigurableCurrencyUnitProvider.CURRENCY_UNITS_BY_LOCALE.put(locale, currencyUnit);
     }
 
     /**
@@ -105,7 +105,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     public static CurrencyUnit removeCurrencyUnit(String currencyCode) {
         Objects.requireNonNull(currencyCode);
-        return ConfigurableCurrencyUnitProvider.currencyUnits.remove(currencyCode);
+        return ConfigurableCurrencyUnitProvider.CURRENCY_UNITS.remove(currencyCode);
     }
 
     /**
@@ -116,7 +116,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     public static CurrencyUnit removeCurrencyUnit(Locale locale) {
         Objects.requireNonNull(locale);
-        return ConfigurableCurrencyUnitProvider.currencyUnitsByLocale.remove(locale);
+        return ConfigurableCurrencyUnitProvider.CURRENCY_UNITS_BY_LOCALE.remove(locale);
     }
 
     /*
@@ -126,8 +126,8 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     @Override
     public String toString() {
-        return "ConfigurableCurrencyUnitProvider [currencyUnits=" + currencyUnits + ", currencyUnitsByLocale=" +
-                currencyUnitsByLocale + ']';
+        return "ConfigurableCurrencyUnitProvider [CURRENCY_UNITS=" + CURRENCY_UNITS + ", CURRENCY_UNITS_BY_LOCALE=" +
+                CURRENCY_UNITS_BY_LOCALE + ']';
     }
 
 }

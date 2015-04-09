@@ -46,7 +46,7 @@ public class IdentityRateProviderTest {
     private ExchangeRateProvider provider;
 
     @BeforeTest
-    public void setup() throws InterruptedException {
+    public void setup() {
         provider = getExchangeRateProvider(ExchangeRateType.IDENTITY);
     }
 

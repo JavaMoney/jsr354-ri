@@ -40,14 +40,14 @@ final class LiteralToken implements FormatToken, Serializable {
     /**
      * The literal part.
      */
-    private String token;
+    private final String token;
 
     /**
      * Creates a new {@link LiteralToken}.
      *
      * @param token The literal token part.
      */
-    public LiteralToken(String token) {
+    LiteralToken(String token) {
         this.token = Optional.ofNullable(token).orElseThrow(
                 () -> new IllegalArgumentException("Token is required."));
     }

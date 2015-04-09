@@ -101,12 +101,12 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable {
      * @see javax.money.MonetaryFunction#apply(java.lang.Object)
      */
     @Override
-    public MonetaryAmount apply(MonetaryAmount value) {
-        Objects.requireNonNull(value, "Amount required.");
+    public MonetaryAmount apply(MonetaryAmount amount) {
+        Objects.requireNonNull(amount, "Amount required.");
         // 1 extract BD value, round according the default fraction units
         int scale = this.context.getInt(SCALE_KEY);
         RoundingMode roundingMode = this.context.get(RoundingMode.class);
-        BigDecimal num = value.getNumber().numberValue(BigDecimal.class).setScale(scale, roundingMode);
+        BigDecimal num = amount.getNumber().numberValue(BigDecimal.class).setScale(scale, roundingMode);
         // 2 evaluate minor units and remainder
         long minors = num.movePointRight(num.scale()).longValueExact();
         int minimalMinors = this.context.getInt(MINMINORS_KEY);
@@ -128,7 +128,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable {
                     minors = low;
             }
         }
-        return value.getFactory().setCurrency(value.getCurrency())
+        return amount.getFactory().setCurrency(amount.getCurrency())
                 .setNumber(BigDecimal.valueOf(minors).movePointLeft(scale)).create();
     }
 

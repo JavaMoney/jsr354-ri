@@ -111,7 +111,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
     /**
      * The full chain, at least one instance long.
      */
-    private List<ExchangeRate> chain = new ArrayList<>();
+    private final List<ExchangeRate> chain = new ArrayList<>();
 
 
     /**
@@ -266,7 +266,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
         }
         if (obj instanceof DefaultExchangeRate) {
             DefaultExchangeRate other = (DefaultExchangeRate) obj;
-            return Objects.equals(base, other.base) && Objects.equals(chain, other.chain) &&
+            return Objects.equals(base, other.base) &&
                     Objects.equals(conversionContext, other.conversionContext) &&
                     Objects.equals(factor, other.factor) && Objects.equals(term, other.term);
         }

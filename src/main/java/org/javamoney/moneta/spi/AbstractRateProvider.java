@@ -34,12 +34,12 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
     /**
      * The logger used.
      */
-    protected final Logger LOGGER = Logger.getLogger(getClass().getName());
+    protected final Logger log = Logger.getLogger(getClass().getName());
 
     /**
      * The {@link ConversionContext} of this provider.
      */
-    private ProviderContext providerContext;
+    private final ProviderContext providerContext;
 
     /**
      * Constructor.

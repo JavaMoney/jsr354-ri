@@ -43,7 +43,7 @@ public class DefaultResourceCache implements ResourceCache {
     /**
      * Cached resources.
      */
-    private Map<String, File> cachedResources = new ConcurrentHashMap<>();
+    private final Map<String, File> cachedResources = new ConcurrentHashMap<>();
 
     /**
      * Constructor.

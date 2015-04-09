@@ -27,7 +27,10 @@ import org.javamoney.moneta.spi.MoneyUtils;
  */
 public final class MonetaryFunctions {
 
-
+    /**
+     * Private constructor for static accessor class.
+     */
+    private MonetaryFunctions(){}
     /**
      * Collector to group by CurrencyUnit
      * @return the Collector to of Map<CurrencyUnit, List<MonetaryAmount>>

@@ -56,7 +56,7 @@ public class ECBHistoricRateProvider extends AbstractECBRateProvider {
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
 
-    public ECBHistoricRateProvider() throws MalformedURLException {
+    public ECBHistoricRateProvider() {
         super(CONTEXT);
     }
 

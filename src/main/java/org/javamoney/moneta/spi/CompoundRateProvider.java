@@ -29,7 +29,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
      * Key used to store a list of child {@link javax.money.convert.ProviderContext} instances of the providers
      * contained within this instance.
      */
-    public static final String CHILD_PROVIDER_CONTEXTS_KEY = "childProviderContexts";
+    private static final String CHILD_PROVIDER_CONTEXTS_KEY = "childProviderContexts";
     /**
      * The {@link ExchangeRateProvider} instances.
      */

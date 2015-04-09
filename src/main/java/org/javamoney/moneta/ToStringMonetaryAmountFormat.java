@@ -17,9 +17,9 @@ import javax.money.format.MonetaryParseException;
  *
  * @author otaviojava
  */
-class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
+final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
-    private ToStringMonetaryAmountFormatStyle style;
+    private final ToStringMonetaryAmountFormatStyle style;
 
     private ToStringMonetaryAmountFormat(ToStringMonetaryAmountFormatStyle style) {
         this.style = Objects.requireNonNull(style);
@@ -67,13 +67,13 @@ class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     private class ParserMonetaryAmount {
-        public ParserMonetaryAmount(CurrencyUnit currencyUnit, BigDecimal number) {
+        ParserMonetaryAmount(CurrencyUnit currencyUnit, BigDecimal number) {
             this.currencyUnit = currencyUnit;
             this.number = number;
         }
 
-        private CurrencyUnit currencyUnit;
-        private BigDecimal number;
+        private final CurrencyUnit currencyUnit;
+        private final BigDecimal number;
     }
 
     /**

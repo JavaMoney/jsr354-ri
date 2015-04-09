@@ -26,7 +26,7 @@ import java.util.Objects;
  */
 final class MajorPart implements MonetaryOperator {
 
-    private static final MonetaryRounding downRounding =
+    private static final MonetaryRounding DOWN_ROUNDING =
             Monetary.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
 
     /**
@@ -52,7 +52,7 @@ final class MajorPart implements MonetaryOperator {
     @Override
     public MonetaryAmount apply(MonetaryAmount amount) {
         Objects.requireNonNull(amount, "Amount required.");
-        return amount.with(downRounding);
+        return amount.with(DOWN_ROUNDING);
     }
 
 }

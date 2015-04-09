@@ -47,9 +47,9 @@ public enum ExchangeRateType implements ExchangeRateProviderSupplier {
             "IDENT",
             "Exchange rate rate with factor one for identical base/term currencies");
 
-    private String type;
+    private final String type;
 
-    private String description;
+    private final String description;
 
     ExchangeRateType(String type, String description) {
         this.type = type;
@@ -61,7 +61,6 @@ public enum ExchangeRateType implements ExchangeRateProviderSupplier {
         return type;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }

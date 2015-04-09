@@ -34,9 +34,9 @@ import javax.money.convert.ExchangeRateProvider;
  */
 public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion implements CurrencyConversion {
 
-    private ExchangeRateProvider rateProvider;
+    private final ExchangeRateProvider rateProvider;
 
-    private ConversionQuery conversionQuery;
+    private final ConversionQuery conversionQuery;
 
     public LazyBoundCurrencyConversion(ConversionQuery conversionQuery, ExchangeRateProvider rateProvider,
                                        ConversionContext conversionContext) {

@@ -44,7 +44,7 @@ final class ParseContext {
     /**
      * The full input.
      */
-    private CharSequence originalInput;
+    private final CharSequence originalInput;
     /**
      * The currency parsed, used for creation of the {@link MonetaryAmount}.
      */
@@ -63,7 +63,7 @@ final class ParseContext {
      *
      * @param text The test to be parsed.
      */
-    public ParseContext(CharSequence text) {
+    ParseContext(CharSequence text) {
         this.originalInput = Optional.ofNullable(text).orElseThrow(
                 () -> new IllegalArgumentException("text is required"));
     }

@@ -17,7 +17,6 @@ package org.javamoney.moneta.internal.convert;
 
 import java.io.InputStream;
 import java.math.MathContext;
-import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -52,7 +51,7 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         LoaderListener {
 
-    static final String BASE_CURRENCY_CODE = "EUR";
+    private static final String BASE_CURRENCY_CODE = "EUR";
 
     /**
      * Base currency of the loaded rates is always EUR.
@@ -66,9 +65,9 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
     /**
      * Parser factory.
      */
-    private SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+    private final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
-    public AbstractECBRateProvider(ProviderContext context) throws MalformedURLException {
+    AbstractECBRateProvider(ProviderContext context) {
         super(context);
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
@@ -77,19 +76,19 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         loader.loadDataAsync(getDataId());
     }
 
-    public abstract String getDataId();
+    protected abstract String getDataId();
 
     @Override
-    public void newDataLoaded(String data, InputStream is) {
+    public void newDataLoaded(String resourceId, InputStream is) {
         final int oldSize = this.rates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new RateReadingHandler(rates, getContext()));
         } catch (Exception e) {
-            LOGGER.log(Level.FINEST, "Error during data load.", e);
+            log.log(Level.FINEST, "Error during data load.", e);
         }
         int newSize = this.rates.size();
-        LOGGER.info("Loaded " + getDataId() + " exchange rates for days:" + (newSize - oldSize));
+        log.info("Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize));
     }
 
     protected LocalDate[] getQueryDates(ConversionQuery query) {
@@ -109,12 +108,12 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
     }
 
     @Override
-    public ExchangeRate getExchangeRate(ConversionQuery query) {
-        Objects.requireNonNull(query);
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        Objects.requireNonNull(conversionQuery);
         if (rates.isEmpty()) {
             return null;
         }
-        LocalDate[] dates = getQueryDates(query);
+        LocalDate[] dates = getQueryDates(conversionQuery);
         LocalDate selectedDate = null;
         Map<String, ExchangeRate> targets = null;
         for(LocalDate date:dates){
@@ -127,12 +126,12 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         if (Objects.isNull(targets)) {
             return null;
         }
-        ExchangeRateBuilder builder = getBuilder(query, selectedDate);
-        ExchangeRate sourceRate = targets.get(query.getBaseCurrency()
+        ExchangeRateBuilder builder = getBuilder(conversionQuery, selectedDate);
+        ExchangeRate sourceRate = targets.get(conversionQuery.getBaseCurrency()
                 .getCurrencyCode());
         ExchangeRate target = targets
-                .get(query.getCurrency().getCurrencyCode());
-        return createExchangeRate(query, builder, sourceRate, target);
+                .get(conversionQuery.getCurrency().getCurrencyCode());
+        return createExchangeRate(conversionQuery, builder, sourceRate, target);
     }
 
     private ExchangeRate createExchangeRate(ConversionQuery query,

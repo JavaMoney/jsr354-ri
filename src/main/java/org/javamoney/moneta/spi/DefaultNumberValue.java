@@ -83,7 +83,7 @@ public final class DefaultNumberValue extends NumberValue {
 	 */
 	@Override
 	public int getScale() {
-		return getBigDecimal(number).scale();
+		return ConvertBigDecimal.of(number).scale();
 	}
 
 	/*
@@ -101,7 +101,7 @@ public final class DefaultNumberValue extends NumberValue {
 	 */
 	@Override
 	public int intValueExact() {
-		return getBigDecimal(number).intValueExact();
+		return ConvertBigDecimal.of(number).intValueExact();
 	}
 
 	/*
@@ -119,7 +119,7 @@ public final class DefaultNumberValue extends NumberValue {
 	 */
 	@Override
 	public long longValueExact() {
-		return getBigDecimal(number).longValueExact();
+		return ConvertBigDecimal.of(number).longValueExact();
 	}
 
 	/*
@@ -160,7 +160,7 @@ public final class DefaultNumberValue extends NumberValue {
      */
     @Override
     public long getAmountFractionNumerator(){
-        BigDecimal bd = getBigDecimal(number).remainder(BigDecimal.ONE);
+        BigDecimal bd = ConvertBigDecimal.of(number).remainder(BigDecimal.ONE);
         return bd.movePointRight(getScale()).longValueExact();
     }
 
@@ -210,18 +210,6 @@ public final class DefaultNumberValue extends NumberValue {
 	@Override
 	public String toString() {
 		return String.valueOf(number);
-	}
-
-	/**
-	 * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
-	 * depending the type given.
-	 * 
-	 * @param num
-	 *            the number type
-	 * @return the corresponding {@link BigDecimal}
-	 */
-	protected static BigDecimal getBigDecimal(Number num) {
-		return ConvertBigDecimal.of(num);
 	}
 
 }

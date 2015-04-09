@@ -61,7 +61,7 @@ public enum ConvertBigDecimal {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			BigDecimal result = ((NumberValue)num).numberValue(BigDecimal.class);
-			return isScaleZero(result);
+			return stripScalingZeroes(result);
 		}
 	},
     /** Conversion from BigDecimal. */
@@ -69,7 +69,7 @@ public enum ConvertBigDecimal {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			BigDecimal result = ((BigDecimal)num);
-			return isScaleZero(result);
+			return stripScalingZeroes(result);
 		}
 	},
     /** Conversion from BigDecimal, extended. */
@@ -77,7 +77,7 @@ public enum ConvertBigDecimal {
 		@Override
 		BigDecimal getDecimal(Number num) {
 			BigDecimal result = ((BigDecimal)num).stripTrailingZeros();
-			return isScaleZero(result);
+			return stripScalingZeroes(result);
 		}
 	},
     /** Default conversion based on String, if everything else failed. */
@@ -91,7 +91,7 @@ public enum ConvertBigDecimal {
 			}
 			result = Optional.ofNullable(result).orElse(
 					BigDecimal.valueOf(num.doubleValue()));
-			return isScaleZero(result);
+			return stripScalingZeroes(result);
 		}
 	};
 	
@@ -104,7 +104,7 @@ public enum ConvertBigDecimal {
 	}
 
 	private static ConvertBigDecimal factory(Number num) {
-		if (INSTEGERS.contains(num.getClass())) {
+		if (INTEGERS.contains(num.getClass())) {
 			return INTEGER;
 		}
 		if (FLOATINGS.contains(num.getClass())) {
@@ -125,14 +125,14 @@ public enum ConvertBigDecimal {
 		return DEFAULT;
 	}
 	
-	private static List<Class<? extends Number>> INSTEGERS = Arrays.asList(
+	private static final List<Class<? extends Number>> INTEGERS = Arrays.asList(
 			Long.class, Integer.class, Short.class, Byte.class,
 			AtomicLong.class, AtomicInteger.class);
 	
-	private static List<Class<? extends Number>> FLOATINGS = Arrays.asList(
+	private static final List<Class<? extends Number>> FLOATINGS = Arrays.asList(
 			Float.class, Double.class);
 	
-	private static BigDecimal isScaleZero(BigDecimal result) {
+	private static BigDecimal stripScalingZeroes(BigDecimal result) {
 		if (result.signum() == 0) {
 			return BigDecimal.ZERO;
 		}

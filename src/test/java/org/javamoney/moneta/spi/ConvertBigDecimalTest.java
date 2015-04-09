@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
 public class ConvertBigDecimalTest {
 
-	private BigDecimal expectValue = BigDecimal.TEN;
+	private final BigDecimal expectValue = BigDecimal.TEN;
 
 	@Test
 	public void ofIntegerTest() {

@@ -42,7 +42,7 @@ final class CurrencyToken implements FormatToken {
     /**
      * The target locale.
      */
-    private Locale locale;
+    private final Locale locale;
 
     /**
      * Creates a new {@link CurrencyToken}.
@@ -51,7 +51,7 @@ final class CurrencyToken implements FormatToken {
      *               {@code null}.
      * @param locale The target locale, not {@code null}.
      */
-    public CurrencyToken(CurrencyStyle style, Locale locale) {
+    CurrencyToken(CurrencyStyle style, Locale locale) {
         Objects.requireNonNull(locale, "Locale null");
         this.locale = locale;
         if (Objects.nonNull(style)) {
@@ -87,7 +87,7 @@ final class CurrencyToken implements FormatToken {
      *               to be formatted.
      * @return the formatted currency.
      */
-    protected String getToken(MonetaryAmount amount) {
+    private String getToken(MonetaryAmount amount) {
         switch (style) {
             case NUMERIC_CODE:
                 return String.valueOf(amount.getCurrency()
@@ -228,7 +228,7 @@ final class CurrencyToken implements FormatToken {
      * @return the first letter based part, or the full token.
      */
     private String parseCurrencyCode(String token) {
-        StringBuilder b = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
         int letterIndex = 0;
         for (char ch : token.toCharArray()) {
             if (Character.isLetter(ch)) {

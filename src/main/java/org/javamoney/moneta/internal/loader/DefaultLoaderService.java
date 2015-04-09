@@ -47,7 +47,7 @@ public class DefaultLoaderService implements LoaderService {
     /**
      * The data resources managed by this instance.
      */
-    private Map<String, LoadableResource> resources = new ConcurrentHashMap<>();
+    private final Map<String, LoadableResource> resources = new ConcurrentHashMap<>();
     /**
      * The registered {@link LoaderListener} instances.
      */
@@ -61,7 +61,7 @@ public class DefaultLoaderService implements LoaderService {
     /**
      * The thread pool used for loading of data, triggered by the timer.
      */
-    private ExecutorService executors = Executors.newCachedThreadPool();
+    private final ExecutorService executors = Executors.newCachedThreadPool();
 
     /**
      * The timer used for schedules.
@@ -216,8 +216,8 @@ public class DefaultLoaderService implements LoaderService {
      * org.javamoney.moneta.spi.LoaderService#isResourceRegistered(java.lang.String)
      */
     @Override
-    public boolean isResourceRegistered(String dataId) {
-        return this.resources.containsKey(dataId);
+    public boolean isResourceRegistered(String resourceId) {
+        return this.resources.containsKey(resourceId);
     }
 
     /*
@@ -318,11 +318,11 @@ public class DefaultLoaderService implements LoaderService {
      * @see org.javamoney.moneta.spi.LoaderService#resetData(java.lang.String)
      */
     @Override
-    public void resetData(String dataId) throws IOException {
-        LoadableResource load = Optional.ofNullable(this.resources.get(dataId))
-                .orElseThrow(() -> new IllegalArgumentException("No such resource: " + dataId));
+    public void resetData(String resourceId) throws IOException {
+        LoadableResource load = Optional.ofNullable(this.resources.get(resourceId))
+                .orElseThrow(() -> new IllegalArgumentException("No such resource: " + resourceId));
         if (load.resetToFallback()) {
-            triggerListeners(dataId, load.getDataStream());
+            triggerListeners(resourceId, load.getDataStream());
         }
     }
 
@@ -365,14 +365,14 @@ public class DefaultLoaderService implements LoaderService {
      * .moneta.spi.LoaderService.LoaderListener, java.lang.String[])
      */
     @Override
-    public void addLoaderListener(LoaderListener l, String... dataIds) {
-        if (dataIds.length == 0) {
+    public void addLoaderListener(LoaderListener l, String... resourceIds) {
+        if (resourceIds.length == 0) {
             List<LoaderListener> listeners = getListeners("");
             synchronized (listeners) {
                 listeners.add(l);
             }
         } else {
-            for (String dataId : dataIds) {
+            for (String dataId : resourceIds) {
                 List<LoaderListener> listeners = getListeners(dataId);
                 synchronized (listeners) {
                     listeners.add(l);
@@ -413,14 +413,14 @@ public class DefaultLoaderService implements LoaderService {
      * .moneta.spi.LoaderService.LoaderListener, java.lang.String[])
      */
     @Override
-    public void removeLoaderListener(LoaderListener l, String... dataIds) {
-        if (dataIds.length == 0) {
+    public void removeLoaderListener(LoaderListener l, String... resourceIds) {
+        if (resourceIds.length == 0) {
             List<LoaderListener> listeners = getListeners("");
             synchronized (listeners) {
                 listeners.remove(l);
             }
         } else {
-            for (String dataId : dataIds) {
+            for (String dataId : resourceIds) {
                 List<LoaderListener> listeners = getListeners(dataId);
                 synchronized (listeners) {
                     listeners.remove(l);

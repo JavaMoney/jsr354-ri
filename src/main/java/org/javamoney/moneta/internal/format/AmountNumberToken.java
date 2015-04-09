@@ -38,13 +38,13 @@ import javax.money.format.MonetaryParseException;
  */
 final class AmountNumberToken implements FormatToken {
 
-    private AmountFormatContext amountFormatContext;
-    private String partialNumberPattern;
+    private final AmountFormatContext amountFormatContext;
+    private final String partialNumberPattern;
     private DecimalFormat parseFormat;
     private DecimalFormat formatFormat;
     private StringGrouper numberGroup;
 
-    public AmountNumberToken(AmountFormatContext amountFormatContext, String partialNumberPattern) {
+    AmountNumberToken(AmountFormatContext amountFormatContext, String partialNumberPattern) {
         this.amountFormatContext = Optional.ofNullable(amountFormatContext)
                 .orElseThrow(
                         () -> new IllegalArgumentException(
@@ -87,7 +87,6 @@ final class AmountNumberToken implements FormatToken {
     @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
-        int digits = amount.getCurrency().getDefaultFractionDigits();
         if (amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class) == null ||
                 amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class).length == 0) {
             appendable.append(this.formatFormat.format(amount.getNumber()

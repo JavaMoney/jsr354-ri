@@ -16,7 +16,6 @@
 package org.javamoney.moneta.internal.convert;
 
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 
 import javax.money.convert.*;
 
@@ -41,10 +40,8 @@ public class IdentityRateProvider extends AbstractRateProvider {
 
     /**
      * Constructor, also loads initial data.
-     *
-     * @throws java.net.MalformedURLException
      */
-    public IdentityRateProvider() throws MalformedURLException {
+    public IdentityRateProvider() {
         super(CONTEXT);
     }
 
@@ -59,11 +56,11 @@ public class IdentityRateProvider extends AbstractRateProvider {
                 .equals(conversionQuery.getCurrency().getCurrencyCode());
     }
 
-    public ExchangeRate getExchangeRate(ConversionQuery query) {
-        if (query.getBaseCurrency().getCurrencyCode().equals(query.getCurrency().getCurrencyCode())) {
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        if (conversionQuery.getBaseCurrency().getCurrencyCode().equals(conversionQuery.getCurrency().getCurrencyCode())) {
             ExchangeRateBuilder builder = new ExchangeRateBuilder(getContext().getProviderName(), RateType.OTHER)
-                    .setBase(query.getBaseCurrency());
-            builder.setTerm(query.getCurrency());
+                    .setBase(conversionQuery.getBaseCurrency());
+            builder.setTerm(conversionQuery.getCurrency());
             builder.setFactor(DefaultNumberValue.of(BigDecimal.ONE));
             return builder.build();
         }

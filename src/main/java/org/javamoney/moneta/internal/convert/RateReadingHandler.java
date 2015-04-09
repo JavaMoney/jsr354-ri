@@ -46,9 +46,14 @@ class RateReadingHandler extends DefaultHandler {
 
     private final Map<LocalDate, Map<String, ExchangeRate>> historicRates;
 
-    private ProviderContext context;
+    private final ProviderContext context;
 
-    public RateReadingHandler(Map<LocalDate, Map<String, ExchangeRate>> historicRates, ProviderContext context) {
+    /**
+     * Creates a new handler.
+     * @param historicRates the rates, not null.
+     * @param context the context, not null.
+     */
+    RateReadingHandler(Map<LocalDate, Map<String, ExchangeRate>> historicRates, ProviderContext context) {
         this.historicRates = historicRates;
         this.context = context;
     }
@@ -75,7 +80,6 @@ class RateReadingHandler extends DefaultHandler {
      * Method to add a currency exchange rate.
      *
      * @param term      the term (target) currency, mapped from EUR.
-     * @param timestamp The target day.
      * @param rate      The rate.
      */
     void addRate(CurrencyUnit term, LocalDate localDate, Number rate) {

@@ -45,7 +45,7 @@ public class ECBCurrentRateProvider extends AbstractECBRateProvider {
             ProviderContextBuilder.of("ECB", RateType.DEFERRED).set("providerDescription", "European Central Bank")
                     .set("days", 1).build();
 
-    public ECBCurrentRateProvider() throws MalformedURLException {
+    public ECBCurrentRateProvider() {
         super(CONTEXT);
     }
 

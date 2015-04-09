@@ -226,7 +226,7 @@ enum ConvertNumberValue {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private Map<Class<? extends Number>, ConvertNumberValueI> convertIMap;
+	private final Map<Class<? extends Number>, ConvertNumberValueI> convertIMap;
 
 	{
 		convertIMap = new HashMap<>();

@@ -29,19 +29,19 @@ final class StringGrouper {
 	private int[] groupSizes = new int[] { 3 };
 	private boolean reverse;
 
-	public StringGrouper() {
+	StringGrouper() {
 	}
 
-	public StringGrouper(char... groupCharacters) {
+	StringGrouper(char... groupCharacters) {
 		setGroupChars(groupCharacters);
 	}
 
-	public StringGrouper(char groupCharacter, int... groupSizes) {
+	StringGrouper(char groupCharacter, int... groupSizes) {
 		setGroupChars(groupCharacter);
 		setGroupSizes(groupSizes);
 	}
 
-	public StringGrouper(char[] groupCharacters, int... groupSizes) {
+	StringGrouper(char[] groupCharacters, int... groupSizes) {
 		setGroupChars(groupCharacters);
 		setGroupSizes(groupSizes);
 	}

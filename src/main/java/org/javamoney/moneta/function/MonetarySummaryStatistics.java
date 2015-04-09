@@ -58,12 +58,6 @@ public interface MonetarySummaryStatistics {
 	MonetaryAmount getAverage();
 
 	/**
-	 * will equals when the currencies were equals
-	 */
-	@Override
-	boolean equals(Object obj);
-
-	/**
 	 * the currency unit used in summary
 	 * @return the currency unit
 	 */

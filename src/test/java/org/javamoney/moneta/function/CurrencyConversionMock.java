@@ -28,7 +28,7 @@ class CurrencyConversionMock implements CurrencyConversion {
     private Conversation conversation;
 
 
-    public CurrencyConversionMock(CurrencyUnit currency) {
+    CurrencyConversionMock(CurrencyUnit currency) {
         this.currency = currency;
         if (DOLLAR.equals(currency)) {
             this.conversation = new DollarConversation();

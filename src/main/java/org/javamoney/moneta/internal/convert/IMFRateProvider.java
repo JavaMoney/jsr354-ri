@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -84,50 +83,50 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
 
     private Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = new HashMap<>();
 
-    private static Map<String, CurrencyUnit> currenciesByName = new HashMap<>();
+    private static final Map<String, CurrencyUnit> CURRENCIES_BY_NAME = new HashMap<>();
 
     static {
         for (Currency currency : Currency.getAvailableCurrencies()) {
-            currenciesByName.put(currency.getDisplayName(Locale.ENGLISH),
+            CURRENCIES_BY_NAME.put(currency.getDisplayName(Locale.ENGLISH),
                     Monetary.getCurrency(currency.getCurrencyCode()));
         }
         // Additional IMF differing codes:
         // This mapping is required to fix data issues in the input stream, it has nothing to do with i18n
-        currenciesByName.put("U.K. Pound Sterling", Monetary.getCurrency("GBP"));
-        currenciesByName.put("U.S. Dollar", Monetary.getCurrency("USD"));
-        currenciesByName.put("Bahrain Dinar", Monetary.getCurrency("BHD"));
-        currenciesByName.put("Botswana Pula", Monetary.getCurrency("BWP"));
-        currenciesByName.put("Czech Koruna", Monetary.getCurrency("CZK"));
-        currenciesByName.put("Icelandic Krona", Monetary.getCurrency("ISK"));
-        currenciesByName.put("Korean Won", Monetary.getCurrency("KRW"));
-        currenciesByName.put("Rial Omani", Monetary.getCurrency("OMR"));
-        currenciesByName.put("Nuevo Sol", Monetary.getCurrency("PEN"));
-        currenciesByName.put("Qatar Riyal", Monetary.getCurrency("QAR"));
-        currenciesByName.put("Saudi Arabian Riyal", Monetary.getCurrency("SAR"));
-        currenciesByName.put("Sri Lanka Rupee", Monetary.getCurrency("LKR"));
-        currenciesByName.put("Trinidad And Tobago Dollar", Monetary.getCurrency("TTD"));
-        currenciesByName.put("U.A.E. Dirham", Monetary.getCurrency("AED"));
-        currenciesByName.put("Peso Uruguayo", Monetary.getCurrency("UYU"));
-        currenciesByName.put("Bolivar Fuerte", Monetary.getCurrency("VEF"));
+        CURRENCIES_BY_NAME.put("U.K. Pound Sterling", Monetary.getCurrency("GBP"));
+        CURRENCIES_BY_NAME.put("U.S. Dollar", Monetary.getCurrency("USD"));
+        CURRENCIES_BY_NAME.put("Bahrain Dinar", Monetary.getCurrency("BHD"));
+        CURRENCIES_BY_NAME.put("Botswana Pula", Monetary.getCurrency("BWP"));
+        CURRENCIES_BY_NAME.put("Czech Koruna", Monetary.getCurrency("CZK"));
+        CURRENCIES_BY_NAME.put("Icelandic Krona", Monetary.getCurrency("ISK"));
+        CURRENCIES_BY_NAME.put("Korean Won", Monetary.getCurrency("KRW"));
+        CURRENCIES_BY_NAME.put("Rial Omani", Monetary.getCurrency("OMR"));
+        CURRENCIES_BY_NAME.put("Nuevo Sol", Monetary.getCurrency("PEN"));
+        CURRENCIES_BY_NAME.put("Qatar Riyal", Monetary.getCurrency("QAR"));
+        CURRENCIES_BY_NAME.put("Saudi Arabian Riyal", Monetary.getCurrency("SAR"));
+        CURRENCIES_BY_NAME.put("Sri Lanka Rupee", Monetary.getCurrency("LKR"));
+        CURRENCIES_BY_NAME.put("Trinidad And Tobago Dollar", Monetary.getCurrency("TTD"));
+        CURRENCIES_BY_NAME.put("U.A.E. Dirham", Monetary.getCurrency("AED"));
+        CURRENCIES_BY_NAME.put("Peso Uruguayo", Monetary.getCurrency("UYU"));
+        CURRENCIES_BY_NAME.put("Bolivar Fuerte", Monetary.getCurrency("VEF"));
     }
 
-    public IMFRateProvider() throws MalformedURLException {
+    public IMFRateProvider() {
         super(CONTEXT);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
         loader.addLoaderListener(this, DATA_ID);
         try {
             loader.loadData(DATA_ID);
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Error loading initial data from IMF provider...", e);
+            log.log(Level.WARNING, "Error loading initial data from IMF provider...", e);
         }
     }
 
     @Override
-    public void newDataLoaded(String data, InputStream is) {
+    public void newDataLoaded(String resourceId, InputStream is) {
         try {
             loadRatesTSV(is);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error", e);
+            log.log(Level.SEVERE, "Error", e);
         }
     }
 
@@ -173,9 +172,9 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
                 continue;
             }
             String[] parts = line.split("\\t");
-            CurrencyUnit currency = currenciesByName.get(parts[0]);
+            CurrencyUnit currency = CURRENCIES_BY_NAME.get(parts[0]);
             if (Objects.isNull(currency)) {
-                LOGGER.finest(() -> "Uninterpretable data from IMF data feed: " + parts[0]);
+                log.finest(() -> "Uninterpretable data from IMF data feed: " + parts[0]);
                 line = pr.readLine();
                 continue;
             }
@@ -213,8 +212,8 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         newCurrencyToSdr.values().forEach((c) -> Collections.sort(List.class.cast(c)));
         this.sdrToCurrency = newSdrToCurrency;
         this.currencyToSdr = newCurrencyToSdr;
-        this.sdrToCurrency.forEach((c, l) -> LOGGER.finest(() -> "SDR -> " + c.getCurrencyCode() + ": " + l));
-        this.currencyToSdr.forEach((c, l) -> LOGGER.finest(() -> c.getCurrencyCode() + " -> SDR: " + l));
+        this.sdrToCurrency.forEach((c, l) -> log.finest(() -> "SDR -> " + c.getCurrencyCode() + ": " + l));
+        this.currencyToSdr.forEach((c, l) -> log.finest(() -> c.getCurrencyCode() + " -> SDR: " + l));
     }
 
     private Double[] parseValues(NumberFormat f, String[] parts) throws ParseException {
@@ -228,7 +227,7 @@ public class IMFRateProvider extends AbstractRateProvider implements LoaderListe
         return result;
     }
 
-    private List<LocalDate> readTimestamps(String line) throws ParseException {
+    private List<LocalDate> readTimestamps(String line) {
         // Currency May 01, 2013 April 30, 2013 April 29, 2013 April 26, 2013
         // April 25, 2013
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("MMMM dd, uuuu").withLocale(Locale.ENGLISH);

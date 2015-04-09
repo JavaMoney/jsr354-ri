@@ -44,31 +44,31 @@ public class LoadableResource {
     /**
      * Lock for this instance.
      */
-    private final Object LOCK = new Object();
+    private final Object lock = new Object();
     /**
      * resource id.
      */
-    private String resourceId;
+    private final String resourceId;
     /**
      * The remote URLs to be looked up (first wins).
      */
-    private List<URI> remoteResources = new ArrayList<>();
+    private final List<URI> remoteResources = new ArrayList<>();
     /**
      * The fallback location (classpath).
      */
-    private URI fallbackLocation;
+    private final URI fallbackLocation;
     /**
      * The cache used.
      */
-    private ResourceCache cache;
+    private final ResourceCache cache;
     /**
      * How many times this resource was successfully loaded.
      */
-    private AtomicInteger loadCount = new AtomicInteger();
+    private final AtomicInteger loadCount = new AtomicInteger();
     /**
      * How many times this resource was accessed.
      */
-    private AtomicInteger accessCount = new AtomicInteger();
+    private final AtomicInteger accessCount = new AtomicInteger();
     /**
      * The current data array.
      */
@@ -85,11 +85,11 @@ public class LoadableResource {
     /**
      * The required update policy for this resource.
      */
-    private LoaderService.UpdatePolicy updatePolicy;
+    private final LoaderService.UpdatePolicy updatePolicy;
     /**
      * The resource configuration.
      */
-    private Map<String, String> properties;
+    private final Map<String, String> properties;
 
 
     /**
@@ -290,7 +290,7 @@ public class LoadableResource {
      * default writes an file containing the data into the user's local home directory, so subsequent or later calls,
      * even after a VM restart, should be able to recover this information.
      */
-    protected void writeCache() {
+    protected void writeCache() throws IOException {
         if (this.cache != null) {
             byte[] data = this.data == null ? null : this.data.get();
             if (data == null) {
@@ -364,7 +364,7 @@ public class LoadableResource {
             accessCount.incrementAndGet();
             byte[] currentData = this.data == null ? null : this.data.get();
             if (Objects.isNull(currentData)) {
-                synchronized (LOCK) {
+                synchronized (lock) {
                     currentData = this.data == null ? null : this.data.get();
                     if (Objects.isNull(currentData)) {
                         if (loadRemote()) {
@@ -388,7 +388,7 @@ public class LoadableResource {
 
 
     public void unload() {
-        synchronized (LOCK) {
+        synchronized (lock) {
             int count = accessCount.decrementAndGet();
             if (count == 0) {
                 this.data = null;
@@ -403,7 +403,7 @@ public class LoadableResource {
      * @return true on success.
      * @throws IOException
      */
-    public boolean resetToFallback() throws IOException {
+    public boolean resetToFallback() {
         if (loadFallback()) {
             loadCount.set(0);
             return true;
@@ -425,9 +425,9 @@ public class LoadableResource {
      */
     private final class WrappedInputStream extends InputStream {
 
-        private InputStream wrapped;
+        private final InputStream wrapped;
 
-        public WrappedInputStream(InputStream wrapped) {
+        WrappedInputStream(InputStream wrapped) {
             this.wrapped = wrapped;
         }
 

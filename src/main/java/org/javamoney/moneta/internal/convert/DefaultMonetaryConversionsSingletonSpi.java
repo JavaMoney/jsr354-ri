@@ -68,8 +68,8 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     }
 
     @Override
-    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery query) {
-        Collection<String> providers = getProvidersToUse(query);
+    public ExchangeRateProvider getExchangeRateProvider(ConversionQuery conversionQuery) {
+        Collection<String> providers = getProvidersToUse(conversionQuery);
         List<ExchangeRateProvider> provInstances = new ArrayList<>();
         for (String provName : providers) {
             ExchangeRateProvider prov = Optional.ofNullable(
@@ -81,7 +81,7 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
             provInstances.add(prov);
         }
         if (provInstances.isEmpty()) {
-            throw new MonetaryException("No such providers: " + query);
+            throw new MonetaryException("No such providers: " + conversionQuery);
         }
         if (provInstances.size() == 1) {
             return provInstances.get(0);

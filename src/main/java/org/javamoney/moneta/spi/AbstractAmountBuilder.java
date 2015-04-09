@@ -29,16 +29,16 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
     /**
      * The default {@link MonetaryContext} applied, if not set explicitly on creation.
      */
-    private MonetaryContext DEFAULT_MONETARY_CONTEXT = loadDefaultMonetaryContext();
+    private final MonetaryContext defaultMonetaryContext = loadDefaultMonetaryContext();
 
     /**
      * The default {@link MonetaryContext} applied, if not set explicitly on creation.
      */
-    private MonetaryContext MAX_MONETARY_CONTEXT = loadMaxMonetaryContext();
+    private final MonetaryContext maxMonetaryContext = loadMaxMonetaryContext();
 
     private CurrencyUnit currency;
     private Number number;
-    private MonetaryContext monetaryContext = DEFAULT_MONETARY_CONTEXT;
+    private MonetaryContext monetaryContext = defaultMonetaryContext;
 
     /**
      * Creates a new instance of {@link MonetaryAmount}, using the default {@link MonetaryContext}.
@@ -85,7 +85,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      */
     @Override
     public MonetaryAmountFactory<T> setNumber(Number number) {
-        this.number = getBigDecimal(number);
+        this.number = ConvertBigDecimal.of(number);
         return this;
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      */
     @Override
     public MonetaryContext getDefaultMonetaryContext() {
-        return DEFAULT_MONETARY_CONTEXT;
+        return defaultMonetaryContext;
     }
 
     /**
@@ -163,34 +163,23 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      */
     @Override
     public MonetaryContext getMaximalMonetaryContext() {
-        return MAX_MONETARY_CONTEXT;
+        return maxMonetaryContext;
     }
 
     /**
      * Converts (if necessary) the given {@link MonetaryAmount} to a new {@link MonetaryAmount}
      * instance, hereby supporting the {@link MonetaryContext} given.
      *
-     * @param amt the amount to be converted, if necessary.
+     * @param smount the amount to be converted, if necessary.
      * @return an according Money instance.
      */
     @Override
-    public MonetaryAmountFactory<T> setAmount(MonetaryAmount amt) {
-        this.currency = amt.getCurrency();
-        this.number = amt.getNumber().numberValue(BigDecimal.class);
-        this.monetaryContext = MonetaryContextBuilder.of(DEFAULT_MONETARY_CONTEXT.getAmountType())
-                .importContext(amt.getContext()).build();
+    public MonetaryAmountFactory<T> setAmount(MonetaryAmount smount) {
+        this.currency = smount.getCurrency();
+        this.number = smount.getNumber().numberValue(BigDecimal.class);
+        this.monetaryContext = MonetaryContextBuilder.of(defaultMonetaryContext.getAmountType())
+                .importContext(smount.getContext()).build();
         return this;
-    }
-
-    /**
-     * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
-     * depending the type given.
-     *
-     * @param num the number type
-     * @return the corresponding {@link BigDecimal}
-     */
-    protected static BigDecimal getBigDecimal(Number num) {
-        return ConvertBigDecimal.of(num);
     }
 
 }

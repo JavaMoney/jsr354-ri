@@ -43,7 +43,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      */
     private final Currency baseCurrency;
 
-    private final CurrencyContext CONTEXT = CurrencyContextBuilder.of(Currency.class.getName()).build();
+    private final CurrencyContext context = CurrencyContextBuilder.of(Currency.class.getName()).build();
 
     /**
      * Private constructor, uses a {@link java.util.Currency} for creating new instances.
@@ -112,7 +112,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
 
     @Override
     public CurrencyContext getContext() {
-        return CONTEXT;
+        return context;
     }
 
     /**

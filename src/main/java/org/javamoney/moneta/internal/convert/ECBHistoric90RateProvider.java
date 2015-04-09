@@ -49,7 +49,7 @@ public class ECBHistoric90RateProvider extends AbstractECBRateProvider {
             ProviderContextBuilder.of("ECB-HIST90", RateType.HISTORIC, RateType.DEFERRED)
                     .set("providerDescription", "European Central Bank (last 90 days)").set("days", 90).build();
 
-    public ECBHistoric90RateProvider() throws MalformedURLException {
+    public ECBHistoric90RateProvider() {
         super(CONTEXT);
     }
 
