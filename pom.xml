@@ -23,9 +23,7 @@
     </parent>
 
     <artifactId>moneta</artifactId>
-    <version>1.0</version>
     <packaging>bundle</packaging>
-
     <name>Moneta (JSR 354 RI)</name>
     <url>http://javamoney.org</url>
     <inceptionYear>2012</inceptionYear>
@@ -42,7 +40,7 @@
     <licenses>
         <license>
             <name>Apache 2 License</name>
-            <comments>Spec</comments>
+            <comments>RI</comments>
             <url>LICENSE.txt</url>
             <distribution>repo</distribution>
         </license>
