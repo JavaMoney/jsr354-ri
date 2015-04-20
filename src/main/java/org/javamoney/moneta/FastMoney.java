@@ -127,6 +127,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      */
     private static final BigDecimal MIN_BD = MIN_VALUE.getBigDecimal();
 
+    /**
+     * For compatibility with database technologies that require a no-args constructor (i.e., Morphia).
+     * 
+     * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
+     */
+    private FastMoney() {}
 
     /**
      * Creates a new instance os {@link FastMoney}.
