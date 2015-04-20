@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -127,6 +127,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      */
     private static final BigDecimal MIN_BD = MIN_VALUE.getBigDecimal();
 
+    /**
+     * For compatibility with database technologies that require a no-args constructor (i.e., Morphia).
+     * 
+     * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
+     */
+    private FastMoney() {}
 
     /**
      * Creates a new instance os {@link FastMoney}.
