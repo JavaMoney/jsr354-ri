@@ -92,20 +92,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * The numeric part of this amount.
      */
     private final BigDecimal number;
-    
-    /**
-     * For compatibility with database technologies that require a no-args constructor (i.e., Morphia).
-     * 
-     * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
-     */
-    private Money() {}
-
-    /**
-     * For compatibility with database technologies that require a no-args constructor (i.e., Morphia).
-     * 
-     * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
-     */
-    private Money() {}
 
     /**
      * Creates a new instance os {@link Money}.
