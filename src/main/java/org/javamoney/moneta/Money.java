@@ -98,7 +98,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * 
      * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
      */
-    private Money() {}
+    //private Money() {} commenting out for now 
+    // TODO we must find a solution for the FINAL member variables in this case, otherwise the no-op won't work.
 
     /**
      * Creates a new instance os {@link Money}.
