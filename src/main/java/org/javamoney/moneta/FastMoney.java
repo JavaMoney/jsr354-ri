@@ -132,7 +132,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * 
      * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
      */
-    private FastMoney() {}
+    //private FastMoney() {} commenting out for now
+    // TODO we must find a solution for the FINAL member variables in this case, otherwise the no-op won't work.
 
     /**
      * Creates a new instance os {@link FastMoney}.
