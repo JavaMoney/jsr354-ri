@@ -101,6 +101,13 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     private Money() {}
 
     /**
+     * For compatibility with database technologies that require a no-args constructor (i.e., Morphia).
+     * 
+     * @see https://github.com/mongodb/morphia/wiki/EntityAnnotation#name--constructor
+     */
+    private Money() {}
+
+    /**
      * Creates a new instance os {@link Money}.
      *
      * @param currency the currency, not null.
