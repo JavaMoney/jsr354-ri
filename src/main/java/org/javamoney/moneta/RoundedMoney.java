@@ -82,11 +82,11 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param currency the currency, not null.
      * @param number   the amount, not null.
      */
-    public RoundedMoney(Number number, CurrencyUnit currency, MonetaryOperator rounding) {
+    RoundedMoney(Number number, CurrencyUnit currency, MonetaryOperator rounding) {
         this(number, currency, null, rounding);
     }
 
-    public RoundedMoney(Number number, CurrencyUnit currency, MathContext mathContext) {
+    RoundedMoney(Number number, CurrencyUnit currency, MathContext mathContext) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
         this.rounding = Monetary.getRounding(RoundingQueryBuilder.of().set(mathContext).build());
@@ -98,50 +98,23 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
     }
 
-    public RoundedMoney(Number number, CurrencyUnit currency, MonetaryContext context, MonetaryOperator rounding) {
+    RoundedMoney(Number number, CurrencyUnit currency, MonetaryContext context, MonetaryOperator rounding) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
         Objects.requireNonNull(number, "Number is required.");
         checkNumber(number);
+        MonetaryContextBuilder monetaryContextBuilder = DEFAULT_MONETARY_CONTEXT.toBuilder();
 
-        MonetaryContextBuilder b = DEFAULT_MONETARY_CONTEXT.toBuilder();
-        if (Objects.nonNull(rounding)) {
-            this.rounding = rounding;
-        } else {
-            if (context != null) {
-                MathContext mc = context.get(MathContext.class);
-                if (mc == null) {
-                    RoundingMode rm = context.get(RoundingMode.class);
-                    if (rm != null) {
-                        Integer scale = Optional.ofNullable(context.getInt("scale")).orElse(2);
-                        b.set(rm);
-                        b.set("scale", scale);
-                        this.rounding = Monetary
-                                .getRounding(RoundingQueryBuilder.of().setScale(scale).set(rm).build());
-                    }
-                    else{
-                        this.rounding = Monetary.getDefaultRounding();
-                    }
-                } else {
-                    b.set(mc.getRoundingMode());
-                    b.set("scale", 2);
-                    this.rounding =
-                            Monetary.getRounding(RoundingQueryBuilder.of().set(mc).setScale(2).build());
-                }
-            }
-            else{
-                this.rounding = Monetary.getDefaultRounding();
-            }
-        }
-        b.set("MonetaryRounding", this.rounding);
+        this.rounding = DefaultMonetaryOperatorFactory.INSTANCE.getDefaultMonetaryOperator(rounding, context, monetaryContextBuilder);
+
+        monetaryContextBuilder.set("MonetaryRounding", this.rounding);
         if (context != null) {
-            b.importContext(context);
+            monetaryContextBuilder.importContext(context);
         }
-        this.monetaryContext = b.build();
+
+        this.monetaryContext = monetaryContextBuilder.build();
         this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
     }
-
-    // Static Factory Methods
 
     /**
      * Translates a {@code BigDecimal} value and a {@code CurrencyUnit} currency into a
