@@ -38,7 +38,6 @@ import java.util.logging.Logger;
  * <p>
  * @author Anatole Tresch
  */
-@SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public class DefaultLoaderService implements LoaderService {
     /**
      * Logger used.
@@ -61,7 +60,7 @@ public class DefaultLoaderService implements LoaderService {
     /**
      * The thread pool used for loading of data, triggered by the timer.
      */
-    private final ExecutorService executors = Executors.newCachedThreadPool();
+    private final ExecutorService executors = Executors.newCachedThreadPool(DaemonThreadFactory.INSTANCE);
 
     /**
      * The timer used for schedules.
@@ -81,7 +80,7 @@ public class DefaultLoaderService implements LoaderService {
     protected void initialize() {
         // Cancel any running tasks
         Timer oldTimer = timer;
-        timer = new Timer();
+        timer = new Timer(true);
         if (Objects.nonNull(oldTimer)) {
             oldTimer.cancel();
         }
