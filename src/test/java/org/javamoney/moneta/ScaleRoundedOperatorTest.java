@@ -28,6 +28,12 @@ public class ScaleRoundedOperatorTest {
 		fail();
 	}
 
+	@Test(expectedExceptions = IllegalStateException.class)
+	public void shouldReturnErrorWhenScaleIsUNNECESSARY() {
+		ScaleRoundedOperator.of(0, RoundingMode.UNNECESSARY);
+		fail();
+	}
+
 	@Test
 	public void shouldRoundedMonetaryOperatorWhenTheImplementationIsMoney() {
 		int scale = 4;

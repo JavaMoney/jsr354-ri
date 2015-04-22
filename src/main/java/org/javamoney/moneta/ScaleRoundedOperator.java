@@ -47,7 +47,13 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 	 * @see {@linkplain RoundingMode}
 	 */
 	public static ScaleRoundedOperator of(int scale, RoundingMode roundingMode) {
-		return new ScaleRoundedOperator(scale, Objects.requireNonNull(roundingMode));
+
+		Objects.requireNonNull(roundingMode);
+
+		if(RoundingMode.UNNECESSARY.equals(roundingMode)) {
+		   throw new IllegalStateException("To create the ScaleRoundedOperator you cannot use the RoundingMode.UNNECESSARY");
+		}
+		return new ScaleRoundedOperator(scale, roundingMode);
 	}
 
 	@Override
