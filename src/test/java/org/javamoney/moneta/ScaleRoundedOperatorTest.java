@@ -5,7 +5,6 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
@@ -14,18 +13,17 @@ import javax.money.MonetaryAmount;
 
 import org.testng.annotations.Test;
 
-public class MathContextRoundedOperatorTest {
+public class ScaleRoundedOperatorTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnNullPointerExceptionWhenParameterIsNull() {
-		MathContextRoundedOperator.of(null);
+		ScaleRoundedOperator.of(0, null);
 		fail();
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnErrorWhenParameterIsNUll() {
-		MathContext mathContext = new MathContext(2, RoundingMode.CEILING);
-		MathContextRoundedOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
+		ScaleRoundedOperator monetaryOperator = ScaleRoundedOperator.of(0, RoundingMode.HALF_EVEN);
 		monetaryOperator.apply(null);
 		fail();
 	}
@@ -33,17 +31,16 @@ public class MathContextRoundedOperatorTest {
 	@Test
 	public void shouldRoundedMonetaryOperatorWhenTheImplementationIsMoney() {
 		int scale = 4;
-		MathContext mathContext = new MathContext(scale, RoundingMode.HALF_EVEN);
 
 		CurrencyUnit real = Monetary.getCurrency("BRL");
 		MonetaryAmount money = Money.of(BigDecimal.valueOf(35.34567), real);
 
-		MathContextRoundedOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
+		ScaleRoundedOperator monetaryOperator = ScaleRoundedOperator.of(scale, RoundingMode.HALF_EVEN);
 		MonetaryAmount result = monetaryOperator.apply(money);
 		assertTrue(RoundedMoney.class.isInstance(result));
 		assertEquals(result.getCurrency(), real);
-		assertEquals(result.getNumber().getPrecision(), scale);
-		assertEquals(BigDecimal.valueOf(35.35), result.getNumber().numberValue(BigDecimal.class));
+		assertEquals(result.getNumber().getScale(), scale);
+		assertEquals(BigDecimal.valueOf(35.3457), result.getNumber().numberValue(BigDecimal.class));
 
 
 

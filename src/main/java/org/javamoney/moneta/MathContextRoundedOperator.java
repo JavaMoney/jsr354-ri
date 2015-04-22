@@ -10,7 +10,18 @@ import javax.money.MonetaryOperator;
 /**
  * <p>This implementation uses a {@link MathContext} to does the rounding operations. The implementation will use the <b>precision</b>, in other words, the total number of digits in a number</p>
  * <p>The derived class will implements the {@link RoundedMoney} with this rounding monetary operator</p>
- * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
+ *  <pre>
+ *   {@code
+ *
+ *     MathContext mathContext = new MathContext(4, RoundingMode.HALF_EVEN);
+ *     MonetaryOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
+ *     CurrencyUnit real = Monetary.getCurrency("BRL");
+ *     MonetaryAmount money = Money.of(BigDecimal.valueOf(35.34567), real);
+ *     MonetaryAmount result = monetaryOperator.apply(money); // BRL 35.35
+ *
+ *    }
+* </pre>
+* <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
  * @see {@link MathContextRoundedOperator#of(MathContext)}
  * @see {@link RoundedMoney}
