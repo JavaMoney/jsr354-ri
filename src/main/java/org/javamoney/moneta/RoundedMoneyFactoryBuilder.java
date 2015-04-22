@@ -51,7 +51,7 @@ class RoundedMoneyFactoryBuilder {
 		}
 
 		if(Objects.nonNull(mathContext)) {
-			return new DefaultRoundedMoneyFactory(DefaultRoundedOperator.of(mathContext));
+			return new DefaultRoundedMoneyFactory(MathContextRoundedOperator.of(mathContext));
 		}
 
 		if (Objects.nonNull(roundingMode) && scale == 0) {
@@ -59,7 +59,7 @@ class RoundedMoneyFactoryBuilder {
 		}
 
 		MathContext mathContext = new MathContext(scale, roundingMode);
-		return new DefaultRoundedMoneyFactory(DefaultRoundedOperator.of(mathContext));
+		return new DefaultRoundedMoneyFactory(MathContextRoundedOperator.of(mathContext));
 
 	}
 
