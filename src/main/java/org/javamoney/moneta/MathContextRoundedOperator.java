@@ -2,6 +2,7 @@ package org.javamoney.moneta;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.MonetaryAmount;
@@ -41,10 +42,23 @@ public final class MathContextRoundedOperator implements MonetaryOperator {
 	 * @param mathContext
 	 * @return the {@link MonetaryOperator} using the {@link MathContext} used in parameter
 	 * @throws NullPointerException when the {@link MathContext} is null
+	 * @throws IllegalArgumentException when the {@link MathContext#getPrecision()} is lesser than zero
+	 * @throws IllegalArgumentException when the mathContext is {@link MathContext#getRoundingMode()} is {@link RoundingMode#UNNECESSARY}
 	 * @see {@linkplain MathContext}
 	 */
 	public static MathContextRoundedOperator of(MathContext mathContext) {
-		return new MathContextRoundedOperator(Objects.requireNonNull(mathContext));
+
+		Objects.requireNonNull(mathContext);
+
+		if(RoundingMode.UNNECESSARY.equals(mathContext.getRoundingMode())) {
+			   throw new IllegalArgumentException("To create the MathContextRoundedOperator you cannot use the RoundingMode.UNNECESSARY on MathContext");
+		}
+
+		if(mathContext.getPrecision() <= 0) {
+				throw new IllegalArgumentException("To create the MathContextRoundedOperator you cannot use the zero precision on MathContext");
+		}
+
+		return new MathContextRoundedOperator(mathContext);
 	}
 
 	@Override

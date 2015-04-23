@@ -22,8 +22,22 @@ public class MathContextRoundedOperatorTest {
 		fail();
 	}
 
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenScaleIsUNNECESSARY() {
+		MathContext mathContext = new MathContext(2, RoundingMode.UNNECESSARY);
+		MathContextRoundedOperator.of(mathContext);
+		fail();
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenPrecisionIsZero() {
+		MathContext mathContext = new MathContext(0, RoundingMode.HALF_EVEN);
+		MathContextRoundedOperator.of(mathContext);
+		fail();
+	}
+
 	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldReturnErrorWhenParameterIsNUll() {
+	public void shouldReturnErrorWhenParameterIsNull() {
 		MathContext mathContext = new MathContext(2, RoundingMode.CEILING);
 		MathContextRoundedOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
 		monetaryOperator.apply(null);
