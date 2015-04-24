@@ -234,7 +234,9 @@ You can use the MonetaryCurrencies static methods to register currencies as foll
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically.
 --------------------------------------------
-CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
+    .setDefaultFractionDigits(3)
+    .build();
 
 // registering it
 Monetary.registerCurrency(unit);
@@ -247,7 +249,9 @@ a register flag to the call: So the same can be rewritten as follows:
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically, using +CurrencyUnitBuilder+.
 --------------------------------------------
-CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* register */);
+CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
+    .setDefaultFractionDigits(3)
+    .build(true /* register */);
 --------------------------------------------
 
 ==== Provided Currencies
