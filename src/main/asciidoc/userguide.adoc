@@ -293,7 +293,7 @@ Additionally _Moneta_ also supports static factory methods on the types directly
 [source,java]
 .Creating instances of +FastMoney+ using the static factory method:
 --------------------------------------------
-FastMoney m = FastMoney.of("USD", 200.20);
+FastMoney m = FastMoney.of(200.20, "USD");
 --------------------------------------------
 
 Creation of +Money+ instances is similar:
@@ -302,7 +302,7 @@ Creation of +Money+ instances is similar:
 .Creating instances of +Money+:
 --------------------------------------------
 Money m1 = Monetary.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
-Money m2 = Money.of("USD", 200.20);
+Money m2 = Money.of(200.20, "USD");
 --------------------------------------------
 
 ===== Configuring Instances of Money
