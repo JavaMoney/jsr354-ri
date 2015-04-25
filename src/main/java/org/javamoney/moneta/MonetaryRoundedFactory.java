@@ -39,7 +39,7 @@ public interface MonetaryRoundedFactory {
 	 * a custom {@link MonetaryOperator} as rounding operator, setting the precision, scale or both.
 	 * @param roundingMode
 	 * @see {@link ScaleRoundedOperator}
-	 * @see {@link MathContextRoundedOperator}
+	 * @see {@link PrecisionContextRoundedOperator}
 	 * @see {@link PrecisionScaleRoundedOperator}
 	 * @see {@link RoundingMode}
 	 * @return the builder to set scale, precision or both
@@ -50,15 +50,15 @@ public interface MonetaryRoundedFactory {
 	}
 
 	/**
-	 * Create the {@link MonetaryRoundedFactory} using the {@link MathContextRoundedOperator} as rounding operator.
-	 * @param mathContext the mathContext that will be used to create the {@link MathContextRoundedOperator}
-	 * @see {@link MathContextRoundedOperator#of(MathContext)}
-	 * @see {@link MathContextRoundedOperator}
+	 * Create the {@link MonetaryRoundedFactory} using the {@link PrecisionContextRoundedOperator} as rounding operator.
+	 * @param mathContext the mathContext that will be used to create the {@link PrecisionContextRoundedOperator}
+	 * @see {@link PrecisionContextRoundedOperator#of(MathContext)}
+	 * @see {@link PrecisionContextRoundedOperator}
 	 * @return the factory using the MathContextRoundedOperator
 	 * @throws NullPointerException if mathContext is null
 	 */
 	static MonetaryRoundedFactory of(MathContext mathContext) {
-		return new DefaultMonetaryRoundedFactory(MathContextRoundedOperator.of(requireNonNull(mathContext)));
+		return new DefaultMonetaryRoundedFactory(PrecisionContextRoundedOperator.of(requireNonNull(mathContext)));
 	}
 
 	/**

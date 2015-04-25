@@ -48,7 +48,5 @@ public class ScaleRoundedOperatorTest {
 		assertEquals(result.getNumber().getScale(), scale);
 		assertEquals(BigDecimal.valueOf(35.3457), result.getNumber().numberValue(BigDecimal.class));
 
-
-
 	}
 }

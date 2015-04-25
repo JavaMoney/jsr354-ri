@@ -65,8 +65,8 @@ public class MonetaryRoundedFactoryBuilderTest {
 		assertNotNull(factory);
 		MonetaryOperator roundingOperator = factory.getRoundingOperator();
 		assertNotNull(roundingOperator);
-		assertTrue(MathContextRoundedOperator.class.isInstance(roundingOperator));
-		MathContext result = MathContextRoundedOperator.class.cast(roundingOperator).getMathContext();
+		assertTrue(PrecisionContextRoundedOperator.class.isInstance(roundingOperator));
+		MathContext result = PrecisionContextRoundedOperator.class.cast(roundingOperator).getMathContext();
 
 		assertEquals(precision, result.getPrecision());
 		assertEquals(roundingMode, result.getRoundingMode());

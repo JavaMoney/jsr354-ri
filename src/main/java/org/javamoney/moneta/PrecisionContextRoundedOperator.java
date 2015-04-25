@@ -15,7 +15,7 @@ import javax.money.MonetaryOperator;
  *   {@code
  *
  *     MathContext mathContext = new MathContext(4, RoundingMode.HALF_EVEN);
- *     MonetaryOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
+ *     MonetaryOperator monetaryOperator = PrecisionContextRoundedOperator.of(mathContext);
  *     CurrencyUnit real = Monetary.getCurrency("BRL");
  *     MonetaryAmount money = Money.of(BigDecimal.valueOf(35.34567), real);
  *     MonetaryAmount result = monetaryOperator.apply(money); // BRL 35.35
@@ -24,16 +24,16 @@ import javax.money.MonetaryOperator;
 * </pre>
 * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
- * @see {@link MathContextRoundedOperator#of(MathContext)}
+ * @see {@link PrecisionContextRoundedOperator#of(MathContext)}
  * @see {@link RoundedMoney}
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#precision()}
  */
-public final class MathContextRoundedOperator implements MonetaryOperator {
+public final class PrecisionContextRoundedOperator implements MonetaryOperator {
 
 	private final MathContext mathContext;
 
-	private MathContextRoundedOperator(MathContext mathContext) {
+	private PrecisionContextRoundedOperator(MathContext mathContext) {
 		this.mathContext = mathContext;
 	}
 
@@ -46,7 +46,7 @@ public final class MathContextRoundedOperator implements MonetaryOperator {
 	 * @throws IllegalArgumentException when the mathContext is {@link MathContext#getRoundingMode()} is {@link RoundingMode#UNNECESSARY}
 	 * @see {@linkplain MathContext}
 	 */
-	public static MathContextRoundedOperator of(MathContext mathContext) {
+	public static PrecisionContextRoundedOperator of(MathContext mathContext) {
 
 		Objects.requireNonNull(mathContext);
 
@@ -58,7 +58,7 @@ public final class MathContextRoundedOperator implements MonetaryOperator {
 				throw new IllegalArgumentException("To create the MathContextRoundedOperator you cannot use the zero precision on MathContext");
 		}
 
-		return new MathContextRoundedOperator(mathContext);
+		return new PrecisionContextRoundedOperator(mathContext);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public final class MathContextRoundedOperator implements MonetaryOperator {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(MathContextRoundedOperator.class.getName()).append('{')
+		sb.append(PrecisionContextRoundedOperator.class.getName()).append('{')
 		.append("mathContext:").append(mathContext).append('}');
 		return sb.toString();
 	}

@@ -1,9 +1,16 @@
 package org.javamoney.moneta;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
+/**
+ *The default implementation to {@link MonetaryRoundedFactory}, this implementation returns the {@link RoundedMoney}.
+ *@see {@link MonetaryRoundedFactory#create(Number, CurrencyUnit)}
+ * @author Otavio Santana
+ */
 class DefaultMonetaryRoundedFactory implements MonetaryRoundedFactory {
 
 	private final MonetaryOperator roundingOperator;
@@ -14,7 +21,7 @@ class DefaultMonetaryRoundedFactory implements MonetaryRoundedFactory {
 
 	@Override
 	public MonetaryAmount create(Number number, CurrencyUnit currencyUnit) {
-		return RoundedMoney.of(number, currencyUnit, roundingOperator);
+		return RoundedMoney.of(requireNonNull(number), requireNonNull(currencyUnit), roundingOperator);
 	}
 
 	@Override

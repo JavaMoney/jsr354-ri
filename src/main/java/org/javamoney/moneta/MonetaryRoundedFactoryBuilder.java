@@ -10,8 +10,7 @@ import java.math.RoundingMode;
  *@see {@link MonetaryRoundedFactoryBuilder#withScale(int)}
  *@see {@link MonetaryRoundedFactoryBuilder#withPrecision(int)}
  */
-public class MonetaryRoundedFactoryBuilder {
-
+public final class MonetaryRoundedFactoryBuilder {
 
 	private final RoundingMode roundingMode;
 
@@ -109,14 +108,14 @@ public class MonetaryRoundedFactoryBuilder {
 		}
 
 		/**
-		 * Make the {@link MonetaryRoundedFactory} using the {@link MathContextRoundedOperator} as rounding operator.
-		 * @return {@link MonetaryRoundedFactory} with {@link MathContextRoundedOperator}
-		 * @see {@link MathContextRoundedOperator}
+		 * Make the {@link MonetaryRoundedFactory} using the {@link PrecisionContextRoundedOperator} as rounding operator.
+		 * @return {@link MonetaryRoundedFactory} with {@link PrecisionContextRoundedOperator}
+		 * @see {@link PrecisionContextRoundedOperator}
 		 * @see {@link MonetaryRoundedFactory}
 		 */
 		public MonetaryRoundedFactory build() {
 			MathContext mathContext = new MathContext(precision, roundingMode);
-			return new DefaultMonetaryRoundedFactory(MathContextRoundedOperator.of(mathContext));
+			return new DefaultMonetaryRoundedFactory(PrecisionContextRoundedOperator.of(mathContext));
 		}
 
 	}
@@ -142,7 +141,7 @@ public class MonetaryRoundedFactoryBuilder {
 		/**
 		 * Make the {@link MonetaryRoundedFactory} using the {@link PrecisionScaleRoundedOperator} as rounding operator.
 		 * @return {@link MonetaryRoundedFactory} with {@link PrecisionScaleRoundedOperator}
-		 * @see {@link MathContextRoundedOperator}
+		 * @see {@link PrecisionContextRoundedOperator}
 		 * @see {@link PrecisionScaleRoundedOperator}
 		 */
 		public MonetaryRoundedFactory build() {

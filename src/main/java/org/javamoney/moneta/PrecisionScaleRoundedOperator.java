@@ -36,7 +36,7 @@ import javax.money.MonetaryOperator;
  */
 public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 
-	private final MathContextRoundedOperator mathContextOperator;
+	private final PrecisionContextRoundedOperator mathContextOperator;
 
 	private final ScaleRoundedOperator scaleRoundedOperator;
 
@@ -47,7 +47,7 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 	private PrecisionScaleRoundedOperator(int scale, MathContext mathContext) {
 		this.scale = scale;
 		this.mathContext = mathContext;
-		this.mathContextOperator = MathContextRoundedOperator.of(mathContext);
+		this.mathContextOperator = PrecisionContextRoundedOperator.of(mathContext);
 		this.scaleRoundedOperator = ScaleRoundedOperator.of(scale, mathContext.getRoundingMode());
 	}
 

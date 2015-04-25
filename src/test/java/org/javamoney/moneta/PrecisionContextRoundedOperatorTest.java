@@ -14,32 +14,32 @@ import javax.money.MonetaryAmount;
 
 import org.testng.annotations.Test;
 
-public class MathContextRoundedOperatorTest {
+public class PrecisionContextRoundedOperatorTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnNullPointerExceptionWhenParameterIsNull() {
-		MathContextRoundedOperator.of(null);
+		PrecisionContextRoundedOperator.of(null);
 		fail();
 	}
 
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void shouldReturnErrorWhenScaleIsUNNECESSARY() {
 		MathContext mathContext = new MathContext(2, RoundingMode.UNNECESSARY);
-		MathContextRoundedOperator.of(mathContext);
+		PrecisionContextRoundedOperator.of(mathContext);
 		fail();
 	}
 
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void shouldReturnErrorWhenPrecisionIsZero() {
 		MathContext mathContext = new MathContext(0, RoundingMode.HALF_EVEN);
-		MathContextRoundedOperator.of(mathContext);
+		PrecisionContextRoundedOperator.of(mathContext);
 		fail();
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnErrorWhenParameterIsNull() {
 		MathContext mathContext = new MathContext(2, RoundingMode.CEILING);
-		MathContextRoundedOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
+		PrecisionContextRoundedOperator monetaryOperator = PrecisionContextRoundedOperator.of(mathContext);
 		monetaryOperator.apply(null);
 		fail();
 	}
@@ -52,7 +52,7 @@ public class MathContextRoundedOperatorTest {
 		CurrencyUnit real = Monetary.getCurrency("BRL");
 		MonetaryAmount money = Money.of(BigDecimal.valueOf(35.34567), real);
 
-		MathContextRoundedOperator monetaryOperator = MathContextRoundedOperator.of(mathContext);
+		PrecisionContextRoundedOperator monetaryOperator = PrecisionContextRoundedOperator.of(mathContext);
 		MonetaryAmount result = monetaryOperator.apply(money);
 		assertTrue(RoundedMoney.class.isInstance(result));
 		assertEquals(result.getCurrency(), real);
