@@ -1,4 +1,5 @@
 target/
+test-output/
 /doc
 *.iml
 .classpath
@@ -6,4 +7,3 @@ target/
 /.resourceCache
 /.project
 /.idea
-

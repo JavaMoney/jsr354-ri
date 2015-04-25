@@ -40,6 +40,7 @@ import java.util.Optional;
  *
  * @author Anatole Tresch
  * @author Werner Keil
+ * @author Otavio Santana
  * @version 0.6.1
  */
 public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
