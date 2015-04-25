@@ -69,6 +69,10 @@ public final class MathContextRoundedOperator implements MonetaryOperator {
 		return RoundedMoney.of(numberRounded, roundedMoney.getCurrency(), this);
 	}
 
+	public MathContext getMathContext() {
+		return mathContext;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

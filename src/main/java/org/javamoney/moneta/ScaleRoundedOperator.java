@@ -64,6 +64,14 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 		return RoundedMoney.of(numberRounded, roundedMoney.getCurrency(), this);
 	}
 
+	public int getScale() {
+		return scale;
+	}
+
+	public RoundingMode getRoundingMode() {
+		return roundingMode;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

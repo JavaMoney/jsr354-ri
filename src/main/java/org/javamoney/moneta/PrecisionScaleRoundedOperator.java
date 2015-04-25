@@ -79,6 +79,14 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 		return scaleRoundedOperator.apply(requireNonNull(amount)).with(mathContextOperator);
 	}
 
+	public int getScale() {
+		return scale;
+	}
+
+	public MathContext getMathContext() {
+		return mathContext;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
