@@ -315,7 +315,7 @@ explicitly by passing a +MathContext+ as part of a +MonetaryContext+:
 [source,java]
 .Creating instances of +Money+ configuring the +MathContext+ to be used.
 --------------------------------------------
-Money money = Money.of(200, "CHF", MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build());
+Money money = Money.of(200, "CHF", MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build());
 --------------------------------------------
 
 Using the JSR's main API allows to achieve the same as follows:
@@ -325,7 +325,7 @@ Using the JSR's main API allows to achieve the same as follows:
 --------------------------------------------
 Money money = Monetary.getAmountFactory(Money.class)
                               .setCurrencyUnit("CHF").setNumber(200).
-                              ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
+                              ,setContext(MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build())
                               .create();
 --------------------------------------------
 
