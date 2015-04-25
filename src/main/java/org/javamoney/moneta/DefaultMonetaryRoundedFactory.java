@@ -1,18 +1,19 @@
 package org.javamoney.moneta;
 
 import javax.money.CurrencyUnit;
+import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
-class DefaultRoundedMoneyFactory implements RoundedMoneyFactory {
+class DefaultMonetaryRoundedFactory implements MonetaryRoundedFactory {
 
 	private final MonetaryOperator roundingOperator;
 
-	public DefaultRoundedMoneyFactory(MonetaryOperator roundingOperator) {
+	public DefaultMonetaryRoundedFactory(MonetaryOperator roundingOperator) {
 		this.roundingOperator = roundingOperator;
 	}
 
 	@Override
-	public RoundedMoney produces(Number number, CurrencyUnit currencyUnit) {
+	public MonetaryAmount create(Number number, CurrencyUnit currencyUnit) {
 		return RoundedMoney.of(number, currencyUnit, roundingOperator);
 	}
 
@@ -24,7 +25,7 @@ class DefaultRoundedMoneyFactory implements RoundedMoneyFactory {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(DefaultRoundedMoneyFactory.class.getName()).append('{')
+		sb.append(DefaultMonetaryRoundedFactory.class.getName()).append('{')
 		.append("roundingOperator: ").append(roundingOperator).append('}');
 		return sb.toString();
 	}
