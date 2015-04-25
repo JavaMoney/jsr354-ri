@@ -521,7 +521,7 @@ the +RoundingQuery+ passed:
 .Access and apply arithmetic rounding.
 --------------------------------------------
 MonetaryRounding rounding = Monetary.getRounding(
-                               RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
+                               RoundingQueryBuilder.of().setScale(4).set(RoundingMode.HALF_UP).build());
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding);
 --------------------------------------------
@@ -559,7 +559,7 @@ For Swiss Francs also a corresponding cash rounding is accessible. In Switzerlan
 .Access Swiss Francs Cash Rounding
 --------------------------------------------
 MonetaryRounding rounding = Monetary.getRounding(Monetary.getCurrency("CHF"),
-  RoundingQueryBuilder.create().set("cashRounding", true).build()
+  RoundingQueryBuilder.of().set("cashRounding", true).build()
 );
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // amount rounded in CHF cash rounding
