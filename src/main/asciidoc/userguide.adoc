@@ -677,14 +677,14 @@ almost all important currencies. Hereby the IMF feeds are internally build up as
 provides data using the intermediate +SDR+ currency unit.
 * *IDENT* provides rates with a factor of 1.0, where base and target currency are the same.
 
-By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST+. As defined by the JSR the conversion
+By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST,ECB-HIST90+. As defined by the JSR the conversion
 provider chain can be configured in +javamoney.properties+ as follows:
 
 [source,listing]
 .Overriding the conversion provider chain
 --------------------------------------------
 #Currency Conversion
-conversion.default-chain=IDENT,ECB,IMF,ECB-HIST
+conversion.default-chain=IDENT,ECB,IMF,ECB-HIST,ECB-HIST90
 --------------------------------------------
 
 ==== Configuring the Exchange Rate Providers
