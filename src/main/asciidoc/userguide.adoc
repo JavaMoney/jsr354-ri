@@ -577,6 +577,8 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 
     private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
 
+    private final Set<String> roundingNames;
+
     public TestRoundingProvider(){
         Set<String> names = new HashSet<>();
         names.add("custom1");
@@ -585,7 +587,7 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 
     @Override
     public MonetaryRounding getRounding(RoundingQuery roundingQuery){
-        CurrencyUnit cu = roundingQuery.getCurrencyUnit();
+        CurrencyUnit cu = roundingQuery.getCurrency();
         if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
             return ROUNDING;
         }
