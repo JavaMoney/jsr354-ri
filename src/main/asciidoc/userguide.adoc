@@ -324,8 +324,8 @@ Using the JSR's main API allows to achieve the same as follows:
 .Creating instances of +Money+ configuring the +MathContext+ to be used, using the +MonetaryAmountFactory+.
 --------------------------------------------
 Money money = Monetary.getAmountFactory(Money.class)
-                              .setCurrencyUnit("CHF").setNumber(200).
-                              ,setContext(MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build())
+                              .setCurrencyUnit("CHF").setNumber(200)
+                              .setContext(MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build())
                               .create();
 --------------------------------------------
 
