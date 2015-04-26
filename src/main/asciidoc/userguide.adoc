@@ -773,15 +773,14 @@ NOTE: Be aware that parsing back an amount in a reverse operation may not always
 === Customizing the Default Amount Formatters
 
 _Moneta_ basically provides similar formatting options to the one of DecimalFormat.
-It is possible to pass a +DecimalFormat+ instance
-as parameter for a +Locale+ vased format query:
+It is possible to pass a +DecimalFormat+ pattern string
+as a parameter for a +Locale+ based format query:
 
 [source,java]
 --------------------------------------------
-DecimalFormat df = ...;
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
   AmountFormatQueryBuilder.of(Locale.GERMANY)
-    .set(df)
+    .set("pattern", "####,####")
     .build()
 );
 --------------------------------------------
