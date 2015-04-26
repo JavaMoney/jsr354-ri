@@ -797,13 +797,15 @@ done based on the mechanism as defined by the Java +ServiceLoader+.
 public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
 
     private static final String PROVIDER_NAME = "GeeCoin";
+    private static final String STYLE_NAME = "GeeCoin";
+
     /** The supported locales. */
     private Set<Locale> supportedSets = new HashSet<>();
     /** The provided formats, by name. */
     private Set<String> formatNames = new HashSet<>();
 
     public GeeCoinFormatProviderSpi(){
-        supportedSets.addAll(Locale.CHINA);
+        supportedSets.add(Locale.CHINA);
         supportedSets = Collections.unmodifiableSet(supportedSets);
         formatNames.add("GeeCoin");
         formatNames = Collections.unmodifiableSet(formatNames);
@@ -827,13 +829,15 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     @Override
     public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-        if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
+	if(!amountFormatQuery.getProviderNames().isEmpty()
+	    && !amountFormatQuery.getProviderNames().contains(getProviderName())){
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+        if(!(amountFormatQuery.getFormatName()==null
+	    || STYLE_NAME.equals(amountFormatQuery.getFormatName()))){
             return Collections.emptySet();
         }
-        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(PROVIDER_NAME);
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(PROVIDER_NAME);
         if(amountFormatQuery.getLocale()!=null){
             builder.setLocale(amountFormatQuery.getLocale());
         }
