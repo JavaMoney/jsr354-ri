@@ -738,10 +738,10 @@ format to use. In contrast to DecimalFormat, the JSR 354 formats are thread-safe
 MonetaryAmountFormat formatCountry = MonetaryFormats.getAmountFormat(Locale.GERMANY);
 MonetaryAmountFormat formatNamed = MonetaryFormats.getAmountFormat("MyCustomFormat");
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
-  AmountFormatQueryBuilder.create()
+  AmountFormatQueryBuilder.of("MyCustomFormat2")
     .set("strict", true)
     .set("omitNegative", true)
-    .set("omitNegativeSign" "N/A")
+    .set("omitNegativeSign", "N/A")
     .build()
 );
 --------------------------------------------
@@ -780,7 +780,7 @@ as parameter for a +Locale+ vased format query:
 --------------------------------------------
 DecimalFormat df = ...;
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
-  AmountFormatQueryBuilder.create(Locale.GERMANY)
+  AmountFormatQueryBuilder.of(Locale.GERMANY)
     .set(df)
     .build()
 );
