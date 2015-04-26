@@ -238,6 +238,15 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return of(number, currency);
     }
 
+    /**
+     * Obtains an instance of Money representing zero.
+     * @param currency
+     * @return
+     */
+    public static FastMoney zero(CurrencyUnit currency) {
+        return of(BigDecimal.ZERO, currency);
+    }
+
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */

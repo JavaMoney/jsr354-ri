@@ -795,6 +795,15 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     }
 
     /**
+     * Obtains an instance of {@link Money} representing zero.
+     * @param currency
+     * @return
+     */
+    public static Money zero(CurrencyUnit currency) {
+        return new Money(BigDecimal.ZERO, currency);
+    }
+
+    /**
      * Converts (if necessary) the given {@link MonetaryAmount} to a
      * {@link Money} instance. The {@link MonetaryContext} will be adapted as
      * necessary, if the precision of the given amount exceeds the capabilities

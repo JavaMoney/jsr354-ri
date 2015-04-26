@@ -33,6 +33,7 @@ import java.math.RoundingMode;
 
 import javax.money.*;
 
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -1123,6 +1124,19 @@ public class RoundedMoneyTest {
     @Test(expectedExceptions = ArithmeticException.class)
     public void testCreatingFromDoubleNegativeInfinity(){
     	RoundedMoney.of(Double.NEGATIVE_INFINITY, "XXX");
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
+    	FastMoney.zero(null);
+    	Assert.fail();
+    }
+
+    @Test
+    public void shouldRerturnZeroWhenUsingZero() {
+    	MonetaryAmount zero = FastMoney.zero(DOLLAR);
+    	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
+    	assertEquals(DOLLAR, zero.getCurrency());
     }
 
 }

@@ -255,6 +255,14 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
                 DEFAULT_MONETARY_CONTEXT.toBuilder().importContext(monetaryContext).build(), rounding);
     }
 
+    /**
+     * Obtains an instance of {@link RoundedMoney} representing zero.
+     * @param currency
+     * @return
+     */
+    public static RoundedMoney zero(CurrencyUnit currency) {
+        return of(BigDecimal.ZERO, currency);
+    }
     /*
      * (non-Javadoc)
      * @see javax.money.MonetaryAmount#getCurrency()
