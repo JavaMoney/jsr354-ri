@@ -75,9 +75,9 @@ You can use the currency code to access currencies.
 [source,java]
 .Accessing currencies by currency code
 --------------------------------------------
-CurrencyUnit currencyCHF = Monetary.getCurrencyUnit("CHF");
-CurrencyUnit currencyUSD = Monetary.getCurrencyUnit("USD");
-CurrencyUnit currencyEUR = Monetary.getCurrencyUnit("EUR");
+CurrencyUnit currencyCHF = Monetary.getCurrency("CHF");
+CurrencyUnit currencyUSD = Monetary.getCurrency("USD");
+CurrencyUnit currencyEUR = Monetary.getCurrency("EUR");
 --------------------------------------------
 
 Hereby all codes available from +java.util.Currency+ in the underlying JDK are mapped by default.
@@ -98,9 +98,9 @@ Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +L
 [source,java]
 .Accessing currencies by Locale
 --------------------------------------------
-CurrencyUnit currencyCHF = Monetary.getCurrencyUnit(new Locale("", "SUI")); // Switzerland
-CurrencyUnit currencyUSD = Monetary.getCurrencyUnit(new Locale("", "USA")); // United States of America
-CurrencyUnit currencyEUR = Monetary.getCurrencyUnit(new Locale("", "GER")); // Germany
+CurrencyUnit currencyCHF = Monetary.getCurrency(new Locale("", "SUI")); // Switzerland
+CurrencyUnit currencyUSD = Monetary.getCurrency(new Locale("", "USA")); // United States of America
+CurrencyUnit currencyEUR = Monetary.getCurrency(new Locale("", "GER")); // Germany
 --------------------------------------------
 
 Hereby all codes available in the underlying JDK are mapped by default.
