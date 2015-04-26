@@ -40,6 +40,7 @@ import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -1181,5 +1182,18 @@ public class MoneyTest {
     @Test(expectedExceptions = ArithmeticException.class)
     public void testCreatingFromDoubleNegativeInfinity(){
     	Money.of(Double.NEGATIVE_INFINITY, "XXX");
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
+    	Money.zero(null);
+    	Assert.fail();
+    }
+
+    @Test
+    public void shouldRerturnZeroWhenUsingZero() {
+    	MonetaryAmount zero = Money.zero(BRAZILIAN_REAL);
+    	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
+    	assertEquals(BRAZILIAN_REAL, zero.getCurrency());
     }
 }
