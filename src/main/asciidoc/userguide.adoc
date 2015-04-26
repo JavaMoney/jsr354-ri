@@ -767,7 +767,7 @@ MonetaryAmount amount = format.parse(formattedString);
 --------------------------------------------
 
 NOTE: Be aware that parsing back an amount in a reverse operation may not always work. If a formatter implements
-      only a unidirectional formatting operation, a +MonetaryFormatException+ will be thrown.
+      only a unidirectional formatting operation, a +MonetaryParseException+ will be thrown.
 
 
 === Customizing the Default Amount Formatters
