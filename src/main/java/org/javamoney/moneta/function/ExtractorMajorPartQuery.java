@@ -22,19 +22,24 @@ import javax.money.*;
 
 /**
  * This class allows to extract the major part of a {@link MonetaryAmount}
- * instance.
- *
+ * instance. Gets the amount in major units as a {@code long}.
+ * <p>
+ * For example, 'EUR 2.35' will return 2,
+ * and 'BHD -1.345' will return -1.
+ * <p>
+ * @return the major units part of the amount
  * @author Anatole Tresch
+ * @author Otavio Santana
  */
-final class MajorUnits implements MonetaryQuery<Long> {
+final class ExtractorMajorPartQuery implements MonetaryQuery<Long> {
 
     private final MonetaryOperator downRounding =
             Monetary.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
 
     /**
-     * Access the shared instance of {@link MajorUnits} for use.
+     * Access the shared instance of {@link ExtractorMajorPartQuery} for use.
      */
-    MajorUnits() {
+    ExtractorMajorPartQuery() {
     }
 
     /**

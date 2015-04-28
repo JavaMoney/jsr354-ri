@@ -33,7 +33,7 @@ import javax.money.MonetaryOperator;
  * 
  * @see <a href="http://en.wikipedia.org/wiki/Percent">Wikipedia: Percentage</a>
  */
-final class Percent implements MonetaryOperator {
+final class PercentOperator implements MonetaryOperator {
 
 	private static final BigDecimal ONE_HUNDRED = new BigDecimal(100,
 			MathContext.DECIMAL64);
@@ -41,9 +41,9 @@ final class Percent implements MonetaryOperator {
 	private final BigDecimal percentValue;
 
 	/**
-	 * Access the shared instance of {@link Percent} for use.
+	 * Access the shared instance of {@link PercentOperator} for use.
 	 */
-	Percent(final BigDecimal decimal) {
+	PercentOperator(final BigDecimal decimal) {
 		percentValue = calcPercent(decimal);
 	}
 
