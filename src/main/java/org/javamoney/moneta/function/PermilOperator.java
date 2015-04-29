@@ -18,20 +18,21 @@ package org.javamoney.moneta.function;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.NumberFormat;
+import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
 /**
  * This class allows to extract the permil of a {@link MonetaryAmount} instance.
- * 
+ *
  * @version 0.5
  * @author Anatole Tresch
  * @author Werner Keil
- * 
+ *
  * @see <a href="http://en.wikipedia.org/wiki/Per_mil">Wikipedia: Per mil</a>
  */
-final class Permil implements MonetaryOperator {
+final class PermilOperator implements MonetaryOperator {
 
 	private static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
 
@@ -41,21 +42,19 @@ final class Permil implements MonetaryOperator {
 	private final BigDecimal permilValue;
 
 	/**
-	 * Get {@link MathContext} for {@link Permil} instances.
-	 * 
+	 * Get {@link MathContext} for {@link PermilOperator} instances.
+	 *
 	 * @return the {@link MathContext} to be used, by default
 	 *         {@link MathContext#DECIMAL64}.
 	 */
 	private static MathContext initDefaultMathContext() {
-		// TODO Initialize default, e.g. by system properties, or better:
-		// classpath properties!
 		return MathContext.DECIMAL64;
 	}
 
 	/**
-	 * Access the shared instance of {@link Permil} for use.
+	 * Access the shared instance of {@link PermilOperator} for use.
 	 */
-	Permil(final BigDecimal decimal) {
+	PermilOperator(final BigDecimal decimal) {
 		permilValue = calcPermil(decimal);
 	}
 
@@ -66,17 +65,18 @@ final class Permil implements MonetaryOperator {
 	 * 2.35' will return 0.235.
 	 * <p>
 	 * This is returned as a {@code MonetaryAmount}.
-	 * 
+	 *
 	 * @return the permil result of the amount, never {@code null}
 	 */
 	@Override
 	public MonetaryAmount apply(MonetaryAmount amount) {
+		Objects.requireNonNull(amount, "Amount required.");
 		return amount.multiply(permilValue);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -89,7 +89,7 @@ final class Permil implements MonetaryOperator {
 	/**
 	 * Calculate a BigDecimal value for a Permil e.g. "3" (3 permil) will
 	 * generate .003
-	 * 
+	 *
 	 * @return java.math.BigDecimal
 	 * @param decimal
 	 *            java.math.BigDecimal

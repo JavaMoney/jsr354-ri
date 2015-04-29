@@ -1178,4 +1178,5 @@ public class FastMoneyTest{
     	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
     	assertEquals(DOLLAR, zero.getCurrency());
     }
+
 }

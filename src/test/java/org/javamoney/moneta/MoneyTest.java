@@ -1196,4 +1196,5 @@ public class MoneyTest {
     	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
     	assertEquals(BRAZILIAN_REAL, zero.getCurrency());
     }
+
 }

@@ -19,7 +19,7 @@ import static java.text.NumberFormat.getPercentInstance;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Locale;
+import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
@@ -27,13 +27,13 @@ import javax.money.MonetaryOperator;
 /**
  * This class allows to extract the percentage of a {@link MonetaryAmount}
  * instance.
- * 
+ *
  * @version 0.5
  * @author Werner Keil
- * 
+ *
  * @see <a href="http://en.wikipedia.org/wiki/Percent">Wikipedia: Percentage</a>
  */
-final class Percent implements MonetaryOperator {
+final class PercentOperator implements MonetaryOperator {
 
 	private static final BigDecimal ONE_HUNDRED = new BigDecimal(100,
 			MathContext.DECIMAL64);
@@ -41,9 +41,9 @@ final class Percent implements MonetaryOperator {
 	private final BigDecimal percentValue;
 
 	/**
-	 * Access the shared instance of {@link Percent} for use.
+	 * Access the shared instance of {@link PercentOperator} for use.
 	 */
-	Percent(final BigDecimal decimal) {
+	PercentOperator(final BigDecimal decimal) {
 		percentValue = calcPercent(decimal);
 	}
 
@@ -54,17 +54,18 @@ final class Percent implements MonetaryOperator {
 	 * 2.35' will return 0.235.
 	 * <p>
 	 * This is returned as a {@code MonetaryAmount}.
-	 * 
+	 *
 	 * @return the percent result of the amount, never {@code null}
 	 */
 	@Override
 	public MonetaryAmount apply(MonetaryAmount amount) {
+		Objects.requireNonNull(amount, "Amount required.");
 		return amount.multiply(percentValue);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -73,19 +74,9 @@ final class Percent implements MonetaryOperator {
 	}
 
 	/**
-	 * Format the percentage for a locale.
-	 * 
-	 * @param locale
-	 *            the target locale
-	 */
-	public String getDisplayName(Locale locale) {
-		return getPercentInstance(locale).format(percentValue);
-	}
-
-	/**
 	 * Calculate a BigDecimal value for a Percent e.g. "3" (3 percent) will
 	 * generate .03
-	 * 
+	 *
 	 * @return java.math.BigDecimal
 	 * @param decimal
 	 *            java.math.BigDecimal

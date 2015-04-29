@@ -21,15 +21,18 @@ public class DefaultMonetaryRoundedFactoryTest {
 
 	private CurrencyUnit real = Monetary.getCurrency("BRL");
 
+	private MonetaryOperator identical = m -> m;
+
+
 	@BeforeMethod
 	public void setup() {
-		factory = new DefaultMonetaryRoundedFactory(MonetaryOperator.identity());
+		factory = new DefaultMonetaryRoundedFactory(identical);
 	}
 
 	@Test
 	public void shouldReturnGetRoudingOperator() {
 		MonetaryOperator roundingOperator = factory.getRoundingOperator();
-		assertEquals(MonetaryOperator.identity(), roundingOperator);
+		assertEquals(identical, roundingOperator);
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)

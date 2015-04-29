@@ -20,42 +20,44 @@ import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
+import javax.money.MonetaryQuery;
 
 /**
  * This class allows to extract the minor part of a {@link MonetaryAmount}
  * instance.
- * 
+ *
  * @author Anatole Tresch
+ * @author Otavio Santana
  */
-final class MinorPart implements MonetaryOperator {
+final class ExtractorMinorPartQuery implements MonetaryQuery<Long> {
 
 	/**
 	 * Package private constructor used from MonetaryFunctions.
 	 */
-	MinorPart() {
+	ExtractorMinorPartQuery() {
 	}
 
 	/**
-	 * Gets the minor part of a {@code MonetaryAmount} with the same scale.
+	 * Extract the minor part of a {@code MonetaryAmount} with the same scale.
 	 * <p>
 	 * This returns the monetary amount in terms of the minor units of the
 	 * currency, truncating the whole part if necessary. For example, 'EUR 2.35'
-	 * will return 'EUR 0.35', and 'BHD -1.345' will return 'BHD -0.345'.
+	 * will return 35, and 'BHD -1.345' will return -345.
 	 * <p>
 	 * This is returned as a {@code MonetaryAmount} rather than a
 	 * {@code BigDecimal} . This is to allow further calculations to be
 	 * performed on the result. Should you need a {@code BigDecimal}, simply
 	 * call {@code asType(BigDecimal.class)}.
-	 * 
 	 * @return the minor units part of the amount, never {@code null}
 	 */
 	@Override
-	public MonetaryAmount apply(MonetaryAmount amount){
+	public Long queryFrom(MonetaryAmount amount) {
 		Objects.requireNonNull(amount, "Amount required.");
+		int fractionDigits = amount.getCurrency().getDefaultFractionDigits();
 		BigDecimal number = amount.getNumber().numberValue(BigDecimal.class);
-		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
-		return amount.subtract(amount.getFactory().setNumber(wholes).create());
+		return number.setScale(fractionDigits, RoundingMode.DOWN)
+		        .remainder(BigDecimal.ONE)
+		        .movePointRight(fractionDigits).longValue();
 	}
 
 }

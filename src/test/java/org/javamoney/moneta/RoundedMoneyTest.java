@@ -1134,7 +1134,7 @@ public class RoundedMoneyTest {
 
     @Test
     public void shouldRerturnZeroWhenUsingZero() {
-    	MonetaryAmount zero = FastMoney.zero(DOLLAR);
+    	MonetaryAmount zero = RoundedMoney.zero(DOLLAR);
     	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
     	assertEquals(DOLLAR, zero.getCurrency());
     }
