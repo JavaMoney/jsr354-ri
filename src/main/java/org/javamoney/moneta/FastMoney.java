@@ -247,19 +247,6 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return of(BigDecimal.ZERO, currency);
     }
 
-    /**
-     * Obtains an instance of {@code FastMoney} from an amount in minor units.
-     * For example, {@code ofMinor(USD, 1234)} creates the instance {@code USD 12.34}.
-     * @param currency  the currency, not null
-     * @param amountMinor  the amount of money in the minor division of the currency
-     * @return the Money from minor units
-     * @see {@link CurrencyUnit#getDefaultFractionDigits()}
-     * @throws NullPointerException when the currency is null
-     */
-    public static FastMoney ofMinor(CurrencyUnit currency, long amountMinor) {
-        return of(BigDecimal.valueOf(amountMinor, currency.getDefaultFractionDigits()), currency);
-    }
-
     /*
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
