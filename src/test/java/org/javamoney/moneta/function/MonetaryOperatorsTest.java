@@ -15,17 +15,17 @@
  */
 package org.javamoney.moneta.function;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.Locale;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole
@@ -154,17 +154,6 @@ public class MonetaryOperatorsTest {
 		MonetaryOperator p = MonetaryOperators.percent((short) 25);
 		assertTrue(p.toString().contains("25"));
 		assertTrue(p.toString().contains("%"));
-	}
-
-	/**
-	 * Test method for
-	 * {@link org.javamoney.moneta.function.MonetaryOperators#percent(java.lang.Number)}
-	 * .
-	 */
-	@Test
-	public void testPercentGetDisplayName() {
-		MonetaryOperator p = MonetaryOperators.percent((byte) 25);
-		assertEquals("25%", ((PercentOperator) p).getDisplayName(Locale.ENGLISH));
 	}
 
 	/**

@@ -18,6 +18,7 @@ package org.javamoney.moneta.function;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.text.NumberFormat;
+import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
@@ -69,6 +70,7 @@ final class PermilOperator implements MonetaryOperator {
 	 */
 	@Override
 	public MonetaryAmount apply(MonetaryAmount amount) {
+		Objects.requireNonNull(amount, "Amount required.");
 		return amount.multiply(permilValue);
 	}
 

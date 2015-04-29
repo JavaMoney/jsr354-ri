@@ -40,7 +40,7 @@ public class MonetaryRoundedFactoryBuilderTest {
 
 	@Test
 	public void shouldReturnTheSameMonetaryOperator() {
-		MonetaryOperator monetaryOperator = MonetaryOperator.identity();
+		MonetaryOperator monetaryOperator = m -> m;
 		MonetaryRoundedFactory factory = MonetaryRoundedFactory.of(monetaryOperator);
 		assertNotNull(factory);
 		assertEquals(monetaryOperator, factory.getRoundingOperator());

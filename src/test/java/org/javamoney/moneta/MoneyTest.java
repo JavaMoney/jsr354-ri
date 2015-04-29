@@ -1196,4 +1196,17 @@ public class MoneyTest {
     	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
     	assertEquals(BRAZILIAN_REAL, zero.getCurrency());
     }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
+    	Money.ofMinor(null, 1234L);
+    	Assert.fail();
+    }
+
+    @Test
+    public void shouldRerturnMonetaryAmount() {
+    	MonetaryAmount zero = Money.ofMinor(DOLLAR, 1234L);
+    	assertEquals(Double.valueOf(12.34), zero.getNumber().doubleValue());
+    	assertEquals(DOLLAR, zero.getCurrency());
+    }
 }

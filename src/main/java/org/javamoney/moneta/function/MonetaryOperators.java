@@ -37,27 +37,16 @@ import javax.money.MonetaryOperator;
  * @author Otavio Santana
  */
 public final class MonetaryOperators {
-    /**
-     * defaulkt Math context used.
-     */
+
     private static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
-    /**
-     * Shared reciprocal instance.
-     */
+
     private static final ReciprocalOperator RECIPROCAL = new ReciprocalOperator();
 
-    /**
-     * The shared instance of this class.
-     */
     private static final ExtractorMinorPartOperator EXTRACTOR_MINOR_PART = new ExtractorMinorPartOperator();
-    /**
-     * Shared major part instance.
-     */
+
     private static final ExtractorMajorPartOperator EXTRACTOR_MAJOR_PART = new ExtractorMajorPartOperator();
 
-    /**
-     * Private singleton constructor.
-     */
+
     private MonetaryOperators() {
     }
 
