@@ -15,19 +15,29 @@
  */
 package org.javamoney.moneta.internal.loader;
 
-import org.javamoney.moneta.spi.LoaderService;
-
-import javax.money.spi.Bootstrap;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.money.spi.Bootstrap;
+
+import org.javamoney.moneta.spi.LoadDataInformation;
+import org.javamoney.moneta.spi.LoaderService;
 
 /**
  * This class provides a mechanism to register resources, that may be updated
@@ -134,26 +144,29 @@ public class DefaultLoaderService implements LoaderService {
      * java.net.URL, java.net.URL[])
      */
     @Override
-    public void registerData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties,
-                             LoaderListener loaderListener,
-                             URI backupResource, URI... resourceLocations) {
-        if (resources.containsKey(resourceId)) {
-            throw new IllegalArgumentException("Resource : " + resourceId + " already registered.");
+    public void registerData(LoadDataInformation loadDataInformation) {
+
+        if (resources.containsKey(loadDataInformation.getResourceId())) {
+            throw new IllegalArgumentException("Resource : " + loadDataInformation.getResourceId() + " already registered.");
         }
-        LoadableResource res = new LoadableResource(resourceId, CACHE, updatePolicy, properties, backupResource, resourceLocations);
-        this.resources.put(resourceId, res);
-        if (loaderListener != null) {
-            this.addLoaderListener(loaderListener, resourceId);
+
+		LoadableResource resource = new LoadableResourceBuilder()
+				.withCache(CACHE).withLoadDataInformation(loadDataInformation)
+				.build();
+        this.resources.put(loadDataInformation.getResourceId(), resource);
+
+        if (loadDataInformation.getLoaderListener() != null) {
+            this.addLoaderListener(loadDataInformation.getLoaderListener(), loadDataInformation.getResourceId());
         }
-        switch (updatePolicy) {
+        switch (loadDataInformation.getUpdatePolicy()) {
             case NEVER:
-                loadDataLocal(resourceId);
+                loadDataLocal(loadDataInformation.getResourceId());
                 break;
             case ONSTARTUP:
-                loadDataAsync(resourceId);
+                loadDataAsync(loadDataInformation.getResourceId());
                 break;
             case SCHEDULED:
-                addScheduledLoad(res);
+                addScheduledLoad(resource);
                 break;
             case LAZY:
             default:
@@ -170,26 +183,30 @@ public class DefaultLoaderService implements LoaderService {
     * java.net.URL, java.net.URL[])
     */
     @Override
-    public void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties,
-                                    LoaderListener loaderListener,
-                                    URI backupResource, URI... resourceLocations) {
-        if (resources.containsKey(resourceId)) {
-            throw new IllegalArgumentException("Resource : " + resourceId + " already registered.");
+    public void registerAndLoadData(LoadDataInformation loadDataInformation) {
+
+        if (resources.containsKey(loadDataInformation.getResourceId())) {
+            throw new IllegalArgumentException("Resource : " + loadDataInformation.getResourceId() + " already registered.");
         }
-        LoadableResource res = new LoadableResource(resourceId, CACHE, updatePolicy, properties, backupResource, resourceLocations);
-        this.resources.put(resourceId, res);
-        if (loaderListener != null) {
-            this.addLoaderListener(loaderListener, resourceId);
+		LoadableResource resource = new LoadableResourceBuilder()
+				.withCache(CACHE).withLoadDataInformation(loadDataInformation)
+				.build();
+        this.resources.put(loadDataInformation.getResourceId(), resource);
+
+
+        if (loadDataInformation.getLoaderListener() != null) {
+            this.addLoaderListener(loadDataInformation.getLoaderListener(), loadDataInformation.getResourceId());
         }
-        switch (updatePolicy) {
+
+        switch (loadDataInformation.getUpdatePolicy()) {
             case SCHEDULED:
-                addScheduledLoad(res);
+                addScheduledLoad(resource);
                 break;
             case LAZY:
             default:
                 break;
         }
-        loadData(resourceId);
+        loadData(loadDataInformation.getResourceId());
     }
 
     /*

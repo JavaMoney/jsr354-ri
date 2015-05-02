@@ -9,10 +9,19 @@ import javax.money.MonetaryQuery;
  * <pre>
  * {@code
  * 	MonetaryAmount monetaryAmount = Money.parse(&quot;EUR 2.35&quot;);
- * 	monetaryAmount.query(query);// 2L
+ * 	Long result = monetaryAmount.query(query);// 2L
  * }
  * </pre>
- *
+ * <p> Or using: </p>
+ * <pre>
+ * {@code
+ * 	MonetaryAmount monetaryAmount = Money.parse(&quot;EUR 2.35&quot;);
+ * 	Long result = query.queryFrom(monetaryAmount);// 2L
+ * }
+ * </pre>
+ * @see {@link MonetaryAmount#query(MonetaryQuery)}
+ * @see {@link MonetaryQuery}
+ * @see {@link MonetaryQuery#queryFrom(MonetaryAmount)}
  * @author Otavio Santana
  */
 public final class MonetaryQueries {
