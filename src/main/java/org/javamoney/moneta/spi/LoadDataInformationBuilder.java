@@ -74,9 +74,6 @@ public class LoadDataInformationBuilder {
 		else if (Objects.isNull(properties)) {
 			throw new IllegalStateException("The properties should be informed");
 		}
-		else if (Objects.isNull(loaderListener)) {
-			throw new IllegalStateException("The properties should be informed");
-		}
 		else if (Objects.isNull(resourceLocations)) {
 			throw new IllegalStateException("The properties should be informed");
 		}
