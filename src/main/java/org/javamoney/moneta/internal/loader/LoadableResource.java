@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal.loader;
 
-import org.javamoney.moneta.spi.LoaderService;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,14 +23,22 @@ import java.lang.ref.SoftReference;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.javamoney.moneta.spi.LoadDataInformation;
+import org.javamoney.moneta.spi.LoaderService;
+
 /**
  * This class represent a resource that automatically is reloaded, if needed.
- *
+ * To create this instance use: {@link LoadableResourceBuilder}
  * @author Anatole Tresch
  */
 public class LoadableResource {
@@ -92,30 +98,22 @@ public class LoadableResource {
     private final Map<String, String> properties;
 
 
-    /**
-     * Create a new instance.
-     *
-     * @param resourceId       The dataId.
-     * @param cache            The cache to be used for storing remote data locally.
-     * @param properties       The configuration properties.
-     * @param fallbackLocation teh fallback ULR, not null.
-     * @param locations        the remote locations, not null (but may be empty!)
-     */
-    public LoadableResource(String resourceId, ResourceCache cache, LoaderService.UpdatePolicy updatePolicy,
-                            Map<String, String> properties, URI fallbackLocation, URI... locations) {
-        Objects.requireNonNull(resourceId, "resourceId required");
-        Objects.requireNonNull(properties, "properties required");
-        Objects.requireNonNull(updatePolicy, "updatePolicy required");
-        String val = properties.get("cacheTTLMillis");
+    LoadableResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
+
+
+        Objects.requireNonNull(loadDataInformation.getResourceId(), "resourceId required");
+        Objects.requireNonNull(loadDataInformation.getProperties(), "properties required");
+        Objects.requireNonNull(loadDataInformation.getUpdatePolicy(), "updatePolicy required");
+        String val = loadDataInformation.getProperties().get("cacheTTLMillis");
         if (val != null) {
             this.cacheTTLMillis = Long.parseLong(val);
         }
         this.cache = cache;
-        this.resourceId = resourceId;
-        this.updatePolicy = updatePolicy;
-        this.properties = properties;
-        this.fallbackLocation = fallbackLocation;
-        this.remoteResources.addAll(Arrays.asList(locations));
+        this.resourceId = loadDataInformation.getResourceId();
+        this.updatePolicy = loadDataInformation.getUpdatePolicy();
+        this.properties = loadDataInformation.getProperties();
+        this.fallbackLocation = loadDataInformation.getBackupResource();
+        this.remoteResources.addAll(Arrays.asList(loadDataInformation.getResourceLocations()));
     }
 
     /**

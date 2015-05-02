@@ -17,28 +17,42 @@ package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.concurrent.atomic.AtomicLong;
+import java.math.RoundingMode;
+import java.util.Objects;
 
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+
+import org.javamoney.moneta.spi.DefaultNumberValue;
 
 /**
  * This singleton class provides access to the predefined monetary functions.
  * <p>
  * The class is thread-safe, which is also true for all functions returned by
  * this class.
-  * <pre>
+ * <pre>
  * {@code
  * 	MonetaryAmount money = Money.parse("EUR 2.35");
  *  MonetaryAmount result = operator.apply(money);
  * }
  * </pre>
+ * <p>Or using: </p>
+ * <pre>
+ * {@code
+ * 	MonetaryAmount money = Money.parse("EUR 2.35");
+ *  MonetaryAmount result = money.with(operator);
+ * }
+ * </pre>
+ * @see {@link MonetaryAmount#with(MonetaryOperator)}
+ * @see {@link MonetaryOperator}
+ * @see {@link MonetaryOperator#apply(MonetaryAmount)}
  * @author Anatole Tresch
  * @author Otavio Santana
  */
 public final class MonetaryOperators {
 
-    private static final MathContext DEFAULT_MATH_CONTEXT = initDefaultMathContext();
+    private static final MathContext DEFAULT_MATH_CONTEXT = MathContext.DECIMAL64;
 
     private static final ReciprocalOperator RECIPROCAL = new ReciprocalOperator();
 
@@ -46,18 +60,10 @@ public final class MonetaryOperators {
 
     private static final ExtractorMajorPartOperator EXTRACTOR_MAJOR_PART = new ExtractorMajorPartOperator();
 
+    private static final RoudingMonetaryAmountOperator ROUNDING_MONETARY_AMOUNT = new RoudingMonetaryAmountOperator();
+
 
     private MonetaryOperators() {
-    }
-
-    /**
-     * Get {@link MathContext} for {@link PermilOperator} instances.
-     *
-     * @return the {@link MathContext} to be used, by default
-     * {@link MathContext#DECIMAL64}.
-     */
-    private static MathContext initDefaultMathContext() {
-        return MathContext.DECIMAL64;
     }
 
     /**
@@ -116,7 +122,7 @@ public final class MonetaryOperators {
      * @return the permil {@link MonetaryOperator}
      */
     public static MonetaryOperator permil(Number number, MathContext mathContext) {
-        return new PermilOperator(getBigDecimal(number, mathContext));
+        return new PermilOperator(new DefaultNumberValue(number).numberValue(BigDecimal.class));
     }
 
 	/**
@@ -145,7 +151,7 @@ public final class MonetaryOperators {
      * @return the percent of {@link MonetaryOperator}
      */
     public static MonetaryOperator percent(Number number) {
-        return percent(getBigDecimal(number, DEFAULT_MATH_CONTEXT));
+        return percent(new DefaultNumberValue(number).numberValue(BigDecimal.class));
     }
 
 	/**
@@ -186,30 +192,63 @@ public final class MonetaryOperators {
 		return EXTRACTOR_MAJOR_PART;
 	}
 
-    /**
-     * Converts to {@link BigDecimal}, if necessary, or casts, if possible.
-     *
-     * @param num         The {@link Number}
-     * @param mathContext the {@link MathContext}
-     * @return the {@code number} as {@link BigDecimal}
-     */
-    private static BigDecimal getBigDecimal(Number num,
-                                            MathContext mathContext) {
-        if (num instanceof BigDecimal) {
-            return (BigDecimal) num;
-        }
-        if (num instanceof Long || num instanceof Integer
-                || num instanceof Byte || num instanceof AtomicLong) {
-            return BigDecimal.valueOf(num.longValue());
-        }
-        if (num instanceof Float || num instanceof Double) {
-            return new BigDecimal(num.toString());
-        }
-        try {
-            // Avoid imprecise conversion to double value if at all possible
-            return new BigDecimal(num.toString(), mathContext);
-        } catch (NumberFormatException ignored) {
-        }
-        return BigDecimal.valueOf(num.doubleValue());
-    }
+	/**
+	 * Rounding the {@link MonetaryAmount} using {@link CurrencyUnit#getDefaultFractionDigits()}
+	 * and {@link RoundingMode#HALF_EVEN}.
+	 * <p>
+	 * For example, 'EUR 2.3523' will return 'EUR 2.35',
+	 * and 'BHD -1.34534432' will return 'BHD -1.345'.
+	 * <p>
+	 *<pre>
+	 *{@code
+	 *MonetaryAmount money = Money.parse("EUR 2.355432");
+	 *MonetaryAmount result = MonetaryOperators.rounding().apply(money);//EUR 2.36
+	 *}
+	 *</pre>
+	 * @return the major part as {@link MonetaryOperator}
+	 */
+	public static MonetaryOperator rounding() {
+		return ROUNDING_MONETARY_AMOUNT;
+	}
+
+	/**
+	 * Rounding the {@link MonetaryAmount} using {@link CurrencyUnit#getDefaultFractionDigits()}
+	 * and {@link RoundingMode}.
+	 * <p>
+	 * For example, 'EUR 2.3523' will return 'EUR 2.35',
+	 * and 'BHD -1.34534432' will return 'BHD -1.345'.
+	 * <p>
+	 *<pre>
+	 *{@code
+	 *MonetaryAmount money = Money.parse("EUR 2.355432");
+	 *MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN).apply(money);//EUR 2.35
+	 *}
+	 *</pre>
+	 * @param roundingMode rounding to be used
+	 * @return the major part as {@link MonetaryOperator}
+	 */
+	public static MonetaryOperator rounding(RoundingMode roundingMode) {
+		return new RoudingMonetaryAmountOperator(Objects.requireNonNull(roundingMode));
+	}
+
+	/**
+	 * Rounding the {@link MonetaryAmount} using {@link CurrencyUnit#getDefaultFractionDigits()}
+	 * and {@link RoundingMode}.
+	 * <p>
+	 * For example, 'EUR 2.3523' will return 'EUR 2.35',
+	 * and 'BHD -1.34534432' will return 'BHD -1.345'.
+	 * <p>
+	 *<pre>
+	 *{@code
+	 *MonetaryAmount money = Money.parse("EUR 2.355432");
+	 *MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN, 3).apply(money);//EUR 2.352
+	 *}
+	 *</pre>
+	 * @param roundingMode rounding to be used
+	 * @param scale to be used
+	 * @return the major part as {@link MonetaryOperator}
+	 */
+	public static MonetaryOperator rounding(RoundingMode roundingMode, int scale) {
+		return new RoudingMonetaryAmountOperator(Objects.requireNonNull(roundingMode));
+	}
 }
