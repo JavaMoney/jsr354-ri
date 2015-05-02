@@ -85,7 +85,7 @@ public interface LoaderService {
          * @param resourceId the resource id
          * @param is         the input stream for accessing the data
          */
-        public void newDataLoaded(String resourceId, InputStream is);
+        void newDataLoaded(String resourceId, InputStream is);
     }
 
     /**
@@ -132,7 +132,7 @@ public interface LoaderService {
      * @return the update configuration properties, not {@code null}
      * @throws IllegalArgumentException if no such dataId is available.
      */
-    public Map<String, String> getUpdateConfiguration(String resourceId);
+    Map<String, String> getUpdateConfiguration(String resourceId);
 
     /**
      * Add a {@link LoaderListener} callback that is informed when a data
@@ -145,7 +145,7 @@ public interface LoaderService {
      * @param l           The listener to be added
      * @see #removeLoaderListener(LoaderListener, String...)
      */
-    public void addLoaderListener(LoaderListener l, String... resourceIds);
+    void addLoaderListener(LoaderListener l, String... resourceIds);
 
     /**
      * Remove a registered {@link LoaderListener} callback.
@@ -170,7 +170,7 @@ public interface LoaderService {
      * @return a {@link Set} of all registered data resource identifiers, never
      * {@code null}.
      */
-    public Set<String> getResourceIds();
+    Set<String> getResourceIds();
 
     /**
      * Access the input stream of the given data resource.
