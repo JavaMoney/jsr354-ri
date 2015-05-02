@@ -16,15 +16,19 @@
 package org.javamoney.moneta.function;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
+import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
+import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 /**
@@ -255,4 +259,31 @@ public class MonetaryOperatorsTest {
 	public void testReciprocal_Null() {
 		MonetaryOperators.reciprocal().apply(null);
 	}
+
+	@Test
+	public void shouldRouding() {
+		CurrencyUnit euro = Monetary.getCurrency("EUR");
+		MonetaryAmount money = Money.parse("EUR 2.355432");
+		MonetaryAmount result = MonetaryOperators.rounding().apply(money);
+		assertNotNull(result);
+		assertEquals(result.getCurrency(), euro);
+		assertEquals(Double.valueOf(2.36), result.getNumber().doubleValue());
+	}
+
+	@Test(expectedExceptions = NullPointerException.class)
+	public void shouldReturnErrorWhenRoundingTypeIsNull() {
+		MonetaryAmount money = Money.parse("EUR 2.355432");
+		MonetaryOperators.rounding(null).apply(money);
+	}
+
+	@Test
+	public void shouldRoudingUsingRoundingMode() {
+		CurrencyUnit euro = Monetary.getCurrency("EUR");
+		MonetaryAmount money = Money.parse("EUR 2.355432");
+		MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN).apply(money);
+		assertNotNull(result);
+		assertEquals(result.getCurrency(), euro);
+		assertEquals(Double.valueOf(2.36), result.getNumber().doubleValue());
+	}
 }
+

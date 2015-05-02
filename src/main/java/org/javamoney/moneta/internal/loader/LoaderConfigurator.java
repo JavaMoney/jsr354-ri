@@ -15,6 +15,8 @@
  */
 package org.javamoney.moneta.internal.loader;
 
+import org.javamoney.moneta.spi.LoadDataInformation;
+import org.javamoney.moneta.spi.LoadDataInformationBuilder;
 import org.javamoney.moneta.spi.LoaderService;
 import org.javamoney.moneta.spi.LoaderService.UpdatePolicy;
 import org.javamoney.moneta.spi.MonetaryConfig;
@@ -44,24 +46,26 @@ class LoaderConfigurator {
 
     public void load() {
         Map<String, String> config = MonetaryConfig.getConfig();
-        // collect loads
-        Set<String> loads = new HashSet<>();
+        Set<String> loadServices = new HashSet<>();
         for (String key : config.keySet()) {
-            if (key.startsWith(LOAD) && key.endsWith('.' + TYPE)) {
-                String res = key.substring(LOAD.length());
-                res = res.substring(0, res.length() - ('.' + TYPE).length());
-                loads.add(res);
+            if (isLoadClass(key)) {
+                String resource = key.substring(LOAD.length());
+                resource = resource.substring(0, resource.length() - ('.' + TYPE).length());
+                loadServices.add(resource);
             }
         }
-        // init loads
-        for (String l : loads) {
+        for (String loadService : loadServices) {
             try {
-                initResource(l, config);
+                initResource(loadService, config);
             } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Failed to initialize/register resource: " + l, e);
+                LOG.log(Level.SEVERE, "Failed to initialize/register resource: " + loadService, e);
             }
         }
     }
+
+	private boolean isLoadClass(String key) {
+		return key.startsWith(LOAD) && key.endsWith('.' + TYPE);
+	}
 
     private void initResource(String name, Map<String, String> allProps) throws MalformedURLException {
         Map<String, String> props = mapProperties(allProps, name);
@@ -79,7 +83,11 @@ class LoaderConfigurator {
             resources = resourcesString.split(",");
         }
         URI[] urls = createURIs(resources);
-        this.loaderService.registerData(name, updatePolicy, props, null, getClassLoaderLocation(fallbackRes), urls);
+		LoadDataInformation loadDataInformation = new LoadDataInformationBuilder().withResourceId(name)
+				.withUpdatePolicy(updatePolicy).withProperties(props)
+				.withBackupResource(getClassLoaderLocation(fallbackRes))
+				.withResourceLocations(urls).build();
+        this.loaderService.registerData(loadDataInformation);
     }
 
     private URI[] createURIs(String[] resources) throws MalformedURLException {
