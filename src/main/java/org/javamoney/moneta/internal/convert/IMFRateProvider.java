@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ConversionContext;
@@ -48,6 +49,9 @@ import org.javamoney.moneta.spi.LoaderService;
  */
 public class IMFRateProvider extends AbstractIMFRateProvider {
 
+	private static final Logger LOG = Logger
+			.getLogger(IMFRateProvider.class.getName());
+
     /**
      * The data id used for the LoaderService.
      */
@@ -65,7 +69,7 @@ public class IMFRateProvider extends AbstractIMFRateProvider {
         try {
             loader.loadData(DATA_ID);
         } catch (IOException e) {
-            log.log(Level.WARNING, "Error loading initial data from IMF provider...", e);
+        	LOG.log(Level.WARNING, "Error loading initial data from IMF provider...", e);
         }
     }
 

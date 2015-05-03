@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -52,6 +53,8 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
  */
 abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         LoaderListener {
+
+	private static final Logger LOG = Logger.getLogger(AbstractECBRateProvider.class.getName());
 
     private static final String BASE_CURRENCY_CODE = "EUR";
 
@@ -85,12 +88,12 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         final int oldSize = this.rates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
-            parser.parse(is, new RateReadingHandler(rates, getContext()));
+            parser.parse(is, new RateECBReadingHandler(rates, getContext()));
         } catch (Exception e) {
-            log.log(Level.FINEST, "Error during data load.", e);
+        	LOG.log(Level.FINEST, "Error during data load.", e);
         }
         int newSize = this.rates.size();
-        log.info("Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize));
+        LOG.info("Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize));
     }
 
     protected LocalDate getQueryDates(ConversionQuery query) {
@@ -147,7 +150,7 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
                 .getCurrencyCode())) {
             return target;
         } else {
-            // Get Conversion base as derived rate: base -> EUR -> term
+
             ExchangeRate rate1 = getExchangeRate(
                     query.toBuilder().setTermCurrency(Monetary.getCurrency(BASE_CURRENCY_CODE)).build());
             ExchangeRate rate2 = getExchangeRate(
