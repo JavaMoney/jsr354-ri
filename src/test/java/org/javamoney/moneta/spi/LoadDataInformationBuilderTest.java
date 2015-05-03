@@ -1,5 +1,7 @@
 package org.javamoney.moneta.spi;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 
@@ -33,7 +35,7 @@ public class LoadDataInformationBuilderTest {
 		LoadDataInformation loadInformation = new LoadDataInformationBuilder().withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy).withProperties(properties)
 				.withLoaderListener(loaderListener)
-				.withBackupResource(backupResource)
+				.withBackupResource(backupResource).withStartRemote(true)
 				.withResourceLocations(resourceLocations).build();
 
 		assertEquals(loadInformation.getResourceId(), resourceId);
@@ -41,7 +43,7 @@ public class LoadDataInformationBuilderTest {
 		assertEquals(loadInformation.getProperties(), properties);
 		assertEquals(loadInformation.getBackupResource(), backupResource);
 		assertEquals(loadInformation.getResourceLocations(), resourceLocations);
-
+		assertTrue(loadInformation.isStartRemote());
 
 	}
 
@@ -55,7 +57,7 @@ public class LoadDataInformationBuilderTest {
 
 		LoadDataInformation loadInformation = new LoadDataInformationBuilder().withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy).withProperties(properties)
-				.withBackupResource(backupResource)
+				.withBackupResource(backupResource).withStartRemote(false)
 				.withResourceLocations(resourceLocations).build();
 
 		assertEquals(loadInformation.getResourceId(), resourceId);
@@ -63,7 +65,7 @@ public class LoadDataInformationBuilderTest {
 		assertEquals(loadInformation.getProperties(), properties);
 		assertEquals(loadInformation.getBackupResource(), backupResource);
 		assertEquals(loadInformation.getResourceLocations(), resourceLocations);
-
+		assertFalse(loadInformation.isStartRemote());
 
 	}
 
@@ -90,6 +92,7 @@ public class LoadDataInformationBuilderTest {
 		assertEquals(loadInformation.getProperties(), properties);
 		assertNull(loadInformation.getBackupResource());
 		assertEquals(loadInformation.getResourceLocations(), resourceLocations);
+		assertFalse(loadInformation.isStartRemote());
 
 	}
 

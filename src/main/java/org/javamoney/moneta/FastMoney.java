@@ -247,9 +247,6 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return of(BigDecimal.ZERO, currency);
     }
 
-    /*
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
     @Override
     public int compareTo(MonetaryAmount o) {
         Objects.requireNonNull(o);

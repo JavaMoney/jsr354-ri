@@ -308,21 +308,19 @@ public class LoadableResource {
      */
     protected boolean load(URI itemToLoad, boolean fallbackLoad) {
         InputStream is = null;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
             URLConnection conn = itemToLoad.toURL().openConnection();
             byte[] data = new byte[4096];
             is = conn.getInputStream();
             int read = is.read(data);
             while (read > 0) {
-                bos.write(data, 0, read);
+                stream.write(data, 0, read);
                 read = is.read(data);
             }
-            setData(bos.toByteArray());
+            setData(stream.toByteArray());
             if (!fallbackLoad) {
                 writeCache();
-            }
-            if (!fallbackLoad) {
                 lastLoaded = System.currentTimeMillis();
                 loadCount.incrementAndGet();
             }
@@ -338,7 +336,7 @@ public class LoadableResource {
                 }
             }
             try {
-                bos.close();
+                stream.close();
             } catch (IOException e) {
                 LOG.log(Level.INFO, "Error closing resource input for " + resourceId, e);
             }

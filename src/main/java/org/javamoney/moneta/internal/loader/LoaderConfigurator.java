@@ -75,6 +75,7 @@ class LoaderConfigurator {
             throw new IllegalArgumentException(LOAD + name + ".resource (classpath resource) required.");
         }
         String resourcesString = props.get("urls");
+        boolean startRemote = Boolean.valueOf(props.get("startRemote"));
         String[] resources;
         if (Objects.isNull(resourcesString)) {
             LOG.info("No update URLs configured for: " + name);
@@ -82,11 +83,12 @@ class LoaderConfigurator {
         } else {
             resources = resourcesString.split(",");
         }
+
         URI[] urls = createURIs(resources);
 		LoadDataInformation loadDataInformation = new LoadDataInformationBuilder().withResourceId(name)
 				.withUpdatePolicy(updatePolicy).withProperties(props)
 				.withBackupResource(getClassLoaderLocation(fallbackRes))
-				.withResourceLocations(urls).build();
+				.withResourceLocations(urls).withStartRemote(startRemote).build();
         this.loaderService.registerData(loadDataInformation);
     }
 

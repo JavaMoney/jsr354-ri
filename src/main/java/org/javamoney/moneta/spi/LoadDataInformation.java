@@ -26,15 +26,18 @@ public class LoadDataInformation {
 
     private final URI[] resourceLocations;
 
+    private final boolean startRemote;
+
 	LoadDataInformation(String resourceId, UpdatePolicy updatePolicy,
 			Map<String, String> properties, LoaderListener loaderListener,
-			URI backupResource, URI[] resourceLocations) {
+			URI backupResource, URI[] resourceLocations, boolean startRemote) {
 		this.resourceId = resourceId;
 		this.updatePolicy = updatePolicy;
 		this.properties = properties;
 		this.loaderListener = loaderListener;
 		this.backupResource = backupResource;
 		this.resourceLocations = resourceLocations;
+		this.startRemote = startRemote;
 	}
 
 	public String getResourceId() {
@@ -59,6 +62,10 @@ public class LoadDataInformation {
 
 	public URI[] getResourceLocations() {
 		return resourceLocations;
+	}
+
+	public boolean isStartRemote() {
+		return startRemote;
 	}
 
 	@Override

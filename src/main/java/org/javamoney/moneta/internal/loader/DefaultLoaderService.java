@@ -68,7 +68,7 @@ public class DefaultLoaderService implements LoaderService {
      */
     private final ExecutorService executors = Executors.newCachedThreadPool(DaemonThreadFactory.INSTANCE);
 
-    private final DefaultLoaderServiceFacade defaultLoaderServiceFacade;
+    private DefaultLoaderServiceFacade defaultLoaderServiceFacade;
 
     /**
      * The timer used for schedules.
@@ -80,7 +80,6 @@ public class DefaultLoaderService implements LoaderService {
      */
     public DefaultLoaderService() {
         initialize();
-        defaultLoaderServiceFacade = new DefaultLoaderServiceFacade(timer, listener, resources);
     }
 
     /**
@@ -95,6 +94,7 @@ public class DefaultLoaderService implements LoaderService {
         }
         // (re)initialize
         LoaderConfigurator configurator = new LoaderConfigurator(this);
+        defaultLoaderServiceFacade = new DefaultLoaderServiceFacade(timer, listener, resources);
         configurator.load();
     }
 
@@ -157,6 +157,10 @@ public class DefaultLoaderService implements LoaderService {
         if (loadDataInformation.getLoaderListener() != null) {
             this.addLoaderListener(loadDataInformation.getLoaderListener(), loadDataInformation.getResourceId());
         }
+
+        if(loadDataInformation.isStartRemote()) {
+        	defaultLoaderServiceFacade.loadDataRemote(loadDataInformation.getResourceId(), resources);
+        }
         switch (loadDataInformation.getUpdatePolicy()) {
             case NEVER:
                 loadDataLocal(loadDataInformation.getResourceId());
@@ -173,14 +177,6 @@ public class DefaultLoaderService implements LoaderService {
         }
     }
 
-    /*
-    * (non-Javadoc)
-    *
-    * @see
-    * org.javamoney.moneta.spi.LoaderService#registerAndLoadData(java.lang.String,
-    * org.javamoney.moneta.spi.LoaderService.UpdatePolicy, java.util.Map,
-    * java.net.URL, java.net.URL[])
-    */
     @Override
     public void registerAndLoadData(LoadDataInformation loadDataInformation) {
 
@@ -208,13 +204,6 @@ public class DefaultLoaderService implements LoaderService {
         loadData(loadDataInformation.getResourceId());
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#getUpdateConfiguration(java.lang
-     * .String)
-     */
     @Override
     public Map<String, String> getUpdateConfiguration(String resourceId) {
         LoadableResource load = this.resources.get(resourceId);
@@ -223,32 +212,17 @@ public class DefaultLoaderService implements LoaderService {
         }
         return null;
     }
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#isResourceRegistered(java.lang.String)
-     */
+
     @Override
     public boolean isResourceRegistered(String resourceId) {
         return this.resources.containsKey(resourceId);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.javamoney.moneta.spi.LoaderService#getResourceIds()
-     */
     @Override
     public Set<String> getResourceIds() {
         return this.resources.keySet();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.javamoney.moneta.spi.LoaderService#getData(java.lang.String)
-     */
     @Override
     public InputStream getData(String resourceId) throws IOException {
         LoadableResource load = this.resources.get(resourceId);
@@ -258,44 +232,22 @@ public class DefaultLoaderService implements LoaderService {
         throw new IllegalArgumentException("No such resource: " + resourceId);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.javamoney.moneta.spi.LoaderService#loadData(java.lang.String)
-     */
     @Override
     public boolean loadData(String resourceId) {
-        return defaultLoaderServiceFacade.loadRetome(resourceId, resources);
+        return defaultLoaderServiceFacade.loadData(resourceId, resources);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#loadDataAsync(java.lang.String)
-     */
     @Override
     public Future<Boolean> loadDataAsync(final String resourceId) {
-        return executors.submit(() -> defaultLoaderServiceFacade.loadRetome(resourceId, resources));
+        return executors.submit(() -> defaultLoaderServiceFacade.loadData(resourceId, resources));
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#loadDataLocal(java.lang.String)
-     */
     @Override
     public boolean loadDataLocal(String resourceId) {
     	return defaultLoaderServiceFacade.loadDataLocal(resourceId);
     }
 
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.javamoney.moneta.spi.LoaderService#resetData(java.lang.String)
-     */
     @Override
     public void resetData(String resourceId) throws IOException {
         LoadableResource load = Optional.ofNullable(this.resources.get(resourceId))
@@ -305,14 +257,6 @@ public class DefaultLoaderService implements LoaderService {
         }
     }
 
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#addLoaderListener(org.javamoney
-     * .moneta.spi.LoaderService.LoaderListener, java.lang.String[])
-     */
     @Override
     public void addLoaderListener(LoaderListener l, String... resourceIds) {
         if (resourceIds.length == 0) {
@@ -330,36 +274,23 @@ public class DefaultLoaderService implements LoaderService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#removeLoaderListener(org.javamoney
-     * .moneta.spi.LoaderService.LoaderListener, java.lang.String[])
-     */
     @Override
-    public void removeLoaderListener(LoaderListener l, String... resourceIds) {
+    public void removeLoaderListener(LoaderListener loadListener, String... resourceIds) {
         if (resourceIds.length == 0) {
             List<LoaderListener> listeners = listener.getListeners("");
             synchronized (listeners) {
-                listeners.remove(l);
+                listeners.remove(loadListener);
             }
         } else {
             for (String dataId : resourceIds) {
                 List<LoaderListener> listeners = listener.getListeners(dataId);
                 synchronized (listeners) {
-                    listeners.remove(l);
+                    listeners.remove(loadListener);
                 }
             }
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.javamoney.moneta.spi.LoaderService#getUpdatePolicy(java.lang.String)
-     */
     @Override
     public UpdatePolicy getUpdatePolicy(String resourceId) {
         LoadableResource load = Optional.of(this.resources.get(resourceId))

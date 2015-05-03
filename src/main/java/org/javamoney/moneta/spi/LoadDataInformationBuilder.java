@@ -34,6 +34,8 @@ public class LoadDataInformationBuilder {
 
     private URI[] resourceLocations;
 
+    private boolean startRemote;
+
 	public LoadDataInformationBuilder withResourceId(String resourceId) {
 		this.resourceId = resourceId;
 		return this;
@@ -64,6 +66,11 @@ public class LoadDataInformationBuilder {
 		return this;
 	}
 
+	public LoadDataInformationBuilder withStartRemote(boolean startRemote) {
+		this.startRemote = startRemote;
+		return this;
+	}
+
 	public LoadDataInformation build() {
 		if(Objects.isNull(resourceId) || resourceId.isEmpty()) {
 			throw new IllegalStateException("The resourceId should be informed");
@@ -78,7 +85,7 @@ public class LoadDataInformationBuilder {
 			throw new IllegalStateException("The properties should be informed");
 		}
 		return new LoadDataInformation(resourceId, updatePolicy, properties,
-				loaderListener, backupResource, resourceLocations);
+				loaderListener, backupResource, resourceLocations, startRemote);
 	}
 
 

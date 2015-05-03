@@ -263,10 +263,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     public static RoundedMoney zero(CurrencyUnit currency) {
         return of(BigDecimal.ZERO, currency);
     }
-    /*
-     * (non-Javadoc)
-     * @see javax.money.MonetaryAmount#getCurrency()
-     */
+
     @Override
     public CurrencyUnit getCurrency() {
         return currency;

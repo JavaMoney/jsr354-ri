@@ -285,5 +285,25 @@ public class MonetaryOperatorsTest {
 		assertEquals(result.getCurrency(), euro);
 		assertEquals(Double.valueOf(2.36), result.getNumber().doubleValue());
 	}
+
+	@Test
+	public void shouldRoudingUsingRoundingModeAndScale() {
+		CurrencyUnit euro = Monetary.getCurrency("EUR");
+		MonetaryAmount money = Money.parse("EUR 2.355432");
+		MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN, 4).apply(money);
+		assertNotNull(result);
+		assertEquals(result.getCurrency(), euro);
+		assertEquals(Double.valueOf(2.3554), result.getNumber().doubleValue());
+	}
+
+	@Test
+	public void shouldRoudingUsingScale() {
+		CurrencyUnit euro = Monetary.getCurrency("EUR");
+		MonetaryAmount money = Money.parse("EUR 2.355432");
+		MonetaryAmount result = MonetaryOperators.rounding(4).apply(money);
+		assertNotNull(result);
+		assertEquals(result.getCurrency(), euro);
+		assertEquals(Double.valueOf(2.3554), result.getNumber().doubleValue());
+	}
 }
 
