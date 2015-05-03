@@ -122,7 +122,7 @@ public class IMFRateProvider extends AbstractIMFRateProvider {
         	return rates.stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on IMFRateProvider."));
         } else {
         	Predicate<ExchangeRate> filter = rate -> rate.getContext().get(LocalDate.class).equals(localDate);
-        	return rates.stream().filter(filter).findFirst().orElseThrow(() -> new ExchangeRateException("There is not recent exchange on day " + localDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + " to rate to  rate on IMFRateProvider."));
+        	return rates.stream().filter(filter).findFirst().orElseThrow(() -> new ExchangeRateException("There is not exchange on day " + localDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + " to rate to  rate on IMFRateProvider."));
         }
     }
 }
