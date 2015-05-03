@@ -249,6 +249,26 @@ public final class MonetaryOperators {
 	 * @return the major part as {@link MonetaryOperator}
 	 */
 	public static MonetaryOperator rounding(RoundingMode roundingMode, int scale) {
-		return new RoudingMonetaryAmountOperator(Objects.requireNonNull(roundingMode));
+		return new RoudingMonetaryAmountOperator(Objects.requireNonNull(roundingMode), scale);
+	}
+
+	/**
+	 * Rounding the {@link MonetaryAmount} using the scale informed
+	 * and {@link RoundingMode#HALF_EVEN}.
+	 * <p>
+	 * For example, 'EUR 2.3523' will return 'EUR 2.35',
+	 * and 'BHD -1.34534432' will return 'BHD -1.345'.
+	 * <p>
+	 *<pre>
+	 *{@code
+	 *MonetaryAmount money = Money.parse("EUR 2.355432");
+	 *MonetaryAmount result = MonetaryOperators.rounding(2).apply(money);//EUR 2.35
+	 *}
+	 *</pre>
+	 * @param roundingMode rounding to be used
+	 * @return the major part as {@link MonetaryOperator}
+	 */
+	public static MonetaryOperator rounding(int scale) {
+		return new RoudingMonetaryAmountOperator(RoudingMonetaryAmountOperator.DEFAULT_ROUDING_MONETARY_AMOUNT, scale);
 	}
 }

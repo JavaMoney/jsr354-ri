@@ -802,21 +802,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     public static Money zero(CurrencyUnit currency) {
         return new Money(BigDecimal.ZERO, currency);
     }
-
-
-    /**
-     * Obtains an instance of {@code Money} from an amount in minor units.
-     * For example, {@code ofMinor(USD, 1234)} creates the instance {@code USD 12.34}.
-     * @param currency  the currency
-     * @param amountMinor  the amount of money in the minor division of the currency
-     * @return the Money from minor units
-     * @throws NullPointerException when the currency is null
-     * @see {@link CurrencyUnit#getDefaultFractionDigits()}
-     */
-    public static Money ofMinor(CurrencyUnit currency, long amountMinor) {
-        return of(BigDecimal.valueOf(amountMinor, currency.getDefaultFractionDigits()), currency);
-    }
-
     /**
      * Converts (if necessary) the given {@link MonetaryAmount} to a
      * {@link Money} instance. The {@link MonetaryContext} will be adapted as
