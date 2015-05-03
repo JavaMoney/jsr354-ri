@@ -18,8 +18,11 @@ package org.javamoney.moneta.internal.convert;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 
 import javax.money.CurrencyUnit;
@@ -74,13 +77,7 @@ public class IMFRateProvider extends AbstractIMFRateProvider {
         }
         CurrencyUnit base = conversionQuery.getBaseCurrency();
         CurrencyUnit term = conversionQuery.getCurrency();
-        LocalDate timestamp = conversionQuery.get(LocalDate.class);
-        if (timestamp == null) {
-            LocalDateTime dateTime = conversionQuery.get(LocalDateTime.class);
-            if (dateTime != null) {
-                timestamp = dateTime.toLocalDate();
-            }
-        }
+        LocalDate timestamp = getTimeStamp(conversionQuery);
         ExchangeRate rate1 = lookupRate(currencyToSdr.get(base), timestamp);
         ExchangeRate rate2 = lookupRate(sdrToCurrency.get(term), timestamp);
         if (base.equals(SDR)) {
@@ -100,28 +97,28 @@ public class IMFRateProvider extends AbstractIMFRateProvider {
         return builder.build();
     }
 
-    private ExchangeRate lookupRate(List<ExchangeRate> list, LocalDate localDate) {
-        if (Objects.isNull(list)) {
+
+	private LocalDate getTimeStamp(ConversionQuery conversionQuery) {
+		LocalDate timestamp = conversionQuery.get(LocalDate.class);
+        if (timestamp == null) {
+            LocalDateTime dateTime = conversionQuery.get(LocalDateTime.class);
+            if (dateTime != null) {
+                timestamp = dateTime.toLocalDate();
+            }
+        }
+		return timestamp;
+	}
+
+    private ExchangeRate lookupRate(List<ExchangeRate> rates,final LocalDate localDate) {
+        if (Objects.isNull(rates) ) {
             return null;
         }
-        ExchangeRate found = null;
-        for (ExchangeRate rate : list) {
-            if (Objects.isNull(localDate)) {
-                localDate = LocalDate.now();
-            }
-            if (isValid(rate.getContext(), localDate)) {
-                return rate;
-            }
-            if (Objects.isNull(found)) {
-                found = rate;
-            }
+        if (Objects.isNull(localDate)) {
+        	Comparator<ExchangeRate> comparator = Comparator.comparing(c -> c.getContext().get(LocalDate.class));
+        	return rates.stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on IMFRateProvider."));
+        } else {
+        	Predicate<ExchangeRate> filter = rate -> rate.getContext().get(LocalDate.class).equals(localDate);
+        	return rates.stream().filter(filter).findFirst().orElseThrow(() -> new ExchangeRateException("There is not recent exchange on day " + localDate.format(DateTimeFormatter.ISO_LOCAL_DATE) + " to rate to  rate on IMFRateProvider."));
         }
-        return found;
     }
-
-    private boolean isValid(ConversionContext conversionContext, LocalDate timestamp) {
-        LocalDate validAt = conversionContext.get(LocalDate.class);
-        return !(Objects.nonNull(validAt)) && validAt.equals(timestamp);
-    }
-
 }
