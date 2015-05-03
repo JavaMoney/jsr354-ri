@@ -15,13 +15,18 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.NumberValue;
-import javax.money.convert.*;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
-import java.util.logging.Logger;
+
+import javax.money.NumberValue;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.CurrencyConversion;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.RateType;
 
 /**
  * Abstract base class for {@link ExchangeRateProvider} implementations.
@@ -30,11 +35,6 @@ import java.util.logging.Logger;
  * @author Werner Keil
  */
 public abstract class AbstractRateProvider implements ExchangeRateProvider {
-
-    /**
-     * The logger used.
-     */
-    protected final Logger log = Logger.getLogger(getClass().getName());
 
     /**
      * The {@link ConversionContext} of this provider.
