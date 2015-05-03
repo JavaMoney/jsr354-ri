@@ -2,6 +2,7 @@ target/
 test-output/
 /doc
 *.iml
+*.log
 .classpath
 -project
 /.resourceCache
