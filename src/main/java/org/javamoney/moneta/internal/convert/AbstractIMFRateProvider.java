@@ -1,22 +1,33 @@
 package org.javamoney.moneta.internal.convert;
 
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionQuery;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
+import org.javamoney.moneta.ExchangeRateBuilder;
 import org.javamoney.moneta.internal.convert.RateIMFReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
@@ -25,6 +36,8 @@ abstract class AbstractIMFRateProvider extends AbstractRateProvider implements L
 
 
     private static final Logger LOG = Logger.getLogger(AbstractIMFRateProvider.class.getName());
+
+    static final Comparator<ExchangeRate> COMPARATOR_EXCHANGE_BY_LOCAL_DATE = Comparator.comparing(c -> c.getContext().get(LocalDate.class));
 
 	protected static final Map<String, CurrencyUnit> CURRENCIES_BY_NAME = new HashMap<>();
 
@@ -36,9 +49,9 @@ abstract class AbstractIMFRateProvider extends AbstractRateProvider implements L
 
 	protected Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = Collections.emptyMap();
 
-	private final ProviderContext context;
+	protected final RateIMFReadingHandler handler;
 
-	private final RateIMFReadingHandler handler;
+	private final ProviderContext context;
 
 	public AbstractIMFRateProvider(ProviderContext providerContext) {
 		super(providerContext);
@@ -74,12 +87,70 @@ abstract class AbstractIMFRateProvider extends AbstractRateProvider implements L
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
         try {
-        	RateIMFResult result = handler.read(is);
+        	 RateIMFResult result = handler.read(is);
         	 this.sdrToCurrency = result.getSdrToCurrency();
              this.currencyToSdr = result.getCurrencyToSdr();
         } catch (Exception e) {
         	LOG.log(Level.SEVERE, "Error", e);
         }
+    }
+
+    @Override
+    public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
+        if (!isAvailable(conversionQuery)) {
+            return null;
+        }
+        CurrencyUnit base = conversionQuery.getBaseCurrency();
+        CurrencyUnit term = conversionQuery.getCurrency();
+        LocalDate[] times = getQueryDates(conversionQuery);
+        ExchangeRate rate1 = getExchangeRate(currencyToSdr.get(base), times);
+        ExchangeRate rate2 = getExchangeRate(sdrToCurrency.get(term), times);
+        if (base.equals(SDR)) {
+            return rate2;
+        } else if (term.equals(SDR)) {
+            return rate1;
+        }
+        if (Objects.isNull(rate1) || Objects.isNull(rate2)) {
+            return null;
+        }
+
+        ConversionContext context = getExchangeContext("imf.digit.fraction");
+
+		ExchangeRateBuilder builder =
+                new ExchangeRateBuilder(context);
+        builder.setBase(base);
+        builder.setTerm(term);
+        builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
+        builder.setRateChain(rate1, rate2);
+
+        return builder.build();
+    }
+
+    private ExchangeRate getExchangeRate(List<ExchangeRate> rates,final LocalDate[] dates) {
+        if (Objects.isNull(rates) ) {
+            return null;
+        }
+        if (Objects.isNull(dates)) {
+        	return rates.stream().sorted(COMPARATOR_EXCHANGE_BY_LOCAL_DATE.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on IMFRateProvider."));
+        } else {
+        	for (LocalDate localDate : dates) {
+        		Predicate<ExchangeRate> filter = rate -> rate.getContext().get(LocalDate.class).equals(localDate);
+        		Optional<ExchangeRate> exchangeRateOptional = rates.stream().filter(filter).findFirst();
+        		if(exchangeRateOptional.isPresent()) {
+        			return exchangeRateOptional.get();
+        		}
+			}
+          	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
+        	throw new ExchangeRateException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
+        }
+    }
+
+    @Override
+    public String toString() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(getClass().getName()).append('{')
+    	.append(" context: ").append(context).append('}');
+    	return sb.toString();
     }
 
 }

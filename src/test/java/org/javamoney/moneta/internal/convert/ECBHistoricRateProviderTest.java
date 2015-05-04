@@ -19,6 +19,7 @@ import static javax.money.convert.MonetaryConversions.getExchangeRateProvider;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -168,6 +169,7 @@ public class ECBHistoricRateProviderTest {
         assertNotNull(currencyConversion);
         MonetaryAmount money = Money.of(BigDecimal.TEN, DOLLAR);
         currencyConversion.apply(money);
+        fail();
     }
 
     @Test
@@ -198,10 +200,9 @@ public class ECBHistoricRateProviderTest {
                 .getCurrencyConversion(conversionQuery);
         assertNotNull(currencyConversion);
         MonetaryAmount money = Money.of(BigDecimal.TEN, DOLLAR);
-        MonetaryAmount result = currencyConversion.apply(money);
+        currencyConversion.apply(money);
+        fail();
 
-        assertEquals(result.getCurrency(), EURO);
-        assertTrue(result.getNumber().doubleValue() > 0);
     }
 
     @Test

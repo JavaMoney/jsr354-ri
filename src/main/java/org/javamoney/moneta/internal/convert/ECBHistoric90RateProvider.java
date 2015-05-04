@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal.convert;
 
-import java.net.MalformedURLException;
-
 import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;

@@ -51,5 +51,4 @@ public class ECBCurrentRateProvider extends AbstractECBRateProvider {
     public String getDataId() {
         return DATA_ID;
     }
-
 }
