@@ -18,12 +18,10 @@ package org.javamoney.moneta.internal.convert;
 import java.io.InputStream;
 import java.math.MathContext;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,12 +30,10 @@ import java.util.stream.Stream;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.money.convert.ConversionContextBuilder;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
-import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -74,8 +70,11 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
      */
     private final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
+    private final ProviderContext context;
+
     AbstractECBRateProvider(ProviderContext context) {
         super(context);
+		this.context = context;
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
@@ -98,24 +97,13 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         LOG.info("Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize));
     }
 
-    protected LocalDate[] getQueryDates(ConversionQuery query) {
-
-        if (Objects.nonNull(query.get(LocalDate.class)) || Objects.nonNull(query.get(LocalDateTime.class))) {
-        	LocalDate localDate = Optional.ofNullable(query.get(LocalDate.class)).orElseGet(() -> query.get(LocalDateTime.class).toLocalDate());
-        	return new LocalDate[]{localDate};
-        } else if(Objects.nonNull(query.get(LocalDate[].class))) {
-        	return query.get(LocalDate[].class);
-        }
-        return null;
-    }
-
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
         Objects.requireNonNull(conversionQuery);
         if (rates.isEmpty()) {
             return null;
         }
-        ECBRateResult result = findExchangeRate(conversionQuery);
+        RateResult result = findExchangeRate(conversionQuery);
 
         ExchangeRateBuilder builder = getBuilder(conversionQuery, result.date);
         ExchangeRate sourceRate = result.targets.get(conversionQuery.getBaseCurrency()
@@ -125,23 +113,23 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         return createExchangeRate(conversionQuery, builder, sourceRate, target);
     }
 
-	private ECBRateResult findExchangeRate(ConversionQuery conversionQuery) {
+	private RateResult findExchangeRate(ConversionQuery conversionQuery) {
 		LocalDate[] dates = getQueryDates(conversionQuery);
 
         if (dates == null) {
         	Comparator<LocalDate> comparator = Comparator.naturalOrder();
-    		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on IMFRateProvider."));
-        	return new ECBRateResult(date, this.rates.get(date));
+    		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on ECBRateProvider."));
+        	return new RateResult(date, this.rates.get(date));
         } else {
         	for (LocalDate localDate : dates) {
         		Map<String, ExchangeRate> targets = this.rates.get(localDate);
 
         		if(Objects.nonNull(targets)) {
-        			return new ECBRateResult(localDate, targets);
+        			return new RateResult(localDate, targets);
         		}
 			}
         	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
-        	throw new ExchangeRateException("There is not exchange on day " + datesOnErros + " to rate to  rate on IMFRateProvider.");
+        	throw new ExchangeRateException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
         }
 
 
@@ -188,11 +176,10 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
 
 
     private ExchangeRateBuilder getBuilder(ConversionQuery query, LocalDate localDate) {
-        ExchangeRateBuilder builder = new ExchangeRateBuilder(
-                ConversionContextBuilder.create(getContext(), RateType.HISTORIC)
-                        .set(localDate).build());
+        ExchangeRateBuilder builder = new ExchangeRateBuilder(getExchangeContext("ecb.digit.fraction"));
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getCurrency());
+
         return builder;
     }
 
@@ -204,12 +191,20 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
                 .setFactor(divide(DefaultNumberValue.ONE, rate.getFactor(), MathContext.DECIMAL64)).build();
     }
 
-    private class ECBRateResult {
+    @Override
+    public String toString() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(getClass().getName()).append('{')
+    	.append(" context: ").append(context).append('}');
+    	return sb.toString();
+    }
+
+    private class RateResult {
     	private final LocalDate date;
 
     	private final Map<String, ExchangeRate> targets;
 
-    	ECBRateResult(LocalDate date, Map<String, ExchangeRate> targets) {
+    	RateResult(LocalDate date, Map<String, ExchangeRate> targets) {
     		this.date = date;
     		this.targets = targets;
     	}

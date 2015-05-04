@@ -5,6 +5,7 @@ import javax.money.convert.ExchangeRateProviderSupplier;
 import org.javamoney.moneta.internal.convert.ECBCurrentRateProvider;
 import org.javamoney.moneta.internal.convert.ECBHistoric90RateProvider;
 import org.javamoney.moneta.internal.convert.ECBHistoricRateProvider;
+import org.javamoney.moneta.internal.convert.IMFHistoricRateProvider;
 import org.javamoney.moneta.internal.convert.IMFRateProvider;
 import org.javamoney.moneta.internal.convert.IdentityRateProvider;
 
@@ -28,6 +29,11 @@ public enum ExchangeRateType implements ExchangeRateProviderSupplier {
      * {@link IMFRateProvider} implementation.
      */
     IMF("IMF", "Exchange rate to the International Monetary Fond."),
+    /**
+     * Exchange rate to the International Monetary Fond from historic. Uses the
+     * {@link IMFHistoricRateProvider} implementation.
+     */
+    IMF_HIST("IMF-HIST", "Exchange rate to the International Monetary Fond that retrieve historical information on lazy way."),
     /**
      * Exchange rate to European Central Bank (last 90 days). Uses the
      * {@link ECBHistoric90RateProvider} implementation.

@@ -168,11 +168,16 @@ class RateIMFReadingHandler {
 
 	private Double[] parseValues(String[] parts) throws ParseException {
 
-		List<Double> result = new ArrayList<>();
+		ArrayList<Double> result = new ArrayList<>();
 		int index = 0;
 		for (String part : parts) {
-			if (part.isEmpty() || index == 0) {
+			if(index == 0) {
 				index++;
+				continue;
+			}
+			if (part.isEmpty() || "NA".equals(part)) {
+				index++;
+				result.add(null);
 				continue;
 			}
 			index++;
