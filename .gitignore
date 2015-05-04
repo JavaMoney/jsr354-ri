@@ -8,3 +8,4 @@ test-output/
 /.resourceCache
 /.project
 /.idea
+.settings/
