@@ -39,7 +39,7 @@ import javax.money.convert.RateType;
  * @author Werner Keil
  * @author otaviojava
  */
-public class ECBHistoricRateProvider extends AbstractECBRateProvider {
+public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
 
     /**
      * The data id used for the LoaderService.

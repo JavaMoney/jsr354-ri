@@ -30,7 +30,7 @@ import javax.money.convert.RateType;
  * @author Werner Keil
  * @author otaviojava
  */
-public class ECBCurrentRateProvider extends AbstractECBRateProvider {
+public class ECBCurrentRateProvider extends ECBAbstractRateProvider {
 
     /**
      * The data id used for the LoaderService.

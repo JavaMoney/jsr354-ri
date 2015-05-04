@@ -49,10 +49,10 @@ import org.javamoney.moneta.spi.LoaderService.LoaderListener;
  *
  * @author otaviojava
  */
-abstract class AbstractECBRateProvider extends AbstractRateProvider implements
+abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         LoaderListener {
 
-	private static final Logger LOG = Logger.getLogger(AbstractECBRateProvider.class.getName());
+	private static final Logger LOG = Logger.getLogger(ECBAbstractRateProvider.class.getName());
 
     private static final String BASE_CURRENCY_CODE = "EUR";
 
@@ -72,7 +72,7 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
 
     private final ProviderContext context;
 
-    AbstractECBRateProvider(ProviderContext context) {
+    ECBAbstractRateProvider(ProviderContext context) {
         super(context);
 		this.context = context;
         saxParserFactory.setNamespaceAware(false);
@@ -89,7 +89,7 @@ abstract class AbstractECBRateProvider extends AbstractRateProvider implements
         final int oldSize = this.rates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
-            parser.parse(is, new RateECBReadingHandler(rates, getContext()));
+            parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
         } catch (Exception e) {
         	LOG.log(Level.FINEST, "Error during data load.", e);
         }

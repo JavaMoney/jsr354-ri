@@ -38,7 +38,7 @@ import javax.money.convert.RateType;
  * @author Werner Keil
  * @author otaviojava
  */
-public class ECBHistoric90RateProvider extends AbstractECBRateProvider {
+public class ECBHistoric90RateProvider extends ECBAbstractRateProvider {
 
 
     private static final String DATA_ID = ECBHistoric90RateProvider.class.getSimpleName();

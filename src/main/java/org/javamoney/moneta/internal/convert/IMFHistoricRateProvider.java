@@ -21,10 +21,10 @@ import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 
-import org.javamoney.moneta.internal.convert.RateIMFReadingHandler.RateIMFResult;
+import org.javamoney.moneta.internal.convert.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.LoaderService;
 
-public class IMFHistoricRateProvider extends AbstractIMFRateProvider {
+public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
 
     private static final Logger LOG = Logger.getLogger(IMFHistoricRateProvider.class.getName());
 

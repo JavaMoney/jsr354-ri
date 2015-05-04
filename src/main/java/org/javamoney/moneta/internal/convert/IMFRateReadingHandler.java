@@ -25,16 +25,16 @@ import javax.money.convert.RateType;
 import org.javamoney.moneta.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 
-class RateIMFReadingHandler {
+class IMFRateReadingHandler {
 
 	private static final Logger LOG = Logger
-			.getLogger(RateIMFReadingHandler.class.getName());
+			.getLogger(IMFRateReadingHandler.class.getName());
 
 	private final Map<String, CurrencyUnit> currenciresByName;
 
 	private final ProviderContext context;
 
-	RateIMFReadingHandler(Map<String, CurrencyUnit> currenciresByName, ProviderContext context) {
+	IMFRateReadingHandler(Map<String, CurrencyUnit> currenciresByName, ProviderContext context) {
 		this.currenciresByName = currenciresByName;
 		this.context = context;
 	}
@@ -146,7 +146,7 @@ class RateIMFReadingHandler {
 				ExchangeRate rate = new ExchangeRateBuilder(
 						ConversionContextBuilder.create(context, rateType)
 								.set(fromTS).build()).setBase(currency)
-						.setTerm(AbstractIMFRateProvider.SDR)
+						.setTerm(IMFAbstractRateProvider.SDR)
 						.setFactor(new DefaultNumberValue(1D / values[index]))
 						.build();
 				List<ExchangeRate> rates = currencyToSdr.computeIfAbsent(
@@ -155,7 +155,7 @@ class RateIMFReadingHandler {
 			} else {
 				ExchangeRate rate = new ExchangeRateBuilder(
 						ConversionContextBuilder.create(context, rateType)
-								.set(fromTS).build()).setBase(AbstractIMFRateProvider.SDR)
+								.set(fromTS).build()).setBase(IMFAbstractRateProvider.SDR)
 						.setTerm(currency)
 						.setFactor(DefaultNumberValue.of(1D / values[index]))
 						.build();
@@ -224,7 +224,7 @@ class RateIMFReadingHandler {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(RateIMFReadingHandler.class.getName()).append('{').append(" currenciresByName: ").append(currenciresByName).append(',')
+		sb.append(IMFRateReadingHandler.class.getName()).append('{').append(" currenciresByName: ").append(currenciresByName).append(',')
 		.append(" context: ").append(context).append('}');
 		return sb.toString();
 	}

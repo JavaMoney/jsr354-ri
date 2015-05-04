@@ -33,7 +33,8 @@ import java.util.Optional;
  */
 final class DefaultCashRounding implements MonetaryRounding, Serializable {
 
-    /**
+	private static final long serialVersionUID = -117584984073879922L;
+	/**
      * The scale key to be used.
      */
     private static final String SCALE_KEY = "scale";

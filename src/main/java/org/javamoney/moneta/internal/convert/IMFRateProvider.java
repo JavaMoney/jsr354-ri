@@ -36,7 +36,7 @@ import org.javamoney.moneta.spi.LoaderService;
  * @author Anatole Tresch
  * @author Werner Keil
  */
-public class IMFRateProvider extends AbstractIMFRateProvider {
+public class IMFRateProvider extends IMFAbstractRateProvider {
 
 	private static final Logger LOG = Logger
 			.getLogger(IMFRateProvider.class.getName());
