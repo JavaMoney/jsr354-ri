@@ -264,6 +264,40 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         return of(BigDecimal.ZERO, currency);
     }
 
+
+   /**
+    * Obtains an instance of {@code FastMoney} from an amount in minor units.
+    * For example, {@code ofMinor(USD, 1234)} creates the instance {@code USD 12.34}.
+    * @param currency  the currency, not null
+    * @param amountMinor  the amount of money in the minor division of the currency
+    * @return the Money from minor units
+    * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+    * @throws NullPointerException when the currency is null
+    * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
+    */
+   public static RoundedMoney ofMinor(CurrencyUnit currency, long amountMinor) {
+	   return ofMinor(currency, amountMinor, currency.getDefaultFractionDigits());
+   }
+
+   /**
+    * Obtains an instance of {@code Money} from an amount in minor units.
+    * For example, {@code ofMinor(USD, 1234, 2)} creates the instance {@code USD 12.34}.
+    * @param currency  the currency, not null
+    * @param amountMinor  the amount of money in the minor division of the currency
+    * @param factionDigits number of digits
+    * @return the monetary amount from minor units
+    * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+    * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
+    * @throws NullPointerException when the currency is null
+    * @throws IllegalArgumentException when the factionDigits is negative
+    */
+   public static RoundedMoney ofMinor(CurrencyUnit currency, long amountMinor, int factionDigits) {
+   	if(factionDigits < 0) {
+   		throw new IllegalArgumentException("The factionDigits cannot be negative");
+   	}
+   	return of(BigDecimal.valueOf(amountMinor, factionDigits), currency);
+   }
+
     @Override
     public CurrencyUnit getCurrency() {
         return currency;

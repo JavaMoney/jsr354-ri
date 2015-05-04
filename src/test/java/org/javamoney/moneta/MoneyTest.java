@@ -1197,4 +1197,35 @@ public class MoneyTest {
     	assertEquals(BRAZILIAN_REAL, zero.getCurrency());
     }
 
+	@Test(expectedExceptions = NullPointerException.class)
+	public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
+		Money.ofMinor(null, 1234L);
+		Assert.fail();
+	}
+
+	@Test
+	public void shouldRerturnMonetaryAmount() {
+		MonetaryAmount amount = Money.ofMinor(DOLLAR, 1234L);
+		assertEquals(Double.valueOf(12.34), amount.getNumber().doubleValue());
+		assertEquals(DOLLAR, amount.getCurrency());
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenCurrencyIsInvalid() {
+		Money.ofMinor(new InvalidCurrency(), 1234L);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenFractionDigitIsNegative() {
+		Money.ofMinor(DOLLAR, 1234L, -2);
+	}
+
+	@Test
+	public void shouldRerturnMonetaryAmountUsingFractionDigits() {
+		MonetaryAmount amount = Money.ofMinor(DOLLAR, 1234L, 3);
+		assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
+		assertEquals(DOLLAR, amount.getCurrency());
+	}
+
+
 }
