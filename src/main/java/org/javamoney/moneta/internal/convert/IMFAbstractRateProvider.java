@@ -28,14 +28,14 @@ import javax.money.convert.ProviderContext;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.ExchangeRateBuilder;
-import org.javamoney.moneta.internal.convert.RateIMFReadingHandler.RateIMFResult;
+import org.javamoney.moneta.internal.convert.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 
-abstract class AbstractIMFRateProvider extends AbstractRateProvider implements LoaderListener {
+abstract class IMFAbstractRateProvider extends AbstractRateProvider implements LoaderListener {
 
 
-    private static final Logger LOG = Logger.getLogger(AbstractIMFRateProvider.class.getName());
+    private static final Logger LOG = Logger.getLogger(IMFAbstractRateProvider.class.getName());
 
     static final Comparator<ExchangeRate> COMPARATOR_EXCHANGE_BY_LOCAL_DATE = Comparator.comparing(c -> c.getContext().get(LocalDate.class));
 
@@ -49,14 +49,14 @@ abstract class AbstractIMFRateProvider extends AbstractRateProvider implements L
 
 	protected Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = Collections.emptyMap();
 
-	protected final RateIMFReadingHandler handler;
+	protected final IMFRateReadingHandler handler;
 
 	private final ProviderContext context;
 
-	public AbstractIMFRateProvider(ProviderContext providerContext) {
+	public IMFAbstractRateProvider(ProviderContext providerContext) {
 		super(providerContext);
 		this.context = providerContext;
-		handler = new RateIMFReadingHandler(CURRENCIES_BY_NAME, context);
+		handler = new IMFRateReadingHandler(CURRENCIES_BY_NAME, context);
 	}
 
 

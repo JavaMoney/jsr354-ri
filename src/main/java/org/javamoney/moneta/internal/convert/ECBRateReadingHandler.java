@@ -38,7 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Anatole Tresch
  * @author otaviojava
  */
-class RateECBReadingHandler extends DefaultHandler {
+class ECBRateReadingHandler extends DefaultHandler {
     /**
      * Current timestamp for the given section.
      */
@@ -53,7 +53,7 @@ class RateECBReadingHandler extends DefaultHandler {
      * @param historicRates the rates, not null.
      * @param context the context, not null.
      */
-    RateECBReadingHandler(Map<LocalDate, Map<String, ExchangeRate>> historicRates, ProviderContext context) {
+    ECBRateReadingHandler(Map<LocalDate, Map<String, ExchangeRate>> historicRates, ProviderContext context) {
         this.historicRates = historicRates;
         this.context = context;
     }
