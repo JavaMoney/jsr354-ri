@@ -44,7 +44,7 @@ public class CurrencyProviderTest {
                 Money money = Money.of(10, currency);
                 System.out.println("ECB : " + money.with(ecbDollarConversion));
                 System.out.println("IMF : " + money.with(imfDollarConversion));
-                assertEquals(money.with(ecbDollarConversion).getNumber().doubleValue(), money.with(imfDollarConversion).getNumber().doubleValue(), 0.1d);
+                assertEquals(money.with(ecbDollarConversion).getNumber().doubleValue(), money.with(imfDollarConversion).getNumber().doubleValue(), 0.2d);
             }
         } catch (InterruptedException e) {
             // This test may fail, if the network is slow or not available, so only write the exception as of now...
