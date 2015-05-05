@@ -75,12 +75,12 @@ You can use the currency code to access currencies.
 [source,java]
 .Accessing currencies by currency code
 --------------------------------------------
-CurrencyUnit currencyCHF = Monetary.getCurrencyUnit("CHF");
-CurrencyUnit currencyUSD = Monetary.getCurrencyUnit("USD");
-CurrencyUnit currencyEUR = Monetary.getCurrencyUnit("EUR");
+CurrencyUnit currencyCHF = Monetary.getCurrency("CHF");
+CurrencyUnit currencyUSD = Monetary.getCurrency("USD");
+CurrencyUnit currencyEUR = Monetary.getCurrency("EUR");
 --------------------------------------------
 
-Hereby all codes available in the underlying JDK are mapped by default.
+Hereby all codes available from +java.util.Currency+ in the underlying JDK are mapped by default.
 
 ==== Access currencies by Locale
 
@@ -98,9 +98,9 @@ Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +L
 [source,java]
 .Accessing currencies by Locale
 --------------------------------------------
-CurrencyUnit currencyCHF = Monetary.getCurrencyUnit(new Locale("", "SUI")); // Switzerland
-CurrencyUnit currencyUSD = Monetary.getCurrencyUnit(new Locale("", "USA")); // United States of America
-CurrencyUnit currencyEUR = Monetary.getCurrencyUnit(new Locale("", "GER")); // Germany
+CurrencyUnit currencyCHF = Monetary.getCurrency(new Locale("", "SUI")); // Switzerland
+CurrencyUnit currencyUSD = Monetary.getCurrency(new Locale("", "USA")); // United States of America
+CurrencyUnit currencyEUR = Monetary.getCurrency(new Locale("", "GER")); // Germany
 --------------------------------------------
 
 Hereby all codes available in the underlying JDK are mapped by default.
@@ -162,7 +162,7 @@ currency instances that then can be registered using the static methods:
 ==== Registering Additional Currency Units
 
 For adding additional CurrencyUnit instances to the +MonetaryCurrencies+ singleton, you must implement an instance
-of +CurrencyProvider+. Following a minimal example, hereby also reusing the +BuildableCurrencyUnit+ class, that
+of +CurrencyProviderSpi+. Following a minimal example, hereby also using the +BuildableCurrencyUnit+ class, that
 also provides currencies for Bitcoin:
 
 [source,java]
@@ -173,13 +173,13 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
     private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
 
     public BitCoinProvider(){
-       bitcoinSet.add(new BuildableCurrencyUnit.Builder("BTC").build());
+       bitcoinSet.add(CurrencyUnitBuilder.of("BTC", "MyCurrencyBuilder").build());
        bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
     }
 
     /**
      * Return a {@link CurrencyUnit} instances matching the given
-     * {@link javax.money.CurrencyContext}.
+     * {@link javax.money.CurrencyQuery}.
      *
      * @param query the {@link javax.money.CurrencyQuery} containing the parameters determining the query. not null.
      * @return the corresponding {@link CurrencyUnit}s matching, never null.
@@ -187,10 +187,10 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
     @Override
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
        // only ensure BTC is the code, or it is a default query.
-       if(query.isDefault()){
-         if(query.getCurrencyCodes().contains("BTC") || query.getCurrencyCodes().isEmpty()){
+       if(query.isEmpty()
+           || query.getCurrencyCodes().contains("BTC")
+	   || query.getCurrencyCodes().isEmpty()){
            return bitcoinSet;
-         }
        }
        return Collections.emptySet();
     }
@@ -222,17 +222,21 @@ public class BitCoinProvider implements CurrencyProviderSpi{
 --------------------------------------------
 
 Now given this example it is obvious that the tricky part is to define, when exactly a given +CurrencyQuery+
-should be targeted by this provider, or otherwise, be simply ignored. In our case just provide an additional
-ISO code, so it is a good idea to just only return data for _default_ query types. Additionally we only return our code
+should be targeted by this provider, or otherwise, be simply ignored. Our case just provides an additional
+currency code, so it is a good idea to just only return data for _default_ query types. Additionally we only return our code
 sublist, when the according code is requested, or a unspecified request is performed.
 
 
 ==== Building Custom Currency Units
 
+You can use the MonetaryCurrencies static methods to register currencies as follows.
+
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically.
 --------------------------------------------
-CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
+    .setDefaultFractionDigits(3)
+    .build();
 
 // registering it
 Monetary.registerCurrency(unit);
@@ -245,19 +249,9 @@ a register flag to the call: So the same can be rewritten as follows:
 [source,java]
 .Example of registering +CurrencyUnit+ instances programmatically, using +CurrencyUnitBuilder+.
 --------------------------------------------
-CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* register */);
---------------------------------------------
-
-Alternatively one may use the +MonetaryCurrencies+ static methods as follows:
-
-[source,java]
-.Example of registering +CurrencyUnit+ instances programmatically, using +MonetaryCurrencies+ .
---------------------------------------------
-CurrencyUnit unit = new CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
-
-// registering it
-Monetary.registerCurrency(unit);
-Monetary.registerCurrency(unit, Locale.MyCOUNTRY);
+CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
+    .setDefaultFractionDigits(3)
+    .build(true /* register */);
 --------------------------------------------
 
 ==== Provided Currencies
@@ -299,7 +293,7 @@ Additionally _Moneta_ also supports static factory methods on the types directly
 [source,java]
 .Creating instances of +FastMoney+ using the static factory method:
 --------------------------------------------
-FastMoney m = FastMoney.of("USD", 200.20);
+FastMoney m = FastMoney.of(200.20, "USD");
 --------------------------------------------
 
 Creation of +Money+ instances is similar:
@@ -308,7 +302,7 @@ Creation of +Money+ instances is similar:
 .Creating instances of +Money+:
 --------------------------------------------
 Money m1 = Monetary.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
-Money m2 = Money.of("USD", 200.20);
+Money m2 = Money.of(200.20, "USD");
 --------------------------------------------
 
 ===== Configuring Instances of Money
@@ -321,7 +315,7 @@ explicitly by passing a +MathContext+ as part of a +MonetaryContext+:
 [source,java]
 .Creating instances of +Money+ configuring the +MathContext+ to be used.
 --------------------------------------------
-Money money = Money.of(200, "CHF", MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build());
+Money money = Money.of(200, "CHF", MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build());
 --------------------------------------------
 
 Using the JSR's main API allows to achieve the same as follows:
@@ -330,8 +324,8 @@ Using the JSR's main API allows to achieve the same as follows:
 .Creating instances of +Money+ configuring the +MathContext+ to be used, using the +MonetaryAmountFactory+.
 --------------------------------------------
 Money money = Monetary.getAmountFactory(Money.class)
-                              .setCurrencyUnit("CHF").setNumber(200).
-                              ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
+                              .setCurrencyUnit("CHF").setNumber(200)
+                              .setContext(MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build())
                               .create();
 --------------------------------------------
 
@@ -375,7 +369,7 @@ By default, additional implementation classes are added, by registering an insta
 For this you have to add the following contents to +META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi+:
 
 [source,listing]
-.Creating instances of +Money+:
+.Providing custom monetary amount implementations
 --------------------------------------------
 my.fully.qualified.MonetaryAmountFactoryProviderImplClass
 --------------------------------------------
@@ -383,7 +377,7 @@ my.fully.qualified.MonetaryAmountFactoryProviderImplClass
 For further ease of use, your implementations may furthermore provide static factory methods, e.g.
 
 [source,java]
-.Creating instances of +Money+:
+.Static factory methods of the custom monetary amount implementation:
 --------------------------------------------
 public static MyMoney of(String currencyCode, double number);
 public static MyMoney of(String currencyCode, long number);
@@ -405,11 +399,11 @@ important to mention, if doing so:
   compatibility of precision is ensured, scale may be reduced silently as needed.
 
 Nevertheless there are strategies to mitigate these possible issues. The most easy and obvious strategy hereby is
-simply explicitly *converting explicitly to the required target type, before performing any operations*. This can
+simply *converting explicitly to the required target type, before performing any operations*. This can
 be easily achieved, since every implementation in _moneta_ provides corresponding static +from()+ methods:
 
 [source,java]
-.Creating instances of +Money+:
+.Using the custom monetary amount implementation with +Money+:
 --------------------------------------------
 MyMoney money1;
 Money money = Money.from(myMoney);
@@ -423,10 +417,10 @@ In the above example, as long as the scale of 5 is never exceeded, no implicit r
 require rounding, when creating new instances of +FastMoney+.
 
 
-==== Additional Provided Extension Points
+==== Other utility functions
 
 The _moneta_ reference implementation also provides implementations for several commonly used simple monetary functions
-in the +org.javamoney.moneta.functions_ package:
+in the +org.javamoney.moneta.functions+ package:
 
 * +MonetaryUtil.reciprocal()+ provides an operator for calculating the reciprocal value of an amount (1/amount).
 * +MonetaryUtil.permil(BigDecimal decimal), MonetaryUtil.permil(Number number),
@@ -527,7 +521,7 @@ the +RoundingQuery+ passed:
 .Access and apply arithmetic rounding.
 --------------------------------------------
 MonetaryRounding rounding = Monetary.getRounding(
-                               RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
+                               RoundingQueryBuilder.of().setScale(4).set(RoundingMode.HALF_UP).build());
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding);
 --------------------------------------------
@@ -545,7 +539,7 @@ MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses Monetary.getRounding(CurrencyUnit);
 --------------------------------------------
 
-Also you can access the default rounding for a given +CurrencyUnit+. Be default this will return an arithmetic rounding
+Also you can access the default rounding for a given +CurrencyUnit+. By default this will return an arithmetic rounding
 based on the currency's _default fraction digits_, but it may also return a non standard rounding, where useful.
 
 [source,java]
@@ -554,7 +548,7 @@ based on the currency's _default fraction digits_, but it may also return a non 
 CurrencyUnit currency = ...;
 MonetaryRounding rounding = Monetary.getRounding(currency);
 MonetaryAmount amt = ...;
-MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses Monetary.getRounding(CurrencyUnit);
+MonetaryAmount roundedAmount = amt.with(rounding); // uses Monetary.getRounding(CurrencyUnit);
 --------------------------------------------
 
 For Swiss Francs also a corresponding cash rounding is accessible. In Switzerland the smallest minor in cash are
@@ -565,46 +559,10 @@ For Swiss Francs also a corresponding cash rounding is accessible. In Switzerlan
 .Access Swiss Francs Cash Rounding
 --------------------------------------------
 MonetaryRounding rounding = Monetary.getRounding(Monetary.getCurrency("CHF"),
-  RoundingQueryBuilder.create().set("cashRounding", true).build()
+  RoundingQueryBuilder.of().set("cashRounding", true).build()
 );
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // amount rounded in CHF cash rounding
---------------------------------------------
-
-==== Custom Roundings
-
-_Moneta_ does not provide any custom roundings by default. Nevertheless you can add custom roundings by registering
-instances of +RoundingProviderSpi+.
-
-[source,java]
-.Implement a custom +RoundingProviderSpi+, registered as "myPersonalRounding"
---------------------------------------------
-public final class TestRoundingProvider implements RoundingProviderSpi{
-
-    private static final MonetaryRounding ROUNDING = new MyCustomRounding();
-
-    private final Set<String> roundingNames;
-
-    public TestRoundingProvider(){
-        Set<String> names = new HashSet<>();
-        names.add("myPersonalRounding");
-        this.roundingNames = Collections.unmodifiableSet(names);
-    }
-
-    @Override
-    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
-        if("myPersonalRounding".equals(roundingQuery.getRoundingName())){
-            return ROUNDING;
-        }
-        return null;
-    }
-
-    @Override
-    public Set<String> getRoundingNames(){
-        return roundingNames;
-    }
-
-}
 --------------------------------------------
 
 ==== Register your own Roundings
@@ -619,6 +577,8 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 
     private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
 
+    private final Set<String> roundingNames;
+
     public TestRoundingProvider(){
         Set<String> names = new HashSet<>();
         names.add("custom1");
@@ -627,7 +587,7 @@ public final class TestRoundingProvider implements RoundingProviderSpi{
 
     @Override
     public MonetaryRounding getRounding(RoundingQuery roundingQuery){
-        CurrencyUnit cu = roundingQuery.getCurrencyUnit();
+        CurrencyUnit cu = roundingQuery.getCurrency();
         if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
             return ROUNDING;
         }
@@ -694,7 +654,7 @@ currency:
 .Getting a +CurrencyConversion+ from an +ExchangeRateProvider+
 --------------------------------------------
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
-CurrencyConversion conversion = rateProvider.getConversion("CHF");
+CurrencyConversion conversion = rateProvider.getCurrencyConversion("CHF");
 
 MonetaryAmount amountInUSD = ...;
 MonetaryAmount amountInCHF = amountInUSD.with(conversion);
@@ -717,14 +677,14 @@ almost all important currencies. Hereby the IMF feeds are internally build up as
 provides data using the intermediate +SDR+ currency unit.
 * *IDENT* provides rates with a factor of 1.0, where base and target currency are the same.
 
-By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST+. As defined by the JSR the conversion
+By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST,ECB-HIST90+. As defined by the JSR the conversion
 provider chain can be configured in +javamoney.properties+ as follows:
 
 [source,listing]
-.Getting a +CurrencyConversion+ from an +ExchangeRateProvider+
+.Overriding the conversion provider chain
 --------------------------------------------
 #Currency Conversion
-conversion.default-chain=IDENT,ECB,IMF,ECB-HIST
+conversion.default-chain=IDENT,ECB,IMF,ECB-HIST,ECB-HIST90
 --------------------------------------------
 
 ==== Configuring the Exchange Rate Providers
@@ -770,7 +730,7 @@ load.IMFRateProvider.urls=http://www.imf.org/external/np/fin/data/rms_five.aspx?
 +MonetaryAmountFormat+ instances can be accessed from the +MonetaryFormats+ singleton. Similar to the Java
 platform, formats can be accessed by passing a country +Locale+. But JSR 354 also supports accessing formats by
 a (unique) name or even given a complex query, that allows to pass any number of parameters to configure the
-format to use. Also compared to the Java platform, the formats are thread-safe and immutable.
+format to use. In contrast to DecimalFormat, the JSR 354 formats are thread-safe and immutable.
 
 [source,java]
 .Accessing Amount Formats
@@ -778,10 +738,10 @@ format to use. Also compared to the Java platform, the formats are thread-safe a
 MonetaryAmountFormat formatCountry = MonetaryFormats.getAmountFormat(Locale.GERMANY);
 MonetaryAmountFormat formatNamed = MonetaryFormats.getAmountFormat("MyCustomFormat");
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
-  AmountFormatQueryBuilder.create()
+  AmountFormatQueryBuilder.of("MyCustomFormat2")
     .set("strict", true)
     .set("omitNegative", true)
-    .set("omitNegativeSign" "N/A")
+    .set("omitNegativeSign", "N/A")
     .build()
 );
 --------------------------------------------
@@ -807,20 +767,20 @@ MonetaryAmount amount = format.parse(formattedString);
 --------------------------------------------
 
 NOTE: Be aware that parsing back an amount in a reverse operation may not always work. If a formatter implements
-      only a unidirectional formatting operation, a +MonetaryFormatException+ will be thrown.
+      only a unidirectional formatting operation, a +MonetaryParseException+ will be thrown.
 
 
 === Customizing the Default Amount Formatters
 
-_Moneta_ basically provides similar formatting options as Java. It is possible to pass a +DecimalFormat+ instance
-as parameter for a +Locale+ vased format query:
+_Moneta_ basically provides similar formatting options to the one of DecimalFormat.
+It is possible to pass a +DecimalFormat+ pattern string
+as a parameter for a +Locale+ based format query:
 
 [source,java]
 --------------------------------------------
-DecimalFormat df = ...;
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
-  AmountFormatQueryBuilder.create(Locale.GERMANY)
-    .set(df)
+  AmountFormatQueryBuilder.of(Locale.GERMANY)
+    .set("pattern", "####,####")
     .build()
 );
 --------------------------------------------
@@ -837,13 +797,15 @@ done based on the mechanism as defined by the Java +ServiceLoader+.
 public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
 
     private static final String PROVIDER_NAME = "GeeCoin";
+    private static final String STYLE_NAME = "GeeCoin";
+
     /** The supported locales. */
     private Set<Locale> supportedSets = new HashSet<>();
     /** The provided formats, by name. */
     private Set<String> formatNames = new HashSet<>();
 
     public GeeCoinFormatProviderSpi(){
-        supportedSets.addAll(Locale.CHINA);
+        supportedSets.add(Locale.CHINA);
         supportedSets = Collections.unmodifiableSet(supportedSets);
         formatNames.add("GeeCoin");
         formatNames = Collections.unmodifiableSet(formatNames);
@@ -867,13 +829,15 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     @Override
     public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-        if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
+	if(!amountFormatQuery.getProviderNames().isEmpty()
+	    && !amountFormatQuery.getProviderNames().contains(getProviderName())){
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+        if(!(amountFormatQuery.getFormatName()==null
+	    || STYLE_NAME.equals(amountFormatQuery.getFormatName()))){
             return Collections.emptySet();
         }
-        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(PROVIDER_NAME);
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(PROVIDER_NAME);
         if(amountFormatQuery.getLocale()!=null){
             builder.setLocale(amountFormatQuery.getLocale());
         }
@@ -898,7 +862,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
 
 === Overriding values in javamoney.properties
 
-The reference application supports overriding of the values in +javamoney.properties+ by prefexing the keys with
+The reference implementation supports overriding of the values in +javamoney.properties+ by prefexing the keys with
 a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
 classpath. If no priority is annotated, priority=0 is assumed:
 
@@ -908,4 +872,4 @@ classpath. If no priority is annotated, priority=0 is assumed:
 {100}myKey=myValue
 --------------------------------------------
 
-If two entries have the same value an exeption is thrown.
+If two entries have the same priority an exeption is thrown.
