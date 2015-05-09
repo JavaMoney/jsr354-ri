@@ -9,20 +9,25 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
 import javax.money.format.AmountFormatContext;
+import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 
 /**
  * class to format and parse a text string such as 'EUR 25.25' or vice versa.
- *
- * @author otaviojava
+ * @author Otavio Santana
  */
 final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
+    private static final String CONTEXT_PREFIX = "ToString_";
+
     private final ToStringMonetaryAmountFormatStyle style;
+
+    private final AmountFormatContext context;
 
     private ToStringMonetaryAmountFormat(ToStringMonetaryAmountFormatStyle style) {
         this.style = Objects.requireNonNull(style);
+        context = AmountFormatContextBuilder.of(CONTEXT_PREFIX + style).build();
     }
 
     public static ToStringMonetaryAmountFormat of(
@@ -40,8 +45,7 @@ final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
     @Override
     public AmountFormatContext getContext() {
-        throw new UnsupportedOperationException(
-                "ToStringMonetaryAmountFormat does not the method support getContext()");
+        return context;
     }
 
     @Override
