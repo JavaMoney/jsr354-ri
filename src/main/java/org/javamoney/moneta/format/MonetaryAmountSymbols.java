@@ -10,12 +10,14 @@ import javax.money.Monetary;
 import javax.money.format.MonetaryAmountFormat;
 
 /**
- * This class represents symbols to be used on {@link MonetaryAmountFormat}, this class decorate the
+ * This class represents symbols to be used on {@link MonetaryAmountFormatSymbols}, this class decorate the
  * {@link DecimalFormatSymbols}
- * @author Otavio Santana
  * @see {@link DecimalFormatSymbols}
+ * @see {@link MonetaryAmountFormat}
+ * @see {@link MonetaryAmountFormatSymbols}
+ * @author Otavio Santana
  */
-public final class MonetaryAmountFormatSymbols {
+public final class MonetaryAmountSymbols {
 
 	private final DecimalFormatSymbols formatSymbols;
 	/**
@@ -23,14 +25,14 @@ public final class MonetaryAmountFormatSymbols {
 	 * @see {@link DecimalFormatSymbols#DecimalFormatSymbols(Locale)}
 	 * @param locale
 	 */
-	public MonetaryAmountFormatSymbols(Locale locale) {
+	public MonetaryAmountSymbols(Locale locale) {
 		this.formatSymbols = new DecimalFormatSymbols(locale);
 	}
 	/**
 	 * Create a MonetaryAmountFormatSymbols object for the default FORMAT locale.
 	 * {@link DecimalFormatSymbols#DecimalFormatSymbols()}
 	 */
-	public MonetaryAmountFormatSymbols() {
+	public MonetaryAmountSymbols() {
 		this.formatSymbols = new DecimalFormatSymbols();
 	}
 	/**
@@ -248,11 +250,15 @@ public final class MonetaryAmountFormatSymbols {
 		if(obj == this) {
 			return true;
 		}
-		if(MonetaryAmountFormatSymbols.class.isInstance(formatSymbols)) {
-			MonetaryAmountFormatSymbols other = MonetaryAmountFormatSymbols.class.cast(obj);
+		if(MonetaryAmountSymbols.class.isInstance(formatSymbols)) {
+			MonetaryAmountSymbols other = MonetaryAmountSymbols.class.cast(obj);
 			return Objects.equals(other.formatSymbols, formatSymbols);
 		}
 		return false;
+	}
+
+	DecimalFormatSymbols getFormatSymbol() {
+		return formatSymbols;
 	}
 
 	@Override
