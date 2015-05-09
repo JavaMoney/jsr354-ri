@@ -18,132 +18,227 @@ import javax.money.format.MonetaryAmountFormat;
 public final class MonetaryAmountFormatSymbols {
 
 	private final DecimalFormatSymbols formatSymbols;
-
+	/**
+	 * Create a MonetaryAmountFormatSymbols object for the given locale
+	 * @see {@link DecimalFormatSymbols#DecimalFormatSymbols(Locale)}
+	 * @param locale
+	 */
 	public MonetaryAmountFormatSymbols(Locale locale) {
 		this.formatSymbols = new DecimalFormatSymbols(locale);
 	}
-
+	/**
+	 * Create a MonetaryAmountFormatSymbols object for the default FORMAT locale.
+	 * {@link DecimalFormatSymbols#DecimalFormatSymbols()}
+	 */
 	public MonetaryAmountFormatSymbols() {
 		this.formatSymbols = new DecimalFormatSymbols();
 	}
-
+	/**
+	 *
+	 * @return
+	 */
 	public CurrencyUnit getCurrency() {
 		return Monetary.getCurrency(formatSymbols.getCurrency().getCurrencyCode());
 	}
 
+	/**
+	 * Sets the currency of these MonetaryAmountFormatSymbols. This also sets the currency symbol attribute to the
+	 * currency's symbol in the MonetaryAmountFormatSymbols' locale, and the international currency symbol attribute
+	 *  to the currency's ISO 4217 currency code.
+	 * @param currency
+	 * @throws NullPointerException if currency is null
+	 */
 	public void setCurrency(CurrencyUnit currency) {
 	    Objects.requireNonNull(currency);
 		formatSymbols.setCurrency(Currency.getInstance(currency.getCurrencyCode()));
 	}
-
+	/**
+	 * @return Returns the currency symbol for the currency of these MonetaryAmountFormatSymbols in their locale.
+	 */
 	public String getCurrencySymbol() {
 		return formatSymbols.getCurrencySymbol();
 	}
-
+	/**
+	 * Sets the currency symbol for the currency of these MonetaryAmountFormatSymbols in their locale.
+	 * @param currencySymbol
+	 */
 	public void setCurrencySymbol(String currencySymbol) {
 		formatSymbols.setCurrencySymbol(currencySymbol);
 	}
-
+	/**
+	 * Gets the character used for decimal sign.
+	 * @return
+	 */
 	public char getDecimalSeparator() {
 		return formatSymbols.getDecimalSeparator();
 	}
 
+	/**
+	 * Sets the character used for decimal sign.
+	 * @param decimalSeparator
+	 */
 	public void setDecimalSeparator(char decimalSeparator) {
 		formatSymbols.setDecimalSeparator(decimalSeparator);
 	}
-
+	/**
+	 * @return Gets the character used for a digit in a pattern.
+	 */
 	public char getDigit() {
 		return formatSymbols.getDigit();
 	}
-
+	/**
+	 * Sets the character used for a digit in a pattern.
+	 * @param digit
+	 */
 	public void setDigit(char digit) {
 		formatSymbols.setDigit(digit);
 	}
-
+	/**
+	 * @return Returns the string used to separate the mantissa from the exponent. Examples: "x10^" for 1.23x10^4,
+	 * "E" for 1.23E4.
+	 */
 	public String getExponentSeparator() {
 		return formatSymbols.getExponentSeparator();
 	}
-
+	/**
+	 * Sets the string used to separate the mantissa from the exponent. Examples: "x10^" for 1.23x10^4, "E" for 1.23E4.
+	 * @param exponentSeparator
+	 */
 	public void setExponentSeparator(String exponentSeparator) {
 		formatSymbols.setExponentSeparator(exponentSeparator);
 	}
-
+	/**
+	 * @return Gets the character used for thousands separator.
+	 */
 	public char getGroupingSeparator() {
 		return formatSymbols.getGroupingSeparator();
 	}
-
+	/**
+	 * Sets the character used for thousands separator.
+	 * @param groupingSeparator
+	 */
 	public void setGroupingSeparator(char groupingSeparator) {
 		formatSymbols.setGroupingSeparator(groupingSeparator);
 	}
-
+	/**
+	 * @return Gets the string used to represent infinity. Almost always left unchanged.
+	 */
 	public String getInfinity() {
 		return formatSymbols.getInfinity();
 	}
-
+	/**
+	 * Sets the string used to represent infinity. Almost always left unchanged.
+	 * @param infinity
+	 */
 	public void setInfinity(String infinity) {
 		formatSymbols.setInfinity(infinity);
 	}
-
+	/**
+	 * @return the ISO 4217 currency code of the currency of these MonetaryAmountFormatSymbols.
+	 */
 	public String getInternationalCurrencySymbol() {
 		return formatSymbols.getInternationalCurrencySymbol();
 	}
-
+	/**
+	 * Sets the ISO 4217 currency code of the currency of these MonetaryAmountFormatSymbols.
+	 * @param internationalCurrencySymbol
+	 */
 	public void setInternationalCurrencySymbol(String internationalCurrencySymbol) {
+		Objects.requireNonNull(internationalCurrencySymbol);
+		Currency.getInstance(internationalCurrencySymbol);
 		formatSymbols.setInternationalCurrencySymbol(internationalCurrencySymbol);
 	}
-
+	/**
+	 * Gets the character used to represent minus sign. If no explicit negative format is specified, one is
+	 * formed by prefixing minusSign to the positive format.
+	 * @return
+	 */
 	public char getMinusSign() {
 		return formatSymbols.getMinusSign();
 	}
-
+	/**
+	 * Sets the character used to represent minus sign. If no explicit negative format is specified, one is
+	 * formed by prefixing minusSign to the positive format.
+	 * @param minusSign
+	 */
 	public void setMinusSign(char minusSign) {
 		formatSymbols.setMinusSign(minusSign);
 	}
-
+	/**
+	 * @return the monetary decimal separator.
+	 */
 	public char getMonetaryDecimalSeparator() {
 		return formatSymbols.getMonetaryDecimalSeparator();
 	}
-
+	/**
+	 * Sets the monetary decimal separator.
+	 * @param monetaryDecimalSeparator
+	 */
 	public void setMonetaryDecimalSeparator(char monetaryDecimalSeparator) {
 		formatSymbols.setMonetaryDecimalSeparator(monetaryDecimalSeparator);
 	}
-
+	/**
+	 * @return the string used to represent "not a number". Almost always left unchanged.
+	 */
 	public String getNaN() {
 		return formatSymbols.getNaN();
 	}
-
+	/**
+	 * Sets the string used to represent "not a number". Almost always left unchanged.
+	 * @param naN
+	 */
 	public void setNaN(String naN) {
 		formatSymbols.setNaN(naN);
 	}
-
+	/**
+	 * @return the character used to separate positive and negative subpatterns in a pattern.
+	 */
 	public char getPatternSeparator() {
 		return formatSymbols.getPatternSeparator();
 	}
-
+	/**
+	 * Sets the character used to separate positive and negative subpatterns in a pattern.
+	 * @param patternSeparator
+	 */
 	public void setPatternSeparator(char patternSeparator) {
 		formatSymbols.setPatternSeparator(patternSeparator);
 	}
-
+	/**
+	 * @return the character used for percent sign.
+	 */
 	public char getPercent() {
 		return formatSymbols.getPercent();
 	}
-
+	/**
+	 * Sets the character used for percent sign.
+	 * @param percent
+	 */
 	public void setPercent(char percent) {
 		formatSymbols.setPercent(percent);
 	}
-
+	/**
+	 * @return the character used for per mille sign.
+	 */
 	public char getPerMill() {
 		return formatSymbols.getPerMill();
 	}
-
+	/**
+	 * Sets the character used for per mille sign.
+	 * @param perMill
+	 */
 	public void setPerMill(char perMill) {
 		formatSymbols.setPerMill(perMill);
 	}
-
+	/**
+	 * @return Gets the character used for zero.
+	 */
 	public char getZeroDigit() {
 		return formatSymbols.getZeroDigit();
 	}
-
+	/**
+	 * Sets the character used for zero.
+	 * @param zeroDigit
+	 */
 	public void setZeroDigit(char zeroDigit) {
 		formatSymbols.setZeroDigit(zeroDigit);
 	}

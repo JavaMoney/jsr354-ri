@@ -39,4 +39,16 @@ public class MonetaryAmountFormatSymbolsTest {
 		assertEquals(real, symbols.getCurrency());
 	}
 
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenInternationalCurrencySymbolIsInvalid() {
+		MonetaryAmountFormatSymbols symbols = new MonetaryAmountFormatSymbols(Locale.US);
+		symbols.setInternationalCurrencySymbol("ERROR");
+	}
+
+	@Test(expectedExceptions = NullPointerException.class)
+	public void shouldReturnErrorWhenInternationalCurrencySymbolIsNull() {
+		MonetaryAmountFormatSymbols symbols = new MonetaryAmountFormatSymbols(Locale.US);
+		symbols.setInternationalCurrencySymbol(null);
+	}
+
 }
