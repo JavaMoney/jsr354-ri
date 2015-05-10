@@ -1,6 +1,7 @@
 package org.javamoney.moneta.spi;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Locale;
 
@@ -8,6 +9,7 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -39,7 +41,13 @@ public class MoneyProducerTest {
 		MonetaryAmount amount = producer.create(currency, value);
 		assertEquals(amount.getCurrency(), currency);
 		assertEquals(Long.valueOf(amount.getNumber().longValue()), value);
+	}
 
+	@Test
+	public void shouldCreateUsingMoneyImplementation() {
+		Long value = 10L;
+		MonetaryAmount amount = producer.create(currency, value);
+		assertTrue(Money.class.isInstance(amount));
 	}
 
 }

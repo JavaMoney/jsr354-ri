@@ -33,4 +33,8 @@ public final class RoundedMoneyProducer implements MonetaryAmountProducer {
 		return RoundedMoney.of(Objects.requireNonNull(number), Objects.requireNonNull(currency), operator);
 	}
 
+	public MonetaryOperator getOperator() {
+		return operator;
+	}
+
 }

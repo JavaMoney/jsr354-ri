@@ -50,6 +50,7 @@ class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols 
 		Objects.requireNonNull(text);
 		try {
 			Number number = decimalFormat.parse(text.toString());
+
 			return factory.setCurrency(symbols.getCurrency()).setNumber(number).create();
 		}catch (Exception exception) {
 			throw new MonetaryParseException(exception.getMessage(), text, 0);
