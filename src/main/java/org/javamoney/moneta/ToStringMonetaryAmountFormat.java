@@ -15,9 +15,16 @@ import javax.money.format.MonetaryParseException;
 
 /**
  * class to format and parse a text string such as 'EUR 25.25' or vice versa.
+ * This class will used to toString and parse in all implementation on Moneta.
+ * {@link Money#toString()}
+ * {@link Money#parse(CharSequence)}
+ * {@link FastMoney#toString()}
+ * {@link FastMoney#parse(CharSequence)}
+ * {@link RoundedMoney#toString()}
+ * {@link RoundedMoney#parse(CharSequence)}
  * @author Otavio Santana
  */
-final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
+public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
     private static final String CONTEXT_PREFIX = "ToString_";
 
@@ -84,19 +91,28 @@ final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
      * indicates with implementation will used to format or parser in
      * ToStringMonetaryAmountFormat
      */
-    enum ToStringMonetaryAmountFormatStyle {
+    public enum ToStringMonetaryAmountFormatStyle {
+    	/**
+    	 * {@link Money}
+    	 */
         MONEY {
             @Override
             MonetaryAmount to(ParserMonetaryAmount amount) {
                 return Money.of(amount.number, amount.currencyUnit);
             }
         },
+        /**
+    	 * {@link FastMoney}
+    	 */
         FAST_MONEY {
             @Override
             MonetaryAmount to(ParserMonetaryAmount amount) {
                 return FastMoney.of(amount.number, amount.currencyUnit);
             }
         },
+        /**
+    	 * {@link RoundedMoney}
+    	 */
         ROUNDED_MONEY {
             @Override
             MonetaryAmount to(ParserMonetaryAmount amount) {
