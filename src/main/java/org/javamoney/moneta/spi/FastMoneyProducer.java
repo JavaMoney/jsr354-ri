@@ -9,7 +9,7 @@ import org.javamoney.moneta.FastMoney;
 
 /**
  * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
- * using {@link FastMoney}
+ * using {@link FastMoney} implementation.
  * @author Otavio Santana
  */
 public final class FastMoneyProducer implements MonetaryAmountProducer {

@@ -7,6 +7,7 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
 import org.javamoney.moneta.RoundedMoney;
+import org.javamoney.moneta.function.MonetaryOperators;
 
 /**
  * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
@@ -26,6 +27,17 @@ public final class RoundedMoneyProducer implements MonetaryAmountProducer {
 	 */
 	public RoundedMoneyProducer(MonetaryOperator operator) {
 		this.operator = Objects.requireNonNull(operator);
+	}
+
+	/**
+	 * Returns the {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
+	 * using the {@link RoundedMoney} implementation using {@link MonetaryOperators#rounding()}
+	 * as rounding operator
+	 * @see {@link RoundedMoneyProducer}
+	 * @return the rounded money producer
+	 */
+	public RoundedMoneyProducer() {
+		this.operator = MonetaryOperators.rounding();
 	}
 
 	@Override

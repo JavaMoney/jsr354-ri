@@ -9,7 +9,7 @@ import org.javamoney.moneta.Money;
 
 /**
  * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
- * using {@link Money}
+ * using {@link Money} implementation.
  * @author Otavio Santana
  */
 public final class MoneyProducer implements MonetaryAmountProducer {
