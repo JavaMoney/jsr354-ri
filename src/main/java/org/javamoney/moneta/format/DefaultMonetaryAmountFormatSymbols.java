@@ -7,11 +7,16 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryParseException;
 
+import org.javamoney.moneta.spi.MonetaryAmountProducer;
+
+/**
+ * The default implementation that uses the {@link DecimalFormat} as formatter.
+ * @author Otavio Santana
+ */
 class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols {
 
 	static final String STYLE = "MonetaryAmountFormatSymbols";
@@ -22,13 +27,23 @@ class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols 
 
 	private final DecimalFormat decimalFormat;
 
-	private final MonetaryAmountFactory<?> factory;
+	private final MonetaryAmountProducer producer;
 
-	DefaultMonetaryAmountFormatSymbols(MonetaryAmountSymbols symbols, MonetaryAmountFactory<?> factory) {
+	private final MonetaryAmountNumericInformation numericInformation;
+
+	DefaultMonetaryAmountFormatSymbols(MonetaryAmountSymbols symbols, MonetaryAmountProducer producer) {
 		this.symbols = symbols;
-		this.factory = factory;
+		this.producer = producer;
 		this.decimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance();
 		decimalFormat.setDecimalFormatSymbols(symbols.getFormatSymbol());
+		numericInformation = new MonetaryAmountNumericInformation(decimalFormat);
+	}
+
+	DefaultMonetaryAmountFormatSymbols(String pattern, MonetaryAmountSymbols symbols, MonetaryAmountProducer producer) {
+		this.symbols = symbols;
+		this.producer = producer;
+		this.decimalFormat = new DecimalFormat(pattern, symbols.getFormatSymbol());
+		numericInformation = new MonetaryAmountNumericInformation(decimalFormat);
 	}
 
 	@Override
@@ -50,8 +65,7 @@ class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols 
 		Objects.requireNonNull(text);
 		try {
 			Number number = decimalFormat.parse(text.toString());
-
-			return factory.setCurrency(symbols.getCurrency()).setNumber(number).create();
+			return producer.create(symbols.getCurrency(), number);
 		}catch (Exception exception) {
 			throw new MonetaryParseException(exception.getMessage(), text, 0);
 		}
@@ -70,4 +84,33 @@ class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols 
 		return symbols;
 	}
 
+	@Override
+	public MonetaryAmountNumericInformation getNumericInformation() {
+		return numericInformation;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(symbols, numericInformation);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		if (DefaultMonetaryAmountFormatSymbols.class.isInstance(obj)) {
+			DefaultMonetaryAmountFormatSymbols other = DefaultMonetaryAmountFormatSymbols.class.cast(obj);
+			return Objects.equals(other.symbols, symbols) && Objects.equals(other.numericInformation, numericInformation);
+		}
+		return false;
+	}
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(DefaultMonetaryAmountFormatSymbols.class.getName()).append('{')
+		.append(" numericInformation: ").append(numericInformation).append(',')
+		.append(" symbols: ").append(symbols).append('}');
+		return sb.toString();
+	}
 }

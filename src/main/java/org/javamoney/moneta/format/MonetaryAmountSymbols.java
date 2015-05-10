@@ -30,6 +30,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Create a MonetaryAmountFormatSymbols object for the default FORMAT locale.
+	 * @see {@link Locale.getDefault(Locale.Category.FORMAT)}
 	 * {@link DecimalFormatSymbols#DecimalFormatSymbols()}
 	 */
 	public MonetaryAmountSymbols() {
@@ -250,21 +251,21 @@ public final class MonetaryAmountSymbols {
 		if(obj == this) {
 			return true;
 		}
-		if(MonetaryAmountSymbols.class.isInstance(formatSymbols)) {
+		if(MonetaryAmountSymbols.class.isInstance(obj)) {
 			MonetaryAmountSymbols other = MonetaryAmountSymbols.class.cast(obj);
 			return Objects.equals(other.formatSymbols, formatSymbols);
 		}
 		return false;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(formatSymbols);
 	}
 
 	DecimalFormatSymbols getFormatSymbol() {
 		return formatSymbols;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(formatSymbols);
-	}
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

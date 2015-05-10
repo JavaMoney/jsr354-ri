@@ -8,12 +8,12 @@ import java.util.Locale;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.internal.MoneyAmountBuilder;
+import org.javamoney.moneta.spi.MonetaryAmountProducer;
+import org.javamoney.moneta.spi.MoneyProducer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -28,15 +28,15 @@ public class DefaultMonetaryAmountFormatSymbolsTest {
 
 	private CurrencyUnit currency;
 
-	private MonetaryAmountFactory<?> factory;
+	private MonetaryAmountProducer producer;
 
 	@BeforeMethod
 	public void setup() {
 		locale = new Locale("pt", "BR");
 		symbols = new MonetaryAmountSymbols(locale);
 		currency = Monetary.getCurrency(locale);
-		factory = new MoneyAmountBuilder().setCurrency(currency);
-		monetaryAmountFormat = new DefaultMonetaryAmountFormatSymbols(symbols, factory);
+		producer = new MoneyProducer();
+		monetaryAmountFormat = new DefaultMonetaryAmountFormatSymbols(symbols, producer);
 
 	}
 
