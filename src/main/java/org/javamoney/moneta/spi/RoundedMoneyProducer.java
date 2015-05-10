@@ -8,10 +8,22 @@ import javax.money.MonetaryOperator;
 
 import org.javamoney.moneta.RoundedMoney;
 
-public class RoundedMoneyProducer implements MonetaryAmountProducer {
+/**
+ * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
+ * using {@link RoundedMoney} using the {@link MonetaryOperator} as rounding operator
+ * @see {@link RoundedMoneyProducer#RoundedMoneyProducer(MonetaryOperator)}
+ * @author Otavio Santana
+ */
+public final class RoundedMoneyProducer implements MonetaryAmountProducer {
 
 	private final MonetaryOperator operator;
 
+	/**
+	 * Creates this producer using this operator
+	 * as rounding operator in all MonetaryAmount produced.
+	 * @param operator
+	 * @throws NullPointerException if operator is null
+	 */
 	public RoundedMoneyProducer(MonetaryOperator operator) {
 		this.operator = Objects.requireNonNull(operator);
 	}

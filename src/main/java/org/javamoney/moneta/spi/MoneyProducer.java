@@ -7,7 +7,12 @@ import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
 
-public class MoneyProducer implements MonetaryAmountProducer {
+/**
+ * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
+ * using {@link Money}
+ * @author Otavio Santana
+ */
+public final class MoneyProducer implements MonetaryAmountProducer {
 
 	@Override
 	public MonetaryAmount create(CurrencyUnit currency, Number number) {
