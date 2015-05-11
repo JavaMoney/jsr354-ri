@@ -5,9 +5,9 @@ import static org.testng.Assert.assertEquals;
 import java.math.BigDecimal;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import javax.money.Monetary;
-import javax.money.UnknownCurrencyException;
+import javax.money.MonetaryAmount;
+import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.testng.annotations.BeforeTest;
@@ -37,19 +37,34 @@ public class ToStringMonetaryAmountFormatTest {
 		format.parse(null);
 	}
 
-	@Test(expectedExceptions = NumberFormatException.class)
-	public void shouldRunNumberFormatException() {
+	@Test(expectedExceptions = MonetaryParseException.class)
+	public void shouldReturnErrorWhenNumberIsInvalid() {
 		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
 				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
 		format.parse("BRL 23AD");
 	}
 
-	@Test(expectedExceptions = UnknownCurrencyException.class)
-	public void shouldRunUnknownCurrencyException() {
+	@Test(expectedExceptions = MonetaryParseException.class)
+	public void shouldReturnErrorWhenCurrencyIsInvalid() {
 		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
 				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
 		format.parse("AXD 23");
 	}
+	@Test(expectedExceptions = MonetaryParseException.class)
+	public void shouldReturnErrorWhenJustHasNumber() {
+		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
+				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+		format.parse("23");
+	}
+
+	@Test(expectedExceptions = MonetaryParseException.class)
+	public void shouldReturnErrorWhenJustHasCurrency() {
+		ToStringMonetaryAmountFormat format = ToStringMonetaryAmountFormat
+				.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+		format.parse("BRL");
+	}
+
+
 
 	@Test
 	public void parserMoneyTest() {
