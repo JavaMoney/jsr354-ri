@@ -44,10 +44,8 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
 
     @Override
     public String queryFrom(MonetaryAmount amount) {
-        if (Objects.isNull(amount)) {
-            return null;
-        }
-        return amount.toString();
+		return Optional.ofNullable(amount).map(MonetaryAmount::toString)
+				.orElse("null");
     }
 
     @Override
@@ -58,8 +56,7 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
     @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
-        appendable.append(Optional.ofNullable(amount)
-                .map(MonetaryAmount::toString).orElse("null"));
+        appendable.append(queryFrom(amount));
 
     }
 
