@@ -66,12 +66,19 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
     @Override
     public MonetaryAmount parse(CharSequence text)
             throws MonetaryParseException {
-        ParserMonetaryAmount amount = parserMonetaryAmount(text);
-        return style.to(amount);
+		try {
+			ParserMonetaryAmount amount = parserMonetaryAmount(text);
+			return style.to(amount);
+		} catch (Exception e) {
+			throw new MonetaryParseException(e.getMessage(), text, 0);
+		}
     }
 
-    private ParserMonetaryAmount parserMonetaryAmount(CharSequence text) {
+    private ParserMonetaryAmount parserMonetaryAmount(CharSequence text) throws Exception {
         String[] array = Objects.requireNonNull(text).toString().split(" ");
+        if(array.length != 2) {
+        	throw new MonetaryParseException("An error happened when try to parse the Monetary Amount.",text,0);
+        }
         CurrencyUnit currencyUnit = Monetary.getCurrency(array[0]);
         BigDecimal number = new BigDecimal(array[1]);
         return new ParserMonetaryAmount(currencyUnit, number);
