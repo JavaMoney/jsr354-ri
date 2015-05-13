@@ -21,9 +21,9 @@
         <artifactId>javamoney-parent</artifactId>
         <version>1.0</version>
     </parent>
-
+	<version>1.0.1-SNAPSHOT</version>
     <artifactId>moneta</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging> <!-- FIXME should be bundle -->
     <name>Moneta (JSR 354 RI)</name>
     <url>http://javamoney.org</url>
     <inceptionYear>2012</inceptionYear>
@@ -47,7 +47,7 @@
     </licenses>
 
     <properties>
-        <jsr.version>${project.version}</jsr.version>
+        <jsr.version>1.0</jsr.version>
         <jdkVersion>1.8</jdkVersion>
         <maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
         <maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
