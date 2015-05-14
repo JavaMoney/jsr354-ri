@@ -239,9 +239,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money[] divideAndRemainder(long divisor) {
-        if (divisor == 1L) {
-            return new Money[]{this, Money.of(0L, getCurrency())};
-        }
         return divideAndRemainder(BigDecimal.valueOf(divisor));
     }
 
@@ -294,9 +291,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money remainder(long divisor) {
-        if (divisor == 1L) {
-            return this;
-        }
         return remainder(BigDecimal.valueOf(divisor));
     }
 
