@@ -127,14 +127,14 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
 
     private Collection<String> getProvidersToUse(ConversionQuery query) {
         List<String> providersToUse = new ArrayList<>();
-        List<String> providers = query.getProviderNames();
-        if (providers.isEmpty()) {
-            providers = getDefaultProviderChain();
-            if (providers.isEmpty()) {
+        List<String> providerNames = query.getProviderNames();
+        if (providerNames.isEmpty()) {
+            providerNames = getDefaultProviderChain();
+            if (providerNames.isEmpty()) {
                 throw new IllegalStateException("No default provider chain available.");
             }
         }
-        for (String provider : providers) {
+        for (String provider : providerNames) {
             ExchangeRateProvider prov = this.conversionProviders.get(provider);
             if (prov == null) {
                 throw new MonetaryException("Invalid ExchangeRateProvider (not found): " + provider);
@@ -153,13 +153,20 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     public List<String> getDefaultProviderChain() {
         List<String> provList = new ArrayList<>();
         String defaultChain = MonetaryConfig.getConfig().get("conversion.default-chain");
-        String[] items = defaultChain.split(",");
-        for (String item : items) {
-            if (getProviderNames().contains(item.trim())) {
-                provList.add(item);
-            } else {
-                LOG.warning("Ignoring non existing default provider: " + item);
+        if(defaultChain!=null) {
+            String[] items = defaultChain.split(",");
+            for (String item : items) {
+                if (getProviderNames().contains(item.trim())) {
+                    provList.add(item);
+                } else {
+                    LOG.warning("Ignoring non existing default provider: " + item);
+                }
             }
+        }
+        else{
+            Bootstrap.getServices(ExchangeRateProvider.class).forEach(
+                    p -> provList.add(p.getContext().getProviderName())
+            );
         }
         return provList;
     }
