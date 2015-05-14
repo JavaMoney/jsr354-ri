@@ -241,7 +241,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      */
     @Override
     public String toString() {
-        return "ExchangeRate [base=" + base + ", factor=" + factor + ", conversionContext=" + conversionContext + ']';
+        return "ExchangeRate [base=" + base + ", term=" + term + ", factor=" + factor + ", conversionContext=" + conversionContext + ']';
     }
 
     /*
