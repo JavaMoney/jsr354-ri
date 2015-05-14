@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
 /**
  * Tests for {@link org.javamoney.moneta.spi.ConvertBigDecimal}.
  */
-@SuppressWarnings("BigDecimalMethodWithoutRoundingCalled")
 public class ConvertBigDecimalTest {
 
 	private final BigDecimal expectValue = BigDecimal.TEN;
@@ -52,22 +51,22 @@ public class ConvertBigDecimalTest {
 	public void ofByteTest() {
 		Assert.assertEquals(ConvertBigDecimal.of((byte) 10), expectValue);
 	}
-	
+
 	@Test
 	public void ofAtomicLongTest() {
 		Assert.assertEquals(ConvertBigDecimal.of(new AtomicLong(10l)), expectValue);
 	}
-	
+
 	@Test
 	public void ofAtomicIntegerTest() {
 		Assert.assertEquals(ConvertBigDecimal.of(new AtomicInteger(10)), expectValue);
 	}
-	
+
 	@Test
 	public void ofFloatTest() {
 		Assert.assertEquals(ConvertBigDecimal.of(10f).setScale(0), expectValue);
 	}
-	
+
 	@Test
 	public void ofDoubleTest() {
 		Assert.assertEquals(ConvertBigDecimal.of(10d).setScale(0), expectValue);

@@ -15,18 +15,32 @@
  */
 package org.javamoney.moneta;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
-import javax.money.*;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.testng.Assert.*;
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryOperator;
+import javax.money.MonetaryQuery;
+
+import org.junit.Assert;
+import org.testng.annotations.Test;
 
 /**
  * @author Anatole
@@ -254,7 +268,7 @@ public class FastMoneyTest{
         m = FastMoney.of(-10, "CHF");
         assertEquals(m.negate(), m.abs());
         assertTrue(m != m.abs());
-        
+
         // Long.MIN_VALUE * -1 == Long.MIN_VALUE
         m = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
         assertFalse(m.isPositiveOrZero());
@@ -275,7 +289,7 @@ public class FastMoneyTest{
         FastMoney moneyResult = money1.add(money2);
         assertNotNull(moneyResult);
         assertEquals(11d, moneyResult.getNumber().doubleValue(), 0d);
-        
+
         FastMoney money3 = FastMoney.of(90000000000000L, "CHF");
         try {
             // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
@@ -310,12 +324,12 @@ public class FastMoneyTest{
         BigDecimal baseValue = new BigDecimal("90000000000");
         // the argument exceeds the numeric capabilities but the result will not
         BigDecimal divisor = new BigDecimal("1000000");
-        @SuppressWarnings("BigDecimalMethodWithoutRoundingCalled") BigDecimal expectedValue = baseValue.divide(divisor);
+        BigDecimal expectedValue = baseValue.divide(divisor);
 
         m = FastMoney.of(baseValue, "CHF");
         assertEquals(FastMoney.of(expectedValue, "CHF"), m.divide(divisor));
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(long)}.
      */
@@ -324,7 +338,7 @@ public class FastMoneyTest{
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(5L));
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
      */
@@ -374,18 +388,18 @@ public class FastMoneyTest{
     public void testMultiplyNumber(){
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(10, "CHF"), m.multiply(new BigDecimal("0.1")));
-        
+
         // the maximum value for FastMoney is 92233720368547.75807
         // so this should fit right below this limit
         BigDecimal baseValue = new BigDecimal("90000000000000");
         BigDecimal expectedValue = new BigDecimal("90000000000000.00009");
         BigDecimal multiplicant = new BigDecimal("1.000000000000000001");
-        
+
         // verify the expected results
         assertEquals(0, expectedValue.compareTo(baseValue.multiply(multiplicant)));
-        
+
         m = FastMoney.of(baseValue, "CHF");
-        
+
         try {
             m.multiply(baseValue);
             fail("overflow should raise ArithmeticException");
@@ -393,7 +407,7 @@ public class FastMoneyTest{
             // should happen
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(long)}.
      */
@@ -403,7 +417,7 @@ public class FastMoneyTest{
         assertEquals(FastMoney.of(400, "CHF"), m.multiply(4));
         assertEquals(FastMoney.of(200, "CHF"), m.multiply(2));
         assertEquals(FastMoney.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
-        
+
         try {
             // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
             FastMoney.of(90000000000000L, "CHF").multiply(90000000000000L);
@@ -412,7 +426,7 @@ public class FastMoneyTest{
             // should happen
         }
     }
-    
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(double)}.
      */
@@ -548,7 +562,7 @@ public class FastMoneyTest{
         assertEquals(FastMoney.of(-100, "CHF"), m.negate());
         m = FastMoney.of(-123.234, "CHF");
         assertEquals(FastMoney.of(123.234, "CHF"), m.negate());
-        
+
         // Long.MIN_VALUE * -1 == Long.MIN_VALUE
         m = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
         assertTrue(m.isNegative());
@@ -1151,4 +1165,47 @@ public class FastMoneyTest{
     public void testCreatingFromDoubleNegativeInfinity(){
         FastMoney.of(Double.NEGATIVE_INFINITY, "XXX");
     }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
+    	FastMoney.zero(null);
+    	Assert.fail();
+    }
+
+    @Test
+    public void shouldRerturnZeroWhenUsingZero() {
+    	MonetaryAmount zero = FastMoney.zero(DOLLAR);
+    	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
+    	assertEquals(DOLLAR, zero.getCurrency());
+    }
+
+   @Test(expectedExceptions = NullPointerException.class)
+   public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
+   	FastMoney.ofMinor(null, 1234L);
+   	Assert.fail();
+   }
+
+   @Test
+   public void shouldRerturnMonetaryAmount() {
+   	MonetaryAmount amount = FastMoney.ofMinor(DOLLAR, 1234L);
+   	assertEquals(Double.valueOf(12.34), amount.getNumber().doubleValue());
+   	assertEquals(DOLLAR, amount.getCurrency());
+   }
+
+   @Test(expectedExceptions = IllegalArgumentException.class)
+   public void shouldReturnErrorWhenCurrencyIsInvalid() {
+   	 FastMoney.ofMinor(new InvalidCurrency(), 1234L);
+   }
+
+   @Test(expectedExceptions = IllegalArgumentException.class)
+   public void shouldReturnErrorWhenFractionDigitIsNegative() {
+   	 FastMoney.ofMinor(DOLLAR, 1234L, -2);
+   }
+
+   @Test
+   public void shouldRerturnMonetaryAmountUsingFractionDigits() {
+   	MonetaryAmount amount = FastMoney.ofMinor(DOLLAR, 1234L, 3);
+   	assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
+   	assertEquals(DOLLAR, amount.getCurrency());
+   }
 }

@@ -24,15 +24,15 @@ import java.util.Objects;
  *
  * @author Anatole Tresch
  */
-final class MajorPart implements MonetaryOperator {
+final class ExtractorMajorPartOperator implements MonetaryOperator {
 
     private static final MonetaryRounding DOWN_ROUNDING =
             Monetary.getRounding(RoundingQueryBuilder.of().setScale(0).set(RoundingMode.DOWN).build());
 
     /**
-     * Access the shared instance of {@link MajorPart} for use.
+     * Access the shared instance of {@link ExtractorMajorPartOperator} for use.
      */
-    MajorPart() {
+    ExtractorMajorPartOperator() {
     }
 
     /**

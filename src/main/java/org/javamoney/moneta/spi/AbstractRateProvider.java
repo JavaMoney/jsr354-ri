@@ -15,13 +15,23 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.NumberValue;
-import javax.money.convert.*;
+import static org.javamoney.moneta.spi.AbstractCurrencyConversion.KEY_SCALE;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.logging.Logger;
+import java.util.Optional;
+
+import javax.money.NumberValue;
+import javax.money.convert.ConversionContext;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.CurrencyConversion;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.RateType;
 
 /**
  * Abstract base class for {@link ExchangeRateProvider} implementations.
@@ -32,14 +42,9 @@ import java.util.logging.Logger;
 public abstract class AbstractRateProvider implements ExchangeRateProvider {
 
     /**
-     * The logger used.
-     */
-    protected final Logger log = Logger.getLogger(getClass().getName());
-
-    /**
      * The {@link ConversionContext} of this provider.
      */
-    private final ProviderContext providerContext;
+    private final ProviderContext context;
 
     /**
      * Constructor.
@@ -48,7 +53,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      */
     public AbstractRateProvider(ProviderContext providerContext) {
         Objects.requireNonNull(providerContext);
-        this.providerContext = providerContext;
+        this.context = providerContext;
     }
 
     /*
@@ -59,7 +64,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      */
     @Override
     public ProviderContext getContext() {
-        return providerContext;
+        return context;
     }
 
     @Override
@@ -133,5 +138,39 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
         }
         return new DefaultNumberValue(
                 dividend.numberValueExact(BigDecimal.class).divide(divisor.numberValue(BigDecimal.class), context));
+    }
+
+    protected int getScale(String key) {
+		String string = MonetaryConfig.getConfig().getOrDefault(
+				key, "-1");
+		if (string.isEmpty()) {
+			return -1;
+		} else {
+			try {
+				return Integer.valueOf(string);
+			} catch (NumberFormatException e) {
+				return -1;
+			}
+		}
+	}
+
+    protected ConversionContext getExchangeContext(String key) {
+		int scale = getScale(key);
+        if(scale < 0) {
+          return ConversionContext.of(this.context.getProviderName(), RateType.HISTORIC);
+        } else {
+        	return ConversionContext.of(this.context.getProviderName(), RateType.HISTORIC).toBuilder().set(KEY_SCALE, scale).build();
+        }
+	}
+
+    protected LocalDate[] getQueryDates(ConversionQuery query) {
+
+        if (Objects.nonNull(query.get(LocalDate.class)) || Objects.nonNull(query.get(LocalDateTime.class))) {
+        	LocalDate localDate = Optional.ofNullable(query.get(LocalDate.class)).orElseGet(() -> query.get(LocalDateTime.class).toLocalDate());
+        	return new LocalDate[]{localDate};
+        } else if(Objects.nonNull(query.get(LocalDate[].class))) {
+        	return query.get(LocalDate[].class);
+        }
+        return null;
     }
 }

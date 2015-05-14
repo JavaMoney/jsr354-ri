@@ -228,7 +228,6 @@ final class CurrencyToken implements FormatToken {
      * @return the first letter based part, or the full token.
      */
     private String parseCurrencyCode(String token) {
-        StringBuilder builder = new StringBuilder();
         int letterIndex = 0;
         for (char ch : token.toCharArray()) {
             if (Character.isLetter(ch)) {

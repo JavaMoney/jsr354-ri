@@ -29,13 +29,13 @@ import javax.money.NumberValue;
  *
  * @author Anatole Tresch
  */
-final class Reciprocal implements MonetaryOperator{
+final class ReciprocalOperator implements MonetaryOperator{
 
 
     /**
-     * Access the shared instance of {@link Reciprocal} for use.
+     * Access the shared instance of {@link ReciprocalOperator} for use.
      */
-    Reciprocal(){
+    ReciprocalOperator(){
     }
 
 

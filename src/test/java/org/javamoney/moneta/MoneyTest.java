@@ -40,6 +40,7 @@ import javax.money.MonetaryException;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -1182,4 +1183,49 @@ public class MoneyTest {
     public void testCreatingFromDoubleNegativeInfinity(){
     	Money.of(Double.NEGATIVE_INFINITY, "XXX");
     }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
+    	Money.zero(null);
+    	Assert.fail();
+    }
+
+    @Test
+    public void shouldRerturnZeroWhenUsingZero() {
+    	MonetaryAmount zero = Money.zero(BRAZILIAN_REAL);
+    	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
+    	assertEquals(BRAZILIAN_REAL, zero.getCurrency());
+    }
+
+	@Test(expectedExceptions = NullPointerException.class)
+	public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
+		Money.ofMinor(null, 1234L);
+		Assert.fail();
+	}
+
+	@Test
+	public void shouldRerturnMonetaryAmount() {
+		MonetaryAmount amount = Money.ofMinor(DOLLAR, 1234L);
+		assertEquals(Double.valueOf(12.34), amount.getNumber().doubleValue());
+		assertEquals(DOLLAR, amount.getCurrency());
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenCurrencyIsInvalid() {
+		Money.ofMinor(new InvalidCurrency(), 1234L);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenFractionDigitIsNegative() {
+		Money.ofMinor(DOLLAR, 1234L, -2);
+	}
+
+	@Test
+	public void shouldRerturnMonetaryAmountUsingFractionDigits() {
+		MonetaryAmount amount = Money.ofMinor(DOLLAR, 1234L, 3);
+		assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
+		assertEquals(DOLLAR, amount.getCurrency());
+	}
+
+
 }

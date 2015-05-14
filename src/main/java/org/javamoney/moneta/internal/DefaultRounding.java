@@ -35,7 +35,9 @@ import java.util.Optional;
  */
 final class DefaultRounding implements MonetaryRounding, Serializable {
 
-    /**
+	private static final long serialVersionUID = -211054408229261721L;
+
+	/**
      * The scale key to be used.
      */
     private static final String SCALE_KEY = "scale";

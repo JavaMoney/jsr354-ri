@@ -19,49 +19,44 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
-import javax.money.MonetaryQuery;
+import javax.money.MonetaryOperator;
 
 /**
- * This class allows to extract the minor units of a {@link MonetaryAmount}
+ * This class allows to extract the minor part of a {@link MonetaryAmount}
  * instance.
- * 
+ *
  * @author Anatole Tresch
+ * @author Otavio Santana
  */
-final class MinorUnits implements MonetaryQuery<Long> {
+final class ExtractorMinorPartOperator implements MonetaryOperator {
 
 	/**
-	 * Private constructor, there is only one instance of this class, accessible
-	 * calling {@link MonetaryUtil#minorUnits()} ()}.
+	 * Package private constructor used from MonetaryFunctions.
 	 */
-	MinorUnits() {
+	ExtractorMinorPartOperator() {
 	}
 
 	/**
-	 * Gets the amount in minor units as a {@code long}.
+	 * Gets the minor part of a {@code MonetaryAmount} with the same scale.
 	 * <p>
 	 * This returns the monetary amount in terms of the minor units of the
-	 * currency, truncating the amount if necessary. For example, 'EUR 2.35'
-	 * will return 235, and 'BHD -1.345' will return -1345.
+	 * currency, truncating the whole part if necessary. For example, 'EUR 2.35'
+	 * will return 'EUR 0.35', and 'BHD -1.345' will return 'BHD -0.345'.
 	 * <p>
-	 * This method matches the API of {@link java.math.BigDecimal}.
-	 * 
-	 * @return the minor units part of the amount
-	 * @throws ArithmeticException
-	 *             if the amount is too large for a {@code long}
+	 * This is returned as a {@code MonetaryAmount} rather than a
+	 * {@code BigDecimal} . This is to allow further calculations to be
+	 * performed on the result. Should you need a {@code BigDecimal}, simply
+	 * call {@code asType(BigDecimal.class)}.
+	 *
+	 * @return the minor units part of the amount, never {@code null}
 	 */
 	@Override
-	public Long queryFrom(MonetaryAmount amount) {
+	public MonetaryAmount apply(MonetaryAmount amount){
 		Objects.requireNonNull(amount, "Amount required.");
 		BigDecimal number = amount.getNumber().numberValue(BigDecimal.class);
-		CurrencyUnit cur = amount.getCurrency();
-		int scale = cur.getDefaultFractionDigits();
-		if(scale<0){
-			scale = 0;
-		}
-		number = number.setScale(scale, RoundingMode.DOWN);
-		return number.movePointRight(number.scale()).longValueExact();
+		BigDecimal wholes = number.setScale(0, RoundingMode.DOWN);
+		return amount.subtract(amount.getFactory().setNumber(wholes).create());
 	}
 
 }

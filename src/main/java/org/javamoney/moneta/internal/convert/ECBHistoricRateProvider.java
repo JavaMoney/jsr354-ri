@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal.convert;
 
-import java.net.MalformedURLException;
-
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
@@ -41,7 +39,7 @@ import javax.money.convert.RateType;
  * @author Werner Keil
  * @author otaviojava
  */
-public class ECBHistoricRateProvider extends AbstractECBRateProvider {
+public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
 
     /**
      * The data id used for the LoaderService.

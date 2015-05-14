@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -222,7 +222,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money divide(double divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
         if (divisor == 1.0) {
@@ -250,7 +250,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money[] divideAndRemainder(double divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             Money zero = Money.of(0, getCurrency());
             return new Money[]{zero, zero};
         }
@@ -277,7 +277,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money multiply(double multiplicand) {
-        checkNoInfinityOrNaN(multiplicand);
+    	NumberVerifier.checkNoInfinityOrNaN(multiplicand);
         if (multiplicand == 1.0d) {
             return this;
         }
@@ -301,7 +301,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money remainder(double divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
         return remainder(new BigDecimal(String.valueOf(divisor)));
@@ -413,7 +413,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money divide(Number divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
         BigDecimal divisorBD = MoneyUtils.getBigDecimal(divisor);
@@ -427,7 +427,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     @Override
     public Money[] divideAndRemainder(Number divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             Money zero = Money.of(0, getCurrency());
             return new Money[]{zero, zero};
         }
@@ -453,7 +453,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     @Override
     public Money divideToIntegralValue(double divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
         return divideToIntegralValue(MoneyUtils.getBigDecimal(divisor));
@@ -461,7 +461,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     @Override
     public Money divideToIntegralValue(Number divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
         BigDecimal divisorBD = MoneyUtils.getBigDecimal(divisor);
@@ -476,7 +476,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money multiply(Number multiplicand) {
-        checkNoInfinityOrNaN(multiplicand);
+    	NumberVerifier.checkNoInfinityOrNaN(multiplicand);
         BigDecimal multiplicandBD = MoneyUtils.getBigDecimal(multiplicand);
         if (multiplicandBD.equals(BigDecimal.ONE)) {
             return this;
@@ -502,7 +502,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money plus() {
-        return new Money(this.number.plus(), getCurrency());
+        return this;
     }
 
     /*
@@ -539,7 +539,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money remainder(Number divisor) {
-        if (isInfinityAndNotNaN(divisor)) {
+        if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return new Money(BigDecimal.ZERO, getCurrency());
         }
         BigDecimal bd = MoneyUtils.getBigDecimal(divisor);
@@ -789,6 +789,48 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     }
 
     /**
+     * Obtains an instance of {@link Money} representing zero.
+     * @param currency
+     * @return
+     */
+    public static Money zero(CurrencyUnit currency) {
+        return new Money(BigDecimal.ZERO, currency);
+    }
+
+   	 /**
+      * Obtains an instance of {@code Money} from an amount in minor units.
+      * For example, {@code ofMinor(USD, 1234)} creates the instance {@code USD 12.34}.
+      * @param currency  the currency
+      * @param amountMinor  the amount of money in the minor division of the currency
+      * @return the Money from minor units
+      * @throws NullPointerException when the currency is null
+      * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
+      * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+      */
+     public static Money ofMinor(CurrencyUnit currency, long amountMinor) {
+    	 return ofMinor(currency, amountMinor, currency.getDefaultFractionDigits());
+     }
+     /**
+      * Obtains an instance of {@code Money} from an amount in minor units.
+      * For example, {@code ofMinor(USD, 1234, 2)} creates the instance {@code USD 12.34}.
+      * @param currency  the currency, not null
+      * @param amountMinor  the amount of money in the minor division of the currency
+      * @param factionDigits number of digits
+      * @return the monetary amount from minor units
+      * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+      * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
+      * @throws NullPointerException when the currency is null
+      * @throws IllegalArgumentException when the factionDigits is negative
+      */
+     public static Money ofMinor(CurrencyUnit currency, long amountMinor, int factionDigits) {
+     	if(factionDigits < 0) {
+     		throw new IllegalArgumentException("The factionDigits cannot be negative");
+     	}
+     	return of(BigDecimal.valueOf(amountMinor, factionDigits), currency);
+     }
+
+
+    /**
      * Converts (if necessary) the given {@link MonetaryAmount} to a
      * {@link Money} instance. The {@link MonetaryContext} will be adapted as
      * necessary, if the precision of the given amount exceeds the capabilities
@@ -830,28 +872,4 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
             .of(ToStringMonetaryAmountFormatStyle.MONEY);
-
-    public static void checkNoInfinityOrNaN(Number number) {
-        if (Double.class == number.getClass() || Float.class == number.getClass()) {
-            double dValue = number.doubleValue();
-            if (Double.isNaN(dValue)) {
-                throw new ArithmeticException("Not a valid input: NaN.");
-            } else if (Double.isInfinite(dValue)) {
-                throw new ArithmeticException("Not a valid input: INFINITY: " + dValue);
-            }
-        }
-    }
-
-    public static boolean isInfinityAndNotNaN(Number number) {
-        if (Double.class == number.getClass() || Float.class == number.getClass()) {
-            double dValue = number.doubleValue();
-            if (Double.isNaN(dValue)) {
-                throw new ArithmeticException("Not a valid input: NaN.");
-            } else if (Double.isInfinite(dValue)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }
