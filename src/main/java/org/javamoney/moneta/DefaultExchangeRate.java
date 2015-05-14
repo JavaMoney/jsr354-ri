@@ -158,7 +158,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the conversion context, never null.
      */
-    public final ConversionContext getContext() {
+    @Override
+	public final ConversionContext getContext() {
         return this.conversionContext;
     }
 
@@ -167,7 +168,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the base {@link javax.money.CurrencyUnit}.
      */
-    public final CurrencyUnit getBaseCurrency() {
+    @Override
+	public final CurrencyUnit getBaseCurrency() {
         return this.base;
     }
 
@@ -176,7 +178,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the term {@link javax.money.CurrencyUnit}.
      */
-    public final CurrencyUnit getCurrency() {
+    @Override
+	public final CurrencyUnit getCurrency() {
         return this.term;
     }
 
@@ -185,7 +188,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return the bid factor for this exchange rate, or {@code null}.
      */
-    public final NumberValue getFactor() {
+    @Override
+	public final NumberValue getFactor() {
         return this.factor;
     }
 
@@ -196,7 +200,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      * several instances. For a direct exchange rate, this equals to
      * <code>new ExchangeRate[]{this}</code>.
      */
-    public final List<ExchangeRate> getExchangeRateChain() {
+    @Override
+	public final List<ExchangeRate> getExchangeRateChain() {
         return this.chain;
     }
 
@@ -212,7 +217,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      *
      * @return true, if the exchange rate is derived.
      */
-    public final boolean isDerived() {
+    @Override
+	public final boolean isDerived() {
         return this.chain.size() > 1;
     }
 
@@ -241,7 +247,7 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      */
     @Override
     public String toString() {
-        return "ExchangeRate [base=" + base + ", factor=" + factor + ", conversionContext=" + conversionContext + ']';
+        return "ExchangeRate [base= " + base + " term= "+ term+ ", factor=" + factor + ", conversionContext=" + conversionContext + ']';
     }
 
     /*
