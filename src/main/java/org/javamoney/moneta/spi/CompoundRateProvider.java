@@ -15,8 +15,21 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.convert.*;
-import java.util.*;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.CurrencyConversionException;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.ProviderContext;
+import javax.money.convert.ProviderContextBuilder;
+import javax.money.convert.RateType;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to
@@ -55,7 +68,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
         for (ExchangeRateProvider exchangeRateProvider : providers) {
             childContextList.add(exchangeRateProvider.getContext());
             providerName.append(exchangeRateProvider.getContext().getProviderName());
-            providerName.append(',');
+            providerName.append(',' );
             rateTypeSet.addAll(exchangeRateProvider.getContext().getRateTypes());
         }
         providerName.setLength(providerName.length() - 1);
@@ -90,14 +103,22 @@ public class CompoundRateProvider extends AbstractRateProvider {
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
         for (ExchangeRateProvider prov : this.providers) {
-            if (prov.isAvailable(conversionQuery)) {
-                ExchangeRate rate = prov.getExchangeRate(conversionQuery);
-                if (Objects.nonNull(rate)) {
-                    return rate;
+            try {
+                if (prov.isAvailable(conversionQuery)) {
+                    ExchangeRate rate = prov.getExchangeRate(conversionQuery);
+                    if (Objects.nonNull(rate)) {
+                        return rate;
+                    }
                 }
+            } catch (Exception e) {
+                Logger.getLogger(getClass().getName()).log(Level.WARNING,
+                        "Rate Provider did not return data though at check before data was flagged as available," +
+                                " provider=" + prov.getContext().getProviderName() + ", query=" + conversionQuery);
             }
         }
-        return null;
+        throw new CurrencyConversionException(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency(), null,
+                "All delegate prov iders failed to deliver rate, providers=" + this.providers +
+                        ", query=" + conversionQuery);
     }
 
 
