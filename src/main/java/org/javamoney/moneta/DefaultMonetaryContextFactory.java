@@ -32,7 +32,7 @@ import org.javamoney.moneta.spi.MonetaryConfig;
  * {@link RoundingMode}.
  */
 class DefaultMonetaryContextFactory {
-
+// TODO this should probably go to "convert" in future releases. Analyze feasability of refactoring.
     public MonetaryContext getContext() {
         try {
             Map<String, String> config = MonetaryConfig.getConfig();
