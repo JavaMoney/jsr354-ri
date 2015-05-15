@@ -19,7 +19,7 @@ import java.util.Objects;
  * @author Werner Keil
  */
 public class ExchangeRateBuilder {
-
+// TODO this should probably go to "convert" in future releases. Analyze feasability of refactoring.
     /**
      * The {@link javax.money.convert.ConversionContext}.
      */
