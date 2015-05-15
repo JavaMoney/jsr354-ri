@@ -1,4 +1,4 @@
-package org.javamoney.moneta.convert;
+package org.javamoney.moneta;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
