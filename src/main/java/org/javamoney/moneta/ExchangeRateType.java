@@ -19,6 +19,7 @@ import org.javamoney.moneta.internal.convert.IdentityRateProvider;
  * @author otaviojava
  */
 public enum ExchangeRateType implements ExchangeRateProviderSupplier {
+// TODO this should probably go to "convert" in future releases. Analyze feasability of refactoring.
     /**
      * Exchange rate to the European Central Bank. Uses the
      * {@link ECBCurrentRateProvider} implementation.
