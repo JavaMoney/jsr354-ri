@@ -18,7 +18,7 @@ import javax.money.RoundingQueryBuilder;
  * @see {@link RoundedMoney#divide(double)}
  * @author Otavio Santana
  */
-enum DefaultMonetaryOperatorFactory {
+enum RoundedMoneyMonetaryOperatorFactory {
 
 INSTANCE;
 

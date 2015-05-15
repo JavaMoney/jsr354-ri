@@ -1,4 +1,4 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.function;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -7,6 +7,8 @@ import java.util.Objects;
 
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+
+import org.javamoney.moneta.RoundedMoney;
 
 /**
  * <p>This implementation uses a scale and {@link RoundingMode} to does the rounding operations. The implementation will use the <b>scale</b>, in other words, the number of digits to the right of the decimal point</p>

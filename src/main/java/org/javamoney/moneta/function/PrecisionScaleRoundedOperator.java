@@ -1,4 +1,4 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.function;
 
 import static java.util.Objects.requireNonNull;
 

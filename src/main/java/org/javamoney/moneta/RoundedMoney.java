@@ -106,7 +106,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         checkNumber(number);
         MonetaryContextBuilder monetaryContextBuilder = DEFAULT_MONETARY_CONTEXT.toBuilder();
 
-        this.rounding = DefaultMonetaryOperatorFactory.INSTANCE.getDefaultMonetaryOperator(rounding, context, monetaryContextBuilder);
+        this.rounding = RoundedMoneyMonetaryOperatorFactory.INSTANCE.getDefaultMonetaryOperator(rounding, context, monetaryContextBuilder);
 
         monetaryContextBuilder.set("MonetaryRounding", this.rounding);
         if (context != null) {

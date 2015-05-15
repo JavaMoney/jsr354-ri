@@ -1,4 +1,4 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.function;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -12,52 +12,65 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.RoundedMoney;
 import org.testng.annotations.Test;
 
-public class PrecisionContextRoundedOperatorTest {
+public class PrecisionScaleRoundedOperatorTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnNullPointerExceptionWhenParameterIsNull() {
-		PrecisionContextRoundedOperator.of(null);
+		PrecisionScaleRoundedOperator.of(0, null);
 		fail();
 	}
 
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void shouldReturnErrorWhenScaleIsUNNECESSARY() {
 		MathContext mathContext = new MathContext(2, RoundingMode.UNNECESSARY);
-		PrecisionContextRoundedOperator.of(mathContext);
+		PrecisionScaleRoundedOperator.of(0, mathContext);
 		fail();
 	}
 
 	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void shouldReturnErrorWhenPrecisionIsZero() {
 		MathContext mathContext = new MathContext(0, RoundingMode.HALF_EVEN);
-		PrecisionContextRoundedOperator.of(mathContext);
+		PrecisionScaleRoundedOperator.of(0, mathContext);
+		fail();
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void shouldReturnErrorWhenPrecisionIsLesserThanZero() {
+		MathContext mathContext = new MathContext(-1, RoundingMode.HALF_EVEN);
+		PrecisionScaleRoundedOperator.of(0, mathContext);
 		fail();
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldReturnErrorWhenParameterIsNull() {
-		MathContext mathContext = new MathContext(2, RoundingMode.CEILING);
-		PrecisionContextRoundedOperator monetaryOperator = PrecisionContextRoundedOperator.of(mathContext);
+	public void shouldReturnErrorWhenParameterIsNUll() {
+		PrecisionScaleRoundedOperator monetaryOperator = PrecisionScaleRoundedOperator.of(0, MathContext.DECIMAL32);
 		monetaryOperator.apply(null);
 		fail();
 	}
 
+
 	@Test
 	public void shouldRoundedMonetaryOperatorWhenTheImplementationIsMoney() {
-		int scale = 4;
-		MathContext mathContext = new MathContext(scale, RoundingMode.HALF_EVEN);
+		int scale = 3;
+		int precision = 5;
 
 		CurrencyUnit real = Monetary.getCurrency("BRL");
-		MonetaryAmount money = Money.of(BigDecimal.valueOf(35.34567), real);
+		BigDecimal valueOf = BigDecimal.valueOf(35.34567);
+		MonetaryAmount money = Money.of(valueOf, real);
 
-		PrecisionContextRoundedOperator monetaryOperator = PrecisionContextRoundedOperator.of(mathContext);
+		MathContext mathContext = new MathContext(precision, RoundingMode.HALF_EVEN);
+		PrecisionScaleRoundedOperator monetaryOperator = PrecisionScaleRoundedOperator.of(scale, mathContext);
+
 		MonetaryAmount result = monetaryOperator.apply(money);
 		assertTrue(RoundedMoney.class.isInstance(result));
 		assertEquals(result.getCurrency(), real);
-		assertEquals(result.getNumber().getPrecision(), scale);
-		assertEquals(BigDecimal.valueOf(35.35), result.getNumber().numberValue(BigDecimal.class));
+		assertEquals(result.getNumber().getScale(), scale);
+		assertEquals(result.getNumber().getPrecision(), precision);
+		assertEquals(BigDecimal.valueOf(35.346), result.getNumber().numberValue(BigDecimal.class));
 
 
 

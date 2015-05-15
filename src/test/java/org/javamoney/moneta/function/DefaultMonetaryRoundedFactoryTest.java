@@ -1,4 +1,4 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.function;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -12,6 +12,7 @@ import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
+import org.javamoney.moneta.RoundedMoney;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

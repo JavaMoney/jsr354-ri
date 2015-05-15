@@ -1,4 +1,4 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.function;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -11,6 +11,8 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.RoundedMoney;
 import org.testng.annotations.Test;
 
 public class ScaleRoundedOperatorTest {

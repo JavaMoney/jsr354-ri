@@ -1,10 +1,12 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.function;
 
 import static java.util.Objects.requireNonNull;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+
+import org.javamoney.moneta.RoundedMoney;
 
 /**
  *The default implementation to {@link MonetaryRoundedFactory}, this implementation returns the {@link RoundedMoney}.
