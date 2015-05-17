@@ -29,8 +29,8 @@ import javax.money.Monetary;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
-import org.javamoney.moneta.ExchangeRateType;
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.convert.ExchangeRateType;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
