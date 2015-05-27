@@ -4,6 +4,8 @@ import static junit.framework.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.money.NumberValue;
 
@@ -115,5 +117,38 @@ public class DefaultNumberValueTest {
 		assertEquals(21L, numberValue.getAmountFractionDenominator());
 	}
 
+	@Test
+	public void shouldReturnNumberValue() {
+		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(21));
+
+		assertEquals(Long.valueOf(21L), numberValue.numberValue(Long.class));
+		assertEquals(Integer.valueOf(21),numberValue.numberValue(Integer.class));
+		assertEquals(Float.valueOf(21),numberValue.numberValue(Float.class));
+		assertEquals(Byte.valueOf((byte)21),numberValue.numberValue(Byte.class));
+		assertEquals(Short.valueOf((short)21),numberValue.numberValue(Short.class));
+		assertEquals(new AtomicLong(21L).get(),numberValue.numberValue(AtomicLong.class).get());
+		assertEquals(new AtomicInteger(21).get(),numberValue.numberValue(AtomicInteger.class).get());
+		assertEquals(BigDecimal.valueOf(21L),numberValue.numberValue(BigDecimal.class));
+		assertEquals(BigInteger.valueOf(21L),numberValue.numberValue(BigInteger.class));
+
+	}
+
+	@Test
+	public void shouldReturnNumberValueExact() {
+		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(21));
+
+		assertEquals(Long.valueOf(21L), numberValue.numberValueExact(Long.class));
+		assertEquals(Integer.valueOf(21),numberValue.numberValueExact(Integer.class));
+		assertEquals(Float.valueOf(21),numberValue.numberValueExact(Float.class));
+		assertEquals(Byte.valueOf((byte)21),numberValue.numberValueExact(Byte.class));
+		assertEquals(Short.valueOf((short)21),numberValue.numberValueExact(Short.class));
+		assertEquals(new AtomicLong(21L).get(),numberValue.numberValueExact(AtomicLong.class).get());
+		assertEquals(new AtomicInteger(21).get(),numberValue.numberValueExact(AtomicInteger.class).get());
+		assertEquals(BigDecimal.valueOf(21L),numberValue.numberValueExact(BigDecimal.class));
+		assertEquals(BigInteger.valueOf(21L),numberValue.numberValueExact(BigInteger.class));
+
+	}
+
 
 }
+
