@@ -17,18 +17,19 @@ package org.javamoney.moneta.spi;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 import javax.money.NumberValue;
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.
- * 
+ *
  * @author Anatole Tresch
  * @author Werner Keil
  */
 public final class DefaultNumberValue extends NumberValue {
-	
+
 	/**
 	 * serialVersionUID.
 	 */
@@ -43,14 +44,14 @@ public final class DefaultNumberValue extends NumberValue {
      * @since  0.8
      */
 	public static final NumberValue ONE = new DefaultNumberValue(BigDecimal.ONE);
-	
+
 	public DefaultNumberValue(Number number) {
         this.number = Objects.requireNonNull(number, "Number required");
     }
-	
+
 	/**
 	 * Creates a new instance of {@link NumberValue}, using the given number.
-	 * 
+	 *
 	 * @param number
 	 *            The numeric part, not null.
 	 * @return A new instance of {@link NumberValue}.
@@ -160,18 +161,21 @@ public final class DefaultNumberValue extends NumberValue {
      */
     @Override
     public long getAmountFractionNumerator(){
-        BigDecimal bd = ConvertBigDecimal.of(number).remainder(BigDecimal.ONE);
-        return bd.movePointRight(getScale()).longValueExact();
+
+    	return ConvertBigDecimal.of(number).setScale(0, RoundingMode.DOWN).longValueExact();
     }
 
     /*
      * (non-Javadoc)
 	 * @see javax.money.NumberValue#getAmountFractionDenominator()
      */
-    @Override
-    public long getAmountFractionDenominator(){
-        return BigDecimal.valueOf(10).pow(getScale()).longValueExact();
-    }
+	@Override
+	public long getAmountFractionDenominator() {
+		BigDecimal value = ConvertBigDecimal.of(number);
+		return value.setScale(value.scale(), RoundingMode.DOWN)
+				.remainder(BigDecimal.ONE).movePointRight(value.scale())
+				.longValue();
+	}
 
 	/*
 	 * (non-Javadoc)
