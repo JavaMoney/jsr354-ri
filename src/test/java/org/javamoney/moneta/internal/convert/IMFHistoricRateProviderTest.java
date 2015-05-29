@@ -15,6 +15,7 @@ import java.util.Objects;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryException;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
@@ -139,7 +140,7 @@ public class IMFHistoricRateProviderTest {
 
 	    }
 
-	    @Test(expectedExceptions = ExchangeRateException.class)
+	    @Test(expectedExceptions = MonetaryException.class)
 	    public void shouldReturnErrorWhenDoesNotFindTheExchangeRate() {
 
 
@@ -171,7 +172,7 @@ public class IMFHistoricRateProviderTest {
 	        assertTrue(result.getNumber().doubleValue() > 0);
 	    }
 
-	    @Test(expectedExceptions = ExchangeRateException.class)
+	    @Test(expectedExceptions = MonetaryException.class)
 	    public void shouldReturnErrorWhenFindFromHistoricalUsingPeriod() {
 
 

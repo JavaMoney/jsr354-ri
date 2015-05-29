@@ -30,12 +30,13 @@ import java.util.Objects;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryException;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
-import org.javamoney.moneta.convert.ExchangeRateType;
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.convert.ExchangeRateType;
 import org.javamoney.moneta.convert.HistoricConversionQueryBuilder;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -157,7 +158,7 @@ public class ECBHistoricRateProviderTest {
 
     }
 
-    @Test(expectedExceptions = ExchangeRateException.class)
+    @Test(expectedExceptions = MonetaryException.class)
     public void shouldReturnErrorWhenDoesNotFindTheExchangeRate() {
 
 
@@ -189,7 +190,7 @@ public class ECBHistoricRateProviderTest {
         assertTrue(result.getNumber().doubleValue() > 0);
     }
 
-    @Test(expectedExceptions = ExchangeRateException.class)
+    @Test(expectedExceptions = MonetaryException.class)
     public void shouldReturnErrorWhenFindFromHistoricalUsingPeriod() {
 
 
