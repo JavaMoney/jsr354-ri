@@ -30,8 +30,9 @@ import org.javamoney.moneta.RoundedMoney;
  * @see {@link RoundedMoney}
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#precision()}
+ * @deprecated see https://java.net/jira/browse/JAVAMONEY-126. Could go to a module like javamoney-calc.
  */
-public final class PrecisionContextRoundedOperator implements MonetaryOperator {
+final class PrecisionContextRoundedOperator implements MonetaryOperator {
 
 	private final MathContext mathContext;
 

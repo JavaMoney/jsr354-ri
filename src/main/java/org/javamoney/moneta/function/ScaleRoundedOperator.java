@@ -30,7 +30,7 @@ import org.javamoney.moneta.RoundedMoney;
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#scale()}
  */
-public final class ScaleRoundedOperator implements MonetaryOperator {
+final class ScaleRoundedOperator implements MonetaryOperator {
 
 	private final int scale;
 

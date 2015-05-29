@@ -33,8 +33,10 @@ import javax.money.MonetaryOperator;
  * @see {@link BigDecimal#scale()}
  * @see {@link MathContext}
  * @see {@link BigDecimal#precision()}
+ * 
+ * @deprecated see https://java.net/jira/browse/JAVAMONEY-126 It does not fit into {@link MonetaryFunctions} either. Should go to a module like javamoney-calc.
  */
-public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
+final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 
 	private final PrecisionContextRoundedOperator mathContextOperator;
 
