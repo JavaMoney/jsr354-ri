@@ -16,6 +16,8 @@ import javax.money.convert.ConversionQueryBuilder;
  * Class builder to find exchange rate from historical.
  * @see {@link HistoricConversionQueryBuilder#of(CurrencyUnit)}
  * @author Otavio Santana
+ * 
+ * @deprecated see https://java.net/jira/browse/JAVAMONEY-127 
  */
 public final class HistoricConversionQueryBuilder {
 
@@ -26,7 +28,7 @@ public final class HistoricConversionQueryBuilder {
 	}
 
 	/**
-	 *Create a {@link HistoricConversionQueryBuilder} from currency
+	 * Create a {@link HistoricConversionQueryBuilder} from currency
 	 * @param currencyUnit to be used in term currency.
 	 * @return a HistoricConversionQuery from currency
 	 * @throws NullPointerException when currency is null
