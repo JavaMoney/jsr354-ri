@@ -9,6 +9,9 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
+/**
+ * @deprecated see https://java.net/jira/browse/JAVAMONEY-126. Could go to a module like javamoney-calc.
+ */
 class RoudingMonetaryAmountOperator implements MonetaryOperator {
 
 	static final RoundingMode DEFAULT_ROUDING_MONETARY_AMOUNT = RoundingMode.HALF_EVEN;
