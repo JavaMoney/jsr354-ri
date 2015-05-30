@@ -35,6 +35,7 @@ import java.util.Objects;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import javax.money.MonetaryException;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.ConversionQueryBuilder;
 import javax.money.convert.CurrencyConversion;
@@ -182,7 +183,7 @@ public class ECBHistoric90RateProviderTest {
 
 	}
 
-	@Test(expectedExceptions = ExchangeRateException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void shouldReturnErrorWhenDoesNotFindTheExchangeRate() {
 
 		LocalDate localDate = YearMonth.of(2011, Month.JANUARY).atDay(9);
@@ -196,7 +197,7 @@ public class ECBHistoric90RateProviderTest {
 		fail();
 	}
 
-	@Test(expectedExceptions = ExchangeRateException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void shouldReturnErrorWhenFindFromHistoricalUsingPeriod() {
 
 		LocalDate localDate = YearMonth.of(2011, Month.JANUARY).atDay(9);
@@ -214,7 +215,7 @@ public class ECBHistoric90RateProviderTest {
 
 	}
 
-	@Test(expectedExceptions = ExchangeRateException.class)
+	@Test(expectedExceptions = MonetaryException.class)
 	public void shouldSetTimeInLocalDateTime() {
 
 		LocalDate localDate = YearMonth.of(2014, Month.JANUARY).atDay(9);

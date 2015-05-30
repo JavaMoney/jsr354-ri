@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.MonetaryException;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.ExchangeRate;
@@ -131,7 +132,7 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
             return null;
         }
         if (Objects.isNull(dates)) {
-        	return rates.stream().sorted(COMPARATOR_EXCHANGE_BY_LOCAL_DATE.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on IMFRateProvider."));
+        	return rates.stream().sorted(COMPARATOR_EXCHANGE_BY_LOCAL_DATE.reversed()).findFirst().orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on IMFRateProvider."));
         } else {
         	for (LocalDate localDate : dates) {
         		Predicate<ExchangeRate> filter = rate -> rate.getContext().get(LocalDate.class).equals(localDate);
@@ -141,7 +142,7 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
         		}
 			}
           	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
-        	throw new ExchangeRateException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
+        	throw new MonetaryException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
         }
     }
 

@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.MonetaryException;
 import javax.money.convert.ConversionQuery;
 import javax.money.convert.CurrencyConversionException;
 import javax.money.convert.ExchangeRate;
@@ -118,7 +119,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
         if (dates == null) {
         	Comparator<LocalDate> comparator = Comparator.naturalOrder();
-    		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new ExchangeRateException("There is not more recent exchange rate to  rate on ECBRateProvider."));
+    		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on ECBRateProvider."));
         	return new RateResult(date, this.rates.get(date));
         } else {
         	for (LocalDate localDate : dates) {
@@ -129,7 +130,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         		}
 			}
         	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
-        	throw new ExchangeRateException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
+        	throw new MonetaryException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
         }
 
 
