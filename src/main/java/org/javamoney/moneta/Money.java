@@ -815,18 +815,18 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
       * For example, {@code ofMinor(USD, 1234, 2)} creates the instance {@code USD 12.34}.
       * @param currency  the currency, not null
       * @param amountMinor  the amount of money in the minor division of the currency
-      * @param factionDigits number of digits
+      * @param fractionDigits number of digits
       * @return the monetary amount from minor units
       * @see {@link CurrencyUnit#getDefaultFractionDigits()}
       * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
       * @throws NullPointerException when the currency is null
-      * @throws IllegalArgumentException when the factionDigits is negative
+      * @throws IllegalArgumentException when the fractionDigits is negative
       */
-     public static Money ofMinor(CurrencyUnit currency, long amountMinor, int factionDigits) {
-     	if(factionDigits < 0) {
-     		throw new IllegalArgumentException("The factionDigits cannot be negative");
+     public static Money ofMinor(CurrencyUnit currency, long amountMinor, int fractionDigits) {
+     	if(fractionDigits < 0) {
+     		throw new IllegalArgumentException("The fractionDigits cannot be negative");
      	}
-     	return of(BigDecimal.valueOf(amountMinor, factionDigits), currency);
+     	return of(BigDecimal.valueOf(amountMinor, fractionDigits), currency);
      }
 
 
