@@ -1,4 +1,4 @@
-package org.javamoney.moneta.spi;
+package org.javamoney.moneta.function;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;

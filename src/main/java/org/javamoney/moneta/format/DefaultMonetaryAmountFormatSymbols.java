@@ -11,7 +11,7 @@ import javax.money.format.AmountFormatContext;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryParseException;
 
-import org.javamoney.moneta.spi.MonetaryAmountProducer;
+import org.javamoney.moneta.function.MonetaryAmountProducer;
 
 /**
  * The default implementation that uses the {@link DecimalFormat} as formatter.
