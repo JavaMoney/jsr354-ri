@@ -1,4 +1,4 @@
-package org.javamoney.moneta.spi;
+package org.javamoney.moneta.function;
 
 import java.util.Objects;
 
@@ -7,7 +7,6 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
 import org.javamoney.moneta.RoundedMoney;
-import org.javamoney.moneta.function.MonetaryOperators;
 
 /**
  * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
