@@ -15,6 +15,7 @@
  */
 package org.javamoney.moneta.internal.convert;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.MathContext;
 import java.time.LocalDate;
@@ -80,6 +81,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         saxParserFactory.setValidating(false);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
         loader.addLoaderListener(this, getDataId());
+        loader.loadDataAsync(getDataId());
     }
 
     protected abstract String getDataId();
