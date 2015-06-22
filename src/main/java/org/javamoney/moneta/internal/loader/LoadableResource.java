@@ -145,12 +145,16 @@ public class LoadableResource {
             clearCache();
         }
         if (!readCache()) {
-            if (loadRemote()) {
+            if (shouldReadDataFromCallBack()) {
                 return loadFallback();
             }
         }
         return true;
     }
+
+	private boolean shouldReadDataFromCallBack() {
+		return LoaderService.UpdatePolicy.NEVER.equals(updatePolicy) || !loadRemote();
+	}
 
     /**
      * Get the resourceId.
@@ -363,7 +367,7 @@ public class LoadableResource {
                 synchronized (lock) {
                     currentData = this.data == null ? null : this.data.get();
                     if (Objects.isNull(currentData)) {
-                        if (loadRemote()) {
+                        if (shouldReadDataFromCallBack()) {
                             loadFallback();
                         }
                     }
