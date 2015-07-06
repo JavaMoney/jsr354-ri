@@ -27,6 +27,7 @@ import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -39,7 +40,7 @@ public class MonetaryFunctionsAggregatorTest {
 
     private ExchangeRateProvider provider;
 
-    @Test
+    @BeforeMethod
     public void init() {
         provider = new ExchangeRateProviderMock();
     }

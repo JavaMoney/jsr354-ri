@@ -20,13 +20,14 @@ import javax.money.convert.ExchangeRateProvider;
 import junit.framework.Assert;
 
 import org.javamoney.moneta.Money;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class MonetaryFunctionsOrderTest {
 
     private ExchangeRateProvider provider;
 
-    @Test
+    @BeforeMethod
     public void init() {
         provider = new ExchangeRateProviderMock();
     }
