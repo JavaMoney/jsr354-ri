@@ -23,6 +23,7 @@ import java.util.Objects;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
+import javax.money.MonetaryQuery;
 
 import org.javamoney.moneta.spi.DefaultNumberValue;
 
@@ -290,5 +291,25 @@ public final class MonetaryOperators {
 	 */
 	public static MonetaryOperator exchange(CurrencyUnit currencyUnit){
 		return new ExchangeCurrencyOperator(Objects.requireNonNull(currencyUnit));
+	}
+
+	/**
+	 * This method was deprecated, uses the
+	 * {@link MonetaryQueries#extractMajorPart()} instead.
+	 * @see {@link MonetaryQueries#extractMajorPart()}
+	 */
+	@Deprecated
+	public static MonetaryQuery<Long> majorUnits() {
+		return MonetaryQueries.extractMajorPart();
+	}
+
+	/**
+	 * This method was deprecated, uses the
+	 * {@link MonetaryQueries#extractMinorPart()} instead.
+	 * @see {@link MonetaryQueries#extractMinorPart()}
+	 */
+	@Deprecated
+	public static MonetaryQuery<Long> minorUnits() {
+		return MonetaryQueries.extractMinorPart();
 	}
 }
