@@ -12,8 +12,8 @@ import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.spi.MonetaryAmountProducer;
-import org.javamoney.moneta.spi.MoneyProducer;
+import org.javamoney.moneta.function.MonetaryAmountProducer;
+import org.javamoney.moneta.function.MoneyProducer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

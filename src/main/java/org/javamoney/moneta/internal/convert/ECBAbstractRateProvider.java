@@ -15,6 +15,7 @@
  */
 package org.javamoney.moneta.internal.convert;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.MathContext;
 import java.time.LocalDate;

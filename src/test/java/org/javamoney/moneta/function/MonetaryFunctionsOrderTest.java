@@ -74,7 +74,7 @@ public class MonetaryFunctionsOrderTest {
         Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO),
                 Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
         List<MonetaryAmount> list = stream.sorted(
-                MonetaryFunctions.sortValiable(provider)).collect(
+                MonetaryFunctions.sortValuable(provider)).collect(
                 Collectors.toList());
 
         Assert.assertEquals(Money.of(9, BRAZILIAN_REAL), list.get(0));
@@ -88,7 +88,7 @@ public class MonetaryFunctionsOrderTest {
         Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO),
                 Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
         List<MonetaryAmount> list = stream.sorted(
-                MonetaryFunctions.sortValiableDesc(provider)).collect(
+                MonetaryFunctions.sortValuableDesc(provider)).collect(
                 Collectors.toList());
 
         Assert.assertEquals(Money.of(7, EURO), list.get(0));

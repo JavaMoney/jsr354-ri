@@ -9,7 +9,7 @@ import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.spi.MoneyProducer;
+import org.javamoney.moneta.function.MoneyProducer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

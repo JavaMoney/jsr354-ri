@@ -6,8 +6,8 @@ import java.util.Objects;
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryAmountFormat;
 
-import org.javamoney.moneta.spi.MonetaryAmountProducer;
-import org.javamoney.moneta.spi.MoneyProducer;
+import org.javamoney.moneta.function.MonetaryAmountProducer;
+import org.javamoney.moneta.function.MoneyProducer;
 /**
  *The {@link MonetaryAmountFormat} that uses the {@link MonetaryAmountSymbols} to format {@link MonetaryAmount}.
  * @author Otavio Santana

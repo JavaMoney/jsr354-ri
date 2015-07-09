@@ -1,6 +1,5 @@
-package org.javamoney.moneta.spi;
+package org.javamoney.moneta.function;
 
-import static org.javamoney.moneta.function.MonetaryOperators.rounding;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -10,11 +9,13 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 
-import org.javamoney.moneta.RoundedMoney;
+import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.function.FastMoneyProducer;
+import org.javamoney.moneta.function.MonetaryAmountProducer;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class RoundedMoneyProducerTest {
+public class FastMoneyProducerTest {
 
 	private MonetaryAmountProducer producer;
 
@@ -22,7 +23,7 @@ public class RoundedMoneyProducerTest {
 
 	@BeforeMethod
 	public void setup() {
-		producer = new RoundedMoneyProducer(rounding());
+		producer = new FastMoneyProducer();
 		currency = Monetary.getCurrency(Locale.getDefault());
 	}
 
@@ -45,10 +46,10 @@ public class RoundedMoneyProducerTest {
 	}
 
 	@Test
-	public void shouldCreateUsingRoundedMoneyImplementation() {
+	public void shouldCreateUsingFastMoneyImplementation() {
 		Long value = 10L;
 		MonetaryAmount amount = producer.create(currency, value);
-		assertTrue(RoundedMoney.class.isInstance(amount));
+		assertTrue(FastMoney.class.isInstance(amount));
 	}
 
 }

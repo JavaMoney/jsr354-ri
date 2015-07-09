@@ -90,7 +90,7 @@ public final class MonetaryFunctions {
 	 * @param provider the rate provider to be used, not null.
 	 * @return the sort of {@link MonetaryAmount} using {@link ExchangeRate}
 	 */
-	public static Comparator<? super MonetaryAmount> sortValiable(
+	public static Comparator<? super MonetaryAmount> sortValuable(
 			ExchangeRateProvider provider) {
 
 		return (m1, m2) -> {
@@ -102,14 +102,14 @@ public final class MonetaryFunctions {
 
 	/**
 	 * Descending order of
-	 * {@link MonetaryFunctions#sortValiable(ExchangeRateProvider)}
+	 * {@link MonetaryFunctions#sortValuable(ExchangeRateProvider)}
 	 * @param provider the rate provider to be used, not null.
 	 * @return the Descending order of
-	 *         {@link MonetaryFunctions#sortValiable(ExchangeRateProvider)}
+	 *         {@link MonetaryFunctions#sortValuable(ExchangeRateProvider)}
 	 */
-	public static Comparator<? super MonetaryAmount> sortValiableDesc(
+	public static Comparator<? super MonetaryAmount> sortValuableDesc(
 			ExchangeRateProvider provider) {
-		return sortValiable(provider).reversed();
+		return sortValuable(provider).reversed();
 	}
 
     /**
