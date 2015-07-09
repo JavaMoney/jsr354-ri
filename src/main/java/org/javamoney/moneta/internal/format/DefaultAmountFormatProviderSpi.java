@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,10 +34,11 @@ import javax.money.spi.MonetaryAmountFormatProviderSpi;
  * Default format provider, which mainly maps the existing JDK functionality into the JSR 354 logic.
  *
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProviderSpi {
 
-    private static final String DEFAULT_STYLE = "default";
+    private static final String DEFAULT_FORMAT = "default";
     private static final String PROVIDER_NAME = "default";
 
     private Set<Locale> supportedSets = new HashSet<>();
@@ -46,7 +47,7 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
     public DefaultAmountFormatProviderSpi() {
         supportedSets.addAll(Arrays.asList(DecimalFormat.getAvailableLocales()));
         supportedSets = Collections.unmodifiableSet(supportedSets);
-        formatNames.add(DEFAULT_STYLE);
+        formatNames.add(DEFAULT_FORMAT);
         formatNames = Collections.unmodifiableSet(formatNames);
     }
 
@@ -67,10 +68,10 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
                 !amountFormatQuery.getProviderNames().contains(getProviderName())) {
             return Collections.emptySet();
         }
-        if (!(amountFormatQuery.getFormatName() == null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))) {
+        if (!(amountFormatQuery.getFormatName() == null || DEFAULT_FORMAT.equals(amountFormatQuery.getFormatName()))) {
             return Collections.emptySet();
         }
-        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(DEFAULT_STYLE);
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(DEFAULT_FORMAT);
         if (amountFormatQuery.getLocale() != null) {
             builder.setLocale(amountFormatQuery.getLocale());
         }
