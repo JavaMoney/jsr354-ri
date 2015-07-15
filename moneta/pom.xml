@@ -13,13 +13,13 @@
 
 	<parent>
 		<groupId>org.javamoney</groupId>
-		<artifactId>javamoney-parent</artifactId>
-		<version>1.0</version>
+		<artifactId>moneta-parent</artifactId>
+        	<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<version>1.0.1-SNAPSHOT</version>
-	<artifactId>moneta-parent</artifactId>
-	<packaging>pom</packaging>
-	<name>Moneta Parent</name>
+	<artifactId>moneta</artifactId>
+	<packaging>bundle</packaging>
+	<name>Moneta (JSR 354 RI)</name>
 	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with
@@ -27,20 +27,7 @@
         This module implements JSR 354.
     </description>
 
-	<organization>
-		<name>JavaMoney</name>
-		<url>http://javamoney.org</url>
-	</organization>
-
-	<licenses>
-		<license>
-			<name>Apache 2 License</name>
-			<comments>RI</comments>
-			<url>LICENSE.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
+	
 	<properties>
 		<jsr.version>1.0</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
@@ -59,28 +46,6 @@
 		<system>Travis CI</system>
 		<url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
 	</ciManagement>
-
-	<mailingLists>
-		<mailingList>
-			<name>JSR354 Issues List</name>
-			<subscribe>https://java.net/projects/javamoney/lists</subscribe>
-			<unsubscribe>https://java.net/projects/javamoney/lists</unsubscribe>
-			<archive>https://java.net/projects/javamoney/lists/issues/archive</archive>
-			<post>issues@javamoney.java.net</post>
-		</mailingList>
-		<mailingList>
-			<name>JSR354 Public Mailing List</name>
-			<subscribe>https://java.net/projects/javamoney/lists</subscribe>
-			<unsubscribe>https://java.net/projects/javamoney/lists</unsubscribe>
-			<archive>http://java.net/projects/javamoney/lists/jcurrency_mail/archive</archive>
-			<post>jcurrency_mail@javamoney.java.net</post>
-		</mailingList>
-	</mailingLists>
-
-	<issueManagement>
-		<system>JIRA</system>
-		<url>http://java.net/jira/browse/JAVAMONEY</url>
-	</issueManagement>
 
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -300,25 +265,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.money</groupId>
-			<artifactId>money-api</artifactId>
-			<version>${jsr.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>1.2</version>
-		</dependency>
-	</dependencies>
 
 	<build>
 
@@ -607,7 +553,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-    <modules>
-        <module>moneta</module>
-    </modules>
 </project>
