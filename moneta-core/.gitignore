@@ -1,5 +1,6 @@
 target/
 test-output/
+bin/
 /doc
 *.iml
 *.log
