@@ -1,0 +1,3 @@
+org.javamoney.moneta.internal.convert.ecb.ECBCurrentRateProvider
+org.javamoney.moneta.internal.convert.ecb.ECBHistoricRateProvider
+org.javamoney.moneta.internal.convert.ecb.ECBHistoric90RateProvider
