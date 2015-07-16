@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import java.io.BufferedReader;
 import java.io.IOException;

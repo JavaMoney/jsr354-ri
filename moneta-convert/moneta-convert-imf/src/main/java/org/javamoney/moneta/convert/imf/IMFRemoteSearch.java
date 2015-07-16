@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import java.io.InputStream;
 import java.time.YearMonth;
@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.javamoney.moneta.internal.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchResult;
+import org.javamoney.moneta.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchResult;
 
 public enum IMFRemoteSearch {
 	INSTANCE;

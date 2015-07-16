@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import static org.testng.Assert.assertNotNull;
 
@@ -7,6 +7,8 @@ import java.time.Month;
 import java.time.YearMonth;
 import java.util.Map;
 
+import org.javamoney.moneta.convert.imf.IMFHistoricalType;
+import org.javamoney.moneta.convert.imf.IMFRemoteSearch;
 import org.testng.annotations.Test;
 
 public class IMFRemoteSearchTest {

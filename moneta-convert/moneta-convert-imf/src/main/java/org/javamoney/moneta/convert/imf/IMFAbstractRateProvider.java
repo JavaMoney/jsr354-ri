@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ import javax.money.convert.ProviderContext;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.ExchangeRateBuilder;
-import org.javamoney.moneta.internal.convert.imf.IMFRateReadingHandler.RateIMFResult;
+import org.javamoney.moneta.convert.imf.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 

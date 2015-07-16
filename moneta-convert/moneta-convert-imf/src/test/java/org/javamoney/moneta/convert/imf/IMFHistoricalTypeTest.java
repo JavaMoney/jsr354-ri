@@ -1,10 +1,11 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import static org.testng.Assert.assertEquals;
 
 import java.time.Month;
 import java.time.YearMonth;
 
+import org.javamoney.moneta.convert.imf.IMFHistoricalType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

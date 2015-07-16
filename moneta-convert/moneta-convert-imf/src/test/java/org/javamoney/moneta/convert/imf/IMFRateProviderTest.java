@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import static javax.money.convert.MonetaryConversions.getExchangeRateProvider;
 import static org.testng.Assert.assertEquals;
@@ -24,12 +24,11 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
 import javax.money.Monetary;
+import javax.money.MonetaryAmount;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
-import org.javamoney.moneta.convert.ExchangeRateType;
 import org.javamoney.moneta.Money;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -47,7 +46,7 @@ public class IMFRateProviderTest {
 
     @BeforeTest
     public void setup() {
-        provider = getExchangeRateProvider(ExchangeRateType.IMF);
+        provider = getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF);
     }
 
     @Test

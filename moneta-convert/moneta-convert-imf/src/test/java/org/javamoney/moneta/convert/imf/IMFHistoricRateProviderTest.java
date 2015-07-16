@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import static javax.money.convert.MonetaryConversions.getExchangeRateProvider;
 import static org.testng.Assert.assertEquals;
@@ -27,7 +27,6 @@ import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.convert.ExchangeRateType;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -43,7 +42,7 @@ public class IMFHistoricRateProviderTest {
 
 	    @BeforeTest
 	    public void setup() {
-	        provider = getExchangeRateProvider(ExchangeRateType.IMF_HIST);
+	        provider = getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF_HIST);
 	    }
 
 	    @Test

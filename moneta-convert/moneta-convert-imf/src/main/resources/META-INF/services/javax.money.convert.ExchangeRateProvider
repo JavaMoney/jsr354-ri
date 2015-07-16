@@ -1,2 +1,2 @@
-org.javamoney.moneta.internal.convert.imf.IMFRateProvider
-org.javamoney.moneta.internal.convert.imf.IMFHistoricRateProvider
+org.javamoney.moneta.convert.imf.IMFRateProvider
+org.javamoney.moneta.convert.imf.IMFHistoricRateProvider

@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.javamoney.moneta.internal.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchResult;
+import org.javamoney.moneta.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchResult;
 
 
 class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{

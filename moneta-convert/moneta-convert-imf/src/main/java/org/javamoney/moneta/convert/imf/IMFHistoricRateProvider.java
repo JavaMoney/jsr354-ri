@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 
-import org.javamoney.moneta.internal.convert.imf.IMFRateReadingHandler.RateIMFResult;
+import org.javamoney.moneta.convert.imf.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.LoaderService;
 
 public class IMFHistoricRateProvider extends IMFAbstractRateProvider {

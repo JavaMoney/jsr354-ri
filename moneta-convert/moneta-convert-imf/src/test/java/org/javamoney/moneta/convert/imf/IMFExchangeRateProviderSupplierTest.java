@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.internal.convert.imf;
+package org.javamoney.moneta.convert.imf;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -23,16 +23,15 @@ import java.util.Objects;
 import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
-import org.javamoney.moneta.convert.ExchangeRateType;
 import org.testng.annotations.Test;
 
-public class ExchangeRateTypeTest {
+public class IMFExchangeRateProviderSupplierTest {
 
 
     @Test
     public void shouldReturnsIMFRateProvider() {
         ExchangeRateProvider prov = MonetaryConversions
-                .getExchangeRateProvider(ExchangeRateType.IMF);
+                .getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF);
         assertTrue(Objects.nonNull(prov));
         assertEquals(IMFRateProvider.class, prov.getClass());
     }
@@ -40,7 +39,7 @@ public class ExchangeRateTypeTest {
     @Test
     public void shouldReturnsIMFHistoricRateProvider() {
         ExchangeRateProvider prov = MonetaryConversions
-                .getExchangeRateProvider(ExchangeRateType.IMF_HIST);
+                .getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF_HIST);
         assertTrue(Objects.nonNull(prov));
         assertEquals(IMFHistoricRateProvider.class, prov.getClass());
     }
