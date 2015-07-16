@@ -30,8 +30,6 @@ import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.convert.ExchangeRateType;
-import org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -49,7 +47,7 @@ public class ECBHistoricRateProviderTest {
 
     @BeforeTest
     public void setup() throws InterruptedException {
-        provider = getExchangeRateProvider(ExchangeRateType.ECB_HIST);
+        provider = getExchangeRateProvider(ECBExchangeRateType.ECB_HIST);
         Thread.sleep(20_000L);
     }
 

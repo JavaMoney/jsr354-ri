@@ -30,8 +30,6 @@ import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.convert.ExchangeRateType;
-import org.javamoney.moneta.convert.ecb.ECBCurrentRateProvider;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -48,7 +46,7 @@ public class ECBCurrentRateProviderTest {
 
     @BeforeTest
     public void setup() {
-        provider = getExchangeRateProvider(ExchangeRateType.ECB);
+        provider = getExchangeRateProvider(ECBExchangeRateType.ECB);
     }
 
     @Test
