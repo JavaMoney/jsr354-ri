@@ -46,7 +46,7 @@ public class IMFRateProviderTest {
 
     @BeforeTest
     public void setup() {
-        provider = getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF);
+        provider = getExchangeRateProvider(IMFExchangeRateType.IMF);
     }
 
     @Test

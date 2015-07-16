@@ -7,12 +7,11 @@ import javax.money.convert.ExchangeRateProviderSupplier;
  * This enum contains all implementations by moneta-convert-IMF. Using this enum will easier
  * to choose an available implementation.
  * </p>
- * <code>ExchangeRateProvider provider = MonetaryConversions.getExchangeRateProvider(ExchangeRateType.ECB);<code>
+ * <code>ExchangeRateProvider provider = MonetaryConversions.getExchangeRateProvider(IMFExchangeRateType.IMF);<code>
  *
  * @author otaviojava
- * @author Werner Keil
  */
-public enum IMFExchangeRateProviderSupplier implements ExchangeRateProviderSupplier {
+public enum IMFExchangeRateType implements ExchangeRateProviderSupplier {
 
     /**
      * Exchange rate to the International Monetary Fond. Uses the
@@ -29,7 +28,7 @@ public enum IMFExchangeRateProviderSupplier implements ExchangeRateProviderSuppl
 
     private final String description;
 
-    IMFExchangeRateProviderSupplier(String type, String description) {
+    IMFExchangeRateType(String type, String description) {
         this.type = type;
         this.description = description;
     }

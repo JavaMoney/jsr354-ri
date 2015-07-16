@@ -31,7 +31,7 @@ public class IMFExchangeRateProviderSupplierTest {
     @Test
     public void shouldReturnsIMFRateProvider() {
         ExchangeRateProvider prov = MonetaryConversions
-                .getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF);
+                .getExchangeRateProvider(IMFExchangeRateType.IMF);
         assertTrue(Objects.nonNull(prov));
         assertEquals(IMFRateProvider.class, prov.getClass());
     }
@@ -39,7 +39,7 @@ public class IMFExchangeRateProviderSupplierTest {
     @Test
     public void shouldReturnsIMFHistoricRateProvider() {
         ExchangeRateProvider prov = MonetaryConversions
-                .getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF_HIST);
+                .getExchangeRateProvider(IMFExchangeRateType.IMF_HIST);
         assertTrue(Objects.nonNull(prov));
         assertEquals(IMFHistoricRateProvider.class, prov.getClass());
     }

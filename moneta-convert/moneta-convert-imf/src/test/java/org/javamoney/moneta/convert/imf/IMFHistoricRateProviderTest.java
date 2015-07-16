@@ -42,7 +42,7 @@ public class IMFHistoricRateProviderTest {
 
 	    @BeforeTest
 	    public void setup() {
-	        provider = getExchangeRateProvider(IMFExchangeRateProviderSupplier.IMF_HIST);
+	        provider = getExchangeRateProvider(IMFExchangeRateType.IMF_HIST);
 	    }
 
 	    @Test
