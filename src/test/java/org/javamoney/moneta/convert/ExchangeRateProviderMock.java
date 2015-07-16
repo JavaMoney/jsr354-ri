@@ -1,4 +1,4 @@
-package org.javamoney.moneta.function;
+package org.javamoney.moneta.convert;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ConversionQuery;
@@ -8,7 +8,7 @@ import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.ProviderContext;
 
 /**
- * This class mock the exchange rate to test some {@link MonetaryFunctions} that
+ * This class mock the exchange rate to test some {@link ConversionOperators} that
  * needs an exchange provider
  *
  * @author otaviojava

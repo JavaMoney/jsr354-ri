@@ -1,4 +1,4 @@
-package org.javamoney.moneta.function;
+package org.javamoney.moneta.convert;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -11,6 +11,7 @@ import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.function.MonetarySummaryStatistics;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -69,7 +70,7 @@ public class ExchangeRateMonetarySummaryStatisticsTest {
 	@Test
 	public void combineImplSummaryTest() {
 		MonetarySummaryStatistics summaryA = createSummary(BRAZILIAN_REAL);
-		MonetarySummaryStatistics summaryB = createSummaryDefault(DOLLAR);
+		MonetarySummaryStatistics summaryB = createSummary(DOLLAR);
 		MonetarySummaryStatistics result = summaryA.combine(summaryB);
 
 		assertEquals(BRAZILIAN_REAL, result.getCurrencyUnit());
@@ -83,17 +84,6 @@ public class ExchangeRateMonetarySummaryStatisticsTest {
 	private MonetarySummaryStatistics createSummary(CurrencyUnit currencyUnit) {
 		MonetarySummaryStatistics summary = new ExchangeRateMonetarySummaryStatistics(
 				currencyUnit, provider);
-		summary.accept(Money.of(10, currencyUnit));
-		summary.accept(Money.of(90, currencyUnit));
-		summary.accept(Money.of(110, currencyUnit));
-		return summary;
-	}
-
-	private MonetarySummaryStatistics createSummaryDefault(
-			CurrencyUnit currencyUnit) {
-		MonetarySummaryStatistics summary = new DefaultMonetarySummaryStatistics(
-				currencyUnit);
-
 		summary.accept(Money.of(10, currencyUnit));
 		summary.accept(Money.of(90, currencyUnit));
 		summary.accept(Money.of(110, currencyUnit));

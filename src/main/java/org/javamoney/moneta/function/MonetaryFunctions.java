@@ -13,9 +13,6 @@ import java.util.stream.Collectors;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryException;
-import javax.money.convert.CurrencyConversion;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.spi.MoneyUtils;
 
@@ -24,6 +21,7 @@ import org.javamoney.moneta.spi.MoneyUtils;
  *
  * @author otaviojava
  * @author anatole
+ * @author keilw
  */
 public final class MonetaryFunctions {
 
@@ -50,20 +48,7 @@ public final class MonetaryFunctions {
 		return Collector.of(supplier, MonetarySummaryStatistics::accept, MonetarySummaryStatistics::combine);
     }
 
-	/**
-	 * of the summary of the MonetaryAmount
-	 * @param currencyUnit
-	 *            the target {@link javax.money.CurrencyUnit}
-	 * @return the MonetarySummaryStatistics
-	 */
-	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
-			CurrencyUnit currencyUnit, ExchangeRateProvider provider) {
 
-		Supplier<MonetarySummaryStatistics> supplier = () -> new ExchangeRateMonetarySummaryStatistics(
-				currencyUnit, provider);
-		return Collector.of(supplier, MonetarySummaryStatistics::accept,
-				MonetarySummaryStatistics::combine);
-	}
 
     /**
      * of MonetaryAmount group by MonetarySummary
@@ -83,34 +68,6 @@ public final class MonetaryFunctions {
     public static Comparator<MonetaryAmount> sortCurrencyUnit(){
         return Comparator.comparing(MonetaryAmount::getCurrency);
     }
-
-	/**
-	 * comparator to sort the {@link MonetaryAmount} considering the
-	 * {@link ExchangeRate}
-	 * @param provider the rate provider to be used, not null.
-	 * @return the sort of {@link MonetaryAmount} using {@link ExchangeRate}
-	 */
-	public static Comparator<? super MonetaryAmount> sortValuable(
-			ExchangeRateProvider provider) {
-
-		return (m1, m2) -> {
-			CurrencyConversion conversion = provider.getCurrencyConversion(m1
-					.getCurrency());
-			return m1.compareTo(conversion.apply(m2));
-		};
-	}
-
-	/**
-	 * Descending order of
-	 * {@link MonetaryFunctions#sortValuable(ExchangeRateProvider)}
-	 * @param provider the rate provider to be used, not null.
-	 * @return the Descending order of
-	 *         {@link MonetaryFunctions#sortValuable(ExchangeRateProvider)}
-	 */
-	public static Comparator<? super MonetaryAmount> sortValuableDesc(
-			ExchangeRateProvider provider) {
-		return sortValuable(provider).reversed();
-	}
 
     /**
      * Get a comparator for sorting CurrencyUnits descending.
@@ -266,23 +223,6 @@ public final class MonetaryFunctions {
         return MonetaryFunctions::sum;
     }
 
-	/**
-	 * return the sum and convert all values to specific currency using the
-	 * provider, if necessary
-	 * @param provider the rate provider to be used, not null.
-	 * @param currency
-	 *            currency
-	 * @return the list convert to specific currency unit
-	 */
-	public static BinaryOperator<MonetaryAmount> sum(
-			ExchangeRateProvider provider, CurrencyUnit currency) {
-		CurrencyConversion currencyConversion = provider
-				.getCurrencyConversion(currency);
-
-		return (m1, m2) -> currencyConversion.apply(m1).add(
-				currencyConversion.apply(m2));
-	}
-
     /**
 	 * Creates a BinaryOperator to calculate the minimum amount
 	 * @return the minimum BinaryOperator, not null.
@@ -291,27 +231,6 @@ public final class MonetaryFunctions {
         return MonetaryFunctions::min;
     }
 
-	/**
-	 * return the minimum value, if the monetary amounts have different
-	 * currencies, will converter first using the given ExchangeRateProvider
-	 * @param provider
-	 *            the ExchangeRateProvider to convert the currencies
-	 * @return the minimum value
-	 */
-	public static BinaryOperator<MonetaryAmount> min(
-			ExchangeRateProvider provider) {
-
-		return (m1, m2) -> {
-			CurrencyConversion conversion = provider.getCurrencyConversion(m1
-					.getCurrency());
-
-			if (m1.isGreaterThan(conversion.apply(m2))) {
-				return m2;
-			}
-			return m1;
-		};
-	}
-
     /**
 	 * Creates a BinaryOperator to calculate the maximum amount.
 	 * @return the max BinaryOperator, not null.
@@ -319,27 +238,4 @@ public final class MonetaryFunctions {
     public static BinaryOperator<MonetaryAmount> max(){
         return MonetaryFunctions::max;
     }
-
-	/**
-	 * return the maximum value, if the monetary amounts have different
-	 * currencies, will converter first using the given ExchangeRateProvider
-	 * @param provider
-	 *            the ExchangeRateProvider to convert the currencies
-	 * @return the maximum value
-	 */
-	public static BinaryOperator<MonetaryAmount> max(
-			ExchangeRateProvider provider) {
-
-		return (m1, m2) -> {
-			CurrencyConversion conversion = provider
-					.getCurrencyConversion(m1.getCurrency());
-
-			if (m1.isGreaterThan(conversion.apply(m2))) {
-				return m1;
-			}
-			return m2;
-		};
-	}
-
-
 }
