@@ -9,14 +9,15 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
+import org.javamoney.moneta.RoundedMoney;
+
 /**
  * this interface is used to create {@link RoundedMoney} using the {@link MonetaryOperator} as rounding.
  * @see {@link MonetaryRoundedFactory#of(MathContext)}
  * @see {@link MonetaryRoundedFactory#of(MonetaryOperator)}
  * @see {@link MonetaryRoundedFactory#withRoundingMode(RoundingMode)}
  * @author Otavio Santana
- * 
- * @deprecated see https://java.net/jira/browse/JAVAMONEY-126. Could go to a module like javamoney-calc.
+ *
  */
 interface MonetaryRoundedFactory {
 
