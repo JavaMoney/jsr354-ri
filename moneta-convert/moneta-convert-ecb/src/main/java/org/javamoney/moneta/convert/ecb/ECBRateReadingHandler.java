@@ -1,4 +1,4 @@
-package org.javamoney.moneta.internal.convert.ecb;
+package org.javamoney.moneta.convert.ecb;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

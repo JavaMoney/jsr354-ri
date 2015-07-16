@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.internal.convert.ecb;
+package org.javamoney.moneta.convert.ecb;
 
 import java.io.InputStream;
 import java.math.MathContext;

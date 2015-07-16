@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.internal.convert.ecb;
+package org.javamoney.moneta.convert.ecb;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -24,6 +24,9 @@ import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.convert.ExchangeRateType;
+import org.javamoney.moneta.convert.ecb.ECBCurrentRateProvider;
+import org.javamoney.moneta.convert.ecb.ECBHistoric90RateProvider;
+import org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider;
 import org.javamoney.moneta.internal.convert.IdentityRateProvider;
 import org.testng.annotations.Test;
 
