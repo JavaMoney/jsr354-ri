@@ -1,6 +1,0 @@
-org.javamoney.moneta.internal.convert.ECBCurrentRateProvider
-org.javamoney.moneta.internal.convert.ECBHistoricRateProvider
-org.javamoney.moneta.internal.convert.ECBHistoric90RateProvider
-org.javamoney.moneta.internal.convert.IMFRateProvider
-org.javamoney.moneta.internal.convert.IMFHistoricRateProvider
-org.javamoney.moneta.internal.convert.IdentityRateProvider

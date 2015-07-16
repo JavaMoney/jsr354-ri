@@ -265,6 +265,23 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<dependencies>
+          <dependency>
+	     <groupId>org.javamoney</groupId>
+	     <artifactId>moneta-convert-imf</artifactId>
+             <version>1.0.1-SNAPSHOT</version>
+	  </dependency>
+          <dependency>
+	     <groupId>org.javamoney</groupId>
+	     <artifactId>moneta-convert-ecb</artifactId>
+             <version>1.0.1-SNAPSHOT</version>
+	  </dependency>
+          <dependency>
+	     <groupId>org.javamoney</groupId>
+	     <artifactId>moneta-core</artifactId>
+             <version>1.0.1-SNAPSHOT</version>
+	  </dependency>
+	</dependencies>
 
 	<build>
 
