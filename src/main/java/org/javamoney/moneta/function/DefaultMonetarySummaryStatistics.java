@@ -29,7 +29,7 @@ import org.javamoney.moneta.FastMoney;
  * @author otaviojava
  * @author Anatole Tresch
  */
-public class DefaultMonetarySummaryStatistics implements MonetarySummaryStatistics {
+class DefaultMonetarySummaryStatistics implements MonetarySummaryStatistics {
 
     private final MonetaryAmount empty;
 
@@ -49,7 +49,7 @@ public class DefaultMonetarySummaryStatistics implements MonetarySummaryStatisti
      *
      * @param currencyUnit the target currency, not null.
      */
-    protected DefaultMonetarySummaryStatistics(CurrencyUnit currencyUnit) {
+    DefaultMonetarySummaryStatistics(CurrencyUnit currencyUnit) {
         empty = FastMoney.of(0, Objects.requireNonNull(currencyUnit));
         setSameMonetary(empty);
     }

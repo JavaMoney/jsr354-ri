@@ -1,4 +1,4 @@
-package org.javamoney.moneta.convert;
+package org.javamoney.moneta.function;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;

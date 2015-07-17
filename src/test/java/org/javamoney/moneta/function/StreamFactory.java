@@ -22,9 +22,9 @@ import org.javamoney.moneta.Money;
  */
 public final class StreamFactory {
 
-	public static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
-	public static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
-	public static final CurrencyUnit BRAZILIAN_REAL = Monetary
+	static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
+	static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
+	static final CurrencyUnit BRAZILIAN_REAL = Monetary
 			.getCurrency("BRL");
 
     /**

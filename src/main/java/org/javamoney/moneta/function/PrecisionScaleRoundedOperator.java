@@ -34,7 +34,7 @@ import javax.money.MonetaryOperator;
  * @see {@link MathContext}
  * @see {@link BigDecimal#precision()}
  * 
- * @deprecated see https://java.net/jira/browse/JAVAMONEY-126 It does not fit into {@link ConversionOperators} either. Should go to a module like javamoney-calc.
+ * @deprecated see https://java.net/jira/browse/JAVAMONEY-126 It does not fit into {@link MonetaryFunctions} either. Should go to a module like javamoney-calc.
  */
 final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 

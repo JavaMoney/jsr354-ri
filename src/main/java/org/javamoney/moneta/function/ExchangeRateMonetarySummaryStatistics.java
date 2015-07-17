@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.convert;
+package org.javamoney.moneta.function;
 
 import java.util.Objects;
 
@@ -21,9 +21,6 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
-
-import org.javamoney.moneta.function.DefaultMonetarySummaryStatistics;
-import org.javamoney.moneta.function.MonetarySummaryStatistics;
 
 class ExchangeRateMonetarySummaryStatistics  extends DefaultMonetarySummaryStatistics {
 
@@ -102,4 +99,5 @@ class ExchangeRateMonetarySummaryStatistics  extends DefaultMonetarySummaryStati
 		another.sum = currencyConversion.apply(sum);
 		return another;
 	}
+
 }

@@ -1,4 +1,4 @@
-package org.javamoney.moneta.convert;
+package org.javamoney.moneta.function;
 
 import static org.javamoney.moneta.function.StreamFactory.BRAZILIAN_REAL;
 import static org.javamoney.moneta.function.StreamFactory.DOLLAR;
@@ -14,10 +14,9 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.function.MonetaryFunctions;
 
 /**
- * This class mock the exchange rate to test some {@link ConversionOperators} that
+ * This class mock the exchange rate to test some {@link MonetaryFunctions} that
  * needs an exchange provider
  *
  * @author otaviojava
