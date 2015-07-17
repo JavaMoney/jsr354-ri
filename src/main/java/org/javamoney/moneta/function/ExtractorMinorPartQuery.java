@@ -32,7 +32,7 @@ import javax.money.MonetaryQuery;
 final class ExtractorMinorPartQuery implements MonetaryQuery<Long> {
 
 	/**
-	 * Package private constructor used from ConversionOperators.
+	 * Package private constructor used from MonetaryFunctions.
 	 */
 	ExtractorMinorPartQuery() {
 	}

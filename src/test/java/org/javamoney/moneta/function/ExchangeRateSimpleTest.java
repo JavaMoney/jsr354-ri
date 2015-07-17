@@ -1,4 +1,4 @@
-package org.javamoney.moneta.convert;
+package org.javamoney.moneta.function;
 
 import org.javamoney.moneta.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;

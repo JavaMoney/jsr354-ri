@@ -32,7 +32,7 @@ import javax.money.MonetaryOperator;
 final class ExtractorMinorPartOperator implements MonetaryOperator {
 
 	/**
-	 * Package private constructor used from ConversionOperators.
+	 * Package private constructor used from MonetaryFunctions.
 	 */
 	ExtractorMinorPartOperator() {
 	}
