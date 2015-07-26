@@ -25,12 +25,15 @@ import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.MonthDay;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -57,10 +60,14 @@ public class ECBHistoric90RateProviderTest {
 
     private ExchangeRateProvider provider;
 
+	private static final List<MonthDay> HOLY_DAYS = Arrays.asList(
+			MonthDay.of(Month.JANUARY, 1), MonthDay.of(Month.MAY, 1),
+			MonthDay.of(Month.DECEMBER, 25));
+
     @BeforeTest
     public void setup() throws InterruptedException {
         provider = getExchangeRateProvider(ECBExchangeRateType.ECB_HIST90);
-        Thread.sleep(10_000L);
+        Thread.sleep(5_000L);
 
     }
 
@@ -164,11 +171,14 @@ public class ECBHistoric90RateProviderTest {
     }
 
 	@Test
-	public void shouldSetTimeInLocalDateTime2() {
+	public void shouldReturnsFindRatesFrom90DaysBefore() {
 
 		LocalDate localDate = LocalDate.now().minusDays(90)
-				.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+					.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
 
+		if(HOLY_DAYS.stream().anyMatch(Predicate.isEqual(MonthDay.from(localDate)))){
+			localDate = localDate.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+		}
 		ConversionQuery conversionQuery = ConversionQueryBuilder.of()
 				.setTermCurrency(EURO).set(localDate).build();
 		CurrencyConversion currencyConversion = provider
@@ -215,7 +225,7 @@ public class ECBHistoric90RateProviderTest {
 	}
 
 	@Test(expectedExceptions = MonetaryException.class)
-	public void shouldSetTimeInLocalDateTime() {
+	public void shouldReturnsFindRateFromHistoric() {
 
 		LocalDate localDate = YearMonth.of(2014, Month.JANUARY).atDay(9);
 
