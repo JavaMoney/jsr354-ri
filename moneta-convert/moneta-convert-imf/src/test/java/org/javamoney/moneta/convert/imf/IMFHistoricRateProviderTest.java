@@ -7,12 +7,11 @@ import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -148,8 +147,7 @@ public class IMFHistoricRateProviderTest {
 		@Test
 		public void shouldSetTimeInLocalDateTime2() {
 
-			LocalDate localDate = LocalDate.now().minusDays(90)
-					.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+			LocalDate localDate = Year.of(2015).atMonth(Month.MAY).atDay(8);
 
 			ConversionQuery conversionQuery = ConversionQueryBuilder.of()
 					.setTermCurrency(EURO).set(localDate).build();
