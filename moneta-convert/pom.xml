@@ -19,7 +19,7 @@
         <dependency>
            <groupId>org.javamoney</groupId>
            <artifactId>moneta-core</artifactId>
-           <version>1.0.1-SNAPSHOT</version>
+           <version>${project.version}</version>
            <scope>provided</scope>
         </dependency>
     </dependencies>

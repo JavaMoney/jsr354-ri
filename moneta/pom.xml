@@ -16,7 +16,6 @@
 		<artifactId>moneta-parent</artifactId>
         	<version>1.0.1-SNAPSHOT</version>
 	</parent>
-	<version>1.0.1-SNAPSHOT</version>
 	<artifactId>moneta</artifactId>
 	<packaging>bundle</packaging>
 	<name>Moneta (JSR 354 RI)</name>
@@ -269,17 +268,17 @@
           <dependency>
 	     <groupId>org.javamoney</groupId>
 	     <artifactId>moneta-convert-imf</artifactId>
-             <version>1.0.1-SNAPSHOT</version>
+             <version>${project.version}</version>
 	  </dependency>
           <dependency>
 	     <groupId>org.javamoney</groupId>
 	     <artifactId>moneta-convert-ecb</artifactId>
-             <version>1.0.1-SNAPSHOT</version>
+             <version>${project.version}</version>
 	  </dependency>
           <dependency>
 	     <groupId>org.javamoney</groupId>
 	     <artifactId>moneta-core</artifactId>
-             <version>1.0.1-SNAPSHOT</version>
+             <version>${project.version}</version>
 	  </dependency>
 	</dependencies>
 
