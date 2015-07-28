@@ -1,8 +1,11 @@
 package org.javamoney.moneta.function;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
 import static org.javamoney.moneta.function.StreamFactory.BRAZILIAN_REAL;
 import static org.javamoney.moneta.function.StreamFactory.DOLLAR;
 import static org.javamoney.moneta.function.StreamFactory.EURO;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Map;
 
@@ -143,6 +146,5 @@ public class GroupMonetarySummaryStatisticsTest {
 		Assert.assertEquals(summary.getSum().getNumber().intValue(),
 				expectedSumm);
 	}
-
 }
 

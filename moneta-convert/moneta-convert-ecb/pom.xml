@@ -3,11 +3,21 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.javamoney</groupId>
+		<groupId>org.javamoney.moneta</groupId>
 		<artifactId>moneta-convert</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>moneta-convert-ecb</artifactId>
 	<packaging>jar</packaging>
-
+	<dependencies>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-convert-shared</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>

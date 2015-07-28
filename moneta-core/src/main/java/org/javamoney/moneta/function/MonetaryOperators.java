@@ -273,27 +273,6 @@ public final class MonetaryOperators {
 	}
 
 	/**
-	 * Do exchange of currency, in other words, create the monetary amount with the
-	 * same value but with currency different.
-	 * <p>
-	 * For example, 'EUR 2.35', using the currency 'USD' as exchange parameter, will return 'USD 2.35',
-	 * and 'BHD -1.345', using the currency 'USD' as exchange parameter, will return 'BHD -1.345'.
-	 * <p>
-	 *<pre>
-	 *{@code
-	 *Currency real = Monetary.getCurrency("BRL");
-	 *MonetaryAmount money = Money.parse("EUR 2.355");
-	 *MonetaryAmount result = MonetaryOperators.exchangeCurrency(real).apply(money);//BRL 2.355
-	 *}
-	 *</pre>
-	 * @param roundingMode rounding to be used
-	 * @return the major part as {@link MonetaryOperator}
-	 */
-	public static MonetaryOperator exchange(CurrencyUnit currencyUnit){
-		return new ExchangeCurrencyOperator(Objects.requireNonNull(currencyUnit));
-	}
-
-	/**
 	 * This method was deprecated, uses the
 	 * {@link MonetaryQueries#extractMajorPart()} instead.
 	 * @see {@link MonetaryQueries#extractMajorPart()}

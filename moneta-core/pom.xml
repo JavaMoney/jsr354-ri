@@ -16,6 +16,7 @@
 		<artifactId>moneta-parent</artifactId>
         	<version>1.0.1-SNAPSHOT</version>
 	</parent>
+	<groupId>org.javamoney.moneta</groupId>
 	<artifactId>moneta-core</artifactId>
 	<packaging>bundle</packaging>
 	<name>Moneta-Core</name>

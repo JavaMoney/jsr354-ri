@@ -14,10 +14,10 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-        	<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>moneta</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>pom</packaging>
 	<name>Moneta (JSR 354 RI)</name>
 	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -26,7 +26,7 @@
         This module implements JSR 354.
     </description>
 
-	
+
 	<properties>
 		<jsr.version>1.0</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
@@ -265,21 +265,26 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-          <dependency>
-	     <groupId>org.javamoney</groupId>
-	     <artifactId>moneta-convert-imf</artifactId>
-             <version>${project.version}</version>
-	  </dependency>
-          <dependency>
-	     <groupId>org.javamoney</groupId>
-	     <artifactId>moneta-convert-ecb</artifactId>
-             <version>${project.version}</version>
-	  </dependency>
-          <dependency>
-	     <groupId>org.javamoney</groupId>
-	     <artifactId>moneta-core</artifactId>
-             <version>${project.version}</version>
-	  </dependency>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-convert-shared</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-convert-imf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-convert-ecb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -412,11 +417,14 @@
 							<show>private</show>
 							<additionalparam>
 								-Xdoclint:none
-								-inferrel -inferdep -quiet -hide java.*
+								-inferrel -inferdep -quiet -hide
+								java.*
 								-collpackages java.util.*
-								-postfixpackage -nodefontname Tahoma
+								-postfixpackage -nodefontname
+								Tahoma
 								-nodefontsize 9
-								-nodefontpackagesize 7 -outputencoding UTF-8
+								-nodefontpackagesize 7 -outputencoding
+								UTF-8
 							</additionalparam>
 						</configuration>
 					</reportSet>

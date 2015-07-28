@@ -24,13 +24,6 @@ import org.testng.annotations.Test;
 
 public class MonetaryFunctionsOrderTest {
 
-    private ExchangeRateProvider provider;
-
-    @Test
-    public void init() {
-        provider = new ExchangeRateProviderMock();
-    }
-
     @Test
     public void sortCurrencyUnitTest() {
         MonetaryAmount money = currencies().sorted(sortCurrencyUnit())
@@ -66,34 +59,5 @@ public class MonetaryFunctionsOrderTest {
 
         Assert.assertEquals(BRAZILIAN_REAL, money.getCurrency());
         Assert.assertEquals(BigDecimal.ZERO, money.getNumber().numberValue(BigDecimal.class));
-    }
-
-    @Test
-    public void shouldExecuteValiableOrder() {
-
-        Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO),
-                Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
-        List<MonetaryAmount> list = stream.sorted(
-                MonetaryFunctions.sortValuable(provider)).collect(
-                Collectors.toList());
-
-        Assert.assertEquals(Money.of(9, BRAZILIAN_REAL), list.get(0));
-        Assert.assertEquals(Money.of(8, DOLLAR), list.get(1));
-        Assert.assertEquals(Money.of(7, EURO), list.get(2));
-    }
-
-    @Test
-    public void shouldExecuteValiableOrderDesc() {
-
-        Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO),
-                Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
-        List<MonetaryAmount> list = stream.sorted(
-                MonetaryFunctions.sortValuableDesc(provider)).collect(
-                Collectors.toList());
-
-        Assert.assertEquals(Money.of(7, EURO), list.get(0));
-        Assert.assertEquals(Money.of(8, DOLLAR), list.get(1));
-        Assert.assertEquals(Money.of(9, BRAZILIAN_REAL), list.get(2));
-
     }
 }

@@ -20,7 +20,7 @@ import org.javamoney.moneta.Money;
 /**
  * Test utility class for testing streams.
  */
-public final class StreamFactory {
+final class StreamFactory {
 
 	static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
 	static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
