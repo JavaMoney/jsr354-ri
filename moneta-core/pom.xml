@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-        	<version>1.0.1-SNAPSHOT</version>
+        	<version>1.0.1-RC1</version>
 	</parent>
 	<groupId>org.javamoney.moneta</groupId>
 	<artifactId>moneta-core</artifactId>
@@ -24,8 +24,7 @@
 	<inceptionYear>2012</inceptionYear>
 	<description>The engine of moneta, this projects has all implementation of MonetayAmount, CurrencyUnit, the Loader to ExchangeRate, SPI, etc.
     </description>
-
-	
+    
 	<properties>
 		<jsr.version>1.0</jsr.version>
 		<jdkVersion>1.8</jdkVersion>

@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>1.0.1-RC1</version>
 	</parent>
 	<artifactId>moneta</artifactId>
 	<packaging>pom</packaging>
@@ -267,6 +267,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
+			<artifactId>moneta-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-shared</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -278,11 +283,6 @@
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-ecb</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.javamoney.moneta</groupId>
-			<artifactId>moneta-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
