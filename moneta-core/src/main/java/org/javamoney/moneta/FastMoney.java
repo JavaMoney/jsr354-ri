@@ -60,7 +60,7 @@ import java.util.logging.Logger;
  * executed one million (1000000) times results in {@code EUR 1657407.96251}, calculated in 179 ms,
  * which is less than 1ns/loop.
  * </p><p>
- * Also note than mixing up types my drastically change the performance behavior. E.g. replacing the
+ * Also note than mixing up types may drastically change the performance behavior. E.g. replacing the
  * code above with the following: *
  * </p>
  * <pre><code>
