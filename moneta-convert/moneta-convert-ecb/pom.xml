@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.javamoney.moneta</groupId>
-		<artifactId>moneta-convert</artifactId>
+		<artifactId>moneta-convert-parent</artifactId>
 		<version>1.0.1-RC1</version>
 	</parent>
 	<artifactId>moneta-convert-ecb</artifactId>
@@ -16,8 +16,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
-			<artifactId>moneta-convert-shared</artifactId>
+			<artifactId>moneta-convert</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<name>Moneta Currency Conversion - ECB Provider</name>
 </project>

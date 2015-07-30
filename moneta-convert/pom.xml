@@ -7,15 +7,15 @@
 		<version>1.0.1-RC1</version>
 	</parent>
 	<groupId>org.javamoney.moneta</groupId>
-	<artifactId>moneta-convert</artifactId>
+	<artifactId>moneta-convert-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>Modules to exchange-rate</name>
-	<description>This parent has modules for JSR 354 exchange rate providers.</description>
+	<name>Moneta Currency Conversion (Parent)</name>
+	<description>This is the parent POM for JSR 354 exchange rate providers.</description>
 
 	<modules>
+		<module>moneta-convert-base</module>
 		<module>moneta-convert-ecb</module>
 		<module>moneta-convert-imf</module>
-		<module>moneta-convert-shared</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -27,7 +27,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.javamoney.moneta</groupId>
-				<artifactId>moneta-convert-shared</artifactId>
+				<artifactId>moneta-convert</artifactId>
 				<version>${project.version}</version>
 				<scope>provided</scope>
 			</dependency>

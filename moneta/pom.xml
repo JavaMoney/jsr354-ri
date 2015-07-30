@@ -272,7 +272,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
-			<artifactId>moneta-convert-shared</artifactId>
+			<artifactId>moneta-convert</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
