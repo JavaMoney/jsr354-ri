@@ -411,6 +411,18 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -450,11 +462,14 @@
 							<show>private</show>
 							<additionalparam>
 								-Xdoclint:none
-								-inferrel -inferdep -quiet -hide java.*
+								-inferrel -inferdep -quiet -hide
+								java.*
 								-collpackages java.util.*
-								-postfixpackage -nodefontname Tahoma
+								-postfixpackage -nodefontname
+								Tahoma
 								-nodefontsize 9
-								-nodefontpackagesize 7 -outputencoding UTF-8
+								-nodefontpackagesize 7 -outputencoding
+								UTF-8
 							</additionalparam>
 						</configuration>
 					</reportSet>
@@ -607,9 +622,9 @@
 			</plugin>
 		</plugins>
 	</reporting>
-    <modules>
-        <module>moneta-core</module>
-        <module>moneta-convert</module>
-        <module>moneta</module>
-    </modules>
+	<modules>
+		<module>moneta-core</module>
+		<module>moneta-convert</module>
+		<module>moneta</module>
+	</modules>
 </project>
