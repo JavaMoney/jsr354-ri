@@ -1,4 +1,4 @@
-package org.javamoney.moneta;
+package org.javamoney.moneta.convert;
 
 import javax.money.CurrencyUnit;
 import javax.money.NumberValue;
@@ -17,10 +17,9 @@ import java.util.Objects;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @deprecated Use org.javamoney.moneta.convert.ExchangeRateBuilder instead
  */
 public class ExchangeRateBuilder {
-
+// TODO this should probably go to "convert" in future releases. Analyze feasability of refactoring.
     /**
      * The {@link javax.money.convert.ConversionContext}.
      */
