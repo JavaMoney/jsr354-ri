@@ -1,6 +1,5 @@
 package org.javamoney.moneta.convert;
 
-import org.javamoney.moneta.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.testng.annotations.Test;
 
