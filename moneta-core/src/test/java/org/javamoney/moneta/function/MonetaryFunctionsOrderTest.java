@@ -6,20 +6,12 @@ import static org.javamoney.moneta.function.MonetaryFunctions.sortNumber;
 import static org.javamoney.moneta.function.MonetaryFunctions.sortNumberDesc;
 import static org.javamoney.moneta.function.StreamFactory.BRAZILIAN_REAL;
 import static org.javamoney.moneta.function.StreamFactory.DOLLAR;
-import static org.javamoney.moneta.function.StreamFactory.EURO;
 import static org.javamoney.moneta.function.StreamFactory.currencies;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javax.money.MonetaryAmount;
-import javax.money.convert.ExchangeRateProvider;
-
 import junit.framework.Assert;
 
-import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 public class MonetaryFunctionsOrderTest {

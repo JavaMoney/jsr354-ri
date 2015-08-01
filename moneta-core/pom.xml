@@ -19,11 +19,10 @@
 	<groupId>org.javamoney.moneta</groupId>
 	<artifactId>moneta-core</artifactId>
 	<packaging>bundle</packaging>
-	<name>Moneta-Core</name>
+	<name>Moneta Core</name>
 	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
-	<description>The engine of moneta, this projects has all implementation of MonetayAmount, CurrencyUnit, the Loader to ExchangeRate, SPI, etc.
-    </description>
+	<description>The engine of moneta, this projects has implementations of MonetayAmount, CurrencyUnit, loaders, formatters and core parts of the SPI.</description>
     
 	<properties>
 		<jsr.version>1.0</jsr.version>
