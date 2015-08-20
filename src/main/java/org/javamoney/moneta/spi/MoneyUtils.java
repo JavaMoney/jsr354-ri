@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Platform RI: This utility class simplifies implementing {@link MonetaryAmount},
@@ -107,20 +108,17 @@ public final class MoneyUtils {
      *                        in {@link MonetaryContext}.
      * @return the corresponding {@link MathContext}
      */
-    public static MathContext getMathContext(MonetaryContext monetaryContext, RoundingMode defaultMode) {
-        MathContext ctx = monetaryContext.get(MathContext.class);
-        if (Objects.nonNull(ctx)) {
-            return ctx;
-        }
-        RoundingMode roundingMode = monetaryContext.get(RoundingMode.class);
-        if (roundingMode == null) {
-            roundingMode = defaultMode;
-        }
-        if (roundingMode == null) {
-            roundingMode = RoundingMode.HALF_EVEN;
-        }
-        return new MathContext(monetaryContext.getPrecision(), roundingMode);
-    }
+	public static MathContext getMathContext(MonetaryContext monetaryContext, RoundingMode defaultMode) {
+		MathContext ctx = monetaryContext.get(MathContext.class);
+		if (Objects.nonNull(ctx)) {
+			return ctx;
+		}
+		RoundingMode roundingMode = monetaryContext.get(RoundingMode.class);
+		if (roundingMode == null) {
+			roundingMode = Optional.ofNullable(defaultMode).orElse(RoundingMode.HALF_EVEN);
+		}
+		return new MathContext(monetaryContext.getPrecision(), roundingMode);
+	}
 
     /**
      * Method to check if a currency is compatible with this amount instance.

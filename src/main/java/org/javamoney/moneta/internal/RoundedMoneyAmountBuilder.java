@@ -15,14 +15,15 @@
  */
 package org.javamoney.moneta.internal;
 
-import org.javamoney.moneta.RoundedMoney;
-import org.javamoney.moneta.spi.AbstractAmountBuilder;
+import java.math.RoundingMode;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryContextBuilder;
 import javax.money.NumberValue;
-import java.math.RoundingMode;
+
+import org.javamoney.moneta.RoundedMoney;
+import org.javamoney.moneta.spi.AbstractAmountBuilder;
 
 /**
  * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link org.javamoney.moneta
@@ -44,7 +45,7 @@ public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMone
      */
     @Override
     protected RoundedMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {
-        return RoundedMoney.of(number, currency, monetaryContext);
+        return RoundedMoney.of(number, currency, MonetaryContext.from(monetaryContext, RoundedMoney.class));
     }
 
     @Override
