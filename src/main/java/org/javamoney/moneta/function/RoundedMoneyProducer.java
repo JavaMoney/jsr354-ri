@@ -13,6 +13,7 @@ import org.javamoney.moneta.RoundedMoney;
  * using {@link RoundedMoney} using the {@link MonetaryOperator} as rounding operator
  * @see {@link RoundedMoneyProducer#RoundedMoneyProducer(MonetaryOperator)}
  * @author Otavio Santana
+ * @since 1.0.1
  */
 public final class RoundedMoneyProducer implements MonetaryAmountProducer {
 

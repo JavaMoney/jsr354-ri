@@ -9,6 +9,7 @@ import javax.money.MonetaryAmount;
  * @see {@link FastMoneyProducer}
  * @see {@link MoneyProducer}
  * @see {@link RoundedMoneyProducer}
+ * @since 1.0.1
  */
 @FunctionalInterface
 public interface MonetaryAmountProducer {
