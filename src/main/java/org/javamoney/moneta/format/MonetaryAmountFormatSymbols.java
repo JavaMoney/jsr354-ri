@@ -14,6 +14,7 @@ import org.javamoney.moneta.function.MoneyProducer;
  * @see {@link MonetaryAmountSymbols}
  * @see {@link MonetaryAmountFormat}
  * @see {@link MonetaryAmountNumericInformation}
+ * @since 1.0.1
  */
 public interface MonetaryAmountFormatSymbols extends MonetaryAmountFormat {
 

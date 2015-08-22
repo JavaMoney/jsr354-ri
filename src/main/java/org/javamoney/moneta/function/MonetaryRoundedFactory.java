@@ -15,10 +15,9 @@ import javax.money.MonetaryOperator;
  * @see {@link MonetaryRoundedFactory#of(MonetaryOperator)}
  * @see {@link MonetaryRoundedFactory#withRoundingMode(RoundingMode)}
  * @author Otavio Santana
- * 
- * @deprecated see https://java.net/jira/browse/JAVAMONEY-126. Could go to a module like javamoney-calc.
+ * @since 1.0.1
  */
-interface MonetaryRoundedFactory {
+public interface MonetaryRoundedFactory {
 
 	/**
 	 * return the {@link MonetaryOperator} as rounding operator
