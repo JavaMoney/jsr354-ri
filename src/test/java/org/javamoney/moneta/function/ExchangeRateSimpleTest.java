@@ -1,15 +1,15 @@
 package org.javamoney.moneta.function;
 
-import org.javamoney.moneta.ExchangeRateBuilder;
-import org.javamoney.moneta.spi.DefaultNumberValue;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.convert.ExchangeRate;
 import javax.money.convert.RateType;
 
-import static org.testng.Assert.assertEquals;
+import org.javamoney.moneta.convert.ExchangeRateBuilder;
+import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.testng.annotations.Test;
 
 public class ExchangeRateSimpleTest {
     private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");

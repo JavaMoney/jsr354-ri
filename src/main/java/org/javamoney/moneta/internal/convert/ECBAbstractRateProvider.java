@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.internal.convert;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.MathContext;
 import java.time.LocalDate;
@@ -40,7 +39,7 @@ import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.javamoney.moneta.ExchangeRateBuilder;
+import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.LoaderService;

@@ -14,7 +14,7 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 import javax.money.convert.RateType;
 
-import org.javamoney.moneta.ExchangeRateBuilder;
+import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
