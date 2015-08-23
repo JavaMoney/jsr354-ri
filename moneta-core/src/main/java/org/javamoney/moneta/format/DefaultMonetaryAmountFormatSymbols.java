@@ -16,6 +16,7 @@ import org.javamoney.moneta.function.MonetaryAmountProducer;
 /**
  * The default implementation that uses the {@link DecimalFormat} as formatter.
  * @author Otavio Santana
+ * @since 1.0.1
  */
 class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols {
 

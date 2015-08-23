@@ -9,7 +9,11 @@ import java.math.RoundingMode;
  * @author Otavio Santana
  * @see {@link MonetaryRoundedFactoryBuilder#withScale(int)}
  * @see {@link MonetaryRoundedFactoryBuilder#withPrecision(int)}
+<<<<<<< HEAD:moneta-core/src/main/java/org/javamoney/moneta/function/MonetaryRoundedFactoryBuilder.java
  *
+=======
+ * @since 1.0.1
+>>>>>>> master:src/main/java/org/javamoney/moneta/function/MonetaryRoundedFactoryBuilder.java
  */
 final class MonetaryRoundedFactoryBuilder {
 

@@ -17,9 +17,13 @@ import org.javamoney.moneta.RoundedMoney;
  * @see {@link MonetaryRoundedFactory#of(MonetaryOperator)}
  * @see {@link MonetaryRoundedFactory#withRoundingMode(RoundingMode)}
  * @author Otavio Santana
+<<<<<<< HEAD:moneta-core/src/main/java/org/javamoney/moneta/function/MonetaryRoundedFactory.java
  *
+=======
+ * @since 1.0.1
+>>>>>>> master:src/main/java/org/javamoney/moneta/function/MonetaryRoundedFactory.java
  */
-interface MonetaryRoundedFactory {
+public interface MonetaryRoundedFactory {
 
 	/**
 	 * return the {@link MonetaryOperator} as rounding operator

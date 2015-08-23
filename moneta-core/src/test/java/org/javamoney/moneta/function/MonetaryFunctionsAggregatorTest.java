@@ -22,6 +22,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryException;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -32,6 +33,16 @@ import org.testng.annotations.Test;
  */
 public class MonetaryFunctionsAggregatorTest {
 
+<<<<<<< HEAD:moneta-core/src/test/java/org/javamoney/moneta/function/MonetaryFunctionsAggregatorTest.java
+=======
+    private ExchangeRateProvider provider;
+
+    @BeforeMethod
+    public void init() {
+        provider = new ExchangeRateProviderMock();
+    }
+
+>>>>>>> master:src/test/java/org/javamoney/moneta/function/MonetaryFunctionsAggregatorTest.java
     @Test
     public void shouldSumCorrectly() {
         Stream<MonetaryAmount> stream = streamNormal();

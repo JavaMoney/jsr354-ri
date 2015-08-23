@@ -23,6 +23,7 @@ import javax.money.MonetaryQuery;
  * @see {@link MonetaryQuery}
  * @see {@link MonetaryQuery#queryFrom(MonetaryAmount)}
  * @author Otavio Santana
+ * @since 1.0.1
  */
 public final class MonetaryQueries {
 

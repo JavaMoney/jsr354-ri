@@ -33,7 +33,11 @@ import javax.money.MonetaryOperator;
  * @see {@link BigDecimal#scale()}
  * @see {@link MathContext}
  * @see {@link BigDecimal#precision()}
+<<<<<<< HEAD:moneta-core/src/main/java/org/javamoney/moneta/function/PrecisionScaleRoundedOperator.java
  *
+=======
+ * @since 1.0.1
+>>>>>>> master:src/main/java/org/javamoney/moneta/function/PrecisionScaleRoundedOperator.java
  */
 final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 

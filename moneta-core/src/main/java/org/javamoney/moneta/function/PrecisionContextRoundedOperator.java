@@ -30,6 +30,10 @@ import org.javamoney.moneta.RoundedMoney;
  * @see {@link RoundedMoney}
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#precision()}
+<<<<<<< HEAD:moneta-core/src/main/java/org/javamoney/moneta/function/PrecisionContextRoundedOperator.java
+=======
+ * @since 1.0.1
+>>>>>>> master:src/main/java/org/javamoney/moneta/function/PrecisionContextRoundedOperator.java
  */
 final class PrecisionContextRoundedOperator implements MonetaryOperator {
 

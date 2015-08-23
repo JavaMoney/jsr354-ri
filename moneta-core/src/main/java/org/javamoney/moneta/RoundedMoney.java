@@ -258,7 +258,8 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     /**
      * Obtains an instance of {@link RoundedMoney} representing zero.
      * @param currency
-     * @return
+     * @return an instance of {@link RoundedMoney} representing zero.
+     * @since 1.0.1
      */
     public static RoundedMoney zero(CurrencyUnit currency) {
         return of(BigDecimal.ZERO, currency);
@@ -274,6 +275,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     * @see {@link CurrencyUnit#getDefaultFractionDigits()}
     * @throws NullPointerException when the currency is null
     * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
+    * @since 1.0.1
     */
    public static RoundedMoney ofMinor(CurrencyUnit currency, long amountMinor) {
 	   return ofMinor(currency, amountMinor, currency.getDefaultFractionDigits());
@@ -290,6 +292,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
     * @throws NullPointerException when the currency is null
     * @throws IllegalArgumentException when the factionDigits is negative
+    * @since 1.0.1
     */
    public static RoundedMoney ofMinor(CurrencyUnit currency, long amountMinor, int factionDigits) {
    	if(factionDigits < 0) {

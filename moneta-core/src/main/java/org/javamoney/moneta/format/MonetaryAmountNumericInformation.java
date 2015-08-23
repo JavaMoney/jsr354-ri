@@ -4,7 +4,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Objects;
-
+/**
+ * This class represents numeric informations to be used on {@link MonetaryAmountFormatSymbols},
+ * this class decorate the {@link DecimalFormat}
+ * @author otaviojava
+ * @since 1.0.1
+ */
 public final class MonetaryAmountNumericInformation {
 
 	private final DecimalFormat format;

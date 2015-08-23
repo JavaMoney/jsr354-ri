@@ -11,6 +11,7 @@ import org.javamoney.moneta.FastMoney;
  * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
  * using {@link FastMoney} implementation.
  * @author Otavio Santana
+ * @since 1.0.1
  */
 public final class FastMoneyProducer implements MonetaryAmountProducer {
 

@@ -24,6 +24,11 @@ import javax.money.spi.Bootstrap;
 import org.javamoney.moneta.convert.imf.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.LoaderService;
 
+/**
+ * Find by historic from IMF
+ * @author otaviojava
+ * @since 1.0.1
+ */
 public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
 
     private static final Logger LOG = Logger.getLogger(IMFHistoricRateProvider.class.getName());
