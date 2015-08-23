@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta;
+package org.javamoney.moneta.convert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -85,9 +85,7 @@ import javax.money.convert.ExchangeRate;
  * @see <a
  * href="https://en.wikipedia.org/wiki/Exchange_rate#Quotations">Wikipedia:
  * Exchange Rate (Quotations)</a>
- * @deprecated Use org.javamoney.moneta.convert.DefaultExchangeRate instead
  */
-@Deprecated
 class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<ExchangeRate> {
 // TODO this should probably go to "convert" in future releases. Analyze feasability of refactoring.
 

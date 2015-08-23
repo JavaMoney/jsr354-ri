@@ -28,7 +28,7 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ProviderContext;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
-import org.javamoney.moneta.ExchangeRateBuilder;
+import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.internal.convert.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
