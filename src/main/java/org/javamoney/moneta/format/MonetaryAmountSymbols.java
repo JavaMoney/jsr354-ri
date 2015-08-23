@@ -16,6 +16,7 @@ import javax.money.format.MonetaryAmountFormat;
  * @see {@link MonetaryAmountFormat}
  * @see {@link MonetaryAmountFormatSymbols}
  * @author Otavio Santana
+ * @since 1.0.1
  */
 public final class MonetaryAmountSymbols {
 

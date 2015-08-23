@@ -11,6 +11,7 @@ import org.javamoney.moneta.Money;
  * The implementation of {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
  * using {@link Money} implementation.
  * @author Otavio Santana
+ * @since 1.0.1
  */
 public final class MoneyProducer implements MonetaryAmountProducer {
 

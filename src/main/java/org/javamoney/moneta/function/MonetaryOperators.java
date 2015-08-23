@@ -288,6 +288,7 @@ public final class MonetaryOperators {
 	 *</pre>
 	 * @param roundingMode rounding to be used
 	 * @return the major part as {@link MonetaryOperator}
+	 * @since 1.0.1
 	 */
 	public static MonetaryOperator exchange(CurrencyUnit currencyUnit){
 		return new ExchangeCurrencyOperator(Objects.requireNonNull(currencyUnit));

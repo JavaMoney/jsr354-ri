@@ -9,8 +9,7 @@ import java.math.RoundingMode;
  * @author Otavio Santana
  * @see {@link MonetaryRoundedFactoryBuilder#withScale(int)}
  * @see {@link MonetaryRoundedFactoryBuilder#withPrecision(int)}
- *
- * @deprecated see https://java.net/jira/browse/JAVAMONEY-126. Could go to a module like javamoney-calc.
+ * @since 1.0.1
  */
 final class MonetaryRoundedFactoryBuilder {
 

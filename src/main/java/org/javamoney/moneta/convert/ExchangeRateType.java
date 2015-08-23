@@ -30,9 +30,9 @@ import org.javamoney.moneta.internal.convert.IdentityRateProvider;
  * to choose an available implementation.
  * </p>
  * <code>ExchangeRateProvider provider = MonetaryConversions.getExchangeRateProvider(ExchangeRateType.ECB);<code>
- *
  * @author otaviojava
  * @author Werner Keil
+ * @since 1.0.1
  */
 public enum ExchangeRateType implements ExchangeRateProviderSupplier {
     /**

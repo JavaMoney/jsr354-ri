@@ -791,7 +791,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /**
      * Obtains an instance of {@link Money} representing zero.
      * @param currency
-     * @return
+     * @return an instance of {@link Money} representing zero.
+     * @since 1.0.1
      */
     public static Money zero(CurrencyUnit currency) {
         return new Money(BigDecimal.ZERO, currency);
@@ -806,11 +807,12 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
       * @throws NullPointerException when the currency is null
       * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
       * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+      * @since 1.0.1
       */
      public static Money ofMinor(CurrencyUnit currency, long amountMinor) {
     	 return ofMinor(currency, amountMinor, currency.getDefaultFractionDigits());
      }
-     
+
      /**
       * Obtains an instance of {@code Money} from an amount in minor units.
       * For example, {@code ofMinor(USD, 1234, 2)} creates the instance {@code USD 12.34}.
@@ -822,6 +824,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
       * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
       * @throws NullPointerException when the currency is null
       * @throws IllegalArgumentException when the fractionDigits is negative
+      * @since 1.0.1
       */
      public static Money ofMinor(CurrencyUnit currency, long amountMinor, int fractionDigits) {
      	if(fractionDigits < 0) {
