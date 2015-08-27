@@ -30,7 +30,7 @@ public class MonetaryAmountFormatSymbolsTest {
 
 	@Test
 	public void shouldReturnDefaultMonetaryAmountFormatSymbol() {
-		MonetaryAmountFormatSymbols defafult = MonetaryAmountFormatSymbols.getDefafult();
+		MonetaryAmountFormatSymbols defafult = MonetaryAmountFormatSymbols.getDefault();
 		String format = defafult.format(money);
 		MonetaryAmount amount = defafult.parse(format);
 		assertEquals(amount.getCurrency(), currency);

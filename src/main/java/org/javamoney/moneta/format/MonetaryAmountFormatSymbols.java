@@ -66,7 +66,7 @@ public interface MonetaryAmountFormatSymbols extends MonetaryAmountFormat {
 	 * @see {@link MonetaryAmountProducer}
 	 * @see {@link DecimalFormat}
 	 */
-	static MonetaryAmountFormatSymbols getDefafult() {
+	static MonetaryAmountFormatSymbols getDefault() {
 		return new DefaultMonetaryAmountFormatSymbols(new MonetaryAmountSymbols(), new MoneyProducer());
 	}
 
