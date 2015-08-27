@@ -19,9 +19,7 @@ import java.util.Objects;
  * @author Werner Keil
  * @deprecated Use org.javamoney.moneta.convert.ExchangeRateBuilder instead
  */
-@Deprecated
 public class ExchangeRateBuilder {
-// TODO this should probably go to "convert" in future releases. Analyze feasability of refactoring.
     /**
      * The {@link javax.money.convert.ConversionContext}.
      */
