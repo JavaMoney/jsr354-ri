@@ -705,9 +705,8 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         }
     }
 
-    /*
-     * @see javax.money.MonetaryAmount#asType(java.lang.Class)
-     */
+
+    @Deprecated
     @SuppressWarnings("unchecked")
     public <T> T asType(Class<T> type) {
         if (BigDecimal.class.equals(type)) {
@@ -740,10 +739,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         throw new IllegalArgumentException("Unsupported representation type: " + type);
     }
 
-    /*
-     * }(non-Javadoc)
-     * @see javax.money.MonetaryAmount#asType(java.lang.Class, javax.money.Rounding)
-     */
+    @Deprecated
     public <T> T asType(Class<T> type, MonetaryOperator adjuster) {
         RoundedMoney amount = (RoundedMoney) adjuster.apply(this);
         return amount.asType(type);
