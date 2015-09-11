@@ -23,6 +23,7 @@ import org.javamoney.moneta.internal.convert.ECBHistoricRateProvider;
 import org.javamoney.moneta.internal.convert.IMFHistoricRateProvider;
 import org.javamoney.moneta.internal.convert.IMFRateProvider;
 import org.javamoney.moneta.internal.convert.IdentityRateProvider;
+import org.javamoney.moneta.internal.convert.USFederalReserveRateProvider;
 
 /**
  * <p>
@@ -62,6 +63,10 @@ public enum ExchangeRateType implements ExchangeRateProviderSupplier {
     ECB_HIST(
             "ECB-HIST",
             "Exchange rate to the European Central Bank that loads all data up to 1999 into its historic data cache."),
+    /**
+     * Uses the {@link USFederalReserveRateProvider} implementation.
+     */
+    FRB("FRB", "Exchange rate to the Federal Reserve Bank of the United States, providing the prior week's Monday-Friday data."),
     /**
      * Uses the {@link IdentityRateProvider} implementation.
      */
