@@ -58,31 +58,31 @@ class USFederalReserveRateReadingHandler extends DefaultHandler {
     private static final Map<String, CurrencyUnit> CURRENCIES_BY_NAME;
 
     static {
-        Map<String, CurrencyUnit> _currencyiesByName = new HashMap<>();
+        Map<String, CurrencyUnit> currencyiesByName = new HashMap<>();
         for (Currency currency : Currency.getAvailableCurrencies()) {
-            _currencyiesByName.put(currency.getDisplayName(Locale.ENGLISH),
+            currencyiesByName.put(currency.getDisplayName(Locale.ENGLISH),
                 Monetary.getCurrency(currency.getCurrencyCode()));
         }
-        _currencyiesByName.put("Brazil Real", Monetary.getCurrency("BRL"));
-        _currencyiesByName.put("Canada Dollar", Monetary.getCurrency("CAD"));
-        _currencyiesByName.put("China, P.R. Yuan", Monetary.getCurrency("CNY"));
-        _currencyiesByName.put("Denmark Krone", Monetary.getCurrency("DKK"));
-        _currencyiesByName.put("EMU member countries Euro", Monetary.getCurrency("EUR"));        
-        _currencyiesByName.put("India Rupee", Monetary.getCurrency("INR"));
-        _currencyiesByName.put("Japan Yen", Monetary.getCurrency("JPY"));
-        _currencyiesByName.put("Malaysia Ringgit", Monetary.getCurrency("MYR"));
-        _currencyiesByName.put("Mexico Peso", Monetary.getCurrency("MXN"));
-        _currencyiesByName.put("Norway Krone", Monetary.getCurrency("NOK"));
-        _currencyiesByName.put("South Africa Rand", Monetary.getCurrency("ZAR"));
-        _currencyiesByName.put("South Korea Won", Monetary.getCurrency("KRW"));
-        _currencyiesByName.put("Sri Lanka Rupee", Monetary.getCurrency("LKR"));
-        _currencyiesByName.put("Sweden Krona", Monetary.getCurrency("SEK"));
-        _currencyiesByName.put("Switzerland Franc", Monetary.getCurrency("CHF"));
-        _currencyiesByName.put("Thailand Baht", Monetary.getCurrency("THB"));
-        _currencyiesByName.put("Taiwan Dollar", Monetary.getCurrency("TWD"));           
-        _currencyiesByName.put("United Kingdom Pound", Monetary.getCurrency("GBP"));        
-        _currencyiesByName.put("Venezuela Bolivar", Monetary.getCurrency("VEF"));
-        CURRENCIES_BY_NAME = Collections.unmodifiableMap(_currencyiesByName);
+        currencyiesByName.put("Brazil Real", Monetary.getCurrency("BRL"));
+        currencyiesByName.put("Canada Dollar", Monetary.getCurrency("CAD"));
+        currencyiesByName.put("China, P.R. Yuan", Monetary.getCurrency("CNY"));
+        currencyiesByName.put("Denmark Krone", Monetary.getCurrency("DKK"));
+        currencyiesByName.put("EMU member countries Euro", Monetary.getCurrency("EUR"));        
+        currencyiesByName.put("India Rupee", Monetary.getCurrency("INR"));
+        currencyiesByName.put("Japan Yen", Monetary.getCurrency("JPY"));
+        currencyiesByName.put("Malaysia Ringgit", Monetary.getCurrency("MYR"));
+        currencyiesByName.put("Mexico Peso", Monetary.getCurrency("MXN"));
+        currencyiesByName.put("Norway Krone", Monetary.getCurrency("NOK"));
+        currencyiesByName.put("South Africa Rand", Monetary.getCurrency("ZAR"));
+        currencyiesByName.put("South Korea Won", Monetary.getCurrency("KRW"));
+        currencyiesByName.put("Sri Lanka Rupee", Monetary.getCurrency("LKR"));
+        currencyiesByName.put("Sweden Krona", Monetary.getCurrency("SEK"));
+        currencyiesByName.put("Switzerland Franc", Monetary.getCurrency("CHF"));
+        currencyiesByName.put("Thailand Baht", Monetary.getCurrency("THB"));
+        currencyiesByName.put("Taiwan Dollar", Monetary.getCurrency("TWD"));           
+        currencyiesByName.put("United Kingdom Pound", Monetary.getCurrency("GBP"));        
+        currencyiesByName.put("Venezuela Bolivar", Monetary.getCurrency("VEF"));
+        CURRENCIES_BY_NAME = Collections.unmodifiableMap(currencyiesByName);
     }
 
     /**
