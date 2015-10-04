@@ -31,7 +31,7 @@ public final class RoundedMoneyProducer implements MonetaryAmountProducer {
 
 	/**
 	 * Returns the {@link MonetaryAmountProducer} that creates {@link MonetaryAmount}
-	 * using the {@link RoundedMoney} implementation using {@link MonetaryOperators#rounding()}
+	 * using the {@link RoundedMoney} implementation using {@link ConversionOperators#rounding()}
 	 * as rounding operator
 	 * @see {@link RoundedMoneyProducer}
 	 * @return the rounded money producer

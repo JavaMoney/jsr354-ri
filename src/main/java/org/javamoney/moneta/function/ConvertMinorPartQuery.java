@@ -38,7 +38,7 @@ final class ConvertMinorPartQuery implements MonetaryQuery<Long> {
 
 	/**
 	 * Private constructor, there is only one instance of this class, accessible
-	 * calling {@link MonetaryOperators#minorUnits()} ()}.
+	 * calling {@link ConversionOperators#minorUnits()} ()}.
 	 */
 	ConvertMinorPartQuery() {
 	}

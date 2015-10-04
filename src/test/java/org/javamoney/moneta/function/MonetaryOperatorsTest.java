@@ -305,30 +305,5 @@ public class MonetaryOperatorsTest {
 		assertEquals(result.getCurrency(), euro);
 		assertEquals(Double.valueOf(2.3554), result.getNumber().doubleValue());
 	}
-	//
-	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldReturnErrorWhenExchangeCurrencyIsNull() {
-		MonetaryOperators.exchange(null);
-	}
-
-	@Test
-	public void shouldExchangeCurrencyPositiveValue() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-		MonetaryAmount money = Money.parse("EUR 2.35");
-		MonetaryAmount result = MonetaryOperators.exchange(real).apply(money);
-		assertNotNull(result);
-		assertEquals(result.getCurrency(), real);
-		assertEquals(Double.valueOf(2.35), result.getNumber().doubleValue());
-	}
-
-	@Test
-	public void shouldExchangeCurrencyNegativeValue() {
-		CurrencyUnit real = Monetary.getCurrency("BRL");
-		MonetaryAmount money = Money.parse("BHD -1.345");
-		MonetaryAmount result = MonetaryOperators.exchange(real).apply(money);
-		assertNotNull(result);
-		assertEquals(result.getCurrency(), real);
-		assertEquals(Double.valueOf(-1.345), result.getNumber().doubleValue());
-	}
 }
 

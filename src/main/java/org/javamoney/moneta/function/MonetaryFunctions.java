@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2012, 2015, Anatole Tresch, Werner Keil and others by the @author tag.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.javamoney.moneta.function;
 
 import java.util.Comparator;
@@ -24,6 +39,7 @@ import org.javamoney.moneta.spi.MoneyUtils;
  *
  * @author otaviojava
  * @author anatole
+ * @author keilw
  */
 public final class MonetaryFunctions {
 
@@ -49,21 +65,6 @@ public final class MonetaryFunctions {
 		Supplier<MonetarySummaryStatistics> supplier = () -> new DefaultMonetarySummaryStatistics(currencyUnit);
 		return Collector.of(supplier, MonetarySummaryStatistics::accept, MonetarySummaryStatistics::combine);
     }
-
-	/**
-	 * of the summary of the MonetaryAmount
-	 * @param currencyUnit
-	 *            the target {@link javax.money.CurrencyUnit}
-	 * @return the MonetarySummaryStatistics
-	 */
-	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
-			CurrencyUnit currencyUnit, ExchangeRateProvider provider) {
-
-		Supplier<MonetarySummaryStatistics> supplier = () -> new ExchangeRateMonetarySummaryStatistics(
-				currencyUnit, provider);
-		return Collector.of(supplier, MonetarySummaryStatistics::accept,
-				MonetarySummaryStatistics::combine);
-	}
 
     /**
      * of MonetaryAmount group by MonetarySummary

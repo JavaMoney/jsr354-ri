@@ -15,7 +15,7 @@ import javax.money.MonetaryQuery;
  * this class.
  *
  * @author Anatole Tresch
- * @deprecated use {@link MonetaryOperators} or {@link MonetaryQuery} instead.
+ * @deprecated use {@link ConversionOperators} or {@link MonetaryQuery} instead.
  */
 @Deprecated
 public final class MonetaryUtil {

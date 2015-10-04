@@ -1,8 +1,8 @@
-package org.javamoney.moneta.function;
+package org.javamoney.moneta.convert;
 
-import static org.javamoney.moneta.function.StreamFactory.BRAZILIAN_REAL;
-import static org.javamoney.moneta.function.StreamFactory.DOLLAR;
-import static org.javamoney.moneta.function.StreamFactory.EURO;
+import static org.javamoney.moneta.convert.ConversionConstants.BRAZILIAN_REAL;
+import static org.javamoney.moneta.convert.ConversionConstants.DOLLAR;
+import static org.javamoney.moneta.convert.ConversionConstants.EURO;
 
 import java.util.Objects;
 
@@ -14,6 +14,7 @@ import javax.money.convert.ExchangeRate;
 import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.function.MonetaryFunctions;
 
 /**
  * This class mock the exchange rate to test some {@link MonetaryFunctions} that

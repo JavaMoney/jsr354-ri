@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.function;
+package org.javamoney.moneta.convert;
 
 import java.util.Objects;
 
@@ -21,6 +21,9 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
+
+import org.javamoney.moneta.function.DefaultMonetarySummaryStatistics;
+import org.javamoney.moneta.function.MonetarySummaryStatistics;
 
 class ExchangeRateMonetarySummaryStatistics  extends DefaultMonetarySummaryStatistics {
 

@@ -1,4 +1,4 @@
-package org.javamoney.moneta.function;
+package org.javamoney.moneta.convert;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
@@ -9,6 +9,7 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.convert.ExchangeCurrencyOperator;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 

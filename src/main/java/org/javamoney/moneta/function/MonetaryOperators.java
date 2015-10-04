@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2015, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -74,7 +74,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.0");
-	 *MonetaryAmount result = MonetaryOperators.reciprocal().apply(money);//EUR 0.5
+	 *MonetaryAmount result = ConversionOperators.reciprocal().apply(money);//EUR 0.5
 	 *}
 	 *</pre>
 	 * @return the reciprocal part as {@link MonetaryOperator}
@@ -92,7 +92,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR EUR 2.35");
-	 *MonetaryAmount result = MonetaryOperators.permil(BigDecimal.TEN).apply(money);//EUR 0.0235
+	 *MonetaryAmount result = ConversionOperators.permil(BigDecimal.TEN).apply(money);//EUR 0.0235
 	 *}
 	 *</pre>
 	 * @return the permil as {@link MonetaryOperator}
@@ -102,10 +102,10 @@ public final class MonetaryOperators {
     }
 
     /**
-     * Returns the {@link MonetaryOperators#percent(BigDecimal)} converting
-     * this number to {@link BigDecimal} and using the {@link MonetaryOperators#DEFAULT_MATH_CONTEXT}
+     * Returns the {@link ConversionOperators#percent(BigDecimal)} converting
+     * this number to {@link BigDecimal} and using the {@link ConversionOperators#DEFAULT_MATH_CONTEXT}
      * @param number to be converted to {@link BigDecimal}
-     * @see {@link MonetaryOperators#permil(BigDecimal)}
+     * @see {@link ConversionOperators#permil(BigDecimal)}
      * @return the permil {@link MonetaryOperator}
      */
     public static MonetaryOperator permil(Number number) {
@@ -114,11 +114,11 @@ public final class MonetaryOperators {
 
 
     /**
-     * Returns the {@link MonetaryOperators#percent(BigDecimal)} converting
+     * Returns the {@link ConversionOperators#percent(BigDecimal)} converting
      * this number to {@link BigDecimal} and using the {@link MathContext} in parameters
      * @param number to be converted to {@link BigDecimal}
      * @param mathContext the mathContext to be used
-     * @see {@link MonetaryOperators#permil(BigDecimal)}
+     * @see {@link ConversionOperators#permil(BigDecimal)}
      * @return the permil {@link MonetaryOperator}
      */
     public static MonetaryOperator permil(Number number, MathContext mathContext) {
@@ -134,7 +134,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 200.0");
-	 *MonetaryAmount result = MonetaryOperators.percent(BigDecimal.TEN).apply(money);//EUR 20.0
+	 *MonetaryAmount result = ConversionOperators.percent(BigDecimal.TEN).apply(money);//EUR 20.0
 	 *}
 	 *</pre>
 	 * @param decimal the value to percent
@@ -147,7 +147,7 @@ public final class MonetaryOperators {
     /**
      * Gets the percentage of the amount.
      * @param number to be used in percent
-     * @see {@link MonetaryOperators#percent(BigDecimal)}
+     * @see {@link ConversionOperators#percent(BigDecimal)}
      * @return the percent of {@link MonetaryOperator}
      */
     public static MonetaryOperator percent(Number number) {
@@ -164,7 +164,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.35");
-	 *MonetaryAmount result = MonetaryOperators.minorPart().apply(money);//EUR 0.35
+	 *MonetaryAmount result = ConversionOperators.minorPart().apply(money);//EUR 0.35
 	 *}
 	 *</pre>
 	 * @return the minor part as {@link MonetaryOperator}
@@ -183,7 +183,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.35");
-	 *MonetaryAmount result = MonetaryOperators.majorPart().apply(money);//EUR 2.0
+	 *MonetaryAmount result = ConversionOperators.majorPart().apply(money);//EUR 2.0
 	 *}
 	 *</pre>
 	 * @return the major part as {@link MonetaryOperator}
@@ -202,7 +202,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.355432");
-	 *MonetaryAmount result = MonetaryOperators.rounding().apply(money);//EUR 2.36
+	 *MonetaryAmount result = ConversionOperators.rounding().apply(money);//EUR 2.36
 	 *}
 	 *</pre>
 	 * @return the major part as {@link MonetaryOperator}
@@ -221,7 +221,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.355432");
-	 *MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN).apply(money);//EUR 2.35
+	 *MonetaryAmount result = ConversionOperators.rounding(RoundingMode.HALF_EVEN).apply(money);//EUR 2.35
 	 *}
 	 *</pre>
 	 * @param roundingMode rounding to be used
@@ -241,7 +241,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.355432");
-	 *MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN, 3).apply(money);//EUR 2.352
+	 *MonetaryAmount result = ConversionOperators.rounding(RoundingMode.HALF_EVEN, 3).apply(money);//EUR 2.352
 	 *}
 	 *</pre>
 	 * @param roundingMode rounding to be used
@@ -262,7 +262,7 @@ public final class MonetaryOperators {
 	 *<pre>
 	 *{@code
 	 *MonetaryAmount money = Money.parse("EUR 2.355432");
-	 *MonetaryAmount result = MonetaryOperators.rounding(2).apply(money);//EUR 2.35
+	 *MonetaryAmount result = ConversionOperators.rounding(2).apply(money);//EUR 2.35
 	 *}
 	 *</pre>
 	 * @param roundingMode rounding to be used
@@ -270,27 +270,5 @@ public final class MonetaryOperators {
 	 */
 	public static MonetaryOperator rounding(int scale) {
 		return new RoudingMonetaryAmountOperator(RoudingMonetaryAmountOperator.DEFAULT_ROUDING_MONETARY_AMOUNT, scale);
-	}
-
-	/**
-	 * Do exchange of currency, in other words, create the monetary amount with the
-	 * same value but with currency different.
-	 * <p>
-	 * For example, 'EUR 2.35', using the currency 'USD' as exchange parameter, will return 'USD 2.35',
-	 * and 'BHD -1.345', using the currency 'USD' as exchange parameter, will return 'BHD -1.345'.
-	 * <p>
-	 *<pre>
-	 *{@code
-	 *Currency real = Monetary.getCurrency("BRL");
-	 *MonetaryAmount money = Money.parse("EUR 2.355");
-	 *MonetaryAmount result = MonetaryOperators.exchangeCurrency(real).apply(money);//BRL 2.355
-	 *}
-	 *</pre>
-	 * @param roundingMode rounding to be used
-	 * @return the major part as {@link MonetaryOperator}
-	 * @since 1.0.1
-	 */
-	public static MonetaryOperator exchange(CurrencyUnit currencyUnit){
-		return new ExchangeCurrencyOperator(Objects.requireNonNull(currencyUnit));
 	}
 }

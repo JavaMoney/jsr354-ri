@@ -1,12 +1,12 @@
-package org.javamoney.moneta.function;
+package org.javamoney.moneta.convert;
 
 import static org.javamoney.moneta.function.MonetaryFunctions.groupBySummarizingMonetary;
-import static org.javamoney.moneta.function.MonetaryFunctions.isCurrency;
 import static org.javamoney.moneta.function.MonetaryFunctions.max;
 import static org.javamoney.moneta.function.MonetaryFunctions.min;
 import static org.javamoney.moneta.function.MonetaryFunctions.sum;
-import static org.javamoney.moneta.function.MonetaryFunctions.summarizingMonetary;
-import static org.javamoney.moneta.function.StreamFactory.BRAZILIAN_REAL;
+import static org.javamoney.moneta.convert.ConversionConstants.BRAZILIAN_REAL;
+import static org.javamoney.moneta.convert.ConversionConstants.DOLLAR;
+import static org.javamoney.moneta.convert.ConversionConstants.EURO;
 import static org.javamoney.moneta.function.StreamFactory.currencies;
 import static org.javamoney.moneta.function.StreamFactory.currenciesToSummary;
 import static org.javamoney.moneta.function.StreamFactory.streamCurrencyDifferent;
@@ -21,7 +21,15 @@ import java.util.stream.Stream;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryException;
+import javax.money.convert.ExchangeRateProvider;
+
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.convert.ExchangeRateProviderMock;
+import org.javamoney.moneta.function.GroupMonetarySummaryStatistics;
+import org.javamoney.moneta.function.MonetaryFunctions;
+import org.javamoney.moneta.function.MonetarySummaryStatistics;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -29,15 +37,28 @@ import org.testng.annotations.Test;
  * just the aggregator methods
  *
  * @author otaviojava
- * @author keilw
  */
-public class MonetaryFunctionsAggregatorTest {
+public class ConversionAggregatorTest {
+
+	private ExchangeRateProvider provider;
+	
+    @BeforeMethod
+    public void init() {
+        provider = new ExchangeRateProviderMock();
+    }
 
     @Test
     public void shouldSumCorrectly() {
         Stream<MonetaryAmount> stream = streamNormal();
         MonetaryAmount sum = stream.reduce(sum()).get();
         Assert.assertTrue(sum.getNumber().intValue() == 20);
+    }
+
+    @Test
+    public void shouldSumExchangeCorrectly() {
+        Stream<MonetaryAmount> stream = currencies();
+        MonetaryAmount sum = stream.reduce(sum(provider, DOLLAR)).get();
+        Assert.assertTrue(sum.getNumber().intValue() > 20);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -59,6 +80,13 @@ public class MonetaryFunctionsAggregatorTest {
         Assert.assertTrue(min.getNumber().intValue() == 0);
     }
 
+    @Test
+    public void shouldMinExchangeCorretly() {
+        Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO),
+                Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
+        MonetaryAmount min = stream.reduce(min(provider)).get();
+        Assert.assertEquals(Money.of(9, BRAZILIAN_REAL), min);
+    }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void shouldMinWithNPEWhenAnElementIsNull() {
@@ -73,11 +101,12 @@ public class MonetaryFunctionsAggregatorTest {
     }
 
     @Test
-    public void shouldMaxCorretly() {
-        Stream<MonetaryAmount> stream = StreamFactory.streamNormal();
-        MonetaryAmount max = stream.reduce(max()).get();
-        Assert.assertTrue(max.getNumber().intValue() == 10);
+    public void shouldMaxExchangeCorrectly() {
+        Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO), Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
+        MonetaryAmount max = stream.reduce(max(provider)).get();
+        Assert.assertEquals(Money.of(7, EURO), max);
     }
+
 
     @Test(expectedExceptions = NullPointerException.class)
     public void shouldMaxWithNPEWhenAnElementIsNull() {
@@ -97,24 +126,17 @@ public class MonetaryFunctionsAggregatorTest {
                 MonetaryFunctions.groupByCurrencyUnit());
         assertEquals(3, groupBy.entrySet().size());
         assertEquals(3, groupBy.get(BRAZILIAN_REAL).size());
-        assertEquals(3, groupBy.get(StreamFactory.DOLLAR).size());
-        assertEquals(3, groupBy.get(StreamFactory.EURO).size());
+        assertEquals(3, groupBy.get(DOLLAR).size());
+        assertEquals(3, groupBy.get(EURO).size());
     }
 
     @Test
-    public void summarizingMonetaryTest() {
+    public void summarizingMonetaryExchangeTest() {
+        MonetarySummaryStatistics summary = currenciesToSummary().collect(
+                ConversionOperators.summarizingMonetary(BRAZILIAN_REAL,
+                        provider));
 
-        MonetarySummaryStatistics summary = currenciesToSummary()
-                .filter(
-                        isCurrency(BRAZILIAN_REAL)).collect(
-                        summarizingMonetary(BRAZILIAN_REAL));
-
-        assertEquals(8L, summary.getCount());
-        assertEquals(0L, summary.getMin().getNumber().longValue());
-        assertEquals(10L, summary.getMax().getNumber().longValue());
-        assertEquals(16L, summary.getSum().getNumber().longValue());
-        assertEquals(2L, summary.getAverage().getNumber().longValue());
-
+        assertEquals(10L, summary.getCount());
     }
 
     @Test
