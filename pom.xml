@@ -10,7 +10,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
@@ -52,6 +51,7 @@
 
 		<!-- dependency versions -->
 		<testng.version>6.8.5</testng.version>
+		<revapi.version>0.5.2</revapi.version>
 		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 
@@ -83,7 +83,7 @@
 	</issueManagement>
 
 	<prerequisites>
-		<maven>3.0.4</maven>
+		<maven>3.1.1</maven>
 	</prerequisites>
 
 	<scm>
@@ -404,12 +404,50 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+                    <groupId>org.revapi</groupId>
+                    <artifactId>revapi-maven-plugin</artifactId>
+                    <version>0.3.10</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.revapi</groupId>
+                            <artifactId>revapi-java</artifactId>
+                            <version>${revapi.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>api-check</id>
+                            <goals><goal>check</goal></goals>
+                            <phase>verify</phase>
+                        </execution>
+                        <execution>
+                            <id>api-report</id>
+                            <goals><goal>report</goal></goals>
+                            <phase>site</phase>
+                        </execution>
+                    </executions>
+                </plugin>
 			</plugins>
 		</pluginManagement>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.revapi</groupId>
+				<artifactId>revapi-maven-plugin</artifactId>
+				<configuration>
+                    <oldArtifacts>
+                        <artifact>${project.groupId}:${project.artifactId}:1.0</artifact>
+                    </oldArtifacts>
+                    <newArtifacts>
+                        <artifact>BUILD</artifact>
+                    </newArtifacts>
+                    <failSeverity>nonBreaking</failSeverity>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
