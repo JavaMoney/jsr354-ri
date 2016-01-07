@@ -405,29 +405,65 @@
 					</executions>
 				</plugin>
 				<plugin>
-                    <groupId>org.revapi</groupId>
-                    <artifactId>revapi-maven-plugin</artifactId>
-                    <version>0.3.10</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.revapi</groupId>
-                            <artifactId>revapi-java</artifactId>
-                            <version>${revapi.version}</version>
-                        </dependency>
-                    </dependencies>
-                    <executions>
-                        <execution>
-                            <id>api-check</id>
-                            <goals><goal>check</goal></goals>
-                            <phase>verify</phase>
-                        </execution>
-                        <execution>
-                            <id>api-report</id>
-                            <goals><goal>report</goal></goals>
-                            <phase>site</phase>
-                        </execution>
-                    </executions>
-                </plugin>
+					<groupId>com.github.siom79.japicmp</groupId>
+					<artifactId>japicmp-maven-plugin</artifactId>
+					<version>0.6.2</version>
+					<configuration>
+						<oldVersion>
+							<dependency>
+								<groupId>${project.groupId}</groupId>
+								<artifactId>${project.artifactId}</artifactId>
+								<version>1.0</version>
+								<type>jar</type>
+							</dependency>
+						</oldVersion>
+						<newVersion>
+							<file>
+								<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+							</file>
+						</newVersion>
+						<parameter>
+							<onlyModified>false</onlyModified>
+							<includes>
+								<include>org.javamoney.moneta</include>
+								<include>org.javamoney.moneta.convert</include>
+								<include>org.javamoney.moneta.format</include>
+								<include>org.javamoney.moneta.function</include>
+								<include>org.javamoney.moneta.spi</include>
+							</includes>
+							<!--<excludes>-->
+							<!--<exclude>package.to.exclude</exclude>-->
+							<!--</excludes>-->
+							<accessModifier>protected</accessModifier>
+							<breakBuildOnModifications>true</breakBuildOnModifications>
+							<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+							<onlyBinaryIncompatible>false</onlyBinaryIncompatible>
+							<includeSynthetic>false</includeSynthetic>
+							<ignoreMissingClasses>false</ignoreMissingClasses>
+							<skipPomModules>true</skipPomModules>
+							<!--<htmlStylesheet>path/to/stylesheet.css</htmlStylesheet>-->
+							<htmlTitle>JSR 354 - Java 8 RI Compatibility Report</htmlTitle>
+							<noAnnotations>false</noAnnotations>
+							<ignoreNonResolvableArtifacts>false</ignoreNonResolvableArtifacts>
+						</parameter>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.commons</groupId>
+								<artifactId>commons-math3</artifactId>
+								<version>3.4</version>
+							</dependency>
+						</dependencies>
+						<skip>false</skip>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>cmp</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		
@@ -437,17 +473,8 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.revapi</groupId>
-				<artifactId>revapi-maven-plugin</artifactId>
-				<configuration>
-                    <oldArtifacts>
-                        <artifact>${project.groupId}:${project.artifactId}:1.0</artifact>
-                    </oldArtifacts>
-                    <newArtifacts>
-                        <artifact>BUILD</artifact>
-                    </newArtifacts>
-                    <failSeverity>nonBreaking</failSeverity>
-				</configuration>
+				<groupId>com.github.siom79.japicmp</groupId>
+				<artifactId>japicmp-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
