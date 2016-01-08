@@ -25,6 +25,9 @@ import javax.money.convert.ExchangeRateProvider;
 import org.javamoney.moneta.function.DefaultMonetarySummaryStatistics;
 import org.javamoney.moneta.function.MonetarySummaryStatistics;
 
+/**
+ * Summary statistics.
+ */
 class ExchangeRateMonetarySummaryStatistics  extends DefaultMonetarySummaryStatistics {
 
 	private final ExchangeRateProvider provider;

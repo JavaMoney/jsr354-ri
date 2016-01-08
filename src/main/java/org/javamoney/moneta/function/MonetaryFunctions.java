@@ -56,7 +56,7 @@ public final class MonetaryFunctions {
     }
 
     /**
-     * of the summary of the MonetaryAmount
+     * Creates a the summary of MonetaryAmounts.
      * @param currencyUnit the target {@link javax.money.CurrencyUnit}
      * @return the MonetarySummaryStatistics
      */
@@ -65,6 +65,20 @@ public final class MonetaryFunctions {
 		Supplier<MonetarySummaryStatistics> supplier = () -> new DefaultMonetarySummaryStatistics(currencyUnit);
 		return Collector.of(supplier, MonetarySummaryStatistics::accept, MonetarySummaryStatistics::combine);
     }
+
+	/**
+	 * reates a the summary of MonetaryAmounts.
+	 * @param currencyUnit the target {@link javax.money.CurrencyUnit}
+	 * @param provider the rate provider
+     * @return the MonetarySummaryStatistics
+	 * @deprecated Use #summarizingMonetary(CurrencyUnit) instead of.
+     */
+	@Deprecated
+	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
+			CurrencyUnit currencyUnit,javax.money.convert.ExchangeRateProvider provider){
+		// TODO implement method here
+		return summarizingMonetary(currencyUnit);
+	}
 
     /**
      * of MonetaryAmount group by MonetarySummary
@@ -99,6 +113,32 @@ public final class MonetaryFunctions {
 					.getCurrency());
 			return m1.compareTo(conversion.apply(m2));
 		};
+	}
+
+	/**
+	 * comparator to sort the {@link MonetaryAmount} considering the
+	 * {@link ExchangeRate}
+	 * @param provider the rate provider to be used.
+	 * @return the sort of {@link MonetaryAmount} using {@link ExchangeRate}
+	 * @deprecated call #sortValuable instead of.
+	 */
+	@Deprecated
+	public static Comparator<? super MonetaryAmount> sortValiable(final ExchangeRateProvider provider) {
+		return sortValuable(provider);
+	}
+
+	/**
+	 * Descending order of
+	 * {@link MonetaryFunctions#sortValuable(ExchangeRateProvider)}
+	 * @param provider the rate provider to be used.
+	 * @return the Descending order of
+	 *         {@link MonetaryFunctions#sortValuable(ExchangeRateProvider)}
+	 * @deprecated Use #sortValiableDesc instead of.
+	 */
+	@Deprecated
+	public static Comparator<? super MonetaryAmount> sortValiableDesc(
+			final ExchangeRateProvider provider) {
+		return sortValuableDesc(provider);
 	}
 
 	/**
