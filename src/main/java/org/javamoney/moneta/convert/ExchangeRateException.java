@@ -24,6 +24,8 @@ import javax.money.MonetaryException;
 @Deprecated
 public class ExchangeRateException extends MonetaryException{
 
+    private static final long serialVersionUID = 1L;
+
     public ExchangeRateException(String message) {
         super(message);
     }

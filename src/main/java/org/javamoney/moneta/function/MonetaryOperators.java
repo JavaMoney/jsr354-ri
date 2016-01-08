@@ -102,10 +102,10 @@ public final class MonetaryOperators {
     }
 
     /**
-     * Returns the {@link ConversionOperators#percent(BigDecimal)} converting
-     * this number to {@link BigDecimal} and using the {@link ConversionOperators#DEFAULT_MATH_CONTEXT}
+     * Returns the {@link #percent(BigDecimal)} converting
+     * this number to {@link BigDecimal} and using the {@link org.javamoney.moneta.convert.ConversionOperators#DEFAULT_MATH_CONTEXT}
      * @param number to be converted to {@link BigDecimal}
-     * @see {@link ConversionOperators#permil(BigDecimal)}
+     * @see {@link #permil(BigDecimal)}
      * @return the permil {@link MonetaryOperator}
      */
     public static MonetaryOperator permil(Number number) {
@@ -114,11 +114,11 @@ public final class MonetaryOperators {
 
 
     /**
-     * Returns the {@link ConversionOperators#percent(BigDecimal)} converting
+     * Returns the {@link #percent(BigDecimal)} converting
      * this number to {@link BigDecimal} and using the {@link MathContext} in parameters
      * @param number to be converted to {@link BigDecimal}
      * @param mathContext the mathContext to be used
-     * @see {@link ConversionOperators#permil(BigDecimal)}
+     * @see {@link #permil(BigDecimal)}
      * @return the permil {@link MonetaryOperator}
      */
     public static MonetaryOperator permil(Number number, MathContext mathContext) {
@@ -147,7 +147,7 @@ public final class MonetaryOperators {
     /**
      * Gets the percentage of the amount.
      * @param number to be used in percent
-     * @see {@link ConversionOperators#percent(BigDecimal)}
+     * @see {@link #percent(BigDecimal)}
      * @return the percent of {@link MonetaryOperator}
      */
     public static MonetaryOperator percent(Number number) {
@@ -265,10 +265,33 @@ public final class MonetaryOperators {
 	 *MonetaryAmount result = ConversionOperators.rounding(2).apply(money);//EUR 2.35
 	 *}
 	 *</pre>
-	 * @param roundingMode rounding to be used
+	 * @param scale scale to be used
 	 * @return the major part as {@link MonetaryOperator}
 	 */
 	public static MonetaryOperator rounding(int scale) {
 		return new RoudingMonetaryAmountOperator(RoudingMonetaryAmountOperator.DEFAULT_ROUDING_MONETARY_AMOUNT, scale);
+	}
+
+	/**
+	 * Do exchange of currency, in other words, create the monetary amount with the
+	 * same value but with currency different.
+	 * <p>
+	 * For example, 'EUR 2.35', using the currency 'USD' as exchange parameter, will return 'USD 2.35',
+	 * and 'BHD -1.345', using the currency 'USD' as exchange parameter, will return 'BHD -1.345'.
+	 * <p>
+	 *<pre>
+	 *{@code
+	 *Currency real = Monetary.getCurrency("BRL");
+	 *MonetaryAmount money = Money.parse("EUR 2.355");
+	 *MonetaryAmount result = MonetaryOperators.exchangeCurrency(real).apply(money);//BRL 2.355
+	 *}
+	 *</pre>
+	 * @param currencyUnit currency to be used
+	 * @return the major part as {@link MonetaryOperator}
+	 * @deprecated
+	 */
+	@Deprecated
+	public static MonetaryOperator exchangeCurrency(CurrencyUnit currencyUnit){
+		return new ExchangeCurrencyOperator(Objects.requireNonNull(currencyUnit));
 	}
 }

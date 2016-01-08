@@ -431,11 +431,14 @@
 								<include>org.javamoney.moneta.function</include>
 								<include>org.javamoney.moneta.spi</include>
 							</includes>
-							<!--<excludes>-->
-							<!--<exclude>package.to.exclude</exclude>-->
-							<!--</excludes>-->
+							<excludes>
+								<exclude>org.javamoney.moneta.internal.convert</exclude>
+								<exclude>org.javamoney.moneta.internal.format</exclude>
+								<exclude>org.javamoney.moneta.internal.loader</exclude>
+								<exclude>org.javamoney.moneta.internal</exclude>
+							</excludes>
 							<accessModifier>protected</accessModifier>
-							<breakBuildOnModifications>true</breakBuildOnModifications>
+							<breakBuildOnModifications>false</breakBuildOnModifications>
 							<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
 							<onlyBinaryIncompatible>false</onlyBinaryIncompatible>
 							<includeSynthetic>false</includeSynthetic>
