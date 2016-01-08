@@ -13,17 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.function;
+package org.javamoney.moneta;
 
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryOperator;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
-
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
-
-import org.javamoney.moneta.RoundedMoney;
 
 /**
  * <p>This implementation uses a scale and {@link RoundingMode} to does the rounding operations. The implementation will use the <b>scale</b>, in other words, the number of digits to the right of the decimal point</p>
@@ -40,7 +37,7 @@ import org.javamoney.moneta.RoundedMoney;
 * </pre>
  * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
- * @see {@link ScaleRoundedOperator#of(MathContext)}
+ * @see {@link ScaleRoundedOperator#of(int, RoundingMode)}
  * @see {@link RoundedMoney}
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#scale()}
@@ -60,8 +57,9 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 
 	/**
 	 * Creates the rounded Operator from scale and roundingMode
-	 * @param mathContext
-	 * @return the {@link MonetaryOperator} using the scale and {@link roundingMode} used in parameter
+	 * @param scale
+	 * @param roundingMode
+	 * @return the {@link MonetaryOperator} using the scale and {@code roundingMode} used in parameter
 	 * @throws NullPointerException when the {@link MathContext} is null
 	 * @see {@linkplain RoundingMode}
 	 */

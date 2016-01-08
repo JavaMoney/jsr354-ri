@@ -27,8 +27,10 @@ import org.javamoney.moneta.RoundedMoney;
  * The default implementation to {@link MonetaryRoundedFactory}, this implementation returns the {@link RoundedMoney}.
  * @see {@link MonetaryRoundedFactory#create(Number, CurrencyUnit)}
  * @author Otavio Santana
+ * @deprecated Do not use, access is only provided for backward compatibility and will be removed.
  */
-class DefaultMonetaryRoundedFactory implements MonetaryRoundedFactory {
+@Deprecated
+public class DefaultMonetaryRoundedFactory implements MonetaryRoundedFactory, org.javamoney.moneta.MonetaryRoundedFactory {
 
 	private final MonetaryOperator roundingOperator;
 

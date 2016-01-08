@@ -23,7 +23,9 @@ import javax.money.MonetaryOperator;
 
 /**
  * MonetaryOperator class that applies an exchange rate to an amount.
+ * @deprecated
  */
+@Deprecated
 public class ExchangeCurrencyOperator implements MonetaryOperator {
 	/** The target currency. */
 	private final CurrencyUnit currency;

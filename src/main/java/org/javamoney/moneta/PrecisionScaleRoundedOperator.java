@@ -13,21 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.function;
+package org.javamoney.moneta;
 
-import static java.util.Objects.requireNonNull;
-
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryOperator;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
+import static java.util.Objects.requireNonNull;
 
 /**
  * <p>This implementation uses a scale and {@link RoundingMode} and precision to does the rounding operations. The implementation will use both the <b>scale</b> and <b>precision</b>, in other words, the number of digits to the right of the decimal point and the number of digits.</p>
- * <p>The derived class will implements the {@link org.javamoney.moneta.RoundedMoney} with this rounding monetary operator</p>
+ * <p>The derived class will implements the {@link RoundedMoney} with this rounding monetary operator</p>
  *  <pre>
  *   {@code
  *     int scale = 3;
@@ -43,7 +42,7 @@ import javax.money.MonetaryOperator;
  * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
  * @see {@link PrecisionScaleRoundedOperator#of(int, MathContext)}
- * @see {@link org.javamoney.moneta.RoundedMoney}
+ * @see {@link RoundedMoney}
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#scale()}
  * @see {@link MathContext}

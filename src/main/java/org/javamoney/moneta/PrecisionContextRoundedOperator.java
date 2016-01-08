@@ -13,17 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.function;
+package org.javamoney.moneta;
 
+import javax.money.MonetaryAmount;
+import javax.money.MonetaryOperator;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
-
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
-
-import org.javamoney.moneta.RoundedMoney;
 
 /**
  * <p>This implementation uses a {@link MathContext} to does the rounding operations. The implementation will use the <b>precision</b>, in other words, the total number of digits in a number</p>
@@ -46,7 +43,9 @@ import org.javamoney.moneta.RoundedMoney;
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#precision()}
  * @since 1.0.1
+ * @deprecated Do not use, access is only provided for backward compatibility and will be removed.
  */
+@Deprecated
 public final class PrecisionContextRoundedOperator implements MonetaryOperator {
 
 	private final MathContext mathContext;
