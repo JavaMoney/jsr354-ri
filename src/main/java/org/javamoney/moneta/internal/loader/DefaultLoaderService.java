@@ -17,6 +17,7 @@ package org.javamoney.moneta.internal.loader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -202,6 +203,16 @@ public class DefaultLoaderService implements LoaderService {
                 break;
         }
         loadData(loadDataInformation.getResourceId());
+    }
+
+    @Override
+    public void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, LoaderListener loaderListener, URI backupResource, URI... resourceLocations) {
+        
+    }
+
+    @Override
+    public void registerData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, LoaderListener loaderListener, URI backupResource, URI... resourceLocations) {
+
     }
 
     @Override
