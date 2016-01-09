@@ -83,10 +83,12 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param currency the currency, not null.
      * @param number   the amount, not null.
      */
+    @Deprecated
     public RoundedMoney(Number number, CurrencyUnit currency, MonetaryOperator rounding) {
         this(number, currency, null, rounding);
     }
 
+    @Deprecated
     public RoundedMoney(Number number, CurrencyUnit currency, MathContext mathContext) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
@@ -98,7 +100,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         checkNumber(number);
         this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
     }
-
+    @Deprecated
     public RoundedMoney(Number number, CurrencyUnit currency, MonetaryContext context, MonetaryOperator rounding) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
@@ -162,6 +164,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param number   The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
+    @Deprecated
     public static RoundedMoney of(Number number, CurrencyUnit currency) {
         return new RoundedMoney(number, currency, (MonetaryOperator) null);
     }
