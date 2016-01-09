@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
@@ -45,6 +46,9 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      * The {@link ConversionContext} of this provider.
      */
     private final ProviderContext context;
+
+    @Deprecated
+    protected final Logger log = Logger.getLogger(getClass().getName());
 
     /**
      * Constructor.

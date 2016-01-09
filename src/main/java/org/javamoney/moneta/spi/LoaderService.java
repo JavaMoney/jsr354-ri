@@ -93,12 +93,12 @@ public interface LoaderService {
      * backed up by a classpath resource {@code backupResource}, reachable as
      * {@code dataId}.
      *
-     * @param resourceId        The unique identifier of the resource that must also be used
+     *resourceId        The unique identifier of the resource that must also be used
      *                          for accessing the resource, not {@code null}.
-     * @param resourceLocations The remote resource locations, not {@code null}.
-     * @param backupResource    The backup resource location in the classpath, not
+     *resourceLocations The remote resource locations, not {@code null}.
+     *backupResource    The backup resource location in the classpath, not
      *                          {@code null}.
-     * @param loaderListener    An (optional) LoaderListener to be registered.
+     *loaderListener    An (optional) LoaderListener to be registered.
      */
     void registerData(LoadDataInformation loadDataInformation);
 
@@ -107,14 +107,26 @@ public interface LoaderService {
      * backed up by a classpath resource {@code backupResource}, reachable as
      * {@code dataId} and (synchronously) loads the data.
      *
-     * @param resourceId        The unique identifier of the resource that must also be used
+     *resourceId        The unique identifier of the resource that must also be used
      *                          for accessing the resource, not {@code null}.
-     * @param resourceLocations The remote resource locations, not {@code null}.
-     * @param backupResource    The backup resource location in the classpath, not
+     * resourceLocations The remote resource locations, not {@code null}.
+     *backupResource    The backup resource location in the classpath, not
      *                          {@code null}.
-     * @param loaderListener    An (optional) LoaderListener to be registered.
+     *loaderListener    An (optional) LoaderListener to be registered.
      */
     void registerAndLoadData(LoadDataInformation loadDataInformation);
+
+    @Deprecated
+    void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy,
+                             Map<String, String> properties, LoaderListener loaderListener,
+                             URI backupResource,
+                             URI... resourceLocations);
+
+    @Deprecated
+    void registerData(String resourceId, UpdatePolicy updatePolicy,
+                      Map<String, String> properties, LoaderListener loaderListener,
+                      URI backupResource,
+                      URI... resourceLocations);
 
     /**
      * Get the {@link UpdatePolicy} in place for the given dataId.

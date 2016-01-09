@@ -15,28 +15,18 @@
  */
 package org.javamoney.moneta;
 
+import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
+import org.javamoney.moneta.internal.MoneyAmountBuilder;
+import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.javamoney.moneta.spi.MoneyUtils;
+
+import javax.money.*;
+import javax.money.format.MonetaryAmountFormat;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
-
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactory;
-import javax.money.MonetaryContext;
-import javax.money.Monetary;
-import javax.money.MonetaryException;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
-import javax.money.NumberValue;
-import javax.money.UnknownCurrencyException;
-import javax.money.format.MonetaryAmountFormat;
-
-import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
-import org.javamoney.moneta.internal.MoneyAmountBuilder;
-import org.javamoney.moneta.spi.DefaultNumberValue;
-import org.javamoney.moneta.spi.MoneyUtils;
 
 /**
  * Default immutable implementation of {@link MonetaryAmount} based
@@ -875,4 +865,38 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
             .of(ToStringMonetaryAmountFormatStyle.MONEY);
+
+    /**
+     * Just to don't break the compatibility.
+     * Don't use it
+     * @param number
+     */
+    @Deprecated
+    public static boolean isInfinityAndNotNaN(Number number) {
+        if (Double.class == number.getClass() || Float.class == number.getClass()) {
+            double dValue = number.doubleValue();
+            if (Double.isNaN(dValue)) {
+                throw new ArithmeticException("Not a valid input: NaN.");
+            } else if (Double.isInfinite(dValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * Just to don't break the compatibility.
+     * Don't use it
+     * @param number
+     */
+    @Deprecated
+    public static void checkNoInfinityOrNaN(Number number) {
+        if (Double.class == number.getClass() || Float.class == number.getClass()) {
+            double dValue = number.doubleValue();
+            if (Double.isNaN(dValue)) {
+                throw new ArithmeticException("Not a valid input: NaN.");
+            } else if (Double.isInfinite(dValue)) {
+                throw new ArithmeticException("Not a valid input: INFINITY: " + dValue);
+            }
+        }
+    }
 }
