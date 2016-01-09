@@ -16,6 +16,7 @@
 package org.javamoney.moneta.format;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -78,7 +79,9 @@ public class DefaultMonetaryAmountFormatSymbolsTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, currency);
 		monetaryAmountFormat.print(sb, money);
-		assertEquals(sb.toString(), "R$ 10,00");
+        String result = sb.toString();
+        assertTrue(result.contains("R$"));
+		assertTrue(result.contains("10,00"));
 	}
 
 	@Test
@@ -89,7 +92,9 @@ public class DefaultMonetaryAmountFormatSymbolsTest {
 	@Test
 	public void shouldQueryFromMonetaryAmount() throws IOException {
 		MonetaryAmount money = Money.of(10, currency);
-		assertEquals(monetaryAmountFormat.queryFrom(money), "R$ 10,00");
+        String result = monetaryAmountFormat.queryFrom(money);
+        assertTrue(result.contains("R$"));
+        assertTrue(result.contains("10,00"));
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
