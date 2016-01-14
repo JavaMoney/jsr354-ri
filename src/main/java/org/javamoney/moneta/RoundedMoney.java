@@ -272,7 +272,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
 
    /**
-    * Obtains an instance of {@code FastMoney} from an amount in minor units.
+    * Obtains an instance of {@code RoundedMoney} from an amount in minor units.
     * For example, {@code ofMinor(USD, 1234)} creates the instance {@code USD 12.34}.
     * @param currency  the currency, not null
     * @param amountMinor  the amount of money in the minor division of the currency
@@ -287,7 +287,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
    }
 
    /**
-    * Obtains an instance of {@code Money} from an amount in minor units.
+    * Obtains an instance of {@code RoundedMoney} from an amount in minor units.
     * For example, {@code ofMinor(USD, 1234, 2)} creates the instance {@code USD 12.34}.
     * @param currency  the currency, not null
     * @param amountMinor  the amount of money in the minor division of the currency
