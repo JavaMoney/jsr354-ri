@@ -269,7 +269,7 @@ Monetary amounts are the key abstraction of JSR 354. _Moneta_ hereby provides di
   and scale.
 * +FastMoney+ represents numeric representation that was optimized for speed. It represents a monetary amount only
   as a integral number of type +long+, hereby using a number scale of 100'000 (10^5).
-* +RoundedMoney+ finally provides an amount implementation thar is implicitly rounded after each operation.
+* +RoundedMoney+ finally provides an amount implementation that is implicitly rounded after each operation.
 
 ==== Choosing an Implementation
 
