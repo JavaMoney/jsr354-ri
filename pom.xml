@@ -15,7 +15,7 @@
 		<artifactId>javamoney-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<artifactId>moneta</artifactId>
 	<packaging>bundle</packaging>
 	<name>Moneta (JSR 354 RI)</name>
@@ -41,7 +41,7 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>1.0</jsr.version>
+		<jsr.version>1.0.1</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
@@ -282,6 +282,76 @@
 										<idseparator>-</idseparator>
 									</attributes>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>compareWithBP</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.siom79.japicmp</groupId>
+						<artifactId>japicmp-maven-plugin</artifactId>
+						<version>0.6.2</version>
+						<configuration>
+							<oldVersion>
+								<dependency>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}-bp</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+								</dependency>
+							</oldVersion>
+							<newVersion>
+								<file>
+									<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
+								</file>
+							</newVersion>
+							<parameter>
+								<onlyModified>false</onlyModified>
+								<includes>
+									<include>org.javamoney.moneta</include>
+									<include>org.javamoney.moneta.convert</include>
+									<include>org.javamoney.moneta.format</include>
+									<include>org.javamoney.moneta.function</include>
+									<include>org.javamoney.moneta.spi</include>
+								</includes>
+								<excludes>
+									<exclude>org.javamoney.moneta.internal.convert</exclude>
+									<exclude>org.javamoney.moneta.internal.format</exclude>
+									<exclude>org.javamoney.moneta.internal.loader</exclude>
+									<exclude>org.javamoney.moneta.internal</exclude>
+								</excludes>
+								<accessModifier>protected</accessModifier>
+								<breakBuildOnModifications>false</breakBuildOnModifications>
+								<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
+								<onlyBinaryIncompatible>false</onlyBinaryIncompatible>
+								<includeSynthetic>false</includeSynthetic>
+								<ignoreMissingClasses>false</ignoreMissingClasses>
+								<skipPomModules>true</skipPomModules>
+								<!--<htmlStylesheet>path/to/stylesheet.css</htmlStylesheet>-->
+								<htmlTitle>JSR 354 - Java 8 / Java 7 Compatibility/Comparison Report</htmlTitle>
+								<noAnnotations>false</noAnnotations>
+								<ignoreNonResolvableArtifacts>false</ignoreNonResolvableArtifacts>
+							</parameter>
+							<dependencies>
+								<dependency>
+									<groupId>org.apache.commons</groupId>
+									<artifactId>commons-math3</artifactId>
+									<version>3.4</version>
+								</dependency>
+							</dependencies>
+							<skip>false</skip>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>cmp</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
