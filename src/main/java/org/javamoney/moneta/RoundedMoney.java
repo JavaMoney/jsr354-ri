@@ -48,7 +48,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     /**
      * serialVersionUID.
      */
-    private static final long serialVersionUID = 366517590511294389L;
+    private static final long serialVersionUID = -6716367273185192901L;
     /**
      * The default {@link MonetaryContext} applied.
      */

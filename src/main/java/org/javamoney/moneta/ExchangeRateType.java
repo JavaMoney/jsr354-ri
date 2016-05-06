@@ -69,6 +69,8 @@ public enum ExchangeRateType implements ExchangeRateProviderSupplier {
             "IDENT",
             "Exchange rate rate with factor one for identical base/term currencies");
 
+    private static final long serialVersionUID = 7769702054407198263L;
+
     private final String type;
 
     private final String description;

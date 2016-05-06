@@ -182,4 +182,18 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
         return this;
     }
 
+    /**
+     * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
+     * depending the type given.
+     *
+     * @param num the number type
+     * @return the corresponding {@link BigDecimal}
+     * @Deprecated will be removed in next release
+     */
+    @Deprecated
+    protected static BigDecimal getBigDecimal(Number num) {
+        return ConvertBigDecimal.of(num);
+    }
+
+
 }

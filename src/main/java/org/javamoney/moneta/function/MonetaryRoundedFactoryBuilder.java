@@ -26,7 +26,7 @@ import java.math.RoundingMode;
  * @see {@link MonetaryRoundedFactoryBuilder#withPrecision(int)}
  * @since 1.0.1
  */
-final class MonetaryRoundedFactoryBuilder {
+public final class MonetaryRoundedFactoryBuilder {
 
 	private final RoundingMode roundingMode;
 

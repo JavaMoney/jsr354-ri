@@ -560,7 +560,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @throws NullPointerException          If the number is null
      * @throws java.lang.ArithmeticException If the number exceeds the capabilities of this class.
      */
-    private void checkNumber(Number number) {
+    protected void checkNumber(Number number) {
         Objects.requireNonNull(number, "Number is required.");
         // numeric check for overflow...
         if (number.longValue() > MAX_BD.longValue()) {

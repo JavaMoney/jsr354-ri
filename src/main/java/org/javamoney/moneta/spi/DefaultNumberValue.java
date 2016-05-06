@@ -207,6 +207,21 @@ public final class DefaultNumberValue extends NumberValue {
 		return ConvertNumberValue.ofExact(numberType, number);
 	}
 
+	/**
+	 * Creates a {@link BigDecimal} from the given {@link Number} doing the valid conversion
+	 * depending the type given.
+	 *
+	 * @param num
+	 *            the number type
+	 * @return the corresponding {@link BigDecimal}
+	 * @deprecated will be removed.
+	 */
+	@Deprecated
+	protected static BigDecimal getBigDecimal(Number num) {
+		return ConvertBigDecimal.of(num);
+	}
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
