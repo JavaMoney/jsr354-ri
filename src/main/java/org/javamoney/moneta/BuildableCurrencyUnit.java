@@ -113,9 +113,9 @@ final class BuildableCurrencyUnit implements CurrencyUnit, Comparable<CurrencyUn
         if (obj == this) {
             return true;
         }
-        if (obj instanceof BuildableCurrencyUnit) {
-            BuildableCurrencyUnit other = (BuildableCurrencyUnit) obj;
-            return Objects.equals(currencyCode, other.currencyCode);
+        if (obj instanceof CurrencyUnit) {
+            CurrencyUnit other = (CurrencyUnit) obj;
+            return Objects.equals(getCurrencyCode(), other.getCurrencyCode());
         }
         return false;
     }
