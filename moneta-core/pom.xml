@@ -13,34 +13,17 @@
 
 	<parent>
 		<groupId>org.javamoney</groupId>
-		<artifactId>javamoney-parent</artifactId>
-		<version>1.0</version>
+		<artifactId>moneta-parent</artifactId>
+        	<version>1.0.2-SNAPSHOT</version>
 	</parent>
-	<version>1.0.2-SNAPSHOT</version>
-	<artifactId>moneta-parent</artifactId>
-	<packaging>pom</packaging>
-	<name>Moneta Parent</name>
+	<groupId>org.javamoney.moneta</groupId>
+	<artifactId>moneta-core</artifactId>
+	<packaging>bundle</packaging>
+	<name>Moneta Core</name>
 	<url>http://javamoney.org</url>
 	<inceptionYear>2012</inceptionYear>
-	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with
-        Money and Currency.
-        This module implements JSR 354.
-    </description>
-
-	<organization>
-		<name>JavaMoney</name>
-		<url>http://javamoney.org</url>
-	</organization>
-
-	<licenses>
-		<license>
-			<name>Apache 2 License</name>
-			<comments>RI</comments>
-			<url>LICENSE.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
+	<description>The engine of moneta, this projects has implementations of MonetayAmount, CurrencyUnit, loaders, formatters and core parts of the SPI.</description>
+    
 	<properties>
 		<jsr.version>1.0</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
@@ -59,28 +42,6 @@
 		<system>Travis CI</system>
 		<url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
 	</ciManagement>
-
-	<mailingLists>
-		<mailingList>
-			<name>JSR354 Issues List</name>
-			<subscribe>https://java.net/projects/javamoney/lists</subscribe>
-			<unsubscribe>https://java.net/projects/javamoney/lists</unsubscribe>
-			<archive>https://java.net/projects/javamoney/lists/issues/archive</archive>
-			<post>issues@javamoney.java.net</post>
-		</mailingList>
-		<mailingList>
-			<name>JSR354 Public Mailing List</name>
-			<subscribe>https://java.net/projects/javamoney/lists</subscribe>
-			<unsubscribe>https://java.net/projects/javamoney/lists</unsubscribe>
-			<archive>http://java.net/projects/javamoney/lists/jcurrency_mail/archive</archive>
-			<post>jcurrency_mail@javamoney.java.net</post>
-		</mailingList>
-	</mailingLists>
-
-	<issueManagement>
-		<system>JIRA</system>
-		<url>http://java.net/jira/browse/JAVAMONEY</url>
-	</issueManagement>
 
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -301,25 +262,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.money</groupId>
-			<artifactId>money-api</artifactId>
-			<version>${jsr.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<version>1.2</version>
-		</dependency>
-	</dependencies>
-
 	<build>
 
 		<defaultGoal>install</defaultGoal>
@@ -411,18 +353,6 @@
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.4.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -462,14 +392,11 @@
 							<show>private</show>
 							<additionalparam>
 								-Xdoclint:none
-								-inferrel -inferdep -quiet -hide
-								java.*
+								-inferrel -inferdep -quiet -hide java.*
 								-collpackages java.util.*
-								-postfixpackage -nodefontname
-								Tahoma
+								-postfixpackage -nodefontname Tahoma
 								-nodefontsize 9
-								-nodefontpackagesize 7 -outputencoding
-								UTF-8
+								-nodefontpackagesize 7 -outputencoding UTF-8
 							</additionalparam>
 						</configuration>
 					</reportSet>
@@ -622,9 +549,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<modules>
-		<module>moneta-core</module>
-		<module>moneta-convert</module>
-		<module>moneta</module>
-	</modules>
 </project>
