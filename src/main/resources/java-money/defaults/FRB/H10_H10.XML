@@ -1,0 +1,2747 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:cb="http://www.cbwiki.net/wiki/index.php/Specification_1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/02/22-rdf-syntax-ns# rdf.xsd">
+
+  <channel rdf:about="http://www.federalreserve.gov/releases/H10">
+    <title>FRB:Data:G.5/H.10 - Foreign Exchange Rates:Exchange Rates</title>
+    <link>http://www.federalreserve.gov/releases/H10/about.htm</link>
+    <description>Daily rates of exchange of major currencies against the U.S. dollar</description>
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#1"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#2"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#3"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#4"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#5"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#6"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#7"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#8"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#9"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#10"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#11"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#12"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#13"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#14"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#15"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#16"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#17"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#18"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#19"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#20"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#21"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#22"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#23"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#24"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#25"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#26"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#27"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#28"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#29"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#30"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#31"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#32"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#33"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#34"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#35"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#36"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#37"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#38"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#39"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#40"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#41"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#42"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#43"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#44"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#45"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#46"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#47"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#48"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#49"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#50"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#51"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#52"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#53"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#54"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#55"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#56"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#57"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#58"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#59"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#60"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#61"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#62"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#63"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#64"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#65"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#66"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#67"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#68"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#69"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#70"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#71"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#72"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#73"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#74"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#75"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#76"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#77"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#78"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#79"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#80"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#81"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#82"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#83"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#84"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#85"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#86"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#87"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#88"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#89"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#90"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#91"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#92"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#93"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#94"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#95"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#96"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#97"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#98"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#99"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#100"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#101"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#102"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#103"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#104"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#105"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#106"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#107"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#108"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#109"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#110"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#111"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#112"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#113"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#114"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#115"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#116"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#117"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#118"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#119"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#120"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#121"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#122"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#123"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#124"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#125"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#126"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#127"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#128"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#129"/>
+        <rdf:li rdf:resource="http://www.federalreserve.gov/releases/H10#130"/>
+      </rdf:Seq>
+    </items>
+    <dc:language>en</dc:language>
+    <dc:date>2015-09-08T16:15:00-05:00</dc:date>
+    <dc:publisher>Board of Governors of the Federal Reserve</dc:publisher>
+  </channel>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#1">
+    <title>US: H10 120.0123 2015-08-31 FRB Broad currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#1</link>
+    <description>Broad currency index (Mar 73 = 100)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">120.0123</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Broad currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#2">
+    <title>US: H10 119.9099 2015-09-01 FRB Broad currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#2</link>
+    <description>Broad currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">119.9099</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Broad currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#3">
+    <title>US: H10 120.2527 2015-09-02 FRB Broad currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#3</link>
+    <description>Broad currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">120.2527</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Broad currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#4">
+    <title>US: H10 120.3003 2015-09-03 FRB Broad currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#4</link>
+    <description>Broad currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">120.3003</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Broad currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#5">
+    <title>US: H10 120.5715 2015-09-04 FRB Broad currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#5</link>
+    <description>Broad currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">120.5715</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Broad currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#6">
+    <title>US: H10 91.8180 2015-08-31 FRB Major currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#6</link>
+    <description>Major currency index (Mar 73 = 100)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">91.8180</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Major currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#7">
+    <title>US: H10 91.3640 2015-09-01 FRB Major currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#7</link>
+    <description>Major currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">91.3640</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Major currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#8">
+    <title>US: H10 91.7404 2015-09-02 FRB Major currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#8</link>
+    <description>Major currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">91.7404</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Major currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#9">
+    <title>US: H10 92.0274 2015-09-03 FRB Major currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#9</link>
+    <description>Major currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">92.0274</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Major currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#10">
+    <title>US: H10 92.0647 2015-09-04 FRB Major currency index (Mar 73 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#10</link>
+    <description>Major currency index (Mar 73 = 100)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1973_Mar_100">92.0647</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Major currency index (Mar 73 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#11">
+    <title>US: H10 149.8243 2015-08-31 FRB OITP currency index (Jan 97 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#11</link>
+    <description>OITP currency index (Jan 97 = 100)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1997_Jan_100">149.8243</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>OITP currency index (Jan 97 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#12">
+    <title>US: H10 150.1595 2015-09-01 FRB OITP currency index (Jan 97 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#12</link>
+    <description>OITP currency index (Jan 97 = 100)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1997_Jan_100">150.1595</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>OITP currency index (Jan 97 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#13">
+    <title>US: H10 150.4465 2015-09-02 FRB OITP currency index (Jan 97 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#13</link>
+    <description>OITP currency index (Jan 97 = 100)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1997_Jan_100">150.4465</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>OITP currency index (Jan 97 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#14">
+    <title>US: H10 150.1973 2015-09-03 FRB OITP currency index (Jan 97 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#14</link>
+    <description>OITP currency index (Jan 97 = 100)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1997_Jan_100">150.1973</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>OITP currency index (Jan 97 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#15">
+    <title>US: H10 150.7452 2015-09-04 FRB OITP currency index (Jan 97 = 100)</title>
+    <link>http://www.federalreserve.gov/releases/H10#15</link>
+    <description>OITP currency index (Jan 97 = 100)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Index:_1997_Jan_100">150.7452</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>OITP currency index (Jan 97 = 100)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#16">
+    <title>US: H10 0.7100 2015-08-31 FRB Australia Dollar (USD per AUD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#16</link>
+    <description>Australia Dollar (USD per AUD)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_AUD">0.7100</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Australia Dollar (USD per AUD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#17">
+    <title>US: H10 0.7036 2015-09-01 FRB Australia Dollar (USD per AUD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#17</link>
+    <description>Australia Dollar (USD per AUD)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_AUD">0.7036</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Australia Dollar (USD per AUD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#18">
+    <title>US: H10 0.7011 2015-09-02 FRB Australia Dollar (USD per AUD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#18</link>
+    <description>Australia Dollar (USD per AUD)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_AUD">0.7011</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Australia Dollar (USD per AUD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#19">
+    <title>US: H10 0.7025 2015-09-03 FRB Australia Dollar (USD per AUD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#19</link>
+    <description>Australia Dollar (USD per AUD)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_AUD">0.7025</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Australia Dollar (USD per AUD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#20">
+    <title>US: H10 0.6917 2015-09-04 FRB Australia Dollar (USD per AUD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#20</link>
+    <description>Australia Dollar (USD per AUD)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_AUD">0.6917</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Australia Dollar (USD per AUD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#21">
+    <title>US: H10 1.1194 2015-08-31 FRB EMU Members Euro (USD per EUR)</title>
+    <link>http://www.federalreserve.gov/releases/H10#21</link>
+    <description>EMU Members Euro (USD per EUR)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_EUR">1.1194</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>EMU Members Euro (USD per EUR)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#22">
+    <title>US: H10 1.1263 2015-09-01 FRB EMU Members Euro (USD per EUR)</title>
+    <link>http://www.federalreserve.gov/releases/H10#22</link>
+    <description>EMU Members Euro (USD per EUR)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_EUR">1.1263</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>EMU Members Euro (USD per EUR)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#23">
+    <title>US: H10 1.1242 2015-09-02 FRB EMU Members Euro (USD per EUR)</title>
+    <link>http://www.federalreserve.gov/releases/H10#23</link>
+    <description>EMU Members Euro (USD per EUR)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_EUR">1.1242</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>EMU Members Euro (USD per EUR)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#24">
+    <title>US: H10 1.1104 2015-09-03 FRB EMU Members Euro (USD per EUR)</title>
+    <link>http://www.federalreserve.gov/releases/H10#24</link>
+    <description>EMU Members Euro (USD per EUR)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_EUR">1.1104</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>EMU Members Euro (USD per EUR)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#25">
+    <title>US: H10 1.1117 2015-09-04 FRB EMU Members Euro (USD per EUR)</title>
+    <link>http://www.federalreserve.gov/releases/H10#25</link>
+    <description>EMU Members Euro (USD per EUR)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_EUR">1.1117</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>EMU Members Euro (USD per EUR)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#26">
+    <title>US: H10 0.6349 2015-08-31 FRB New Zealand Dollar (USD per NZD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#26</link>
+    <description>New Zealand Dollar (USD per NZD)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_NZD">0.6349</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>New Zealand Dollar (USD per NZD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#27">
+    <title>US: H10 0.6346 2015-09-01 FRB New Zealand Dollar (USD per NZD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#27</link>
+    <description>New Zealand Dollar (USD per NZD)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_NZD">0.6346</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>New Zealand Dollar (USD per NZD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#28">
+    <title>US: H10 0.6343 2015-09-02 FRB New Zealand Dollar (USD per NZD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#28</link>
+    <description>New Zealand Dollar (USD per NZD)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_NZD">0.6343</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>New Zealand Dollar (USD per NZD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#29">
+    <title>US: H10 0.6400 2015-09-03 FRB New Zealand Dollar (USD per NZD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#29</link>
+    <description>New Zealand Dollar (USD per NZD)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_NZD">0.6400</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>New Zealand Dollar (USD per NZD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#30">
+    <title>US: H10 0.6280 2015-09-04 FRB New Zealand Dollar (USD per NZD)</title>
+    <link>http://www.federalreserve.gov/releases/H10#30</link>
+    <description>New Zealand Dollar (USD per NZD)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_NZD">0.6280</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>New Zealand Dollar (USD per NZD)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#31">
+    <title>US: H10 1.5363 2015-08-31 FRB United Kingdom Pound (USD per GBP)</title>
+    <link>http://www.federalreserve.gov/releases/H10#31</link>
+    <description>United Kingdom Pound (USD per GBP)</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="0.01" units="Currency:_Per_GBP">1.5363</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>United Kingdom Pound (USD per GBP)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#32">
+    <title>US: H10 1.5341 2015-09-01 FRB United Kingdom Pound (USD per GBP)</title>
+    <link>http://www.federalreserve.gov/releases/H10#32</link>
+    <description>United Kingdom Pound (USD per GBP)</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="0.01" units="Currency:_Per_GBP">1.5341</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>United Kingdom Pound (USD per GBP)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#33">
+    <title>US: H10 1.5310 2015-09-02 FRB United Kingdom Pound (USD per GBP)</title>
+    <link>http://www.federalreserve.gov/releases/H10#33</link>
+    <description>United Kingdom Pound (USD per GBP)</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="0.01" units="Currency:_Per_GBP">1.5310</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>United Kingdom Pound (USD per GBP)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#34">
+    <title>US: H10 1.5254 2015-09-03 FRB United Kingdom Pound (USD per GBP)</title>
+    <link>http://www.federalreserve.gov/releases/H10#34</link>
+    <description>United Kingdom Pound (USD per GBP)</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="0.01" units="Currency:_Per_GBP">1.5254</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>United Kingdom Pound (USD per GBP)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#35">
+    <title>US: H10 1.5195 2015-09-04 FRB United Kingdom Pound (USD per GBP)</title>
+    <link>http://www.federalreserve.gov/releases/H10#35</link>
+    <description>United Kingdom Pound (USD per GBP)</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="0.01" units="Currency:_Per_GBP">1.5195</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>United Kingdom Pound (USD per GBP)</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#36">
+    <title>US: H10 13.2455 2015-08-31 FRB South Africa Rand</title>
+    <link>http://www.federalreserve.gov/releases/H10#36</link>
+    <description>South Africa Rand</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">13.2455</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Africa Rand</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#37">
+    <title>US: H10 13.3980 2015-09-01 FRB South Africa Rand</title>
+    <link>http://www.federalreserve.gov/releases/H10#37</link>
+    <description>South Africa Rand</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">13.3980</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Africa Rand</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#38">
+    <title>US: H10 13.4790 2015-09-02 FRB South Africa Rand</title>
+    <link>http://www.federalreserve.gov/releases/H10#38</link>
+    <description>South Africa Rand</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">13.4790</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Africa Rand</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#39">
+    <title>US: H10 13.5250 2015-09-03 FRB South Africa Rand</title>
+    <link>http://www.federalreserve.gov/releases/H10#39</link>
+    <description>South Africa Rand</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">13.5250</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Africa Rand</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#40">
+    <title>US: H10 13.8300 2015-09-04 FRB South Africa Rand</title>
+    <link>http://www.federalreserve.gov/releases/H10#40</link>
+    <description>South Africa Rand</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">13.8300</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Africa Rand</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#41">
+    <title>US: H10 3.6206 2015-08-31 FRB Brazil Real</title>
+    <link>http://www.federalreserve.gov/releases/H10#41</link>
+    <description>Brazil Real</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">3.6206</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Brazil Real</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#42">
+    <title>US: H10 3.6715 2015-09-01 FRB Brazil Real</title>
+    <link>http://www.federalreserve.gov/releases/H10#42</link>
+    <description>Brazil Real</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">3.6715</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Brazil Real</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#43">
+    <title>US: H10 3.7389 2015-09-02 FRB Brazil Real</title>
+    <link>http://www.federalreserve.gov/releases/H10#43</link>
+    <description>Brazil Real</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">3.7389</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Brazil Real</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#44">
+    <title>US: H10 3.7546 2015-09-03 FRB Brazil Real</title>
+    <link>http://www.federalreserve.gov/releases/H10#44</link>
+    <description>Brazil Real</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">3.7546</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Brazil Real</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#45">
+    <title>US: H10 3.8094 2015-09-04 FRB Brazil Real</title>
+    <link>http://www.federalreserve.gov/releases/H10#45</link>
+    <description>Brazil Real</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">3.8094</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Brazil Real</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#46">
+    <title>US: H10 1.3223 2015-08-31 FRB Canada Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#46</link>
+    <description>Canada Dollar</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.3223</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Canada Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#47">
+    <title>US: H10 1.3180 2015-09-01 FRB Canada Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#47</link>
+    <description>Canada Dollar</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.3180</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Canada Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#48">
+    <title>US: H10 1.3308 2015-09-02 FRB Canada Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#48</link>
+    <description>Canada Dollar</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.3308</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Canada Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#49">
+    <title>US: H10 1.3200 2015-09-03 FRB Canada Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#49</link>
+    <description>Canada Dollar</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.3200</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Canada Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#50">
+    <title>US: H10 1.3272 2015-09-04 FRB Canada Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#50</link>
+    <description>Canada Dollar</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.3272</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Canada Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#51">
+    <title>US: H10 6.3760 2015-08-31 FRB China, P.R. Yuan</title>
+    <link>http://www.federalreserve.gov/releases/H10#51</link>
+    <description>China, P.R. Yuan</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.3760</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>China, P.R. Yuan</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#52">
+    <title>US: H10 6.3630 2015-09-01 FRB China, P.R. Yuan</title>
+    <link>http://www.federalreserve.gov/releases/H10#52</link>
+    <description>China, P.R. Yuan</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.3630</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>China, P.R. Yuan</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#53">
+    <title>US: H10 6.3544 2015-09-02 FRB China, P.R. Yuan</title>
+    <link>http://www.federalreserve.gov/releases/H10#53</link>
+    <description>China, P.R. Yuan</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.3544</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>China, P.R. Yuan</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#54">
+    <title>US: H10 6.3549 2015-09-03 FRB China, P.R. Yuan</title>
+    <link>http://www.federalreserve.gov/releases/H10#54</link>
+    <description>China, P.R. Yuan</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.3549</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>China, P.R. Yuan</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#55">
+    <title>US: H10 6.3549 2015-09-04 FRB China, P.R. Yuan</title>
+    <link>http://www.federalreserve.gov/releases/H10#55</link>
+    <description>China, P.R. Yuan</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.3549</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>China, P.R. Yuan</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#56">
+    <title>US: H10 6.6672 2015-08-31 FRB Denmark Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#56</link>
+    <description>Denmark Krone</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.6672</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Denmark Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#57">
+    <title>US: H10 6.6264 2015-09-01 FRB Denmark Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#57</link>
+    <description>Denmark Krone</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.6264</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Denmark Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#58">
+    <title>US: H10 6.6398 2015-09-02 FRB Denmark Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#58</link>
+    <description>Denmark Krone</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.6398</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Denmark Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#59">
+    <title>US: H10 6.7180 2015-09-03 FRB Denmark Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#59</link>
+    <description>Denmark Krone</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.7180</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Denmark Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#60">
+    <title>US: H10 6.7108 2015-09-04 FRB Denmark Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#60</link>
+    <description>Denmark Krone</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.7108</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Denmark Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#61">
+    <title>US: H10 7.7500 2015-08-31 FRB Hong Kong Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#61</link>
+    <description>Hong Kong Dollar</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">7.7500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Hong Kong Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#62">
+    <title>US: H10 7.7500 2015-09-01 FRB Hong Kong Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#62</link>
+    <description>Hong Kong Dollar</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">7.7500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Hong Kong Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#63">
+    <title>US: H10 7.7500 2015-09-02 FRB Hong Kong Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#63</link>
+    <description>Hong Kong Dollar</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">7.7500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Hong Kong Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#64">
+    <title>US: H10 7.7504 2015-09-03 FRB Hong Kong Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#64</link>
+    <description>Hong Kong Dollar</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">7.7504</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Hong Kong Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#65">
+    <title>US: H10 7.7499 2015-09-04 FRB Hong Kong Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#65</link>
+    <description>Hong Kong Dollar</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">7.7499</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Hong Kong Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#66">
+    <title>US: H10 66.3900 2015-08-31 FRB India Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#66</link>
+    <description>India Rupee</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">66.3900</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>India Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#67">
+    <title>US: H10 66.3400 2015-09-01 FRB India Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#67</link>
+    <description>India Rupee</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">66.3400</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>India Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#68">
+    <title>US: H10 66.1600 2015-09-02 FRB India Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#68</link>
+    <description>India Rupee</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">66.1600</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>India Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#69">
+    <title>US: H10 66.0700 2015-09-03 FRB India Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#69</link>
+    <description>India Rupee</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">66.0700</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>India Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#70">
+    <title>US: H10 66.7000 2015-09-04 FRB India Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#70</link>
+    <description>India Rupee</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">66.7000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>India Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#71">
+    <title>US: H10 121.2600 2015-08-31 FRB Japan Yen</title>
+    <link>http://www.federalreserve.gov/releases/H10#71</link>
+    <description>Japan Yen</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">121.2600</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Japan Yen</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#72">
+    <title>US: H10 119.9400 2015-09-01 FRB Japan Yen</title>
+    <link>http://www.federalreserve.gov/releases/H10#72</link>
+    <description>Japan Yen</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">119.9400</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Japan Yen</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#73">
+    <title>US: H10 120.0000 2015-09-02 FRB Japan Yen</title>
+    <link>http://www.federalreserve.gov/releases/H10#73</link>
+    <description>Japan Yen</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">120.0000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Japan Yen</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#74">
+    <title>US: H10 120.2000 2015-09-03 FRB Japan Yen</title>
+    <link>http://www.federalreserve.gov/releases/H10#74</link>
+    <description>Japan Yen</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">120.2000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Japan Yen</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#75">
+    <title>US: H10 119.0500 2015-09-04 FRB Japan Yen</title>
+    <link>http://www.federalreserve.gov/releases/H10#75</link>
+    <description>Japan Yen</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">119.0500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Japan Yen</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#76">
+    <title>US: H10 4.1920 2015-08-31 FRB Malaysia Ringgit</title>
+    <link>http://www.federalreserve.gov/releases/H10#76</link>
+    <description>Malaysia Ringgit</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">4.1920</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Malaysia Ringgit</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#77">
+    <title>US: H10 4.1640 2015-09-01 FRB Malaysia Ringgit</title>
+    <link>http://www.federalreserve.gov/releases/H10#77</link>
+    <description>Malaysia Ringgit</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">4.1640</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Malaysia Ringgit</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#78">
+    <title>US: H10 4.2070 2015-09-02 FRB Malaysia Ringgit</title>
+    <link>http://www.federalreserve.gov/releases/H10#78</link>
+    <description>Malaysia Ringgit</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">4.2070</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Malaysia Ringgit</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#79">
+    <title>US: H10 4.2350 2015-09-03 FRB Malaysia Ringgit</title>
+    <link>http://www.federalreserve.gov/releases/H10#79</link>
+    <description>Malaysia Ringgit</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">4.2350</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Malaysia Ringgit</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#80">
+    <title>US: H10 4.2560 2015-09-04 FRB Malaysia Ringgit</title>
+    <link>http://www.federalreserve.gov/releases/H10#80</link>
+    <description>Malaysia Ringgit</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">4.2560</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Malaysia Ringgit</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#81">
+    <title>US: H10 16.7315 2015-08-31 FRB Mexico Peso</title>
+    <link>http://www.federalreserve.gov/releases/H10#81</link>
+    <description>Mexico Peso</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">16.7315</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Mexico Peso</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#82">
+    <title>US: H10 16.8775 2015-09-01 FRB Mexico Peso</title>
+    <link>http://www.federalreserve.gov/releases/H10#82</link>
+    <description>Mexico Peso</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">16.8775</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Mexico Peso</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#83">
+    <title>US: H10 16.9415 2015-09-02 FRB Mexico Peso</title>
+    <link>http://www.federalreserve.gov/releases/H10#83</link>
+    <description>Mexico Peso</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">16.9415</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Mexico Peso</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#84">
+    <title>US: H10 16.7850 2015-09-03 FRB Mexico Peso</title>
+    <link>http://www.federalreserve.gov/releases/H10#84</link>
+    <description>Mexico Peso</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">16.7850</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Mexico Peso</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#85">
+    <title>US: H10 16.8620 2015-09-04 FRB Mexico Peso</title>
+    <link>http://www.federalreserve.gov/releases/H10#85</link>
+    <description>Mexico Peso</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">16.8620</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Mexico Peso</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#86">
+    <title>US: H10 8.3223 2015-08-31 FRB Norway Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#86</link>
+    <description>Norway Krone</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.3223</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Norway Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#87">
+    <title>US: H10 8.2830 2015-09-01 FRB Norway Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#87</link>
+    <description>Norway Krone</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.2830</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Norway Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#88">
+    <title>US: H10 8.2556 2015-09-02 FRB Norway Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#88</link>
+    <description>Norway Krone</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.2556</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Norway Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#89">
+    <title>US: H10 8.2742 2015-09-03 FRB Norway Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#89</link>
+    <description>Norway Krone</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.2742</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Norway Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#90">
+    <title>US: H10 8.3138 2015-09-04 FRB Norway Krone</title>
+    <link>http://www.federalreserve.gov/releases/H10#90</link>
+    <description>Norway Krone</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.3138</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Norway Krone</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#91">
+    <title>US: H10 1.4118 2015-08-31 FRB Singapore Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#91</link>
+    <description>Singapore Dollar</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.4118</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Singapore Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#92">
+    <title>US: H10 1.4125 2015-09-01 FRB Singapore Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#92</link>
+    <description>Singapore Dollar</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.4125</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Singapore Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#93">
+    <title>US: H10 1.4165 2015-09-02 FRB Singapore Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#93</link>
+    <description>Singapore Dollar</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.4165</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Singapore Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#94">
+    <title>US: H10 1.4169 2015-09-03 FRB Singapore Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#94</link>
+    <description>Singapore Dollar</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.4169</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Singapore Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#95">
+    <title>US: H10 1.4221 2015-09-04 FRB Singapore Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#95</link>
+    <description>Singapore Dollar</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1.4221</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Singapore Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#96">
+    <title>US: H10 1182.5400 2015-08-31 FRB South Korea Won</title>
+    <link>http://www.federalreserve.gov/releases/H10#96</link>
+    <description>South Korea Won</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1182.5400</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Korea Won</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#97">
+    <title>US: H10 1179.7800 2015-09-01 FRB South Korea Won</title>
+    <link>http://www.federalreserve.gov/releases/H10#97</link>
+    <description>South Korea Won</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1179.7800</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Korea Won</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#98">
+    <title>US: H10 1183.4600 2015-09-02 FRB South Korea Won</title>
+    <link>http://www.federalreserve.gov/releases/H10#98</link>
+    <description>South Korea Won</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1183.4600</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Korea Won</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#99">
+    <title>US: H10 1188.0700 2015-09-03 FRB South Korea Won</title>
+    <link>http://www.federalreserve.gov/releases/H10#99</link>
+    <description>South Korea Won</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1188.0700</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Korea Won</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#100">
+    <title>US: H10 1196.4000 2015-09-04 FRB South Korea Won</title>
+    <link>http://www.federalreserve.gov/releases/H10#100</link>
+    <description>South Korea Won</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">1196.4000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>South Korea Won</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#101">
+    <title>US: H10 134.5000 2015-08-31 FRB Sri Lanka Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#101</link>
+    <description>Sri Lanka Rupee</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">134.5000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sri Lanka Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#102">
+    <title>US: H10 134.5000 2015-09-01 FRB Sri Lanka Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#102</link>
+    <description>Sri Lanka Rupee</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">134.5000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sri Lanka Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#103">
+    <title>US: H10 134.4000 2015-09-02 FRB Sri Lanka Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#103</link>
+    <description>Sri Lanka Rupee</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">134.4000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sri Lanka Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#104">
+    <title>US: H10 134.7500 2015-09-03 FRB Sri Lanka Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#104</link>
+    <description>Sri Lanka Rupee</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">134.7500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sri Lanka Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#105">
+    <title>US: H10 137.5000 2015-09-04 FRB Sri Lanka Rupee</title>
+    <link>http://www.federalreserve.gov/releases/H10#105</link>
+    <description>Sri Lanka Rupee</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">137.5000</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sri Lanka Rupee</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#106">
+    <title>US: H10 8.4745 2015-08-31 FRB Sweden Krona</title>
+    <link>http://www.federalreserve.gov/releases/H10#106</link>
+    <description>Sweden Krona</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.4745</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sweden Krona</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#107">
+    <title>US: H10 8.4609 2015-09-01 FRB Sweden Krona</title>
+    <link>http://www.federalreserve.gov/releases/H10#107</link>
+    <description>Sweden Krona</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.4609</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sweden Krona</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#108">
+    <title>US: H10 8.4193 2015-09-02 FRB Sweden Krona</title>
+    <link>http://www.federalreserve.gov/releases/H10#108</link>
+    <description>Sweden Krona</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.4193</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sweden Krona</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#109">
+    <title>US: H10 8.4266 2015-09-03 FRB Sweden Krona</title>
+    <link>http://www.federalreserve.gov/releases/H10#109</link>
+    <description>Sweden Krona</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.4266</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sweden Krona</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#110">
+    <title>US: H10 8.4688 2015-09-04 FRB Sweden Krona</title>
+    <link>http://www.federalreserve.gov/releases/H10#110</link>
+    <description>Sweden Krona</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">8.4688</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Sweden Krona</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#111">
+    <title>US: H10 0.9681 2015-08-31 FRB Switzerland Franc</title>
+    <link>http://www.federalreserve.gov/releases/H10#111</link>
+    <description>Switzerland Franc</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">0.9681</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Switzerland Franc</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#112">
+    <title>US: H10 0.9622 2015-09-01 FRB Switzerland Franc</title>
+    <link>http://www.federalreserve.gov/releases/H10#112</link>
+    <description>Switzerland Franc</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">0.9622</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Switzerland Franc</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#113">
+    <title>US: H10 0.9690 2015-09-02 FRB Switzerland Franc</title>
+    <link>http://www.federalreserve.gov/releases/H10#113</link>
+    <description>Switzerland Franc</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">0.9690</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Switzerland Franc</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#114">
+    <title>US: H10 0.9764 2015-09-03 FRB Switzerland Franc</title>
+    <link>http://www.federalreserve.gov/releases/H10#114</link>
+    <description>Switzerland Franc</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">0.9764</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Switzerland Franc</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#115">
+    <title>US: H10 0.9754 2015-09-04 FRB Switzerland Franc</title>
+    <link>http://www.federalreserve.gov/releases/H10#115</link>
+    <description>Switzerland Franc</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">0.9754</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Switzerland Franc</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#116">
+    <title>US: H10 32.4900 2015-08-31 FRB Taiwan Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#116</link>
+    <description>Taiwan Dollar</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">32.4900</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Taiwan Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#117">
+    <title>US: H10 32.4200 2015-09-01 FRB Taiwan Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#117</link>
+    <description>Taiwan Dollar</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">32.4200</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Taiwan Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#118">
+    <title>US: H10 32.4700 2015-09-02 FRB Taiwan Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#118</link>
+    <description>Taiwan Dollar</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">32.4700</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Taiwan Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#119">
+    <title>US: H10 32.4900 2015-09-03 FRB Taiwan Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#119</link>
+    <description>Taiwan Dollar</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">32.4900</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Taiwan Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#120">
+    <title>US: H10 32.6500 2015-09-04 FRB Taiwan Dollar</title>
+    <link>http://www.federalreserve.gov/releases/H10#120</link>
+    <description>Taiwan Dollar</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">32.6500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Taiwan Dollar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#121">
+    <title>US: H10 35.8100 2015-08-31 FRB Thailand Baht</title>
+    <link>http://www.federalreserve.gov/releases/H10#121</link>
+    <description>Thailand Baht</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">35.8100</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Thailand Baht</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#122">
+    <title>US: H10 35.7400 2015-09-01 FRB Thailand Baht</title>
+    <link>http://www.federalreserve.gov/releases/H10#122</link>
+    <description>Thailand Baht</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">35.7400</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Thailand Baht</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#123">
+    <title>US: H10 35.7500 2015-09-02 FRB Thailand Baht</title>
+    <link>http://www.federalreserve.gov/releases/H10#123</link>
+    <description>Thailand Baht</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">35.7500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Thailand Baht</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#124">
+    <title>US: H10 35.8500 2015-09-03 FRB Thailand Baht</title>
+    <link>http://www.federalreserve.gov/releases/H10#124</link>
+    <description>Thailand Baht</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">35.8500</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Thailand Baht</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#125">
+    <title>US: H10 35.9400 2015-09-04 FRB Thailand Baht</title>
+    <link>http://www.federalreserve.gov/releases/H10#125</link>
+    <description>Thailand Baht</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">35.9400</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Thailand Baht</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#126">
+    <title>US: H10 6.2842 2015-08-31 FRB Venezuela Bolivar</title>
+    <link>http://www.federalreserve.gov/releases/H10#126</link>
+    <description>Venezuela Bolivar</description>
+    <dc:date>2015-08-31T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.2842</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Venezuela Bolivar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-08-31</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#127">
+    <title>US: H10 6.2842 2015-09-01 FRB Venezuela Bolivar</title>
+    <link>http://www.federalreserve.gov/releases/H10#127</link>
+    <description>Venezuela Bolivar</description>
+    <dc:date>2015-09-01T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.2842</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Venezuela Bolivar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-01</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#128">
+    <title>US: H10 6.2842 2015-09-02 FRB Venezuela Bolivar</title>
+    <link>http://www.federalreserve.gov/releases/H10#128</link>
+    <description>Venezuela Bolivar</description>
+    <dc:date>2015-09-02T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.2842</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Venezuela Bolivar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-02</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#129">
+    <title>US: H10 6.2842 2015-09-03 FRB Venezuela Bolivar</title>
+    <link>http://www.federalreserve.gov/releases/H10#129</link>
+    <description>Venezuela Bolivar</description>
+    <dc:date>2015-09-03T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.2842</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Venezuela Bolivar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-03</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+  <item rdf:about="http://www.federalreserve.gov/releases/H10#130">
+    <title>US: H10 6.2842 2015-09-04 FRB Venezuela Bolivar</title>
+    <link>http://www.federalreserve.gov/releases/H10#130</link>
+    <description>Venezuela Bolivar</description>
+    <dc:date>2015-09-04T12:00:00-05:00</dc:date>
+    <dc:language>en</dc:language>
+    <dc:creator>FRB</dc:creator>
+    <cb:statistics>
+      <cb:country>US</cb:country>
+      <cb:institutionAbbrev>FRB</cb:institutionAbbrev>
+      <cb:otherStatistic>
+        <cb:value decimals="4" unit_mult="1" units="Currency:_Per_USD">6.2842</cb:value>
+        <cb:topic>H10</cb:topic>
+        <cb:coverage>Venezuela Bolivar</cb:coverage>
+        <cb:observationPeriod frequency="business">2015-09-04</cb:observationPeriod>
+        <cb:dataType/>
+      </cb:otherStatistic>
+    </cb:statistics>
+  </item>
+
+</rdf:RDF>
