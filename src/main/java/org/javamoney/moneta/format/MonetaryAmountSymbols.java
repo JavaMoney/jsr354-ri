@@ -285,23 +285,21 @@ public final class MonetaryAmountSymbols {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.getClass().getName()).append('{');
-		sb.append(" Currency: ").append(formatSymbols.getCurrency()).append(',');
-		sb.append(" currencySymbol: ").append(formatSymbols.getCurrencySymbol()).append(',');
-		sb.append(" decimalSeparator: ").append(formatSymbols.getDecimalSeparator()).append(',');
-		sb.append(" digit: ").append(formatSymbols.getDigit()).append(',');
-		sb.append(" exponentSeparator: ").append(formatSymbols.getExponentSeparator()).append(',');
-		sb.append(" groupingSeparator: ").append(formatSymbols.getGroupingSeparator()).append(',');
-		sb.append(" infinity: ").append(formatSymbols.getInfinity()).append(',');
-		sb.append(" internationalCurrencySymbol: ").append(formatSymbols.getInternationalCurrencySymbol()).append(',');
-		sb.append(" minusSign: ").append(formatSymbols.getMinusSign()).append(',');
-		sb.append(" monetaryDecimalSeparator: ").append(formatSymbols.getMonetaryDecimalSeparator()).append(',');
-		sb.append(" naN: ").append(formatSymbols.getNaN()).append(',');
-		sb.append(" patternSeparator: ").append(formatSymbols.getPatternSeparator()).append(',');
-		sb.append(" percent: ").append(formatSymbols.getPercent()).append(',');
-		sb.append(" perMill: ").append(formatSymbols.getPerMill()).append(',');
-		sb.append(" zeroDigit: ").append(formatSymbols.getZeroDigit()).append('}');
-		return sb.toString();
+		return new StringBuilder().append(this.getClass().getName()).append('{')
+				.append(" Currency: ").append(formatSymbols.getCurrency()).append(',')
+				.append(" currencySymbol: ").append(formatSymbols.getCurrencySymbol()).append(',')
+				.append(" decimalSeparator: ").append(formatSymbols.getDecimalSeparator()).append(',')
+				.append(" digit: ").append(formatSymbols.getDigit()).append(',')
+				.append(" exponentSeparator: ").append(formatSymbols.getExponentSeparator()).append(',')
+				.append(" groupingSeparator: ").append(formatSymbols.getGroupingSeparator()).append(',')
+				.append(" infinity: ").append(formatSymbols.getInfinity()).append(',')
+				.append(" internationalCurrencySymbol: ").append(formatSymbols.getInternationalCurrencySymbol()).append(',')
+				.append(" minusSign: ").append(formatSymbols.getMinusSign()).append(',')
+				.append(" monetaryDecimalSeparator: ").append(formatSymbols.getMonetaryDecimalSeparator()).append(',')
+				.append(" naN: ").append(formatSymbols.getNaN()).append(',')
+				.append(" patternSeparator: ").append(formatSymbols.getPatternSeparator()).append(',')
+				.append(" percent: ").append(formatSymbols.getPercent()).append(',')
+				.append(" perMill: ").append(formatSymbols.getPerMill()).append(',')
+				.append(" zeroDigit: ").append(formatSymbols.getZeroDigit()).append('}').toString();
 	}
 }

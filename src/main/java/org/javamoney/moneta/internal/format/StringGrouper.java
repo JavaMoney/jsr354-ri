@@ -102,10 +102,9 @@ final class StringGrouper {
 		}
 		end = builder.toString();
 		builder.setLength(0);
-		builder.append(start);
-		builder.append(groupNumeric(input.substring(start.length(),
-				input.length() - end.length())));
-		builder.append(end);
+		builder.append(start)
+				.append(groupNumeric(input.substring(start.length(), input.length() - end.length())))
+				.append(end);
 		return builder.toString();
 	}
 
