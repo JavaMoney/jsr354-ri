@@ -1,0 +1,12 @@
+target/
+test-output/
+/doc
+*.iml
+*.log
+.classpath
+-project
+/.resourceCache
+/.project
+/.idea
+.settings/
+/target/
