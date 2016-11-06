@@ -1,5 +1,7 @@
 JSR 354: Money and Currency Moneta Reference Implementation
 ===========================================================
+
+[![Join the chat at https://gitter.im/JavaMoney/jsr354-ri](https://badges.gitter.im/JavaMoney/jsr354-ri.svg)](https://gitter.im/JavaMoney/jsr354-ri?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
 This module (moneta) implements JSR 354 Money & Currency. Hereby basic implementations of amounts, currency and roundings 
 are provided.
