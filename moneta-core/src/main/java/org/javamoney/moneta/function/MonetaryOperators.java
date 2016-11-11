@@ -176,9 +176,9 @@ public final class MonetaryOperators {
 	/**
 	 * Extract major part of {@link MonetaryAmount}
 	 * <p>
-	 * This returns the monetary amount in terms of the minor units of the
-	 * currency, truncating the whole part if necessary. For example, 'EUR 2.35'
-	 * will return 'EUR 0.35', and 'BHD -1.345' will return 'BHD -0.345'.
+	 * This returns the monetary amount in terms of the major units of the
+	 * currency. For example, 'EUR 2.35'
+	 * will return 'EUR 2.0', and 'BHD -1.345' will return 'BHD -1.0'.
 	 * <p>
 	 *<pre>
 	 *{@code
