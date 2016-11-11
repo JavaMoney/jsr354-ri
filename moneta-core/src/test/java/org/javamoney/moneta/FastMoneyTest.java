@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -45,7 +45,7 @@ import org.testng.annotations.Test;
 /**
  * @author Anatole
  */
-public class FastMoneyTest{
+public class FastMoneyTest {
 
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
 
@@ -58,13 +58,13 @@ public class FastMoneyTest{
      * {@link org.javamoney.moneta.FastMoney#of(java.lang.Number, javax.money.CurrencyUnit)} .
      */
     @Test
-    public void testOfCurrencyUnitBigDecimal(){
+    public void testOfCurrencyUnitBigDecimal() {
         FastMoney m = FastMoney.of(TEN, Monetary.getCurrency("EUR"));
         assertEquals(new BigDecimal("10").intValue(), m.getNumber().numberValue(BigDecimal.class).intValue());
     }
 
     @Test
-    public void testOfCurrencyUnitDouble(){
+    public void testOfCurrencyUnitDouble() {
         FastMoney m = FastMoney.of(10.0d, Monetary.getCurrency("EUR"));
         assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
     }
@@ -73,14 +73,14 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getCurrency()}.
      */
     @Test
-    public void testGetCurrency(){
+    public void testGetCurrency() {
         MonetaryAmount money = FastMoney.of(BigDecimal.TEN, EURO);
         assertNotNull(money.getCurrency());
         assertEquals("EUR", money.getCurrency().getCurrencyCode());
     }
 
     @Test
-    public void testSubtractMonetaryAmount(){
+    public void testSubtractMonetaryAmount() {
         FastMoney money1 = FastMoney.of(BigDecimal.TEN, EURO);
         FastMoney money2 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney moneyResult = money1.subtract(money2);
@@ -89,7 +89,7 @@ public class FastMoneyTest{
     }
 
     @Test
-    public void testDivideAndRemainder_BigDecimal(){
+    public void testDivideAndRemainder_BigDecimal() {
         FastMoney money1 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), new BigDecimal("1"));
@@ -97,12 +97,12 @@ public class FastMoneyTest{
     }
 
     @Test
-    public void testDivideToIntegralValue_BigDecimal(){
+    public void testDivideToIntegralValue_BigDecimal() {
         FastMoney money1 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney result = money1.divideToIntegralValue(new BigDecimal("0.5001"));
-        assertEquals(result.getNumber().numberValue(BigDecimal.class),BigDecimal.ONE);
+        assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
-        assertEquals(result.getNumber().numberValue(BigDecimal.class),BigDecimal.valueOf(4l));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(4l));
         result = money1.divideToIntegralValue(BigDecimal.valueOf(5));
         assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact() == 0);
     }
@@ -112,7 +112,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#hashCode()}.
      */
     @Test
-    public void testHashCode(){
+    public void testHashCode() {
         FastMoney money1 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney money2 = FastMoney.of(new BigDecimal("1"), EURO);
         assertEquals(money1.hashCode(), money2.hashCode());
@@ -135,7 +135,7 @@ public class FastMoneyTest{
      * {@link org.javamoney.moneta.FastMoney#of(java.lang.Number, javax.money.CurrencyUnit)} .
      */
     @Test
-    public void testOfCurrencyUnitNumber(){
+    public void testOfCurrencyUnitNumber() {
         FastMoney m = FastMoney.of((byte) 2, EURO);
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -176,7 +176,7 @@ public class FastMoneyTest{
      * .
      */
     @Test
-    public void testOfStringNumber(){
+    public void testOfStringNumber() {
         FastMoney m = FastMoney.of((byte) 2, "EUR");
         assertNotNull(m);
         assertEquals(EURO, m.getCurrency());
@@ -216,14 +216,14 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#equals(java.lang.Object)}.
      */
     @Test
-    public void testEqualsObject(){
+    public void testEqualsObject() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(BigDecimal.ZERO, "CHF"), FastMoney.of(BigDecimal.ONE, "CHF"),
                 FastMoney.of(BigDecimal.ONE, "XXX"), FastMoney.of(BigDecimal.ONE.negate(), "XXX")};
-        for(int i = 0; i < moneys.length; i++){
-            for(int j = 0; j < moneys.length; j++){
-                if(i == j){
+        for (int i = 0; i < moneys.length; i++) {
+            for (int j = 0; j < moneys.length; j++) {
+                if (i == j) {
                     assertEquals(moneys[i], moneys[j]);
-                }else{
+                } else {
                     assertNotSame(moneys[i], moneys[j]);
                 }
             }
@@ -235,7 +235,7 @@ public class FastMoneyTest{
      * .
      */
     @Test
-    public void testCompareTo(){
+    public void testCompareTo() {
         FastMoney m1 = FastMoney.of(-2, "CHF");
         FastMoney m2 = FastMoney.of(0, "CHF");
         FastMoney m3 = FastMoney.of(-0, "CHF");
@@ -258,7 +258,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#abs()}.
      */
     @Test
-    public void testAbs(){
+    public void testAbs() {
         FastMoney m = FastMoney.of(10, "CHF");
         assertEquals(m, m.abs());
         assertTrue(m == m.abs());
@@ -283,16 +283,31 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#add(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testAdd(){
+    public void testAdd() {
         FastMoney money1 = FastMoney.of(BigDecimal.TEN, EURO);
         FastMoney money2 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney moneyResult = money1.add(money2);
         assertNotNull(moneyResult);
         assertEquals(11d, moneyResult.getNumber().doubleValue(), 0d);
 
-        FastMoney money3 = FastMoney.of(90000000000000L, "CHF");
+        // This example create a sum that is to big for fastmoney, it should overflow
         try {
             // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
+            // 87978089321359 + 4866358678300 = 92844447999659 > 92233720368547.75807
+            money1 = FastMoney.of(87978089321359L, EURO);
+            money2 = FastMoney.of(4866358678300L, EURO);
+
+            try {
+                moneyResult = money1.add(money2);
+                fail("overflow should raise ArithmeticException");
+            } catch (ArithmeticException e) {
+                // should happen
+            }
+
+            // check greates FM 92233720368547.75807 value
+            long fastMoneyMax = 92233720368547L;
+            FastMoney money3 = FastMoney.of(fastMoneyMax, "CHF");
+
             money3.add(money3);
             fail("overflow should raise ArithmeticException");
         } catch (ArithmeticException e) {
@@ -315,7 +330,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
      */
     @Test
-    public void testDivideNumber(){
+    public void testDivideNumber() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(BigDecimal.valueOf(5)));
 
@@ -334,7 +349,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(long)}.
      */
     @Test
-    public void testDivideLong(){
+    public void testDivideLong() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(5L));
     }
@@ -343,7 +358,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
      */
     @Test
-    public void testDivideDouble(){
+    public void testDivideDouble() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(BigDecimal.valueOf(20), "CHF"), m.divide(5.0d));
     }
@@ -352,15 +367,15 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#divideAndRemainder(java.lang.Number)} .
      */
     @Test
-    public void testDivideAndRemainderNumber(){
+    public void testDivideAndRemainderNumber() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(
 
-                             BigDecimal.valueOf(33), "CHF"), m.divideAndRemainder(BigDecimal.valueOf(3))[0]
+                BigDecimal.valueOf(33), "CHF"), m.divideAndRemainder(BigDecimal.valueOf(3))[0]
         );
         assertEquals(FastMoney.of(
 
-                             BigDecimal.valueOf(1), "CHF"), m.divideAndRemainder(BigDecimal.valueOf(3))[1]
+                BigDecimal.valueOf(1), "CHF"), m.divideAndRemainder(BigDecimal.valueOf(3))[1]
         );
     }
 
@@ -369,15 +384,15 @@ public class FastMoneyTest{
      * {@link org.javamoney.moneta.FastMoney#divideToIntegralValue(java.lang.Number)} .
      */
     @Test
-    public void testDivideToIntegralValueNumber(){
+    public void testDivideToIntegralValueNumber() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(
 
-                             BigDecimal.valueOf(5), "CHF"), m.divideToIntegralValue(BigDecimal.valueOf(20))
+                BigDecimal.valueOf(5), "CHF"), m.divideToIntegralValue(BigDecimal.valueOf(20))
         );
         assertEquals(FastMoney.of(
 
-                             BigDecimal.valueOf(33), "CHF"), m.divideToIntegralValue(BigDecimal.valueOf(3))
+                BigDecimal.valueOf(33), "CHF"), m.divideToIntegralValue(BigDecimal.valueOf(3))
         );
     }
 
@@ -385,7 +400,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(java.lang.Number)}.
      */
     @Test
-    public void testMultiplyNumber(){
+    public void testMultiplyNumber() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(10, "CHF"), m.multiply(new BigDecimal("0.1")));
 
@@ -412,11 +427,16 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(long)}.
      */
     @Test
-    public void testMultiplyLong(){
+    public void testMultiplyLong() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(400, "CHF"), m.multiply(4));
         assertEquals(FastMoney.of(200, "CHF"), m.multiply(2));
         assertEquals(FastMoney.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
+
+        m = FastMoney.of(100, "CHF");
+        assertEquals(m.multiply(0), FastMoney.of(0, "CHF"));
+        m = FastMoney.of(0, "CHF");
+        assertEquals(m.multiply(10), FastMoney.of(0, "CHF"));
 
         try {
             // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
@@ -425,13 +445,24 @@ public class FastMoneyTest{
         } catch (ArithmeticException e) {
             // should happen
         }
+
+        try {
+            // the maximum value for FastMoney is 92233720368547.75807
+            // these values are lower, but the overflow detection does not work
+            // correct.
+            FastMoney.of(-53484567177043L, "CHF").multiply(2178802625L);
+            fail("overflow should raise ArithmeticException");
+        } catch (ArithmeticException e) {
+            // should happen
+        }
     }
+
 
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#multiply(double)}.
      */
     @Test
-    public void testMultiplyDouble(){
+    public void testMultiplyDouble() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(new BigDecimal("50.0"), "CHF"), m.multiply(0.5));
     }
@@ -557,7 +588,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#negate()}.
      */
     @Test
-    public void testNegate(){
+    public void testNegate() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(-100, "CHF"), m.negate());
         m = FastMoney.of(-123.234, "CHF");
@@ -571,13 +602,16 @@ public class FastMoneyTest{
         } catch (ArithmeticException e) {
             // should happen
         }
+
+        m = FastMoney.of(0, "CHF");
+        assertEquals(m.negate(), FastMoney.of(0, "CHF"));
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#plus()}.
      */
     @Test
-    public void testPlus(){
+    public void testPlus() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(100, "CHF"), m.plus());
         m = FastMoney.of(123.234, "CHF");
@@ -588,7 +622,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#subtract(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testSubtract(){
+    public void testSubtract() {
         FastMoney m = FastMoney.of(100, "CHF");
         FastMoney s1 = FastMoney.of(100, "CHF");
         FastMoney s2 = FastMoney.of(200, "CHF");
@@ -607,9 +641,9 @@ public class FastMoneyTest{
         s2 = FastMoney.of(12.40234, "CHF");
         s3 = FastMoney.of(-2343.45, "CHF");
         assertEquals(FastMoney.of(new BigDecimal("12.40234").subtract(new BigDecimal("2343.45")), "CHF"),
-                     m.subtract(s1));
+                m.subtract(s1));
         assertEquals(FastMoney.of(new BigDecimal("12.402345534").subtract(new BigDecimal("12.402345534")), "CHF"),
-                     m.subtract(s2));
+                m.subtract(s2));
         assertEquals(FastMoney.of(0, "CHF"), m.subtract(s2));
         assertEquals(FastMoney.of(new BigDecimal("2355.85234"), "CHF"), m.subtract(s3));
         assertTrue(m == m.subtract(FastMoney.of(0, "CHF")));
@@ -619,26 +653,26 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#remainder(java.lang.Number)} .
      */
     @Test
-    public void testRemainderNumber(){
+    public void testRemainderNumber() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(23123213.435, "CHF"), FastMoney.of(0, "CHF"), FastMoney.of(-100, "CHF"),
                 FastMoney.of(-723527.36532, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertEquals(m.getFactory().setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(10.50)))
-                                 .create(), m.remainder(10.50), "Invalid remainder of " + 10.50
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(10.50)))
+                    .create(), m.remainder(10.50), "Invalid remainder of " + 10.50
             );
             assertEquals(m.getFactory().setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-30.20)))
-                                 .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-30.20)))
+                    .create(), m.remainder(-30.20), "Invalid remainder of " + -30.20
             );
             assertEquals(m.getFactory().setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-3)))
-                                 .create(), m.remainder(-3),"Invalid remainder of " + -3
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(-3)))
+                    .create(), m.remainder(-3), "Invalid remainder of " + -3
             );
             assertEquals(m.getFactory().setNumber(
-                                 m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(3))).create(),
-                         m.remainder(3), "Invalid remainder of " + 3
+                    m.getNumber().numberValue(BigDecimal.class).remainder(BigDecimal.valueOf(3))).create(),
+                    m.remainder(3), "Invalid remainder of " + 3
             );
         }
     }
@@ -647,24 +681,24 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#scaleByPowerOfTen(int)} .
      */
     @Test
-    public void testScaleByPowerOfTen(){
+    public void testScaleByPowerOfTen() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(23123213.435, "CHF"), FastMoney.of(0, "CHF"), FastMoney.of(-100, "CHF"),
                 FastMoney.of(-723527.36532, "CHF")};
-        for(FastMoney m : moneys){
-            for(int p = 0; p < 3; p++){
+        for (FastMoney m : moneys) {
+            for (int p = 0; p < 3; p++) {
                 assertEquals(m.getFactory().setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
-                                     .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen."
+                        .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen."
                 );
             }
         }
         moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(23123213.435, "CHF"), FastMoney.of(0, "CHF"), FastMoney.of(-100, "CHF"),
                 FastMoney.of(-723527.32, "CHF")};
-        for(FastMoney m : moneys){
-            for(int p = -2; p < 0; p++){
+        for (FastMoney m : moneys) {
+            for (int p = -2; p < 0; p++) {
                 assertEquals(m.getFactory().setNumber(m.getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(p))
-                                     .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen."
+                        .create(), m.scaleByPowerOfTen(p), "Invalid scaleByPowerOfTen."
                 );
             }
         }
@@ -674,15 +708,15 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#isZero()}.
      */
     @Test
-    public void testIsZero(){
+    public void testIsZero() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(23123213.435, "CHF"), FastMoney.of(-100, "CHF"), FastMoney.of(-723527.36532, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertFalse(m.isZero());
         }
         moneys = new FastMoney[]{FastMoney.of(0, "CHF"), FastMoney.of(0.0, "CHF"), FastMoney.of(BigDecimal.ZERO, "CHF"),
                 FastMoney.of(new BigDecimal("0.00000000000000000"), "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertTrue(m.isZero());
         }
     }
@@ -691,16 +725,16 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#isPositive()}.
      */
     @Test
-    public void testIsPositive(){
+    public void testIsPositive() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertTrue(m.isPositive());
         }
         moneys = new FastMoney[]{FastMoney.of(0, "CHF"), FastMoney.of(0.0, "CHF"), FastMoney.of(BigDecimal.ZERO, "CHF"),
                 FastMoney.of(new BigDecimal("0.00000000000000000"), "CHF"), FastMoney.of(-100, "CHF"),
                 FastMoney.of(-34242344, "CHF"), FastMoney.of(-23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertFalse(m.isPositive());
         }
     }
@@ -709,17 +743,17 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#isPositiveOrZero()} .
      */
     @Test
-    public void testIsPositiveOrZero(){
+    public void testIsPositiveOrZero() {
         FastMoney[] moneys =
                 new FastMoney[]{FastMoney.of(0, "CHF"), FastMoney.of(0.0, "CHF"), FastMoney.of(BigDecimal.ZERO, "CHF"),
                         FastMoney.of(new BigDecimal("0.00000000000000000"), "CHF"), FastMoney.of(100, "CHF"),
                         FastMoney.of(34242344, "CHF"), FastMoney.of(23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertTrue(m.isPositiveOrZero(), "Invalid positiveOrZero (expected true): " + m);
         }
         moneys = new FastMoney[]{FastMoney.of(-100, "CHF"), FastMoney.of(-34242344, "CHF"),
                 FastMoney.of(-23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertFalse(m.isPositiveOrZero(), "Invalid positiveOrZero (expected false): " + m);
         }
     }
@@ -728,17 +762,17 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#isNegative()}.
      */
     @Test
-    public void testIsNegative(){
+    public void testIsNegative() {
         FastMoney[] moneys =
                 new FastMoney[]{FastMoney.of(0, "CHF"), FastMoney.of(0.0, "CHF"), FastMoney.of(BigDecimal.ZERO, "CHF"),
                         FastMoney.of(new BigDecimal("0.00000000000000000"), "CHF"), FastMoney.of(100, "CHF"),
                         FastMoney.of(34242344, "CHF"), FastMoney.of(23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertFalse(m.isNegative(), "Invalid isNegative (expected false): " + m);
         }
         moneys = new FastMoney[]{FastMoney.of(-100, "CHF"), FastMoney.of(-34242344, "CHF"),
                 FastMoney.of(-23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertTrue(m.isNegative(), "Invalid isNegative (expected true): " + m);
         }
     }
@@ -747,16 +781,16 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#isNegativeOrZero()} .
      */
     @Test
-    public void testIsNegativeOrZero(){
+    public void testIsNegativeOrZero() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertFalse(m.isNegativeOrZero(), "Invalid negativeOrZero (expected false): " + m);
         }
         moneys = new FastMoney[]{FastMoney.of(0, "CHF"), FastMoney.of(0.0, "CHF"), FastMoney.of(BigDecimal.ZERO, "CHF"),
                 FastMoney.of(new BigDecimal("0.00000000000000000"), "CHF"), FastMoney.of(-100, "CHF"),
                 FastMoney.of(-34242344, "CHF"), FastMoney.of(-23123213.435, "CHF")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertTrue(m.isNegativeOrZero(), "Invalid negativeOrZero (expected true): " + m);
         }
     }
@@ -765,7 +799,7 @@ public class FastMoneyTest{
      * Test method for {@link FastMoney#getFactory()#setNumber(java.lang.Number)} .
      */
     @Test
-    public void testWithNumber(){
+    public void testWithNumber() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "CHF"),
                 FastMoney.of(new BigDecimal("23123213.435"), "CHF"),
                 FastMoney.of(new BigDecimal("-23123213.435"), "CHF"), FastMoney.of(-23123213, "CHF"),
@@ -776,7 +810,7 @@ public class FastMoneyTest{
                 s.getFactory().setNumber(new BigDecimal("23123213.435")).create(),
                 s.getFactory().setNumber(new BigDecimal("-23123213.435")).create(),
                 s.getFactory().setNumber(-23123213).create(), s.getFactory().setNumber(0).create()};
-        for(int i = 0; i < moneys.length; i++){
+        for (int i = 0; i < moneys.length; i++) {
             assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
     }
@@ -787,7 +821,7 @@ public class FastMoneyTest{
      * .javamoney.moneta.FastMoney#getFactory()#setNumber(java.lang.Number)}  .
      */
     @Test
-    public void testWithCurrencyUnitNumber(){
+    public void testWithCurrencyUnitNumber() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "USD"),
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
@@ -801,7 +835,7 @@ public class FastMoneyTest{
                         .setNumber(new BigDecimal("-23123213.435")).create(),
                 s.getFactory().setCurrency(Monetary.getCurrency("USN")).setNumber(-23123213).create(),
                 s.getFactory().setCurrency(Monetary.getCurrency("GBP")).setNumber(0).create()};
-        for(int i = 0; i < moneys.length; i++){
+        for (int i = 0; i < moneys.length; i++) {
             assertEquals(moneys[i], moneys2[i], "with(Number) failed.");
         }
     }
@@ -810,11 +844,11 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getScale()}.
      */
     @Test
-    public void testGetScale(){
+    public void testGetScale() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "USD"),
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertEquals(5, m.getScale(), "Scale for " + m);
         }
     }
@@ -823,13 +857,13 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getPrecision()}.
      */
     @Test
-    public void testGetPrecision(){
+    public void testGetPrecision() {
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(111, "CHF"), FastMoney.of(34242344, "USD"),
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
                 FastMoney.of(0, "GBP")};
-        for(FastMoney m : moneys){
+        for (FastMoney m : moneys) {
             assertEquals(m.getNumber().numberValue(BigDecimal.class).precision(), m
-                        .getPrecision(), "Precision for " + m);
+                    .getPrecision(), "Precision for " + m);
         }
     }
 
@@ -837,7 +871,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#longValue()}.
      */
     @Test(expectedExceptions = ArithmeticException.class)
-    public void testLongValue(){
+    public void testLongValue() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100L, m.getNumber().longValue(), "longValue of " + m);
         m = FastMoney.of(-100, "CHF");
@@ -850,18 +884,18 @@ public class FastMoneyTest{
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = FastMoney.of(-0.0, "CHF");
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
-		m = FastMoney
-				.of(new BigDecimal(
-						"12121762517652176251725178251872652765321876352187635217835378125"),
-						"CHF");
-		fail("longValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
+        m = FastMoney
+                .of(new BigDecimal(
+                                "12121762517652176251725178251872652765321876352187635217835378125"),
+                        "CHF");
+        fail("longValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#longValueExact()}.
      */
     @Test
-    public void testLongValueExact(){
+    public void testLongValueExact() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100L, m.getNumber().longValueExact(), "longValue of " + m);
         m = FastMoney.of(-100, "CHF");
@@ -870,26 +904,23 @@ public class FastMoneyTest{
         assertEquals(0L, m.getNumber().longValueExact(), "longValue of " + m);
         m = FastMoney.of(-0.0, "CHF");
         assertEquals(0L, m.getNumber().longValueExact(), "longValue of " + m);
-        try{
+        try {
             m = FastMoney.of(Long.MAX_VALUE, "CHF");
             fail("longValueExact(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             // OK
         }
-        try{
+        try {
             m = FastMoney.of(Long.MIN_VALUE, "CHF");
             fail("longValueExact(-100.3434) should raise an ArithmeticException.");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             // OK
         }
-        try{
+        try {
             m = FastMoney.of(100.3434, "CHF");
             m.getNumber().longValueExact();
             fail("longValueExact(100.3434) should raise an ArithmeticException.");
-        }
-        catch(ArithmeticException e){
+        } catch (ArithmeticException e) {
             // OK
         }
     }
@@ -898,7 +929,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#doubleValue()}.
      */
     @Test(expectedExceptions = ArithmeticException.class)
-    public void testDoubleValue(){
+    public void testDoubleValue() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(100d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = FastMoney.of(-100, "CHF");
@@ -911,19 +942,19 @@ public class FastMoneyTest{
         assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = FastMoney.of(-0.0, "CHF");
         assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
-		m = FastMoney
-				.of(new BigDecimal(
-						"12121762517652176251725178251872652765321876352187635217835378125"),
-						"CHF");
-		m.getNumber().doubleValue();
-		fail("doubleValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
+        m = FastMoney
+                .of(new BigDecimal(
+                                "12121762517652176251725178251872652765321876352187635217835378125"),
+                        "CHF");
+        m.getNumber().doubleValue();
+        fail("doubleValue(12121762517652176251725178251872652765321876352187635217835378125) should fail!");
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#signum()}.
      */
     @Test
-    public void testSignum(){
+    public void testSignum() {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(1, m.signum(), "signum of " + m);
         m = FastMoney.of(-100, "CHF");
@@ -944,10 +975,10 @@ public class FastMoneyTest{
      * .
      */
     @Test
-    public void testIsLessThan(){
+    public void testIsLessThan() {
         assertFalse(FastMoney.of(BigDecimal.valueOf(0d), "CHF").isLessThan(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
         assertFalse(FastMoney.of(BigDecimal.valueOf(0.00001d), "CHF")
-                            .isLessThan(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
+                .isLessThan(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
         assertFalse(FastMoney.of(15, "CHF").isLessThan(FastMoney.of(10, "CHF")));
         assertFalse(FastMoney.of(15.546, "CHF").isLessThan(FastMoney.of(10.34, "CHF")));
         assertTrue(FastMoney.of(5, "CHF").isLessThan(FastMoney.of(10, "CHF")));
@@ -959,11 +990,11 @@ public class FastMoneyTest{
      * {@link org.javamoney.moneta.FastMoney#isLessThanOrEqualTo(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testIsLessThanOrEqualTo(){
+    public void testIsLessThanOrEqualTo() {
         assertTrue(FastMoney.of(BigDecimal.valueOf(0d), "CHF")
-                           .isLessThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
+                .isLessThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
         assertFalse(FastMoney.of(BigDecimal.valueOf(0.00001d), "CHF")
-                            .isLessThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
+                .isLessThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
         assertFalse(FastMoney.of(15, "CHF").isLessThanOrEqualTo(FastMoney.of(10, "CHF")));
         assertFalse(FastMoney.of(15.546, "CHF").isLessThan(FastMoney.of(10.34, "CHF")));
         assertTrue(FastMoney.of(5, "CHF").isLessThanOrEqualTo(FastMoney.of(10, "CHF")));
@@ -975,11 +1006,11 @@ public class FastMoneyTest{
      * {@link org.javamoney.moneta.FastMoney#isGreaterThan(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testIsGreaterThan(){
+    public void testIsGreaterThan() {
         assertFalse(
                 FastMoney.of(BigDecimal.valueOf(0d), "CHF").isGreaterThan(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
         assertTrue(FastMoney.of(BigDecimal.valueOf(0.00001d), "CHF")
-                           .isGreaterThan(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
+                .isGreaterThan(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
         assertTrue(FastMoney.of(15, "CHF").isGreaterThan(FastMoney.of(10, "CHF")));
         assertTrue(FastMoney.of(15.546, "CHF").isGreaterThan(FastMoney.of(10.34, "CHF")));
         assertFalse(FastMoney.of(5, "CHF").isGreaterThan(FastMoney.of(10, "CHF")));
@@ -991,11 +1022,11 @@ public class FastMoneyTest{
      * {@link org.javamoney.moneta.FastMoney#isGreaterThanOrEqualTo(javax.money.MonetaryAmount)} .
      */
     @Test
-    public void testIsGreaterThanOrEqualTo(){
+    public void testIsGreaterThanOrEqualTo() {
         assertTrue(FastMoney.of(BigDecimal.valueOf(0d), "CHF")
-                           .isGreaterThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
+                .isGreaterThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
         assertTrue(FastMoney.of(BigDecimal.valueOf(0.00001d), "CHF")
-                           .isGreaterThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
+                .isGreaterThanOrEqualTo(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
         assertTrue(FastMoney.of(15, "CHF").isGreaterThanOrEqualTo(FastMoney.of(10, "CHF")));
         assertTrue(FastMoney.of(15.546, "CHF").isGreaterThanOrEqualTo(FastMoney.of(10.34, "CHF")));
         assertFalse(FastMoney.of(5, "CHF").isGreaterThanOrEqualTo(FastMoney.of(10, "CHF")));
@@ -1007,10 +1038,10 @@ public class FastMoneyTest{
      * .
      */
     @Test
-    public void testIsEqualTo(){
+    public void testIsEqualTo() {
         assertTrue(FastMoney.of(BigDecimal.valueOf(0d), "CHF").isEqualTo(FastMoney.of(BigDecimal.valueOf(0), "CHF")));
         assertFalse(FastMoney.of(BigDecimal.valueOf(0.00001d), "CHF")
-                            .isEqualTo(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
+                .isEqualTo(FastMoney.of(BigDecimal.valueOf(0d), "CHF")));
         assertTrue(FastMoney.of(BigDecimal.valueOf(5d), "CHF").isEqualTo(FastMoney.of(BigDecimal.valueOf(5), "CHF")));
         assertTrue(
                 FastMoney.of(BigDecimal.valueOf(1d), "CHF").isEqualTo(FastMoney.of(BigDecimal.valueOf(1.00), "CHF")));
@@ -1025,7 +1056,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()}.
      */
     @Test
-    public void testGetImplementationType(){
+    public void testGetImplementationType() {
         assertEquals(FastMoney.of(0, "CHF").getContext().getAmountType(), FastMoney.class);
         assertEquals(FastMoney.of(0.34746d, "CHF").getContext().getAmountType(), FastMoney.class);
         assertEquals(FastMoney.of(100034L, "CHF").getContext().getAmountType(), FastMoney.class);
@@ -1035,7 +1066,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#query(javax.money.MonetaryQuery)}.
      */
     @Test
-    public void testQuery(){
+    public void testQuery() {
         MonetaryQuery<Integer> q = amount -> FastMoney.from(amount).getPrecision();
         FastMoney[] moneys = new FastMoney[]{FastMoney.of(100, "CHF"), FastMoney.of(34242344, "USD"),
                 FastMoney.of(23123213.435, "EUR"), FastMoney.of(-23123213.435, "USS"), FastMoney.of(-23123213, "USN"),
@@ -1049,7 +1080,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#asType(java.lang.Class)}.
      */
     @Test
-    public void testGetNumberClassOfT(){
+    public void testGetNumberClassOfT() {
         FastMoney m = FastMoney.of(13.656, "CHF");
         assertEquals(m.getNumber().numberValue(Byte.class), Byte.valueOf((byte) 13));
         assertEquals(m.getNumber().numberValue(Short.class), Short.valueOf((short) 13));
@@ -1064,18 +1095,18 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#getNumber()#asNumber()}.
      */
     @Test
-    public void testGetNumber(){
+    public void testGetNumber() {
         assertEquals(BigDecimal.ZERO, FastMoney.of(0, "CHF").getNumber().numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("100034"), FastMoney.of(100034L, "CHF").getNumber().numberValue(BigDecimal.class));
         assertEquals(new BigDecimal("0.34738"),
-                     FastMoney.of(new BigDecimal("0.34738"), "CHF").getNumber().numberValue(BigDecimal.class));
+                FastMoney.of(new BigDecimal("0.34738"), "CHF").getNumber().numberValue(BigDecimal.class));
     }
 
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#toString()}.
      */
     @Test
-    public void testToString(){
+    public void testToString() {
         assertEquals("XXX 1.23455", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
         assertEquals("CHF 1234.00000", FastMoney.of(1234, "CHF").toString());
         assertEquals("CHF 1234.00000", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
@@ -1087,7 +1118,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#with(javax.money.MonetaryOperator)} .
      */
     @Test
-    public void testWithMonetaryOperator(){
+    public void testWithMonetaryOperator() {
         MonetaryOperator adj = amount -> FastMoney.of(-100, amount.getCurrency());
         FastMoney m = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         FastMoney a = m.with(adj);
@@ -1107,7 +1138,7 @@ public class FastMoneyTest{
      * Test method for {@link org.javamoney.moneta.FastMoney#from(javax.money.MonetaryAmount)}.
      */
     @Test
-    public void testFrom(){
+    public void testFrom() {
         FastMoney m = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         FastMoney m2 = FastMoney.from(m);
         assertTrue(m == m2);
@@ -1118,7 +1149,7 @@ public class FastMoneyTest{
     }
 
     @Test
-    public void testSerialization() throws IOException, ClassNotFoundException{
+    public void testSerialization() throws IOException, ClassNotFoundException {
         FastMoney m = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -1130,18 +1161,18 @@ public class FastMoneyTest{
         assertTrue(m != m2);
     }
 
-	@Test
-	public void parseTest() {
-		FastMoney money = FastMoney.parse("EUR 25.25");
-		assertEquals(money.getCurrency(), EURO);
-		assertEquals(money.getNumber().doubleValue(), 25.25);
-	}
+    @Test
+    public void parseTest() {
+        FastMoney money = FastMoney.parse("EUR 25.25");
+        assertEquals(money.getCurrency(), EURO);
+        assertEquals(money.getNumber().doubleValue(), 25.25);
+    }
 
     /**
      * Test method for {@link org.javamoney.moneta.Money#from(javax.money.MonetaryAmount)}.
      */
     @Test
-    public void testFromInversed(){
+    public void testFromInversed() {
         Money m = Money.of(new BigDecimal("1.2345"), "XXX");
         Money m2 = Money.from(m);
         assertTrue(m == m2);
@@ -1152,60 +1183,60 @@ public class FastMoneyTest{
     }
 
     @Test(expectedExceptions = ArithmeticException.class)
-    public void testCreatingFromDoubleNan(){
+    public void testCreatingFromDoubleNan() {
         FastMoney.of(Double.NaN, "XXX");
     }
 
     @Test(expectedExceptions = ArithmeticException.class)
-    public void testCreatingFromDoublePositiveInfinity(){
+    public void testCreatingFromDoublePositiveInfinity() {
         FastMoney.of(Double.POSITIVE_INFINITY, "XXX");
     }
 
     @Test(expectedExceptions = ArithmeticException.class)
-    public void testCreatingFromDoubleNegativeInfinity(){
+    public void testCreatingFromDoubleNegativeInfinity() {
         FastMoney.of(Double.NEGATIVE_INFINITY, "XXX");
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
-    	FastMoney.zero(null);
-    	Assert.fail();
+        FastMoney.zero(null);
+        Assert.fail();
     }
 
     @Test
     public void shouldRerturnZeroWhenUsingZero() {
-    	MonetaryAmount zero = FastMoney.zero(DOLLAR);
-    	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
-    	assertEquals(DOLLAR, zero.getCurrency());
+        MonetaryAmount zero = FastMoney.zero(DOLLAR);
+        assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
+        assertEquals(DOLLAR, zero.getCurrency());
     }
 
-   @Test(expectedExceptions = NullPointerException.class)
-   public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
-   	FastMoney.ofMinor(null, 1234L);
-   	Assert.fail();
-   }
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
+        FastMoney.ofMinor(null, 1234L);
+        Assert.fail();
+    }
 
-   @Test
-   public void shouldRerturnMonetaryAmount() {
-   	MonetaryAmount amount = FastMoney.ofMinor(DOLLAR, 1234L);
-   	assertEquals(Double.valueOf(12.34), amount.getNumber().doubleValue());
-   	assertEquals(DOLLAR, amount.getCurrency());
-   }
+    @Test
+    public void shouldRerturnMonetaryAmount() {
+        MonetaryAmount amount = FastMoney.ofMinor(DOLLAR, 1234L);
+        assertEquals(Double.valueOf(12.34), amount.getNumber().doubleValue());
+        assertEquals(DOLLAR, amount.getCurrency());
+    }
 
-   @Test(expectedExceptions = IllegalArgumentException.class)
-   public void shouldReturnErrorWhenCurrencyIsInvalid() {
-   	 FastMoney.ofMinor(new InvalidCurrency(), 1234L);
-   }
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldReturnErrorWhenCurrencyIsInvalid() {
+        FastMoney.ofMinor(new InvalidCurrency(), 1234L);
+    }
 
-   @Test(expectedExceptions = IllegalArgumentException.class)
-   public void shouldReturnErrorWhenFractionDigitIsNegative() {
-   	 FastMoney.ofMinor(DOLLAR, 1234L, -2);
-   }
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void shouldReturnErrorWhenFractionDigitIsNegative() {
+        FastMoney.ofMinor(DOLLAR, 1234L, -2);
+    }
 
-   @Test
-   public void shouldRerturnMonetaryAmountUsingFractionDigits() {
-   	MonetaryAmount amount = FastMoney.ofMinor(DOLLAR, 1234L, 3);
-   	assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
-   	assertEquals(DOLLAR, amount.getCurrency());
-   }
+    @Test
+    public void shouldRerturnMonetaryAmountUsingFractionDigits() {
+        MonetaryAmount amount = FastMoney.ofMinor(DOLLAR, 1234L, 3);
+        assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
+        assertEquals(DOLLAR, amount.getCurrency());
+    }
 }
