@@ -38,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  * @author Otavio Santana
  * @since 1.0.1
  */
-class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
+public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
 
     static final String STYLE = "MonetaryAmountFormatSymbols";
 
