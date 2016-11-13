@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -38,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  * @author Otavio Santana
  * @since 1.0.1
  */
-class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
+public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
 
     static final String STYLE = "MonetaryAmountFormatSymbols";
 
@@ -69,6 +69,15 @@ class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         return currencyUnit;
     }
 
+
+    public String toLocalizedPattern() {
+        return decimalFormat.toLocalizedPattern();
+    }
+
+    public String toPattern() {
+        return decimalFormat.toPattern();
+    }
+
     @Override
     public AmountFormatContext getContext() {
         return CONTEXT;
@@ -85,7 +94,7 @@ class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         try {
             Number number = decimalFormat.parse(text.toString());
             return producer.create(currencyUnit, number);
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             throw new MonetaryParseException(exception.getMessage(), text, 0);
         }
     }
@@ -105,7 +114,7 @@ class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this) {
+        if (obj == this) {
             return true;
         }
         if (MonetaryAmountDecimalFormat.class.isInstance(obj)) {
@@ -115,6 +124,7 @@ class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         }
         return false;
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

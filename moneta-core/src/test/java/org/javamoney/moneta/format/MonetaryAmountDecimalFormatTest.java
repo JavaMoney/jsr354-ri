@@ -16,6 +16,8 @@
 package org.javamoney.moneta.format;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.function.MoneyProducer;
 import org.testng.Assert;
@@ -107,6 +109,22 @@ public class MonetaryAmountDecimalFormatTest {
         MonetaryAmount money = Money.of(EXAMPLE_VALUE, currencyUnit);
         String parse = format.queryFrom(money);
         assertEquals(format.parse(parse), money);
+    }
+
+    @Test
+    public void shouldtoLocalizedPattern() {
+        MonetaryAmountDecimalFormat f = MonetaryAmountDecimalFormat.class.cast(format);
+        String pattern = f.toLocalizedPattern();
+        assertNotNull(pattern);
+    }
+
+    @Test
+    public void shouldtoLocalizedPattern2() {
+        String pattern = "#,##0.###";
+        MonetaryAmountDecimalFormat f = (MonetaryAmountDecimalFormat) MonetaryAmountDecimalFormatBuilder.of(pattern).build();
+        assertNotNull(f.toLocalizedPattern());
+        assertEquals(pattern, f.toLocalizedPattern());
+        assertEquals(pattern, f.toPattern());
     }
 
 }
