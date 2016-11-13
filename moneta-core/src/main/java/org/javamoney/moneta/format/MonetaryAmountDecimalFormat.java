@@ -74,6 +74,10 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         return decimalFormat.toLocalizedPattern();
     }
 
+    public String toPattern() {
+        return decimalFormat.toPattern();
+    }
+
     @Override
     public AmountFormatContext getContext() {
         return CONTEXT;

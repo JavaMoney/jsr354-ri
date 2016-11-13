@@ -124,6 +124,7 @@ public class MonetaryAmountDecimalFormatTest {
         MonetaryAmountDecimalFormat f = (MonetaryAmountDecimalFormat) MonetaryAmountDecimalFormatBuilder.of(pattern).build();
         assertNotNull(f.toLocalizedPattern());
         assertEquals(pattern, f.toLocalizedPattern());
+        assertEquals(pattern, f.toPattern());
     }
 
 }
