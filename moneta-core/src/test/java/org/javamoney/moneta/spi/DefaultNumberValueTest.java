@@ -123,13 +123,21 @@ public class DefaultNumberValueTest {
 	@Test
 	public void shouldReturnAmountFractionNumerator() {
 		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(132.21));
-		assertEquals(132L, numberValue.getAmountFractionNumerator());
+		assertEquals(21L, numberValue.getAmountFractionNumerator());
+	}
+
+	@Test
+	public void shoudReturnAmountFractionNumerator() {
+		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(62.5));
+		assertEquals(5L, numberValue.getAmountFractionNumerator());
+		assertEquals(10L, numberValue.getAmountFractionDenominator());
+
 	}
 
 	@Test
 	public void shouldReturnAmountFractionDenominator() {
 		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(132.21));
-		assertEquals(21L, numberValue.getAmountFractionDenominator());
+		assertEquals(100L, numberValue.getAmountFractionDenominator());
 	}
 
 	@Test
