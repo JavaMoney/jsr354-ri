@@ -15,12 +15,10 @@
  */
 package org.javamoney.moneta.spi;
 
+import javax.money.NumberValue;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.Objects;
-
-import javax.money.NumberValue;
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.
@@ -171,7 +169,7 @@ public final class DefaultNumberValue extends NumberValue {
      */
     @Override
     public long getAmountFractionDenominator() {
-        return BigDecimal.valueOf(10).pow(getScale()).longValueExact();
+        return getScale() < 0 ? 1 : BigDecimal.valueOf(10).pow(getScale()).longValueExact();
     }
 
     /*
