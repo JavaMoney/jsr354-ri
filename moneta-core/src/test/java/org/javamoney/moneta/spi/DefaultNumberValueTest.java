@@ -141,6 +141,12 @@ public class DefaultNumberValueTest {
 	}
 
 	@Test
+	public void shouldReturnAmountFractionDenominatorForNegativeScale() {
+		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(10.00));
+		assertEquals(1, numberValue.getAmountFractionDenominator());
+	}
+
+	@Test
 	public void shouldReturnNumberValue() {
 		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(21));
 
