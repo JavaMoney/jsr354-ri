@@ -26,6 +26,8 @@ import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 public class ExchangeRateSimpleTest {
     private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
     private static final CurrencyUnit GBP = Monetary.getCurrency("GBP");
@@ -33,6 +35,7 @@ public class ExchangeRateSimpleTest {
     @Test
     public void equalsTest() {
         DefaultNumberValue factor = new DefaultNumberValue(1.1);
+        DefaultNumberValue bigDecimalFactor = new DefaultNumberValue(new BigDecimal("1.1"));
 
         ExchangeRate rate1 = new ExchangeRateBuilder("myprovider", RateType.ANY)
                 .setBase(EUR)
@@ -46,6 +49,15 @@ public class ExchangeRateSimpleTest {
                 .setFactor(factor)
                 .build();
 
-        assertEquals(rate1, rate2);
+        ExchangeRate rate3 = new ExchangeRateBuilder("myprovider", RateType.ANY)
+                .setBase(EUR)
+                .setTerm(GBP)
+                .setFactor(bigDecimalFactor)
+                .build();
+
+        assertEquals(rate1, rate2, "Rates with same factor");
+        assertEquals(rate1, rate3, "Rates with numerically equal factor");
+        assertEquals(rate1.hashCode(), rate2.hashCode(), "Hashes with same factor");
+        assertEquals(rate1.hashCode(), rate3.hashCode(), "Hashes with numerically equal factor");
     }
 }

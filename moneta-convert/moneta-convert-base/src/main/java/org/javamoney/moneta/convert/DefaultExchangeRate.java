@@ -16,6 +16,7 @@
 package org.javamoney.moneta.convert;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -258,7 +259,24 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
      */
     @Override
     public int hashCode() {
-        return Objects.hash(base, conversionContext, factor, term, chain);
+        // Numerically equal factors should produce the same hash code, so hash a normalized
+        // version of the factor rather than the NumberValue object.
+        BigDecimal normalizedFactor = factor.numberValue(BigDecimal.class).stripTrailingZeros();
+
+        // The exchange rate chain includes a reference to "this" if the caller doesn't explicitly
+        // set a chain in the builder, so we can't naively hash the chain or we'll get infinite
+        // recursion.
+        int chainHash = 0;
+        for (ExchangeRate chainedRate : chain) {
+            if (chainedRate == this) {
+                // Use a constant to represent the presence of this object in the chain.
+                chainHash = Objects.hash(chainHash, "this");
+            } else {
+                chainHash = Objects.hash(chainHash, chainedRate);
+            }
+        }
+
+        return Objects.hash(base, conversionContext, normalizedFactor, term, chainHash);
     }
 
     /*
@@ -275,7 +293,8 @@ class DefaultExchangeRate implements ExchangeRate, Serializable, Comparable<Exch
             DefaultExchangeRate other = (DefaultExchangeRate) obj;
             return Objects.equals(base, other.base) &&
                     Objects.equals(conversionContext, other.conversionContext) &&
-                    Objects.equals(factor, other.factor) && Objects.equals(term, other.term);
+                    factor.compareTo(other.factor) == 0 &&
+                    Objects.equals(term, other.term);
         }
         return false;
     }
