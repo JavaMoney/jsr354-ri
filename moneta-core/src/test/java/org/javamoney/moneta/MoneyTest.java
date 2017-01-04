@@ -1085,6 +1085,8 @@ public class MoneyTest {
         assertEquals("CHF 1234", Money.of(new BigDecimal("1234.0"), "CHF").toString());
         assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
         assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
+        assertEquals("CHF 50",
+            Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
     }
 
     /**
