@@ -106,7 +106,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
         ExchangeRate rate = getExchangeRate(amount);
         if (Objects.isNull(rate) || !amount.getCurrency().equals(rate.getBaseCurrency())) {
             throw new CurrencyConversionException(amount.getCurrency(),
-                    Objects.isNull(rate) ? null : rate.getCurrency(), null);
+                    this.termCurrency, null);
         }
 
         NumberValue factor = rate.getFactor();
