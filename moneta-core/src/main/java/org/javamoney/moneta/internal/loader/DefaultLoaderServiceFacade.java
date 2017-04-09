@@ -29,7 +29,7 @@ class DefaultLoaderServiceFacade {
 	private final LoadRemoteDataLoaderService loadRemoteDataLoaderService;
 
 	DefaultLoaderServiceFacade(Timer timer, DefaultLoaderListener listener, Map<String, LoadableResource> resources){
-		this.scheduledDataLoaderService = new ScheduledDataLoaderService(timer);
+		this.scheduledDataLoaderService = new ScheduledDataLoaderService(timer, listener);
 		this.loadDataLoaderService = new LoadDataLoaderService(listener);
 		this.loadDataLocalLoaderService = new LoadDataLocalLoaderService(resources, listener);
 		this.loadRemoteDataLoaderService = new LoadRemoteDataLoaderService(listener);
