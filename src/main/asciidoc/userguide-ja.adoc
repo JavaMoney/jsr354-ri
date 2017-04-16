@@ -1,0 +1,2060 @@
+JavaMoney 'Moneta' User Guide
+=============================
+Anatole Tresch <atsticks@gmail.com>, and Miyakawa Taku <miyakawa.taku@gmail.com> for Japanese translation
+:Author Initials: ATR
+:source-highlighter: coderay
+:toc:
+:data-uri:
+:icons:
+:numbered:
+:website: http://javamoney.org/
+:imagesdir: src\main\asciidoc\images
+:iconsdir: src\main\asciidoc\images/icons
+:data-uri:
+
+
+////
+'Moneta' is an implementation of the JSR 354 'Java Money API'. The API is separated
+so also other can provide their own implementations. This document will
+mainly focus on the overall library usage from a user's perspective, when using 'Moneta'. Normally this document
+will not explicitly differentiate between the JSR 354 API and this implementation, unless it is useful for the
+common understanding.
+////
+
+'Moneta' はJSR 354 'java Money API' の実装です。
+APIと実装は分離されているので、他の誰でも自前の実装が提供できます。
+この文書は主に、ユーザ目線から見た 'Moneta' ライブラリの使い方を書きます。
+通常このドキュメントはJSR 354 APIと、実装である 'Moneta' を明示的に区別して扱いません。
+ただし、区別することが理解の上で有用である場合を除きます。
+
+
+////
+.This document
+**********************************************************************
+This is a user guide that describes all relevant aspects of
+Java Money, for using this API along with the 'Moneta' reference implementation.
+
+For a shorter introduction you may check out the quick start guide (tbd).
+
+**********************************************************************
+////
+
+.この文書について
+**********************************************************************
+この文書は、Java MoneyのAPIと、参照実装である 'Moneta' を使う上で、
+関連するすべての側面を記述するユーザーガイドです。
+
+For a shorter introduction you may check out the quick start guide (tbd).
+
+より簡潔な入門編が読みたい場合は、クイックスタートガイド (TBD) を参照してください。
+
+**********************************************************************
+
+
+////
+== Introduction to Java Money
+////
+
+== Java Moneyの紹介
+
+////
+Java Money is a initiative lead by Credit Suisse to standardize monetary aspects in Java. The main part hereby is
+JSR 354, which defines the money and currency API covering currencies, monetary amounts, rounding, currency conversion
+and formatting. _Moneta_ is the JSR 354 reference implementation, also adding some additional aspects like
+extended Lambda-Support and multiple amount implementation classes. Additionally there is the JavaMoney OSS library,
+which contains additionally financial calculations and formulas, additional currency mapping, regions, historic
+currencies, currency/region mapping and last but not least EE/CDI support. Below given the most important links:
+////
+
+Java Moneyは、金銭に関するJavaの機能 (aspects) を標準化するための構想で、クレディ・スイスによって主導されています。
+Java Moneyの主要部分はJSR 354です。
+このJSRは、通貨(currencies)・金額(monetary amounts)・丸め(rounding)・通貨換算(currency conversion)
+・書式化(formatting)など、お金(money)と通貨に関わるAPIを定義するものです。
+_Moneta_ はJSR 354の参照実装です。
+また、ラムダ式のサポート強化や複数の金額実装クラスなど、いくつかの追加機能も提供しています。
+_Moneta_ の他に、JavaMoney OSSライブラリも存在しています。
+JavaMoney OSSライブラリが提供する機能は、財務計算や公式、追加的な通貨マッピング、地域、歴史的通貨、
+通貨・地域のマッピング、そして最後に重要な、Java EEとCDIのサポートといったものです。
+以下に重要な文書へのリンクを挙げます。
+
+////
+* JSR 354 API specification available https://jcp.org/en/jsr/detail?id=354[here].
+* JSR 354 on GitHub https://github.com/4[here].
+* JavaMoney Umbrella Site: http://javamoney.org
+////
+
+* https://jcp.org/en/jsr/detail?id=354[JSR 354 API 仕様].
+* https://github.com/4[GitHub上のJSR 354リポジトリ].
+* JavaMoneyの全体に関するサイト: http://javamoney.org
+
+////
+Basically the API of JSR 354 provides the following packages:
+////
+
+JSR 354のAPIは次のパッケージから構成されます:
+
+////
++javax.money+:: contains the main artifacts, such as +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
+MonetaryQuery, MonetaryRounding+, and the singleton accessors +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+..
+////
+
++javax.money+:: +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator, MonetaryQuery, MonetaryRounding+
+といった核となる部品と、シングルトンのアクセサである +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+
+を提供。
+
+////
++javax.money.conversion+:: contains the conversion artifacts +ExchangeRate, ExchangeRateProvider, CurrencyConversion+
+and the according +MonetaryConversions+ accessor singleton..
+////
+
++javax.money.conversion+:: +ExchangeRate, ExchangeRateProvider, CurrencyConversion+ といった通過換算の部品と、
+付随するシングルトンのアクセサである +MonetaryConversions+ を提供。
+
+////
++javax.money.format+:: contains the formatting artifacts +MonetaryAmountFormat, AmountFormatContext+ and the according
++MonetaryFormats+ accessor singleton.
+////
+
++javax.money.format+:: 書式化の部品である +MonetaryAmountFormat, AmountFormatContext+ と、
+付随するシングルトンのアクセサである +MonetaryFormats+ を提供。
+
+////
++javax.money.spi+:: contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
+different runtime environments and component loading mechanisms.
+////
+
++javax.money.spi+:: JSR 354 API用のSPIインタフェースと起動処理を提供。
+これらによって、多様な実行環境とコンポーネント・ローディングの機構がサポートされる。
+
+////
+Basically the JSR 354 API is complete, meaning users won't have to reference anything other than what is already part of
+the JSR's API. As a consequence this reference implementation contains mostly components that are registered into the
+API using the JSR's SPI mechanism. Only a few additions to the API are done, e.g. singletons providing Lambda-supporting
+methods (+MonetaryFunctions+).
+////
+
+基本的に、JSR 354のAPIは自己完結的(complete)です。
+これはつまり、ユーザがJSRのAPIに含まれるもの以外を参照する必要がない、ということを意味します。
+必然的に、この参照実装のコンポーネントのほとんどは、SPIを使ってAPIに登録されるものになっています。
+API自体への拡張は、ラムダ式サポート用のメソッド (+MonetaryFunctions+) など、ほんの少数にとどまります。
+
+
+////
+== Working with Currency Units
+=== Accessing Currency Units
+////
+
+== 通貨単位の操作
+=== 通貨単位を取得する
+
+////
+Basically access to  currency units is based on the +javax.money.MonetaryCurrencies+ singleton. Hereby you can access
+currencies in different ways:
+////
+
+基本的に、通貨単位の取得は +javax.money.MonetaryCurrencies+ シングルトンを介して行います。
+以下に挙げる方法で通貨単位が取得できます。
+
+////
+==== Access currencies by currency code
+////
+
+==== 通貨コードで通貨を取得する
+
+////
+You can use the currency code to access currencies.
+////
+
+通貨コードで通貨が取得できます。
+
+////
+[source,java]
+.Accessing currencies by currency code
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit("CHF");
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit("USD");
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit("EUR");
+--------------------------------------------
+////
+
+[source,java]
+.通貨コードで通貨を取得する
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit("CHF");
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit("USD");
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit("EUR");
+--------------------------------------------
+
+////
+Hereby all codes available in the underlying JDK are mapped by default.
+////
+
+使用中のJDKで使用可能なすべての通貨コードが、デフォルトでマッピングされています。
+（訳注:なんのことか？要調査）
+
+////
+==== Access currencies by Locale
+////
+
+==== ロケールで通貨を取得する
+
+////
+You can use +java.util.Locale+ to access currencies. Hereby the +Locale+ instance, represents a
+country. All available countries can be accessed by calling +Locale.getISOCountries()+. With the
+given ISO country code a corresponding +Locale+ can be created:
+////
+
++java.util.Locale+ で通貨ができます。
+ここで +Locale+ クラスのインスタンスは、国 (country) を指し示すために使われます（訳注:かなり意訳）。
+なお、使用できる国のリストは、 +Locale.getISOCountries()+ メソッドで取得できます。
+また、ISO国名コードを使って、 +Locale+ クラスのインスタンスが生成できます:
+
+[source,java]
+--------------------------------------------
+String isoCountry = "USA";
+Locale country = new Locale("", isoCountry);
+--------------------------------------------
+
+////
+Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +Locale+:
+////
+
++java.util.Currency+ クラスと同じように、 +CurrencyUnit+ クラスのインスタンスはロケールを使って取得できます。
+
+////
+[source,java]
+.Accessing currencies by Locale
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit(new Locale("", "SUI")); // Switzerland
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit(new Locale("", "USA")); // United States of America
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit(new Locale("", "GER")); // Germany
+--------------------------------------------
+////
+
+[source,java]
+.ロケールを使って通貨を取得する
+--------------------------------------------
+CurrencyUnit currencyCHF = MonetaryCurrencies.getCurrencyUnit(new Locale("", "SUI")); // スイス
+CurrencyUnit currencyUSD = MonetaryCurrencies.getCurrencyUnit(new Locale("", "USA")); // アメリカ合衆国
+CurrencyUnit currencyEUR = MonetaryCurrencies.getCurrencyUnit(new Locale("", "GER")); // ドイツ
+--------------------------------------------
+
+////
+Hereby all codes available in the underlying JDK are mapped by default.
+////
+
+使用中のJDKで使用可能なすべての国名コードについて、通貨へのマッピングが存在します。
+
+////
+==== Accessing all currencies
+
+Also all currently known currencies can be accessed:
+////
+
+==== すべての通貨を取得する
+
+現在知られているすべての通貨を取得することもできます。
+
+////
+[source,java]
+.Accessing all currencies
+--------------------------------------------
+Collection<CurrencyUnit> allCurrencies = MonetaryCurrencies.getCurrencies();
+--------------------------------------------
+////
+
+[source,java]
+.すべての通貨を取得する
+--------------------------------------------
+Collection<CurrencyUnit> allCurrencies = MonetaryCurrencies.getCurrencies();
+--------------------------------------------
+
+////
+Similarly to other access methods you can also explicitly specifiy the provider chain to be used. The _Moneta_
+reference implementation provides the following currency providers:
+
+* _default_: this currency provider (implemented by +org.javamoney.moneta.internal.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
+* _ConfigurableCurrencyUnitProvider_ (implemented by +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+)
+  provides a configuration hook for programmatically add instances. This provider is autoconfigured. Ir provides
+  static hooks for adding additional +CurrencyUnit+ instances:
+////
+
+他のアクセス方法と同じように、プロバイダ・チェーンを明示的に用いることも可能です。
+参照実装である _Moneta_ は、次の通貨プロバイダを提供しています:
+
+* _デフォルト_: +org.javamoney.moneta.internal.JDKCurrencyProvider+ クラスとして実装されています。
+  この通貨プロバイダは、単純に +java.util.Currency+ クラスのアダプタとして機能します。
+* _ConfigurableCurrencyUnitProvider_: +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+ クラスとして実装されています。
+  この通貨プロバイダは、プログラム上で通貨のインスタンスを追加するためのフックを提供します。
+  この通貨プロバイダは自動設定されます（訳注:？？？）。
+  また、 +CurrencyUnit+ クラスのインスタンスを追加するためのフックも提供します。
+
+////
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically.
+--------------------------------------------
+ /**
+ * Registers a bew currency unit under its currency code.
+ * @param currencyUnit the new currency to be registered, not null.
+ * @return any unit instance registered previously by this instance, or null.
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit);
+
+/**
+ * Registers a bew currency unit under the given Locale.
+ * @param currencyUnit the new currency to be registered, not null.
+ * @param locale the Locale, not null.
+ * @return any unit instance registered previously by this instance, or null.
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit, Locale locale);
+
+/**
+ * Removes a CurrencyUnit.
+ * @param currencyCode the currency code, not null.
+ * @return any unit instance removed, or null.
+ */
+public static CurrencyUnit removeCurrencyUnit(String currencyCode);
+
+/**
+ * Removes a CurrencyUnit.
+ * @param locale the Locale, not null.
+ * @return  any unit instance removed, or null.
+ */
+public static CurrencyUnit removeCurrencyUnit(Locale locale);
+--------------------------------------------
+////
+
+[source,java]
+.+CurrencyUnit+ クラスのインスタンスをプログラム上で登録する例:
+--------------------------------------------
+/**
+ * 新しい通貨単位を、その通貨コードに対応するものとして登録する.
+ * @param currencyUnit 登録される通貨。非null。
+ * @return 通貨コードに対応する通貨単位が既に登録されていれば、そのインスタンス。
+ *         登録されていなければ、null。
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit);
+
+/**
+ * 新しい通貨単位を、ロケールに対応するものとして登録する.
+ * @param currencyUnit 登録される通貨。非null。
+ * @param locale ロケール。非null。
+ * @return ロケールに対応する通貨単位が既に登録されていれば、そのインスタンス。
+ *         登録されていなければ、null。
+ */
+public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit, Locale locale);
+
+/**
+ * 通貨単位を削除する.
+ * @param currencyCode 通貨コード。非null。
+ * @return 削除される通貨単位のインスタンス。削除される通貨単位がない場合、null。
+ */
+public static CurrencyUnit removeCurrencyUnit(String currencyCode);
+
+/**
+ * 通貨単位を削除する.
+ * @param locale ロケール。非null。
+ * @return 削除される通貨単位のインスタンス。削除される通貨単位がない場合、null。
+ */
+public static CurrencyUnit removeCurrencyUnit(Locale locale);
+--------------------------------------------
+
+////
+The API is straightforward so far. For most cases the +BuildableCurrencyUnit+ class can be used to create additional
+currency instances that then can be registered using the static methods:
+////
+
+これまでのところ、APIは単純明快です。
+上述のstaticメソッドで登録するべき追加的な通貨単位のインスタンスは、
+大抵の場合、次節で紹介する +BuildableCurrencyUnit+ クラスから生成できます。
+
+////
+==== Registering Additional Currency Units
+////
+
+==== 追加的な通貨単位を登録する
+
+////
+For adding additional CurrencyUnit instances to the +MonetaryCurrencies+ singleton, you must implement an instance
+of +CurrencyProvider+. Following a minimal example, hereby also reusing the +BuildableCurrencyUnit+ class, that
+also provides currencies for Bitcoin:
+訳注: CurrencyProvider -> CurrencyProviderSpi
+訳注: reusingしてない
+////
+
+CurrencyUnitクラスのインスタンスを +MonetaryCurrencies+ シングルトンに追加するためには、
++CurrencyProviderSpi+ インタフェースを実装したクラスを作る必要があります。
+次に挙げる最小限の実装では、+BuildableCurrencyUnit+ クラスを使って
+Bitcoinの通貨単位を生成しています。
+
+////
+[source,java]
+.Implementing a Bitcoin currency provider
+--------------------------------------------
+public final class BitCoinProvider implements CurrencyProviderSpi{
+
+    private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
+
+    public BitCoinProvider(){
+       bitcoinSet.add(new BuildableCurrencyUnit.Builder("BTC").build());
+       bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
+    }
+
+    /**
+     * Return a {@link CurrencyUnit} instances matching the given
+     * {@link javax.money.CurrencyContext}. 訳注→CurrencyQuery
+     *
+     * @param query the {@link javax.money.CurrencyQuery} containing the parameters determining the query. not null.
+     * @return the corresponding {@link CurrencyUnit}s matching, never null.
+     */
+    @Override
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
+       // only ensure BTC is the code, or it is a default query.
+       if(query.isDefault()){
+         if(query.getCurrencyCodes().contains("BTC") || query.getCurrencyCodes().isEmpty()){
+           return bitcoinSet;
+         }
+       }
+       return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
+////
+
+[source,java]
+.Bitcoinの通貨プロバイダを実装する
+--------------------------------------------
+public final class BitCoinProvider implements CurrencyProviderSpi{
+
+    private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
+
+    public BitCoinProvider(){
+       bitcoinSet.add(new BuildableCurrencyUnit.Builder("BTC").build());
+       bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
+    }
+
+    /**
+     * 通貨クエリに合致するCurrencyUnitのインスタンスを戻す.
+     *
+     * @param query クエリを表す{@link javax.money.CurrencyQuery}。非null。
+     * @return 対応するCurrencyUnitの集合。非null。
+     */
+    @Override
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
+       // クエリがデフォルトのものであるか、通貨コードにBTCが指定された時だけ戻す
+       if(query.isDefault()){
+         if(query.getCurrencyCodes().contains("BTC") || query.getCurrencyCodes().isEmpty()){
+           return bitcoinSet;
+         }
+       }
+       return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
+
+////
+By default, the +BitCoinProvider+ class must be configured as service to be loadable by +java.util.ServiceLoader+.
+This can be achieved by adding a file +META-INF/services/javax.money.spi.CurrencyProviderSpi+ with the following content
+to your classpath:
+////
+
+通常 +BitCoinProvider+ クラスは +java.util.ServiceLoader+ クラスでロードできるように設定する必要があります。
+このために、次の内容を含む +META-INF/services/javax.money.spi.CurrencyProviderSpi+
+ファイルをクラスパス上に配置する必要があります。
+
+////
+[source,listing]
+.Contents of +META-INF/services/javax.money.spi.CurrencyProviderSpi+
+--------------------------------------------
+# assuming the class BitCoinProvider is in the package my.fully.qualified
+my.fully.qualified.BitCoinProvider
+--------------------------------------------
+////
+
+[source,listing]
+.+META-INF/services/javax.money.spi.CurrencyProviderSpi+ ファイルの内容
+--------------------------------------------
+# BitCoinProviderクラスがmy.fully.qualifiedパッケージに含まれていることを前提とする
+my.fully.qualified.BitCoinProvider
+--------------------------------------------
+
+////
+Alternatively, if the JSR's +Bootstrap+ logic uses CDI, it would also be possible to register the provider class as
+normal CDI bean, e.g.
+////
+
+JSRの +Bootstrap+ 処理がCDIを使っている場合、ServiceLoaderの代わりに、
+プロバイダのクラスを通常のCDI Beanとして登録することもできます。
+
+////
+[source,java]
+.Implementing a Bitcoin currency provider
+--------------------------------------------
+@Singleton
+public class BitCoinProvider implements CurrencyProviderSpi{
+  ...
+}
+--------------------------------------------
+////
+
+[source,java]
+.Bitcoinの通貨プロバイダを実装
+--------------------------------------------
+@Singleton
+public class BitCoinProvider implements CurrencyProviderSpi{
+  ...
+}
+--------------------------------------------
+
+////
+Now given this example it is obvious that the tricky part is to define, when exactly a given +CurrencyQuery+
+should be targeted by this provider, or otherwise, be simply ignored. In our case just provide an additional
+ISO code, so it is a good idea to just only return data for _default_ query types. Additionally we only return our code
+sublist, when the according code is requested, or a unspecified request is performed.
+訳注: In our case -> because our case
+訳注: our code sublistではない
+訳注: default = 国名コードってこと？
+訳注: 通貨コードであってISOコードではないのでは。
+////
+
+通貨プロバイダを提供するにあたって一番やっかいなことは、 +CurrencyQuery+ に対して通貨単位を戻すか、
+あるいは単にクエリを無視するかを決めることです。
+上記の例は、追加的な通貨コードに対して通貨単位を登録するだけなので、
+_default_ クエリタイプに対してデータを返すだけで充分です。
+また上記の例は、対応する通貨コードがリクエストされた場合、
+あるいは条件を指定しないクエリに限って通貨単位を戻しています。
+
+////
+==== Building Custom Currency Units
+////
+
+==== カスタムの通貨単位を作る
+
+////
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically.
+--------------------------------------------
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+
+// registering it
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+////
+
+[source,java]
+.+CurrencyUnit+ のインスタンスをプログラム上で登録する例
+--------------------------------------------
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+
+// 通貨単位を登録する
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+
+////
+Fortunately +CurrencyUnitBuilder+ is also capable of registering a currency on creation, by just passing
+a register flag to the call: So the same can be rewritten as follows:
+////
+
+幸いなことに +CurrencyUnitBuilder+ 自体、通貨を生成すると同時に登録する機能を有しています。
+これは、登録することを表すフラグを渡すことによって可能です。
+したがって、上記のプログラムは次のように書き直せます:
+
+////
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically, using +CurrencyUnitBuilder+.
+--------------------------------------------
+CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* register */);
+--------------------------------------------
+////
+
+[source,java]
+.+CurrencyUnitBuilder+ を使って +CurrencyUnit+ のインスタンスをプログラム上で登録する例
+--------------------------------------------
+CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build(true /* 登録する */);
+--------------------------------------------
+
+////
+Alternatively one may use the +MonetaryCurrencies+ static methods as follows:
+
+上とかぶってる！
+////
+
+あるいは、 +MonetaryCurrencies+ クラスのstaticメソッドを使って、次のように登録することも可能です。
+
+////
+[source,java]
+.Example of registering +CurrencyUnit+ instances programmatically, using +MonetaryCurrencies+ .
+--------------------------------------------
+CurrencyUnit unit = new CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+
+// registering it
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+
+訳注: たぶん間違ってる。new ... じゃないはず。
+////
+
+[source,java]
+.+MonetaryCurrencies+ を使って +CurrencyUnit+ のインスタンスをプログラム上で登録する例
+--------------------------------------------
+CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22").setDefaultFractionUnits(3).build();
+
+// 登録する
+MonetaryCurrencies.registerCurrency(unit);
+MonetaryCurrencies.registerCurrency(unit, Locale.MyCOUNTRY);
+--------------------------------------------
+
+////
+==== Provided Currencies
+
+_Moneta_, by default provides only the same currencies as defined by +java.util.Currency+. Use the extended currency
+module from the JavaMoney OSS library for additional currency support, e.g. current overloading of currencies
+based on the actual input from the online ISO-4217 resources.
+訳注: e.g. 以下が意味不明瞭。
+////
+
+==== 提供される通貨
+
+_Moneta_ がデフォルトで提供する通貨は、 +java.util.Currency+ が提供しているものだけです。
+追加の通貨サポートを得るためには、JavaMoney OSSライブラリの拡張通貨モジュールを使ってください。
+たとえば、オンラインのISO-4217リソースに基づく通貨のオーバーロードが存在します。
+
+////
+=== Monetary Amounts
+
+Monetary amounts are the key abstraction of JSR 354. _Moneta_ hereby provides different implementations of amounts:
+
+* +Money+ represents a effective implementation, which is based on +java.math.BigDecimal+ internally for
+  performing the arithmetic operations. The implementation is capable of supporting arbitrary precision
+  and scale.
+* +FastMoney+ represents numeric representation that was optimized for speed. It represents a monetary amount only
+  as a integral number of type +long+, hereby using a number scale of 100'000 (10^5).
+* +RoundedMoney+ finally provides an amount implementation thar is implicitly rounded after each operation.
+訳注: arithmetic operation → 計算
+////
+
+=== 金額
+
+金額はJSR 354が提供する抽象化のうち、核となるもののひとつです。
+_Moneta_ は次に挙げるような金額の実装を提供します:
+
+* +Money+ は、内部で +java.math.BigDecimal+ を使って計算を行います。
+  この実装は任意精度・スケールをサポートします。
+* +FastMoney+ は計算速度が最適化された実装です。
+  この実装は +long+ 型の整数を10^5=100,000のスケールで保持することにより、金額の数値を表現します。
+* +RoundedMoney+ は一回の計算ごとに暗黙的な丸めを行う実装です。
+
+////
+==== Choosing an Implementation
+
+Basically, if the numeric capabilities of +FastMoney+ are sufficient for your use cases, you may use this type. If
+not sure, using +Money+ is in general safe. +RoundedMoney+ should only be used, if you are well aware of its usage,
+since the immediate rounding may produce unwanted side effects (invalid values).
+////
+
+==== 実装の選択
+
++FastMoney+ の計算方法で用が足りるのであれば、この実装が使えます。
+用が足りるかどうか定かでない場合は、 +Money+ を使うのが安全です。
++RoundedMoney+ は、使い方をよく理解している場合に限って使うべきです。
+なぜなら、計算ごとの丸め処理によって、誤った結果が生じるかもしれないからです。
+
+////
+==== Creating new Amounts
+
+As defined by the JSR's API you can access according +MonetaryAmountFactory+ for all types listed above to create
+new instances of amounts. E.g. instances of +FastMoney+ can be created as follows:
+////
+
+==== 新しく金額を作る
+
+上述したような金額実装クラスのインスタンスは、 +MonetaryAmountFactory+ で生成できます。
++MonetaryAmountFactory+ のインスタンスは、JSRのAPIで取得できます。
+たとえば、 +FastMoney+ のインスタンスは次のように生成できます。
+
+////
+[source,java]
+.Creating instances of +FastMoney+ using the +MonetaryAmounts+ singleton:
+--------------------------------------------
+FastMoney m = MonetaryAmounts.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
+--------------------------------------------
+////
+
+[source,java]
+.+MonetaryAmounts+ シングルトンを使って +FastMoney+ のインスタンスを生成する:
+--------------------------------------------
+FastMoney m = MonetaryAmounts.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
+--------------------------------------------
+
+////
+Additionally _Moneta_ also supports static factory methods on the types directly. So the following code is equivalent:
+
+[source,java]
+.Creating instances of +FastMoney+ using the +MonetaryAmounts+ singleton:
+--------------------------------------------
+FastMoney m = FastMoney.of("USD", 200.20);
+--------------------------------------------
+
+訳注: キャプションが間違ってる
+////
+
+これに加えて、 _Moneta_ の金額実装クラスは、staticなファクトリメソッドを提供しています。
+したがって、上述のコードは次のコードと等価です。
+
+[source,java]
+.+FastMoney+ のファクトリメソッドを使って +FastMoney+ のインスタンスを生成する
+--------------------------------------------
+FastMoney m = FastMoney.of("USD", 200.20);
+--------------------------------------------
+
+////
+Creation of +Money+ instances is similar:
+
+[source,java]
+.Creating instances of +Money+:
+--------------------------------------------
+Money m1 = MonetaryAmounts.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
+Money m2 = Money.of("USD", 200.20);
+--------------------------------------------
+////
+
++Money+ の生成も同様です:
+
+[source,java]
+.+Money+ のインスタンスを生成する
+--------------------------------------------
+Money m1 = MonetaryAmounts.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
+Money m2 = Money.of("USD", 200.20);
+--------------------------------------------
+
+////
+===== Configuring Instances of Money
+
+The +Money+ class is internally based on +java.math.BigDecimal+. Therefore the arithmetic precision and rounding
+capabilities of +BigDecimal+ are also usable with +Money+. Hereby, by default, instances
+of +Money+ internally are initialized with +MathContext.DECIMAL64+. Nevertheless instance also can be configured
+explicitly by passing a +MathContext+ as part of a +MonetaryContext+:
+////
+
+===== Moneyのインスタンスを設定を変更する
+
++Money+ クラスは +java.math.BigDecimal+ に基づいています。
+したがって、 +BigDecimal+ の提供する精度と丸めの制御機能は +Money+ でも使えます。
+デフォルトでは、 +Money+ のインスタンスは +MathContext.DECIMAL64+ を使うように初期化されます。
+しかしながら、 +MathContext+ を +MonetaryContext+ に設定することも可能です。
+
+////
+[source,java]
+.Creating instances of +Money+ configuring the +MathContext+ to be used.
+--------------------------------------------
+Money money = Money.of("CHF", 200, MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build());
+--------------------------------------------
+////
+
+[source,java]
+.+Money+ が +MathContext+ を使うように設定する
+--------------------------------------------
+Money money = Money.of("CHF", 200, MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build());
+--------------------------------------------
+
+////
+Using the JSR's main API allows to achieve the same as follows:
+
+[source,java]
+.Creating instances of +Money+ configuring the +MathContext+ to be used, using the +MonetaryAmountFactory+.
+--------------------------------------------
+Money money = MonetaryAmounts.getAmountFactory(Money.class)
+                              .setCurrencyUnit("CHF").setNumber(200).
+                              ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
+                              .create();
+--------------------------------------------
+////
+
+JSRのAPIを使うと、同じ処理は次のように書けます。
+
+[source,java]
+.+Money+ が +MathContext+ を使うように、 +MonetaryAmountFactory+ を使って設定する
+--------------------------------------------
+Money money = MonetaryAmounts.getAmountFactory(Money.class)
+                              .setCurrencyUnit("CHF").setNumber(200).
+                              ,setContext(MonetaryContextBuilder.create().set(MathContext.DECIMAL128).build())
+                              .create();
+--------------------------------------------
+
+////
+Additionally the default +MathContext+ can be configured with the +javamoney.properties+ located in your classpath:
+
+[source,listing]
+.Configuring the default +MathContext+ to be used for +Money+.
+--------------------------------------------
+org.javamoney.moneta.Money.defaults.mathContext=DECIMAL128
+--------------------------------------------
+////
+
++javamoney.properties+ ファイルをクラスパス上に配置することで、デフォルトの +MathContext+ を設定することも可能です。
+
+[source,listing]
+.+Money+ が使うデフォルトの +MathContext+ を設定する
+--------------------------------------------
+org.javamoney.moneta.Money.defaults.mathContext=DECIMAL128
+--------------------------------------------
+
+////
+Alternatively you also can configure the precision and +RoundingMode+ to be used:
+
+[source,listing]
+.Configuring the default +MathContext+ to be used for +Money+ (alternative).
+--------------------------------------------
+org.javamoney.moneta.Money.defaults.precision=DECIMAL128
+org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
+--------------------------------------------
+////
+
+同じことを行うための別の方法として、精度と +RoundingMode+ を個別に設定することもできます。
+
+[source,listing]
+.+Money+ が使うデフォルトの +MathContext+ を設定する（別の方法）
+--------------------------------------------
+org.javamoney.moneta.Money.defaults.precision=DECIMAL128
+org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
+--------------------------------------------
+
+////
+==== Configuring Internal Rounding of FastMoney
+
+The class +FastMoney+ internally uses a single +long+ value to model a monetary amount. Hereby it uses a fixed scale of
+5 digits. Obviously this may require rounding in some cases. Hereby by default +FastMoney+ rounds input values (of type
++MonetaryAmount+, or numbers) to its internal 5 digits scale. In most cases that makes sense and makes use of
+this class easy and straight forward. Nevertheless there might be scenarios, where you want to throw
++ArithmeticException+ if an entry value exceeds the maximal scale. This alternate, more rigid behaviour, can be
+activated by adding the following configuration to +javamoney.properties+:
+////
+
+==== FastMoneyの内部的な丸め方法を設定する
+
++FastMoney+ は内部で単一の +long+ 値を使って、5桁の固定スケールで金額を表します。
+もちろん計算によっては、丸めが必要になることがあります。
++FastMoney+ はデフォルトで、入力値となる +MonetaryAmount+, あるいは数値を、内部的なスケールである5桁に丸めます。
+多くの場合、これはは便利で素直で有用な挙動です。
+しかしながら、入力値が5桁のスケールを超える場合、 +ArithmeticException+ を投げて欲しい、というシナリオも考えられます。
++javamoney.properties+ ファイルに次の設定を追加することで、このような厳格な挙動が実現できます。
+
+////
+[source,listing]
+.Activating strict input number validation for +FastMoney+
+--------------------------------------------
+org.javamoney.moneta.FastMoney.enforceScaleCompatibility=true
+--------------------------------------------
+////
+
+[source,listing]
+.+FastMoney+ が入力値を厳格に検査するように設定
+--------------------------------------------
+org.javamoney.moneta.FastMoney.enforceScaleCompatibility=true
+--------------------------------------------
+
+////
+==== Registering Additional Amount Implementations
+
+By default, additional implementation classes are added, by registering an instance of
++MonetaryAmountFactoryProviderSpi+ as JDK services loaded by +java.util.ServiceLoader+.
+For this you have to add the following contents to +META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi+:
+////
+
+==== 追加的な金額実装クラスを登録する
+
++MonetaryAmountFactoryProviderSpi+ のインスタンスが +java.util.ServiceLoader+
+でロードされるように設定することで、追加的な金額実装クラスが登録できます。
+この設定を行うためには、 +META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi+
+ファイルが次のような行を含むようにします。
+
+////
+[source,listing]
+.Creating instances of +Money+:
+--------------------------------------------
+my.fully.qualified.MonetaryAmountFactoryProviderImplClass
+--------------------------------------------
+
+訳注: キャプションが間違っている
+////
+
+[source,listing]
+.金額のファクトリを登録する
+--------------------------------------------
+my.fully.qualified.MonetaryAmountFactoryProviderImplClass
+--------------------------------------------
+
+////
+For further ease of use, your implementations may furthermore provide static factory methods, e.g.
+
+[source,java]
+.Creating instances of +Money+:
+--------------------------------------------
+public static MyMoney of(String currencyCode, double number);
+public static MyMoney of(String currencyCode, long number);
+public static MyMoney of(String currencyCode, Number number);
+--------------------------------------------
+
+訳注: キャプションが間違っている
+////
+
+より使いやすくするため、金額実装クラスにstaticなファクトリメソッドを含ませるのが良いかもしれません。
+
+[source,java]
+.金額実装クラスのstaticファクトリメソッド
+--------------------------------------------
+public static MyMoney of(String currencyCode, double number);
+public static MyMoney of(String currencyCode, long number);
+public static MyMoney of(String currencyCode, Number number);
+--------------------------------------------
+
+////
+Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK nubber type
+to +BigDecimal+ is available on +MoneyUtils+, along with additional helpful methods.
+////
+
+参照実装であるMonetaは、再利用可能な共通機能を含んでいます。
+たとえば +MoneyUtils+ クラスは、任意の数値型からBigDecimalへの安全な変換のような有用な機能を提供しています。
+
+////
+==== Mixing Amount Implementation Types
+////
+
+==== 金額実装クラスを混用する
+
+////
+Basically the JSR supports mixing of different implementation types. Nevertheless there are some effects that are
+important to mention, if doing so:
+
+* the performance may decrease based on the slower implementation used. Hereby the type used as a base type (the
+  type on which the operations are performed), is the type that basically determines overall performance.
+* mixing of different amount implementation types may require internal rounding to be performed. Whereas the
+  compatibility of precision is ensured, scale may be reduced silently as needed.
+////
+
+複数の金額実装クラスを混用することは可能です。
+ただし、いくつか注意するべきことがあります。
+
+* 遅い方の実装のために性能が劣化するかもしれません。
+  基本的には、計算を行うメソッドを提供するクラスによって性能が決まります。
+* 異なる実装の混用によって、丸めが行われる場合があります。
+  精度は保持されますが、スケールは暗黙的に切り詰められることがあり得ます。
+
+////
+Nevertheless there are strategies to mitigate these possible issues. The most easy and obvious strategy hereby is
+simply explicitly *converting explicitly to the required target type, before performing any operations*. This can
+be easily achieved, since every implementation in _moneta_ provides corresponding static +from()+ methods:
+
+訳注: explicitlyが重複
+////
+
+上述の問題を緩和するためには、いくつかの方法があります。
+最も簡単で分かりやすい方法は、 *計算を行う前に、明示的に対象のクラスへの変換を行う* ことです。
+_Moneta_ の金額実装クラスは、いずれもstaticな
++from()+ メソッドを含んでいるため、このような処理は容易に実現できます。
+
+////
+[source,java]
+.Creating instances of +Money+:
+--------------------------------------------
+MyMoney money1;
+Money money = Money.from(myMoney);
+FastMoney fastMoney = FastMoney.from(myMoney);
+
+money = Money.from(fastMoney);
+fastMoney = FastMoney.from(money);
+--------------------------------------------
+
+訳注: キャプションが間違っている
+////
+
+[source,java]
+.計算の前に変換を行う
+--------------------------------------------
+MyMoney money1;
+Money money = Money.from(myMoney);
+FastMoney fastMoney = FastMoney.from(myMoney);
+
+money = Money.from(fastMoney);
+fastMoney = FastMoney.from(money);
+--------------------------------------------
+
+////
+In the above example, as long as the scale of 5 is never exceeded, no implicit rounding is performed. Bigger scales
+require rounding, when creating new instances of +FastMoney+.
+////
+
+上述の例では、5桁のスケールを上回らない限り、暗黙の丸め処理は行われません。
+5桁のスケールを上回る場合は、 +FastMoney+ への変換で丸めが行われます。
+
+////
+==== Additional Provided Extension Points
+
+The _moneta_ reference implementation also provides implementations for several commonly used simple monetary functions
+in the +org.javamoney.moneta.functions_ package:
+
+訳注: 「拡張ポイント」ではないだろう
+////
+
+==== その他の共通機能
+
+参照実装である _Moneta_ は、 +org.javamoney.moneta.functions+
+パッケージにて、単純な共通機能を提供しています。
+
+////
+* +MonetaryUtil.reciprocal()+ provides an operator for calculating the reciprocal value of an amount (1/amount).
+* +MonetaryUtil.permil(BigDecimal decimal), MonetaryUtil.permil(Number number),
+  MonetaryUtil.permil(Number number, MathContext mathContext)+ provides an operator for calculating permils.
+* +MonetaryUtil.percent(BigDecimal decimal), MonetaryUtil.percent(Number number)+ provides an operator for
+  calculating percentages.
+* +MonetaryUtil.minorPart()+ provides an operator for extracting only the minor part of an amount.
+* +MonetaryUtil.majorPart()+ provides an operator for extracting only the major part of an amount.
+* +MonetaryUtil.minorUnits()+ provides a query for extracting only the minor units of an amount.
+* +MonetaryUtil.majorUnits()+ provides a query for extracting only the major units of an amount.
+
+訳注: minorUnitsの説明が怪しい。
+////
+
+* +MonetaryUtil.reciprocal()+:
+  逆数 (1/amount) を計算する演算子を戻す。
+* +MonetaryUtil.permil(BigDecimal decimal), MonetaryUtil.permil(Number number),
+  MonetaryUtil.permil(Number number, MathContext mathContext)+:
+  千分率を計算する演算子を戻す。
+* +MonetaryUtil.percent(BigDecimal decimal), MonetaryUtil.percent(Number number)+:
+  パーセンテージを計算する演算子を戻す。
+* +MonetaryUtil.minorPart()+:
+  補助通貨単位部分だけを抜き出す演算子を戻す。
+* +MonetaryUtil.majorPart()+
+  主要通貨単位部分だけを抜き出す演算子を戻す。
+* +MonetaryUtil.minorUnits()+
+  補助通貨単位で金額の数値を表すためのクエリを戻す。
+* +MonetaryUtil.majorUnits()+
+  主要通貨単位に金額の数値を切り詰めるためのクエリを戻す。
+
+////
+Additionally several aggregate functions are provided on +MonetaryFunctions+, they are specially useful
+when combined with the new Java 8 Lambda/Streaming features:
+////
+
++MonetaryFunctions+ クラスはいくつかの集計関数を提供しています。
+これらの関数は、Java 8のラムダ式・ストリームAPIと組み合わせることで便利に使えます。
+
+////
+* +public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit()+
+ provides a +Collector+ to group by +CurrencyUnit+.
+* +public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary()+
+  create the summary of the +MonetaryAmount+.
+* +public static Collector<MonetaryAmount, GroupMonetarySummaryStatistics, GroupMonetarySummaryStatistics> groupBySummarizingMonetary()+
+  create +MonetaryAmount+ group by MonetarySummary.
+* +public static Comparator<MonetaryAmount> sortCurrencyUnit()+ get a comparator for sorting currency units ascending.
+* +public static Comparator<MonetaryAmount> sortCurrencyUnitDesc()+ get a comparator for sorting currency units descending.
+* +public static Comparator<MonetaryAmount> sortNumber()+ + access a comparator for sorting amount by number value ascending.
+* +public static Comparator<MonetaryAmount> sortNumberDesc()+ access a comparator for sorting amount by number value descending.
+* +public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit currencyUnit)+ creates a predicate that filters by
+  +CurrencyUnit+.
+* +public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit currencyUnit) creates a predicate that filters by
+ +CurrencyUnit+.
+* +public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit requiredUnit, CurrencyUnit... otherUnits)+
+  creates a filtering predicate based on the given currencies.
+* +public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount)+ creates a filter using
+  +MonetaryAmount.isGreaterThan+.
+* +public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(
+        MonetaryAmount amount)+ creates a filter using +MonetaryAmount.isGreaterThanOrEqualTo+.
+* +public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount)+ creates a filter using
+  +MonetaryAmount.isLess+.
+* +public static Predicate<MonetaryAmount> isLessThanOrEqualTo(
+        MonetaryAmount amount)+ creates a filter using +MonetaryAmount.isLessThanOrEqualTo+.
+* +public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min,
+        MonetaryAmount max)+ creates a filter using the isBetween predicate.
+* +public static MonetaryAmount sum(MonetaryAmount a, MonetaryAmount b)+ adds two monetary together.
+* +public static MonetaryAmount min(MonetaryAmount a, MonetaryAmount b)+ returns the smaller of two
+  +MonetaryAmount+ values. If the arguments have the same value, the result is that same value.
+* +public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b)+ returns the greater of two
+  +MonetaryAmount+ values. If the arguments have the same value, the result is that same value.
+* +public static BinaryOperator<MonetaryAmount> sum()+ Creates a BinaryOperator to sum.
+* +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the mininum amount
+* +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to caclulate the maximum amount.
+
+訳注: isBetweenの説明が怪しい
+////
+
+* +public static Collector<MonetaryAmount, ?, Map<CurrencyUnit, List<MonetaryAmount>>> groupByCurrencyUnit()+
+  +CurrencyUnit+ ごとにグルーピングを行う +Collector+ を戻す。
+* +public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary()+
+  +MonetaryAmount+ を集計する +Collector+ を戻す。
+* +public static Collector<MonetaryAmount, GroupMonetarySummaryStatistics, GroupMonetarySummaryStatistics> groupBySummarizingMonetary()+
+  +MonetaryAmount+ をMonetarySummaryごとにグルーピングする +Collector+ を戻す。
+* +public static Comparator<MonetaryAmount> sortCurrencyUnit()+
+  通貨単位の昇順で金額を並び替えるComparatorを戻す。
+* +public static Comparator<MonetaryAmount> sortCurrencyUnitDesc()+
+  通貨単位の降順で金額を並び替えるComparatorを戻す。
+* +public static Comparator<MonetaryAmount> sortNumber()+
+  金額の昇順で並び替えるComparatorを戻す。
+* +public static Comparator<MonetaryAmount> sortNumberDesc()+
+  金額の降順で並び替えるComparatorを戻す。
+* +public static Predicate<MonetaryAmount> isCurrency(CurrencyUnit currencyUnit)+
+  金額がCurrencyUnitの通貨のものかどうかを判別する述語を戻す。
+* +public static Predicate<MonetaryAmount> isNotCurrency(CurrencyUnit currencyUnit)+
+  金額がCurrencyUnitの通貨のものでないかどうかを判別する述語を戻す。
+* +public static Predicate<MonetaryAmount> containsCurrencies(CurrencyUnit requiredUnit, CurrencyUnit... otherUnits)+
+  金額がいずれかの通貨のものかどうかを判別する述語を戻す。
+* +public static Predicate<MonetaryAmount> isGreaterThan(MonetaryAmount amount)+
+  +MonetaryAmount.isGreaterThan+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isGreaterThanOrEqualTo(MonetaryAmount amount)+
+  +MonetaryAmount.isGreaterThanOrEqualTo+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isLessThan(MonetaryAmount amount)+
+  +MonetaryAmount.isLess+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isLessThanOrEqualTo(MonetaryAmount amount)+
+  +MonetaryAmount.isLessThanOrEqualTo+ によって比較する述語を戻す。
+* +public static Predicate<MonetaryAmount> isBetween(MonetaryAmount min, MonetaryAmount max)+
+  金額がminとmaxの間かどうかを判別する述語を戻す。
+* +public static MonetaryAmount sum(MonetaryAmount a, MonetaryAmount b)+
+  金額を足し合わせる。
+* +public static MonetaryAmount min(MonetaryAmount a, MonetaryAmount b)+
+  小さい方の金額を戻す。もしa, bが同じ金額の場合、結果はその同じ金額。
+* +public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b)+
+  大きい方の金額を戻す。もしa, bが同じ金額の場合、結果はその同じ金額。
+* +public static BinaryOperator<MonetaryAmount> sum()+
+  足し算するBinaryOperatorを戻す。
+* +public static BinaryOperator<MonetaryAmount> min()+
+  小さい方の金額を戻すBinaryOperatorを戻す。
+* +public static BinaryOperator<MonetaryAmount> max()+
+  大さい方の金額を戻すBinaryOperatorを戻す。
+
+////
+==== Performance Aspects
+
+Performance was not measured in deep. Nevertheless we have a simple test in place, which is executed during all
+component test runs, which performs different monetary operations on the different implementation types provided:
+////
+
+==== 性能
+
+性能はまだ厳密に計測されていません。
+ただし、全コンポーネントのテストと同時に実行される単純な性能テストが実装されています。
+このテストは、異なる金額実装クラスに対していくつかの計算を行うものです。
+
+////
+[source,java]
+.Simple Performance Test Code
+--------------------------------------------
+M money1 = money1.add(M.of(EURO, 1234567.3444));
+money1 = money1.subtract(M.of(EURO, 232323));
+money1 = money1.multiply(3.4);
+money1 = money1.divide(5.456);
+money1 = money1.with(MonetaryRoundings.getRounding());
+--------------------------------------------
+////
+
+[source,java]
+.単純な性能テストコード
+--------------------------------------------
+M money1 = money1.add(M.of(EURO, 1234567.3444));
+money1 = money1.subtract(M.of(EURO, 232323));
+money1 = money1.multiply(3.4);
+money1 = money1.divide(5.456);
+money1 = money1.with(MonetaryRoundings.getRounding());
+--------------------------------------------
+
+////
+All tests were executed on a notebook with an +Intel i7 2.6GHz+ processor with SSD.
+The VM was not configured in any special way.
+
+This test is executed 100000 times for each monetary amount class +M+:
+
+[source,listing]
+.Performance Test Results for monetary arithmetic, no implementation mix
+--------------------------------------------
+Duration for 100000 operations (Money,BD): 2107 ms (21 ns per loop) -> EUR 1657407.95
+Duration for 100000 operations (FastMoney,long): 1011 ms (10 ns per loop) -> EUR 1657407.95000
+--------------------------------------------
+////
+
+すべてのテストは +Intel i7 2.6GHz+ のSSD付きノートPCで実行されています。
+VMは特に設定変更されていません。
+
+このテストは金額クラス +M+ ごとに100000回ずつ実行されます。
+
+[source,listing]
+.金額計算の性能テスト結果（金額実装クラスの混用なし）
+--------------------------------------------
+Duration for 100000 operations (Money,BD): 2107 ms (21 ns per loop) -> EUR 1657407.95
+Duration for 100000 operations (FastMoney,long): 1011 ms (10 ns per loop) -> EUR 1657407.95000
+--------------------------------------------
+
+////
+The same test is also done, hereby mixing different implementation types. Also this test is executed 100000 times for
+each monetary amount class +M+:
+
+[source,listing]
+.Performance Test Results for monetary arithmetic, mixing implementations
+--------------------------------------------
+Duration for 100000 operations (FastMoney/Money mixed): 899 ms (8 ns per loop) -> EUR 1657407.95000
+Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop) -> EUR 1657407.95
+--------------------------------------------
+
+訳注 「M」は正しいか？
+////
+
+金額実装クラスを混用した状態でも同じテストを行っています。
+このテストも同じように金額実装クラスごとに100000回ずつ実行されます。
+
+[source,listing]
+.金額計算の性能テスト結果（金額実装クラスを混用）
+--------------------------------------------
+Duration for 100000 operations (FastMoney/Money mixed): 899 ms (8 ns per loop) -> EUR 1657407.95000
+Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop) -> EUR 1657407.95
+--------------------------------------------
+
+////
+=== Rounding
+
+_Moneta_ provides different roundings, all accessible from the +MonetaryRoundings+ singleton.
+////
+
+=== 丸め方
+
+_Moneta_ は複数の丸め方をサポートします。
+具体的には、 +MonetaryRoundings+ シングルトンを使うことで丸め方を表すオブジェクトが取得できます。
+
+////
+==== Arithmetic Roundings
+
+You can acquire instances of arithmetic roundings by passing the target scale and +RoundingMode+ to be used within
+the +RoundingQuery+ passed:
+
+[source,java]
+.Access and apply arithmetic rounding.
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getRounding(
+                               RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding);
+--------------------------------------------
+////
+
+==== 算術的丸め方
+
+計算結果のスケールと +RoundingMode+ を +RoundingQuery+ に設定することで、
+算術的丸め方のインスタンスが取得できます。
+
+[source,java]
+.算術的丸め方を取得・使用する
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getRounding(
+                               RoundingQueryBuilder.create().setScale(4).set(RoundingMode.HALF_UP).build());
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding);
+--------------------------------------------
+
+////
+==== Default Roundings
+
+Also a _default_ +MonetaryRounding+ can be accessed, which basically falls back to the according _default_ rounding
+based on the current amount instance to be rounded:
+
+[source,java]
+.Access and apply default rounding.
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getDefaultRounding();
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
+--------------------------------------------
+////
+
+==== デフォルトの丸め方
+
+デフォルトの +MonetaryRounding+ も取得できます。
+この丸め方は、は丸め対象の金額のインスタンスの、デフォルトの丸め方にフォールバックします。
+
+[source,java]
+.デフォルトの丸め方を取得・使用する
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getDefaultRounding();
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
+--------------------------------------------
+
+////
+Also you can access the default rounding for a given +CurrencyUnit+. Be default this will return an arithmetic rounding
+based on the currency's _default fraction digits_, but it may also return a non standard rounding, where useful.
+
+[source,java]
+.Access and apply default currency rounding.
+--------------------------------------------
+CurrencyUnit currency = ...;
+MonetaryRounding rounding = MonetaryRoundings.getRounding(currency);
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses MonetaryRoundings.getRounding(CurrencyUnit);
+--------------------------------------------
+
+訳注: this will return ...が怪しい
+訳注: implicitlyでない。上のコードのコピペ
+////
+
++CurrencyUnit+ が表す通貨のデフォルトの丸め方も取得できます。
+通常これは、通貨の「デフォルトの小数部桁数」に基づいた算術的丸め方を適用します。
+ただし、標準的でない有用な丸め方を適用する場合もあります。
+
+[source,java]
+.通貨のデフォルトの丸め方を取得・使用する
+--------------------------------------------
+CurrencyUnit currency = ...;
+MonetaryRounding rounding = MonetaryRoundings.getRounding(currency);
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding);
+--------------------------------------------
+
+////
+For Swiss Francs also a corresponding cash rounding is accessible. In Switzerland the smallest minor in cash are
+5 Rappen, so everything must be rounded to minors dividable by 5. This rounding can be accessed by setting the
++cashRounding=tru+ property, when accessing a currency rounding for CHF:
+
+[source,java]
+.Access Swiss Francs Cash Rounding
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getRounding(MonetaryCurrencies.getCurrency("CHF"),
+  RoundingQueryBuilder.create().set("cashRounding", true).build()
+);
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // amount rounded in CHF cash rounding
+--------------------------------------------
+////
+
+スイスフランについては、この通貨特有の丸め方が取得できます。
+スイスで現金を扱う際の最小の補助通貨単位は5ラッペンです。
+このため、現金決済の金額は補助通貨単位が5で割り切れるように丸める必要があります。
+CHF（スイスフラン）用の丸め方を取得する際に、
++cashRounding+ プロパティをtrueに設定することにより、このような丸め方が可能になります。
+
+[source,java]
+.スイスフランの現金決済用の丸め方を取得する
+--------------------------------------------
+MonetaryRounding rounding = MonetaryRoundings.getRounding(MonetaryCurrencies.getCurrency("CHF"),
+  RoundingQueryBuilder.create().set("cashRounding", true).build()
+);
+MonetaryAmount amt = ...;
+MonetaryAmount roundedAmount = amt.with(rounding); // CHFの現金決済用に丸められた金額
+--------------------------------------------
+
+////
+==== Custom Roundings
+
+_Moneta_ does not provide any custom roundings by default. Nevertheless you can add custom roundings by registering
+instances of +RoundingProviderSpi+.
+////
+
+==== カスタムの丸め方
+
+（訳注: この節は次節と同内容です）
+
+_Moneta_ はデフォルトではカスタムの丸め方を提供していません。
+その代わり、自身のカスタムの丸め方を、 +RoundingProviderSpi+ のインスタンスを通して登録することができます。
+
+////
+[source,java]
+.Implement a custom +RoundingProviderSpi+, registered as "myPersonalRounding"
+--------------------------------------------
+public final class TestRoundingProvider implements RoundingProviderSpi{
+
+    private static final MonetaryRounding ROUNDING = new MyCustomRounding();
+
+    private final Set<String> roundingNames;
+
+    public TestRoundingProvider(){
+        Set<String> names = new HashSet<>();
+        names.add("myPersonalRounding");
+        this.roundingNames = Collections.unmodifiableSet(names);
+    }
+
+    @Override
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+        if("myPersonalRounding".equals(roundingQuery.getRoundingName())){
+            return ROUNDING;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> getRoundingNames(){
+        return roundingNames;
+    }
+
+}
+--------------------------------------------
+
+訳注: この節不要
+////
+
+[source,java]
+.カスタムの +RoundingProviderSpi+ を実装し、 "myPersonalRounding" として登録
+--------------------------------------------
+public final class TestRoundingProvider implements RoundingProviderSpi{
+
+    private static final MonetaryRounding ROUNDING = new MyCustomRounding();
+
+    private final Set<String> roundingNames;
+
+    public TestRoundingProvider(){
+        Set<String> names = new HashSet<>();
+        names.add("myPersonalRounding");
+        this.roundingNames = Collections.unmodifiableSet(names);
+    }
+
+    @Override
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+        if("myPersonalRounding".equals(roundingQuery.getRoundingName())){
+            return ROUNDING;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> getRoundingNames(){
+        return roundingNames;
+    }
+
+}
+--------------------------------------------
+
+////
+==== Register your own Roundings
+
+You can add additional roundings by registering instances of +RoundingProviderSpi+. Be default this has to be done
+based on the mechanism as defined by the Java +ServiceLoader+.
+////
+
+==== 自身の丸め方を登録する
+
++RoundingProviderSpi+ を登録することで、自身のカスタムの丸め方が使えるようになります。
+通常これは、Javaの +ServiceLoader+ の仕組みを用いて登録します。
+
+////
+[source,java]
+.Implement a +RoundingProviderSpi+ providing a currency rounding for "BTC" (Bitcoin)
+--------------------------------------------
+public final class TestRoundingProvider implements RoundingProviderSpi{
+
+    private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
+
+    public TestRoundingProvider(){
+        Set<String> names = new HashSet<>();
+        names.add("custom1");
+        this.roundingNames = Collections.unmodifiableSet(names);
+    }
+
+    @Override
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+        CurrencyUnit cu = roundingQuery.getCurrencyUnit();
+        if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
+            return ROUNDING;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> getRoundingNames(){
+        return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
+////
+
+[source,java]
+."BTC" (Bitcoin) 用の丸め方を +RoundingProviderSpi+ によって提供する
+--------------------------------------------
+public final class TestRoundingProvider implements RoundingProviderSpi{
+
+    private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
+
+    public TestRoundingProvider(){
+        Set<String> names = new HashSet<>();
+        names.add("custom1");
+        this.roundingNames = Collections.unmodifiableSet(names);
+    }
+
+    @Override
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+        CurrencyUnit cu = roundingQuery.getCurrencyUnit();
+        if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
+            return ROUNDING;
+        }
+        return null;
+    }
+
+    @Override
+    public Set<String> getRoundingNames(){
+        return Collections.emptySet();
+    }
+
+}
+--------------------------------------------
+
+////
+== Currency Conversion
+
+=== Basics
+
+Basically converting of amounts into other currencies is based on the concept of +MonetaryOperator+, which transforms
+an amount into another amount (of the same implementation type). A conversion hereby is based on +ExchangeRate+
+that defines the transformation between amount A in currency Ca to amount B in currency Cb.
+
+Hereby exchange rates can be accessed through an instanceof +ExchangeRateProvider+, which can be accessed from
+the +MonetaryConversions+ singleton:
+////
+
+== 通貨換算
+
+=== 基本
+
+金額を異なる通貨に換算するためには、 +MonetaryOperator+ を使います。
++MonetaryOperator+ は、金額を、実装クラスを同じくする他の金額へと変換する演算子です。
+換算のレートは +ExchangeRate+ にしたがって行われます。
++ExchangeRate+ は、通貨Caにおける金額Aから、通貨Cbにおける金額Bのような変換を定義するものです。
+
+換算レートは +ExchangeRateProvider+ のインスタンスから取得できます。
++ExchangeRateProvider+ は +MonetaryConversions+ シングルトンから取得できます。
+
+////
+[source,java]
+.Access an +ExchangeRateProvider+ and get an +ExchangeRate+
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
+ExchangeRate chfToUsdRate = rateProvider.getExchangeRate("CHF", "USD");
+--------------------------------------------
+////
+
+[source,java]
+.+ExchangeRateProvider+ から +ExchangeRate+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
+ExchangeRate chfToUsdRate = rateProvider.getExchangeRate("CHF", "USD");
+--------------------------------------------
+
+////
+As you see above we can access a provider by passing its (unique) name. But we can also combine multiple providers
+to an compound provider, by passing a chain of provider names. This defines the chain of providers to be used
+to evaluate a rate required. By default, the first result returned by a provider in the chain is returned. So if we
+want to use the "ECB" provider first and only use the "IMF" provider for currencies not covered by the "ECB" provider
+we can write the following code:
+
+[source,java]
+.Access a compound +ExchangeRateProvider+ and get an +ExchangeRate+
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
+ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
+--------------------------------------------
+////
+
+上の例で見たように、プロバイダは一意の名前によって取得できます。
+また、名前を複数指定することで、複数のプロバイダを合成して複合的なプロバイダを作ることもできます。
+複合的なプロバイダは、プロバイダのチェーンを使って換算レートを決めます。
+デフォルトでは、チェーンの最初のプロバイダによるレートが戻ります。
+したがって、 "ECB" プロバイダを最初のプロバイダとして使い、
+"ECB" プロバイダがサポートしない通貨のためのフォールバック先として "IMF" プロバイダを使う場合は、次のように書きます。
+
+[source,java]
+.複合的な +ExchangeRateProvider+ から +ExchangeRate+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
+ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
+--------------------------------------------
+
+////
+Finally we can also omit the definition of a provider chain. This will use the default provider chain:
+
+[source,java]
+.Access an +ExchangeRate+ using the default provider chain
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
+ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
+--------------------------------------------
+////
+
+最後に、プロバイダチェーンの定義は完全に省くこともできます。
+この場合、デフォルトのプロバイダチェーンが使われます。
+
+[source,java]
+.デフォルトのプロバイダチェーンから +ExchangeRate+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
+ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
+--------------------------------------------
+
+////
+==== Extracting a +CurrencyConversion+
+
+A +CurrencyConversion+ extends +MonetaryOperator+ and is therefore directly applicable on every +MonetaryAmount+.
+Hereby a +CurrencyConversion+ instance is always bound to a terminating currency and an underlying +ExchangeRateProvider+.
+As a consequence each +ExchangeRateProvider+ allows to get a +CurrencyConversion+ instance by passing the terminating
+currency:
+////
+
+==== +CurrencyConversion+ を取得する
+
++CurrencyConversion+ は +MonetaryOperator+ を継承しています。
+したがって、 +MonetaryAmount+ に対する演算子として使えます。
++CurrencyConversion+ のインスタンスには、換算先の通貨と、用いられる +ExchangeRateProvider+ が紐付いています。
++ExchangeRateProvider+ に換算先の通貨を渡すことで、 +CurrencyConversion+ のインスタンスが取得できます。
+
+////
+
+[source,java]
+.Getting a +CurrencyConversion+ from an +ExchangeRateProvider+
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
+CurrencyConversion conversion = rateProvider.getConversion("CHF");
+
+MonetaryAmount amountInUSD = ...;
+MonetaryAmount amountInCHF = amountInUSD.with(conversion);
+--------------------------------------------
+////
+
+[source,java]
+.+ExchangeRateProvider+ から +CurrencyConversion+ を取得する
+--------------------------------------------
+ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
+CurrencyConversion conversion = rateProvider.getConversion("CHF");
+
+MonetaryAmount amountInUSD = ...;
+MonetaryAmount amountInCHF = amountInUSD.with(conversion);
+--------------------------------------------
+
+////
+=== Exchange Rate Providers
+
+_Moneta_ provides quite powerful conversion providers, which allows you to perform currency conversion for most commonly used
+currencies, in some cases event back until 1995:
+////
+
+=== 換算レートのプロバイダ
+
+_Moneta_ は強力な通貨換算のプロバイダを提供します。
+これによって、一般に使われるほとんどの通貨について換算を行うことができます。
+またいくつかの場合には、1995年時点までさかのぼって換算を行うことができます。
+
+////
+* *ECB* connects to the online resources of the European Central Bank, which provides dayily exchange rates related
+  to EURO.
+* *ECB-HIST90* connects the historic currencies feed of the European Central Bank, which provides exchange rates back
+  for the last 90 days.
+* *ECB-HIST* connects the historic currencies feed of the European Central Bank, which provides exchange rates back
+  until 1999.
+* *IMF* connects to the data-feed of the International Monetary Fund, which provides daily exchange rates for
+almost all important currencies. Hereby the IMF feeds are internally build up as derived rates, since IMF
+provides data using the intermediate +SDR+ currency unit.
+* *IDENT* provides rates with a factor of 1.0, where base and target currency are the same.
+
+訳注: ECB-HISTの実装に「直近1500日」と書かれている。
+訳注: ECBのプロバイダは実装されていない？http://www.ecb.int/vocabulary/2002-08-01/eurofxrefの文書タイプをロードするらしいが。
+訳注: ECBCurrentRateProviderのコメントがhistoricとして書かれている。おそらく間違っている。
+////
+
+* *ECB* は、欧州中央銀行がオンラインで提供する、日次の対ユーロ換算レートを使います。
+* *ECB-HIST90* は、欧州中央銀行がオンラインで提供する、直近90日間の対ユーロ換算レートを使います。
+* *ECB-HIST* は、欧州中央銀行がオンラインで提供する、1999年以降の対ユーロ換算レートを使います。
+* *IMF* は、国際通貨基金がオンラインで提供する、ほとんどすべての重要な通貨に関する日次換算レートを使います。
+  国際通貨基金は +SDR+ という中間的な通貨単位を使ってレートを提供しています。
+  このプロバイダは、対SDRレートを組み合わせて換算レートを作ります。
+* *IDENT* は、換算元と換算先が同じ通貨である場合に限り、係数を1.0とする換算レートを提供します。
+
+////
+By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST+. As defined by the JSR the conversion
+provider chain can be configured in +javamoney.properties+ as follows:
+
+[source,listing]
+.Getting a +CurrencyConversion+ from an +ExchangeRateProvider+
+--------------------------------------------
+#Currency Conversion
+conversion.default-chain=IDENT,ECB,IMF,ECB-HIST
+--------------------------------------------
+訳注: キャプションが間違っている
+////
+
+デフォルトのプロバイダチェーンは +IDENT,ECB,IMF,ECB-HIST+ です。
+通貨換算のプロバイダのチェーンは、
++javamoney.properties+ ファイルで次のように設定変更できるよう、JSRに定義されています。
+
+[source,listing]
+.デフォルトの通貨換算のプロバイダチェーンを変更する
+--------------------------------------------
+#Currency Conversion
+conversion.default-chain=IDENT,ECB,IMF,ECB-HIST
+--------------------------------------------
+
+////
+==== Configuring the Exchange Rate Providers
+
+The exchange rate providers provided provide several options to be configured, especially also the locations of
+data feeds and the (re)load/update settings:
+
+[source,listing]
+.Configuring the provided exchange rate providers
+--------------------------------------------
+# ResourceLoader-Configuration (optional)
+# ECB Rates
+load.ECBCurrentRateProvider.type=SCHEDULED
+load.ECBCurrentRateProvider.period=03:00
+load.ECBCurrentRateProvider.resource=/java-money/defaults/ECB/eurofxref-daily.xml
+load.ECBCurrentRateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+
+load.ECBHistoric90RateProvider.type=SCHEDULED
+load.ECBHistoric90RateProvider.period=03:00
+#load.ECBHistoric90RateProvider.at=12:00
+load.ECBHistoric90RateProvider.resource=/java-money/defaults/ECB/eurofxref-hist-90d.xml
+load.ECBHistoric90RateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml
+
+load.ECBHistoricRateProvider.type=SCHEDULED
+load.ECBHistoricRateProvider.period=24:00
+load.ECBHistoricRateProvider.delay=01:00
+load.ECBHistoricRateProvider.at=07:00
+load.ECBHistoricRateProvider.resource=/java-money/defaults/ECB/eurofxref-hist.xml
+load.ECBHistoricRateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml
+
+# IMF Rates
+load.IMFRateProvider.type=SCHEDULED
+load.IMFRateProvider.period=06:00
+#load.IMFRateProvider.delay=12:00
+#load.IMFRateProvider.at=12:00
+load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.xls
+load.IMFRateProvider.urls=http://www.imf.org/external/np/fin/data/rms_five.aspx?tsvflag=Y
+--------------------------------------------
+
+訳注: javamoney.propertiesに、ということを書く必要がある
+////
+
+==== 換算レートのプロバイダを設定変更する
+
+換算レートのプロバイダは設定可能なオプションを提供しています。
+特に、データフィードの場所とロード・リロード・更新に関する設定が変更できます。
+
+[source,listing]
+.換算レートのプロバイダを設定変更する
+--------------------------------------------
+# リソースローダーの設定（省略可能）
+
+# ECBレート
+load.ECBCurrentRateProvider.type=SCHEDULED
+load.ECBCurrentRateProvider.period=03:00
+load.ECBCurrentRateProvider.resource=/java-money/defaults/ECB/eurofxref-daily.xml
+load.ECBCurrentRateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+
+load.ECBHistoric90RateProvider.type=SCHEDULED
+load.ECBHistoric90RateProvider.period=03:00
+#load.ECBHistoric90RateProvider.at=12:00
+load.ECBHistoric90RateProvider.resource=/java-money/defaults/ECB/eurofxref-hist-90d.xml
+load.ECBHistoric90RateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml
+
+load.ECBHistoricRateProvider.type=SCHEDULED
+load.ECBHistoricRateProvider.period=24:00
+load.ECBHistoricRateProvider.delay=01:00
+load.ECBHistoricRateProvider.at=07:00
+load.ECBHistoricRateProvider.resource=/java-money/defaults/ECB/eurofxref-hist.xml
+load.ECBHistoricRateProvider.urls=http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml
+
+# IMFレート
+load.IMFRateProvider.type=SCHEDULED
+load.IMFRateProvider.period=06:00
+#load.IMFRateProvider.delay=12:00
+#load.IMFRateProvider.at=12:00
+load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.xls
+load.IMFRateProvider.urls=http://www.imf.org/external/np/fin/data/rms_five.aspx?tsvflag=Y
+--------------------------------------------
+
+////
+== Formatting Monetary Amounts
+
++MonetaryAmountFormat+ instances can be accessed from the +MonetaryFormats+ singleton. Similar to the Java
+platform, formats can be accessed by passing a country +Locale+. But JSR 354 also supports accessing formats by
+a (unique) name or even given a complex query, that allows to pass any number of parameters to configure the
+format to use. Also compared to the Java platform, the formats are thread-safe and immutable.
+
+訳注: ここでいうJava platformは、java.util.Currency / DecimalFormatのことか？
+////
+
+== 金額を書式化する
+
++MonetaryFormats+ シングルトンを使って +MonetaryAmountFormat+ のインスタンスが取得できます。
+DecimalFormatと同じように、書式はロケールを使って取得できます。
+これに加えてJSR 354では、一意の名前によって書式を取得したり、複合的なクエリによって書式を取得したりできます。
+書式のクエリには、任意の数のパラメータが指定できます。
+DecimalFormatと異なり、JSR 354の書式は不変でスレッドセーフです。
+
+////
+[source,java]
+.Accessing Amount Formats
+--------------------------------------------
+MonetaryAmountFormat formatCountry = MonetaryFormats.getAmountFormat(Locale.GERMANY);
+MonetaryAmountFormat formatNamed = MonetaryFormats.getAmountFormat("MyCustomFormat");
+MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
+  AmountFormatQueryBuilder.create()
+    .set("strict", true)
+    .set("omitNegative", true)
+    .set("omitNegativeSign" "N/A")
+    .build()
+);
+--------------------------------------------
+////
+
+[source,java]
+.金額の書式を取得する
+--------------------------------------------
+MonetaryAmountFormat formatCountry = MonetaryFormats.getAmountFormat(Locale.GERMANY);
+MonetaryAmountFormat formatNamed = MonetaryFormats.getAmountFormat("MyCustomFormat");
+MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
+  AmountFormatQueryBuilder.create()
+    .set("strict", true)
+    .set("omitNegative", true)
+    .set("omitNegativeSign" "N/A")
+    .build()
+);
+--------------------------------------------
+
+////
+Given a +MonetaryAmountFormat+ instance we can use it to format amounts:
+////
+
++MonetaryAmountFormat+ を使って、金額が書式化できます。
+
+[source,java]
+--------------------------------------------
+
+MonetaryAmountFormat format = ...;
+MonetaryAmount amount = ...;
+String formattedString = format.format(amount);
+--------------------------------------------
+
+////
+Basically a +MonetaryAmountFormat+ instance can also reverse the operation by parsing an amount back:
+////
+
++MonetaryAmountFormat+ を逆向きに使って、文字列から金額をパースすることも可能です。
+
+[source,java]
+--------------------------------------------
+
+MonetaryAmountFormat format = ...;
+String formattedString = ...;
+MonetaryAmount amount = format.parse(formattedString);
+--------------------------------------------
+
+////
+NOTE: Be aware that parsing back an amount in a reverse operation may not always work. If a formatter implements
+      only a unidirectional formatting operation, a +MonetaryFormatException+ will be thrown.
+////
+
+NOTE: 書式化された文字列のパースは常にうまく行くとは限りません。
+      フォーマッタが金額から文字列への書式化の一方向だけを実装している場合、
+      +MonetaryFormatException+ が発生します。
+
+////
+=== Customizing the Default Amount Formatters
+
+_Moneta_ basically provides similar formatting options as Java. It is possible to pass a +DecimalFormat+ instance
+as parameter for a +Locale+ vased format query:
+
+訳注: ここでの「Java」はDecimalFormatか
+////
+
+=== デフォルトの金額フォーマッタをカスタマイズする
+
+_Moneta_ はDecimalFormatと同じようなオプションを提供しています。
+書式にクエリにロケールと合わせて +DecimalFormat+ を指定することも可能です。
+
+[source,java]
+--------------------------------------------
+DecimalFormat df = ...;
+MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
+  AmountFormatQueryBuilder.create(Locale.GERMANY)
+    .set(df)
+    .build()
+);
+--------------------------------------------
+
+////
+=== Registering your own Formats
+
+You can add additional formats by registering instances of +MonetaryAmountFormatProviderSpi+. Be default this has to be
+done based on the mechanism as defined by the Java +ServiceLoader+.
+////
+
+=== 独自の書式を登録する
+
++MonetaryAmountFormatProviderSpi+ を使って独自の書式が登録できます。
+通常これは、Javaの +ServiceLoader+ の仕組みを用いて設定する必要があります。
+
+////
+[source,java]
+.Implement a +MonetaryAmountFormatProviderSpi+ providing a format for "GKC" (GeeCoin)
+--------------------------------------------
+public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
+
+    private static final String PROVIDER_NAME = "GeeCoin";
+    /** The supported locales. */
+    private Set<Locale> supportedSets = new HashSet<>();
+    /** The provided formats, by name. */
+    private Set<String> formatNames = new HashSet<>();
+
+    public GeeCoinFormatProviderSpi(){
+        supportedSets.addAll(Locale.CHINA);
+        supportedSets = Collections.unmodifiableSet(supportedSets);
+        formatNames.add("GeeCoin");
+        formatNames = Collections.unmodifiableSet(formatNames);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.money.spi.MonetaryAmountFormatProviderSpi#getProviderName()
+     */
+    @Override
+    public String getProviderName(){
+        return PROVIDER_NAME;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
+     */
+    @Override
+    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
+        Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
+        if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
+            return Collections.emptySet();
+        }
+        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+            return Collections.emptySet();
+        }
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(PROVIDER_NAME);
+        if(amountFormatQuery.getLocale()!=null){
+            builder.setLocale(amountFormatQuery.getLocale());
+        }
+        builder.importContext(amountFormatQuery, false);
+        builder.setMonetaryAmountFactory(amountFormatQuery.getMonetaryAmountFactory());
+        return Arrays.asList(new MonetaryAmountFormat[]{new GeeCoinAmountFormat(builder.build())});
+    }
+
+    @Override
+    public Set<Locale> getAvailableLocales(){
+        return supportedSets;
+    }
+
+    @Override
+    public Set<String> getAvailableFormatNames(){
+        return formatNames;
+    }
+
+}
+--------------------------------------------
+////
+
+[source,java]
+.+MonetaryAmountFormatProviderSpi+ で "GKC" (GeeCoin) 向けの書式を登録する
+--------------------------------------------
+public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
+
+    private static final String PROVIDER_NAME = "GeeCoin";
+    /** サポートするロケールの集合. */
+    private Set<Locale> supportedSets = new HashSet<>();
+    /** 提供する書式の名前の集合. */
+    private Set<String> formatNames = new HashSet<>();
+
+    public GeeCoinFormatProviderSpi(){
+        supportedSets.addAll(Locale.CHINA);
+        supportedSets = Collections.unmodifiableSet(supportedSets);
+        formatNames.add("GeeCoin");
+        formatNames = Collections.unmodifiableSet(formatNames);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.money.spi.MonetaryAmountFormatProviderSpi#getProviderName()
+     */
+    @Override
+    public String getProviderName(){
+        return PROVIDER_NAME;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see
+     * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
+     */
+    @Override
+    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
+        Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
+        if(!amountFormatQuery.getProviders().isEmpty() && !amountFormatQuery.getProviders().contains(getProviderName())){
+            return Collections.emptySet();
+        }
+        if(!(amountFormatQuery.getFormatName()==null || DEFAULT_STYLE.equals(amountFormatQuery.getFormatName()))){
+            return Collections.emptySet();
+        }
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.create(PROVIDER_NAME);
+        if(amountFormatQuery.getLocale()!=null){
+            builder.setLocale(amountFormatQuery.getLocale());
+        }
+        builder.importContext(amountFormatQuery, false);
+        builder.setMonetaryAmountFactory(amountFormatQuery.getMonetaryAmountFactory());
+        return Arrays.asList(new MonetaryAmountFormat[]{new GeeCoinAmountFormat(builder.build())});
+    }
+
+    @Override
+    public Set<Locale> getAvailableLocales(){
+        return supportedSets;
+    }
+
+    @Override
+    public Set<String> getAvailableFormatNames(){
+        return formatNames;
+    }
+
+}
+--------------------------------------------
+
+
+////
+=== Overriding values in javamoney.properties
+
+The reference application supports overriding of the values in +javamoney.properties+ by prefexing the keys with
+a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
+classpath. If no priority is annotated, priority=0 is assumed:
+
+訳注: "reference application" → "reference implementation" の誤記か？
+////
+
+=== javamoney.propertiesの値をオーバーライドする
+
+参照実装であるMonetaは、 +javamoney.properties+ ファイルの値をオーバーライドする方法を提供しています。
+具体的には、キーの名前の前に波括弧で優先度を付加します。
+クラスパス上にあるすべての +javamoney.properties+ ファイルが読み込み対象となります。
+優先度が明示されていない場合、優先度は0とみなされます。
+
+////
+[source,listing]
+.Overriding a Configuration Value using a Priority
+--------------------------------------------
+{100}myKey=myValue
+--------------------------------------------
+////
+
+[source,listing]
+.優先度によって設定値をオーバーライドする
+--------------------------------------------
+{100}myKey=myValue
+--------------------------------------------
+
+////
+If two entries have the same value an exeption is thrown.
+
+訳注: "value"は曖昧。 "priority"の方が良い
+////
+
+2つのエントリが同じ優先度を持っていた場合、例外が発生します。
