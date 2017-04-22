@@ -30,9 +30,11 @@ class ScheduledDataLoaderService {
 	private static final Logger LOG = Logger.getLogger(ScheduledDataLoaderService.class.getName());
 
 	private final Timer timer;
+	private final DefaultLoaderListener listener;
 
-	 ScheduledDataLoaderService(Timer timer) {
+	ScheduledDataLoaderService(Timer timer, DefaultLoaderListener listener) {
 		this.timer = timer;
+		this.listener = listener;
 	}
 
 	public void execute(final LoadableResource load) {
@@ -41,7 +43,9 @@ class ScheduledDataLoaderService {
 	            @Override
 	            public void run() {
 	                try {
-	                    load.load();
+	                    if (load.load()) {
+	                        listener.trigger(load.getResourceId(), load.getDataStream());
+	                    }
 	                } catch (Exception e) {
 	                    LOG.log(Level.SEVERE, "Failed to update remote resource: " + load.getResourceId(), e);
 	                }

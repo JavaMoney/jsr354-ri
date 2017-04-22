@@ -145,16 +145,16 @@ public class LoadableResource {
             clearCache();
         }
         if (!readCache()) {
-            if (shouldReadDataFromCallBack()) {
+            if (shouldReadDataFromFallback()) {
                 return loadFallback();
             }
         }
         return true;
     }
 
-	private boolean shouldReadDataFromCallBack() {
-		return LoaderService.UpdatePolicy.NEVER.equals(updatePolicy) || !loadRemote();
-	}
+    private boolean shouldReadDataFromFallback() {
+        return LoaderService.UpdatePolicy.NEVER.equals(updatePolicy) || !loadRemote();
+    }
 
     /**
      * Get the resourceId.
@@ -227,12 +227,12 @@ public class LoadableResource {
     public boolean loadRemote() {
         for (URI itemToLoad : remoteResources) {
             try {
-                return !load(itemToLoad, false);
+                return load(itemToLoad, false);
             } catch (Exception e) {
                 LOG.log(Level.INFO, "Failed to load resource: " + itemToLoad, e);
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -367,7 +367,7 @@ public class LoadableResource {
                 synchronized (lock) {
                     currentData = this.data == null ? null : this.data.get();
                     if (Objects.isNull(currentData)) {
-                        if (shouldReadDataFromCallBack()) {
+                        if (shouldReadDataFromFallback()) {
                             loadFallback();
                         }
                     }
