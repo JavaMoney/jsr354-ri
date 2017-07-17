@@ -24,7 +24,7 @@ import org.javamoney.moneta.Money;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
- * {@link MoneyAmountBuilder}.
+ * {@link MoneyAmountFactory}.
  *
  * @author Anatole Tresch
  */
@@ -38,7 +38,7 @@ public final class MoneyAmountFactoryProvider implements MonetaryAmountFactoryPr
 
     @Override
     public MonetaryAmountFactory<Money> createMonetaryAmountFactory(){
-        return new MoneyAmountBuilder();
+        return new MoneyAmountFactory();
     }
 
     /*
@@ -52,11 +52,11 @@ public final class MoneyAmountFactoryProvider implements MonetaryAmountFactoryPr
 
     @Override
     public MonetaryContext getDefaultMonetaryContext(){
-        return MoneyAmountBuilder.DEFAULT_CONTEXT;
+        return MoneyAmountFactory.DEFAULT_CONTEXT;
     }
 
     @Override
     public MonetaryContext getMaximalMonetaryContext(){
-        return MoneyAmountBuilder.MAX_CONTEXT;
+        return MoneyAmountFactory.MAX_CONTEXT;
     }
 }

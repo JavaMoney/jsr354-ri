@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,9 +23,8 @@ import java.util.Objects;
  * Basic implementation of {@link javax.money.MonetaryAmountFactory}, which simplifies development of the SPI interface.
  *
  * @param <T> the target class implementing {@link javax.money.MonetaryAmount}.
- * @deprecated Use AbstractAmountFactory
  */
-public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements MonetaryAmountFactory<T> {
+public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements MonetaryAmountFactory<T> {
 
     /**
      * The default {@link MonetaryContext} applied, if not set explicitly on creation.

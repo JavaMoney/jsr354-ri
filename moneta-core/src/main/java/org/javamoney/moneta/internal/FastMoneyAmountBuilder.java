@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,14 +20,14 @@ import java.math.RoundingMode;
 import javax.money.*;
 
 import org.javamoney.moneta.FastMoney;
-import org.javamoney.moneta.spi.AbstractAmountBuilder;
+import org.javamoney.moneta.spi.AbstractAmountFactory;
 
 /**
  * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link FastMoney}.
  *
  * @author Anatole Tresch
  */
-public class FastMoneyAmountBuilder extends AbstractAmountBuilder<FastMoney> {
+public class FastMoneyAmountBuilder extends AbstractAmountFactory<FastMoney> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
             MonetaryContextBuilder.of(FastMoney.class).setPrecision(19).setMaxScale(5).setFixedScale(true)

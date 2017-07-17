@@ -16,7 +16,7 @@
 package org.javamoney.moneta;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
-import org.javamoney.moneta.internal.RoundedMoneyAmountBuilder;
+import org.javamoney.moneta.internal.RoundedMoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MoneyUtils;
 
@@ -915,7 +915,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
     @Override
     public MonetaryAmountFactory<RoundedMoney> getFactory() {
-        return new RoundedMoneyAmountBuilder().setAmount(this);
+        return new RoundedMoneyAmountFactory().setAmount(this);
     }
 
     private boolean isOne(Number number) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,7 +16,7 @@
 package org.javamoney.moneta;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
-import org.javamoney.moneta.internal.MoneyAmountBuilder;
+import org.javamoney.moneta.internal.MoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MoneyUtils;
 
@@ -53,7 +53,8 @@ import java.util.Objects;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 0.7
+ * @version 1.1
+ * @since 1.0
  */
 public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 
@@ -627,7 +628,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public MonetaryAmountFactory<Money> getFactory() {
-        return new MoneyAmountBuilder().setAmount(this);
+        return new MoneyAmountFactory().setAmount(this);
     }
 
     /*

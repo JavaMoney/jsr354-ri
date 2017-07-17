@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,7 +23,7 @@ import javax.money.MonetaryContextBuilder;
 import javax.money.NumberValue;
 
 import org.javamoney.moneta.RoundedMoney;
-import org.javamoney.moneta.spi.AbstractAmountBuilder;
+import org.javamoney.moneta.spi.AbstractAmountFactory;
 
 /**
  * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link org.javamoney.moneta
@@ -31,7 +31,7 @@ import org.javamoney.moneta.spi.AbstractAmountBuilder;
  *
  * @author Anatole Tresch
  */
-public class RoundedMoneyAmountBuilder extends AbstractAmountBuilder<RoundedMoney> {
+public class RoundedMoneyAmountFactory extends AbstractAmountFactory<RoundedMoney> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
             MonetaryContextBuilder.of(RoundedMoney.class).setPrecision(0).set(RoundingMode.HALF_EVEN).build();

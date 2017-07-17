@@ -23,7 +23,7 @@ import org.javamoney.moneta.RoundedMoney;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
- * {@link RoundedMoneyAmountBuilder}.
+ * {@link RoundedMoneyAmountFactory}.
  *
  * @author Anatole Tresch
  */
@@ -36,7 +36,7 @@ public final class RoundedMoneyAmountFactoryProvider implements MonetaryAmountFa
 
     @Override
     public MonetaryAmountFactory<RoundedMoney> createMonetaryAmountFactory(){
-        return new RoundedMoneyAmountBuilder();
+        return new RoundedMoneyAmountFactory();
     }
 
     /*
@@ -50,12 +50,12 @@ public final class RoundedMoneyAmountFactoryProvider implements MonetaryAmountFa
 
     @Override
     public MonetaryContext getDefaultMonetaryContext(){
-        return RoundedMoneyAmountBuilder.DEFAULT_CONTEXT;
+        return RoundedMoneyAmountFactory.DEFAULT_CONTEXT;
     }
 
     @Override
     public MonetaryContext getMaximalMonetaryContext(){
-        return RoundedMoneyAmountBuilder.MAX_CONTEXT;
+        return RoundedMoneyAmountFactory.MAX_CONTEXT;
     }
 
 }
