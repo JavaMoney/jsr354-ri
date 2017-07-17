@@ -27,6 +27,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -105,15 +106,17 @@ public final class MoneyUtils {
     	BigDecimal bd = getBigDecimal(num);
         if (Objects.nonNull(moneyContext)) {
             if (moneyContext.getMaxScale() > 0) {
-            	//if (moneyContext.isFixedScale()) {
-            		LOG.finer(String.format("Using Max Scale %s", moneyContext.getMaxScale()));
-            	//}
-            		final DecimalFormat fmt = new DecimalFormat();
-            		fmt.setMaximumFractionDigits(moneyContext.getMaxScale());
-            		return new BigDecimal(fmt.format(bd), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
-            } else {
+//            	if (moneyContext.isFixedScale()) {
+            		LOG.fine(String.format("Got Max Scale %s", moneyContext.getMaxScale()));
+            	}
+//            		NumberFormat df = NumberFormat.getInstance(Locale.ROOT);
+//            		df.setMinimumFractionDigits(moneyContext.getMaxScale());
+//            		df.setMaximumFractionDigits(moneyContext.getMaxScale());
+//            		df.setRoundingMode(RoundingMode.HALF_UP);
+//            		return new BigDecimal(df.format(bd), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
+//            } else {
             	return new BigDecimal(bd.toString(), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
-            }
+//            }
         }
         return bd;
     }
