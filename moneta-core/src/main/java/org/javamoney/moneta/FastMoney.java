@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -60,7 +60,7 @@ import java.util.logging.Logger;
  * executed one million (1000000) times results in {@code EUR 1657407.96251}, calculated in 179 ms,
  * which is less than 1ns/loop.
  * </p><p>
- * Also note than mixing up types my drastically change the performance behavior. E.g. replacing the
+ * Also note than mixing up types may drastically change the performance behavior. E.g. replacing the
  * code above with the following: *
  * </p>
  * <pre><code>
@@ -78,7 +78,8 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 1.0
+ * @version 1.0.1
+ * @since 1.0
  */
 public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 
