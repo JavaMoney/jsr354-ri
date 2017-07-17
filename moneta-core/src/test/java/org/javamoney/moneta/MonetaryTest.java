@@ -69,7 +69,7 @@ public class MonetaryTest {
 		assertEquals(RoundingMode.HALF_DOWN, monetaryAmount.getContext().get(RoundingMode.class));
 	}
 
-	@Test(enabled=false)
+	@Test //(enabled=false)
 	// TODO Currently maxScale is not used in some places, see https://github.com/JavaMoney/jsr354-ri/issues/162
 	public void shouldUseContextInFactory() {
 		MonetaryContext mc = MonetaryContextBuilder.of().setMaxScale(2).setPrecision(64).set(RoundingMode.HALF_DOWN).build();

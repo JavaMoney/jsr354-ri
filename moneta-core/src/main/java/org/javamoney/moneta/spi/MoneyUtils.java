@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,11 +19,17 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryException;
+
+import org.javamoney.moneta.FastMoney;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * Platform RI: This utility class simplifies implementing {@link MonetaryAmount},
@@ -36,7 +42,10 @@ import java.util.Optional;
  * @author Anatole Tresch
  */
 public final class MoneyUtils {
-
+    /**
+     * The logger used.
+     */
+    private static final Logger LOG = Logger.getLogger(FastMoney.class.getName());
 
     private MoneyUtils() {
     }
@@ -93,9 +102,18 @@ public final class MoneyUtils {
      * @return the corresponding {@link BigDecimal}
      */
     public static BigDecimal getBigDecimal(Number num, MonetaryContext moneyContext) {
-        BigDecimal bd = getBigDecimal(num);
+    	BigDecimal bd = getBigDecimal(num);
         if (Objects.nonNull(moneyContext)) {
-            return new BigDecimal(bd.toString(), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
+            if (moneyContext.getMaxScale() > 0) {
+            	//if (moneyContext.isFixedScale()) {
+            		LOG.finer(String.format("Using Max Scale %s", moneyContext.getMaxScale()));
+            	//}
+            		final DecimalFormat fmt = new DecimalFormat();
+            		fmt.setMaximumFractionDigits(moneyContext.getMaxScale());
+            		return new BigDecimal(fmt.format(bd), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
+            } else {
+            	return new BigDecimal(bd.toString(), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
+            }
         }
         return bd;
     }
