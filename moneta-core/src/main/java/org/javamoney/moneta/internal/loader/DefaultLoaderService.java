@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import javax.money.spi.Bootstrap;
 
 import org.javamoney.moneta.spi.LoadDataInformation;
+import org.javamoney.moneta.spi.LoadDataInformationBuilder;
 import org.javamoney.moneta.spi.LoaderService;
 
 /**
@@ -180,39 +181,53 @@ public class DefaultLoaderService implements LoaderService {
 
     @Override
     public void registerAndLoadData(LoadDataInformation loadDataInformation) {
-
-        if (resources.containsKey(loadDataInformation.getResourceId())) {
-            throw new IllegalArgumentException("Resource : " + loadDataInformation.getResourceId() + " already registered.");
-        }
-		LoadableResource resource = new LoadableResourceBuilder()
-				.withCache(CACHE).withLoadDataInformation(loadDataInformation)
-				.build();
-        this.resources.put(loadDataInformation.getResourceId(), resource);
-
-
-        if (loadDataInformation.getLoaderListener() != null) {
-            this.addLoaderListener(loadDataInformation.getLoaderListener(), loadDataInformation.getResourceId());
-        }
-
-        switch (loadDataInformation.getUpdatePolicy()) {
-            case SCHEDULED:
-            	defaultLoaderServiceFacade.scheduledData(resource);
-                break;
-            case LAZY:
-            default:
-                break;
-        }
+        registerData(loadDataInformation);
         loadData(loadDataInformation.getResourceId());
     }
 
     @Override
     public void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, LoaderListener loaderListener, URI backupResource, URI... resourceLocations) {
-        
+        registerAndLoadData(new LoadDataInformationBuilder()
+                .withResourceId(resourceId)
+                .withUpdatePolicy(updatePolicy)
+                .withProperties(properties)
+                .withLoaderListener(loaderListener)
+                .withBackupResource(backupResource)
+                .withResourceLocations(resourceLocations)
+                .build());
     }
 
     @Override
     public void registerData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, LoaderListener loaderListener, URI backupResource, URI... resourceLocations) {
+        if (resources.containsKey(resourceId)) {
+            throw new IllegalArgumentException("Resource : " + resourceId + " already registered.");
+        }
+        LoadDataInformation loadInfo = new LoadDataInformationBuilder()
+                .withResourceId(resourceId)
+                .withUpdatePolicy(updatePolicy)
+                .withProperties(properties)
+                .withLoaderListener(loaderListener)
+                .withBackupResource(backupResource)
+                .withResourceLocations(resourceLocations)
+                .build();
 
+        LoadableResource resource = new LoadableResourceBuilder()
+                .withCache(CACHE).withLoadDataInformation(loadInfo)
+                .build();
+        this.resources.put(loadInfo.getResourceId(), resource);
+
+        if (loadInfo.getLoaderListener() != null) {
+            this.addLoaderListener(loadInfo.getLoaderListener(), loadInfo.getResourceId());
+        }
+
+        switch (loadInfo.getUpdatePolicy()) {
+            case SCHEDULED:
+                defaultLoaderServiceFacade.scheduledData(resource);
+                break;
+            case LAZY:
+            default:
+                break;
+        }
     }
 
     @Override

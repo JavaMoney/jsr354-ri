@@ -37,11 +37,24 @@ public class LoadDataLoaderService {
 		if (Objects.nonNull(load)) {
 			try {
 				if (load.load()) {
+					LOG.log(Level.INFO, "Read data from: " + load.getRemoteResources());
 					listener.trigger(resourceId, load.getDataStream());
+					LOG.log(Level.INFO, "New data successfully loaded from: " + load.getRemoteResources());
 					return true;
 				}
 			} catch (Exception e) {
-				LOG.log(Level.SEVERE, "Failed to load resource: " + resourceId,
+				LOG.log(Level.WARNING, "Failed to read/load resource (checking fallback): " + resourceId,
+						e);
+			}
+			try {
+				if (load.loadFallback()) {
+					LOG.log(Level.WARNING, "Read fallback data from: " + load.getFallbackResource());
+					listener.trigger(resourceId, load.getDataStream());
+					LOG.log(Level.WARNING, "Loaded fallback data from: " + load.getFallbackResource());
+					return true;
+				}
+			} catch (Exception e) {
+				LOG.log(Level.SEVERE, "Failed to read/load fallback resource: " + resourceId,
 						e);
 			}
 		} else {

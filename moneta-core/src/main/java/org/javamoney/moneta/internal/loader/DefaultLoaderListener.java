@@ -81,7 +81,7 @@ class DefaultLoaderListener {
                     try {
                         ll.newDataLoaded(dataId, is);
                     } catch (Exception e) {
-                        LOG.log(Level.SEVERE, "Error calling LoadListener: " + ll, e);
+                        throw new IllegalArgumentException("Failed to load new data: " + ll, e);
                     }
                 }
             }
