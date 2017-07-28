@@ -23,6 +23,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -66,12 +68,18 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
      * Historic exchange rates, rate timestamp as UTC long.
      */
     protected final Map<LocalDate, Map<String, ExchangeRate>> rates = new ConcurrentHashMap<>();
+
+    protected volatile String loadState;
+
+    protected volatile CountDownLatch loadLock = new CountDownLatch(1);
+
     /**
      * Parser factory.
      */
     private final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
     private final ProviderContext context;
+
 
     ECBAbstractRateProvider(ProviderContext context) {
         super(context);
@@ -87,31 +95,44 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
-        final int oldSize = this.rates.size();
+        final int oldSize = this.rates==null?0:this.rates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
+            int newSize = this.rates.size();
+            loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
+            LOG.info(loadState);
         } catch (Exception e) {
+            loadState = "Last Error during data load: " + e.getMessage();
         	LOG.log(Level.FINEST, "Error during data load.", e);
+        } finally{
+            loadLock.countDown();
         }
-        int newSize = this.rates.size();
-        LOG.info("Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize));
     }
 
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
         Objects.requireNonNull(conversionQuery);
-        if (rates.isEmpty()) {
-            return null;
-        }
-        RateResult result = findExchangeRate(conversionQuery);
+        try {
+            if (loadLock.await(30, TimeUnit.SECONDS)) {
+                if (rates.isEmpty()) {
+                    return null;
+                }
+                RateResult result = findExchangeRate(conversionQuery);
 
-        ExchangeRateBuilder builder = getBuilder(conversionQuery, result.date);
-        ExchangeRate sourceRate = result.targets.get(conversionQuery.getBaseCurrency()
-                .getCurrencyCode());
-        ExchangeRate target = result.targets
-                .get(conversionQuery.getCurrency().getCurrencyCode());
-        return createExchangeRate(conversionQuery, builder, sourceRate, target);
+                ExchangeRateBuilder builder = getBuilder(conversionQuery, result.date);
+                ExchangeRate sourceRate = result.targets.get(conversionQuery.getBaseCurrency()
+                        .getCurrencyCode());
+                ExchangeRate target = result.targets
+                        .get(conversionQuery.getCurrency().getCurrencyCode());
+                return createExchangeRate(conversionQuery, builder, sourceRate, target);
+            }else{
+                throw new MonetaryException("Failed to load currency conversion data: " + loadState);
+            }
+        }
+        catch(InterruptedException e){
+            throw new MonetaryException("Failed to load currency conversion data: Load task has been interrupted.", e);
+        }
     }
 
 	private RateResult findExchangeRate(ConversionQuery conversionQuery) {

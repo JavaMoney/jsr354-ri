@@ -27,8 +27,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -64,6 +65,10 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
 	protected Map<CurrencyUnit, List<ExchangeRate>> currencyToSdr = Collections.emptyMap();
 
 	protected Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = Collections.emptyMap();
+
+    protected volatile String loadState;
+
+    protected volatile CountDownLatch loadLock = new CountDownLatch(1);
 
 	protected final IMFRateReadingHandler handler;
 
@@ -103,43 +108,63 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
         try {
-        	 RateIMFResult result = handler.read(is);
-        	 this.sdrToCurrency = result.getSdrToCurrency();
-             this.currencyToSdr = result.getCurrencyToSdr();
+            int oldSize = this.sdrToCurrency.size();
+        	RateIMFResult result = handler.read(is);
+        	this.sdrToCurrency = result.getSdrToCurrency();
+            this.currencyToSdr = result.getCurrencyToSdr();
+            int newSize = this.sdrToCurrency.size();
+            loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
+            LOG.info(loadState);
+            loadLock.countDown();
         } catch (Exception e) {
-        	LOG.log(Level.SEVERE, "Error", e);
+            loadState = "Last Error during data load: " + e.getMessage();
+            throw new IllegalArgumentException("Failed to load IMF data provided.", e);
         }
     }
 
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
-        if (!isAvailable(conversionQuery)) {
-            return null;
-        }
-        CurrencyUnit base = conversionQuery.getBaseCurrency();
-        CurrencyUnit term = conversionQuery.getCurrency();
-        LocalDate[] times = getQueryDates(conversionQuery);
-        ExchangeRate rate1 = getExchangeRate(currencyToSdr.get(base), times);
-        ExchangeRate rate2 = getExchangeRate(sdrToCurrency.get(term), times);
-        if (base.equals(SDR)) {
-            return rate2;
-        } else if (term.equals(SDR)) {
-            return rate1;
-        }
-        if (Objects.isNull(rate1) || Objects.isNull(rate2)) {
-            return null;
-        }
+        try {
+            if (loadLock.await(30, TimeUnit.SECONDS)) {
+                if (currencyToSdr.isEmpty()) {
+                    return null;
+                }
+                if (!isAvailable(conversionQuery)) {
+                    return null;
+                }
+                CurrencyUnit base = conversionQuery.getBaseCurrency();
+                CurrencyUnit term = conversionQuery.getCurrency();
+                LocalDate[] times = getQueryDates(conversionQuery);
+                ExchangeRate rate1 = getExchangeRate(currencyToSdr.get(base), times);
+                ExchangeRate rate2 = getExchangeRate(sdrToCurrency.get(term), times);
+                if (base.equals(SDR)) {
+                    return rate2;
+                } else if (term.equals(SDR)) {
+                    return rate1;
+                }
+                if (Objects.isNull(rate1) || Objects.isNull(rate2)) {
+                    return null;
+                }
 
-        ConversionContext context = getExchangeContext("imf.digit.fraction");
+                ConversionContext context = getExchangeContext("imf.digit.fraction");
 
-		ExchangeRateBuilder builder =
-                new ExchangeRateBuilder(context);
-        builder.setBase(base);
-        builder.setTerm(term);
-        builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
-        builder.setRateChain(rate1, rate2);
+                ExchangeRateBuilder builder =
+                        new ExchangeRateBuilder(context);
+                builder.setBase(base);
+                builder.setTerm(term);
+                builder.setFactor(multiply(rate1.getFactor(), rate2.getFactor()));
+                builder.setRateChain(rate1, rate2);
 
-        return builder.build();
+                return builder.build();
+            }else{
+                // Lets wait for a successful load only once, then answer requests as data is present.
+                loadLock.countDown();
+                throw new MonetaryException("Failed to load currency conversion data: " + loadState);
+            }
+        }
+        catch(InterruptedException e){
+            throw new MonetaryException("Failed to load currency conversion data: Load task has been interrupted.", e);
+        }
     }
 
     private ExchangeRate getExchangeRate(List<ExchangeRate> rates,final LocalDate[] dates) {

@@ -62,6 +62,9 @@ class IMFRateReadingHandler {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				inputStream));
 		String line = reader.readLine();
+		if(line.contains("Request Rejected")){
+			throw new IOException("Request has been rejected by IMF server.");
+		}
 		boolean isCurrencyToSdr = true;
 		// SDRs per Currency unit (2)
 		//
