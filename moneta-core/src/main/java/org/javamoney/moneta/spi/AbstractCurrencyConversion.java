@@ -122,18 +122,35 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
 
     /**
      * Optionally rounds the factor to be used. By default this method will only round
-     * as much as its is needed, so the factor can be handled by the target amount instance based on its
-     * numeric capabilities.
+     * as much as it is needed, so the factor can be handled by the target amount instance based on its
+     * numeric capabilities. Rounding is applied only if {@code amount.getContext().getMaxScale() > 0} as follows:
+     * <ul>
+     *     <li>If the amount provides a {@link MathContext} as context property this is used.</li>
+     *     <li>If the amount provides a {@link RoundingMode}, this is used (default is
+     *     {@code RoundingMode.HALF_EVEN}).</li>
+     *     <li>By default the scale used is scale of the conversion factor. If the acmount allows a higher
+     *     scale based on {@code amount.getContext().getMaxScale()}, this higher scale is used.</li>
+     * </ul>
      *
      * @param amount the amount, not null.
      * @param factor the factor
-     * @return the new NumberValue, never null.
+     * @return the new rounding factor, never null.
      */
     protected NumberValue roundFactor(MonetaryAmount amount, NumberValue factor) {
         if (amount.getContext().getMaxScale() > 0) {
-            if (factor.getScale() > amount.getContext().getMaxScale()) {
-                return factor.round(new MathContext(amount.getContext().getMaxScale(), RoundingMode.HALF_EVEN));
+            MathContext mathContext = amount.getContext().get(MathContext.class);
+            if(mathContext==null){
+                int scale = factor.getScale();
+                if (factor.getScale() > amount.getContext().getMaxScale()) {
+                    scale = amount.getContext().getMaxScale();
+                }
+                RoundingMode roundingMode = amount.getContext().get(RoundingMode.class);
+                if(roundingMode==null){
+                    roundingMode = RoundingMode.HALF_EVEN;
+                }
+                mathContext = new MathContext(scale, roundingMode);
             }
+            return factor.round(mathContext);
         }
         return factor;
     }
