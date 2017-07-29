@@ -105,18 +105,12 @@ public final class MoneyUtils {
     public static BigDecimal getBigDecimal(Number num, MonetaryContext moneyContext) {
     	BigDecimal bd = getBigDecimal(num);
         if (Objects.nonNull(moneyContext)) {
+            MathContext mc = getMathContext(moneyContext, RoundingMode.HALF_EVEN);
+            bd = new BigDecimal(bd.toString(), mc);
             if (moneyContext.getMaxScale() > 0) {
-//            	if (moneyContext.isFixedScale()) {
-            		LOG.fine(String.format("Got Max Scale %s", moneyContext.getMaxScale()));
-            	}
-//            		NumberFormat df = NumberFormat.getInstance(Locale.ROOT);
-//            		df.setMinimumFractionDigits(moneyContext.getMaxScale());
-//            		df.setMaximumFractionDigits(moneyContext.getMaxScale());
-//            		df.setRoundingMode(RoundingMode.HALF_UP);
-//            		return new BigDecimal(df.format(bd), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
-//            } else {
-            	return new BigDecimal(bd.toString(), getMathContext(moneyContext, RoundingMode.HALF_EVEN));
-//            }
+                LOG.fine(String.format("Got Max Scale %s", moneyContext.getMaxScale()));
+                bd = bd.setScale(moneyContext.getMaxScale(), mc.getRoundingMode());
+            }
         }
         return bd;
     }
