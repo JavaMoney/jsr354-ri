@@ -114,8 +114,8 @@ public class MonetaryAmountDecimalFormatTest {
     @Test
     public void shouldtoLocalizedPattern() {
         MonetaryAmountDecimalFormat f = MonetaryAmountDecimalFormat.class.cast(format);
-        String pattern = f.toLocalizedPattern();
-        assertNotNull(pattern);
+        assertNotNull(f.toLocalizedPattern());
+        assertNotNull(f.toPattern());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class MonetaryAmountDecimalFormatTest {
         String pattern = "#,##0.###";
         MonetaryAmountDecimalFormat f = (MonetaryAmountDecimalFormat) MonetaryAmountDecimalFormatBuilder.of(pattern).build();
         assertNotNull(f.toLocalizedPattern());
-        assertEquals(pattern, f.toLocalizedPattern());
+        assertNotNull(f.toPattern());
         assertEquals(pattern, f.toPattern());
     }
 

@@ -99,6 +99,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         checkNumber(number);
         this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
     }
+
     @Deprecated
     public RoundedMoney(Number number, CurrencyUnit currency, MonetaryContext context, MonetaryOperator rounding) {
         Objects.requireNonNull(currency, "Currency is required.");

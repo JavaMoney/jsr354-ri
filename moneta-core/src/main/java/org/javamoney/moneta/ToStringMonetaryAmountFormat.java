@@ -96,7 +96,7 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
         return new ParserMonetaryAmount(currencyUnit, number);
     }
 
-    private class ParserMonetaryAmount {
+    private static class ParserMonetaryAmount {
         ParserMonetaryAmount(CurrencyUnit currencyUnit, BigDecimal number) {
             this.currencyUnit = currencyUnit;
             this.number = number;

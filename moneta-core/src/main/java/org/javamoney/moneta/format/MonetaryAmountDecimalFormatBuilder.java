@@ -21,7 +21,6 @@ import org.javamoney.moneta.function.MoneyProducer;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.MonetaryFormats;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;

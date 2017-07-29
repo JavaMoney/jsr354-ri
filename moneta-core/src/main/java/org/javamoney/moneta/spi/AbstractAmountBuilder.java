@@ -25,6 +25,7 @@ import java.util.Objects;
  * @param <T> the target class implementing {@link javax.money.MonetaryAmount}.
  * @deprecated Use AbstractAmountFactory
  */
+@Deprecated
 public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements MonetaryAmountFactory<T> {
 
     /**

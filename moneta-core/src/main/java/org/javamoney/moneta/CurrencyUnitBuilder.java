@@ -19,6 +19,7 @@ import org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
 
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
+import javax.money.CurrencyContext;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -42,7 +43,7 @@ public final class CurrencyUnitBuilder {
     /**
      * The currency's context.
      */
-    javax.money.CurrencyContext currencyContext;
+    CurrencyContext currencyContext;
 
     /**
      * Private constructor, use #of() methods.
@@ -56,7 +57,7 @@ public final class CurrencyUnitBuilder {
      * @param currencyCode    the (unique) and identifying currency code, not null.
      * @param currencyContext The currency context to be used.
      */
-    public static CurrencyUnitBuilder of(String currencyCode, javax.money.CurrencyContext currencyContext) {
+    public static CurrencyUnitBuilder of(String currencyCode, CurrencyContext currencyContext) {
         return new CurrencyUnitBuilder(currencyCode, currencyContext);
     }
 
@@ -75,7 +76,7 @@ public final class CurrencyUnitBuilder {
      *
      * @param currencyCode the (unique) and identifying currency code, not null.
      */
-    private CurrencyUnitBuilder(String currencyCode, javax.money.CurrencyContext currencyContext) {
+    private CurrencyUnitBuilder(String currencyCode, CurrencyContext currencyContext) {
         Objects.requireNonNull(currencyCode, "currencyCode required");
         this.currencyCode = currencyCode;
         Objects.requireNonNull(currencyContext, "currencyContext required");
@@ -138,10 +139,10 @@ public final class CurrencyUnitBuilder {
 
     /**
      * Returns a new instance of {@link BuildableCurrencyUnit} and publishes it so it is
-     * accessible from the {@code MonetaryCurrencies} singleton.
+     * accessible from the {@code Monetary} singleton.
      *
      * @param register if {@code true} the instance created is published so it is accessible from
-     *                 the {@code MonetaryCurrencies} singleton.
+     *                 the {@code Monetary} singleton.
      * @return the new CurrencyUnit instance.
      * @see javax.money.Monetary#getCurrency(String, String...)
      */
@@ -155,10 +156,10 @@ public final class CurrencyUnitBuilder {
 
     /**
      * Returns a new instance of {@link BuildableCurrencyUnit} and publishes it so it is
-     * accessible from the {@code MonetaryCurrencies} singleton.
+     * accessible from the {@code Monetary} singleton.
      *
      * @param register if {@code true} the instance created is published so it is accessible from
-     *                 the {@code MonetaryCurrencies} singleton.
+     *                 the {@code Monetary} singleton.
      * @param locale   country Locale for making the currency for the given country.
      * @return the new CurrencyUnit instance.
      * @see javax.money.Monetary#getCurrency(String, String...)

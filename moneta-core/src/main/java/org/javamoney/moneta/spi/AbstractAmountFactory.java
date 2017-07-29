@@ -17,6 +17,7 @@ package org.javamoney.moneta.spi;
 
 import javax.money.*;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Objects;
 
 /**

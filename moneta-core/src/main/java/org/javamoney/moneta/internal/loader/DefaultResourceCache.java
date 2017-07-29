@@ -131,7 +131,6 @@ public class DefaultResourceCache implements ResourceCache {
 			return Files.readAllBytes(f.toPath());
 		} catch (IOException exception) {
 			throw new MonetaryException("An error on retrieve the resource id: " + resourceId, exception);
-
 		}
     }
 

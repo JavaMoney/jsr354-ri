@@ -32,6 +32,7 @@ import java.math.RoundingMode;
  * @since 1.0.1
  * @deprecated Moved to function package.
  */
+@Deprecated
 public final class MonetaryRoundedFactoryBuilder {
 
 	private final RoundingMode roundingMode;

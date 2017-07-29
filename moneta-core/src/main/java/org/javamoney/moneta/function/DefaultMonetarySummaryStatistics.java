@@ -28,6 +28,7 @@ import org.javamoney.moneta.FastMoney;
  *
  * @author otaviojava
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public class DefaultMonetarySummaryStatistics implements MonetarySummaryStatistics {
 

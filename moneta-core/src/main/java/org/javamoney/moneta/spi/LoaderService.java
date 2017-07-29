@@ -107,12 +107,12 @@ public interface LoaderService {
      * backed up by a classpath resource {@code backupResource}, reachable as
      * {@code dataId} and (synchronously) loads the data.
      *
-     *resourceId        The unique identifier of the resource that must also be used
+     * resourceId        The unique identifier of the resource that must also be used
      *                          for accessing the resource, not {@code null}.
      * resourceLocations The remote resource locations, not {@code null}.
-     *backupResource    The backup resource location in the classpath, not
+     * backupResource    The backup resource location in the classpath, not
      *                          {@code null}.
-     *loaderListener    An (optional) LoaderListener to be registered.
+     * loaderListener    An (optional) LoaderListener to be registered.
      */
     void registerAndLoadData(LoadDataInformation loadDataInformation);
 

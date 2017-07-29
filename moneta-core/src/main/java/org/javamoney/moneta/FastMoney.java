@@ -572,9 +572,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
             throw new ArithmeticException("Precision exceeds maximal precision: " + MAX_BD.precision());
         }
         if (bd.scale() > SCALE) {
-            if (Boolean.parseBoolean(MonetaryConfig.getConfig()
-                    .getOrDefault("org.javamoney.moneta.FastMoney.enforceScaleCompatibility",
-                            "false"))) {
+            String val = MonetaryConfig.getConfig()
+                    .get("org.javamoney.moneta.FastMoney.enforceScaleCompatibility");
+            if(val==null){
+                val = "false";
+            }
+            if (Boolean.parseBoolean(val)) {
                 throw new ArithmeticException("Scale of " + bd + " exceeds maximal scale: " + SCALE);
             } else {
                 if (LOG.isLoggable(Level.FINEST)) {
@@ -701,7 +704,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             FastMoney zero = new FastMoney(0L, getCurrency());
             return new FastMoney[]{zero, zero};
-        } else if (divisor == Double.NaN) {
+        } else if (Double.isNaN(divisor)) {
             throw new ArithmeticException("Not a number: NaN.");
         }
         return divideAndRemainder(new BigDecimal(String.valueOf(divisor)));

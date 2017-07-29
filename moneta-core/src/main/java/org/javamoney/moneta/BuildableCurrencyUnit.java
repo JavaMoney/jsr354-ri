@@ -15,7 +15,10 @@
  */
 package org.javamoney.moneta;
 
-import javax.money.*;
+
+import javax.money.CurrencyContext;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -54,8 +57,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit,
 	/**
 	 * Constructor, called from the Builder.
 	 *
-	 * @param builder
-	 *            the builder, never null.
+	 * @param builder the builder, never null.
 	 */
 	BuildableCurrencyUnit(CurrencyUnitBuilder builder) {
 		Objects.requireNonNull(builder.currencyCode, "currencyCode required");

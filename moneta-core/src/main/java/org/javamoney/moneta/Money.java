@@ -183,7 +183,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /*
      * (non-Javadoc)
      *
-     * @see javax.money.MonetaryAmount#abs()
+     * @see MonetaryAmount#abs()
      */
     @Override
     public Money abs() {
@@ -196,7 +196,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /*
      * (non-Javadoc)
      *
-     * @see javax.money.MonetaryAmount#divide(javax.money.MonetaryAmount)
+     * @see MonetaryAmount#divide(MonetaryAmount)
      */
     @Override
     public Money divide(long divisor) {
@@ -209,7 +209,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /*
      * (non-Javadoc)
      *
-     * @see javax.money.MonetaryAmount#divide(javax.money.MonetaryAmount)
+     * @see MonetaryAmount#divide(MonetaryAmount)
      */
     @Override
     public Money divide(double divisor) {
@@ -226,7 +226,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * (non-Javadoc)
      *
      * @see
-     * javax.money.MonetaryAmount#divideAndRemainder(javax.money.MonetaryAmount)
+     * MonetaryAmount#divideAndRemainder(MonetaryAmount)
      */
     @Override
     public Money[] divideAndRemainder(long divisor) {
@@ -237,7 +237,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * (non-Javadoc)
      *
      * @see
-     * javax.money.MonetaryAmount#divideAndRemainder(javax.money.MonetaryAmount)
+     * MonetaryAmount#divideAndRemainder(MonetaryAmount)
      */
     @Override
     public Money[] divideAndRemainder(double divisor) {
@@ -502,12 +502,12 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * @see javax.money.MonetaryAmount#subtract(javax.money.MonetaryAmount)
      */
     @Override
-    public Money subtract(MonetaryAmount amount) {
-        MoneyUtils.checkAmountParameter(amount, this.currency);
-        if (amount.isZero()) {
+    public Money subtract(MonetaryAmount subtrahend) {
+        MoneyUtils.checkAmountParameter(subtrahend, this.currency);
+        if (subtrahend.isZero()) {
             return this;
         }
-        return new Money(this.number.subtract(amount.getNumber().numberValue(BigDecimal.class)), getCurrency());
+        return new Money(this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class)), getCurrency());
     }
 
     /*
@@ -876,9 +876,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     public static boolean isInfinityAndNotNaN(Number number) {
         if (Double.class == number.getClass() || Float.class == number.getClass()) {
             double dValue = number.doubleValue();
-            if (Double.isNaN(dValue)) {
-                throw new ArithmeticException("Not a valid input: NaN.");
-            } else if (Double.isInfinite(dValue)) {
+            if (!Double.isNaN(dValue) && Double.isInfinite(dValue)) {
                 return true;
             }
         }

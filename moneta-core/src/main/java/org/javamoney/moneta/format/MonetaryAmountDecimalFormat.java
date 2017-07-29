@@ -15,10 +15,9 @@
  */
 package org.javamoney.moneta.format;
 
-import org.javamoney.moneta.function.MonetaryAmountProducer;
+import static java.util.Objects.requireNonNull;
 
 import javax.money.CurrencyUnit;
-import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.AmountFormatContextBuilder;
@@ -30,7 +29,7 @@ import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.util.Objects.requireNonNull;
+import org.javamoney.moneta.function.MonetaryAmountProducer;
 
 /**
  * The implementation that uses the {@link DecimalFormat} as formatter.

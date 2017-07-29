@@ -40,7 +40,7 @@ import org.javamoney.moneta.RoundedMoney;
 * </pre>
  * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
- * @see {@link ScaleRoundedOperator#of(MathContext)}
+ * @see {@link ScaleRoundedOperator(MathContext)}
  * @see {@link RoundedMoney}
  * @see {@link MonetaryOperator}
  * @see {@link BigDecimal#scale()}
@@ -60,8 +60,9 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 
 	/**
 	 * Creates the rounded Operator from scale and roundingMode
-	 * @param mathContext
-	 * @return the {@link MonetaryOperator} using the scale and {@link roundingMode} used in parameter
+	 * @param scale the scale to be used
+	 * @param roundingMode the rounding mode to be used
+	 * @return the {@link MonetaryOperator} using the scale and {@link RoundingMode} used in parameter
 	 * @throws NullPointerException when the {@link MathContext} is null
 	 * @see {@linkplain RoundingMode}
 	 */

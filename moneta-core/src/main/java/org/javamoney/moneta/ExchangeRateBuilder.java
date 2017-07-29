@@ -34,6 +34,7 @@ import java.util.Objects;
  * @author Werner Keil
  * @deprecated Use org.javamoney.moneta.convert.ExchangeRateBuilder instead
  */
+@Deprecated
 public class ExchangeRateBuilder {
     /**
      * The {@link javax.money.convert.ConversionContext}.
