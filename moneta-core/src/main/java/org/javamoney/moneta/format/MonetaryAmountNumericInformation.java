@@ -205,19 +205,18 @@ public final class MonetaryAmountNumericInformation {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(MonetaryAmountNumericInformation.class.getName()).append('{')
-		.append(" maximumFractionDigits: ").append(getMaximumFractionDigits()).append(',')
-		.append(" maximumIntegerDigits: ").append(getMaximumIntegerDigits()).append(',')
-		.append(" minimumFractionDigits: ").append(getMinimumFractionDigits()).append(',')
-		.append(" minimumIntegerDigits: ").append(getMinimumIntegerDigits()).append(',')
-		.append(" decimalSeparatorAlwaysShown: ").append(isDecimalSeparatorAlwaysShown()).append(',')
-		.append(" groupingUsed: ").append(isGroupingUsed()).append(',')
-		.append(" groupingSize: ").append(getGroupingSize()).append(',')
-		.append(" multiplier: ").append(getMultiplier()).append(',')
-		.append(" parseBigDecimal: ").append(isParseBigDecimal()).append(',')
-		.append(" parseIntegerOnly: ").append(isParseIntegerOnly()).append(',')
-		.append(" roundingMode: ").append(getRoundingMode()).append('}');
-		return sb.toString();
+        String sb = MonetaryAmountNumericInformation.class.getName() + '{' +
+                " maximumFractionDigits: " + getMaximumFractionDigits() + ',' +
+                " maximumIntegerDigits: " + getMaximumIntegerDigits() + ',' +
+                " minimumFractionDigits: " + getMinimumFractionDigits() + ',' +
+                " minimumIntegerDigits: " + getMinimumIntegerDigits() + ',' +
+                " decimalSeparatorAlwaysShown: " + isDecimalSeparatorAlwaysShown() + ',' +
+                " groupingUsed: " + isGroupingUsed() + ',' +
+                " groupingSize: " + getGroupingSize() + ',' +
+                " multiplier: " + getMultiplier() + ',' +
+                " parseBigDecimal: " + isParseBigDecimal() + ',' +
+                " parseIntegerOnly: " + isParseIntegerOnly() + ',' +
+                " roundingMode: " + getRoundingMode() + '}';
+        return sb;
 	}
 }

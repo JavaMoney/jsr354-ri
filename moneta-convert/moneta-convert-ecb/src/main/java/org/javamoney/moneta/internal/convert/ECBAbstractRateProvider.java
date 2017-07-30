@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -99,7 +99,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
-            int newSize = this.rates.size();
+            int newSize = this.rates==null?0:this.rates.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
             LOG.info(loadState);
         } catch (Exception e) {
@@ -215,10 +215,9 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     @Override
     public String toString() {
-    	StringBuilder sb = new StringBuilder();
-    	sb.append(getClass().getName()).append('{')
-    	.append(" context: ").append(context).append('}');
-    	return sb.toString();
+        String sb = getClass().getName() + '{' +
+                " context: " + context + '}';
+        return sb;
     }
 
     private class RateResult {

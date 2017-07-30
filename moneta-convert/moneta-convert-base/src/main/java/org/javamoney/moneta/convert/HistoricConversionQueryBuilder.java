@@ -56,7 +56,7 @@ public final class HistoricConversionQueryBuilder {
 
 	/**
 	 * Set a specify day on {@link HistoricConversionQueryBuilder}
-	 * @param localDate
+	 * @param localDate the target date
 	 * @return this
 	 * @throws NullPointerException when {@link LocalDate} is null
 	 */
@@ -70,7 +70,7 @@ public final class HistoricConversionQueryBuilder {
 	/**
 	 *Set days on {@link HistoricConversionQueryBuilder} to be used on ExchangeRateProvider,
 	 *these parameters will sort to most recent to be more priority than other.
-	 * @param localDates
+	 * @param localDates the target dates
 	 * @return this
 	 * @throws IllegalArgumentException when is empty or the parameter has an null value
 	 */
@@ -94,7 +94,7 @@ public final class HistoricConversionQueryBuilder {
 	/**
 	 *Set days on {@link HistoricConversionQueryBuilder} to be used on ExchangeRateProvider,
 	 *these parameters, different of  {@link HistoricConversionQueryBuilder#withDays(LocalDate...)}, consider the order already defined.
-	 * @param localDates
+	 * @param localDates the target dates
 	 * @return this
 	 * @throws IllegalArgumentException when is empty or the parameter has an null value
 	 */
@@ -116,8 +116,8 @@ public final class HistoricConversionQueryBuilder {
 	/**
 	 * Set the period of days on {@link HistoricConversionQueryBuilder}
 	 *  to be used on ExchangeRateProvider,
-	 * @param begin
-	 * @param end
+	 * @param begin the start date
+	 * @param end the end date
 	 * @return this;
 	 * <p>Example:</p>
 	 * <pre>
@@ -159,11 +159,10 @@ public final class HistoricConversionQueryBuilder {
 
 	@Override
 	public String toString() {
-	    StringBuilder sb = new StringBuilder();
-	    sb.append(HistoricConversionQueryBuilder.class.getName())
-	    .append('{').append(" conversionQueryBuilder: ")
-	    .append(conversionQueryBuilder).append('}');
-		return sb.toString();
+		String sb = HistoricConversionQueryBuilder.class.getName() +
+				'{' + " conversionQueryBuilder: " +
+				conversionQueryBuilder + '}';
+		return sb;
 	}
 
 	public class HistoricConversionQueryWithDayBuilder {
@@ -185,11 +184,10 @@ public final class HistoricConversionQueryBuilder {
 
 		@Override
 		public String toString() {
-		    StringBuilder sb = new StringBuilder();
-		    sb.append(HistoricConversionQueryWithDayBuilder.class.getName())
-		    .append('{').append(" conversionQueryBuilder: ")
-		    .append(conversionQueryBuilder).append('}');
-			return sb.toString();
+			String sb = HistoricConversionQueryWithDayBuilder.class.getName() +
+					'{' + " conversionQueryBuilder: " +
+					conversionQueryBuilder + '}';
+			return sb;
 		}
 
 	}

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -177,6 +177,9 @@ final class CurrencyToken implements FormatToken {
                 continue;
             }
             break;
+        }
+        if(token==null){
+            throw new MonetaryException("Error parsing CurrencyUnit: no input.");
         }
         try {
             CurrencyUnit cur;

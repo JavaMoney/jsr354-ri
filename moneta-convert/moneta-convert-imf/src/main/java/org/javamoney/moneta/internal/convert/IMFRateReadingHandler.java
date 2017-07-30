@@ -205,8 +205,7 @@ class IMFRateReadingHandler {
 	}
 
 	private LocalDate getLocalDateFromTS(List<LocalDate> timestamps, int index) {
-		LocalDate fromTS = timestamps != null ? timestamps.get(index) : null;
-		return fromTS;
+		return timestamps != null ? timestamps.get(index) : null;
 	}
 
 	private RateType getRateType(LocalDate fromTS) {
@@ -241,9 +240,8 @@ class IMFRateReadingHandler {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(IMFRateReadingHandler.class.getName()).append('{').append(" currenciresByName: ").append(currenciresByName).append(',')
-		.append(" context: ").append(context).append('}');
-		return sb.toString();
+		String sb = IMFRateReadingHandler.class.getName() + '{' + " currenciresByName: " + currenciresByName + ',' +
+				" context: " + context + '}';
+		return sb;
 	}
 }

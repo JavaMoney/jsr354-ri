@@ -16,6 +16,7 @@
 package org.javamoney.moneta.spi;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -102,15 +103,14 @@ public class LoadDataInformation {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(LoadDataInformation.class.getName()).append('{')
-		.append(" resourceId: ").append(resourceId).append(',')
-		.append(" updatePolicy: ").append(updatePolicy).append(',')
-		.append(" properties: ").append(properties).append(',')
-		.append(" LoaderListener: ").append(loaderListener).append(',')
-		.append(" backupResource: ").append(backupResource).append(',')
-		.append(" resourceLocations: ").append(resourceLocations).append('}');
-		return sb.toString();
+        String sb = LoadDataInformation.class.getName() + '{' +
+                " resourceId: " + resourceId + ',' +
+                " updatePolicy: " + updatePolicy + ',' +
+                " properties: " + properties + ',' +
+                " LoaderListener: " + loaderListener + ',' +
+                " backupResource: " + backupResource + ',' +
+                " resourceLocations: " + Arrays.toString(resourceLocations) + '}';
+        return sb;
 	}
 
 }

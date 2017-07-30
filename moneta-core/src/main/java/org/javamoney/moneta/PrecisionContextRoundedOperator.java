@@ -92,10 +92,9 @@ public final class PrecisionContextRoundedOperator implements MonetaryOperator {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(PrecisionContextRoundedOperator.class.getName()).append('{')
-		.append("mathContext:").append(mathContext).append('}');
-		return sb.toString();
+        String sb = PrecisionContextRoundedOperator.class.getName() + '{' +
+                "mathContext:" + mathContext + '}';
+        return sb;
 	}
 
 }

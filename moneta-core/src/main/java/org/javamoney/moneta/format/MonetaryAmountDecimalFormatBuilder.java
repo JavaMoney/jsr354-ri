@@ -60,7 +60,7 @@ public class MonetaryAmountDecimalFormatBuilder {
 
     /**
      * Creates a new instance of {@link MonetaryAmountDecimalFormatBuilder} with {@link Locale} set from parameter.
-     * @param locale
+     * @param locale the target locale
      * @see {@link NumberFormat#getCurrencyInstance(Locale)}
      * @return a new instance of {@link MonetaryAmountDecimalFormatBuilder}
      */
@@ -86,8 +86,8 @@ public class MonetaryAmountDecimalFormatBuilder {
 
     /**
      * Creates a new instance of {@link MonetaryAmountDecimalFormatBuilder} with {@link Locale} set from parameter and pattern to format the {@link javax.money.MonetaryAmount}.
-     * @param  pattern
-     * @param  locale
+     * @param  pattern the pattern to be used
+     * @param  locale the target locale
      * @see {@link DecimalFormat}
      * @see {@link DecimalFormat#DecimalFormat(String)}
      * @return a new instance of {@link MonetaryAmountDecimalFormatBuilder}
@@ -101,7 +101,7 @@ public class MonetaryAmountDecimalFormatBuilder {
 
     /**
      * Sets the {@link CurrencyUnit}
-     * @param currencyUnit
+     * @param currencyUnit the target currency
      * @return the {@link MonetaryAmountDecimalFormatBuilder}
      */
     public MonetaryAmountDecimalFormatBuilder withCurrencyUnit(CurrencyUnit currencyUnit) {
@@ -111,7 +111,7 @@ public class MonetaryAmountDecimalFormatBuilder {
 
     /**
      * Sets the {@link MonetaryAmountProducer}
-     * @param producer
+     * @param producer the producer
      * @return the {@link MonetaryAmountDecimalFormatBuilder}
      */
     public MonetaryAmountDecimalFormatBuilder withProducer(MonetaryAmountProducer producer) {

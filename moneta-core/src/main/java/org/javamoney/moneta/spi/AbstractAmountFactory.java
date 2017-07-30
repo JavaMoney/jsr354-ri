@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -17,7 +17,6 @@ package org.javamoney.moneta.spi;
 
 import javax.money.*;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Objects;
 
 /**
@@ -189,7 +188,7 @@ public abstract class AbstractAmountFactory<T extends MonetaryAmount> implements
      *
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
-     * @Deprecated will be removed in next release
+     * @deprecated will be removed in next release
      */
     @Deprecated
     protected static BigDecimal getBigDecimal(Number num) {

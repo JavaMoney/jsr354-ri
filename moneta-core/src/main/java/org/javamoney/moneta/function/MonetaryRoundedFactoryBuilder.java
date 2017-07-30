@@ -169,10 +169,9 @@ public final class MonetaryRoundedFactoryBuilder {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(MonetaryRoundedFactoryBuilder.class.getName()).append('{')
-		.append("roundingMode: ").append(roundingMode).append('}');
-		return sb.toString();
+        String sb = MonetaryRoundedFactoryBuilder.class.getName() + '{' +
+                "roundingMode: " + roundingMode + '}';
+        return sb;
 	}
 
 }

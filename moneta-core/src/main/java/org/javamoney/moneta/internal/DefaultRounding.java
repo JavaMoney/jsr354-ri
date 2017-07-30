@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -63,12 +63,7 @@ final class DefaultRounding implements MonetaryRounding, Serializable {
             scale = 0;
         }
         this.context = RoundingContextBuilder.of("default", "default").
-                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).set(Optional.ofNullable(roundingMode)
-                .orElseThrow(
-                        () -> new
-                                IllegalArgumentException(
-                                "roundingMode missing")))
-                .build();
+                set(PROVCLASS_KEY, getClass().getName()).set(SCALE_KEY, scale).set(roundingMode).build();
     }
 
     /**

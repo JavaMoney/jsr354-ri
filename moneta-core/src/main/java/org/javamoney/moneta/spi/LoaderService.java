@@ -47,7 +47,7 @@ public interface LoaderService {
      *
      * @author Anatole Tresch
      */
-    public enum UpdatePolicy {
+    enum UpdatePolicy {
         /**
          * The resource will never be updated from remote, only the fallback URL
          * will be evaluated.

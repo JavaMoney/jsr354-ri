@@ -27,7 +27,6 @@ import javax.money.*;
  * For example, 'EUR 2.35' will return 2,
  * and 'BHD -1.345' will return -1.
  * <p>
- * @return the major units part of the amount
  * @author Anatole Tresch
  * @author Otavio Santana
  */

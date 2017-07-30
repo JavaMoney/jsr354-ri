@@ -126,11 +126,10 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(MonetaryAmountDecimalFormat.class.getName()).append('{')
-                .append(" decimalFormat: ").append(decimalFormat).append(',')
-                .append(" producer: ").append(producer).append(',')
-                .append(" currencyUnit: ").append(currencyUnit).append('}');
-        return sb.toString();
+        String sb = MonetaryAmountDecimalFormat.class.getName() + '{' +
+                " decimalFormat: " + decimalFormat + ',' +
+                " producer: " + producer + ',' +
+                " currencyUnit: " + currencyUnit + '}';
+        return sb;
     }
 }

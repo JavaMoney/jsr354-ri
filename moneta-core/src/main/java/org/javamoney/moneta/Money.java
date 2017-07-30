@@ -216,7 +216,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
-        if (divisor == 1.0) {
+        if (divisor == 1.0d) {
             return this;
         }
         return divide(new BigDecimal(String.valueOf(divisor)));
@@ -871,6 +871,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * Just to don't break the compatibility.
      * Don't use it
      * @param number
+     * @deprecated Will be removed.
      */
     @Deprecated
     public static boolean isInfinityAndNotNaN(Number number) {
@@ -882,10 +883,13 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         }
         return false;
     }
+
+
     /**
      * Just to don't break the compatibility.
      * Don't use it
      * @param number
+     * @deprecated Will be removed.
      */
     @Deprecated
     public static void checkNoInfinityOrNaN(Number number) {
@@ -898,4 +902,5 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
             }
         }
     }
+
 }

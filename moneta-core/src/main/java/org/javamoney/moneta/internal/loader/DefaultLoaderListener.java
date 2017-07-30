@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -63,6 +63,7 @@ class DefaultLoaderListener {
      * @param dataId the data id, not null.
      * @param is     the InputStream, containing the latest data.
      */
+    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public void trigger(String dataId, InputStream is) {
         List<LoaderListener> listeners = getListeners("");
         synchronized (listeners) {
@@ -90,9 +91,8 @@ class DefaultLoaderListener {
 
     @Override
     public String toString() {
-    	StringBuilder sb = new StringBuilder();
-    	sb.append(DefaultLoaderListener.class.getName()).append('{')
-    	.append("listenersMap: ").append(listenersMap).append('}');
-    	return sb.toString();
+        String sb = DefaultLoaderListener.class.getName() + '{' +
+                "listenersMap: " + listenersMap + '}';
+        return sb;
     }
 }

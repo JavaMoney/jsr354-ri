@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -52,11 +52,10 @@ class DefaultLoaderServiceFacade {
 	}
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(DefaultLoaderServiceFacade.class.getName()).append('{')
-		.append(" scheduledDataLoaderService: ").append(scheduledDataLoaderService).append(',')
-		.append(" asyncLoaderService: ").append(loadDataLoaderService).append(',')
-		.append(" loadDataLocalLoaderService: ").append(loadDataLocalLoaderService).append(',');
-		return sb.toString();
+		String sb = DefaultLoaderServiceFacade.class.getName() + '{' +
+				" scheduledDataLoaderService: " + scheduledDataLoaderService + ',' +
+				" asyncLoaderService: " + loadDataLoaderService + ',' +
+				" loadDataLocalLoaderService: " + loadDataLocalLoaderService + ',';
+		return sb;
 	}
 }

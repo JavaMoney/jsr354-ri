@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -190,7 +190,7 @@ public abstract class AbstractAmountBuilder<T extends MonetaryAmount> implements
      *
      * @param num the number type
      * @return the corresponding {@link BigDecimal}
-     * @Deprecated will be removed in next release
+     * @deprecated will be removed in next release
      */
     @Deprecated
     protected static BigDecimal getBigDecimal(Number num) {

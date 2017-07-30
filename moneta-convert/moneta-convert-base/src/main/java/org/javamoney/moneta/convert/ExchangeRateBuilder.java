@@ -192,13 +192,12 @@ public class ExchangeRateBuilder {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("org.javamoney.moneta.ExchangeRateBuilder: ");
-        sb.append("[conversionContext").append(conversionContext).append(',');
-        sb.append("base").append(base).append(',');
-        sb.append("term").append(term).append(',');
-        sb.append("factor").append(factor).append(',');
-        sb.append("rateChain").append(rateChain).append(']');
-        return sb.toString();
+        String sb = "org.javamoney.moneta.ExchangeRateBuilder: " +
+                "[conversionContext" + conversionContext + ',' +
+                "base" + base + ',' +
+                "term" + term + ',' +
+                "factor" + factor + ',' +
+                "rateChain" + rateChain + ']';
+        return sb;
     }
 }

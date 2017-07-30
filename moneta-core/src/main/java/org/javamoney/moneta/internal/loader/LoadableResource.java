@@ -401,7 +401,6 @@ public class LoadableResource {
      * load counter.
      *
      * @return true on success.
-     * @throws IOException
      */
     public boolean resetToFallback() {
         if (loadFallback()) {

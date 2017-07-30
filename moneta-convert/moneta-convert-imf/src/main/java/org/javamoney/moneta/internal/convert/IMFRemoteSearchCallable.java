@@ -50,7 +50,7 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 		if(Objects.isNull(connection)) {
 			return null;
 		}
-        try (InputStream inputStream = connection.getInputStream(); ByteArrayOutputStream stream = new ByteArrayOutputStream();) {
+        try (InputStream inputStream = connection.getInputStream(); ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             byte[] data = new byte[4096];
             int read = inputStream.read(data);
             while (read > 0) {
@@ -77,10 +77,9 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(IMFRemoteSearchCallable.class.getName()).append('{')
-		.append(" type: ").append(type).append(", yearMonth: ").append(yearMonth).append('}');
-		return sb.toString();
+        String sb = IMFRemoteSearchCallable.class.getName() + '{' +
+                " type: " + type + ", yearMonth: " + yearMonth + '}';
+        return sb;
 	}
 
 	class IMFRemoteSearchResult {
@@ -104,10 +103,9 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
 		@Override
 		public String toString() {
-			StringBuilder sb = new StringBuilder();
-			sb.append(IMFRemoteSearchResult.class.getName()).append('{')
-			.append(" type: ").append(type).append(", stream: ").append(stream).append('}');
-			return sb.toString();
+            String sb = IMFRemoteSearchResult.class.getName() + '{' +
+                    " type: " + type + ", stream: " + stream + '}';
+            return sb;
 		}
 	}
 

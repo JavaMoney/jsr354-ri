@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -122,10 +122,9 @@ class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols 
 	}
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(DefaultMonetaryAmountFormatSymbols.class.getName()).append('{')
-		.append(" numericInformation: ").append(numericInformation).append(',')
-		.append(" symbols: ").append(symbols).append('}');
-		return sb.toString();
+		String sb = DefaultMonetaryAmountFormatSymbols.class.getName() + '{' +
+				" numericInformation: " + numericInformation + ',' +
+				" symbols: " + symbols + '}';
+		return sb;
 	}
 }

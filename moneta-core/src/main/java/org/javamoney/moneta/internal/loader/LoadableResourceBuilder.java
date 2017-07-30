@@ -54,10 +54,9 @@ public class LoadableResourceBuilder {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(LoadableResourceBuilder.class.getName()).append('{')
-		.append(" loadDataInformation: ").append(loadDataInformation).append(',')
-		.append(" cache: ").append(loadDataInformation).append('}');
-		return sb.toString();
+        String sb = LoadableResourceBuilder.class.getName() + '{' +
+                " loadDataInformation: " + loadDataInformation + ',' +
+                " cache: " + loadDataInformation + '}';
+        return sb;
 	}
 }

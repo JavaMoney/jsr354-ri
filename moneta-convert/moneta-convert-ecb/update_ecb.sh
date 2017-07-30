@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 printf "\n Downloading the ECB daily resource. \n"
 wget http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
 mv eurofxref-daily.xml src/main/resources/java-money/defaults/ECB/eurofxref-daily.xml

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -123,7 +123,7 @@ public class DefaultMonetaryAmountsSingletonQuerySpi implements MonetaryAmountsS
 		MonetaryContext context = createContext(factoryQuery);
 
 		factories.forEach(f -> f.setContext(context));
-        Collections.sort(selection, CONTEXT_COMPARATOR);
+        selection.sort(CONTEXT_COMPARATOR);
         factories.add(selection.get(0).createMonetaryAmountFactory());
         return factories;
     }

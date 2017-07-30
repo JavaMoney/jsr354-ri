@@ -20,16 +20,12 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryContext;
 import javax.money.MonetaryException;
 
-import org.javamoney.moneta.FastMoney;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -46,7 +42,7 @@ public final class MoneyUtils {
     /**
      * The logger used.
      */
-    private static final Logger LOG = Logger.getLogger(FastMoney.class.getName());
+    private static final Logger LOG = Logger.getLogger(MoneyUtils.class.getName());
 
     private MoneyUtils() {
     }
@@ -73,12 +69,10 @@ public final class MoneyUtils {
      * @return the corresponding {@link BigDecimal}
      */
     public static BigDecimal getBigDecimal(double num) {
-        if (num == Double.NaN) {
+        if (Double.isNaN(num)) {
             throw new ArithmeticException("Invalid input Double.NaN.");
-        } else if (num == Double.POSITIVE_INFINITY) {
-            throw new ArithmeticException("Invalid input Double.POSITIVE_INFINITY.");
-        } else if (num == Double.NEGATIVE_INFINITY) {
-            throw new ArithmeticException("Invalid input Double.NEGATIVE_INFINITY.");
+        } else if(Double.isInfinite(num)) {
+            throw new ArithmeticException("Invalid input Double.xxx_INFINITY.");
         }
         return new BigDecimal(String.valueOf(num));
     }
@@ -108,7 +102,7 @@ public final class MoneyUtils {
             MathContext mc = getMathContext(moneyContext, RoundingMode.HALF_EVEN);
             bd = new BigDecimal(bd.toString(), mc);
             if (moneyContext.getMaxScale() > 0) {
-                LOG.fine(String.format("Got Max Scale %s", moneyContext.getMaxScale()));
+                LOG.log(Level.FINE, "Got Max Scale %n", moneyContext.getMaxScale());
                 bd = bd.setScale(moneyContext.getMaxScale(), mc.getRoundingMode());
             }
         }

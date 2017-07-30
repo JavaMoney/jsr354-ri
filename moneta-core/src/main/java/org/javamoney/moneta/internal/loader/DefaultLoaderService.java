@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -46,6 +46,7 @@ import org.javamoney.moneta.spi.LoaderService;
  * <p>
  * @author Anatole Tresch
  */
+@SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public class DefaultLoaderService implements LoaderService {
     /**
      * Logger used.

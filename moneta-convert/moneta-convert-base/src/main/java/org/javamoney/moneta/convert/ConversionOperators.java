@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2015, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -73,7 +73,7 @@ public final class ConversionOperators {
 	 *MonetaryAmount result = ConversionOperators.exchangeCurrency(real).apply(money);//BRL 2.355
 	 *}
 	 *</pre>
-	 * @param roundingMode rounding to be used
+	 * @param currencyUnit the currency to be used
 	 * @return the major part as {@link MonetaryOperator}
 	 * @since 1.0.1
 	 */

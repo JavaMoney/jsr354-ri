@@ -285,23 +285,22 @@ public final class MonetaryAmountSymbols {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.getClass().getName()).append('{');
-		sb.append(" Currency: ").append(formatSymbols.getCurrency()).append(',');
-		sb.append(" currencySymbol: ").append(formatSymbols.getCurrencySymbol()).append(',');
-		sb.append(" decimalSeparator: ").append(formatSymbols.getDecimalSeparator()).append(',');
-		sb.append(" digit: ").append(formatSymbols.getDigit()).append(',');
-		sb.append(" exponentSeparator: ").append(formatSymbols.getExponentSeparator()).append(',');
-		sb.append(" groupingSeparator: ").append(formatSymbols.getGroupingSeparator()).append(',');
-		sb.append(" infinity: ").append(formatSymbols.getInfinity()).append(',');
-		sb.append(" internationalCurrencySymbol: ").append(formatSymbols.getInternationalCurrencySymbol()).append(',');
-		sb.append(" minusSign: ").append(formatSymbols.getMinusSign()).append(',');
-		sb.append(" monetaryDecimalSeparator: ").append(formatSymbols.getMonetaryDecimalSeparator()).append(',');
-		sb.append(" naN: ").append(formatSymbols.getNaN()).append(',');
-		sb.append(" patternSeparator: ").append(formatSymbols.getPatternSeparator()).append(',');
-		sb.append(" percent: ").append(formatSymbols.getPercent()).append(',');
-		sb.append(" perMill: ").append(formatSymbols.getPerMill()).append(',');
-		sb.append(" zeroDigit: ").append(formatSymbols.getZeroDigit()).append('}');
-		return sb.toString();
+        String sb = this.getClass().getName() + '{' +
+                " Currency: " + formatSymbols.getCurrency() + ',' +
+                " currencySymbol: " + formatSymbols.getCurrencySymbol() + ',' +
+                " decimalSeparator: " + formatSymbols.getDecimalSeparator() + ',' +
+                " digit: " + formatSymbols.getDigit() + ',' +
+                " exponentSeparator: " + formatSymbols.getExponentSeparator() + ',' +
+                " groupingSeparator: " + formatSymbols.getGroupingSeparator() + ',' +
+                " infinity: " + formatSymbols.getInfinity() + ',' +
+                " internationalCurrencySymbol: " + formatSymbols.getInternationalCurrencySymbol() + ',' +
+                " minusSign: " + formatSymbols.getMinusSign() + ',' +
+                " monetaryDecimalSeparator: " + formatSymbols.getMonetaryDecimalSeparator() + ',' +
+                " naN: " + formatSymbols.getNaN() + ',' +
+                " patternSeparator: " + formatSymbols.getPatternSeparator() + ',' +
+                " percent: " + formatSymbols.getPercent() + ',' +
+                " perMill: " + formatSymbols.getPerMill() + ',' +
+                " zeroDigit: " + formatSymbols.getZeroDigit() + '}';
+        return sb;
 	}
 }

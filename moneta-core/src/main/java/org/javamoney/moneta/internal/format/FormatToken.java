@@ -35,7 +35,7 @@ public interface FormatToken {
 	 * @throws MonetaryParseException
 	 *             if parsing fails.
 	 */
-	public void parse(ParseContext context) throws MonetaryParseException;
+    void parse(ParseContext context) throws MonetaryParseException;
 
 	/**
 	 * Formats the given {@link MonetaryAmount} to an {@link Appendable}.
@@ -43,7 +43,7 @@ public interface FormatToken {
 	 * @param amount the {@link MonetaryAmount} to be formatted, not {@code null}.
 	 * @throws IOException thrown by the {@link Appendable} on appending.
 	 */
-	public void print(Appendable appendable, MonetaryAmount amount)
+    void print(Appendable appendable, MonetaryAmount amount)
 			throws IOException;
 
 }

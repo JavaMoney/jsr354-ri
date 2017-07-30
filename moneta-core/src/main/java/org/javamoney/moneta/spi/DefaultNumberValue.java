@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -19,6 +19,7 @@ import javax.money.NumberValue;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
+
 
 /**
  * Default implementation of {@link NumberValue} based on {@link BigDecimal}.

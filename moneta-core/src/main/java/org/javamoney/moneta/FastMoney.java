@@ -241,7 +241,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     /**
      * Obtains an instance of {@link FastMoney} representing zero.
-     * @param currency
+     * @param currency the target currency
      * @return an instance of {@link FastMoney} representing zero.
      * @since 1.0.1
      */
@@ -273,7 +273,6 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param factionDigits number of digits
      * @return the monetary amount from minor units
      * @see {@link CurrencyUnit#getDefaultFractionDigits()}
-     * @see {@link FastMoney#ofMinor(CurrencyUnit, long, int)}
      * @throws NullPointerException when the currency is null
      * @throws IllegalArgumentException when the factionDigits is negative
      * @since 1.0.1
