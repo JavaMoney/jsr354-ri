@@ -22,15 +22,65 @@ import javax.money.Monetary;
 import javax.money.NumberValue;
 import javax.money.convert.ConversionContext;
 import javax.money.convert.ExchangeRate;
+import javax.money.convert.RateType;
 
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.testng.annotations.Test;
+
+import java.math.BigDecimal;
 
 public class ExchangeRateBuilderTest {
 
 
 	private static final NumberValue NUMBER_FACTOR = DefaultNumberValue.of(10);
 	private static final CurrencyUnit CURRENCY = Monetary.getCurrency("BRL");
+
+	@Test
+	public void testNumberInsignificanceForRates(){
+		ExchangeRate rateFromString = new ExchangeRateBuilder(ConversionContext.HISTORIC_CONVERSION)
+				.setBase(Monetary.getCurrency("USD"))
+				.setTerm(Monetary.getCurrency("EUR"))
+				.setFactor(DefaultNumberValue.of(new BigDecimal("1.1")))
+				.build();
+
+		ExchangeRate rateFromDouble = new ExchangeRateBuilder(ConversionContext.HISTORIC_CONVERSION)
+				.setBase(Monetary.getCurrency("USD"))
+				.setTerm(Monetary.getCurrency("EUR"))
+				.setFactor(DefaultNumberValue.of(1.1))
+				.build();
+
+		assertEquals(rateFromDouble, rateFromString, "Rates are not equal for same factor.");
+	}
+
+	@Test
+	public void equalsTest() {
+		DefaultNumberValue factor = new DefaultNumberValue(1.1);
+		DefaultNumberValue bigDecimalFactor = new DefaultNumberValue(new BigDecimal("1.1"));
+		CurrencyUnit EUR = Monetary.getCurrency("EUR");
+		CurrencyUnit GBP = Monetary.getCurrency("GBP");
+		ExchangeRate rate1 = new ExchangeRateBuilder("myprovider", RateType.ANY)
+				.setBase(EUR)
+				.setTerm(GBP)
+				.setFactor(factor)
+				.build();
+
+		ExchangeRate rate2 = new ExchangeRateBuilder("myprovider", RateType.ANY)
+				.setBase(EUR)
+				.setTerm(GBP)
+				.setFactor(factor)
+				.build();
+
+		ExchangeRate rate3 = new ExchangeRateBuilder("myprovider", RateType.ANY)
+				.setBase(EUR)
+				.setTerm(GBP)
+				.setFactor(bigDecimalFactor)
+				.build();
+
+		assertEquals(rate1, rate2, "Rates with same factor");
+		assertEquals(rate1, rate3, "Rates with numerically equal factor");
+		assertEquals(rate1.hashCode(), rate2.hashCode(), "Hashes with same factor");
+		assertEquals(rate1.hashCode(), rate3.hashCode(), "Hashes with numerically equal factor");
+	}
 
 	@Test(expectedExceptions  = NullPointerException.class)
 	public void shouldReturnNPEWhenConversionContextIsNull() {
