@@ -79,9 +79,28 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
             }
             return result;
         }
+        if(!currencyQuery.getNumericCodes().isEmpty()) {
+            for (Integer numCode : currencyQuery.getNumericCodes()) {
+                List<CurrencyUnit> cus = getCurrencyUnits(numCode);
+                result.addAll(cus);
+            }
+            return result;
+        }
+        // No constraints defined, return all.
         result.addAll(CACHED.values());
         return result;
     }
+
+    private List<CurrencyUnit> getCurrencyUnits(int numCode) {
+        List<CurrencyUnit> result = new ArrayList<>();
+        for(Currency currency: Currency.getAvailableCurrencies()){
+            if(currency.getNumericCode()==numCode){
+                result.add(CACHED.get(currency.getCurrencyCode()));
+            }
+        }
+        return result;
+    }
+
 
     private CurrencyUnit getCurrencyUnit(Locale locale) {
 		Currency cur;

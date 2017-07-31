@@ -15,20 +15,16 @@
  */
 package org.javamoney.moneta;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryAmountFactoryQueryBuilder;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryContextBuilder;
+import javax.money.*;
 
 import org.junit.Ignore;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
 
 public class MonetaryTest {
 
@@ -74,5 +70,27 @@ public class MonetaryTest {
 		MonetaryContext mc = MonetaryContextBuilder.of().setMaxScale(2).setPrecision(64).set(RoundingMode.FLOOR).build();
 		MonetaryAmount am = Monetary.getDefaultAmountFactory().setContext(mc).setNumber(999.999).setCurrency("EUR").create();
 		assertEquals(am.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(999.99));
+	}
+
+	@Test
+	public void accessMultipleCurrenciesWithCode() {
+		Collection<CurrencyUnit> currencies = Monetary.getCurrencies(CurrencyQueryBuilder.of().setNumericCodes(324).build());
+		assertNotNull(currencies);
+		assertTrue(currencies.size()==1);
+		assertEquals(currencies.iterator().next().getCurrencyCode(), "GNF");
+	}
+
+	@Test
+	public void accessMultipleCurrenciesWithCodeAll() {
+		Collection<CurrencyUnit> currencies = Monetary.getCurrencies(CurrencyQueryBuilder.of().setNumericCodes(0).build());
+		assertNotNull(currencies);
+		assertTrue(currencies.size()>1);
+	}
+
+	@Test
+	public void accessSingleCurrencyWithCode() {
+		CurrencyUnit currency = Monetary.getCurrency(CurrencyQueryBuilder.of().setNumericCodes(324).build());
+		assertNotNull(currency);
+		assertEquals(currency.getCurrencyCode(), "GNF");
 	}
 }
