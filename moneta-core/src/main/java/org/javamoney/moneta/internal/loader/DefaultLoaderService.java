@@ -254,7 +254,7 @@ public class DefaultLoaderService implements LoaderService {
     public InputStream getData(String resourceId) throws IOException {
         LoadableResource load = this.resources.get(resourceId);
         if (Objects.nonNull(load)) {
-            load.getDataStream();
+            return load.getDataStream();
         }
         throw new IllegalArgumentException("No such resource: " + resourceId);
     }
