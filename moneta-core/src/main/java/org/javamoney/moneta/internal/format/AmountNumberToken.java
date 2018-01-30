@@ -15,6 +15,7 @@
  */
 package org.javamoney.moneta.internal.format;
 
+import org.javamoney.moneta.Money;
 import org.javamoney.moneta.format.AmountFormatParams;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
+import javax.money.format.MonetaryFormats;
 import javax.money.format.MonetaryParseException;
 
 /**
@@ -61,8 +63,15 @@ final class AmountNumberToken implements FormatToken {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
         }
-        formatFormat.applyPattern(this.partialNumberPattern);
-        parseFormat.applyPattern(this.partialNumberPattern.trim());
+        formatFormat.applyPattern(removeNBSP(partialNumberPattern));
+        parseFormat.applyPattern(removeNBSP(partialNumberPattern).trim());
+    }
+
+    /**
+     * Removes the non-breaking-space character 0x0A from the string.
+     */
+    private String removeNBSP(String s) {
+        return s.replaceAll("\\u00A0", " ");
     }
 
     /**
