@@ -15,9 +15,11 @@
  */
 package org.javamoney.moneta.internal.format;
 
-import org.javamoney.moneta.Money;
 import org.javamoney.moneta.format.AmountFormatParams;
 
+import javax.money.MonetaryAmount;
+import javax.money.format.AmountFormatContext;
+import javax.money.format.MonetaryParseException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -26,11 +28,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
-
-import javax.money.MonetaryAmount;
-import javax.money.format.AmountFormatContext;
-import javax.money.format.MonetaryFormats;
-import javax.money.format.MonetaryParseException;
 
 /**
  * {@link FormatToken} which allows to format a {@link MonetaryAmount} type.
