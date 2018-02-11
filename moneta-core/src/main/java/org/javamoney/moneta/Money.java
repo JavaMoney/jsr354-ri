@@ -394,7 +394,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (amount.isZero()) {
             return this;
         }
-        return new Money(this.number.add(amount.getNumber().numberValue(BigDecimal.class)), getCurrency());
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
+        return new Money(this.number.add(amount.getNumber().numberValue(BigDecimal.class), mc), getCurrency(), monetaryContext);
     }
 
     /*
@@ -411,9 +412,13 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (divisorBD.equals(BigDecimal.ONE)) {
             return this;
         }
-        BigDecimal dec =
-                this.number.divide(divisorBD, MoneyUtils.getMathContext(getContext(), RoundingMode.HALF_EVEN));
-        return new Money(dec, getCurrency());
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
+        int maxScale = monetaryContext.getMaxScale();
+        BigDecimal dec;
+        if(maxScale>0){
+            return new Money(this.number.divide(divisorBD, maxScale, mc.getRoundingMode()), getCurrency(), monetaryContext);
+        }
+        return new Money(this.number.divide(divisorBD, mc), getCurrency(), monetaryContext);
     }
 
     @Override
@@ -426,8 +431,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (divisorBD.equals(BigDecimal.ONE)) {
             return new Money[]{this, new Money(BigDecimal.ZERO, getCurrency())};
         }
-        BigDecimal[] dec = this.number.divideAndRemainder(divisorBD);
-        return new Money[]{new Money(dec[0], getCurrency()), new Money(dec[1], getCurrency())};
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
+        BigDecimal[] dec = this.number.divideAndRemainder(divisorBD, mc);
+        return new Money[]{new Money(dec[0], getCurrency(), monetaryContext), new Money(dec[1], getCurrency(), monetaryContext)};
     }
 
     /*
@@ -455,9 +461,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return Money.of(0, getCurrency());
         }
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
         BigDecimal divisorBD = MoneyUtils.getBigDecimal(divisor);
-        BigDecimal dec = this.number.divideToIntegralValue(divisorBD);
-        return new Money(dec, getCurrency());
+        BigDecimal dec = this.number.divideToIntegralValue(divisorBD, mc);
+        return new Money(dec, getCurrency(), monetaryContext);
     }
 
     /*
@@ -472,8 +479,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (multiplicandBD.equals(BigDecimal.ONE)) {
             return this;
         }
-        BigDecimal dec = this.number.multiply(multiplicandBD);
-        return new Money(dec, getCurrency());
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
+        BigDecimal dec = this.number.multiply(multiplicandBD, mc);
+        return new Money(dec, getCurrency(), monetaryContext);
     }
 
     /*
@@ -507,7 +515,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (subtrahend.isZero()) {
             return this;
         }
-        return new Money(this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class)), getCurrency());
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
+        return new Money(this.number.subtract(subtrahend.getNumber().numberValue(BigDecimal.class), mc), getCurrency(),
+                monetaryContext);
     }
 
     /*
@@ -520,7 +530,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (isZero()) {
             return new Money(BigDecimal.ZERO, getCurrency());
         }
-        return new Money(this.number.stripTrailingZeros(), getCurrency());
+        return new Money(this.number.stripTrailingZeros(), getCurrency(), monetaryContext);
     }
 
     /*
@@ -533,8 +543,9 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return new Money(BigDecimal.ZERO, getCurrency());
         }
+        MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
         BigDecimal bd = MoneyUtils.getBigDecimal(divisor);
-        return new Money(this.number.remainder(bd), getCurrency());
+        return new Money(this.number.remainder(bd, mc), getCurrency(), monetaryContext);
     }
 
     /*
@@ -544,7 +555,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money scaleByPowerOfTen(int power) {
-        return new Money(this.number.scaleByPowerOfTen(power), getCurrency());
+        return new Money(this.number.scaleByPowerOfTen(power), getCurrency(),
+                monetaryContext);
     }
 
     /*

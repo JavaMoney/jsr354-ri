@@ -58,9 +58,20 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
             if (roundingMode == null) {
                 roundingMode = RoundingMode.HALF_EVEN;
             }
+            // Simple hack to honor: https://en.wikipedia.org/wiki/Cash_rounding#Rounding_with_1.00_intervals
             if (Boolean.TRUE.equals(roundingQuery.getBoolean("cashRounding"))) {
                 if ("CHF".equals(currency.getCurrencyCode())) {
                     return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
+                } else if ("SEK".equals(currency.getCurrencyCode())) {
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 100);
+                } else if ("NOK".equals(currency.getCurrencyCode())) {
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 100);
+                } else if ("¨CNY".equals(currency.getCurrencyCode())) {
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 10);
+                } else if ("¨HKD".equals(currency.getCurrencyCode())) {
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 10);
+                } else if ("¨NZD".equals(currency.getCurrencyCode())) {
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_DOWN, 10);
                 } else {
                     return new DefaultCashRounding(currency, 1);
                 }

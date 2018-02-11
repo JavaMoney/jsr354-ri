@@ -30,16 +30,14 @@ import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Locale;
 
-import javax.money.CurrencyUnit;
-import javax.money.MonetaryAmount;
-import javax.money.Monetary;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryContextBuilder;
-import javax.money.MonetaryException;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
+import javax.money.*;
+import javax.money.format.AmountFormatQueryBuilder;
+import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 
+import org.javamoney.moneta.format.CurrencyStyle;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
@@ -1228,6 +1226,57 @@ public class MoneyTest {
 		assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
 		assertEquals(DOLLAR, amount.getCurrency());
 	}
+
+    @Test
+    public void maxScaleOnDivide() {
+        MonetaryContext mc = MonetaryContextBuilder.of().setMaxScale(2).setPrecision(64).set(RoundingMode.FLOOR).build();
+        MonetaryAmount dividend = Monetary.getDefaultAmountFactory().setContext(mc).setNumber(100).setCurrency("EUR").create();
+        MonetaryAmount quotient = dividend.divide(3);
+        assertEquals(quotient.getContext().getMaxScale(), 2);
+        assertEquals(quotient.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(33.33));
+    }
+
+    @Test
+    public void maxPrecisionOnDivide() {
+        MonetaryContext mc = MonetaryContextBuilder.of().setMaxScale(4).setPrecision(2).set(RoundingMode.FLOOR).build();
+        MonetaryAmount dividend = Monetary.getDefaultAmountFactory().setContext(mc).setNumber(1000).setCurrency("EUR").create();
+        MonetaryAmount quotient = dividend.divide(3);
+        assertEquals(quotient.getContext().getMaxScale(), 4);
+        assertEquals(quotient.getContext().getPrecision(), 2);
+        assertEquals(quotient.getNumber().numberValue(BigDecimal.class).longValueExact(), BigDecimal.valueOf(330).longValueExact());
+    }
+
+    @Test
+    public void test(){
+        CurrencyUnit chf = CurrencyUnitBuilder.of("CHF","").build();
+        CurrencyUnit eur = CurrencyUnitBuilder.of("EUR","").build();
+        CurrencyUnit sek = CurrencyUnitBuilder.of("SEK","").build();
+
+        MonetaryRounding rounding = Monetary.getRounding(
+                RoundingQueryBuilder.of()
+                        .setCurrency(chf)
+                        .set("cashRounding", true).build());
+
+        MonetaryRounding roundingEUR = Monetary.getRounding(
+                RoundingQueryBuilder.of()
+                        .setCurrency(eur)
+                        .set("cashRounding", true).build());
+
+        MonetaryRounding roundingSEK = Monetary.getRounding(
+                RoundingQueryBuilder.of()
+                        .setCurrency(sek)
+                        .set("cashRounding", true).build());
+
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("ch", "")).format(Money.of(3459.97,chf)));
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("ch", "")).format(Money.of(3459.97,chf).with(rounding)));
+
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("de", "")).format(Money.of(3459.97,eur)));
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("de", "")).format(Money.of(3459.97,eur).with(roundingEUR)));
+
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("sv", "")).format(Money.of(3459.97,sek)));
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("sv", "")).format(Money.of(3459.97,sek).with(roundingSEK)));
+
+    }
 
 
 }
