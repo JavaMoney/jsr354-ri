@@ -15,14 +15,18 @@
  */
 package org.javamoney.moneta.function;
 
+import org.javamoney.moneta.CurrencyUnitBuilder;
+import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 import javax.money.*;
+import javax.money.format.MonetaryFormats;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Currency;
+import java.util.Locale;
 
 import static org.testng.Assert.*;
 
@@ -269,5 +273,38 @@ public class MonetaryRoundingsTest {
     public void testGetRounding_Null2() {
         Monetary.getRounding(Monetary.getCurrency("USD")).apply(null);
     }
+
+    @Test
+    public void testCashRoundings(){
+        CurrencyUnit chf = CurrencyUnitBuilder.of("CHF","").build();
+        CurrencyUnit eur = CurrencyUnitBuilder.of("EUR","").build();
+        CurrencyUnit sek = CurrencyUnitBuilder.of("SEK","").build();
+
+        MonetaryRounding rounding = Monetary.getRounding(
+                RoundingQueryBuilder.of()
+                        .setCurrency(chf)
+                        .set("cashRounding", true).build());
+
+        MonetaryRounding roundingEUR = Monetary.getRounding(
+                RoundingQueryBuilder.of()
+                        .setCurrency(eur)
+                        .set("cashRounding", true).build());
+
+        MonetaryRounding roundingSEK = Monetary.getRounding(
+                RoundingQueryBuilder.of()
+                        .setCurrency(sek)
+                        .set("cashRounding", true).build());
+
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("ch", "")).format(Money.of(3459.97,chf)));
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("ch", "")).format(Money.of(3459.97,chf).with(rounding)));
+
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("de", "")).format(Money.of(3459.97,eur)));
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("de", "")).format(Money.of(3459.97,eur).with(roundingEUR)));
+
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("sv", "")).format(Money.of(3459.97,sek)));
+        System.out.println(MonetaryFormats.getAmountFormat(new Locale("sv", "")).format(Money.of(3459.97,sek).with(roundingSEK)));
+
+    }
+
 
 }

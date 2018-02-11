@@ -1246,37 +1246,5 @@ public class MoneyTest {
         assertEquals(quotient.getNumber().numberValue(BigDecimal.class).longValueExact(), BigDecimal.valueOf(330).longValueExact());
     }
 
-    @Test
-    public void test(){
-        CurrencyUnit chf = CurrencyUnitBuilder.of("CHF","").build();
-        CurrencyUnit eur = CurrencyUnitBuilder.of("EUR","").build();
-        CurrencyUnit sek = CurrencyUnitBuilder.of("SEK","").build();
-
-        MonetaryRounding rounding = Monetary.getRounding(
-                RoundingQueryBuilder.of()
-                        .setCurrency(chf)
-                        .set("cashRounding", true).build());
-
-        MonetaryRounding roundingEUR = Monetary.getRounding(
-                RoundingQueryBuilder.of()
-                        .setCurrency(eur)
-                        .set("cashRounding", true).build());
-
-        MonetaryRounding roundingSEK = Monetary.getRounding(
-                RoundingQueryBuilder.of()
-                        .setCurrency(sek)
-                        .set("cashRounding", true).build());
-
-        System.out.println(MonetaryFormats.getAmountFormat(new Locale("ch", "")).format(Money.of(3459.97,chf)));
-        System.out.println(MonetaryFormats.getAmountFormat(new Locale("ch", "")).format(Money.of(3459.97,chf).with(rounding)));
-
-        System.out.println(MonetaryFormats.getAmountFormat(new Locale("de", "")).format(Money.of(3459.97,eur)));
-        System.out.println(MonetaryFormats.getAmountFormat(new Locale("de", "")).format(Money.of(3459.97,eur).with(roundingEUR)));
-
-        System.out.println(MonetaryFormats.getAmountFormat(new Locale("sv", "")).format(Money.of(3459.97,sek)));
-        System.out.println(MonetaryFormats.getAmountFormat(new Locale("sv", "")).format(Money.of(3459.97,sek).with(roundingSEK)));
-
-    }
-
 
 }
