@@ -31,14 +31,14 @@ import java.util.Locale;
 import static org.testng.Assert.*;
 
 /**
- * Test for the {@link MonetaryRoundings} singleton.
+ * Test for the {@link Monetary} singleton.
  *
  * @author Anatole Tresch
  */
 public class MonetaryRoundingsTest {
 
     /**
-     * Test method for {@link javax.money.MonetaryRoundings#getDefaultRounding()}.
+     * Test method for {@link javax.money.Monetary#getDefaultRounding()}.
      */
     @Test
     public void testGetRounding() {
@@ -54,7 +54,7 @@ public class MonetaryRoundingsTest {
 
     /**
      * Test method for
-     * {@link javax.money.MonetaryRoundings#getRounding(javax.money.RoundingQuery)} for arithmetic rounding.
+     * {@link javax.money.Monetary#getRounding(javax.money.RoundingQuery)} for arithmetic rounding.
      * .
      */
     @Test
@@ -175,7 +175,7 @@ public class MonetaryRoundingsTest {
 
     /**
      * Test method for
-     * {@link javax.money.Monetarys#getRounding(javax.money.RoundingQuery)} with cashRounding, timestamps.
+     * {@link javax.money.Monetary#getRounding(javax.money.RoundingQuery)} with cashRounding, timestamps.
      * .
      */
     @Test
