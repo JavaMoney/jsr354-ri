@@ -42,19 +42,20 @@ public class IMFRemoteSearchCallableTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnErrorWhenIMFHistoricalTypeIsNull() {
-		new IMFRemoteSearchCallable(null, YearMonth.of(2015, Month.MAY));
+		new IMFRemoteSearchCallable(null, YearMonth.of(2015, Month.MAY), null);
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnErrorWhenYearMonthIsNull() {
-		new IMFRemoteSearchCallable(IMFHistoricalType.Currency_SDR, null);
+		new IMFRemoteSearchCallable(IMFHistoricalType.Currency_SDR, null, null);
 	}
 
 	@Test
 	public void shouldReturnIMFCurrencySDR() throws InterruptedException, ExecutionException {
 
 		IMFHistoricalType type = IMFHistoricalType.Currency_SDR;
-		IMFRemoteSearchCallable task = new IMFRemoteSearchCallable(type, YearMonth.of(2015, Month.MAY));
+		IMFRemoteSearchCallable task = new IMFRemoteSearchCallable(type, YearMonth.of(2015, Month.MAY),
+				IMFAbstractRateProvider.DEFAULT_USER_AGENT);
 		Future<IMFRemoteSearchResult> resultFuture = SERVICE.submit(task);
 		IMFRemoteSearchResult result = resultFuture.get();
 		assertNotNull(result);
@@ -65,7 +66,8 @@ public class IMFRemoteSearchCallableTest {
 	@Test
 	public void shouldReturnIMFSDRCurrency() throws InterruptedException, ExecutionException {
 		IMFHistoricalType type = IMFHistoricalType.SDR_Currency;
-		IMFRemoteSearchCallable task = new IMFRemoteSearchCallable(type, YearMonth.of(2015, Month.MAY));
+		IMFRemoteSearchCallable task = new IMFRemoteSearchCallable(type, YearMonth.of(2015, Month.MAY),
+				IMFAbstractRateProvider.DEFAULT_USER_AGENT);
 		Future<IMFRemoteSearchResult> resultFuture = SERVICE.submit(task);
 		IMFRemoteSearchResult result = resultFuture.get();
 		assertNotNull(result);

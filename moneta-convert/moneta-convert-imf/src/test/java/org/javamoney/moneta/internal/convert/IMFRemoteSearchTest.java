@@ -28,12 +28,12 @@ public class IMFRemoteSearchTest {
 
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldReturnErrorWhenYearMonthIsNull(){
-		IMFRemoteSearch.INSTANCE.getResources(null);
+		IMFRemoteSearch.INSTANCE.getResources(null, null);
 	}
 
 	@Test
 	public void shouldReturnStream(){
-		Map<IMFHistoricalType, InputStream> resources = IMFRemoteSearch.INSTANCE.getResources(YearMonth.of(2015, Month.MAY));
+		Map<IMFHistoricalType, InputStream> resources = IMFRemoteSearch.INSTANCE.getResources(YearMonth.of(2015, Month.MAY), null);
 		assertNotNull(resources.get(IMFHistoricalType.Currency_SDR));
 		assertNotNull(resources.get(IMFHistoricalType.SDR_Currency));
 	}

@@ -37,15 +37,18 @@ public enum IMFRemoteSearch {
 
 	private final ExecutorService executor = Executors.newCachedThreadPool();
 
-	public Map<IMFHistoricalType, InputStream> getResources(YearMonth yearMonth) {
+	public Map<IMFHistoricalType, InputStream> getResources(YearMonth yearMonth, String userAgent) {
 		Objects.requireNonNull(yearMonth);
+		if(userAgent==null){
+			userAgent = IMFAbstractRateProvider.DEFAULT_USER_AGENT;
+		}
 
 		Map<IMFHistoricalType, InputStream> map = new EnumMap<>(IMFHistoricalType.class);
-		try {
+				try {
 			List<Future<IMFRemoteSearchResult>> results = new ArrayList<>(2);
 			for (IMFHistoricalType type : IMFHistoricalType.values()) {
 				results.add(executor.submit(new IMFRemoteSearchCallable(type,
-						yearMonth)));
+						yearMonth, userAgent)));
 			}
 
 			for (Future<IMFRemoteSearchResult> result : results) {

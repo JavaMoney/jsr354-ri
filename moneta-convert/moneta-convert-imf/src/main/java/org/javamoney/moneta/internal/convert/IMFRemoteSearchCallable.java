@@ -36,10 +36,12 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 	private final IMFHistoricalType type;
 
 	private final YearMonth yearMonth;
+	private final String userAgent;
 
-	IMFRemoteSearchCallable(IMFHistoricalType type, YearMonth yearMonth) {
+	IMFRemoteSearchCallable(IMFHistoricalType type, YearMonth yearMonth, String userAgent) {
 		this.type = Objects.requireNonNull(type);
 		this.yearMonth = Objects.requireNonNull(yearMonth);
+		this.userAgent = Objects.requireNonNull(userAgent);
 	}
 
 
@@ -47,6 +49,7 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 	public IMFRemoteSearchResult call() throws Exception {
 
 		URLConnection connection = getConnection();
+		connection.addRequestProperty("User-Agent", userAgent);
 		if(Objects.isNull(connection)) {
 			return null;
 		}

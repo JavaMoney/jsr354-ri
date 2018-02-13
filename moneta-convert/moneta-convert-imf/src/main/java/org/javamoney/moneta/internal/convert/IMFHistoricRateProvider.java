@@ -51,7 +51,10 @@ public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
     private static final String DATA_ID = IMFHistoricRateProvider.class.getSimpleName();
 
 	private static final ProviderContext CONTEXT = ProviderContextBuilder.of("IMF-HIST", RateType.HISTORIC)
-	            .set("providerDescription", "Historic International Monetary Fond").set("days", 0).build();
+	            .set("providerDescription", "Historic International Monetary Fond")
+			.set("days", 0)
+			.set("User-Agent", "Chrome/51.0.2704.103")
+			.build();
 
 
 	private final List<YearMonth> cachedHistoric = new ArrayList<>();
@@ -77,7 +80,8 @@ public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
 				.collect(Collectors.toSet())) {
 
 			if(!cachedHistoric.contains(yearMonth)){
-				Map<IMFHistoricalType, InputStream> resources = IMFRemoteSearch.INSTANCE.getResources(yearMonth);
+				Map<IMFHistoricalType, InputStream> resources = IMFRemoteSearch.INSTANCE.getResources(yearMonth,
+						getContext().get("User-Agent", String.class));
 				loadFromRemote(resources);
 				cachedHistoric.add(yearMonth);
 			}
