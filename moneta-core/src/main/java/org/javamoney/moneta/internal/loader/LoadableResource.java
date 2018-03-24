@@ -20,9 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -313,8 +311,18 @@ public class LoadableResource {
     protected boolean load(URI itemToLoad, boolean fallbackLoad) {
         InputStream is = null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try {
-            URLConnection conn = itemToLoad.toURL().openConnection();
+        try{
+            URLConnection conn;
+            String proxyPort = this.properties.get("proxy.port");
+            String proxyHost = this.properties.get("proxy.host");
+            String proxyType = this.properties.get("procy.type");
+            if(proxyType!=null){
+                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
+                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
+                conn = itemToLoad.toURL().openConnection(proxy);
+            }else{
+                conn = itemToLoad.toURL().openConnection();
+            }
             byte[] data = new byte[4096];
             is = conn.getInputStream();
             int read = is.read(data);
