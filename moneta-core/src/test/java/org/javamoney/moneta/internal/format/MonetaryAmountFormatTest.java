@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import javax.money.Monetary;
+import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
@@ -169,7 +170,23 @@ public class MonetaryAmountFormatTest {
                         .set(CurrencyStyle.SYMBOL)
                         .build());
         assertEquals("12.345,23 €", format.format(money));
+    }
 
+    /**
+     * Test related to {@link https://java.net/jira/browse/JAVAMONEY-151}.
+     */
+    @Test
+    public void testBulgarianLev(){
+        MonetaryAmount money = Money.of(1123000.50, "BGN");
+        Locale locale = new Locale("", "BG");
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
+                AmountFormatQueryBuilder.of(locale).set(CurrencyStyle.SYMBOL)
+                        .build());
+        assertEquals(format.format(money), "1 123 000,50 лв");
 
+        format = MonetaryFormats.getAmountFormat(
+                AmountFormatQueryBuilder.of(locale).set(CurrencyStyle.CODE)
+                        .build());
+        assertEquals(format.format(money), "1 123 000,50 BGN");
     }
 }

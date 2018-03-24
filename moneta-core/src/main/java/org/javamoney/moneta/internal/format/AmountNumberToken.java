@@ -54,8 +54,9 @@ final class AmountNumberToken implements FormatToken {
     }
 
     private void initDecimalFormats() {
-        formatFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.get(Locale.class));
-        parseFormat = (DecimalFormat) DecimalFormat.getInstance(amountFormatContext.get(Locale.class));
+        Locale locale = amountFormatContext.get(Locale.class);
+        formatFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
+        parseFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
         DecimalFormatSymbols syms = amountFormatContext.get(DecimalFormatSymbols.class);
         if (Objects.nonNull(syms)) {
             formatFormat.setDecimalFormatSymbols(syms);
@@ -63,6 +64,16 @@ final class AmountNumberToken implements FormatToken {
         }
         formatFormat.applyPattern(this.partialNumberPattern);
         parseFormat.applyPattern(this.partialNumberPattern.trim());
+        // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
+        if ("BG".equals(locale.getCountry())) {
+            formatFormat.setGroupingSize(3);
+            formatFormat.setGroupingUsed(true);
+            syms = formatFormat.getDecimalFormatSymbols();
+            syms.setDecimalSeparator(',');
+            syms.setGroupingSeparator(' ');
+            formatFormat.setDecimalFormatSymbols(syms);
+            parseFormat.setDecimalFormatSymbols(syms);
+        }
     }
 
     /**

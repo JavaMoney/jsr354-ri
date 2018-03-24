@@ -148,6 +148,10 @@ final class CurrencyToken implements FormatToken {
     private String getCurrencySymbol(CurrencyUnit currency) {
         Currency jdkCurrency = getCurrency(currency.getCurrencyCode());
         if (Objects.nonNull(jdkCurrency)) {
+            // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
+            if("BG".equals(locale.getCountry())){
+                return "лв";
+            }
             return jdkCurrency.getSymbol(locale);
         }
         return currency.getCurrencyCode();
