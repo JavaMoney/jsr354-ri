@@ -92,7 +92,6 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
      * Method that converts the source {@link MonetaryAmount} to an
      * {@link MonetaryAmount} based on the {@link ExchangeRate} of this
      * conversion.
-     *
      * @param amount The source amount
      * @return The converted amount, never null.
      * @throws CurrencyConversionException if conversion failed, or the required data is not available.

@@ -323,6 +323,20 @@ public class LoadableResource {
             }else{
                 conn = itemToLoad.toURL().openConnection();
             }
+            String timeout = this.properties.get("connection.connect.timeout");
+            if(timeout!=null){
+                int seconds = Integer.parseInt(timeout);
+                conn.setConnectTimeout(seconds*1000);
+            }else{
+                conn.setConnectTimeout(10000);
+            }
+            timeout = this.properties.get("connection.read.timeout");
+            if(timeout!=null){
+                int seconds = Integer.parseInt(timeout);
+                conn.setReadTimeout(seconds*1000);
+            }else{
+                conn.setReadTimeout(10000);
+            }
             byte[] data = new byte[4096];
             is = conn.getInputStream();
             int read = is.read(data);
