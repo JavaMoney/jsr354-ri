@@ -2,7 +2,7 @@ package org.javamoney.moneta.convert;
 
 
 import org.javamoney.moneta.Money;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import javax.money.MonetaryAmount;
 import javax.money.convert.CurrencyConversion;

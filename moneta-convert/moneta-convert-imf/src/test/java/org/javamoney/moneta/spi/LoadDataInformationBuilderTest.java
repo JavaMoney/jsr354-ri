@@ -15,11 +15,6 @@
  */
 package org.javamoney.moneta.spi;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,6 +24,8 @@ import java.util.Map;
 import org.javamoney.moneta.spi.LoaderService.LoaderListener;
 import org.javamoney.moneta.spi.LoaderService.UpdatePolicy;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.*;
 
 public class LoadDataInformationBuilderTest {
 
