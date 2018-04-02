@@ -15,11 +15,11 @@
  */
 package org.javamoney.moneta.convert;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
 import static org.javamoney.moneta.convert.ConversionConstants.BRAZILIAN_REAL;
 import static org.javamoney.moneta.convert.ConversionConstants.DOLLAR;
-import static org.junit.Assert.assertNotNull;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
 
 import javax.money.CurrencyUnit;
 import javax.money.convert.ExchangeRateProvider;
