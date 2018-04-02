@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.spi;
 
-import static junit.framework.Assert.assertEquals;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,6 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.money.NumberValue;
 
 import org.testng.annotations.Test;
+
+import static org.testng.AssertJUnit.assertEquals;
 
 public class DefaultNumberValueTest {
 

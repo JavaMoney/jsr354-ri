@@ -20,9 +20,8 @@ import static org.javamoney.moneta.function.StreamFactory.DOLLAR;
 
 import javax.money.CurrencyUnit;
 
-import junit.framework.Assert;
-
 import org.javamoney.moneta.Money;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class DefaultMonetarySummaryStatisticsTest {

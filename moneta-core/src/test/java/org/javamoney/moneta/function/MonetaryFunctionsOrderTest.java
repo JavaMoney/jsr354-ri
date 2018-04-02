@@ -25,8 +25,8 @@ import static org.javamoney.moneta.function.StreamFactory.currencies;
 
 import java.math.BigDecimal;
 import javax.money.MonetaryAmount;
-import junit.framework.Assert;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class MonetaryFunctionsOrderTest {

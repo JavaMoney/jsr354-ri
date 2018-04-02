@@ -21,7 +21,6 @@ import java.util.Collection;
 
 import javax.money.*;
 
-import org.junit.Ignore;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;

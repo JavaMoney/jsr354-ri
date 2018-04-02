@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import javax.money.MonetaryAmount;
 
 import org.javamoney.moneta.FastMoney;
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class MonetaryFunctionsFilterTest {

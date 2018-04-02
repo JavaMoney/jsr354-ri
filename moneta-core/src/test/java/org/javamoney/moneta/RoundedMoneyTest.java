@@ -33,7 +33,7 @@ import java.math.RoundingMode;
 
 import javax.money.*;
 
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
