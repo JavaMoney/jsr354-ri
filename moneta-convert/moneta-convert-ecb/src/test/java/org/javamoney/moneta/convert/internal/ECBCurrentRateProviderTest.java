@@ -13,48 +13,48 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.internal.convert;
+package org.javamoney.moneta.convert.internal;
 
 import static javax.money.convert.MonetaryConversions.getExchangeRateProvider;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
-import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import javax.money.Monetary;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.convert.ExchangeRateType;
+import org.javamoney.moneta.convert.internal.ecb.ECBCurrentRateProvider;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class ECBHistoricRateProviderTest {
+public class ECBCurrentRateProviderTest {
 
     private static final CurrencyUnit EURO = Monetary
             .getCurrency("EUR");
     private static final CurrencyUnit DOLLAR = Monetary
             .getCurrency("USD");
-
     private static final CurrencyUnit BRAZILIAN_REAL = Monetary
             .getCurrency("BRL");
 
     private ExchangeRateProvider provider;
 
     @BeforeTest
-    public void setup() throws InterruptedException {
-        provider = getExchangeRateProvider(ExchangeRateType.ECB_HIST);
-        Thread.sleep(20_000L);
+    public void setup() {
+        provider = getExchangeRateProvider(ExchangeRateType.ECB);
     }
 
     @Test
-    public void shouldReturnsECBHistoricRateProvider() {
+    public void shouldReturnsECBCurrentRateProvider() {
         assertTrue(Objects.nonNull(provider));
-        assertEquals(provider.getClass(), ECBHistoricRateProvider.class);
+        assertEquals(provider.getClass(), ECBCurrentRateProvider.class);
     }
 
     @Test
