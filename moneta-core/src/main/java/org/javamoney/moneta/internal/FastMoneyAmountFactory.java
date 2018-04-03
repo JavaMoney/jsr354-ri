@@ -15,20 +15,19 @@
  */
 package org.javamoney.moneta.internal;
 
+import java.math.RoundingMode;
+
+import javax.money.*;
+
 import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
 
-import javax.money.*;
-import java.math.RoundingMode;
-
 /**
- * Implementation of {@link MonetaryAmountFactory} creating instances of {@link FastMoney}.
+ * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link FastMoney}.
  *
  * @author Anatole Tresch
- * @deprecated Use {@link FastMoneyAmountFactory} instead of.
  */
-@Deprecated
-public class FastMoneyAmountBuilder extends AbstractAmountFactory<FastMoney> {
+public class FastMoneyAmountFactory extends AbstractAmountFactory<FastMoney> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
             MonetaryContextBuilder.of(FastMoney.class).setPrecision(19).setMaxScale(5).setFixedScale(true)

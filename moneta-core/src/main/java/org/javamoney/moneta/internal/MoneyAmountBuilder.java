@@ -15,46 +15,47 @@
  */
 package org.javamoney.moneta.internal;
 
-import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.Money;
 import org.javamoney.moneta.spi.AbstractAmountFactory;
 
-import javax.money.*;
+import javax.money.CurrencyUnit;
+import javax.money.MonetaryContext;
+import javax.money.MonetaryContextBuilder;
+import javax.money.NumberValue;
 import java.math.RoundingMode;
 
 /**
- * Implementation of {@link MonetaryAmountFactory} creating instances of {@link FastMoney}.
+ * Implementation of {@link javax.money.MonetaryAmountFactory} creating instances of {@link Money}.
  *
  * @author Anatole Tresch
- * @deprecated Use {@link FastMoneyAmountFactory} instead of.
+ * @deprecated Use {@link MoneyAmountFactory} instead of.
  */
 @Deprecated
-public class FastMoneyAmountBuilder extends AbstractAmountFactory<FastMoney> {
+public class MoneyAmountBuilder extends AbstractAmountFactory<Money> {
 
     static final MonetaryContext DEFAULT_CONTEXT =
-            MonetaryContextBuilder.of(FastMoney.class).setPrecision(19).setMaxScale(5).setFixedScale(true)
-                    .set(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(Money.class).set(64).setMaxScale(63).set(RoundingMode.HALF_EVEN).build();
     static final MonetaryContext MAX_CONTEXT =
-            MonetaryContextBuilder.of(FastMoney.class).setPrecision(19).setMaxScale(5).setFixedScale(true)
-                    .set(RoundingMode.HALF_EVEN).build();
+            MonetaryContextBuilder.of(Money.class).setPrecision(0).setMaxScale(-1).set(RoundingMode.HALF_EVEN).build();
 
     @Override
-    protected FastMoney create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {
-        return FastMoney.of(number, currency);
-    }
-
-    @Override
-    public Class<FastMoney> getAmountType() {
-        return FastMoney.class;
+    protected Money create(Number number, CurrencyUnit currency, MonetaryContext monetaryContext) {
+        return Money.of(number, currency, MonetaryContext.from(monetaryContext, Money.class));
     }
 
     @Override
     public NumberValue getMaxNumber() {
-        return FastMoney.MAX_VALUE.getNumber();
+        return null;
     }
 
     @Override
     public NumberValue getMinNumber() {
-        return FastMoney.MIN_VALUE.getNumber();
+        return null;
+    }
+
+    @Override
+    public Class<Money> getAmountType() {
+        return Money.class;
     }
 
     @Override

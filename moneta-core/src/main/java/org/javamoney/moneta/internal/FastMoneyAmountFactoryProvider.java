@@ -23,7 +23,7 @@ import org.javamoney.moneta.FastMoney;
 
 /**
  * Implementation of {@link MonetaryAmountFactoryProviderSpi} creating instances of
- * {@link FastMoneyAmountBuilder}.
+ * {@link FastMoneyAmountFactory}.
  *
  * @author Anatole Tresch
  */
@@ -37,7 +37,7 @@ public final class FastMoneyAmountFactoryProvider implements MonetaryAmountFacto
     @Override
     public MonetaryAmountFactory<FastMoney> createMonetaryAmountFactory(){
         // TODO ensure context!
-        return new FastMoneyAmountBuilder();
+        return new FastMoneyAmountFactory();
     }
 
     /*
@@ -51,12 +51,12 @@ public final class FastMoneyAmountFactoryProvider implements MonetaryAmountFacto
 
     @Override
     public MonetaryContext getDefaultMonetaryContext(){
-        return FastMoneyAmountBuilder.DEFAULT_CONTEXT;
+        return FastMoneyAmountFactory.DEFAULT_CONTEXT;
     }
 
     @Override
     public MonetaryContext getMaximalMonetaryContext(){
-        return FastMoneyAmountBuilder.MAX_CONTEXT;
+        return FastMoneyAmountFactory.MAX_CONTEXT;
     }
 
 }
