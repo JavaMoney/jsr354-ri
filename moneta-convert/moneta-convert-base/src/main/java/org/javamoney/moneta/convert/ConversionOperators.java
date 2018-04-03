@@ -46,9 +46,9 @@ import org.javamoney.moneta.function.MonetarySummaryStatistics;
  *  MonetaryAmount result = money.with(operator);
  * }
  * </pre>
- * @see {@link MonetaryAmount#with(MonetaryOperator)}
- * @see {@link MonetaryOperator}
- * @see {@link MonetaryOperator#apply(MonetaryAmount)}
+ * @see MonetaryAmount#with(MonetaryOperator)
+ * @see MonetaryOperator
+ * @see MonetaryOperator#apply(MonetaryAmount)
  * @author Werner Keil
  * @since 1.0.1
  */

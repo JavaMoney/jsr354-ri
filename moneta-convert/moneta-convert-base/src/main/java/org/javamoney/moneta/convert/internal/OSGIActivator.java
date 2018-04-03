@@ -23,7 +23,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import javax.money.convert.ExchangeRateProvider;
-import javax.money.spi.Bootstrap;
 import java.util.logging.Logger;
 
 /**
