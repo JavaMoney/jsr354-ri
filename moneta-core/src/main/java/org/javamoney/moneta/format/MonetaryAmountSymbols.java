@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta.format;
 
@@ -27,9 +27,9 @@ import javax.money.format.MonetaryAmountFormat;
 /**
  * This class represents symbols to be used on {@link MonetaryAmountFormatSymbols}, this class decorate the
  * {@link DecimalFormatSymbols}
- * @see {@link DecimalFormatSymbols}
- * @see {@link MonetaryAmountFormat}
- * @see {@link MonetaryAmountFormatSymbols}
+ * @see DecimalFormatSymbols
+ * @see MonetaryAmountFormat
+ * @see MonetaryAmountFormatSymbols
  * @author Otavio Santana
  * @deprecated
  */
@@ -39,23 +39,23 @@ public final class MonetaryAmountSymbols {
 	private final DecimalFormatSymbols formatSymbols;
 	/**
 	 * Create a MonetaryAmountFormatSymbols object for the given locale
-	 * @see {@link DecimalFormatSymbols#DecimalFormatSymbols(Locale)}
-	 * @param locale
+	 * @see DecimalFormatSymbols#DecimalFormatSymbols(Locale)
+	 * @param locale the locale, not null.
 	 */
 	public MonetaryAmountSymbols(Locale locale) {
 		this.formatSymbols = new DecimalFormatSymbols(locale);
 	}
 	/**
 	 * Create a MonetaryAmountFormatSymbols object for the default FORMAT locale.
-	 * @see {@link Locale.getDefault(Locale.Category.FORMAT)}
+	 * @see Locale#getDefault(Locale.Category)
 	 * {@link DecimalFormatSymbols#DecimalFormatSymbols()}
 	 */
 	public MonetaryAmountSymbols() {
 		this.formatSymbols = new DecimalFormatSymbols();
 	}
 	/**
-	 *
-	 * @return
+	 * Get the currency unit.
+	 * @return the currency unit
 	 */
 	public CurrencyUnit getCurrency() {
 		return Monetary.getCurrency(formatSymbols.getCurrency().getCurrencyCode());
@@ -65,7 +65,7 @@ public final class MonetaryAmountSymbols {
 	 * Sets the currency of these MonetaryAmountFormatSymbols. This also sets the currency symbol attribute to the
 	 * currency's symbol in the MonetaryAmountFormatSymbols' locale, and the international currency symbol attribute
 	 *  to the currency's ISO 4217 currency code.
-	 * @param currency
+	 * @param currency the currency, not null.
 	 * @throws NullPointerException if currency is null
 	 */
 	public void setCurrency(CurrencyUnit currency) {
@@ -80,14 +80,14 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the currency symbol for the currency of these MonetaryAmountFormatSymbols in their locale.
-	 * @param currencySymbol
+	 * @param currencySymbol the currency symbol, not null.
 	 */
 	public void setCurrencySymbol(String currencySymbol) {
 		formatSymbols.setCurrencySymbol(currencySymbol);
 	}
 	/**
 	 * Gets the character used for decimal sign.
-	 * @return
+	 * @return the separator.
 	 */
 	public char getDecimalSeparator() {
 		return formatSymbols.getDecimalSeparator();
@@ -95,7 +95,7 @@ public final class MonetaryAmountSymbols {
 
 	/**
 	 * Sets the character used for decimal sign.
-	 * @param decimalSeparator
+	 * @param decimalSeparator the separator.
 	 */
 	public void setDecimalSeparator(char decimalSeparator) {
 		formatSymbols.setDecimalSeparator(decimalSeparator);
@@ -108,7 +108,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the character used for a digit in a pattern.
-	 * @param digit
+	 * @param digit the digit.
 	 */
 	public void setDigit(char digit) {
 		formatSymbols.setDigit(digit);
@@ -135,7 +135,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the character used for thousands separator.
-	 * @param groupingSeparator
+	 * @param groupingSeparator the separator.
 	 */
 	public void setGroupingSeparator(char groupingSeparator) {
 		formatSymbols.setGroupingSeparator(groupingSeparator);
@@ -148,7 +148,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the string used to represent infinity. Almost always left unchanged.
-	 * @param infinity
+	 * @param infinity the infinity representation, not null.
 	 */
 	public void setInfinity(String infinity) {
 		formatSymbols.setInfinity(infinity);
@@ -161,7 +161,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the ISO 4217 currency code of the currency of these MonetaryAmountFormatSymbols.
-	 * @param internationalCurrencySymbol
+	 * @param internationalCurrencySymbol the currency symbol, not null.
 	 */
 	public void setInternationalCurrencySymbol(String internationalCurrencySymbol) {
 		Objects.requireNonNull(internationalCurrencySymbol);
@@ -171,7 +171,7 @@ public final class MonetaryAmountSymbols {
 	/**
 	 * Gets the character used to represent minus sign. If no explicit negative format is specified, one is
 	 * formed by prefixing minusSign to the positive format.
-	 * @return
+	 * @return the sign
 	 */
 	public char getMinusSign() {
 		return formatSymbols.getMinusSign();
@@ -179,7 +179,7 @@ public final class MonetaryAmountSymbols {
 	/**
 	 * Sets the character used to represent minus sign. If no explicit negative format is specified, one is
 	 * formed by prefixing minusSign to the positive format.
-	 * @param minusSign
+	 * @param minusSign the sign
 	 */
 	public void setMinusSign(char minusSign) {
 		formatSymbols.setMinusSign(minusSign);
@@ -192,7 +192,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the monetary decimal separator.
-	 * @param monetaryDecimalSeparator
+	 * @param monetaryDecimalSeparator the separator.
 	 */
 	public void setMonetaryDecimalSeparator(char monetaryDecimalSeparator) {
 		formatSymbols.setMonetaryDecimalSeparator(monetaryDecimalSeparator);
@@ -205,7 +205,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the string used to represent "not a number". Almost always left unchanged.
-	 * @param naN
+	 * @param naN the nam sysmbol
 	 */
 	public void setNaN(String naN) {
 		formatSymbols.setNaN(naN);
@@ -218,7 +218,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the character used to separate positive and negative subpatterns in a pattern.
-	 * @param patternSeparator
+	 * @param patternSeparator the separator.
 	 */
 	public void setPatternSeparator(char patternSeparator) {
 		formatSymbols.setPatternSeparator(patternSeparator);
@@ -231,7 +231,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the character used for percent sign.
-	 * @param percent
+	 * @param percent the precent character
 	 */
 	public void setPercent(char percent) {
 		formatSymbols.setPercent(percent);
@@ -244,7 +244,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the character used for per mille sign.
-	 * @param perMill
+	 * @param perMill the permill char
 	 */
 	public void setPerMill(char perMill) {
 		formatSymbols.setPerMill(perMill);
@@ -257,7 +257,7 @@ public final class MonetaryAmountSymbols {
 	}
 	/**
 	 * Sets the character used for zero.
-	 * @param zeroDigit
+	 * @param zeroDigit the zero digit
 	 */
 	public void setZeroDigit(char zeroDigit) {
 		formatSymbols.setZeroDigit(zeroDigit);
@@ -285,7 +285,7 @@ public final class MonetaryAmountSymbols {
 
 	@Override
 	public String toString() {
-        String sb = this.getClass().getName() + '{' +
+        return this.getClass().getName() + '{' +
                 " Currency: " + formatSymbols.getCurrency() + ',' +
                 " currencySymbol: " + formatSymbols.getCurrencySymbol() + ',' +
                 " decimalSeparator: " + formatSymbols.getDecimalSeparator() + ',' +
@@ -301,6 +301,5 @@ public final class MonetaryAmountSymbols {
                 " percent: " + formatSymbols.getPercent() + ',' +
                 " perMill: " + formatSymbols.getPerMill() + ',' +
                 " zeroDigit: " + formatSymbols.getZeroDigit() + '}';
-        return sb;
 	}
 }

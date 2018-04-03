@@ -36,7 +36,7 @@ public final class OSGIServiceHelper {
 
     private OSGIServiceHelper(){}
 
-    public Enumeration<URL> getResources(BundleContext bundleContext, String resource) throws IOException{
+    public Enumeration<URL> getResources(BundleContext bundleContext, String resource) {
         LOG.finest("TAMAYA  Loading resources: " + resource);
         List<URL> result = new ArrayList<>();
         URL url = bundleContext.getBundle().getEntry(resource);

@@ -25,7 +25,7 @@ import org.javamoney.moneta.RoundedMoney;
 
 /**
  * The default implementation to {@link MonetaryRoundedFactory}, this implementation returns the {@link RoundedMoney}.
- * @see {@link MonetaryRoundedFactory#create(Number, CurrencyUnit)}
+ * @see MonetaryRoundedFactory#create(Number, CurrencyUnit)
  * @author Otavio Santana
  * @deprecated Do not use, access is only provided for backward compatibility and will be removed.
  */
@@ -50,9 +50,8 @@ public class DefaultMonetaryRoundedFactory implements MonetaryRoundedFactory, or
 
 	@Override
 	public String toString() {
-		String sb = DefaultMonetaryRoundedFactory.class.getName() + '{' +
-				"roundingOperator: " + roundingOperator + '}';
-		return sb;
+        return DefaultMonetaryRoundedFactory.class.getName() + '{' +
+                "roundingOperator: " + roundingOperator + '}';
 	}
 
 }

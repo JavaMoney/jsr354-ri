@@ -23,7 +23,6 @@ import org.javamoney.moneta.internal.loader.DefaultLoaderService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-import javax.money.convert.ExchangeRateProvider;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.CurrencyProviderSpi;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;

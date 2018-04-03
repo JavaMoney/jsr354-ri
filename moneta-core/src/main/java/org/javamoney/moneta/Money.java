@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta;
 
@@ -793,7 +793,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
 
     /**
      * Obtains an instance of {@link Money} representing zero.
-     * @param currency
+     * @param currency the currency, not null.
      * @return an instance of {@link Money} representing zero.
      * @since 1.0.1
      */
@@ -809,7 +809,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
       * @return the Money from minor units
       * @throws NullPointerException when the currency is null
       * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
-      * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+      * @see CurrencyUnit#getDefaultFractionDigits()
       * @since 1.0.1
       */
      public static Money ofMinor(CurrencyUnit currency, long amountMinor) {
@@ -823,8 +823,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
       * @param amountMinor  the amount of money in the minor division of the currency
       * @param fractionDigits number of digits
       * @return the monetary amount from minor units
-      * @see {@link CurrencyUnit#getDefaultFractionDigits()}
-      * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
+      * @see CurrencyUnit#getDefaultFractionDigits()
+      * @see Money#ofMinor(CurrencyUnit, long, int)
       * @throws NullPointerException when the currency is null
       * @throws IllegalArgumentException when the fractionDigits is negative
       * @since 1.0.1
@@ -857,9 +857,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      *
      * @param text the text to parse not null
      * @return Money instance
-     * @throws NullPointerException
-     * @throws NumberFormatException
-     * @throws UnknownCurrencyException
+     * @throws NumberFormatException if the amount is not a number
+     * @throws UnknownCurrencyException if the currency cannot be resolved
      */
     public static Money parse(CharSequence text) {
         return parse(text, DEFAULT_FORMATTER);
@@ -882,7 +881,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /**
      * Just to don't break the compatibility.
      * Don't use it
-     * @param number
+     * @param number the amount, not null
      * @deprecated Will be removed.
      */
     @Deprecated
@@ -900,7 +899,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     /**
      * Just to don't break the compatibility.
      * Don't use it
-     * @param number
+     * @param number the amount, not null.
      * @deprecated Will be removed.
      */
     @Deprecated

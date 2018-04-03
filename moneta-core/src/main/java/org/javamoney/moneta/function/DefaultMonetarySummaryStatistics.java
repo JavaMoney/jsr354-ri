@@ -166,13 +166,12 @@ public class DefaultMonetarySummaryStatistics implements MonetarySummaryStatisti
 
     @Override
     public String toString() {
-        String sb = "[currency: " + empty.getCurrency() + ',' +
+        return "[currency: " + empty.getCurrency() + ',' +
                 "count:" + count + ',' +
                 "min:" + min + ',' +
                 "max:" + max + ',' +
                 "sum:" + sum + ',' +
                 "average:" + average + ']';
-        return sb;
     }
 
     @Override

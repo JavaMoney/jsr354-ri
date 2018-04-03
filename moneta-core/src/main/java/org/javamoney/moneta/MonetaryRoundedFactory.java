@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta;
 
@@ -30,9 +30,9 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * this interface is used to create {@link RoundedMoney} using the {@link MonetaryOperator} as rounding.
- * @see {@link MonetaryRoundedFactory#of(MathContext)}
- * @see {@link MonetaryRoundedFactory#of(MonetaryOperator)}
- * @see {@link MonetaryRoundedFactory#withRoundingMode(RoundingMode)}
+ * @see MonetaryRoundedFactory#of(MathContext)
+ * @see MonetaryRoundedFactory#of(MonetaryOperator)
+ * @see MonetaryRoundedFactory#withRoundingMode(RoundingMode)
  * @author Otavio Santana
  * @since 1.0.1
  * @deprecated Moved to function package.
@@ -50,8 +50,8 @@ public interface MonetaryRoundedFactory {
 	 * Create a {@link MonetaryAmount} with {@link Number}, {@link CurrencyUnit} and
 	 * the {@link MonetaryOperator} as rounding operator given in this factory with the
 	 * {@link MonetaryRoundedFactory#getRoundingOperator()}. The implementation will {@link RoundedMoney}
-	 * @param number
-	 * @param currencyUnit
+	 * @param number the amount, not null
+	 * @param currencyUnit the currency, not null
 	 * @return the {@link MonetaryAmount} from number and {@link CurrencyUnit}
 	 */
 	MonetaryAmount create(Number number, CurrencyUnit currencyUnit);
@@ -59,11 +59,11 @@ public interface MonetaryRoundedFactory {
 	/**
 	 * Create a factory to {@link org.javamoney.moneta.function.MonetaryRoundedFactoryBuilder} with this factory is possible make
 	 * a custom {@link MonetaryOperator} as rounding operator, setting the precision, scale or both.
-	 * @param roundingMode
-	 * @see {@link ScaleRoundedOperator}
-	 * @see {@link PrecisionContextRoundedOperator}
-	 * @see {@link PrecisionScaleRoundedOperator}
-	 * @see {@link RoundingMode}
+	 * @param roundingMode the rounding mode, not null.
+	 * @see ScaleRoundedOperator
+	 * @see PrecisionContextRoundedOperator
+	 * @see PrecisionScaleRoundedOperator
+	 * @see RoundingMode
 	 * @return the builder to set scale, precision or both
 	 * @throws NullPointerException if roundingMode is null
 	 */
@@ -74,8 +74,8 @@ public interface MonetaryRoundedFactory {
 	/**
 	 * Create the {@link MonetaryRoundedFactory} using the {@link PrecisionContextRoundedOperator} as rounding operator.
 	 * @param mathContext the mathContext that will be used to create the {@link PrecisionContextRoundedOperator}
-	 * @see {@link PrecisionContextRoundedOperator#of(MathContext)}
-	 * @see {@link PrecisionContextRoundedOperator}
+	 * @see PrecisionContextRoundedOperator#of(MathContext)
+	 * @see PrecisionContextRoundedOperator
 	 * @return the factory using the MathContextRoundedOperator
 	 * @throws NullPointerException if mathContext is null
 	 */

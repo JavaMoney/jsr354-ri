@@ -91,8 +91,7 @@ class DefaultLoaderListener {
 
     @Override
     public String toString() {
-        String sb = DefaultLoaderListener.class.getName() + '{' +
+        return DefaultLoaderListener.class.getName() + '{' +
                 "listenersMap: " + listenersMap + '}';
-        return sb;
     }
 }

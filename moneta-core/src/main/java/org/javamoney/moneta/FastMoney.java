@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2017, Anatole Tresch, Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta;
 
@@ -255,8 +255,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param currency  the currency, not null
      * @param amountMinor  the amount of money in the minor division of the currency
      * @return the monetary amount from minor units
-     * @see {@link CurrencyUnit#getDefaultFractionDigits()}
-     * @see {@link FastMoney#ofMinor(CurrencyUnit, long, int)}
+     * @see CurrencyUnit#getDefaultFractionDigits()
+     * @see FastMoney#ofMinor(CurrencyUnit, long, int)
      * @throws NullPointerException when the currency is null
      * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
      * @since 1.0.1
@@ -272,7 +272,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @param amountMinor  the amount of money in the minor division of the currency
      * @param factionDigits number of digits
      * @return the monetary amount from minor units
-     * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+     * @see CurrencyUnit#getDefaultFractionDigits()
      * @throws NullPointerException when the currency is null
      * @throws IllegalArgumentException when the factionDigits is negative
      * @since 1.0.1
@@ -623,9 +623,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      *
      * @param text the text to parse not null
      * @return FastMoney instance
-     * @throws NullPointerException
-     * @throws NumberFormatException
-     * @throws UnknownCurrencyException
+     * @throws NumberFormatException if the amount is not a number
+     * @throws UnknownCurrencyException if the currency cannot be resolved
      */
     public static FastMoney parse(CharSequence text) {
         return parse(text, DEFAULT_FORMATTER);

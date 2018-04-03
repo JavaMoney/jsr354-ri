@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta.function;
 
@@ -40,10 +40,10 @@ import org.javamoney.moneta.RoundedMoney;
 * </pre>
  * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
- * @see {@link ScaleRoundedOperator(MathContext)}
- * @see {@link RoundedMoney}
- * @see {@link MonetaryOperator}
- * @see {@link BigDecimal#scale()}
+ * @see ScaleRoundedOperator(MathContext)
+ * @see RoundedMoney
+ * @see MonetaryOperator
+ * @see BigDecimal#scale()
  * @deprecated Do not use, access is only provided for backward compatibility and will be removed.
  */
 @Deprecated
@@ -64,7 +64,7 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 	 * @param roundingMode the rounding mode to be used
 	 * @return the {@link MonetaryOperator} using the scale and {@link RoundingMode} used in parameter
 	 * @throws NullPointerException when the {@link MathContext} is null
-	 * @see {@linkplain RoundingMode}
+	 * @see RoundingMode
 	 */
 	public static ScaleRoundedOperator of(int scale, RoundingMode roundingMode) {
 
@@ -94,10 +94,9 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 
 	@Override
 	public String toString() {
-        String sb = ScaleRoundedOperator.class.getName() + '{' +
+        return ScaleRoundedOperator.class.getName() + '{' +
                 "scale:" + Integer.toString(scale) + ',' +
                 "roundingMode:" + roundingMode + '}';
-        return sb;
 	}
 
 }

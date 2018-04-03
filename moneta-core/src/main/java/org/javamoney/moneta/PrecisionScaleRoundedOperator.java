@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta;
 
@@ -41,12 +41,12 @@ import static java.util.Objects.requireNonNull;
 * </pre>
  * <p>Case the parameter in {@link MonetaryOperator#apply(MonetaryAmount)} be null, the apply will return a {@link NullPointerException}</p>
  * @author Otavio Santana
- * @see {@link PrecisionScaleRoundedOperator#of(int, MathContext)}
- * @see {@link RoundedMoney}
- * @see {@link MonetaryOperator}
- * @see {@link BigDecimal#scale()}
- * @see {@link MathContext}
- * @see {@link BigDecimal#precision()}
+ * @see PrecisionScaleRoundedOperator#of(int, MathContext)
+ * @see RoundedMoney
+ * @see MonetaryOperator
+ * @see BigDecimal#scale()
+ * @see MathContext
+ * @see BigDecimal#precision()
  * @since 1.0.1
  * @deprecated Do not use, access is only provided for backward compatibility and will be removed.
  */
@@ -70,12 +70,12 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 
 	/**
 	 * Creates the rounded Operator from scale and roundingMode
-	 * @param mathContext
+	 * @param mathContext the math context, not null
 	 * @return the {@link MonetaryOperator} using the scale and {@link RoundingMode} used in parameter
 	 * @throws NullPointerException when the {@link MathContext} is null
 	 * @throws IllegalArgumentException if {@link MathContext#getPrecision()} is lesser than zero
 	 * @throws IllegalArgumentException if {@link MathContext#getRoundingMode()} is {@link RoundingMode#UNNECESSARY}
-	 * @see {@linkplain RoundingMode}
+	 * @see RoundingMode
 	 */
 	public static PrecisionScaleRoundedOperator of(int scale, MathContext mathContext) {
 
@@ -106,10 +106,9 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 
 	@Override
 	public String toString() {
-        String sb = PrecisionScaleRoundedOperator.class.getName() + '{' +
+        return PrecisionScaleRoundedOperator.class.getName() + '{' +
                 "scale:" + Integer.toString(scale) + ',' +
                 "mathContext:" + mathContext + '}';
-        return sb;
 	}
 
 }

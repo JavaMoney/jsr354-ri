@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2014, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta;
 
@@ -263,7 +263,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
     /**
      * Obtains an instance of {@link RoundedMoney} representing zero.
-     * @param currency
+     * @param currency the currency, not null.
      * @return an instance of {@link RoundedMoney} representing zero.
      * @since 1.0.1
      */
@@ -278,7 +278,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     * @param currency  the currency, not null
     * @param amountMinor  the amount of money in the minor division of the currency
     * @return the Money from minor units
-    * @see {@link CurrencyUnit#getDefaultFractionDigits()}
+    * @see CurrencyUnit#getDefaultFractionDigits()
     * @throws NullPointerException when the currency is null
     * @throws IllegalArgumentException when {@link CurrencyUnit#getDefaultFractionDigits()} is lesser than zero.
     * @since 1.0.1
@@ -294,8 +294,8 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     * @param amountMinor  the amount of money in the minor division of the currency
     * @param factionDigits number of digits
     * @return the monetary amount from minor units
-    * @see {@link CurrencyUnit#getDefaultFractionDigits()}
-    * @see {@link Money#ofMinor(CurrencyUnit, long, int)}
+    * @see CurrencyUnit#getDefaultFractionDigits()
+    * @see Money#ofMinor(CurrencyUnit, long, int)
     * @throws NullPointerException when the currency is null
     * @throws IllegalArgumentException when the factionDigits is negative
     * @since 1.0.1
@@ -673,9 +673,8 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      *
      * @param text the input text, not null.
      * @return RoundedMoney instance
-     * @throws NullPointerException
-     * @throws NumberFormatException
-     * @throws UnknownCurrencyException
+     * @throws NumberFormatException if the amount is not a number
+     * @throws UnknownCurrencyException the currency cannot be resolved
      */
     public static RoundedMoney parse(CharSequence text) {
         return parse(text, DEFAULT_FORMATTER);

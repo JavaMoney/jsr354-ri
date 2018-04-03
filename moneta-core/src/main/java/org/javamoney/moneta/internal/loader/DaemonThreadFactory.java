@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * <p>Decorator to {@link Executors#defaultThreadFactory()} that make thread as daemon.</p>
  * Set {@link Thread#setDaemon(boolean)} as <code>true</code>
- * @see {@link Thread}
+ * @see Thread
  * @author Otavio Santana
  */
 enum DaemonThreadFactory implements ThreadFactory {

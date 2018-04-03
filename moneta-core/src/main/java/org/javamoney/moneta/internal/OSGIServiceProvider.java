@@ -34,14 +34,14 @@ public class OSGIServiceProvider implements ServiceProvider {
     private static final Logger LOG = Logger.getLogger(OSGIServiceProvider.class.getName());
     private static final OSGIServiceComparator REF_COMPARATOR = new OSGIServiceComparator();
 
-    private BundleContext bundleContext;
+    private final BundleContext bundleContext;
 
     public OSGIServiceProvider( BundleContext bundleContext){
         this.bundleContext = bundleContext;
     }
 
     public boolean isInitialized(){
-        return true;
+        return bundleContext != null;
     }
 
 
@@ -102,7 +102,7 @@ public class OSGIServiceProvider implements ServiceProvider {
         return services;
     }
 
-    public Enumeration<URL> getResources(String resource, ClassLoader cl) throws IOException{
+    public Enumeration<URL> getResources(String resource, ClassLoader cl) {
         LOG.finest("TAMAYA  Loading resources: " + resource);
         List<URL> result = new ArrayList<>();
         URL url = bundleContext.getBundle()

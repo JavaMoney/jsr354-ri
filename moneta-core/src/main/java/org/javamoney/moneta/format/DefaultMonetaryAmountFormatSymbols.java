@@ -122,9 +122,8 @@ class DefaultMonetaryAmountFormatSymbols implements MonetaryAmountFormatSymbols 
 	}
 	@Override
 	public String toString() {
-		String sb = DefaultMonetaryAmountFormatSymbols.class.getName() + '{' +
-				" numericInformation: " + numericInformation + ',' +
-				" symbols: " + symbols + '}';
-		return sb;
+        return DefaultMonetaryAmountFormatSymbols.class.getName() + '{' +
+                " numericInformation: " + numericInformation + ',' +
+                " symbols: " + symbols + '}';
 	}
 }

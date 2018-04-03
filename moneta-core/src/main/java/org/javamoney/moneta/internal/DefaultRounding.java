@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Implementation class providing rounding {@link javax.money.MonetaryOperator} instances

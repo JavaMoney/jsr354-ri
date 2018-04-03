@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta.function;
 
@@ -22,8 +22,8 @@ import java.math.RoundingMode;
  * Builder to {@link MonetaryRoundedFactory} once the {@link RoundingMode}, is possible
  * choose the <b>scale</b>, the number of digits to the right of the decimal point, and the <b>precision</b>, the total number of digits in a number or both.
  * @author Otavio Santana
- * @see {@link MonetaryRoundedFactoryBuilder#withScale(int)}
- * @see {@link MonetaryRoundedFactoryBuilder#withPrecision(int)}
+ * @see MonetaryRoundedFactoryBuilder#withScale(int)
+ * @see MonetaryRoundedFactoryBuilder#withPrecision(int)
  * @since 1.0.1
  */
 public final class MonetaryRoundedFactoryBuilder {
@@ -36,7 +36,7 @@ public final class MonetaryRoundedFactoryBuilder {
 
 	/**
 	 * Set the number of digits to the right of the decimal point
-	 * @param scale
+	 * @param scale the scale
 	 * @return {@link MonetaryRoundedFactoryWithScaleBuilder}
 	 */
 	public MonetaryRoundedFactoryWithScaleBuilder withScale(int scale) {
@@ -45,7 +45,7 @@ public final class MonetaryRoundedFactoryBuilder {
 
 	/**
 	 * Set the total number of digits in a number
-	 * @param precision
+	 * @param precision the precision
 	 * @return @{@link MonetaryRoundedFactoryWithPrecisionBuilder}
 	 */
 	public MonetaryRoundedFactoryWithPrecisionBuilder withPrecision(int precision) {
@@ -56,8 +56,8 @@ public final class MonetaryRoundedFactoryBuilder {
 	 * Once the {@link RoundingMode} and scale informed, is possible create a {@link MonetaryRoundedFactory}
 	 * or set the number of precision.
 	 * @author Otavio Santana
-	 *@see {@link MonetaryRoundedFactoryWithScaleBuilder#withPrecision(int)}
-	 *@see {@link MonetaryRoundedFactoryWithScaleBuilder#build()}
+	 *@see MonetaryRoundedFactoryWithScaleBuilder#withPrecision(int)
+	 *@see MonetaryRoundedFactoryWithScaleBuilder#build()
 	 */
 	public static class MonetaryRoundedFactoryWithScaleBuilder {
 
@@ -73,8 +73,8 @@ public final class MonetaryRoundedFactoryBuilder {
 		/**
 		 * Make the {@link MonetaryRoundedFactory} using the {@link ScaleRoundedOperator} as rounding operator.
 		 * @return {@link MonetaryRoundedFactory} with {@link ScaleRoundedOperator}
-		 * @see {@link ScaleRoundedOperator}
-		 * @see {@link MonetaryRoundedFactory}
+		 * @see ScaleRoundedOperator
+		 * @see MonetaryRoundedFactory
 		 */
 		public MonetaryRoundedFactory build() {
 			return new DefaultMonetaryRoundedFactory(ScaleRoundedOperator.of(scale, roundingMode));
@@ -82,7 +82,7 @@ public final class MonetaryRoundedFactoryBuilder {
 
 		/**
 		 * Set the total number of digits in a number
-		 * @param precision
+		 * @param precision the precision
 		 * @return {@link MonetaryRoundedFactoryWithPrecisionBuilder}
 		 */
 		public MonetaryRoundedFactoryWithPrecisionScaleBuilder withPrecision(int precision) {
@@ -98,8 +98,8 @@ public final class MonetaryRoundedFactoryBuilder {
 	 * Once the {@link RoundingMode} and precision informed, is possible create a {@link MonetaryRoundedFactory}
 	 * or set the number of scale.
 	 * @author Otavio Santana
-	 *@see {@link MonetaryRoundedFactoryWithPrecisionBuilder#withScale(int)}
-	 *@see {@link MonetaryRoundedFactoryWithPrecisionBuilder#build()}
+	 *@see MonetaryRoundedFactoryWithPrecisionBuilder#withScale(int)
+	 *@see MonetaryRoundedFactoryWithPrecisionBuilder#build()
 	 */
 	public static class MonetaryRoundedFactoryWithPrecisionBuilder {
 
@@ -113,8 +113,8 @@ public final class MonetaryRoundedFactoryBuilder {
 		}
 		/**
 		 * Set the number of digits to the right of the decimal point
-		 * @param scale
-		 * @return {@link MonetaryRoundedFactoryWithPrecisionScaleBuilder}
+		 * @param scale the scale
+		 * @return MonetaryRoundedFactoryWithPrecisionScaleBuilder
 		 */
 		public MonetaryRoundedFactoryWithPrecisionScaleBuilder withScale(int scale) {
 			MonetaryRoundedFactoryWithPrecisionScaleBuilder builder = new MonetaryRoundedFactoryWithPrecisionScaleBuilder(roundingMode);
@@ -126,8 +126,8 @@ public final class MonetaryRoundedFactoryBuilder {
 		/**
 		 * Make the {@link MonetaryRoundedFactory} using the {@link PrecisionContextRoundedOperator} as rounding operator.
 		 * @return {@link MonetaryRoundedFactory} with {@link PrecisionContextRoundedOperator}
-		 * @see {@link PrecisionContextRoundedOperator}
-		 * @see {@link MonetaryRoundedFactory}
+		 * @see PrecisionContextRoundedOperator
+		 * @see MonetaryRoundedFactory
 		 */
 		public MonetaryRoundedFactory build() {
 			MathContext mathContext = new MathContext(precision, roundingMode);
@@ -157,8 +157,8 @@ public final class MonetaryRoundedFactoryBuilder {
 		/**
 		 * Make the {@link MonetaryRoundedFactory} using the {@link PrecisionScaleRoundedOperator} as rounding operator.
 		 * @return {@link MonetaryRoundedFactory} with {@link PrecisionScaleRoundedOperator}
-		 * @see {@link PrecisionContextRoundedOperator}
-		 * @see {@link PrecisionScaleRoundedOperator}
+		 * @see PrecisionContextRoundedOperator
+		 * @see PrecisionScaleRoundedOperator
 		 */
 		public MonetaryRoundedFactory build() {
 			MathContext mathContext = new MathContext(precision, roundingMode);
@@ -169,9 +169,8 @@ public final class MonetaryRoundedFactoryBuilder {
 
 	@Override
 	public String toString() {
-        String sb = MonetaryRoundedFactoryBuilder.class.getName() + '{' +
+        return MonetaryRoundedFactoryBuilder.class.getName() + '{' +
                 "roundingMode: " + roundingMode + '}';
-        return sb;
 	}
 
 }

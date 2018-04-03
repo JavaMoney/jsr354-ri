@@ -1,17 +1,17 @@
-/**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+/*
+  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
 package org.javamoney.moneta.function;
 
@@ -30,7 +30,7 @@ import javax.money.MonetaryQuery;
  * this class.
  *
  * @author Anatole Tresch
- * @deprecated use {@link ConversionOperators} or {@link MonetaryQuery} instead.
+ * @deprecated use {@link MonetaryOperators} or {@link MonetaryQuery} instead.
  */
 @Deprecated
 public final class MonetaryUtil {
@@ -68,7 +68,7 @@ public final class MonetaryUtil {
     }
 
     /**
-     * Get {@link MathContext} for {@link Permil} instances.
+     * Get {@link MathContext} instance.
      *
      * @return the {@link MathContext} to be used, by default
      * {@link MathContext#DECIMAL64}.
@@ -141,7 +141,7 @@ public final class MonetaryUtil {
     }
 
     /**
-     * Access the shared instance of {@link MinorPart} for use.
+     * Access the shared instance of {@link #MINORPART} for use.
      *
      * @return the shared instance, never {@code null}.
      */
@@ -150,7 +150,7 @@ public final class MonetaryUtil {
     }
 
     /**
-     * Access the shared instance of {@link MajorPart} for use.
+     * Access the shared instance of {@link #MAJORPART} for use.
      *
      * @return the shared instance, never {@code null}.
      */
@@ -159,7 +159,7 @@ public final class MonetaryUtil {
     }
 
     /**
-     * Access the shared instance of {@link MinorUnits} for use.
+     * Access the shared instance of {@link #MINORUNITS} for use.
      *
      * @return the shared instance, never {@code null}.
      */
@@ -168,7 +168,7 @@ public final class MonetaryUtil {
     }
 
     /**
-     * Access the shared instance of {@link MajorUnits} for use.
+     * Access the shared instance of {@link #MAJORUNITS} for use.
      *
      * @return the shared instance, never {@code null}.
      */

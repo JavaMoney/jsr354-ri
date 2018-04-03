@@ -52,10 +52,9 @@ class DefaultLoaderServiceFacade {
 	}
 	@Override
 	public String toString() {
-		String sb = DefaultLoaderServiceFacade.class.getName() + '{' +
-				" scheduledDataLoaderService: " + scheduledDataLoaderService + ',' +
-				" asyncLoaderService: " + loadDataLoaderService + ',' +
-				" loadDataLocalLoaderService: " + loadDataLocalLoaderService + ',';
-		return sb;
+        return DefaultLoaderServiceFacade.class.getName() + '{' +
+                " scheduledDataLoaderService: " + scheduledDataLoaderService + ',' +
+                " asyncLoaderService: " + loadDataLoaderService + ',' +
+                " loadDataLocalLoaderService: " + loadDataLocalLoaderService + ',';
 	}
 }
