@@ -17,7 +17,7 @@ package org.javamoney.moneta;
 
 import javax.money.convert.ExchangeRateProviderSupplier;
 
-import org.javamoney.moneta.internal.convert.IdentityRateProvider;
+import org.javamoney.moneta.convert.internal.IdentityRateProvider;
 
 /**
  * <p>

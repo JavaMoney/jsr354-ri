@@ -1,0 +1,31 @@
+-buildpath: \
+	osgi.annotation; version=6.0.0,\
+	osgi.core; version=6.0,\
+	osgi.cmpn; version=6.0
+
+-testpath: \
+	${junit}
+
+javac.source: 1.8
+javac.target: 1.8
+
+Automatic-Module-Name: org.javamoney.moneta.convert.ecb
+Bundle-Version: ${version}.${tstamp}
+Bundle-Name: JavaMoney Moneta ECB Conversion
+Bundle-Activator: org.javamoney.moneta.convert.internal.ecb.OSGIActivator
+Bundle-SymbolicName: org.javamoney.moneta.convert.ecb
+Bundle-Description: JavaMoney - Moneta Reference Implementation - ECB Conversion
+Bundle-Category: Implementation
+Bundle-Copyright: (C) Credit Suisse AG
+Bundle-License: Apache License, Version 2.0
+Bundle-Vendor: Credit Suisse AG
+Bundle-DocURL: http://www.javamoney.org
+Import-Package: \
+	javax.money,\
+    javax.money.spi,\
+    javax.money.convert,\
+    org.javamoney.moneta.convert
+Private-Package: \
+	org.javamoney.moneta.convert.internal.ecb
+Export-Service: \
+    javax.money.convert.ExchangeRateProvider

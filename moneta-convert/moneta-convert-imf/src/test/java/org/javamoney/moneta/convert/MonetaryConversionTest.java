@@ -31,8 +31,7 @@ import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.internal.convert.IMFRateProvider;
-import org.javamoney.moneta.spi.CompoundRateProvider;
+import org.javamoney.moneta.convert.internal.imf.IMFRateProvider;
 import org.testng.annotations.Test;
 
 public class MonetaryConversionTest {
