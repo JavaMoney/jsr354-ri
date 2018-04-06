@@ -33,4 +33,42 @@
         </dependency>
     </dependencies>
    <name>Moneta Currency Conversion</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <debug>true</debug>
+                    <optimize>true</optimize>
+                    <verbose>false</verbose>
+                    <source>${maven.compile.sourceLevel}</source>
+                    <target>${maven.compile.targetLevel}</target>
+                    <compilerArgument>-g</compilerArgument>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>javax.money.module-info.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>moduledesc</id>
+                        <configuration>
+                            <includes>
+                                <include>javax.money.module-info.java</include>
+                            </includes>
+                            <release>1.9</release>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
