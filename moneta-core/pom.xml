@@ -25,7 +25,6 @@
 	<description>The engine of moneta, this projects has implementations of MonetayAmount, CurrencyUnit, loaders, formatters and core parts of the SPI.</description>
     
 	<properties>
-		<jsr.version>1.0</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
@@ -308,33 +307,12 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.7.0</version>
 					<configuration>
-						<debug>true</debug>
-						<optimize>true</optimize>
-						<verbose>false</verbose>
 						<source>${maven.compile.sourceLevel}</source>
 						<target>${maven.compile.targetLevel}</target>
-						<compilerArgument>-g</compilerArgument>
-						<encoding>${project.build.sourceEncoding}</encoding>
+						<excludes>
+							<exclude>org/javamoney/moneta/module-info.java</exclude>
+						</excludes>
 					</configuration>
-					<executions>
-						<execution>
-							<id>default</id>
-							<configuration>
-								<excludes>
-									<exclude>javax.money.module-info.java</exclude>
-								</excludes>
-							</configuration>
-						</execution>
-						<execution>
-							<id>moduledesc</id>
-							<configuration>
-								<includes>
-									<include>javax.money.module-info.java</include>
-								</includes>
-								<release>1.9</release>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -385,7 +363,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.7.2.201409121644</version>
+					<version>0.8.1</version>
 					<executions>
 						<execution>
 							<id>prepare-agent</id>
@@ -416,6 +394,39 @@
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-compile</id>
+						<configuration>
+							<!-- compile everything to ensure module-info contains right entries -->
+							<!-- required when JAVA_HOME is JDK 8 or below -->
+							<jdkToolchain>
+								<version>9</version>
+							</jdkToolchain>
+							<release>9</release>
+						</configuration>
+					</execution>
+					<execution>
+						<id>base-compile</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<!-- recompile everything for target VM except the module-info.java -->
+						<configuration>
+							<excludes>
+								<exclude>org/javamoney/moneta/module-info.java</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<source>9</source>
+					<target>9</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -566,7 +577,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.6.3.201306030806</version>
+				<version>0.8.1</version>
 				<configuration>
 					<destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
 					<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>

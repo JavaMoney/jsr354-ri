@@ -13,11 +13,12 @@
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert</artifactId>
-			<scope>provided</scope>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- OSGI support -->
 		<dependency>
@@ -46,35 +47,35 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<debug>true</debug>
-					<optimize>true</optimize>
-					<verbose>false</verbose>
-					<source>${maven.compile.sourceLevel}</source>
-					<target>${maven.compile.targetLevel}</target>
-					<compilerArgument>-g</compilerArgument>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
 				<executions>
 					<execution>
-						<id>default</id>
+						<id>default-compile</id>
+						<configuration>
+							<!-- compile everything to ensure module-info contains right entries -->
+							<!-- required when JAVA_HOME is JDK 8 or below -->
+							<jdkToolchain>
+								<version>9</version>
+							</jdkToolchain>
+							<release>9</release>
+						</configuration>
+					</execution>
+					<execution>
+						<id>base-compile</id>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<!-- recompile everything for target VM except the module-info.java -->
 						<configuration>
 							<excludes>
-								<exclude>javax.money.module-info.java</exclude>
+								<exclude>org/javamoney/moneta/convert/ecb/module-info.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>
-					<execution>
-						<id>moduledesc</id>
-						<configuration>
-							<includes>
-								<include>javax.money.module-info.java</include>
-							</includes>
-							<release>1.9</release>
-						</configuration>
-					</execution>
 				</executions>
+				<configuration>
+					<source>9</source>
+					<target>9</target>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

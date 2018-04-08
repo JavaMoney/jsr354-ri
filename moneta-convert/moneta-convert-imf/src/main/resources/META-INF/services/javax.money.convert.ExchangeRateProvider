@@ -12,5 +12,5 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 #
-org.javamoney.moneta.convert.internal.imf.IMFRateProvider
-org.javamoney.moneta.convert.internal.imf.IMFHistoricRateProvider
+org.javamoney.moneta.convert.imf.IMFRateProvider
+org.javamoney.moneta.convert.imf.IMFHistoricRateProvider

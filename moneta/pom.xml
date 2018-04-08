@@ -28,7 +28,7 @@
 
 
 	<properties>
-		<jsr.version>1.0.1</jsr.version>
+		<jsr.version>1.0.2</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
@@ -360,7 +360,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.7.2.201409121644</version>
+					<version>0.8.1</version>
 					<executions>
 						<execution>
 							<id>prepare-agent</id>
@@ -369,6 +369,18 @@
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.7.0</version>
+					<configuration>
+						<source>${maven.compile.sourceLevel}</source>
+						<target>${maven.compile.targetLevel}</target>
+						<excludes>
+							<exclude>module-info.java</exclude>
+						</excludes>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -522,7 +534,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.6.3.201306030806</version>
+				<version>0.8.1</version>
 				<configuration>
 					<destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
 					<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>

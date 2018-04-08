@@ -3,17 +3,14 @@
 	osgi.core; version=6.0,\
 	osgi.cmpn; version=6.0
 
--testpath: \
-	${junit}
-
 javac.source: 1.8
 javac.target: 1.8
 
-Automatic-Module-Name: org.javamoney.moneta.convert.internal.imf
-Bundle-Version: ${version}.${tstamp}
+Automatic-Module-Name: org.javamoney.moneta.convert.imf
+Bundle-Version: ${project.version}.${tstamp}
 Bundle-Name: JavaMoney Moneta IMF Conversion
-Bundle-Activator: org.javamoney.moneta.convert.internal.imf.OSGIActivator
-Bundle-SymbolicName: org.javamoney.moneta.convert.internal.imf
+Bundle-Activator: org.javamoney.moneta.convert.imf.OSGIActivator
+Bundle-SymbolicName: org.javamoney.moneta.convert.imf
 Bundle-Description: JavaMoney - Moneta Reference Implementation - IMF Conversion
 Bundle-Category: Implementation
 Bundle-Copyright: (C) Credit Suisse AG
@@ -26,6 +23,6 @@ Import-Package: \
     javax.money.convert,\
     org.javamoney.moneta.convert
 Private-Package: \
-	org.javamoney.moneta.convert.internal.imf
+	org.javamoney.moneta.convert.imf
 Export-Service: \
     javax.money.convert.ExchangeRateProvider

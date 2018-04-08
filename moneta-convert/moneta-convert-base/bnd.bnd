@@ -3,14 +3,11 @@
 	osgi.core; version=6.0,\
 	osgi.cmpn; version=6.0
 
--testpath: \
-	${junit}
-
 javac.source: 1.8
 javac.target: 1.8
 
 Automatic-Module-Name: org.javamoney.moneta.convert
-Bundle-Version: ${version}.${tstamp}
+Bundle-Version: ${project.version}.${tstamp}
 Bundle-Name: JavaMoney Moneta Conversion
 Bundle-Activator: org.javamoney.moneta.convert.internal.OSGIActivator
 Bundle-SymbolicName: org.javamoney.moneta.convert

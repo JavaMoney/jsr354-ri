@@ -12,6 +12,6 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 #
-org.javamoney.moneta.convert.internal.ecb.ECBCurrentRateProvider
-org.javamoney.moneta.convert.internal.ecb.ECBHistoricRateProvider
-org.javamoney.moneta.convert.internal.ecb.ECBHistoric90RateProvider
+org.javamoney.moneta.convert.ecb.ECBCurrentRateProvider
+org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider
+org.javamoney.moneta.convert.ecb.ECBHistoric90RateProvider

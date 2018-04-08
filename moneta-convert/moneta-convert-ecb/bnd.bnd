@@ -10,9 +10,9 @@ javac.source: 1.8
 javac.target: 1.8
 
 Automatic-Module-Name: org.javamoney.moneta.convert.ecb
-Bundle-Version: ${version}.${tstamp}
+Bundle-Version: ${project.version}.${tstamp}
 Bundle-Name: JavaMoney Moneta ECB Conversion
-Bundle-Activator: org.javamoney.moneta.convert.internal.ecb.OSGIActivator
+Bundle-Activator: org.javamoney.moneta.convert.ecb.OSGIActivator
 Bundle-SymbolicName: org.javamoney.moneta.convert.ecb
 Bundle-Description: JavaMoney - Moneta Reference Implementation - ECB Conversion
 Bundle-Category: Implementation
@@ -26,6 +26,6 @@ Import-Package: \
     javax.money.convert,\
     org.javamoney.moneta.convert
 Private-Package: \
-	org.javamoney.moneta.convert.internal.ecb
+	org.javamoney.moneta.convert.ecb
 Export-Service: \
     javax.money.convert.ExchangeRateProvider
