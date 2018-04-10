@@ -13,6 +13,9 @@ import org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider;
 module org.javamoney.moneta.convert.ecb {
     requires java.xml;
     requires org.javamoney.moneta.convert;
+    requires static org.osgi.core;
+    requires static org.osgi.compendium;
+    requires static org.osgi.annotation;
     provides javax.money.convert.ExchangeRateProvider with
             ECBCurrentRateProvider, ECBHistoric90RateProvider, ECBHistoricRateProvider;
     uses org.javamoney.moneta.spi.LoaderService;

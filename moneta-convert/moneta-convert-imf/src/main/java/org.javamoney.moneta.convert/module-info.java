@@ -11,6 +11,9 @@ import org.javamoney.moneta.convert.imf.IMFRateProvider;
  */
 module org.javamoney.moneta.convert.imf {
     requires org.javamoney.moneta.convert;
+    requires static org.osgi.core;
+    requires static org.osgi.compendium;
+    requires static org.osgi.annotation;
     provides javax.money.convert.ExchangeRateProvider with
             IMFRateProvider, IMFHistoricRateProvider;
     uses org.javamoney.moneta.spi.LoaderService;

@@ -12,9 +12,9 @@ import org.javamoney.moneta.convert.internal.IdentityRateProvider;
 module org.javamoney.moneta.convert {
     exports org.javamoney.moneta.convert;
     requires transitive org.javamoney.moneta;
-    requires org.osgi.core;
-    requires org.osgi.compendium;
-    requires org.osgi.annotation;
+    requires static org.osgi.core;
+    requires static org.osgi.compendium;
+    requires static org.osgi.annotation;
     provides javax.money.spi.MonetaryConversionsSingletonSpi with DefaultMonetaryConversionsSingletonSpi;
     provides javax.money.convert.ExchangeRateProvider with IdentityRateProvider;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
