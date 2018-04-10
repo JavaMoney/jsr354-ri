@@ -150,7 +150,7 @@
 						<artifactId>maven-gpg-plugin</artifactId>
 						<configuration>
 							<defaultKeyring>false</defaultKeyring>
-							<keyname>0E3BCC9A</keyname>
+							<keyname>11A1E4D6</keyname>
 						</configuration>
 						<executions>
 							<execution>
