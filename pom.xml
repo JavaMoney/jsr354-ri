@@ -42,7 +42,7 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>1.0.2-SNAPSHOT</jsr.version>
+		<jsr.version>1.0.2</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
@@ -112,6 +112,11 @@
 	</distributionManagement>
 
 	<repositories>
+		<repository>
+			<id>jcenter</id>
+			<name>JCenter</name>
+			<url>http://jcenter.bintray.com</url>
+		</repository>
 		<repository>
 			<snapshots>
 				<enabled>false</enabled>
@@ -349,9 +354,7 @@
 	</dependencies>
 
 	<build>
-
 		<defaultGoal>install</defaultGoal>
-
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
