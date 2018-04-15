@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.2.1-SNAPSHOT</version>
+		<version>1.2.1</version>
 	</parent>
 	<artifactId>moneta</artifactId>
 	<packaging>pom</packaging>
@@ -25,21 +25,6 @@
         Money and Currency.
         This module implements JSR 354.
     </description>
-
-
-	<properties>
-		<jsr.version>1.0.2</jsr.version>
-		<jdkVersion>1.8</jdkVersion>
-		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
-		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
-
-		<moduleDir>.</moduleDir>
-		<basedir>.</basedir>
-
-		<!-- dependency versions -->
-		<testng.version>6.8.5</testng.version>
-		<additionalparam>-Xdoclint:none</additionalparam>
-	</properties>
 
 	<ciManagement>
 		<system>Travis CI</system>

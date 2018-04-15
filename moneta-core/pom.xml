@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-        	<version>1.2.1-SNAPSHOT</version>
+		<version>1.2.1</version>
 	</parent>
 	<groupId>org.javamoney.moneta</groupId>
 	<artifactId>moneta-core</artifactId>
@@ -24,19 +24,6 @@
 	<inceptionYear>2012</inceptionYear>
 	<description>The engine of moneta, this projects has implementations of MonetayAmount, CurrencyUnit, loaders, formatters and core parts of the SPI.</description>
     
-	<properties>
-		<jdkVersion>1.8</jdkVersion>
-		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
-		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
-
-		<moduleDir>.</moduleDir>
-		<basedir>.</basedir>
-
-		<!-- dependency versions -->
-		<testng.version>6.8.5</testng.version>
-		<additionalparam>-Xdoclint:none</additionalparam>
-	</properties>
-
 	<ciManagement>
 		<system>Travis CI</system>
 		<url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
@@ -262,6 +249,11 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>javax.money</groupId>
+			<artifactId>money-api</artifactId>
+			<version>${jsr.version}</version>
+		</dependency>
 		<!-- OSGI support -->
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -395,8 +387,6 @@
 					<execution>
 						<id>default-compile</id>
 						<configuration>
-							<source>9</source>
-							<target>9</target>
 							<!-- compile everything to ensure module-info contains right entries -->
 							<!-- required when JAVA_HOME is JDK 8 or below -->
 							<jdkToolchain>
@@ -415,7 +405,7 @@
 							<source>${maven.compile.sourceLevel}</source>
 							<target>${maven.compile.targetLevel}</target>
 							<excludes>
-								<exclude>org.javamoney.moneta/module-info.java</exclude>
+								<exclude>module-info.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>

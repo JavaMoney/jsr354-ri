@@ -16,7 +16,7 @@
 		<artifactId>javamoney-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>1.2.1</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -42,7 +42,7 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>1.0.2</jsr.version>
+		<jsr.version>1.0.3</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compile.targetLevel>${jdkVersion}</maven.compile.targetLevel>
 		<maven.compile.sourceLevel>${jdkVersion}</maven.compile.sourceLevel>
@@ -67,24 +67,14 @@
 
 	<mailingLists>
 		<mailingList>
-			<name>JSR354 Issues List</name>
-			<subscribe>https://java.net/projects/javamoney/lists</subscribe>
-			<unsubscribe>https://java.net/projects/javamoney/lists</unsubscribe>
-			<archive>https://java.net/projects/javamoney/lists/issues/archive</archive>
-			<post>issues@javamoney.java.net</post>
-		</mailingList>
-		<mailingList>
-			<name>JSR354 Public Mailing List</name>
-			<subscribe>https://java.net/projects/javamoney/lists</subscribe>
-			<unsubscribe>https://java.net/projects/javamoney/lists</unsubscribe>
-			<archive>http://java.net/projects/javamoney/lists/jcurrency_mail/archive</archive>
-			<post>jcurrency_mail@javamoney.java.net</post>
+			<name>JavaMoney Support Mail</name>
+			<post>support@javamoney.org</post>
 		</mailingList>
 	</mailingLists>
 
 	<issueManagement>
-		<system>JIRA</system>
-		<url>http://java.net/jira/browse/JAVAMONEY</url>
+		<system>GITHUB</system>
+		<url>https://github.com/JavaMoney/jsr354-ri/issues</url>
 	</issueManagement>
 
 	<prerequisites>
@@ -375,8 +365,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.7.0</version>
 					<configuration>
-						<source>${maven.compile.sourceLevel}</source>
-						<source>${maven.compile.targetLevel}</source>
+						<source>9</source>
+						<source>9</source>
 					</configuration>
 				</plugin>
 				<plugin>

@@ -4,11 +4,10 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.2.1-SNAPSHOT</version>
+		<version>1.2.1</version>
 	</parent>
 	<groupId>org.javamoney.moneta</groupId>
 	<artifactId>moneta-convert-parent</artifactId>
-	<version>1.2.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Moneta Currency Conversion (Parent)</name>
 	<description>This is the parent POM for JSR 354 exchange rate providers.</description>

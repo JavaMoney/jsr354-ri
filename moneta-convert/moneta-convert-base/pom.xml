@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.javamoney.moneta</groupId>
     <artifactId>moneta-convert-parent</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.1</version>
   </parent>
   <artifactId>moneta-convert</artifactId>
 
@@ -68,7 +68,7 @@
                             <source>${maven.compile.sourceLevel}</source>
                             <target>${maven.compile.targetLevel}</target>
                             <excludes>
-                                <exclude>org.javamoney.moneta.convert/module-info.java</exclude>
+                                <exclude>module-info.java</exclude>
                             </excludes>
                         </configuration>
                     </execution>
