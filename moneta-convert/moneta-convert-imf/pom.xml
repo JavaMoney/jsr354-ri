@@ -75,7 +75,7 @@
 							<source>${maven.compile.sourceLevel}</source>
 							<target>${maven.compile.targetLevel}</target>
 							<excludes>
-								<exclude>module-info.java</exclude>
+								<exclude>org/javamoney/moneta/convert/imf/module-info.java</exclude>
 							</excludes>
 						</configuration>
 					</execution>
