@@ -23,7 +23,7 @@ module org.javamoney.moneta {
     requires transitive java.money;
     requires transitive java.base;
     requires transitive java.logging;
-    requires transitive java.annotation;
+    requires java.annotation;
     requires static org.osgi.core;
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;

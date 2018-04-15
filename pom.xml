@@ -16,7 +16,7 @@
 		<artifactId>javamoney-parent</artifactId>
 		<version>1.0</version>
 	</parent>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.2.1-SNAPSHOT</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -370,6 +370,15 @@
 
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.7.0</version>
+					<configuration>
+						<source>${maven.compile.sourceLevel}</source>
+						<source>${maven.compile.targetLevel}</source>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>

@@ -74,7 +74,7 @@ public class MonetaryAmountFormatTest {
     public void testFormatWithBuilder() {
         MonetaryAmountFormat defaultFormat =
                 MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.of(Locale.JAPANESE).build());
-        assertEquals("CHF 12.50", defaultFormat
+        assertEquals("CHF12.50", defaultFormat
                 .format(Monetary.getDefaultAmountFactory().setCurrency("CHF").setNumber(12.50)
                         .create()));
     }

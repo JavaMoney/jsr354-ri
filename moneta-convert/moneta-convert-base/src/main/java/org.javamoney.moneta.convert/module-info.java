@@ -18,4 +18,5 @@ module org.javamoney.moneta.convert {
     provides javax.money.spi.MonetaryConversionsSingletonSpi with DefaultMonetaryConversionsSingletonSpi;
     provides javax.money.convert.ExchangeRateProvider with IdentityRateProvider;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
+    uses javax.money.convert.ExchangeRateProvider;
 }
