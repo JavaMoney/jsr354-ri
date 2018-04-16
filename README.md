@@ -13,6 +13,14 @@ http://javamoney.github.io/ri.html
 
 This module is licenced under the the [Apache 2 Licence](https://www.apache.org/licenses/LICENSE-2.0.html).
 
+Release Notes
+-------------
+
+- *1.0*    First release along with with JSR 354 API
+- *1.1*    Bugfix release.
+- *1.2*    Modularized release (with separated conversion and conversion providers), Java 9 module support
+- *1.2.1*  Fix release for invalid/missing Java 9 descriptor for conversion base. Compatible with Java 8, 9 and beyond.
+
 [![Maven Central](https://img.shields.io/maven-central/v/org.javamoney/moneta.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.javamoney%22%20AND%20a%3A%22moneta%22)
 [![Build Status](https://api.travis-ci.org/JavaMoney/jsr354-ri.png?branch=master)](https://travis-ci.org/JavaMoney/jsr354-ri) 
 [![Coverage Status](https://coveralls.io/repos/JavaMoney/jsr354-ri/badge.svg?branch=master)](https://coveralls.io/r/JavaMoney/jsr354-ri?branch=master)
