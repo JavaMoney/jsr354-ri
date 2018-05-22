@@ -20,9 +20,9 @@ Bundle-Activator: org.javamoney.moneta.convert.internal.OSGIActivator
 Bundle-SymbolicName: org.javamoney.moneta.convert
 Bundle-Description: JavaMoney - Moneta Reference Implementation - Conversion Base
 Bundle-Category: Implementation
-Bundle-Copyright: (C) Credit Suisse AG
+Bundle-Copyright: (C) 2012, 2018 Anatole Tresch, Werner Keil and others
 Bundle-License: Apache License, Version 2.0
-Bundle-Vendor: Credit Suisse AG
+Bundle-Vendor: JavaMoney Project
 Bundle-DocURL: http://www.javamoney.org
 
 # Bundle capabilities and requirements
