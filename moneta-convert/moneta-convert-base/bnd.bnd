@@ -1,12 +1,19 @@
+# Javac settings
+javac.source: 1.8
+javac.target: 1.8
+
+# Override automatic runtime requirement when building with JDK9+
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=8.0))"
+
 -buildpath: \
 	osgi.annotation; version=6.0.0,\
 	osgi.core; version=6.0,\
 	osgi.cmpn; version=6.0
 
-javac.source: 1.8
-javac.target: 1.8
-
+# JPMS
 Automatic-Module-Name: org.javamoney.moneta.convert
+
+# Bundle description
 Bundle-Version: ${project.version}.${tstamp}
 Bundle-Name: JavaMoney Moneta Conversion
 Bundle-Activator: org.javamoney.moneta.convert.internal.OSGIActivator
@@ -17,14 +24,10 @@ Bundle-Copyright: (C) Credit Suisse AG
 Bundle-License: Apache License, Version 2.0
 Bundle-Vendor: Credit Suisse AG
 Bundle-DocURL: http://www.javamoney.org
-Import-Package: \
-	javax.money,\
-    javax.money.spi,\
-    javax.money.convert
-Export-Package: \
-	org.javamoney.moneta.convert
-Private-Package: \
-	org.javamoney.moneta.convert.internal
+
+# Bundle capabilities and requirements
+Import-Package: *
+Export-Package: ${packages;NAMED;!*internal*}
 Export-Service: \
     javax.money.convert.ExchangeRateProvider,\
     javax.money.spi.MonetaryConversionsSingletonSpi
