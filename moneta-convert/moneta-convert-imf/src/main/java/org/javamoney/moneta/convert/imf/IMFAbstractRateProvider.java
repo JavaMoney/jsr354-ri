@@ -85,25 +85,25 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
 
     static {
         for (Currency currency : Currency.getAvailableCurrencies()) {
-            CURRENCIES_BY_NAME.put(currency.getDisplayName(Locale.ENGLISH),
+            CURRENCIES_BY_NAME.put(currency.getDisplayName(Locale.ENGLISH).toLowerCase(Locale.ENGLISH),
                     Monetary.getCurrency(currency.getCurrencyCode()));
         }
-        CURRENCIES_BY_NAME.put("U.K. Pound Sterling", Monetary.getCurrency("GBP"));
-        CURRENCIES_BY_NAME.put("U.S. Dollar", Monetary.getCurrency("USD"));
-        CURRENCIES_BY_NAME.put("Bahrain Dinar", Monetary.getCurrency("BHD"));
-        CURRENCIES_BY_NAME.put("Botswana Pula", Monetary.getCurrency("BWP"));
-        CURRENCIES_BY_NAME.put("Czech Koruna", Monetary.getCurrency("CZK"));
-        CURRENCIES_BY_NAME.put("Icelandic Krona", Monetary.getCurrency("ISK"));
-        CURRENCIES_BY_NAME.put("Korean Won", Monetary.getCurrency("KRW"));
-        CURRENCIES_BY_NAME.put("Rial Omani", Monetary.getCurrency("OMR"));
-        CURRENCIES_BY_NAME.put("Nuevo Sol", Monetary.getCurrency("PEN"));
-        CURRENCIES_BY_NAME.put("Qatar Riyal", Monetary.getCurrency("QAR"));
-        CURRENCIES_BY_NAME.put("Saudi Arabian Riyal", Monetary.getCurrency("SAR"));
-        CURRENCIES_BY_NAME.put("Sri Lanka Rupee", Monetary.getCurrency("LKR"));
-        CURRENCIES_BY_NAME.put("Trinidad And Tobago Dollar", Monetary.getCurrency("TTD"));
-        CURRENCIES_BY_NAME.put("U.A.E. Dirham", Monetary.getCurrency("AED"));
-        CURRENCIES_BY_NAME.put("Peso Uruguayo", Monetary.getCurrency("UYU"));
-        CURRENCIES_BY_NAME.put("Bolivar Fuerte", Monetary.getCurrency("VEF"));
+        CURRENCIES_BY_NAME.put("U.K. pound".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("GBP"));
+        CURRENCIES_BY_NAME.put("U.S. dollar".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("USD"));
+        CURRENCIES_BY_NAME.put("Bahrain dinar".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("BHD"));
+        CURRENCIES_BY_NAME.put("Botswana pula".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("BWP"));
+        CURRENCIES_BY_NAME.put("Czech koruna".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("CZK"));
+        CURRENCIES_BY_NAME.put("Icelandic krona".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("ISK"));
+        CURRENCIES_BY_NAME.put("Korean won".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("KRW"));
+        CURRENCIES_BY_NAME.put("Omani rial".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("OMR"));
+        CURRENCIES_BY_NAME.put("Peruvian sol".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("PEN"));
+        CURRENCIES_BY_NAME.put("Qatari riyal".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("QAR"));
+        CURRENCIES_BY_NAME.put("Saudi Arabian riyal".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("SAR"));
+        CURRENCIES_BY_NAME.put("Sri Lankan rupee".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("LKR"));
+        CURRENCIES_BY_NAME.put("Trinidadian dollar".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("TTD"));
+        CURRENCIES_BY_NAME.put("U.A.E. dirham".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("AED"));
+        CURRENCIES_BY_NAME.put("Uruguayan peso".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("UYU"));
+        CURRENCIES_BY_NAME.put("Bolivar Fuerte".toLowerCase(Locale.ENGLISH), Monetary.getCurrency("VEF"));
     }
 
 
