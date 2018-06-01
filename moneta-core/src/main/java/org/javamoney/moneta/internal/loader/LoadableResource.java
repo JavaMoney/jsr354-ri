@@ -323,9 +323,12 @@ public class LoadableResource {
             }else{
                 conn = itemToLoad.toURL().openConnection();
             }
-            if(conn instanceof HttpURLConnection){
-            	  conn.setRequestProperty("User-Agent", "Chrome/51.0.2704.103");
+            
+            String userAgent = this.properties.get("useragent");
+            if(userAgent!=null && conn instanceof HttpURLConnection) {
+            	conn.setRequestProperty("User-Agent", userAgent);
             }
+            
             String timeout = this.properties.get("connection.connect.timeout");
             if(timeout!=null){
                 int seconds = Integer.parseInt(timeout);
