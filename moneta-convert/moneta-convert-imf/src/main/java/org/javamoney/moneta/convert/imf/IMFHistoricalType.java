@@ -19,14 +19,13 @@ import java.time.YearMonth;
 import java.util.Objects;
 
 enum IMFHistoricalType {
+	SDR_Currency("SDRCV"), Currency_SDR("CVSDR");
 
-	 SDR_Currency("SDRCV"), Currency_SDR("CVSDR");
+	private final String type;
 
-	 private final String type;
+	private static final String HOST = "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=%s&reportType=%s&tsvflag=Y";
 
-	 private static final String HOST = "http://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=%s&reportType=%s&tsvflag=Y";
-
-	 IMFHistoricalType(String type) {
+	IMFHistoricalType(String type) {
 		this.type = type;
 	 }
 
