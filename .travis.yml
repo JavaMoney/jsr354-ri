@@ -1,10 +1,7 @@
 language: java
 jdk:
-  - oraclejdk9
-addons:
-  apt:
-    packages:
-      - oracle-java9-installer
+  - openjdk9
+  - openjdk10
 
 after_success:
   - mvn --batch-mode deploy -Dmaven.test.skip -DcreateDocs=true -s settings.xml
