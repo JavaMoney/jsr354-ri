@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal.format;
 
-import org.javamoney.moneta.format.CurrencyStyle;
-
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -26,11 +24,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.money.*;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
+import org.javamoney.moneta.format.CurrencyStyle;
 
 /**
  * Formats instances of {@code MonetaryAmount} to a {@link String} or an
@@ -241,7 +239,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
             String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));
             initPattern(plusMinusPatterns[0], this.positiveTokens, amountFormatContext);
             if (plusMinusPatterns.length > 1) {
-                initPattern(plusMinusPatterns[1], this.negativeTokens, amountFormatContext);
+                initPattern(plusMinusPatterns[1].replace("-", ""), this.negativeTokens, amountFormatContext);
             } else {
                 this.negativeTokens = this.positiveTokens;
             }
