@@ -58,7 +58,7 @@ public class DefaultMonetaryCurrenciesSingletonSpi implements MonetaryCurrencies
             for (String providerName : query.getProviderNames()) {
                 CurrencyProviderSpi provider = getProvider(providerName);
                 if (provider == null) {
-                    Logger.getLogger(DefaultMonetaryCurrenciesSingletonSpi.class.getName()).warning("No such currenvcy " +
+                    Logger.getLogger(DefaultMonetaryCurrenciesSingletonSpi.class.getName()).warning("No such currency " +
                             "provider found, ignoring: " + providerName);
                 } else {
                     result.add(provider);
@@ -69,7 +69,7 @@ public class DefaultMonetaryCurrenciesSingletonSpi implements MonetaryCurrencies
             for(String providerName:getDefaultProviderChain()){
                 CurrencyProviderSpi provider = getProvider(providerName);
                 if (provider == null) {
-                    Logger.getLogger(DefaultMonetaryCurrenciesSingletonSpi.class.getName()).warning("No such currenvcy " +
+                    Logger.getLogger(DefaultMonetaryCurrenciesSingletonSpi.class.getName()).warning("No such currency " +
                             "provider found, ignoring: " + providerName);
                 } else {
                     result.add(provider);
