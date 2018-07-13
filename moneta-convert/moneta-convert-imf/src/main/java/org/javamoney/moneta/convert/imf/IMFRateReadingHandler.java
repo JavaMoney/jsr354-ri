@@ -98,7 +98,7 @@ class IMFRateReadingHandler {
 				continue;
 			}
 			String[] parts = line.split("\\t");
-			CurrencyUnit currency = currenciresByName.get(parts[0]);
+			CurrencyUnit currency = currenciresByName.get(parts[0].toLowerCase(Locale.ENGLISH));
 			if (Objects.isNull(currency)) {
 				LOG.finest(() -> "Uninterpretable data from IMF data feed: "
 						+ parts[0]);
