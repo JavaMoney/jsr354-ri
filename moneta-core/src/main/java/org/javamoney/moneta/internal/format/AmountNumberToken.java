@@ -17,6 +17,9 @@ package org.javamoney.moneta.internal.format;
 
 import org.javamoney.moneta.format.AmountFormatParams;
 
+import javax.money.MonetaryAmount;
+import javax.money.format.AmountFormatContext;
+import javax.money.format.MonetaryParseException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -25,10 +28,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
-
-import javax.money.MonetaryAmount;
-import javax.money.format.AmountFormatContext;
-import javax.money.format.MonetaryParseException;
 
 /**
  * {@link FormatToken} which allows to format a {@link MonetaryAmount} type.
@@ -62,8 +61,8 @@ final class AmountNumberToken implements FormatToken {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
         }
-        formatFormat.applyPattern(this.partialNumberPattern);
-        parseFormat.applyPattern(this.partialNumberPattern.trim());
+        formatFormat.applyPattern(removeNBSP(partialNumberPattern));
+        parseFormat.applyPattern(removeNBSP(partialNumberPattern).trim());
         // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
         if ("BG".equals(locale.getCountry())) {
             formatFormat.setGroupingSize(3);
@@ -74,6 +73,14 @@ final class AmountNumberToken implements FormatToken {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
         }
+    }
+
+    /**
+     * Removes the non-breaking-space character 0x0A from the string.
+     */
+    private String removeNBSP(String s) {
+        return s.replaceAll("\\u00A0", " ");
+        // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
     }
 
     /**
