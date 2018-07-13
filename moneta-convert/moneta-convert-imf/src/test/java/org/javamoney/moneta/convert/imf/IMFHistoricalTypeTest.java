@@ -47,7 +47,7 @@ public class IMFHistoricalTypeTest {
 		YearMonth yearMonth = YearMonth.of(2015, Month.APRIL);
 		String url = IMFHistoricalType.Currency_SDR.getUrl(yearMonth);
 		Assert.assertNotNull(url);
-		Assert.assertEquals(url, "http://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=CVSDR&tsvflag=Y");
+		Assert.assertEquals(url, "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=CVSDR&tsvflag=Y");
 	}
 
 	@Test
@@ -55,6 +55,6 @@ public class IMFHistoricalTypeTest {
 		YearMonth yearMonth = YearMonth.of(2015, Month.APRIL);
 		String url = IMFHistoricalType.SDR_Currency.getUrl(yearMonth);
 		Assert.assertNotNull(url);
-		Assert.assertEquals(url, "http://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=SDRCV&tsvflag=Y");
+		Assert.assertEquals(url, "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=SDRCV&tsvflag=Y");
 	}
 }
