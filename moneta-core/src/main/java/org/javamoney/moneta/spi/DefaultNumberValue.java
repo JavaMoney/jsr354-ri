@@ -64,7 +64,7 @@ public final class DefaultNumberValue extends NumberValue {
      * @see javax.money.NumberValue#getNumberType()
      */
     @Override
-    public Class<?> getNumberType() {
+    public Class<? extends Number> getNumberType() {
         return this.number.getClass();
     }
 
