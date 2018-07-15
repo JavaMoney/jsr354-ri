@@ -22,19 +22,19 @@ You can access the RI by adding the following Maven dependencies:
 <dependency>
   <groupId>org.javamoney</groupId>
   <artifactId>moneta</artifactId>
-  <version>1.2.1</version>
+  <version>1.3</version>
   <type>pom</type>
 </dependency>
 ```
 
 The same for Gradle:
 ```groovy
-compile group: 'org.javamoney', name: 'moneta', version: '1.2.1', ext: 'pom'
+compile group: 'org.javamoney', name: 'moneta', version: '1.3', ext: 'pom'
 ```
 
 SBT:
 ```scala
-libraryDependencies += "org.javamoney" % "moneta" % "1.2.1" pomOnly()
+libraryDependencies += "org.javamoney" % "moneta" % "1.3" pomOnly()
 ```
 
 The release artifacts are accessible from the following repositories:
@@ -53,6 +53,7 @@ Release Notes
 - *1.1*    Bugfix release.
 - *1.2*    Modularized release (with separated conversion and conversion providers), Java 9 module support
 - *1.2.1*  Fix release for invalid/missing Java 9 descriptor for conversion base. Compatible with Java 8, 9 and beyond.
+- *1.3*    Bugfix release.
 
 Help and support
 ----------------
