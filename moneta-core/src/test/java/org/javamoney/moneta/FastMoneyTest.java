@@ -318,6 +318,19 @@ public class FastMoneyTest {
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
      */
+    @Test
+    public void testDivideNumber_AvoidsDouble() {
+        BigDecimal baseValue = new BigDecimal("10000000");
+        BigDecimal divisor = new BigDecimal("0.00001");
+  
+        FastMoney m = FastMoney.of(baseValue, "CHF");
+        BigDecimal expectedValue = baseValue.divide(divisor);
+        assertEquals(FastMoney.of(expectedValue, "CHF"), m.divide(divisor));
+    }
+
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#divide(java.lang.Number)}.
+     */
     @Test(expectedExceptions = java.lang.ArithmeticException.class)
     public void testDivideNumber_Overflow() {
         FastMoney m = FastMoney.of(100, "CHF");
