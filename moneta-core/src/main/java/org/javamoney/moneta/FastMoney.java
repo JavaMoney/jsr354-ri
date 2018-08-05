@@ -350,7 +350,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (isOne(divisor)) {
             return this;
         }
-        return new FastMoney(Math.round(this.number / divisor.doubleValue()), getCurrency());
+        BigDecimal div = MoneyUtils.getBigDecimal(divisor);
+        BigDecimal res = getBigDecimal().divide(div);
+        return new FastMoney(res, getCurrency(), false);
     }
 
     @Override
