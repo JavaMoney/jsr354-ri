@@ -130,7 +130,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
 
     /**
-     * Creates a new instance os {@link FastMoney}.
+     * Creates a new instance of {@link FastMoney}.
      *
      * @param currency the currency, not null.
      * @param number   the amount, not null.
@@ -143,7 +143,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
     /**
-     * Creates a new instance os {@link FastMoney}.
+     * Creates a new instance of {@link FastMoney}.
      *
      * @param currency    the currency, not null.
      * @param numberValue the numeric value, not null.
@@ -156,7 +156,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
     /**
-     * Creates a new instance os {@link FastMoney}.
+     * Creates a new instance of {@link FastMoney}.
      *
      * @param number   The format number value
      * @param currency the currency, not null.

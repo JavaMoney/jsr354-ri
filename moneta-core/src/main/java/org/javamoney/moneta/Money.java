@@ -85,7 +85,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     private final BigDecimal number;
 
     /**
-     * Creates a new instance os {@link Money}.
+     * Creates a new instance of {@link Money}.
      *
      * @param currency the currency, not null.
      * @param number   the amount, not null.

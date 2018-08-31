@@ -78,7 +78,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
 
 
     /**
-     * Creates a new instance os {@link RoundedMoney}.
+     * Creates a new instance of {@link RoundedMoney}.
      *
      * @param currency the currency, not null.
      * @param number   the amount, not null.
