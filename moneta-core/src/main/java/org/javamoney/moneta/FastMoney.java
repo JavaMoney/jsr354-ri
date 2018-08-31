@@ -393,7 +393,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney negate() {
-        return new FastMoney(Math.multiplyExact(this.number, -1), getCurrency());
+        return new FastMoney(Math.negateExact(this.number), getCurrency());
     }
 
     @Override
