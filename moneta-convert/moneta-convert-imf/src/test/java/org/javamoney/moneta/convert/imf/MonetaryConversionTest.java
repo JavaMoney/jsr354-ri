@@ -16,7 +16,6 @@
 package org.javamoney.moneta.convert.imf;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -31,7 +30,6 @@ import javax.money.convert.ExchangeRateProvider;
 import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.Money;
-import org.javamoney.moneta.convert.imf.IMFRateProvider;
 import org.testng.annotations.Test;
 
 public class MonetaryConversionTest {
