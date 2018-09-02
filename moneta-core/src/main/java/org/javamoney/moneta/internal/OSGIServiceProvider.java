@@ -21,9 +21,9 @@ package org.javamoney.moneta.internal;
 import org.osgi.framework.*;
 
 import javax.money.spi.ServiceProvider;
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -52,7 +52,9 @@ public class OSGIServiceProvider implements ServiceProvider {
 
     @Override
     public <T> T getService(Class<T> serviceType) {
-        LOG.finest("TAMAYA  Loading service: " + serviceType.getName());
+        if (LOG.isLoggable(Level.FINEST)) {
+            LOG.finest("Loading service: " + serviceType.getName());
+        }
         ServiceReference<T> ref = this.bundleContext.getServiceReference(serviceType);
         if(ref!=null){
             return this.bundleContext.getService(ref);
@@ -62,12 +64,15 @@ public class OSGIServiceProvider implements ServiceProvider {
 
     @SuppressWarnings("unchecked")
     public <T> T create(Class<T> serviceType) {
-        LOG.finest("TAMAYA  Creating service: " + serviceType.getName());
+        if (LOG.isLoggable(Level.FINEST)) {
+            LOG.finest("Creating service: " + serviceType.getName());
+        }
         ServiceReference<T> ref = this.bundleContext.getServiceReference(serviceType);
         if(ref!=null){
             try {
-                return (T)this.bundleContext.getService(ref).getClass().newInstance();
+                return (T)this.bundleContext.getService(ref).getClass().getConstructor().newInstance();
             } catch (Exception e) {
+                LOG.log(Level.SEVERE, "could not create service of type: " + serviceType, e);
                 return null;
             }
         }
@@ -76,7 +81,9 @@ public class OSGIServiceProvider implements ServiceProvider {
 
     @Override
     public <T> List<T> getServices(Class<T> serviceType) {
-        LOG.finest("TAMAYA  Loading services: " + serviceType.getName());
+        if (LOG.isLoggable(Level.FINEST)) {
+            LOG.finest("Loading services: " + serviceType.getName());
+        }
         List<ServiceReference<T>> refs = new ArrayList<>();
         List<T> services = new ArrayList<>(refs.size());
         try {
@@ -89,7 +96,8 @@ public class OSGIServiceProvider implements ServiceProvider {
                 }
             }
         } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
+            // should not happen since we have null as a filter
+            LOG.log(Level.SEVERE, "could not create services of type: " + serviceType, e);
         }
         try{
             for(T service:ServiceLoader.load(serviceType)){
@@ -97,32 +105,40 @@ public class OSGIServiceProvider implements ServiceProvider {
             }
             return services;
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.log(Level.SEVERE, "could not create services of type: " + serviceType, e);
         }
         return services;
     }
 
     public Enumeration<URL> getResources(String resource, ClassLoader cl) {
-        LOG.finest("TAMAYA  Loading resources: " + resource);
+        if (LOG.isLoggable(Level.FINEST)) {
+            LOG.finest("Loading resources: " + resource);
+        }
         List<URL> result = new ArrayList<>();
         URL url = bundleContext.getBundle()
                 .getEntry(resource);
         if(url != null) {
-            LOG.finest("TAMAYA  Resource: " + resource + " found in unregistered bundle " +
-                    bundleContext.getBundle().getSymbolicName());
+            if (LOG.isLoggable(Level.FINEST)) {
+                LOG.finest(" Resource: " + resource + " found in unregistered bundle " +
+                        bundleContext.getBundle().getSymbolicName());
+            }
             result.add(url);
         }
         for(Bundle bundle: bundleContext.getBundles()) {
             url = bundle.getEntry(resource);
             if (url != null && !result.contains(url)) {
-                LOG.finest("TAMAYA  Resource: " + resource + " found in registered bundle " + bundle.getSymbolicName());
+                if (LOG.isLoggable(Level.FINEST)) {
+                    LOG.finest("Resource: " + resource + " found in registered bundle " + bundle.getSymbolicName());
+                }
                 result.add(url);
             }
         }
         for(Bundle bundle: bundleContext.getBundles()) {
             url = bundle.getEntry(resource);
             if (url != null && !result.contains(url)) {
-                LOG.finest("TAMAYA  Resource: " + resource + " found in unregistered bundle " + bundle.getSymbolicName());
+                if (LOG.isLoggable(Level.FINEST)) {
+                    LOG.finest("Resource: " + resource + " found in unregistered bundle " + bundle.getSymbolicName());
+                }
                 result.add(url);
             }
         }

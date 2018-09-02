@@ -21,7 +21,6 @@ package org.javamoney.moneta;
 import org.javamoney.moneta.internal.PriorityServiceComparator;
 import org.osgi.framework.*;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
@@ -37,25 +36,32 @@ public final class OSGIServiceHelper {
     private OSGIServiceHelper(){}
 
     public Enumeration<URL> getResources(BundleContext bundleContext, String resource) {
-        LOG.finest("TAMAYA  Loading resources: " + resource);
+        if (LOG.isLoggable(Level.FINEST)) {
+            LOG.finest("Loading resources: " + resource);
+        }
         List<URL> result = new ArrayList<>();
         URL url = bundleContext.getBundle().getEntry(resource);
         if(url != null) {
-            LOG.finest("TAMAYA  Resource: " + resource + " found in unregistered bundle " +
-                    bundleContext.getBundle().getSymbolicName());
+            if (LOG.isLoggable(Level.FINEST)) {
+                LOG.finest("Resource: " + resource + " found in unregistered bundle " + bundleContext.getBundle().getSymbolicName());
+            }
             result.add(url);
         }
         for(Bundle bundle: bundleContext.getBundles()) {
             url = bundle.getEntry(resource);
             if (url != null && !result.contains(url)) {
-                LOG.finest("TAMAYA  Resource: " + resource + " found in registered bundle " + bundle.getSymbolicName());
+                if (LOG.isLoggable(Level.FINEST)) {
+                    LOG.finest("Resource: " + resource + " found in registered bundle " + bundle.getSymbolicName());
+                }
                 result.add(url);
             }
         }
         for(Bundle bundle: bundleContext.getBundles()) {
             url = bundle.getEntry(resource);
             if (url != null && !result.contains(url)) {
-                LOG.finest("TAMAYA  Resource: " + resource + " found in unregistered bundle " + bundle.getSymbolicName());
+                if (LOG.isLoggable(Level.FINEST)) {
+                    LOG.finest("Resource: " + resource + " found in unregistered bundle " + bundle.getSymbolicName());
+                }
                 result.add(url);
             }
         }
@@ -65,7 +71,9 @@ public final class OSGIServiceHelper {
     public static <T> void registerService(Bundle bundle, Class<T> serviceClass, Class<? extends T> implClass) {
         try {
             // Load the service class
-            LOG.info("Loaded Service Factory (" + serviceClass.getName() + "): " + implClass.getName());
+            if (LOG.isLoggable(Level.INFO)) {
+                LOG.info("Loaded Service Factory (" + serviceClass.getName() + "): " + implClass.getName());
+            }
             // Provide service properties
             Hashtable<String, String> props = new Hashtable<>();
             props.put(Constants.VERSION_ATTRIBUTE, bundle.getVersion().toString());
@@ -76,10 +84,12 @@ public final class OSGIServiceHelper {
                     String.valueOf(PriorityServiceComparator.getPriority(implClass)));
 
             // Register the service factory on behalf of the intercepted bundle
-            JDKUtilServiceFactory factory = new JDKUtilServiceFactory(implClass);
+            JDKUtilServiceFactory<T> factory = new JDKUtilServiceFactory<T>(implClass);
             BundleContext bundleContext = bundle.getBundleContext();
             bundleContext.registerService(serviceClass.getName(), factory, props);
-            LOG.info("Registered Tamaya service class: " + implClass.getName() + "(" + serviceClass.getName() + ")");
+            if (LOG.isLoggable(Level.INFO)) {
+                LOG.info("Registered service class: " + implClass.getName() + "(" + serviceClass.getName() + ")");
+            }
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Failed to load service: " + implClass.getName(), e);
         }
@@ -87,7 +97,9 @@ public final class OSGIServiceHelper {
 
     public static <T> void unregisterService(Bundle bundle, Class<T> serviceClass, Class<? extends T> implClass) {
         try {
-            LOG.fine("Unloading Service (" + serviceClass.getName() + "): " + implClass.getName());
+            if (LOG.isLoggable(Level.FINE)) {
+                LOG.fine("Unloading Service (" + serviceClass.getName() + "): " + implClass.getName());
+            }
             ServiceReference<?> ref = bundle.getBundleContext().getServiceReference(implClass);
             if (ref != null) {
                 bundle.getBundleContext().ungetService(ref);
@@ -100,26 +112,30 @@ public final class OSGIServiceHelper {
     /**
      * Service factory simply instantiating the configured service.
      */
-    static class JDKUtilServiceFactory implements ServiceFactory {
-        private final Class<?> serviceClass;
+    static class JDKUtilServiceFactory<S> implements ServiceFactory<S> {
+        private final Class<? extends S> serviceClass;
 
-        public JDKUtilServiceFactory(Class<?> serviceClass) {
+        public JDKUtilServiceFactory(Class<? extends S> serviceClass) {
             this.serviceClass = serviceClass;
         }
 
         @Override
-        public Object getService(Bundle bundle, ServiceRegistration registration) {
+        public S getService(Bundle bundle, ServiceRegistration<S> registration) {
             try {
-                LOG.fine("Creating Service...:" + serviceClass.getName());
-                return serviceClass.newInstance();
+                if (LOG.isLoggable(Level.FINE)) {
+                    LOG.fine("Creating Service...:" + serviceClass.getName());
+                }
+                return serviceClass.getConstructor().newInstance();
             } catch (Exception ex) {
-                ex.printStackTrace();
-                throw new IllegalStateException("Failed to create service: " + serviceClass.getName(), ex);
+                String message = "Failed to create service: " + serviceClass.getName();
+                LOG.log(Level.SEVERE, message, ex);
+                throw new IllegalStateException(message, ex);
             }
         }
 
         @Override
-        public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
+        public void ungetService(Bundle bundle, ServiceRegistration<S> registration, S service) {
+          // nothing to do
         }
     }
 

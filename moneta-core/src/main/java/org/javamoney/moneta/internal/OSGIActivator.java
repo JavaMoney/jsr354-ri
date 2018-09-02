@@ -36,7 +36,7 @@ public class OSGIActivator implements BundleActivator {
 
     private static final Logger LOG = Logger.getLogger(OSGIActivator.class.getName());
 
-    private OSGIServiceProvider serviceProvider;
+    private volatile OSGIServiceProvider serviceProvider;
 
     @Override
     public void start(BundleContext context) {
