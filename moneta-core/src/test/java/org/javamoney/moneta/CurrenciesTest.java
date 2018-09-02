@@ -17,6 +17,7 @@ package org.javamoney.moneta;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Currency;
@@ -93,7 +94,7 @@ public class CurrenciesTest {
 		CurrencyUnit cur = Monetary.getCurrency("USD");
 		CurrencyUnit cur2 = Monetary.getCurrency("USD");
 		assertNotNull(cur2);
-		assertTrue(cur == cur2);
+		assertSame(cur, cur2);
 		Currency jdkCurrency = Currency.getInstance("USD");
 		assertEquals(jdkCurrency.getCurrencyCode(), cur.getCurrencyCode());
 		assertEquals(jdkCurrency.getNumericCode(), cur.getNumericCode());

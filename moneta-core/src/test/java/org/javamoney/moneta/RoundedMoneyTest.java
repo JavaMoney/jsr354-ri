@@ -19,6 +19,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -1046,10 +1047,10 @@ public class RoundedMoneyTest {
     public void testFrom() {
         RoundedMoney m = RoundedMoney.of(new BigDecimal("1.2345"), "XXX");
         RoundedMoney m2 = RoundedMoney.from(m);
-        assertTrue(m == m2);
+        assertSame(m, m2);
         FastMoney fm = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         m2 = RoundedMoney.from(fm);
-        assertFalse(m == m2);
+        assertNotSame(m, m2);
         assertEquals(m, m2);
     }
 
@@ -1070,7 +1071,7 @@ public class RoundedMoneyTest {
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
         RoundedMoney m2 = (RoundedMoney) ois.readObject();
         assertEquals(m, m2);
-        assertTrue(m != m2);
+        assertNotSame(m, m2);
     }
 
     // Bad Cases
