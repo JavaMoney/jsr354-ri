@@ -24,7 +24,7 @@ module org.javamoney.moneta.convert.ecb {
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;
     provides javax.money.convert.ExchangeRateProvider with
-            ECBCurrentRateProvider, ECBHistoric90RateProvider, ECBHistoricRateProvider;
+        org.javamoney.moneta.convert.ecb.ECBCurrentRateProvider, org.javamoney.moneta.convert.ecb.ECBHistoric90RateProvider, org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider;
     uses org.javamoney.moneta.spi.LoaderService;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
 }

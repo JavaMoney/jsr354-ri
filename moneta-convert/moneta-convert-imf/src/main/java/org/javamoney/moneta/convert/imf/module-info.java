@@ -22,7 +22,7 @@ module org.javamoney.moneta.convert.imf {
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;
     provides javax.money.convert.ExchangeRateProvider with
-            IMFRateProvider, IMFHistoricRateProvider;
+            org.javamoney.moneta.convert.imf.IMFRateProvider, org.javamoney.moneta.convert.imf.IMFHistoricRateProvider;
     uses org.javamoney.moneta.spi.LoaderService;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
 }
