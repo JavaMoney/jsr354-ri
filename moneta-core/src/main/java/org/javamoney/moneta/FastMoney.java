@@ -364,7 +364,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         checkNumber(divisor);
         BigDecimal div = MoneyUtils.getBigDecimal(divisor);
         BigDecimal[] res = getBigDecimal().divideAndRemainder(div);
-        return new FastMoney[]{new FastMoney(res[0], getCurrency(), true), new FastMoney(res[1], getCurrency(), true)};
+        return new FastMoney[]{new FastMoney(res[0], getCurrency(), false), new FastMoney(res[1], getCurrency(), false)};
     }
 
     @Override
@@ -430,7 +430,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney scaleByPowerOfTen(int power) {
-        return new FastMoney(getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(power), getCurrency(), true);
+        return new FastMoney(getNumber().numberValue(BigDecimal.class).scaleByPowerOfTen(power), getCurrency(), false);
     }
 
     @Override

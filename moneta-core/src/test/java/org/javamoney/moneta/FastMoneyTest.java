@@ -19,6 +19,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertThrows;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
@@ -94,6 +95,14 @@ public class FastMoneyTest {
         FastMoney[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), new BigDecimal("1"));
         assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class), new BigDecimal("0.49999"));
+    }
+
+    @Test
+    public void testDivideAndRemainderArithmeticException() {
+      BigDecimal original = BigDecimal.ONE;
+      FastMoney money = FastMoney.of(original, "EUR");
+      BigDecimal divisor = new BigDecimal("0.333333");
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(divisor));
     }
 
     @Test
@@ -715,6 +724,16 @@ public class FastMoneyTest {
                 );
             }
         }
+    }
+    
+
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#scaleByPowerOfTen(int)} .
+     */
+    @Test
+    public void testScaleByPowerOfTenArithmeticException() {
+        FastMoney money = FastMoney.of(BigDecimal.valueOf(16, 5), "CHF");
+        assertThrows(ArithmeticException.class, () -> money.scaleByPowerOfTen(-1));
     }
 
     /**
