@@ -19,6 +19,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertThrows;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
@@ -270,13 +271,9 @@ public class FastMoneyTest {
         assertTrue(m != m.abs());
 
         // Long.MIN_VALUE * -1 == Long.MIN_VALUE
-        m = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
-        assertFalse(m.isPositiveOrZero());
-        try {
-            assertTrue(m.abs().isPositiveOrZero());
-        } catch (ArithmeticException e) {
-            // should happen
-        }
+        FastMoney minValue = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
+        assertFalse(minValue.isPositiveOrZero());
+        assertThrows(ArithmeticException.class, minValue::abs);
     }
 
     /**
@@ -608,13 +605,9 @@ public class FastMoneyTest {
         assertEquals(FastMoney.of(123.234, "CHF"), m.negate());
 
         // Long.MIN_VALUE * -1 == Long.MIN_VALUE
-        m = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
-        assertTrue(m.isNegative());
-        try {
-            assertFalse(m.negate().isNegative());
-        } catch (ArithmeticException e) {
-            // should happen
-        }
+        FastMoney minValue = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
+        assertTrue(minValue.isNegative());
+        assertThrows(ArithmeticException.class, minValue::negate);
 
         m = FastMoney.of(0, "CHF");
         assertEquals(m.negate(), FastMoney.of(0, "CHF"));
