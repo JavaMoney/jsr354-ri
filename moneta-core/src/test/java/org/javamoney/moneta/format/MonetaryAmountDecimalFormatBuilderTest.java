@@ -17,12 +17,10 @@ package org.javamoney.moneta.format;
 
 import org.javamoney.moneta.function.FastMoneyProducer;
 import org.javamoney.moneta.function.MoneyProducer;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.money.format.MonetaryAmountFormat;
 import java.util.Locale;
 
 import static org.testng.Assert.assertEquals;

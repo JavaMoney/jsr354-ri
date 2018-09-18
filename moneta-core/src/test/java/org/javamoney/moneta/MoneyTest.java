@@ -30,14 +30,9 @@ import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.Locale;
 
 import javax.money.*;
-import javax.money.format.AmountFormatQueryBuilder;
-import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.MonetaryFormats;
 
-import org.javamoney.moneta.format.CurrencyStyle;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
