@@ -52,7 +52,7 @@ final class ReciprocalOperator implements MonetaryOperator{
         Objects.requireNonNull(amount, "Amount required.");
         NumberValue num = amount.getNumber();
         BigDecimal one = new BigDecimal("1.0").setScale(num.getScale() < 5 ? 5 : num.getScale(),
-                BigDecimal.ROUND_HALF_EVEN);
+                RoundingMode.HALF_EVEN);
         return amount.getFactory().setNumber(one.divide(num.numberValue(BigDecimal.class), RoundingMode.HALF_EVEN))
                 .create();
     }

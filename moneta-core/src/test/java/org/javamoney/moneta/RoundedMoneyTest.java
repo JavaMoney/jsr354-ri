@@ -459,7 +459,7 @@ public class RoundedMoneyTest {
     public void testDivideNumber() {
         RoundedMoney m = RoundedMoney.of(100, "CHF");
         assertEquals(RoundedMoney.of(new BigDecimal("100.00").divide(BigDecimal.valueOf(5),
-                        BigDecimal.ROUND_HALF_EVEN), "CHF"),
+                        RoundingMode.HALF_EVEN), "CHF"),
                 m.divide(BigDecimal.valueOf(5)));
     }
 
