@@ -228,7 +228,7 @@ enum ConvertNumberValue {
 	@SuppressWarnings("rawtypes")
 	private final Map<Class<? extends Number>, ConvertNumberValueI> convertIMap;
 
-	{
+	private ConvertNumberValue() {
 		convertIMap = new HashMap<>();
 		convertIMap.put(BigDecimal.class, new ConvertNumberValueBigDecimal());
 		convertIMap.put(BigInteger.class, new ConvertNumberValueBigInteger());

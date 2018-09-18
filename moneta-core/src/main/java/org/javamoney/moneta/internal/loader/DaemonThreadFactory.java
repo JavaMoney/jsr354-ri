@@ -33,7 +33,7 @@ enum DaemonThreadFactory implements ThreadFactory {
 
 	private final ThreadFactory threadFactory;
 
-	{
+	private DaemonThreadFactory () {
 		threadFactory = Executors.defaultThreadFactory();
 	}
 
