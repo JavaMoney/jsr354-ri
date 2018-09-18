@@ -34,13 +34,14 @@ module org.javamoney.moneta {
     requires static org.osgi.core;
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;
-    provides javax.money.spi.CurrencyProviderSpi with JDKCurrencyProvider;
-    provides javax.money.spi.MonetaryAmountFactoryProviderSpi with MoneyAmountFactoryProvider,FastMoneyAmountFactoryProvider;
-    provides javax.money.spi.MonetaryAmountFormatProviderSpi with DefaultAmountFormatProviderSpi;
-    provides javax.money.spi.MonetaryAmountsSingletonQuerySpi with DefaultMonetaryAmountsSingletonQuerySpi;
-    provides javax.money.spi.MonetaryAmountsSingletonSpi with DefaultMonetaryAmountsSingletonSpi;
-    provides javax.money.spi.RoundingProviderSpi with DefaultRoundingProvider;
-    provides javax.money.spi.ServiceProvider with PriorityAwareServiceProvider;
+    provides javax.money.spi.CurrencyProviderSpi with org.javamoney.moneta.internal.JDKCurrencyProvider, org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
+    provides javax.money.spi.MonetaryAmountFactoryProviderSpi with org.javamoney.moneta.internal.MoneyAmountFactoryProvider, org.javamoney.moneta.internal.FastMoneyAmountFactoryProvider, org.javamoney.moneta.internal.RoundedMoneyAmountFactoryProvider;
+    provides javax.money.spi.MonetaryAmountFormatProviderSpi with org.javamoney.moneta.internal.format.DefaultAmountFormatProviderSpi;
+    provides javax.money.spi.MonetaryAmountsSingletonQuerySpi with org.javamoney.moneta.internal.DefaultMonetaryAmountsSingletonQuerySpi;
+    provides javax.money.spi.MonetaryAmountsSingletonSpi with org.javamoney.moneta.internal.DefaultMonetaryAmountsSingletonSpi;
+    provides javax.money.spi.MonetaryCurrenciesSingletonSpi with org.javamoney.moneta.internal.DefaultMonetaryCurrenciesSingletonSpi;
+    provides javax.money.spi.RoundingProviderSpi with org.javamoney.moneta.internal.DefaultRoundingProvider;
+    provides javax.money.spi.ServiceProvider with org.javamoney.moneta.internal.PriorityAwareServiceProvider;
     provides org.javamoney.moneta.spi.LoaderService with DefaultLoaderService;
 
     uses org.javamoney.moneta.spi.LoaderService;
