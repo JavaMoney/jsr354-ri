@@ -98,6 +98,14 @@ public class FastMoneyTest {
     }
 
     @Test
+    public void testDivideAndRemainderArithmeticException() {
+      BigDecimal original = BigDecimal.ONE;
+      FastMoney money = FastMoney.of(original, "EUR");
+      BigDecimal divisor = new BigDecimal("0.333333");
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(divisor));
+    }
+
+    @Test
     public void testDivideToIntegralValue_BigDecimal() {
         FastMoney money1 = FastMoney.of(BigDecimal.ONE, EURO);
         FastMoney result = money1.divideToIntegralValue(new BigDecimal("0.5001"));
@@ -708,6 +716,16 @@ public class FastMoneyTest {
                 );
             }
         }
+    }
+    
+
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#scaleByPowerOfTen(int)} .
+     */
+    @Test
+    public void testScaleByPowerOfTenArithmeticException() {
+        FastMoney money = FastMoney.of(BigDecimal.valueOf(16, 5), "CHF");
+        assertThrows(ArithmeticException.class, () -> money.scaleByPowerOfTen(-1));
     }
 
     /**
