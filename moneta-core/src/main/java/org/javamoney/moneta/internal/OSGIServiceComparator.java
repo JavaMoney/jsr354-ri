@@ -26,14 +26,11 @@ import java.util.Comparator;
 /**
  * Comparator implementation for ordering services loaded based on their increasing priority values.
  */
-@SuppressWarnings("rawtypes")
-class OSGIServiceComparator implements Comparator<ServiceReference> {
+class OSGIServiceComparator implements Comparator<ServiceReference<?>> {
 
     @Override
-    public int compare(ServiceReference o1, ServiceReference o2) {
-        int prio = getPriority(o1) - getPriority(o2);
-        //o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
-        return Integer.compare(0, prio);
+    public int compare(ServiceReference<?> o1, ServiceReference<?> o2) {
+        return Integer.compare(getPriority(o1), getPriority(o2));
     }
 
     /**
