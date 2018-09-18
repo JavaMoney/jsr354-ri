@@ -647,7 +647,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
             .of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
 
     private BigDecimal getBigDecimal() {
-        return BigDecimal.valueOf(this.number).movePointLeft(SCALE);
+        return BigDecimal.valueOf(this.number, SCALE);
     }
 
     @Override
