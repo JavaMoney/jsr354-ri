@@ -315,7 +315,7 @@ public class LoadableResource {
             URLConnection conn;
             String proxyPort = this.properties.get("proxy.port");
             String proxyHost = this.properties.get("proxy.host");
-            String proxyType = this.properties.get("procy.type");
+            String proxyType = this.properties.get("proxy.type");
             if(proxyType!=null){
                 Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
                         InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
