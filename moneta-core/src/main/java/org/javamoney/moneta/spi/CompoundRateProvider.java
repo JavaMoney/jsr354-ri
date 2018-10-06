@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class implements a {@link ExchangeRateProvider} that delegates calls to
@@ -113,9 +111,9 @@ public class CompoundRateProvider extends AbstractRateProvider {
                     }
                 }
             } catch (Exception e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING,
-                        "Rate Provider did not return data though at check before data was flagged as available," +
-                                " provider=" + prov.getContext().getProviderName() + ", query=" + conversionQuery);
+                throw new CurrencyConversionException(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency(), null,
+                    "Rate Provider did not return data though at check before data was flagged as available," +
+                        " provider=" + prov.getContext().getProviderName() + ", query=" + conversionQuery, e);
             }
         }
         throw new CurrencyConversionException(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency(), null,
