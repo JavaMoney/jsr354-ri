@@ -39,7 +39,7 @@ import org.javamoney.moneta.spi.LoaderService;
  * To create this instance use: {@link LoadableResourceBuilder}
  * @author Anatole Tresch
  */
-public class LoadableResource {
+public class LoadableResource implements DataStreamFactory {
 
     /**
      * The logger used.

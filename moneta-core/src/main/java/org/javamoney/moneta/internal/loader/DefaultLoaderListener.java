@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.internal.loader;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,15 +60,15 @@ class DefaultLoaderListener {
      * Trigger the listeners registered for the given dataId.
      *
      * @param dataId the data id, not null.
-     * @param is     the InputStream, containing the latest data.
+     * @param dataStreamFactory factory of the InputStream with the latest data.
      */
     @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-    public void trigger(String dataId, InputStream is) {
+    public void trigger(String dataId, DataStreamFactory dataStreamFactory) {
         List<LoaderListener> listeners = getListeners("");
         synchronized (listeners) {
             for (LoaderListener ll : listeners) {
                 try {
-                    ll.newDataLoaded(dataId, is);
+                    ll.newDataLoaded(dataId, dataStreamFactory.getDataStream());
                 } catch (Exception e) {
                     LOG.log(Level.SEVERE, "Error calling LoadListener: " + ll, e);
                 }
@@ -80,7 +79,7 @@ class DefaultLoaderListener {
             synchronized (listeners) {
                 for (LoaderListener ll : listeners) {
                     try {
-                        ll.newDataLoaded(dataId, is);
+                        ll.newDataLoaded(dataId, dataStreamFactory.getDataStream());
                     } catch (Exception e) {
                         throw new IllegalArgumentException("Failed to load new data: " + ll, e);
                     }

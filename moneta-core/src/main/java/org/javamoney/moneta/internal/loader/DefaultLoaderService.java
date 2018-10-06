@@ -280,7 +280,7 @@ public class DefaultLoaderService implements LoaderService {
         LoadableResource load = Optional.ofNullable(this.resources.get(resourceId))
                 .orElseThrow(() -> new IllegalArgumentException("No such resource: " + resourceId));
         if (load.resetToFallback()) {
-        	listener.trigger(resourceId, load.getDataStream());
+        	listener.trigger(resourceId, load);
         }
     }
 

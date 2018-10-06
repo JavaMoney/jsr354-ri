@@ -37,9 +37,9 @@ class LoadRemoteDataLoaderService {
 		if (Objects.nonNull(load)) {
 			try {
 				load.readCache();
-				listener.trigger(resourceId, load.getDataStream());
+				listener.trigger(resourceId, load);
 				load.loadRemote();
-				listener.trigger(resourceId, load.getDataStream());
+				listener.trigger(resourceId, load);
 				LOG.info("The exchange rate with resourceId " + resourceId + " was started remotely");
 				return true;
 			} catch (Exception e) {

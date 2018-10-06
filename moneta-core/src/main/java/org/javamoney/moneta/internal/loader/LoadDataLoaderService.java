@@ -38,7 +38,7 @@ public class LoadDataLoaderService {
 			try {
 				if (load.load()) {
 					LOG.log(Level.INFO, "Read data from: " + load.getRemoteResources());
-					listener.trigger(resourceId, load.getDataStream());
+					listener.trigger(resourceId, load);
 					LOG.log(Level.INFO, "New data successfully loaded from: " + load.getRemoteResources());
 					return true;
 				}
@@ -49,7 +49,7 @@ public class LoadDataLoaderService {
 			try {
 				if (load.loadFallback()) {
 					LOG.log(Level.WARNING, "Read fallback data from: " + load.getFallbackResource());
-					listener.trigger(resourceId, load.getDataStream());
+					listener.trigger(resourceId, load);
 					LOG.log(Level.WARNING, "Loaded fallback data from: " + load.getFallbackResource());
 					return true;
 				}

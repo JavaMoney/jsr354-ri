@@ -44,7 +44,7 @@ class ScheduledDataLoaderService {
 	            public void run() {
 	                try {
 	                    if (load.load()) {
-	                        listener.trigger(load.getResourceId(), load.getDataStream());
+	                        listener.trigger(load.getResourceId(), load);
 	                    }
 	                } catch (Exception e) {
 	                    LOG.log(Level.SEVERE, "Failed to update remote resource: " + load.getResourceId(), e);
