@@ -39,18 +39,6 @@ class ScheduledDataLoaderService {
 
     public void execute(final LoadableResource load) {
         Objects.requireNonNull(load);
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    if (load.load()) {
-                        listener.trigger(load.getResourceId(), load);
-                    }
-                } catch (Exception e) {
-                    LOG.log(Level.SEVERE, "Failed to update remote resource: " + load.getResourceId(), e);
-                }
-            }
-        };
         Map<String, String> props = load.getProperties();
         if (Objects.nonNull(props)) {
             String value = props.get("period");
@@ -58,12 +46,12 @@ class ScheduledDataLoaderService {
             value = props.get("delay");
             long delayMS = parseDuration(value);
             if (periodMS > 0) {
-                timer.scheduleAtFixedRate(task, delayMS, periodMS);
+                timer.scheduleAtFixedRate(createTimerTask(load), delayMS, periodMS);
             } else {
                 value = props.get("at");
                 if (Objects.nonNull(value)) {
                     List<GregorianCalendar> dates = parseDates(value);
-                    dates.forEach(date -> timer.schedule(task, date.getTime(), 3_600_000 * 24 /* daily */));
+                    dates.forEach(date -> timer.schedule(createTimerTask(load), date.getTime(), 3_600_000 * 24 /* daily */));
                 }
             }
         }
@@ -137,6 +125,22 @@ class ScheduledDataLoaderService {
             }
         }
         return periodMS;
+    }
+
+    private TimerTask createTimerTask(final LoadableResource load)
+    {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    if (load.load()) {
+                        listener.trigger(load.getResourceId(), load);
+                    }
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE, "Failed to update remote resource: " + load.getResourceId(), e);
+                }
+            }
+        };
     }
 
     @Override
