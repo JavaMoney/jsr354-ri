@@ -41,7 +41,6 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -1225,7 +1224,7 @@ public class FastMoneyTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
         FastMoney.zero(null);
-        Assert.fail();
+        fail();
     }
 
     @Test
@@ -1238,7 +1237,7 @@ public class FastMoneyTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
         FastMoney.ofMinor(null, 1234L);
-        Assert.fail();
+        fail();
     }
 
     @Test

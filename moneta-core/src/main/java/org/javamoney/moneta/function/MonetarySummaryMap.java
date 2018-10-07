@@ -97,7 +97,7 @@ class MonetarySummaryMap implements
     }
 
     @Override
-    public Set<java.util.Map.Entry<CurrencyUnit, MonetarySummaryStatistics>> entrySet() {
+    public Set<Entry<CurrencyUnit, MonetarySummaryStatistics>> entrySet() {
         return statisticsMap.entrySet();
     }
 

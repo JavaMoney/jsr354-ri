@@ -89,7 +89,7 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
 
     @Override
     public MonetaryAmount parse(CharSequence text) throws MonetaryParseException {
-        Objects.requireNonNull(text);
+        requireNonNull(text);
         try {
             Number number = decimalFormat.parse(text.toString());
             return producer.create(currencyUnit, number);

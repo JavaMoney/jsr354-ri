@@ -19,7 +19,6 @@ import org.javamoney.moneta.Money;
 import org.javamoney.moneta.function.GroupMonetarySummaryStatistics;
 import org.javamoney.moneta.function.MonetaryFunctions;
 import org.javamoney.moneta.function.MonetarySummaryStatistics;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -34,6 +33,7 @@ import java.util.stream.Stream;
 import static org.javamoney.moneta.convert.StreamFactory.*;
 import static org.javamoney.moneta.function.MonetaryFunctions.*;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Class to test the class MonetaryFunctions, but
@@ -54,14 +54,14 @@ public class ConversionAggregatorTest {
     public void shouldSumCorrectly() {
         Stream<MonetaryAmount> stream = streamNormal();
         MonetaryAmount sum = stream.reduce(sum()).get();
-        Assert.assertTrue(sum.getNumber().intValue() == 20);
+        assertEquals(sum.getNumber().intValue(), 20);
     }
 
     @Test
     public void shouldSumExchangeCorrectly() {
         Stream<MonetaryAmount> stream = currencies();
         MonetaryAmount sum = stream.reduce(sum(provider, DOLLAR)).get();
-        Assert.assertTrue(sum.getNumber().intValue() > 20);
+        assertTrue(sum.getNumber().intValue() > 20);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -80,7 +80,7 @@ public class ConversionAggregatorTest {
     public void shouldMinCorretly() {
         Stream<MonetaryAmount> stream = streamNormal();
         MonetaryAmount min = stream.reduce(min()).get();
-        Assert.assertTrue(min.getNumber().intValue() == 0);
+        assertEquals(min.getNumber().intValue(), 0);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class ConversionAggregatorTest {
         Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO),
                 Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
         MonetaryAmount min = stream.reduce(min(provider)).get();
-        Assert.assertEquals(Money.of(9, BRAZILIAN_REAL), min);
+        assertEquals(Money.of(9, BRAZILIAN_REAL), min);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -107,7 +107,7 @@ public class ConversionAggregatorTest {
     public void shouldMaxExchangeCorrectly() {
         Stream<MonetaryAmount> stream = Stream.of(Money.of(7, EURO), Money.of(9, BRAZILIAN_REAL), Money.of(8, DOLLAR));
         MonetaryAmount max = stream.reduce(max(provider)).get();
-        Assert.assertEquals(Money.of(7, EURO), max);
+        assertEquals(Money.of(7, EURO), max);
     }
 
 

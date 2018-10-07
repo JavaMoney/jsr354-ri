@@ -75,7 +75,7 @@ public final class MonetaryFunctions {
      */
 	@Deprecated
 	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
-			CurrencyUnit currencyUnit,javax.money.convert.ExchangeRateProvider provider){
+			CurrencyUnit currencyUnit, ExchangeRateProvider provider){
 		// TODO implement method here
 		return summarizingMonetary(currencyUnit);
 	}

@@ -26,7 +26,6 @@ import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
-import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -104,46 +103,46 @@ public class ToStringMonetaryAmountFormatTest {
 	@Test
 	public void shoudReturNullStringOnQueryFromWhenMonetaryIsNullWithFastMoney() {
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY).queryFrom(null);
-		Assert.assertEquals(result, "null");
+		assertEquals(result, "null");
 	}
 
 	@Test
 	public void shoudReturnToStringOnQueryFromWhenMonetaryWithFastMoney() {
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY).queryFrom(money);
-		Assert.assertEquals(result, "BRL 10");
+		assertEquals(result, "BRL 10");
 	}
 
 	@Test
 	public void shoudReturNullStringOnQueryFromWhenMonetaryIsNullWithMoney() {
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY).queryFrom(null);
-		Assert.assertEquals(result, "null");
+		assertEquals(result, "null");
 	}
 
 	@Test
 	public void shoudReturnToStringOnQueryFromWhenMonetaryWithMoney() {
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY).queryFrom(money);
-		Assert.assertEquals(result, "BRL 10");
+		assertEquals(result, "BRL 10");
 	}
 
 	@Test
 	public void shoudReturNullStringOnQueryFromWhenMonetaryIsNullWithRoundedMoney() {
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY).queryFrom(null);
-		Assert.assertEquals(result, "null");
+		assertEquals(result, "null");
 	}
 
 	@Test
 	public void shoudReturnToStringOnQueryFromWhenMonetaryWithRoundedMoney() {
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY).queryFrom(money);
-		Assert.assertEquals(result, "BRL 10");
+		assertEquals(result, "BRL 10");
 	}
 	@Test
 	public void shoudReturNullStringOnPrintWhenMonetaryIsNullWithFastMoney() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY).print(sb, null);
-		Assert.assertEquals(sb.toString(), "null");
+		assertEquals(sb.toString(), "null");
 	}
 
 	@Test
@@ -151,14 +150,14 @@ public class ToStringMonetaryAmountFormatTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY).print(sb, money);
-		Assert.assertEquals(sb.toString(), "BRL 10");
+		assertEquals(sb.toString(), "BRL 10");
 	}
 //
 	@Test
 	public void shoudReturNullStringOnPrintWhenMonetaryIsNullWithMoney() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY).print(sb, null);
-		Assert.assertEquals(sb.toString(), "null");
+		assertEquals(sb.toString(), "null");
 	}
 
 	@Test
@@ -166,13 +165,13 @@ public class ToStringMonetaryAmountFormatTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY).print(sb, money);
-		Assert.assertEquals(sb.toString(), "BRL 10");
+		assertEquals(sb.toString(), "BRL 10");
 	}
 	@Test
 	public void shoudReturNullStringOnPrintWhenMonetaryIsNullWithRoundedMoney() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY).print(sb, null);
-		Assert.assertEquals(sb.toString(), "null");
+		assertEquals(sb.toString(), "null");
 	}
 
 	@Test
@@ -180,7 +179,7 @@ public class ToStringMonetaryAmountFormatTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY).print(sb, money);
-		Assert.assertEquals(sb.toString(), "BRL 10");
+		assertEquals(sb.toString(), "BRL 10");
 	}
 
 	private void executeTest(MonetaryAmount expectedMoney, MonetaryAmount a,

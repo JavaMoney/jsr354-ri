@@ -80,7 +80,7 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 	 */
 	public static PrecisionScaleRoundedOperator of(int scale, MathContext mathContext) {
 
-		Objects.requireNonNull(mathContext);
+		requireNonNull(mathContext);
 
 		if(RoundingMode.UNNECESSARY.equals(mathContext.getRoundingMode())) {
 		   throw new IllegalArgumentException("To create the ScaleRoundedOperator you cannot use the RoundingMode.UNNECESSARY on MathContext");
