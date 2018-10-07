@@ -19,6 +19,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertThrows;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
@@ -1165,10 +1166,10 @@ public class FastMoneyTest {
     public void testFrom() {
         FastMoney m = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         FastMoney m2 = FastMoney.from(m);
-        assertTrue(m == m2);
+        assertSame(m, m2);
         Money fm = Money.of(new BigDecimal("1.2345"), "XXX");
         m2 = FastMoney.from(fm);
-        assertFalse(m == m2);
+        assertNotSame(m, m2);
         assertEquals(m, m2);
     }
 
@@ -1182,7 +1183,7 @@ public class FastMoneyTest {
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
         FastMoney m2 = (FastMoney) ois.readObject();
         assertEquals(m, m2);
-        assertTrue(m != m2);
+        assertNotSame(m, m2);
     }
 
     @Test
