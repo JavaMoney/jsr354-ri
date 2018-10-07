@@ -130,7 +130,7 @@ final class DefaultCashRounding implements MonetaryRounding, Serializable {
             }
         }
         return amount.getFactory().setCurrency(amount.getCurrency())
-                .setNumber(BigDecimal.valueOf(minors).movePointLeft(scale)).create();
+                .setNumber(BigDecimal.valueOf(minors, scale)).create();
     }
 
     @Override
