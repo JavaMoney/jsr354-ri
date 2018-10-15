@@ -20,7 +20,6 @@ import javax.money.MonetaryOperator;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -79,7 +78,7 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 	 */
 	public static PrecisionScaleRoundedOperator of(int scale, MathContext mathContext) {
 
-		Objects.requireNonNull(mathContext);
+		requireNonNull(mathContext);
 
 		if(RoundingMode.UNNECESSARY.equals(mathContext.getRoundingMode())) {
 		   throw new IllegalArgumentException("To create the ScaleRoundedOperator you cannot use the RoundingMode.UNNECESSARY on MathContext");

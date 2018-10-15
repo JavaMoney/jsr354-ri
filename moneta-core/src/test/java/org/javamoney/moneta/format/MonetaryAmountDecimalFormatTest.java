@@ -20,7 +20,6 @@ import static org.testng.Assert.assertNotNull;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.function.MoneyProducer;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -59,7 +58,7 @@ public class MonetaryAmountDecimalFormatTest {
     @Test
     public void shouldReturnContext() {
         AmountFormatContext context = format.getContext();
-        Assert.assertEquals(MonetaryAmountDecimalFormat.STYLE, context.getFormatName());
+        assertEquals(MonetaryAmountDecimalFormat.STYLE, context.getFormatName());
     }
 
     @Test(expectedExceptions = NullPointerException.class)

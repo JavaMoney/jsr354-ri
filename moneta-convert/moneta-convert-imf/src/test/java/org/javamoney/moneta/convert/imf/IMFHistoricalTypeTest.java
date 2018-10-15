@@ -16,11 +16,11 @@
 package org.javamoney.moneta.convert.imf;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.time.Month;
 import java.time.YearMonth;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class IMFHistoricalTypeTest {
@@ -46,15 +46,15 @@ public class IMFHistoricalTypeTest {
 	public void shouldReturnUrlSDRCurrency() {
 		YearMonth yearMonth = YearMonth.of(2015, Month.APRIL);
 		String url = IMFHistoricalType.Currency_SDR.getUrl(yearMonth);
-		Assert.assertNotNull(url);
-		Assert.assertEquals(url, "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=CVSDR&tsvflag=Y");
+		assertNotNull(url);
+		assertEquals(url, "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=CVSDR&tsvflag=Y");
 	}
 
 	@Test
 	public void shouldReturnUrlCurrencySDR() {
 		YearMonth yearMonth = YearMonth.of(2015, Month.APRIL);
 		String url = IMFHistoricalType.SDR_Currency.getUrl(yearMonth);
-		Assert.assertNotNull(url);
-		Assert.assertEquals(url, "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=SDRCV&tsvflag=Y");
+		assertNotNull(url);
+		assertEquals(url, "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=2015-04&reportType=SDRCV&tsvflag=Y");
 	}
 }

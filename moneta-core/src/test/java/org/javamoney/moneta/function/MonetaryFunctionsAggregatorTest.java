@@ -36,7 +36,6 @@ import java.util.stream.Stream;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryException;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -52,7 +51,7 @@ public class MonetaryFunctionsAggregatorTest {
     public void shouldSumCorrectly() {
         Stream<MonetaryAmount> stream = streamNormal();
         MonetaryAmount sum = stream.reduce(sum()).get();
-        Assert.assertTrue(sum.getNumber().intValue() == 20);
+        assertEquals(sum.getNumber().intValue(), 20);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -71,7 +70,7 @@ public class MonetaryFunctionsAggregatorTest {
     public void shouldMinCorretly() {
         Stream<MonetaryAmount> stream = streamNormal();
         MonetaryAmount min = stream.reduce(min()).get();
-        Assert.assertTrue(min.getNumber().intValue() == 0);
+        assertEquals(min.getNumber().intValue(), 0);
     }
 
 
@@ -89,9 +88,9 @@ public class MonetaryFunctionsAggregatorTest {
 
     @Test
     public void shouldMaxCorretly() {
-        Stream<MonetaryAmount> stream = StreamFactory.streamNormal();
+        Stream<MonetaryAmount> stream = streamNormal();
         MonetaryAmount max = stream.reduce(max()).get();
-        Assert.assertTrue(max.getNumber().intValue() == 10);
+        assertEquals(max.getNumber().intValue(), 10);
     }
 
     @Test(expectedExceptions = NullPointerException.class)

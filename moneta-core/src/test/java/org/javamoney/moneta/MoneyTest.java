@@ -34,7 +34,6 @@ import java.math.RoundingMode;
 
 import javax.money.*;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -1183,7 +1182,7 @@ public class MoneyTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
     	Money.zero(null);
-    	Assert.fail();
+    	fail();
     }
 
     @Test
@@ -1196,7 +1195,7 @@ public class MoneyTest {
 	@Test(expectedExceptions = NullPointerException.class)
 	public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
 		Money.ofMinor(null, 1234L);
-		Assert.fail();
+		fail();
 	}
 
 	@Test

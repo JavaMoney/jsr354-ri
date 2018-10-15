@@ -30,7 +30,6 @@ import javax.money.format.MonetaryParseException;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.spi.MonetaryAmountProducer;
 import org.javamoney.moneta.spi.MoneyProducer;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -59,7 +58,7 @@ public class DefaultMonetaryAmountFormatSymbolsTest {
 	@Test
 	public void shouldReturnContext() {
 		AmountFormatContext context = monetaryAmountFormat.getContext();
-		Assert.assertEquals(DefaultMonetaryAmountFormatSymbols.STYLE, context.getFormatName());
+		assertEquals(DefaultMonetaryAmountFormatSymbols.STYLE, context.getFormatName());
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
