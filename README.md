@@ -8,10 +8,12 @@ JSR 354: Money and Currency: Moneta Reference Implementation
 [![License](https://img.shields.io/badge/license-Apache2-red.svg)](http://opensource.org/licenses/apache-2.0)
 [![Join the chat at https://gitter.im/JavaMoney/jsr354-ri](https://badges.gitter.im/JavaMoney/jsr354-ri.svg)](https://gitter.im/JavaMoney/jsr354-ri?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[JSR 354 JavaMoney](https://jcp.org/en/jsr/detail?id=354) provides an API for representing, transporting, and performing comprehensive calculations with Money and Currency. 
-This module (moneta) implements the JSR 354 Money & Currency. Hereby basic implementations of amounts, currency and roundings 
-are provided.
-The library supports JDK8 and later but also is available a limited backport to JDK7 [jsr354-ri-bp](https://github.com/JavaMoney/jsr354-ri-bp).
+The Moneta is a reference implementation (RI) of the [JSR 354 Money & Currency API](http://javamoney.org) and provides:
+* Monetary amounts: fixed sized `FastMoney` and `Money` for big amounts.
+* Currency conversion and rate providers.
+* Custom currencies support like the Bitcoin.
+
+See [Moneta User Guide](/moneta-core/src/main/asciidoc/userguide.adoc) for an introduction.
 
 
 Usage
@@ -41,19 +43,9 @@ The release artifacts are accessible from the following repositories:
 * [Maven Central](https://mvnrepository.com/artifact/org.javamoney/moneta/) 
 * [JCenter by Bintray](https://jcenter.bintray.com/org/javamoney/moneta/)
 
+[Release notes](https://github.com/JavaMoney/jsr354-ri/releases)
 
-Then refer to [Moneta User Guide](/moneta-core/src/main/asciidoc/userguide.adoc)
-
-
-Release Notes
--------------
-
-- [All release notes](https://github.com/JavaMoney/jsr354-ri/releases)
-- *1.0*    First release along with with JSR 354 API
-- *1.1*    Bugfix release.
-- *1.2*    Modularized release (with separated conversion and conversion providers), Java 9 module support
-- *1.2.1*  Fix release for invalid/missing Java 9 descriptor for conversion base. Compatible with Java 8, 9 and beyond.
-- *1.3*    Bugfix release.
+The library supports JDK8 and later but also is available a limited backport to JDK7 [jsr354-ri-bp](https://github.com/JavaMoney/jsr354-ri-bp).
 
 Help and support
 ----------------
