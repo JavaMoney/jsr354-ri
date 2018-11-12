@@ -41,7 +41,7 @@ class LoadDataLocalLoaderService {
 	        if (Objects.nonNull(load)) {
 	            try {
 	                if (load.loadFallback()) {
-	                	listener.trigger(resourceId, load.getDataStream());
+	                	listener.trigger(resourceId, load);
 	                    return true;
 	                }
 	            } catch (Exception e) {
