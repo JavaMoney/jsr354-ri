@@ -422,23 +422,23 @@ public class FastMoneyTest {
         FastMoney m = FastMoney.of(100, "CHF");
         assertEquals(FastMoney.of(10, "CHF"), m.multiply(new BigDecimal("0.1")));
 
+        m = FastMoney.of(new BigDecimal("1111111111.11111"), "CHF");
+        assertEquals(FastMoney.of(new BigDecimal("2222222222.22222"), "CHF"), m.multiply(BigDecimal.valueOf(2L)));
+
+        m = FastMoney.of(new BigDecimal("11111111111111.11111"), "CHF");
+        assertEquals(FastMoney.of(new BigDecimal("22222222222222.22222"), "CHF"), m.multiply(BigDecimal.valueOf(2L)));
+
         // the maximum value for FastMoney is 92233720368547.75807
         // so this should fit right below this limit
         BigDecimal baseValue = new BigDecimal("90000000000000");
-        BigDecimal expectedValue = new BigDecimal("90000000000000.00009");
-        BigDecimal multiplicant = new BigDecimal("1.000000000000000001");
+        BigDecimal expectedValue = new BigDecimal("90000900000000.00000");
+        BigDecimal multiplicand = new BigDecimal("1.00001");
 
         // verify the expected results
-        assertEquals(0, expectedValue.compareTo(baseValue.multiply(multiplicant)));
+        assertEquals(0, expectedValue.compareTo(baseValue.multiply(multiplicand)));
 
         m = FastMoney.of(baseValue, "CHF");
-
-        try {
-            m.multiply(baseValue);
-            fail("overflow should raise ArithmeticException");
-        } catch (ArithmeticException e) {
-            // should happen
-        }
+        assertEquals(FastMoney.of(expectedValue, "CHF"), m.multiply(multiplicand));
     }
 
     /**
@@ -455,6 +455,12 @@ public class FastMoneyTest {
         assertEquals(m.multiply(0), FastMoney.of(0, "CHF"));
         m = FastMoney.of(0, "CHF");
         assertEquals(m.multiply(10), FastMoney.of(0, "CHF"));
+
+        m = FastMoney.of(new BigDecimal("1111111111.11111"), "CHF");
+        assertEquals(FastMoney.of(new BigDecimal("2222222222.22222"), "CHF"), m.multiply(2L));
+
+        m = FastMoney.of(new BigDecimal("11111111111111.11111"), "CHF");
+        assertEquals(FastMoney.of(new BigDecimal("22222222222222.22222"), "CHF"), m.multiply(2L));
 
         try {
             // the maximum value for FastMoney is 92233720368547.75807 so this should overflow
