@@ -382,13 +382,20 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public FastMoney multiply(Number multiplicand) {
-    	NumberVerifier.checkNoInfinityOrNaN(multiplicand);
+        NumberVerifier.checkNoInfinityOrNaN(multiplicand);
         checkNumber(multiplicand);
         if (isOne(multiplicand)) {
             return this;
         }
-        return new FastMoney(Math.multiplyExact(this.number, getInternalNumber(multiplicand)) / 100000L,
-                getCurrency());
+        long internalMultiplicand = getInternalNumber(multiplicand);
+        try {
+            return new FastMoney(Math.multiplyExact(this.number, internalMultiplicand) / 100000L,
+                    getCurrency());
+        } catch (ArithmeticException e) {
+            // since we scale by 100000 even allowed values may overflow so we try again
+            return new FastMoney(getBigDecimal().multiply(BigDecimal.valueOf(internalMultiplicand))
+                    .movePointLeft(SCALE), getCurrency());
+        }
     }
 
     @Override
