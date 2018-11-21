@@ -16,7 +16,6 @@
 package org.javamoney.moneta.function;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -43,9 +42,7 @@ public class ReciprocalOperatorTest {
 		MonetaryAmount result = operator.apply(money);
 		assertEquals(result.getCurrency(), currency);
 		assertEquals(result.getNumber().doubleValue(), 0.5);
-
 	}
-
 
 	@Test
 	public void shouldReturnNegativeValue() {
@@ -54,12 +51,10 @@ public class ReciprocalOperatorTest {
 		MonetaryAmount result = operator.apply(money);
 		assertEquals(result.getCurrency(), currency);
 		assertEquals(result.getNumber().doubleValue(), -0.5);
-
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldReturnErroWhenIsNull() {
+	public void shouldReturnErrorWhenIsNull() {
 		operator.apply(null);
-		fail();
 	}
 }
