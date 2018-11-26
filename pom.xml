@@ -57,6 +57,8 @@
 		<osgi.version>5.0.0</osgi.version>
 		<osgi.compendium.version>${osgi.version}</osgi.compendium.version>
 		<osgi.annotation.version>6.0.0</osgi.annotation.version>
+
+		<jacoco.version>0.8.2</jacoco.version>
 	</properties>
 
 	<ciManagement>
@@ -418,7 +420,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.1</version>
+					<version>${jacoco.version}</version>
 					<executions>
 						<execution>
 							<id>prepare-agent</id>
@@ -614,7 +616,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.1</version>
+				<version>${jacoco.version}</version>
 				<configuration>
 					<destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
 					<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
