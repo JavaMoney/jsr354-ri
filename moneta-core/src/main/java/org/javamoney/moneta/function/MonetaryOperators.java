@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -49,6 +49,8 @@ import org.javamoney.moneta.spi.DefaultNumberValue;
  * @see MonetaryOperator#apply(MonetaryAmount)
  * @author Anatole Tresch
  * @author Otavio Santana
+ * @author Werner Keil
+ * @version 1.1
  * @since 1.0.1
  */
 public final class MonetaryOperators {
@@ -270,28 +272,5 @@ public final class MonetaryOperators {
 	 */
 	public static MonetaryOperator rounding(int scale) {
 		return new RoudingMonetaryAmountOperator(RoudingMonetaryAmountOperator.DEFAULT_ROUDING_MONETARY_AMOUNT, scale);
-	}
-
-	/**
-	 * Do exchange of currency, in other words, create the monetary amount with the
-	 * same value but with currency different.
-	 * <p>
-	 * For example, 'EUR 2.35', using the currency 'USD' as exchange parameter, will return 'USD 2.35',
-	 * and 'BHD -1.345', using the currency 'USD' as exchange parameter, will return 'BHD -1.345'.
-	 * <p>
-	 *<pre>
-	 *{@code
-	 *Currency real = Monetary.getCurrency("BRL");
-	 *MonetaryAmount money = Money.parse("EUR 2.355");
-	 *MonetaryAmount result = MonetaryOperators.exchangeCurrency(real).apply(money);//BRL 2.355
-	 *}
-	 *</pre>
-	 * @param currencyUnit currency to be used
-	 * @return the major part as {@link MonetaryOperator}
-	 * @deprecated
-	 */
-	@Deprecated
-	public static MonetaryOperator exchangeCurrency(CurrencyUnit currencyUnit){
-		return new ExchangeCurrencyOperator(Objects.requireNonNull(currencyUnit));
 	}
 }

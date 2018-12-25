@@ -42,7 +42,7 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>1.0.3</jsr.version>
+		<jsr.version>1.1-SNAPSHOT</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compiler.release>8</maven.compiler.release>
 

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -20,8 +20,6 @@ import static java.util.Objects.requireNonNull;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.Objects;
-
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
@@ -49,9 +47,7 @@ import javax.money.MonetaryOperator;
  * @see MathContext
  * @see BigDecimal#precision()
  * @since 1.0.1
- * @deprecated Do not use, access is only provided for backward compatibility and will be removed.
  */
-@Deprecated
 public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 
 	private final PrecisionContextRoundedOperator mathContextOperator;
