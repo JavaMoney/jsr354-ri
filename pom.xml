@@ -50,7 +50,7 @@
 		<basedir>.</basedir>
 
 		<!-- dependency versions -->
-		<testng.version>6.9.12</testng.version>
+		<testng.version>6.13.1</testng.version>
 		<additionalparam>-Xdoclint:none</additionalparam>
 
 		<!-- OSGI support -->
