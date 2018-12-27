@@ -19,7 +19,6 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Locale;
 
-import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
