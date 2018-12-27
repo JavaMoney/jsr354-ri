@@ -52,7 +52,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit,
 	/**
 	 * THe currency's context.
 	 */
-	private javax.money.CurrencyContext currencyContext;
+	private CurrencyContext currencyContext;
 
 	/**
 	 * Constructor, called from the Builder.

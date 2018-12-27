@@ -17,7 +17,6 @@ package org.javamoney.moneta.convert;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.function.GroupMonetarySummaryStatistics;
-import org.javamoney.moneta.function.MonetaryFunctions;
 import org.javamoney.moneta.function.MonetarySummaryStatistics;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -126,7 +125,7 @@ public class ConversionAggregatorTest {
     @Test
     public void groupByCurrencyUnitTest() {
         Map<CurrencyUnit, List<MonetaryAmount>> groupBy = currencies().collect(
-                MonetaryFunctions.groupByCurrencyUnit());
+                groupByCurrencyUnit());
         assertEquals(3, groupBy.entrySet().size());
         assertEquals(3, groupBy.get(BRAZILIAN_REAL).size());
         assertEquals(3, groupBy.get(DOLLAR).size());

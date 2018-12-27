@@ -414,7 +414,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         }
         MathContext mc = MoneyUtils.getMathContext(monetaryContext, RoundingMode.HALF_EVEN);
         int maxScale = monetaryContext.getMaxScale();
-        BigDecimal dec;
         if(maxScale>0){
             return new Money(this.number.divide(divisorBD, maxScale, mc.getRoundingMode()), getCurrency(), monetaryContext);
         }

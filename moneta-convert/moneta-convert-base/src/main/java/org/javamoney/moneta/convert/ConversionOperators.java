@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.convert;
 
-import java.math.MathContext;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
@@ -53,8 +52,6 @@ import org.javamoney.moneta.function.MonetarySummaryStatistics;
  * @since 1.0.1
  */
 public final class ConversionOperators {
-
-    private static final MathContext DEFAULT_MATH_CONTEXT = MathContext.DECIMAL64;
 
     private ConversionOperators() {
     }
