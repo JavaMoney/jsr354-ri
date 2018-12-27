@@ -103,6 +103,13 @@ public class FastMoneyTest {
       FastMoney money = FastMoney.of(original, "EUR");
       BigDecimal divisor = new BigDecimal("0.333333");
       assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(divisor));
+
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(0.0d));
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(-0.0d));
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(Double.NaN));
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(Double.valueOf(0.0d)));
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(Double.valueOf(-0.0d)));
+      assertThrows(ArithmeticException.class, () -> money.divideAndRemainder(Double.valueOf(Double.NaN)));
     }
 
     @Test
