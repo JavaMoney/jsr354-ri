@@ -16,7 +16,6 @@
 package org.javamoney.moneta.format;
 
 import static org.testng.Assert.assertEquals;
-
 import java.util.Locale;
 
 import javax.money.MonetaryAmount;
@@ -42,6 +41,17 @@ public class MonetaryFormatsTest {
 	    assertEquals(amountOk.getNumber().doubleValueExact(), 123.01); // OK
 	    assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12); // KO
 	}
+	
+	@Test(enabled = false) // FIXME this seems totally wrong, expected [14 000,12 EUR] but found [14 000,12 EUR] why does it work for Lev but not Euro?
+	public void testFormatFR() {
+	    MonetaryAmountFormat format = MonetaryFormats
+	            .getAmountFormat(AmountFormatQueryBuilder.of(Locale.FRANCE)
+	                    .set(CurrencyStyle.CODE)
+	                    .build());
+	    MonetaryAmount amount = Money.of(14000.12, "EUR");
+	    String formatted = format.format(amount);
+	    assertEquals(formatted, "14 000,12 EUR");
+	}  
 	
 	@Test(enabled = false)
 	public void testParseFR() {
