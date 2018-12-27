@@ -1227,10 +1227,10 @@ public class FastMoneyTest {
     public void testFromInversed() {
         Money m = Money.of(new BigDecimal("1.2345"), "XXX");
         Money m2 = Money.from(m);
-        assertTrue(m == m2);
+        assertSame(m, m2);
         FastMoney fm = FastMoney.of(new BigDecimal("1.2345"), "XXX");
         m2 = Money.from(fm);
-        assertFalse(m == m2);
+        assertNotSame(m, m2);
         assertEquals(m, m2);
     }
 

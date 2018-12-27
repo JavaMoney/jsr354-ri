@@ -1129,7 +1129,7 @@ public class MoneyTest {
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
         Money m2 = (Money) ois.readObject();
         assertEquals(m, m2);
-        assertTrue(m != m2);
+        assertNotSame(m, m2);
     }
 
     // Bad cases
