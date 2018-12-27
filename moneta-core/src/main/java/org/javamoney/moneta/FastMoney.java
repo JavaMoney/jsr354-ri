@@ -682,6 +682,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (NumberVerifier.isInfinityAndNotNaN(divisor)) {
             return new FastMoney(0L, getCurrency());
         }
+        if (divisor == 0.0d) {
+            throw new ArithmeticException("Division by zero");
+        }
         if (divisor == 1.0d) {
             return this;
         }
