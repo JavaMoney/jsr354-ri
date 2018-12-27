@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -23,15 +23,13 @@ import javax.money.MonetaryOperator;
 
 /**
  * MonetaryOperator class that applies an exchange rate to an amount.
- * @deprecated
  */
-@Deprecated
 public class ExchangeCurrencyOperator implements MonetaryOperator {
 	/** The target currency. */
 	private final CurrencyUnit currency;
 
 	/**
-	 * Constrcutor.
+	 * Constructor.
 	 * @param currency the target currency, not null.
      */
 	ExchangeCurrencyOperator(CurrencyUnit currency) {
@@ -43,5 +41,4 @@ public class ExchangeCurrencyOperator implements MonetaryOperator {
 		Objects.requireNonNull(amount, "Amount required.");
 		return amount.getFactory().setCurrency(currency).create();
 	}
-
 }
