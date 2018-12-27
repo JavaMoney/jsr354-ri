@@ -120,7 +120,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
                 }
                 RateResult result = findExchangeRate(conversionQuery);
 
-                ExchangeRateBuilder builder = getBuilder(conversionQuery, result.date);
+                ExchangeRateBuilder builder = getBuilder(conversionQuery);
                 ExchangeRate sourceRate = result.targets.get(conversionQuery.getBaseCurrency()
                         .getCurrencyCode());
                 ExchangeRate target = result.targets
@@ -141,13 +141,13 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         if (dates == null) {
         	Comparator<LocalDate> comparator = Comparator.naturalOrder();
     		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on ECBRateProvider."));
-        	return new RateResult(date, this.rates.get(date));
+        	return new RateResult(this.rates.get(date));
         } else {
         	for (LocalDate localDate : dates) {
         		Map<String, ExchangeRate> targets = this.rates.get(localDate);
 
         		if(Objects.nonNull(targets)) {
-        			return new RateResult(localDate, targets);
+        			return new RateResult(targets);
         		}
 			}
         	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
@@ -197,7 +197,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
     }
 
 
-    private ExchangeRateBuilder getBuilder(ConversionQuery query, LocalDate localDate) {
+    private ExchangeRateBuilder getBuilder(ConversionQuery query) {
         ExchangeRateBuilder builder = new ExchangeRateBuilder(getExchangeContext("ecb.digit.fraction"));
         builder.setBase(query.getBaseCurrency());
         builder.setTerm(query.getCurrency());
@@ -221,12 +221,10 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
     }
 
     private class RateResult {
-    	private final LocalDate date;
 
     	private final Map<String, ExchangeRate> targets;
 
-    	RateResult(LocalDate date, Map<String, ExchangeRate> targets) {
-    		this.date = date;
+    	RateResult(Map<String, ExchangeRate> targets) {
     		this.targets = targets;
     	}
     }
