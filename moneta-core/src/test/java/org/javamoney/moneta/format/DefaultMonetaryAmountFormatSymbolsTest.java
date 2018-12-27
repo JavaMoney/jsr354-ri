@@ -35,22 +35,16 @@ import org.testng.annotations.Test;
 
 public class DefaultMonetaryAmountFormatSymbolsTest {
 
-	private MonetaryAmountSymbols symbols;
-
 	private DefaultMonetaryAmountFormatSymbols monetaryAmountFormat;
-
-	private Locale locale;
 
 	private CurrencyUnit currency;
 
-	private MonetaryAmountProducer producer;
-
 	@BeforeMethod
 	public void setup() {
-		locale = new Locale("pt", "BR");
-		symbols = new MonetaryAmountSymbols(locale);
+		Locale locale = new Locale("pt", "BR");
+		MonetaryAmountSymbols symbols = new MonetaryAmountSymbols(locale);
 		currency = Monetary.getCurrency(locale);
-		producer = new MoneyProducer();
+		MonetaryAmountProducer producer = new MoneyProducer();
 		monetaryAmountFormat = new DefaultMonetaryAmountFormatSymbols(symbols, producer);
 
 	}
