@@ -382,6 +382,28 @@ public class FastMoneyTest {
     }
 
     /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
+     */
+    @Test
+    public void testDivideByZeroDouble() {
+        FastMoney m = FastMoney.of(100, "CHF");
+        assertThrows(ArithmeticException.class, () -> m.divide(0.0d));
+        assertThrows(ArithmeticException.class, () -> m.divide(-0.0d));
+        assertThrows(ArithmeticException.class, () -> m.divide(Double.valueOf(0.0d)));
+        assertThrows(ArithmeticException.class, () -> m.divide(Double.valueOf(-0.0d)));
+    }
+
+    /**
+     * Test method for {@link org.javamoney.moneta.FastMoney#divide(double)}.
+     */
+    @Test
+    public void testDivideByNanDouble() {
+        FastMoney m = FastMoney.of(100, "CHF");
+        assertThrows(ArithmeticException.class, () -> m.divide(Double.NaN));
+        assertThrows(ArithmeticException.class, () -> m.divide(Double.valueOf(Double.NaN)));
+    }
+
+    /**
      * Test method for {@link org.javamoney.moneta.FastMoney#divideAndRemainder(java.lang.Number)} .
      */
     @Test
