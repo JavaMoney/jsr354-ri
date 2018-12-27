@@ -19,11 +19,13 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Locale;
 
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
+import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsTest {
@@ -53,4 +55,31 @@ public class MonetaryFormatsTest {
 	    assertEquals(amountOk.getNumber().doubleValueExact(), 123.01); // OK
 	    assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12); // KO
 	}
+	
+	@Test(enabled = false)
+	public void testParseBG() {
+		final Locale.Builder localeBuilder = new Locale.Builder();
+		localeBuilder.setRegion("BG"); // BG
+	    MonetaryAmountFormat format = MonetaryFormats
+	            .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+	                    .set(CurrencyStyle.CODE)
+	                    .build());
+	    MonetaryAmount amountOk = format.parse("123,01 BGN");
+	    MonetaryAmount amountKo = format.parse("14 000,12 BGN");
+	    assertEquals(amountOk.getNumber().doubleValueExact(), 123.01); // OK
+	    assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12); // KO
+	}
+	
+	@Test
+	public void testFormatBG() {
+		final Locale.Builder localeBuilder = new Locale.Builder();
+		localeBuilder.setRegion("BG"); // BG
+	    MonetaryAmountFormat format = MonetaryFormats
+	            .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+	                    .set(CurrencyStyle.CODE)
+	                    .build());
+	    MonetaryAmount amount = Money.of(14000.12, "BGN");
+	    String formatted = format.format(amount);
+	    assertEquals(formatted, "14 000,12 BGN");
+	}    		
 }

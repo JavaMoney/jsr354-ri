@@ -61,6 +61,9 @@ final class AmountNumberToken implements FormatToken {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
         }
+        DecimalFormatSymbols formatSyms = formatFormat.getDecimalFormatSymbols();
+        DecimalFormatSymbols parseSyms = formatFormat.getDecimalFormatSymbols();
+
         formatFormat.applyPattern(removeNBSP(partialNumberPattern));
         parseFormat.applyPattern(removeNBSP(partialNumberPattern).trim());
         // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
