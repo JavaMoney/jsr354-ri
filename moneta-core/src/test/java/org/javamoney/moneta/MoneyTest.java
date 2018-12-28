@@ -405,7 +405,7 @@ public class MoneyTest {
     public void testEqualsMonetaryAmount() {
         MonetaryAmount m = Monetary.getDefaultAmountFactory().setCurrency("CHF").setNumber(100).create();
         MonetaryAmount m2 = Money.of(100, "CHF");
-        Money m3 = Money.of(100, "CHF");
+        Money m3 = Money.of(new BigDecimal("100.00"), "CHF");
         assertTrue(m.equals(m2));
         assertTrue(m.equals(m3));
         assertTrue(m2.equals(m3));

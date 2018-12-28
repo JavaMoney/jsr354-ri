@@ -654,8 +654,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         }
         if (obj instanceof Money) {
             Money other = (Money) obj;
-            return Objects.equals(getCurrency(), other.getCurrency()) &&
-                    Objects.equals(getNumberStripped(), other.getNumberStripped());
+            return getCurrency().equals(other.getCurrency()) &&
+                    this.number.compareTo(other.number) == 0;
         }
         return false;
     }
