@@ -48,7 +48,6 @@ public class MonetaryAmountDecimalFormatTest {
     public void setup() {
         Locale locale = Locale.US;
         currencyUnit = Monetary.getCurrency(locale);
-        currencyUnit = Monetary.getCurrency(locale);
         format = MonetaryAmountDecimalFormatBuilder.of(locale).withProducer(new MoneyProducer())
                 .withCurrencyUnit(currencyUnit).build();
         numberFormat = NumberFormat.getCurrencyInstance(locale);
