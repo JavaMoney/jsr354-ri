@@ -640,7 +640,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     }
 
     /*
-     * }(non-Javadoc)
+     * (non-Javadoc)
      * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
      */
     @Override
@@ -695,7 +695,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
             .of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
 
     /*
-     * }(non-Javadoc)
+     * (non-Javadoc)
      * @see javax.money.MonetaryAmount#adjust(javax.money.AmountAdjuster)
      */
     @Override
