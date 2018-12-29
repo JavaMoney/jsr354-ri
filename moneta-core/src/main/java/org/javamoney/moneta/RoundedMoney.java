@@ -479,7 +479,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      */
     @Override
     public boolean isZero() {
-        return number.signum() == 0;
+        return signum() == 0;
     }
 
     /*
