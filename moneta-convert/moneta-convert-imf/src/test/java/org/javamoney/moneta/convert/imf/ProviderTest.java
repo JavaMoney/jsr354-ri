@@ -22,7 +22,7 @@ public class ProviderTest {
                 final ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
                 final CurrencyConversion dollarConversion = rateProvider.getCurrencyConversion("USD");
                 final MonetaryAmount inDollar = inEuro.with(dollarConversion);
-                System.out.println(String.format("RUN: %n - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
+                System.out.println(String.format("RUN: %d - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -32,7 +32,7 @@ public class ProviderTest {
             final CurrencyConversion dollarConversion = rateProvider.getCurrencyConversion("USD");
             Thread.sleep(100L);
             final MonetaryAmount inDollar = inEuro.with(dollarConversion);
-            System.out.println(String.format("RUN: %n - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
+            System.out.println(String.format("RUN: %d - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
         }
 
     }
@@ -45,7 +45,7 @@ public class ProviderTest {
                 final ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF-HIST");
                 final CurrencyConversion dollarConversion = rateProvider.getCurrencyConversion("USD");
                 final MonetaryAmount inDollar = inEuro.with(dollarConversion);
-                System.out.println(String.format("RUN: %n - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
+                System.out.println(String.format("RUN: %d - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class ProviderTest {
             final CurrencyConversion dollarConversion = rateProvider.getCurrencyConversion("USD");
             Thread.sleep(100L);
             final MonetaryAmount inDollar = inEuro.with(dollarConversion);
-            System.out.println(String.format("RUN: %n - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
+            System.out.println(String.format("RUN: %d - %s: %s ≙ %s", i, rateProvider, inEuro, inDollar));
         }
 
     }
