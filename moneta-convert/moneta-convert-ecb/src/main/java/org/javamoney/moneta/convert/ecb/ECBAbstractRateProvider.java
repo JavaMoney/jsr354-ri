@@ -140,7 +140,9 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
         if (dates == null) {
         	Comparator<LocalDate> comparator = Comparator.naturalOrder();
-    		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on ECBRateProvider."));
+    		LocalDate date = this.rates.keySet().stream()
+                    .max(comparator)
+                    .orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on ECBRateProvider."));
         	return new RateResult(this.rates.get(date));
         } else {
         	for (LocalDate localDate : dates) {

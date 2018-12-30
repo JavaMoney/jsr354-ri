@@ -33,36 +33,31 @@ public class MonetaryFunctionsOrderTest {
 	
     @Test
     public void sortCurrencyUnitTest() {
-        MonetaryAmount money = currencies().sorted(sortCurrencyUnit())
-                .findFirst().get();
+        MonetaryAmount money = currencies().min(sortCurrencyUnit()).get();
         Assert.assertEquals(BRAZILIAN_REAL, money.getCurrency());
     }
 
     @Test
     public void sortCurrencyUnitDescTest() {
-        MonetaryAmount money = currencies().sorted(sortCurrencyUnitDesc())
-                .findFirst().get();
+        MonetaryAmount money = currencies().min(sortCurrencyUnitDesc()).get();
         Assert.assertEquals(DOLLAR, money.getCurrency());
     }
 
     @Test
     public void sortorderNumberTest() {
-        MonetaryAmount money = currencies().sorted(sortNumber())
-                .findFirst().get();
+        MonetaryAmount money = currencies().min(sortNumber()).get();
         Assert.assertEquals(BigDecimal.ZERO, money.getNumber().numberValue(BigDecimal.class));
     }
 
     @Test
     public void sortorderNumberDescTest() {
-        MonetaryAmount money = currencies().sorted(sortNumberDesc())
-                .findFirst().get();
+        MonetaryAmount money = currencies().min(sortNumberDesc()).get();
         Assert.assertEquals(BigDecimal.TEN, money.getNumber().numberValue(BigDecimal.class));
     }
 
     @Test
     public void sortCurrencyUnitAndNumberTest() {
-        MonetaryAmount money = currencies().sorted(sortCurrencyUnit().thenComparing(sortNumber()))
-                .findFirst().get();
+        MonetaryAmount money = currencies().min(sortCurrencyUnit().thenComparing(sortNumber())).get();
 
         Assert.assertEquals(BRAZILIAN_REAL, money.getCurrency());
         Assert.assertEquals(BigDecimal.ZERO, money.getNumber().numberValue(BigDecimal.class));
