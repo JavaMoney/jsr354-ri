@@ -84,7 +84,7 @@ public final class OSGIServiceHelper {
                     String.valueOf(PriorityServiceComparator.getPriority(implClass)));
 
             // Register the service factory on behalf of the intercepted bundle
-            JDKUtilServiceFactory<T> factory = new JDKUtilServiceFactory<T>(implClass);
+            JDKUtilServiceFactory<T> factory = new JDKUtilServiceFactory<>(implClass);
             BundleContext bundleContext = bundle.getBundleContext();
             bundleContext.registerService(serviceClass.getName(), factory, props);
             if (LOG.isLoggable(Level.INFO)) {
