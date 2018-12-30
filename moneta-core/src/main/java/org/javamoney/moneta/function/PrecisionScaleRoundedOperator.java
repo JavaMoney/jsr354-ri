@@ -104,7 +104,7 @@ public final class PrecisionScaleRoundedOperator implements MonetaryOperator {
 	@Override
 	public String toString() {
         return PrecisionScaleRoundedOperator.class.getName() + '{' +
-                "scale:" + Integer.toString(scale) + ',' +
+                "scale:" + scale + ',' +
                 "mathContext:" + mathContext + '}';
 	}
 
