@@ -1,7 +1,3 @@
-import org.javamoney.moneta.convert.ecb.ECBCurrentRateProvider;
-import org.javamoney.moneta.convert.ecb.ECBHistoric90RateProvider;
-import org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider;
-
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 

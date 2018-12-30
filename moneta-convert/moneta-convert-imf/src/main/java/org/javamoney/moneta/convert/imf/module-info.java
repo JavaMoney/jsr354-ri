@@ -1,6 +1,3 @@
-import org.javamoney.moneta.convert.imf.IMFHistoricRateProvider;
-import org.javamoney.moneta.convert.imf.IMFRateProvider;
-
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
