@@ -34,8 +34,7 @@ public class MonetaryAmountsRegistrationTest{
         assertNotNull(Monetary.getDefaultAmountFactory());
         assertNotNull(Monetary.getAmountFactory(FastMoney.class));
         assertNotNull(Monetary.getAmountFactory(Money.class));
-        assertTrue(Monetary.getDefaultAmountFactory().getClass() ==
-                           Monetary.getAmountFactory(Money.class).getClass());
+        assertSame(Monetary.getDefaultAmountFactory().getClass(), Monetary.getAmountFactory(Money.class).getClass());
     }
 
     /**
@@ -44,7 +43,7 @@ public class MonetaryAmountsRegistrationTest{
     @Test
     public void testGetTypes(){
         assertNotNull(Monetary.getAmountTypes());
-        assertTrue(Monetary.getAmountTypes().size() == 3);
+        assertEquals(Monetary.getAmountTypes().size(), 3);
         assertTrue(Monetary.getAmountTypes().contains(FastMoney.class));
         assertTrue(Monetary.getAmountTypes().contains(Money.class));
         assertTrue(Monetary.getAmountTypes().contains(RoundedMoney.class));
@@ -77,37 +76,37 @@ public class MonetaryAmountsRegistrationTest{
         MonetaryAmountFactory<?> f = Monetary
                 .getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setTargetType(RoundedMoney.class).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == RoundedMoney.class);
+        assertSame(f.getAmountType(), RoundedMoney.class);
         f = Monetary.getAmountFactory(
                 MonetaryAmountFactoryQueryBuilder.of().setTargetType(FastMoney.class).setPrecision(5).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == FastMoney.class);
+        assertSame(f.getAmountType(), FastMoney.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setTargetType(Money.class).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Monetary.getDefaultAmountType());
+        assertSame(f.getAmountType(), Monetary.getDefaultAmountType());
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setPrecision(5).build());
         assertNotNull(f);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setPrecision(20).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setPrecision(5).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setPrecision(5).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setPrecision(5).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
         f = Monetary.getAmountFactory(MonetaryAmountFactoryQueryBuilder.of().setPrecision(200).build());
         assertNotNull(f);
-        assertTrue(f.getAmountType() == Money.class);
+        assertSame(f.getAmountType(), Money.class);
     }
 
     /**
