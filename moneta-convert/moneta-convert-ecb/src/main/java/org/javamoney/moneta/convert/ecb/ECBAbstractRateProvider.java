@@ -95,11 +95,11 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
-        final int oldSize = this.rates==null?0:this.rates.size();
+        final int oldSize = this.rates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
-            int newSize = this.rates==null?0:this.rates.size();
+            int newSize = this.rates.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
             LOG.info(loadState);
         } catch (Exception e) {
