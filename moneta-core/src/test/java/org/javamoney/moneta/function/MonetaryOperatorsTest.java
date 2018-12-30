@@ -267,7 +267,7 @@ public class MonetaryOperatorsTest {
 		MonetaryAmount result = MonetaryOperators.rounding().apply(money);
 		assertNotNull(result);
 		assertEquals(result.getCurrency(), euro);
-		assertEquals(Double.valueOf(2.36), result.getNumber().doubleValue());
+		assertEquals(2.36d, result.getNumber().doubleValue());
 	}
 
 	@Test(expectedExceptions = NullPointerException.class)
@@ -283,7 +283,7 @@ public class MonetaryOperatorsTest {
 		MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN).apply(money);
 		assertNotNull(result);
 		assertEquals(result.getCurrency(), euro);
-		assertEquals(Double.valueOf(2.36), result.getNumber().doubleValue());
+		assertEquals(2.36d, result.getNumber().doubleValue());
 	}
 
 	@Test
@@ -293,7 +293,7 @@ public class MonetaryOperatorsTest {
 		MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN, 4).apply(money);
 		assertNotNull(result);
 		assertEquals(result.getCurrency(), euro);
-		assertEquals(Double.valueOf(2.3554), result.getNumber().doubleValue());
+		assertEquals(2.3554d, result.getNumber().doubleValue());
 	}
 
 	@Test
@@ -303,7 +303,7 @@ public class MonetaryOperatorsTest {
 		MonetaryAmount result = MonetaryOperators.rounding(4).apply(money);
 		assertNotNull(result);
 		assertEquals(result.getCurrency(), euro);
-		assertEquals(Double.valueOf(2.3554), result.getNumber().doubleValue());
+		assertEquals(2.3554d, result.getNumber().doubleValue());
 	}
 }
 
