@@ -191,12 +191,11 @@ public class ExchangeRateBuilder {
 
     @Override
     public String toString() {
-        String sb = "org.javamoney.moneta.ExchangeRateBuilder: " +
+        return "org.javamoney.moneta.ExchangeRateBuilder: " +
                 "[conversionContext" + conversionContext + ',' +
                 "base" + base + ',' +
                 "term" + term + ',' +
                 "factor" + factor + ',' +
                 "rateChain" + rateChain + ']';
-        return sb;
     }
 }

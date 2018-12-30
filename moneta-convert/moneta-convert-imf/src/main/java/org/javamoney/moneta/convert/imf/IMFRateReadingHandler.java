@@ -240,8 +240,7 @@ class IMFRateReadingHandler {
 
 	@Override
 	public String toString() {
-		String sb = IMFRateReadingHandler.class.getName() + '{' + " currenciresByName: " + currenciresByName + ',' +
+		return IMFRateReadingHandler.class.getName() + '{' + " currenciresByName: " + currenciresByName + ',' +
 				" context: " + context + '}';
-		return sb;
 	}
 }

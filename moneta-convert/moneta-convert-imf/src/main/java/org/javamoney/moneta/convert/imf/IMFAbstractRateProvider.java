@@ -190,9 +190,8 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
 
     @Override
     public String toString() {
-        String sb = getClass().getName() + '{' +
+        return getClass().getName() + '{' +
                 " context: " + context + '}';
-        return sb;
     }
 
 }

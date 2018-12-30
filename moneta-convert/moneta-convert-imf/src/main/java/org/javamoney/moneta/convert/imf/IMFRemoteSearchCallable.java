@@ -80,9 +80,8 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
 	@Override
 	public String toString() {
-        String sb = IMFRemoteSearchCallable.class.getName() + '{' +
+        return IMFRemoteSearchCallable.class.getName() + '{' +
                 " type: " + type + ", yearMonth: " + yearMonth + '}';
-        return sb;
 	}
 
 	class IMFRemoteSearchResult {
@@ -106,9 +105,8 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
 		@Override
 		public String toString() {
-            String sb = IMFRemoteSearchResult.class.getName() + '{' +
+            return IMFRemoteSearchResult.class.getName() + '{' +
                     " type: " + type + ", stream: " + stream + '}';
-            return sb;
 		}
 	}
 
