@@ -106,8 +106,8 @@ final class AmountNumberToken implements FormatToken {
     @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
-        if (amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class) == null ||
-                amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class).length == 0) {
+        int[] groupSizes = amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class);
+        if (groupSizes == null || groupSizes.length == 0) {
             String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
             appendable.append(preformattedValue);
             return;
@@ -123,10 +123,6 @@ final class AmountNumberToken implements FormatToken {
                 if (groupChars == null || groupChars.length == 0) {
                     groupChars = new char[]{this.formatFormat
                             .getDecimalFormatSymbols().getGroupingSeparator()};
-                }
-                int[] groupSizes = amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class);
-                if (groupSizes == null) {
-                    groupSizes = new int[0];
                 }
                 numberGroup = new StringGrouper(groupChars, groupSizes);
             }
