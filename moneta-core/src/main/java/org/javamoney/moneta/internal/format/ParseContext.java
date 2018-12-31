@@ -127,7 +127,8 @@ final class ParseContext {
      */
     public int skipWhitespace() {
         for (int i = index; i < originalInput.length(); i++) {
-            if (Character.isWhitespace(originalInput.charAt(i))) {
+            char ch = originalInput.charAt(i);
+            if (Character.isWhitespace(ch)) {
                 index++;
             } else {
                 break;
@@ -256,7 +257,8 @@ final class ParseContext {
         skipWhitespace();
         int start = index;
         for (int end = index; end < originalInput.length(); end++) {
-            if (Character.isWhitespace(originalInput.charAt(end))) {
+            char ch = originalInput.charAt(end);
+            if (Character.isWhitespace(ch)) {
                 if (end > start) {
                     return originalInput.subSequence(start, end).toString();
                 }
