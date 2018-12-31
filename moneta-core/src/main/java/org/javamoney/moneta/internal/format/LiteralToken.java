@@ -58,11 +58,11 @@ final class LiteralToken implements FormatToken, Serializable {
      * @see org.javamoney.moneta.internal.format.FormatToken#parse(ParseContext)
      */
     @Override
-    public void parse(ParseContext context)
-            throws MonetaryParseException {
+    public void parse(ParseContext context) throws MonetaryParseException {
         if (!context.consume(token)) {
-            throw new MonetaryParseException(context.getOriginalInput(),
-                    context.getErrorIndex());
+            context.setError();
+            context.setErrorMessage("Parse Error");
+            throw new MonetaryParseException(context.getOriginalInput(), context.getErrorIndex());
         }
     }
 
