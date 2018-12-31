@@ -108,15 +108,13 @@ final class AmountNumberToken implements FormatToken {
             throws IOException {
         if (amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class) == null ||
                 amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class).length == 0) {
-            appendable.append(this.formatFormat.format(amount.getNumber()
-                    .numberValue(BigDecimal.class)));
+            String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
+            appendable.append(preformattedValue);
             return;
         }
         this.formatFormat.setGroupingUsed(false);
-        String preformattedValue = this.formatFormat.format(amount.getNumber()
-                .numberValue(BigDecimal.class));
-        String[] numberParts = splitNumberParts(this.formatFormat,
-                preformattedValue);
+        String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
+        String[] numberParts = splitNumberParts(this.formatFormat, preformattedValue);
         if (numberParts.length != 2) {
             appendable.append(preformattedValue);
         } else {
