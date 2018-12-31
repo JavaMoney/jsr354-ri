@@ -15,6 +15,8 @@
  */
 package org.javamoney.moneta.format;
 
+import static java.util.Locale.FRANCE;
+import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 import static org.testng.Assert.assertEquals;
 
 import java.math.BigDecimal;
@@ -29,72 +31,72 @@ import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsTest {
-	
-	@Test(enabled = false)
-	public void testParseDK() {
-		final Locale.Builder localeBuilder = new Locale.Builder();
-		localeBuilder.setLanguage("da"); // Danish
-	    MonetaryAmountFormat format = MonetaryFormats
-	            .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
-	                    .set(CurrencyStyle.CODE)
-	                    .build());
-	    MonetaryAmount amountOk = format.parse("123,01 DKK");
-	    MonetaryAmount amountKo = format.parse("14 000,12 DKK");
-	    assertEquals(amountOk.getNumber().doubleValueExact(), 123.01); // OK
-	    assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12); // KO
-	}
-	
-	@Test(enabled = false) // FIXME this seems totally wrong, expected [14 000,12 EUR] but found [14 000,12 EUR] why does it work for Lev but not Euro?
-	public void testFormatFR() {
-	    MonetaryAmountFormat format = MonetaryFormats
-	            .getAmountFormat(AmountFormatQueryBuilder.of(Locale.FRANCE)
-	                    .set(CurrencyStyle.CODE)
-	                    .build());
-	    MonetaryAmount amount = Money.of(14000.12, "EUR");
-	    String formatted = format.format(amount);
-	    assertEquals(formatted, "14 000,12 EUR");
-	}  
-	
-	@Test(enabled = false)
-	public void testParseFR() {
-	    MonetaryAmountFormat format = MonetaryFormats
-	            .getAmountFormat(AmountFormatQueryBuilder.of(Locale.FRANCE)
-	                    .set(CurrencyStyle.CODE)
-	                    .build());
-	    MonetaryAmount amountOk = format.parse("123,01 EUR");
-	    MonetaryAmount amountKo = format.parse("14 000,12 EUR");
-	    assertEquals(amountOk.getNumber().doubleValueExact(), 123.01); // OK
-	    assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12); // KO
-	}
-	
-	@Test(enabled = false)
-	public void testParseBG() {
-		final Locale.Builder localeBuilder = new Locale.Builder();
-		localeBuilder.setRegion("BG"); // BG
-	    MonetaryAmountFormat format = MonetaryFormats
-	            .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
-	                    .set(CurrencyStyle.CODE)
-	                    .build());
-	    MonetaryAmount amountOk = format.parse("123,01 BGN");
-	    MonetaryAmount amountKo = format.parse("14 000,12 BGN");
-	    assertEquals(amountOk.getNumber().doubleValueExact(), 123.01); // OK
-	    assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12); // KO
-	}
-	
-	@Test
-	public void testFormatBG() {
-		final Locale.Builder localeBuilder = new Locale.Builder();
-		localeBuilder.setRegion("BG"); // BG
-	    MonetaryAmountFormat format = MonetaryFormats
-	            .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
-	                    .set(CurrencyStyle.CODE)
-	                    .build());
-	    MonetaryAmount amount = Money.of(14000.12, "BGN");
-	    String formatted = format.format(amount);
-	    assertEquals(formatted, "14 000,12 BGN");
-	}    	
-	
-	/**
+
+    @Test(enabled = false)
+    public void testParseDK() {
+        final Locale.Builder localeBuilder = new Locale.Builder();
+        localeBuilder.setLanguage("da"); // Danish
+        MonetaryAmountFormat format = MonetaryFormats
+                .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+                        .set(CODE)
+                        .build());
+        MonetaryAmount amountOk = format.parse("123,01 DKK");
+        MonetaryAmount amountKo = format.parse("14 000,12 DKK");
+        assertEquals(amountOk.getNumber().doubleValueExact(), 123.01);
+        assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12);
+    }
+
+    @Test(enabled = false) // FIXME this seems totally wrong, expected [14 000,12 EUR] but found [14 000,12 EUR] why does it work for Lev but not Euro?
+    public void testFormatFR() {
+        MonetaryAmountFormat format = MonetaryFormats
+                .getAmountFormat(AmountFormatQueryBuilder.of(FRANCE)
+                        .set(CODE)
+                        .build());
+        MonetaryAmount amount = Money.of(14000.12, "EUR");
+        String formatted = format.format(amount);
+        assertEquals(formatted, "14 000,12 EUR");
+    }
+
+    @Test(enabled = false)
+    public void testParseFR() {
+        MonetaryAmountFormat format = MonetaryFormats
+                .getAmountFormat(AmountFormatQueryBuilder.of(FRANCE)
+                        .set(CODE)
+                        .build());
+        MonetaryAmount amountOk = format.parse("123,01 EUR");
+        MonetaryAmount amountKo = format.parse("14 000,12 EUR");
+        assertEquals(amountOk.getNumber().doubleValueExact(), 123.01);
+        assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12);
+    }
+
+    @Test(enabled = false)
+    public void testParseBG() {
+        final Locale.Builder localeBuilder = new Locale.Builder();
+        localeBuilder.setRegion("BG"); // BG
+        MonetaryAmountFormat format = MonetaryFormats
+                .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+                        .set(CODE)
+                        .build());
+        MonetaryAmount amountOk = format.parse("123,01 BGN");
+        MonetaryAmount amountKo = format.parse("14 000,12 BGN");
+        assertEquals(amountOk.getNumber().doubleValueExact(), 123.01);
+        assertEquals(amountKo.getNumber().doubleValueExact(), 14000.12);
+    }
+
+    @Test
+    public void testFormatBG() {
+        final Locale.Builder localeBuilder = new Locale.Builder();
+        localeBuilder.setRegion("BG"); // BG
+        MonetaryAmountFormat format = MonetaryFormats
+                .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+                        .set(CODE)
+                        .build());
+        MonetaryAmount amount = Money.of(14000.12, "BGN");
+        String formatted = format.format(amount);
+        assertEquals(formatted, "14 000,12 BGN");
+    }
+
+    /**
      * Test related to parsing and formatting for India.
      * https://github.com/JavaMoney/jsr354-ri/issues/275
      */
