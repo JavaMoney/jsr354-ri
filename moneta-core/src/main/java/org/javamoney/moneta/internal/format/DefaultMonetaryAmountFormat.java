@@ -46,17 +46,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     /**
      * The international Unicode currency sign.
      */
-    private static final char CURRENCY_SIGN = '\u00A4';
+    private static final char CURRENCY_SIGN = '¤';
 
     /**
-     * The tokens to be used for formatting/parsing of positive and zero
-     * numbers.
+     * The tokens to be used for formatting/parsing of positive and zero numbers.
      */
     private List<FormatToken> positiveTokens;
 
     /**
-     * The tokens to be used for formatting/parsing of positive and zero
-     * numbers.
+     * The tokens to be used for formatting/parsing of negative numbers.
      */
     private List<FormatToken> negativeTokens;
 
@@ -122,6 +120,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @return the string printed using the settings of this formatter
      * @throws UnsupportedOperationException if the formatter is unable to print
      */
+    @Override
     public String format(MonetaryAmount amount) {
         StringBuilder builder = new StringBuilder();
         try {
@@ -143,6 +142,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @param amount     the amount to print, not null
      * @throws IOException if an IO error occurs
      */
+    @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
         if (amount.isNegative()) {
@@ -169,6 +169,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @throws UnsupportedOperationException             if the formatter is unable to parse
      * @throws javax.money.format.MonetaryParseException if there is a problem while parsing
      */
+    @Override
     public MonetaryAmount parse(CharSequence text)
             throws MonetaryParseException {
         ParseContext ctx = new ParseContext(text);
