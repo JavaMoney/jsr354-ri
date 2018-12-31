@@ -95,11 +95,11 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
-        final int oldSize = this.rates==null?0:this.rates.size();
+        final int oldSize = this.rates.size();
         try {
             SAXParser parser = saxParserFactory.newSAXParser();
             parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
-            int newSize = this.rates==null?0:this.rates.size();
+            int newSize = this.rates.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
             LOG.info(loadState);
         } catch (Exception e) {
@@ -140,7 +140,9 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
         if (dates == null) {
         	Comparator<LocalDate> comparator = Comparator.naturalOrder();
-    		LocalDate date = this.rates.keySet().stream().sorted(comparator.reversed()).findFirst().orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on ECBRateProvider."));
+    		LocalDate date = this.rates.keySet().stream()
+                    .max(comparator)
+                    .orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on ECBRateProvider."));
         	return new RateResult(this.rates.get(date));
         } else {
         	for (LocalDate localDate : dates) {
