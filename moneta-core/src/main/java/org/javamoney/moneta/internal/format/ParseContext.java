@@ -17,11 +17,12 @@ package org.javamoney.moneta.internal.format;
 
 import java.text.ParsePosition;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryAmountFormat;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Context passed along to each {@link FormatToken} in-line, when parsing an
@@ -64,8 +65,7 @@ final class ParseContext {
      * @param text The test to be parsed.
      */
     ParseContext(CharSequence text) {
-        this.originalInput = Optional.ofNullable(text).orElseThrow(
-                () -> new IllegalArgumentException("text is required"));
+        this.originalInput = requireNonNull(text, "text is required");
     }
 
     /**
@@ -214,7 +214,7 @@ final class ParseContext {
      * @param number The result number
      */
     public void setParsedNumber(Number number) {
-        this.parsedNumber = number;
+        this.parsedNumber = requireNonNull(number);
     }
 
     /**
@@ -223,7 +223,7 @@ final class ParseContext {
      * @param currency The parsed currency
      */
     public void setParsedCurrency(CurrencyUnit currency) {
-        this.parsedCurrency = currency;
+        this.parsedCurrency = requireNonNull(currency);
     }
 
     /**
@@ -297,7 +297,6 @@ final class ParseContext {
     }
 
     public void setErrorMessage(String message) {
-        Objects.requireNonNull(message);
-        this.errorMessage = message;
+        this.errorMessage = requireNonNull(message);;
     }
 }
