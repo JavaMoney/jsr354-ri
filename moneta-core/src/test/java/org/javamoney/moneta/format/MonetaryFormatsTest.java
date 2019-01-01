@@ -16,6 +16,8 @@
 package org.javamoney.moneta.format;
 
 import static org.testng.Assert.assertEquals;
+
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import javax.money.MonetaryAmount;
@@ -90,5 +92,21 @@ public class MonetaryFormatsTest {
 	    MonetaryAmount amount = Money.of(14000.12, "BGN");
 	    String formatted = format.format(amount);
 	    assertEquals(formatted, "14 000,12 BGN");
-	}    		
+	}    	
+	
+	/**
+     * Test related to parsing and formatting for India.
+     * https://github.com/JavaMoney/jsr354-ri/issues/275
+     */
+    @Test(enabled = false)
+    public void testRupeeFormatting() {
+        BigDecimal amount = new BigDecimal("67890000000000");
+        Locale india = new Locale("en, IN");
+
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(india);
+        Money money = Money.of(amount, "INR");
+        String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
+        assertEquals(format.format(money), expectedFormattedString);
+        assertEquals(money, Money.parse(expectedFormattedString, format));
+    }
 }
