@@ -174,7 +174,9 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
             return null;
         }
         if (Objects.isNull(dates)) {
-        	return rates.stream().sorted(COMPARATOR_EXCHANGE_BY_LOCAL_DATE.reversed()).findFirst().orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on IMFRateProvider."));
+        	return rates.stream()
+                    .max(COMPARATOR_EXCHANGE_BY_LOCAL_DATE)
+                    .orElseThrow(() -> new MonetaryException("There is not more recent exchange rate to  rate on IMFRateProvider."));
         } else {
         	for (LocalDate localDate : dates) {
         		Predicate<ExchangeRate> filter = rate -> rate.getContext().get(LocalDate.class).equals(localDate);
