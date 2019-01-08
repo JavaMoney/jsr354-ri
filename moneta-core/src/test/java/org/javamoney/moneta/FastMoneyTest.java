@@ -118,7 +118,7 @@ public class FastMoneyTest {
         FastMoney result = money1.divideToIntegralValue(new BigDecimal("0.5001"));
         assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
-        assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(4l));
+        assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(4L));
         result = money1.divideToIntegralValue(BigDecimal.valueOf(5));
         assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact() == 0);
     }

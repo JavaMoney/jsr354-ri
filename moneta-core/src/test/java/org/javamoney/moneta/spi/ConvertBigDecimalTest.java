@@ -39,7 +39,7 @@ public class ConvertBigDecimalTest {
 
 	@Test
 	public void ofLongTest() {
-		Assert.assertEquals(ConvertBigDecimal.of(10l), expectValue);
+		Assert.assertEquals(ConvertBigDecimal.of(10L), expectValue);
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class ConvertBigDecimalTest {
 
 	@Test
 	public void ofAtomicLongTest() {
-		Assert.assertEquals(ConvertBigDecimal.of(new AtomicLong(10l)), expectValue);
+		Assert.assertEquals(ConvertBigDecimal.of(new AtomicLong(10L)), expectValue);
 	}
 
 	@Test
@@ -77,6 +77,6 @@ public class ConvertBigDecimalTest {
 	}
 	@Test
 	public void ofBigIntegerTest() {
-		Assert.assertEquals(ConvertBigDecimal.of(BigInteger.valueOf(10l)), expectValue);
+		Assert.assertEquals(ConvertBigDecimal.of(BigInteger.valueOf(10L)), expectValue);
 	}
 }
