@@ -20,15 +20,16 @@ import org.javamoney.moneta.format.CurrencyStyle;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
-import javax.money.MonetaryException;
 import javax.money.format.MonetaryParseException;
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.logging.Level.FINEST;
 import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 
 /**
@@ -168,8 +169,8 @@ final class CurrencyToken implements FormatToken {
      * </ul>
      * Parsing of localized currency names or numeric code is not supported.
      *
-     * @throws UnsupportedOperationException if the {@link CurrencyStyle} is configured to us currency
-     *                                       names, or numeric codes for formatting.
+     * @throws MonetaryParseException on an error or if the {@link CurrencyStyle} is configured
+     *         to non implemented currency name (NAME), or numeric codes (NUMERIC_CODE).
      */
     @Override
     public void parse(ParseContext context)
@@ -183,8 +184,8 @@ final class CurrencyToken implements FormatToken {
             }
             break;
         }
-        if(token==null){
-            throw new MonetaryException("Error parsing CurrencyUnit: no input.");
+        if (token == null){
+            throw new MonetaryParseException("Error parsing CurrencyUnit: no input.", "", -1);
         }
         try {
             CurrencyUnit cur;
@@ -224,8 +225,15 @@ final class CurrencyToken implements FormatToken {
             if (Objects.nonNull(cur)) {
                 context.setParsedCurrency(cur);
             }
+        } catch (MonetaryParseException e) {
+            context.setError();
+            context.setErrorMessage(e.getMessage());
+            throw e;
         } catch (Exception e) {
-            throw new MonetaryException("Error parsing CurrencyUnit.", e);
+            context.setError();
+            context.setErrorMessage(e.getMessage());
+            Logger.getLogger(getClass().getName()).log(FINEST, "Could not parse CurrencyUnit from \"" + token + "\"", e);
+            throw new MonetaryParseException("Could not parse CurrencyUnit. " + e.getMessage(), token, -1);
         }
     }
 
