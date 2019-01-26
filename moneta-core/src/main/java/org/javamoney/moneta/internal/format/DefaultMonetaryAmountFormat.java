@@ -75,19 +75,19 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         setAmountFormatContext(amountFormatContext);
     }
 
-    private void initPattern(String pattern, List<FormatToken> tokens,
-                             AmountFormatContext style) {
+    private void initPattern(String pattern, List<FormatToken> tokens, AmountFormatContext style) {
         int index = pattern.indexOf(CURRENCY_SIGN);
+        Locale locale = style.get(Locale.class);
+        CurrencyStyle currencyStyle = style.get(CurrencyStyle.class);
         if (index > 0) { // currency placement after, between
             String p1 = pattern.substring(0, index);
             String p2 = pattern.substring(index + 1);
             if (isLiteralPattern(p1)) {
                 tokens.add(new LiteralToken(p1));
-                tokens.add(new CurrencyToken(style.get(CurrencyStyle.class), style.
-                        get(Locale.class)));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
             } else {
                 tokens.add(new AmountNumberToken(style, p1));
-                tokens.add(new CurrencyToken(style.get(CurrencyStyle.class), style.get(Locale.class)));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
             }
             if (!p2.isEmpty()) {
                 if (isLiteralPattern(p2)) {
@@ -97,8 +97,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
                 }
             }
         } else if (index == 0) { // currency placement before
-            tokens.add(new CurrencyToken(style.get(CurrencyStyle.class), style
-                    .get(Locale.class)));
+            tokens.add(new CurrencyToken(currencyStyle, locale));
             tokens.add(new AmountNumberToken(style, pattern.substring(1)));
         } else { // no currency
             tokens.add(new AmountNumberToken(style, pattern));
@@ -231,7 +230,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
             if (amountFormatContext.getLocale() != null && "BG".equals(amountFormatContext.getLocale().getCountry())) {
                 pattern = "#,##0.00 ¤";
             }else {
-                pattern = ((DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale())).toPattern();
+                DecimalFormat currencyDecimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale());
+                pattern = currencyDecimalFormat.toPattern();
             }
         }
         if (pattern.indexOf(CURRENCY_SIGN) < 0) {
@@ -240,8 +240,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         } else {
             // split into (potential) plus, minus patterns
             char patternSeparator = ';';
-            if (Objects.nonNull(amountFormatContext.get(DecimalFormatSymbols.class))) {
-                patternSeparator = amountFormatContext.get(DecimalFormatSymbols.class).getPatternSeparator();
+            DecimalFormatSymbols decimalFormatSymbols = amountFormatContext.get(DecimalFormatSymbols.class);
+            if (Objects.nonNull(decimalFormatSymbols)) {
+                patternSeparator = decimalFormatSymbols.getPatternSeparator();
             }
             String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));
             initPattern(plusMinusPatterns[0], this.positiveTokens, amountFormatContext);
