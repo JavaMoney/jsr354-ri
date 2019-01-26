@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.spi.MoneyUtils.replaceNbspWithSpace;
 
 /**
  * {@link FormatToken} which allows to format a {@link MonetaryAmount} type.
@@ -62,8 +63,8 @@ final class AmountNumberToken implements FormatToken {
             parseFormat.setDecimalFormatSymbols(syms);
         }
 
-        formatFormat.applyPattern(removeNBSP(partialNumberPattern));
-        parseFormat.applyPattern(removeNBSP(partialNumberPattern).trim());
+        formatFormat.applyPattern(replaceNbspWithSpace(partialNumberPattern));
+        parseFormat.applyPattern(replaceNbspWithSpace(partialNumberPattern).trim());
         // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
         if ("BG".equals(locale.getCountry())) {
             formatFormat.setGroupingSize(3);
@@ -74,14 +75,6 @@ final class AmountNumberToken implements FormatToken {
             formatFormat.setDecimalFormatSymbols(syms);
             parseFormat.setDecimalFormatSymbols(syms);
         }
-    }
-
-    /**
-     * Removes the non-breaking-space character 0x0A from the string.
-     */
-    private String removeNBSP(String s) {
-        return s.replaceAll("\\u00A0", " ");
-        // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
     }
 
     /**

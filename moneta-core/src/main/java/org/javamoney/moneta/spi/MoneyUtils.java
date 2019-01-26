@@ -43,6 +43,7 @@ public final class MoneyUtils {
      * The logger used.
      */
     private static final Logger LOG = Logger.getLogger(MoneyUtils.class.getName());
+    public static final char NBSP = '\u00A0';
 
     private MoneyUtils() {
     }
@@ -156,4 +157,10 @@ public final class MoneyUtils {
         Objects.requireNonNull(number, "Number is required.");
     }
 
+    /**
+     * Replaces the non-breaking-space character 0x0A from the string with usual space.
+     */
+    public static String replaceNbspWithSpace(String s) {
+        return s.replace(NBSP, ' ');
+    }
 }
