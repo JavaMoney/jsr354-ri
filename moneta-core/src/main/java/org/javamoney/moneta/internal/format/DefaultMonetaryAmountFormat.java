@@ -226,13 +226,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         this.negativeTokens = new ArrayList<>();
         String pattern = amountFormatContext.getText("pattern");
         if (pattern == null) {
-            // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
-            if (amountFormatContext.getLocale() != null && "BG".equals(amountFormatContext.getLocale().getCountry())) {
-                pattern = "#,##0.00 ¤";
-            }else {
-                DecimalFormat currencyDecimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale());
-                pattern = currencyDecimalFormat.toPattern();
-            }
+            DecimalFormat currencyDecimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale());
+            pattern = currencyDecimalFormat.toPattern();
         }
         if (pattern.indexOf(CURRENCY_SIGN) < 0) {
             this.positiveTokens.add(new AmountNumberToken(amountFormatContext, pattern));
