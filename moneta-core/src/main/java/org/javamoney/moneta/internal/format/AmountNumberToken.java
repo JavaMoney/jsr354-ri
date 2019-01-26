@@ -166,4 +166,9 @@ final class AmountNumberToken implements FormatToken {
         }
     }
 
+    @Override
+    public String toString() {
+        Locale locale = amountFormatContext.getLocale();
+        return "AmountNumberToken [locale=" + locale + ", partialNumberPattern=" + partialNumberPattern + ']';
+    }
 }
