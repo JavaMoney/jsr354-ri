@@ -28,6 +28,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.format.CurrencyStyle.CODE;
+
 /**
  * Implements a {@link FormatToken} that adds a localizable {@link String}, read
  * by key from a {@link ResourceBundle}.
@@ -38,7 +41,7 @@ final class CurrencyToken implements FormatToken {
     /**
      * The style defining, how the currency should be localized.
      */
-    private CurrencyStyle style = CurrencyStyle.CODE;
+    private CurrencyStyle style = CODE;
     /**
      * The target locale.
      */
@@ -52,8 +55,7 @@ final class CurrencyToken implements FormatToken {
      * @param locale The target locale, not {@code null}.
      */
     CurrencyToken(CurrencyStyle style, Locale locale) {
-        Objects.requireNonNull(locale, "Locale null");
-        this.locale = locale;
+        this.locale = requireNonNull(locale, "Locale null");
         if (Objects.nonNull(style)) {
             this.style = style;
         }
@@ -66,8 +68,7 @@ final class CurrencyToken implements FormatToken {
      * @return this token instance, for chaining.
      */
     public CurrencyToken setCurrencyStyle(CurrencyStyle style) {
-        Objects.requireNonNull(style, "CurrencyStyle null");
-        this.style = style;
+        this.style = requireNonNull(style, "CurrencyStyle null");
         return this;
     }
 
@@ -90,15 +91,15 @@ final class CurrencyToken implements FormatToken {
     private String getToken(MonetaryAmount amount) {
         switch (style) {
             case NUMERIC_CODE:
-                return String.valueOf(amount.getCurrency()
-                        .getNumericCode());
+                return String.valueOf(amount.getCurrency().getNumericCode());
             case NAME:
                 return getCurrencyName(amount.getCurrency());
             case SYMBOL:
                 return getCurrencySymbol(amount.getCurrency());
-            default:
             case CODE:
                 return amount.getCurrency().getCurrencyCode();
+            default:
+                throw new UnsupportedOperationException("Unexpected style " + style);
         }
     }
 

@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Adapter that implements the new {@link CurrencyUnit} interface using the
  * JDK's {@link Currency}.
@@ -96,14 +98,17 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
         return cu;
     }
 
+    @Override
     public String getCurrencyCode() {
         return currencyCode;
     }
 
+    @Override
     public int getNumericCode() {
         return numericCode;
     }
 
+    @Override
     public int getDefaultFractionDigits() {
         return defaultFractionDigits;
     }
@@ -113,6 +118,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
         return CONTEXT;
     }
 
+    @Override
     public int compareTo(CurrencyUnit currency) {
         Objects.requireNonNull(currency);
         return getCurrencyCode().compareTo(currency.getCurrencyCode());
@@ -150,8 +156,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
         }
 
         public Builder withCurrencyCode(String currencyCode) {
-            this.currencyCode = Optional.ofNullable(currencyCode)
-                    .orElseThrow(() -> new IllegalArgumentException("currencyCode may not be null."));
+            this.currencyCode = requireNonNull(currencyCode, "currencyCode may not be null.");
             return this;
         }
 
@@ -222,8 +227,7 @@ public final class TestCurrency implements CurrencyUnit, Serializable, Comparabl
          * @param currency the JDK currency instance
          */
         private JDKCurrencyAdapter(Currency currency) {
-            this.currency =
-                    Optional.ofNullable(currency).orElseThrow(() -> new IllegalArgumentException("Currency required."));
+            this.currency = requireNonNull(currency, "Currency required.");
         }
 
         @Override

@@ -26,8 +26,9 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.logging.Logger;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * {@link FormatToken} which allows to format a {@link MonetaryAmount} type.
@@ -44,10 +45,9 @@ final class AmountNumberToken implements FormatToken {
     private StringGrouper numberGroup;
 
     AmountNumberToken(AmountFormatContext amountFormatContext, String partialNumberPattern) {
-        this.amountFormatContext = Optional.ofNullable(amountFormatContext)
-                .orElseThrow(
-                        () -> new IllegalArgumentException(
-                                "amountFormatContext is required."));
+        requireNonNull(amountFormatContext, "amountFormatContext is required.");
+        requireNonNull(partialNumberPattern, "partialNumberPattern is required.");
+        this.amountFormatContext = amountFormatContext;
         this.partialNumberPattern = partialNumberPattern;
         initDecimalFormats();
     }
@@ -85,7 +85,7 @@ final class AmountNumberToken implements FormatToken {
     }
 
     /**
-     * Access the underlying amount fomat context.
+     * Access the underlying amount format context.
      *
      * @return the {@link javax.money.format.AmountFormatContext}.
      */

@@ -17,10 +17,11 @@ package org.javamoney.moneta.internal.format;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Optional;
 
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryParseException;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * {@link FormatToken} which adds an arbitrary literal constant value to the
@@ -48,8 +49,7 @@ final class LiteralToken implements FormatToken, Serializable {
      * @param token The literal token part.
      */
     LiteralToken(String token) {
-        this.token = Optional.ofNullable(token).orElseThrow(
-                () -> new IllegalArgumentException("Token is required."));
+        this.token = requireNonNull(token, "Token is required.");
     }
 
     /**

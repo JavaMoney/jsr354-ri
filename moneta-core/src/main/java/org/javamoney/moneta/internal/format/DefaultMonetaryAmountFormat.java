@@ -30,6 +30,8 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 import org.javamoney.moneta.format.CurrencyStyle;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Formats instances of {@code MonetaryAmount} to a {@link String} or an
  * {@link Appendable}.
@@ -220,8 +222,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     private void setAmountFormatContext(AmountFormatContext amountFormatContext) {
-        Objects.requireNonNull(amountFormatContext);
-        this.amountFormatContext = amountFormatContext;
+        this.amountFormatContext = requireNonNull(amountFormatContext);
         this.positiveTokens = new ArrayList<>();
         this.negativeTokens = new ArrayList<>();
         String pattern = amountFormatContext.getText("pattern");
