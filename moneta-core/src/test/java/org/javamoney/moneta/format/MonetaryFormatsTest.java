@@ -19,10 +19,10 @@ import static java.util.Locale.FRANCE;
 import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 import static org.testng.Assert.assertEquals;
 
-import java.math.BigDecimal;
 import java.util.Locale;
 
 import javax.money.MonetaryAmount;
+import javax.money.format.AmountFormatQuery;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
@@ -37,10 +37,8 @@ public class MonetaryFormatsTest {
 
     @Test(enabled = false)
     public void testParse_DKK_da() {
-         MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(DANISH)
-                        .set(CODE)
-                        .build());
+        AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(DANISH).set(CODE).build();
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         MonetaryAmount amountOk = format.parse("123,01 DKK");
         MonetaryAmount amountKo = format.parse("14 000,12 DKK");
         assertEquals(amountOk.getNumber().doubleValueExact(), 123.01);
@@ -49,10 +47,8 @@ public class MonetaryFormatsTest {
 
     @Test(enabled = false) // FIXME this seems totally wrong, expected [14 000,12 EUR] but found [14 000,12 EUR] why does it work for Lev but not Euro?
     public void testFormat_EUR_fr_FR() {
-        MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(FRANCE)
-                        .set(CODE)
-                        .build());
+        AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(FRANCE).set(CODE).build();
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         MonetaryAmount amount = Money.of(14000.12, "EUR");
         String formatted = format.format(amount);
         assertEquals(formatted, "14 000,12 EUR");
@@ -60,10 +56,8 @@ public class MonetaryFormatsTest {
 
     @Test(enabled = false)
     public void testParse_EUR_fr_FR() {
-        MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(FRANCE)
-                        .set(CODE)
-                        .build());
+        AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(FRANCE).set(CODE).build();
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         MonetaryAmount amountOk = format.parse("123,01 EUR");
         MonetaryAmount amountKo = format.parse("14 000,12 EUR");
         assertEquals(amountOk.getNumber().doubleValueExact(), 123.01);
@@ -72,10 +66,8 @@ public class MonetaryFormatsTest {
 
     @Test(enabled = false)
     public void testParse_BGN_bg_BG() {
-        MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(BULGARIA)
-                        .set(CODE)
-                        .build());
+        AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(BULGARIA).set(CODE).build();
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         MonetaryAmount amountOk = format.parse("123,01 BGN");
         MonetaryAmount amountKo = format.parse("14 000,12 BGN");
         assertEquals(amountOk.getNumber().doubleValueExact(), 123.01);
@@ -84,10 +76,8 @@ public class MonetaryFormatsTest {
 
     @Test
     public void testFormat_BGN_bg_BG() {
-        MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(BULGARIA)
-                        .set(CODE)
-                        .build());
+        AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(BULGARIA).set(CODE).build();
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         MonetaryAmount amount = Money.of(14000.12, "BGN");
         String formatted = format.format(amount);
         assertEquals(formatted, "14 000,12 BGN");
@@ -99,11 +89,11 @@ public class MonetaryFormatsTest {
      */
     @Test(enabled = false)
     public void testFormat_INR_en_IN() {
-        BigDecimal amount = new BigDecimal("67890000000000");
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
-        Money money = Money.of(amount, "INR");
+        Money money = Money.of(67890000000000L, "INR");
         String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
-        assertEquals(format.format(money), expectedFormattedString);
+        String formatted = format.format(money);
+        assertEquals(formatted, expectedFormattedString);
         assertEquals(money, Money.parse(expectedFormattedString, format));
     }
 }
