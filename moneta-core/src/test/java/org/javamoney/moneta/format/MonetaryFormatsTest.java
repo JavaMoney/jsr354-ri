@@ -31,13 +31,14 @@ import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsTest {
+    private static final Locale DANISH = new Locale("da");
+    private static final Locale BULGARIA = new Locale("bg", "BG");
+    public static final Locale INDIA = new Locale("en, IN");
 
     @Test(enabled = false)
-    public void testParseDK() {
-        final Locale.Builder localeBuilder = new Locale.Builder();
-        localeBuilder.setLanguage("da"); // Danish
-        MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+    public void testParse_DKK_da() {
+         MonetaryAmountFormat format = MonetaryFormats
+                .getAmountFormat(AmountFormatQueryBuilder.of(DANISH)
                         .set(CODE)
                         .build());
         MonetaryAmount amountOk = format.parse("123,01 DKK");
@@ -47,7 +48,7 @@ public class MonetaryFormatsTest {
     }
 
     @Test(enabled = false) // FIXME this seems totally wrong, expected [14 000,12 EUR] but found [14 000,12 EUR] why does it work for Lev but not Euro?
-    public void testFormatFR() {
+    public void testFormat_EUR_fr_FR() {
         MonetaryAmountFormat format = MonetaryFormats
                 .getAmountFormat(AmountFormatQueryBuilder.of(FRANCE)
                         .set(CODE)
@@ -58,7 +59,7 @@ public class MonetaryFormatsTest {
     }
 
     @Test(enabled = false)
-    public void testParseFR() {
+    public void testParse_EUR_fr_FR() {
         MonetaryAmountFormat format = MonetaryFormats
                 .getAmountFormat(AmountFormatQueryBuilder.of(FRANCE)
                         .set(CODE)
@@ -70,11 +71,9 @@ public class MonetaryFormatsTest {
     }
 
     @Test(enabled = false)
-    public void testParseBG() {
-        final Locale.Builder localeBuilder = new Locale.Builder();
-        localeBuilder.setRegion("BG"); // BG
+    public void testParse_BGN_bg_BG() {
         MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+                .getAmountFormat(AmountFormatQueryBuilder.of(BULGARIA)
                         .set(CODE)
                         .build());
         MonetaryAmount amountOk = format.parse("123,01 BGN");
@@ -84,11 +83,9 @@ public class MonetaryFormatsTest {
     }
 
     @Test
-    public void testFormatBG() {
-        final Locale.Builder localeBuilder = new Locale.Builder();
-        localeBuilder.setRegion("BG"); // BG
+    public void testFormat_BGN_bg_BG() {
         MonetaryAmountFormat format = MonetaryFormats
-                .getAmountFormat(AmountFormatQueryBuilder.of(localeBuilder.build())
+                .getAmountFormat(AmountFormatQueryBuilder.of(BULGARIA)
                         .set(CODE)
                         .build());
         MonetaryAmount amount = Money.of(14000.12, "BGN");
@@ -97,15 +94,13 @@ public class MonetaryFormatsTest {
     }
 
     /**
-     * Test related to parsing and formatting for India.
+     * Test related to parsing and formatting Rupees for India.
      * https://github.com/JavaMoney/jsr354-ri/issues/275
      */
     @Test(enabled = false)
-    public void testRupeeFormatting() {
+    public void testFormat_INR_en_IN() {
         BigDecimal amount = new BigDecimal("67890000000000");
-        Locale india = new Locale("en, IN");
-
-        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(india);
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
         Money money = Money.of(amount, "INR");
         String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
         assertEquals(format.format(money), expectedFormattedString);
