@@ -18,6 +18,7 @@ package org.javamoney.moneta.spi;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,21 +35,20 @@ public class LoadDataInformationBuilderTest {
 	public void shouldCreateLoadDataInformation() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = new HashMap<>();
-	    LoaderListener loaderListener = new LoaderListener() {
-
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
+	    Map<String, String> properties = Collections.emptyMap();
+		LoaderListener loaderListener = (id, is) -> {};
         URI backupResource = new URI("localhost");
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
-		LoadDataInformation loadInformation = new LoadDataInformationBuilder().withResourceId(resourceId)
-				.withUpdatePolicy(updatePolicy).withProperties(properties)
+		LoadDataInformation loadInformation = new LoadDataInformationBuilder()
+				.withResourceId(resourceId)
+				.withUpdatePolicy(updatePolicy)
+				.withProperties(properties)
 				.withLoaderListener(loaderListener)
-				.withBackupResource(backupResource).withStartRemote(true)
-				.withResourceLocations(resourceLocations).build();
+				.withBackupResource(backupResource)
+				.withStartRemote(true)
+				.withResourceLocations(resourceLocations)
+				.build();
 
 		assertEquals(loadInformation.getResourceId(), resourceId);
 		assertEquals(loadInformation.getUpdatePolicy(), updatePolicy);
@@ -85,19 +85,17 @@ public class LoadDataInformationBuilderTest {
 	public void shouldCreateLoadDataInformationWithOutBackupResource() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = new HashMap<>();
-	    LoaderListener loaderListener = new LoaderListener() {
-
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
+	    Map<String, String> properties = Collections.emptyMap();
+		LoaderListener loaderListener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
-		LoadDataInformation loadInformation = new LoadDataInformationBuilder().withResourceId(resourceId)
-				.withUpdatePolicy(updatePolicy).withProperties(properties)
+		LoadDataInformation loadInformation = new LoadDataInformationBuilder()
+				.withResourceId(resourceId)
+				.withUpdatePolicy(updatePolicy)
+				.withProperties(properties)
 				.withLoaderListener(loaderListener)
-				.withResourceLocations(resourceLocations).build();
+				.withResourceLocations(resourceLocations)
+				.build();
 
 		assertEquals(loadInformation.getResourceId(), resourceId);
 		assertEquals(loadInformation.getUpdatePolicy(), updatePolicy);
@@ -111,38 +109,32 @@ public class LoadDataInformationBuilderTest {
 	@Test(expectedExceptions = IllegalStateException.class)
 	public void shouldReturnsErrorWhenResourceIdWasNotInformed() throws URISyntaxException {
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = new HashMap<>();
-	    LoaderListener loaderListener = new LoaderListener() {
-
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
+	    Map<String, String> properties = Collections.emptyMap();
+		LoaderListener loaderListener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
 		new LoadDataInformationBuilder()
-				.withUpdatePolicy(updatePolicy).withProperties(properties)
+				.withUpdatePolicy(updatePolicy)
+				.withProperties(properties)
 				.withLoaderListener(loaderListener)
-				.withResourceLocations(resourceLocations).build();
+				.withResourceLocations(resourceLocations)
+				.build();
 
 	}
 
 	@Test(expectedExceptions = IllegalStateException.class)
 	public void shouldReturnsErrorWhenUpdatePolicyWasNotInformed() throws URISyntaxException {
 		String resourceId = "resourceId";
-	    Map<String, String> properties = new HashMap<>();
-	    LoaderListener loaderListener = new LoaderListener() {
-
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
+	    Map<String, String> properties = Collections.emptyMap();
+		LoaderListener loaderListener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
-		new LoadDataInformationBuilder().withResourceId(resourceId)
+		new LoadDataInformationBuilder()
+				.withResourceId(resourceId)
 				.withProperties(properties)
 				.withLoaderListener(loaderListener)
-				.withResourceLocations(resourceLocations).build();
+				.withResourceLocations(resourceLocations)
+				.build();
 
 	}
 
@@ -150,18 +142,15 @@ public class LoadDataInformationBuilderTest {
 	public void shouldReturnsErrorWhenPropertiesWasNotInformed() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    LoaderListener loaderListener = new LoaderListener() {
-
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
+		LoaderListener loaderListener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
-		new LoadDataInformationBuilder().withResourceId(resourceId)
+		new LoadDataInformationBuilder()
+				.withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy)
 				.withLoaderListener(loaderListener)
-				.withResourceLocations(resourceLocations).build();
+				.withResourceLocations(resourceLocations)
+				.build();
 
 	}
 
@@ -169,16 +158,13 @@ public class LoadDataInformationBuilderTest {
 	public void shouldReturnsErrorWhenResourceLocationsWasNotInformed() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = new HashMap<>();
-	    LoaderListener loaderListener = new LoaderListener() {
+	    Map<String, String> properties = Collections.emptyMap();
+		LoaderListener loaderListener = (id, is) -> {};
 
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
-
-		new LoadDataInformationBuilder().withResourceId(resourceId)
-				.withUpdatePolicy(updatePolicy).withProperties(properties)
+		new LoadDataInformationBuilder()
+				.withResourceId(resourceId)
+				.withUpdatePolicy(updatePolicy)
+				.withProperties(properties)
 				.withLoaderListener(loaderListener)
 				.build();
 	}

@@ -20,6 +20,7 @@ import static org.testng.Assert.assertNotNull;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,21 +39,19 @@ public class LoadableResourceBuilderTest {
 	public void setup() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = new HashMap<>();
-	    LoaderListener loaderListener = new LoaderListener() {
-
-			@Override
-			public void newDataLoaded(String resourceId, InputStream is) {
-			}
-		};
+	    Map<String, String> properties = Collections.emptyMap();
+	    LoaderListener loaderListener = (id, is) -> {};
         URI backupResource = new URI("localhost");
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
-		loadInformation = new LoadDataInformationBuilder().withResourceId(resourceId)
-				.withUpdatePolicy(updatePolicy).withProperties(properties)
+		loadInformation = new LoadDataInformationBuilder()
+				.withResourceId(resourceId)
+				.withUpdatePolicy(updatePolicy)
+				.withProperties(properties)
 				.withLoaderListener(loaderListener)
 				.withBackupResource(backupResource)
-				.withResourceLocations(resourceLocations).build();
+				.withResourceLocations(resourceLocations)
+				.build();
 
 	}
 
