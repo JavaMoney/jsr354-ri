@@ -24,11 +24,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.spi.MoneyUtils.NBSP;
+import static org.javamoney.moneta.spi.MoneyUtils.NNBSP;
 import static org.javamoney.moneta.spi.MoneyUtils.replaceNbspWithSpace;
 
 /**
@@ -49,31 +52,31 @@ final class AmountNumberToken implements FormatToken {
         requireNonNull(amountFormatContext, "amountFormatContext is required.");
         requireNonNull(partialNumberPattern, "partialNumberPattern is required.");
         this.amountFormatContext = amountFormatContext;
-        this.partialNumberPattern = partialNumberPattern;
+        this.partialNumberPattern = replaceNbspWithSpace(partialNumberPattern);
         initDecimalFormats();
     }
 
     private void initDecimalFormats() {
         Locale locale = amountFormatContext.get(Locale.class);
         formatFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
-        parseFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
+        parseFormat = (DecimalFormat) formatFormat.clone();
         DecimalFormatSymbols syms = amountFormatContext.get(DecimalFormatSymbols.class);
         if (Objects.nonNull(syms)) {
-            formatFormat.setDecimalFormatSymbols(syms);
-            parseFormat.setDecimalFormatSymbols(syms);
-        }
-
-        formatFormat.applyPattern(replaceNbspWithSpace(partialNumberPattern));
-        parseFormat.applyPattern(replaceNbspWithSpace(partialNumberPattern).trim());
-        // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
-        if ("BG".equals(locale.getCountry())) {
-            formatFormat.setGroupingSize(3);
-            formatFormat.setGroupingUsed(true);
+            syms = (DecimalFormatSymbols) syms.clone();
+        } else {
             syms = formatFormat.getDecimalFormatSymbols();
-            syms.setDecimalSeparator(',');
+        }
+        fixThousandsSeparatorWithSpace(syms);
+        formatFormat.setDecimalFormatSymbols(syms);
+        parseFormat.setDecimalFormatSymbols(syms);
+
+        formatFormat.applyPattern(partialNumberPattern);
+        parseFormat.applyPattern(partialNumberPattern.trim());
+    }
+
+    private void fixThousandsSeparatorWithSpace(DecimalFormatSymbols syms) {
+        if (syms.getGroupingSeparator() == NBSP || syms.getGroupingSeparator() == NNBSP) {
             syms.setGroupingSeparator(' ');
-            formatFormat.setDecimalFormatSymbols(syms);
-            parseFormat.setDecimalFormatSymbols(syms);
         }
     }
 
@@ -139,9 +142,9 @@ final class AmountNumberToken implements FormatToken {
 
     @Override
     public void parse(ParseContext context) throws MonetaryParseException {
-        String token = context.lookupNextToken();
-        if (Objects.nonNull(token) && !context.isComplete()) {
-            parseToken(context, token);
+        context.skipWhitespace();
+        if (!context.isFullyParsed()) {
+            parseToken(context);
             if (context.hasError()) {
                 throw new MonetaryParseException(context.getErrorMessage(), context.getInput(), context.getIndex());
             }
@@ -151,18 +154,18 @@ final class AmountNumberToken implements FormatToken {
         }
     }
 
-    private void parseToken(ParseContext context, String token) {
-        try {
-            Number number = this.parseFormat.parse(token);
-            if (Objects.nonNull(number)) {
-                context.setParsedNumber(number);
-                context.consume(token);
-            }
-        } catch (Exception e) {
-            Logger.getLogger(getClass().getName()).finest(
-                    "Could not parse amount from: " + token);
+    private void parseToken(ParseContext context) {
+        ParsePosition pos = new ParsePosition(context.getIndex());
+        Number number = this.parseFormat.parse(context.getOriginalInput(), pos);
+        if (Objects.nonNull(number)) {
+            context.setParsedNumber(number);
+            String consumedToken = context.getOriginalInput().substring(context.getIndex(), pos.getIndex());
+            context.consume(consumedToken);
+        } else {
+            Logger.getLogger(getClass().getName()).finest("Could not parse amount from: " + context.getOriginalInput());
             context.setError();
-            context.setErrorMessage(e.getMessage());
+            context.setErrorIndex(pos.getErrorIndex());
+            context.setErrorMessage("Unparseable number: \"" + context.getOriginalInput() + "\"");
         }
     }
 

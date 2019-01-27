@@ -23,6 +23,7 @@ import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryAmountFormat;
 
 import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.spi.MoneyUtils.replaceNbspWithSpace;
 
 /**
  * Context passed along to each {@link FormatToken} in-line, when parsing an
@@ -65,7 +66,8 @@ final class ParseContext {
      * @param text The test to be parsed.
      */
     ParseContext(CharSequence text) {
-        this.originalInput = requireNonNull(text, "text is required");
+        requireNonNull(text, "text is required");
+        this.originalInput = replaceNbspWithSpace(text.toString());
     }
 
     /**
@@ -259,7 +261,7 @@ final class ParseContext {
         int start = index;
         for (int end = index; end < originalInput.length(); end++) {
             char ch = originalInput.charAt(end);
-            if (Character.isWhitespace(ch)) {
+            if (Character.isSpaceChar(ch)) {
                 if (end > start) {
                     return originalInput.subSequence(start, end).toString();
                 }
