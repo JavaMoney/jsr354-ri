@@ -256,18 +256,18 @@ public class FastMoneyTest {
         FastMoney m2 = FastMoney.of(0, "CHF");
         FastMoney m3 = FastMoney.of(-0, "CHF");
         FastMoney m4 = FastMoney.of(2, "CHF");
-        assertEquals(0, m2.compareTo(m3));
-        assertEquals(0, m2.compareTo(m2));
-        assertEquals(0, m3.compareTo(m3));
-        assertEquals(0, m3.compareTo(m2));
-        assertTrue(m1.compareTo(m2) < 0);
-        assertTrue(m2.compareTo(m1) > 0);
-        assertTrue(m1.compareTo(m3) < 0);
-        assertTrue(m2.compareTo(m3) == 0);
-        assertTrue(m1.compareTo(m4) < 0);
-        assertTrue(m3.compareTo(m4) < 0);
-        assertTrue(m4.compareTo(m1) > 0);
-        assertTrue(m4.compareTo(m2) > 0);
+        assertEquals(m2.compareTo(m3), 0);
+        assertEquals(m2.compareTo(m2), 0);
+        assertEquals(m3.compareTo(m3), 0);
+        assertEquals(m3.compareTo(m2), 0);
+        assertEquals(m1.compareTo(m2), -1);
+        assertEquals(m2.compareTo(m1), 1);
+        assertEquals(m1.compareTo(m3), -1);
+        assertEquals(m2.compareTo(m3), 0);
+        assertEquals(m1.compareTo(m4), -1);
+        assertEquals(m3.compareTo(m4), -1);
+        assertEquals(m4.compareTo(m1), -1);
+        assertEquals(m4.compareTo(m2), -1);
     }
 
     /**
