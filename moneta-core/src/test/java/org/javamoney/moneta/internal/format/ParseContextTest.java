@@ -12,9 +12,9 @@ public class ParseContextTest {
 
     @Test
     public void testSkip() {
-        ParseContext context = new ParseContext(" EUR");
+        ParseContext context = new ParseContext(" \u00A0 \u202F \u2007 \u2060 EUR");
         context.skipWhitespace();
-        assertEquals(context.getIndex(), 1);
+        assertEquals(context.getIndex(), " \u00A0 \u202F \u2007 ".length());
     }
 
     @Test

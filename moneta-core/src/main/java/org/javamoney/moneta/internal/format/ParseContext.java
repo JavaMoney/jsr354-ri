@@ -128,7 +128,7 @@ final class ParseContext {
     public int skipWhitespace() {
         for (int i = index; i < originalInput.length(); i++) {
             char ch = originalInput.charAt(i);
-            if (Character.isWhitespace(ch)) {
+            if (Character.isSpaceChar(ch) ) {
                 index++;
             } else {
                 break;
