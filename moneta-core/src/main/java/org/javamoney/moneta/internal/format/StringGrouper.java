@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.internal.format;
 
-import java.util.Optional;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Small utility class that supports flexible grouping of an input String using
@@ -47,10 +47,7 @@ final class StringGrouper {
 	}
 
 	public StringGrouper setGroupChars(char... groupCharacters) {
-		this.groupCharacters = Optional.ofNullable(groupCharacters)
-				.orElseThrow(
-						() -> new IllegalArgumentException(
-								"groupCharacters is required."));
+		this.groupCharacters = requireNonNull(groupCharacters, "groupCharacters is required.");
 		return this;
 	}
 
@@ -63,11 +60,7 @@ final class StringGrouper {
 	}
 
 	public StringGrouper setGroupSizes(int... groupSizes) {
-		this.groupSizes = Optional
-				.ofNullable(groupSizes)
-				.orElseThrow(
-						() -> new IllegalArgumentException(
-								"groupSizes is required.")).clone();
+		this.groupSizes = requireNonNull(groupSizes, "groupSizes is required.").clone();
 		return this;
 	}
 

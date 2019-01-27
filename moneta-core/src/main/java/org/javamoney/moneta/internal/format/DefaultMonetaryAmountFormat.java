@@ -30,6 +30,8 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 import org.javamoney.moneta.format.CurrencyStyle;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Formats instances of {@code MonetaryAmount} to a {@link String} or an
  * {@link Appendable}.
@@ -46,17 +48,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     /**
      * The international Unicode currency sign.
      */
-    private static final char CURRENCY_SIGN = '\u00A4';
+    private static final char CURRENCY_SIGN = '¤';
 
     /**
-     * The tokens to be used for formatting/parsing of positive and zero
-     * numbers.
+     * The tokens to be used for formatting/parsing of positive and zero numbers.
      */
     private List<FormatToken> positiveTokens;
 
     /**
-     * The tokens to be used for formatting/parsing of positive and zero
-     * numbers.
+     * The tokens to be used for formatting/parsing of negative numbers.
      */
     private List<FormatToken> negativeTokens;
 
@@ -75,19 +75,19 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         setAmountFormatContext(amountFormatContext);
     }
 
-    private void initPattern(String pattern, List<FormatToken> tokens,
-                             AmountFormatContext style) {
+    private void initPattern(String pattern, List<FormatToken> tokens, AmountFormatContext style) {
         int index = pattern.indexOf(CURRENCY_SIGN);
+        Locale locale = style.get(Locale.class);
+        CurrencyStyle currencyStyle = style.get(CurrencyStyle.class);
         if (index > 0) { // currency placement after, between
             String p1 = pattern.substring(0, index);
             String p2 = pattern.substring(index + 1);
             if (isLiteralPattern(p1)) {
                 tokens.add(new LiteralToken(p1));
-                tokens.add(new CurrencyToken(style.get(CurrencyStyle.class), style.
-                        get(Locale.class)));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
             } else {
                 tokens.add(new AmountNumberToken(style, p1));
-                tokens.add(new CurrencyToken(style.get(CurrencyStyle.class), style.get(Locale.class)));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
             }
             if (!p2.isEmpty()) {
                 if (isLiteralPattern(p2)) {
@@ -97,8 +97,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
                 }
             }
         } else if (index == 0) { // currency placement before
-            tokens.add(new CurrencyToken(style.get(CurrencyStyle.class), style
-                    .get(Locale.class)));
+            tokens.add(new CurrencyToken(currencyStyle, locale));
             tokens.add(new AmountNumberToken(style, pattern.substring(1)));
         } else { // no currency
             tokens.add(new AmountNumberToken(style, pattern));
@@ -122,6 +121,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @return the string printed using the settings of this formatter
      * @throws UnsupportedOperationException if the formatter is unable to print
      */
+    @Override
     public String format(MonetaryAmount amount) {
         StringBuilder builder = new StringBuilder();
         try {
@@ -143,6 +143,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @param amount     the amount to print, not null
      * @throws IOException if an IO error occurs
      */
+    @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
         if (amount.isNegative()) {
@@ -169,6 +170,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @throws UnsupportedOperationException             if the formatter is unable to parse
      * @throws javax.money.format.MonetaryParseException if there is a problem while parsing
      */
+    @Override
     public MonetaryAmount parse(CharSequence text)
             throws MonetaryParseException {
         ParseContext ctx = new ParseContext(text);
@@ -219,18 +221,13 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     private void setAmountFormatContext(AmountFormatContext amountFormatContext) {
-        Objects.requireNonNull(amountFormatContext);
-        this.amountFormatContext = amountFormatContext;
+        this.amountFormatContext = requireNonNull(amountFormatContext);
         this.positiveTokens = new ArrayList<>();
         this.negativeTokens = new ArrayList<>();
         String pattern = amountFormatContext.getText("pattern");
         if (pattern == null) {
-            // Fix for https://github.com/JavaMoney/jsr354-ri/issues/151
-            if (amountFormatContext.getLocale() != null && "BG".equals(amountFormatContext.getLocale().getCountry())) {
-                pattern = "#,##0.00 ¤";
-            }else {
-                pattern = ((DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale())).toPattern();
-            }
+            DecimalFormat currencyDecimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale());
+            pattern = currencyDecimalFormat.toPattern();
         }
         if (pattern.indexOf(CURRENCY_SIGN) < 0) {
             this.positiveTokens.add(new AmountNumberToken(amountFormatContext, pattern));
@@ -238,8 +235,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         } else {
             // split into (potential) plus, minus patterns
             char patternSeparator = ';';
-            if (Objects.nonNull(amountFormatContext.get(DecimalFormatSymbols.class))) {
-                patternSeparator = amountFormatContext.get(DecimalFormatSymbols.class).getPatternSeparator();
+            DecimalFormatSymbols decimalFormatSymbols = amountFormatContext.get(DecimalFormatSymbols.class);
+            if (Objects.nonNull(decimalFormatSymbols)) {
+                patternSeparator = decimalFormatSymbols.getPatternSeparator();
             }
             String[] plusMinusPatterns = pattern.split(String.valueOf(patternSeparator));
             initPattern(plusMinusPatterns[0], this.positiveTokens, amountFormatContext);

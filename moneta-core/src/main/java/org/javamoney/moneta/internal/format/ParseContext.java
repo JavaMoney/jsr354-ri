@@ -17,11 +17,13 @@ package org.javamoney.moneta.internal.format;
 
 import java.text.ParsePosition;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryAmountFormat;
+
+import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.spi.MoneyUtils.replaceNbspWithSpace;
 
 /**
  * Context passed along to each {@link FormatToken} in-line, when parsing an
@@ -64,8 +66,8 @@ final class ParseContext {
      * @param text The test to be parsed.
      */
     ParseContext(CharSequence text) {
-        this.originalInput = Optional.ofNullable(text).orElseThrow(
-                () -> new IllegalArgumentException("text is required"));
+        requireNonNull(text, "text is required");
+        this.originalInput = replaceNbspWithSpace(text.toString());
     }
 
     /**
@@ -127,7 +129,8 @@ final class ParseContext {
      */
     public int skipWhitespace() {
         for (int i = index; i < originalInput.length(); i++) {
-            if (Character.isWhitespace(originalInput.charAt(i))) {
+            char ch = originalInput.charAt(i);
+            if (Character.isSpaceChar(ch) ) {
                 index++;
             } else {
                 break;
@@ -206,6 +209,7 @@ final class ParseContext {
         this.errorIndex = -1;
         this.parsedNumber = null;
         this.parsedCurrency = null;
+        this.errorMessage = null;
     }
 
     /**
@@ -214,7 +218,7 @@ final class ParseContext {
      * @param number The result number
      */
     public void setParsedNumber(Number number) {
-        this.parsedNumber = number;
+        this.parsedNumber = requireNonNull(number);
     }
 
     /**
@@ -223,7 +227,7 @@ final class ParseContext {
      * @param currency The parsed currency
      */
     public void setParsedCurrency(CurrencyUnit currency) {
-        this.parsedCurrency = currency;
+        this.parsedCurrency = requireNonNull(currency);
     }
 
     /**
@@ -256,7 +260,8 @@ final class ParseContext {
         skipWhitespace();
         int start = index;
         for (int end = index; end < originalInput.length(); end++) {
-            if (Character.isWhitespace(originalInput.charAt(end))) {
+            char ch = originalInput.charAt(end);
+            if (Character.isSpaceChar(ch)) {
                 if (end > start) {
                     return originalInput.subSequence(start, end).toString();
                 }
@@ -297,7 +302,6 @@ final class ParseContext {
     }
 
     public void setErrorMessage(String message) {
-        Objects.requireNonNull(message);
-        this.errorMessage = message;
+        this.errorMessage = requireNonNull(message);;
     }
 }

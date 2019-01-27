@@ -43,6 +43,8 @@ public final class MoneyUtils {
      * The logger used.
      */
     private static final Logger LOG = Logger.getLogger(MoneyUtils.class.getName());
+    public static final char NBSP = '\u00A0';
+    public static final char NNBSP = '\u202F';
 
     private MoneyUtils() {
     }
@@ -156,4 +158,11 @@ public final class MoneyUtils {
         Objects.requireNonNull(number, "Number is required.");
     }
 
+    /**
+     * Replaces the non-breaking space character U+00A0 and Narrow non-breaking space U+202F from the string with usual space.
+     * https://en.wikipedia.org/wiki/Non-breaking_space}
+     */
+    public static String replaceNbspWithSpace(String s) {
+        return s.replace(NBSP, ' ').replace(NNBSP, ' ');
+    }
 }

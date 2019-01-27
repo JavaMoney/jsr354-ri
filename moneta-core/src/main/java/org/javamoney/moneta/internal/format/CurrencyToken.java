@@ -20,13 +20,17 @@ import org.javamoney.moneta.format.CurrencyStyle;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
-import javax.money.MonetaryException;
 import javax.money.format.MonetaryParseException;
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.logging.Level.FINEST;
+import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 
 /**
  * Implements a {@link FormatToken} that adds a localizable {@link String}, read
@@ -38,7 +42,7 @@ final class CurrencyToken implements FormatToken {
     /**
      * The style defining, how the currency should be localized.
      */
-    private CurrencyStyle style = CurrencyStyle.CODE;
+    private CurrencyStyle style = CODE;
     /**
      * The target locale.
      */
@@ -52,8 +56,7 @@ final class CurrencyToken implements FormatToken {
      * @param locale The target locale, not {@code null}.
      */
     CurrencyToken(CurrencyStyle style, Locale locale) {
-        Objects.requireNonNull(locale, "Locale null");
-        this.locale = locale;
+        this.locale = requireNonNull(locale, "Locale null");
         if (Objects.nonNull(style)) {
             this.style = style;
         }
@@ -66,8 +69,7 @@ final class CurrencyToken implements FormatToken {
      * @return this token instance, for chaining.
      */
     public CurrencyToken setCurrencyStyle(CurrencyStyle style) {
-        Objects.requireNonNull(style, "CurrencyStyle null");
-        this.style = style;
+        this.style = requireNonNull(style, "CurrencyStyle null");
         return this;
     }
 
@@ -90,15 +92,15 @@ final class CurrencyToken implements FormatToken {
     private String getToken(MonetaryAmount amount) {
         switch (style) {
             case NUMERIC_CODE:
-                return String.valueOf(amount.getCurrency()
-                        .getNumericCode());
+                return String.valueOf(amount.getCurrency().getNumericCode());
             case NAME:
                 return getCurrencyName(amount.getCurrency());
             case SYMBOL:
                 return getCurrencySymbol(amount.getCurrency());
-            default:
             case CODE:
                 return amount.getCurrency().getCurrencyCode();
+            default:
+                throw new UnsupportedOperationException("Unexpected style " + style);
         }
     }
 
@@ -167,8 +169,8 @@ final class CurrencyToken implements FormatToken {
      * </ul>
      * Parsing of localized currency names or numeric code is not supported.
      *
-     * @throws UnsupportedOperationException if the {@link CurrencyStyle} is configured to us currency
-     *                                       names, or numeric codes for formatting.
+     * @throws MonetaryParseException on an error or if the {@link CurrencyStyle} is configured
+     *         to non implemented currency name (NAME), or numeric codes (NUMERIC_CODE).
      */
     @Override
     public void parse(ParseContext context)
@@ -182,8 +184,8 @@ final class CurrencyToken implements FormatToken {
             }
             break;
         }
-        if(token==null){
-            throw new MonetaryException("Error parsing CurrencyUnit: no input.");
+        if (token == null){
+            throw new MonetaryParseException("Error parsing CurrencyUnit: no input.", "", -1);
         }
         try {
             CurrencyUnit cur;
@@ -223,8 +225,15 @@ final class CurrencyToken implements FormatToken {
             if (Objects.nonNull(cur)) {
                 context.setParsedCurrency(cur);
             }
+        } catch (MonetaryParseException e) {
+            context.setError();
+            context.setErrorMessage(e.getMessage());
+            throw e;
         } catch (Exception e) {
-            throw new MonetaryException("Error parsing CurrencyUnit.", e);
+            context.setError();
+            context.setErrorMessage(e.getMessage());
+            Logger.getLogger(getClass().getName()).log(FINEST, "Could not parse CurrencyUnit from \"" + token + "\"", e);
+            throw new MonetaryParseException("Could not parse CurrencyUnit. " + e.getMessage(), token, -1);
         }
     }
 
