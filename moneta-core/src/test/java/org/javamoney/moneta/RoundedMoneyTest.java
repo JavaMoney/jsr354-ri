@@ -1149,7 +1149,7 @@ public class RoundedMoneyTest {
    @Test
    public void shouldRerturnMonetaryAmount() {
    	MonetaryAmount amount = RoundedMoney.ofMinor(DOLLAR, 1234L);
-   	assertEquals(Double.valueOf(12.34), amount.getNumber().doubleValue());
+   	assertEquals(12.34d, amount.getNumber().doubleValue());
    	assertEquals(DOLLAR, amount.getCurrency());
    }
 
@@ -1167,7 +1167,7 @@ public class RoundedMoneyTest {
 	@Test
 	public void shouldRerturnMonetaryAmountUsingFractionDigits() {
 		MonetaryAmount amount = RoundedMoney.ofMinor(DOLLAR, 1234L, 3);
-		assertEquals(Double.valueOf(1.234), amount.getNumber().doubleValue());
+		assertEquals(1.234d, amount.getNumber().doubleValue());
 		assertEquals(DOLLAR, amount.getCurrency());
 	}
 

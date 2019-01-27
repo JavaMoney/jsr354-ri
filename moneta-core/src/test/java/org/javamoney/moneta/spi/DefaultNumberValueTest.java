@@ -152,7 +152,8 @@ public class DefaultNumberValueTest {
 
 		assertEquals(Long.valueOf(21L), numberValue.numberValue(Long.class));
 		assertEquals(Integer.valueOf(21),numberValue.numberValue(Integer.class));
-		assertEquals(Float.valueOf(21),numberValue.numberValue(Float.class));
+		assertEquals(Float.valueOf(21f),numberValue.numberValueExact(Float.class));
+		assertEquals(Double.valueOf(21d),numberValue.numberValueExact(Double.class));
 		assertEquals(Byte.valueOf((byte)21),numberValue.numberValue(Byte.class));
 		assertEquals(Short.valueOf((short)21),numberValue.numberValue(Short.class));
 		assertEquals(new AtomicLong(21L).get(),numberValue.numberValue(AtomicLong.class).get());
@@ -168,7 +169,8 @@ public class DefaultNumberValueTest {
 
 		assertEquals(Long.valueOf(21L), numberValue.numberValueExact(Long.class));
 		assertEquals(Integer.valueOf(21),numberValue.numberValueExact(Integer.class));
-		assertEquals(Float.valueOf(21),numberValue.numberValueExact(Float.class));
+		assertEquals(Float.valueOf(21f),numberValue.numberValueExact(Float.class));
+		assertEquals(Double.valueOf(21d),numberValue.numberValueExact(Double.class));
 		assertEquals(Byte.valueOf((byte)21),numberValue.numberValueExact(Byte.class));
 		assertEquals(Short.valueOf((short)21),numberValue.numberValueExact(Short.class));
 		assertEquals(new AtomicLong(21L).get(),numberValue.numberValueExact(AtomicLong.class).get());
