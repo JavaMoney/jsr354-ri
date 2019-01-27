@@ -67,7 +67,7 @@ public class FastMoneyTest {
     @Test
     public void testOfCurrencyUnitDouble() {
         FastMoney m = FastMoney.of(10.0d, Monetary.getCurrency("EUR"));
-        assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
+        assertEquals(m.getNumber().doubleValue(), TEN.doubleValue());
     }
 
     /**
@@ -120,7 +120,7 @@ public class FastMoneyTest {
         result = money1.divideToIntegralValue(new BigDecimal("0.2001"));
         assertEquals(result.getNumber().numberValue(BigDecimal.class), BigDecimal.valueOf(4L));
         result = money1.divideToIntegralValue(BigDecimal.valueOf(5));
-        assertTrue(result.getNumber().numberValue(BigDecimal.class).intValueExact() == 0);
+        assertEquals(result.getNumber().numberValue(BigDecimal.class).intValueExact(), 0);
     }
 
 
@@ -277,13 +277,13 @@ public class FastMoneyTest {
     public void testAbs() {
         FastMoney m = FastMoney.of(10, "CHF");
         assertEquals(m, m.abs());
-        assertTrue(m == m.abs());
+        assertSame(m, m.abs());
         m = FastMoney.of(0, "CHF");
         assertEquals(m, m.abs());
-        assertTrue(m == m.abs());
+        assertSame(m, m.abs());
         m = FastMoney.of(-10, "CHF");
         assertEquals(m.negate(), m.abs());
-        assertTrue(m != m.abs());
+        assertNotSame(m, m.abs());
 
         // Long.MIN_VALUE * -1 == Long.MIN_VALUE
         FastMoney minValue = FastMoney.of(new BigDecimal(Long.MIN_VALUE).movePointLeft(5), "CHF");
@@ -679,12 +679,12 @@ public class FastMoneyTest {
         assertEquals(FastMoney.of(0, "CHF"), m.subtract(s1));
         assertEquals(FastMoney.of(-100, "CHF"), m.subtract(s2));
         assertEquals(FastMoney.of(100, "CHF"), m.subtract(s3));
-        assertTrue(m == m.subtract(s3));
+        assertSame(m, m.subtract(s3));
         m = FastMoney.of(-123.234, "CHF");
         assertEquals(FastMoney.of(new BigDecimal("-223.234"), "CHF"), m.subtract(s1));
         assertEquals(FastMoney.of(new BigDecimal("-323.234"), "CHF"), m.subtract(s2));
         assertEquals(FastMoney.of(new BigDecimal("-123.234"), "CHF"), m.subtract(s3));
-        assertTrue(m == m.subtract(s3));
+        assertSame(m, m.subtract(s3));
         m = FastMoney.of(12.40234, "CHF");
         s1 = FastMoney.of(2343.45, "CHF");
         s2 = FastMoney.of(12.40234, "CHF");
@@ -695,7 +695,7 @@ public class FastMoneyTest {
                 m.subtract(s2));
         assertEquals(FastMoney.of(0, "CHF"), m.subtract(s2));
         assertEquals(FastMoney.of(new BigDecimal("2355.85234"), "CHF"), m.subtract(s3));
-        assertTrue(m == m.subtract(FastMoney.of(0, "CHF")));
+        assertSame(m, m.subtract(FastMoney.of(0, "CHF")));
     }
 
     /**

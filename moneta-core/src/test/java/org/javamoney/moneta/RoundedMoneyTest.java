@@ -60,7 +60,7 @@ public class RoundedMoneyTest {
     @Test
     public void testOfCurrencyUnitDouble() {
         RoundedMoney m = RoundedMoney.of(10.0d, Monetary.getCurrency("EUR"));
-        assertTrue(TEN.doubleValue() == m.getNumber().doubleValue());
+        assertEquals(m.getNumber().doubleValue(), TEN.doubleValue());
     }
 
     /**
@@ -429,13 +429,13 @@ public class RoundedMoneyTest {
     public void testAbs() {
         RoundedMoney m = RoundedMoney.of(10, "CHF");
         assertEquals(m, m.abs());
-        assertTrue(m == m.abs());
+        assertSame(m, m.abs());
         m = RoundedMoney.of(0, "CHF");
         assertEquals(m, m.abs());
-        assertTrue(m == m.abs());
+        assertSame(m, m.abs());
         m = RoundedMoney.of(-10, "CHF");
         assertEquals(m.negate(), m.abs());
-        assertTrue(m != m.abs());
+        assertNotSame(m, m.abs());
     }
 
     /**
@@ -536,12 +536,12 @@ public class RoundedMoneyTest {
         assertEquals(RoundedMoney.of(0, "CHF"), m.subtract(s1));
         assertEquals(RoundedMoney.of(-100, "CHF"), m.subtract(s2));
         assertEquals(RoundedMoney.of(100, "CHF"), m.subtract(s3));
-        assertTrue(m == m.subtract(s3));
+        assertSame(m, m.subtract(s3));
         m = RoundedMoney.of(new BigDecimal("-123.234"), "CHF");
         assertEquals(RoundedMoney.of(new BigDecimal("-223.234"), "CHF"), m.subtract(s1));
         assertEquals(RoundedMoney.of(new BigDecimal("-323.234"), "CHF"), m.subtract(s2));
         assertEquals(RoundedMoney.of(new BigDecimal("-123.234"), "CHF"), m.subtract(s3));
-        assertTrue(m == m.subtract(s3));
+        assertSame(m, m.subtract(s3));
         m = RoundedMoney.of(new BigDecimal("12.402345534"), "CHF");
         s1 = RoundedMoney.of(new BigDecimal("2343.45"), "CHF");
         s2 = RoundedMoney.of(new BigDecimal("12.402345534"), "CHF");
@@ -552,7 +552,7 @@ public class RoundedMoneyTest {
                 m.subtract(s2));
         assertTrue(m.subtract(s2).isZero());
         assertEquals(RoundedMoney.of(new BigDecimal("2355.852345534"), "CHF"), m.subtract(s3));
-        assertTrue(m == m.subtract(RoundedMoney.of(0, "CHF")));
+        assertSame(m, m.subtract(RoundedMoney.of(0, "CHF")));
     }
 
     /**

@@ -75,7 +75,7 @@ public class MonetaryTest {
 	public void accessMultipleCurrenciesWithCode() {
 		Collection<CurrencyUnit> currencies = Monetary.getCurrencies(CurrencyQueryBuilder.of().setNumericCodes(324).build());
 		assertNotNull(currencies);
-		assertTrue(currencies.size()==1);
+		assertEquals(currencies.size(), 1);
 		assertEquals(currencies.iterator().next().getCurrencyCode(), "GNF");
 	}
 

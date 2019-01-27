@@ -75,7 +75,7 @@ public class CurrenciesTest {
     public void testGetCurrencyLocale() {
         Set<CurrencyUnit> cur = Monetary.getCurrencies(Locale.US);
         assertNotNull(cur);
-        assertTrue(cur.size()==1);
+		assertEquals(cur.size(), 1);
         Currency jdkCurrency = Currency.getInstance(Locale.US);
         CurrencyUnit unit = cur.iterator().next();
         assertEquals(jdkCurrency.getCurrencyCode(), unit.getCurrencyCode());
