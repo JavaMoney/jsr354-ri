@@ -1,6 +1,3 @@
-import org.javamoney.moneta.convert.internal.DefaultMonetaryConversionsSingletonSpi;
-import org.javamoney.moneta.convert.internal.IdentityRateProvider;
-
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 

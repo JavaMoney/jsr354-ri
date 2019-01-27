@@ -1,12 +1,3 @@
-import org.javamoney.moneta.internal.*;
-import org.javamoney.moneta.internal.format.DefaultAmountFormatProviderSpi;
-import org.javamoney.moneta.internal.loader.DefaultLoaderService;
-
-import javax.money.DefaultMonetaryRoundingsSingletonSpi;
-import javax.money.format.MonetaryFormats;
-import javax.money.format.MonetaryFormats.DefaultMonetaryFormatsSingletonSpi;
-import javax.money.spi.MonetaryFormatsSingletonSpi;
-
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
@@ -28,7 +19,6 @@ module org.javamoney.moneta {
     exports org.javamoney.moneta.function;
     exports org.javamoney.moneta.spi;
     requires transitive java.money;
-    requires transitive java.base;
     requires transitive java.logging;
     requires java.annotation;
     requires static org.osgi.core;
@@ -42,7 +32,7 @@ module org.javamoney.moneta {
     provides javax.money.spi.MonetaryCurrenciesSingletonSpi with org.javamoney.moneta.internal.DefaultMonetaryCurrenciesSingletonSpi;
     provides javax.money.spi.RoundingProviderSpi with org.javamoney.moneta.internal.DefaultRoundingProvider;
     provides javax.money.spi.ServiceProvider with org.javamoney.moneta.internal.PriorityAwareServiceProvider;
-    provides org.javamoney.moneta.spi.LoaderService with DefaultLoaderService;
+    provides org.javamoney.moneta.spi.LoaderService with org.javamoney.moneta.internal.loader.DefaultLoaderService;
 
     uses org.javamoney.moneta.spi.LoaderService;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
