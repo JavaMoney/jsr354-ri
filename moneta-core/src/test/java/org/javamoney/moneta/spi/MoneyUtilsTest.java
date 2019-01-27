@@ -1,7 +1,6 @@
 package org.javamoney.moneta.spi;
 
 import org.javamoney.moneta.FastMoney;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.money.CurrencyUnit;
@@ -49,7 +48,7 @@ public class MoneyUtilsTest {
 
     @Test
     public void testReplaceNbspWithSpace() {
-        assertEquals(replaceNbspWithSpace("14\u00A0000,12\u00A0EUR"), "14 000,12 EUR");
+        assertEquals(replaceNbspWithSpace("14\u202F000,12\u00A0EUR"), "14 000,12 EUR");
     }
 
 }
