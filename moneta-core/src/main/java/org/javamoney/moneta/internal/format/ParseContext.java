@@ -207,6 +207,7 @@ final class ParseContext {
         this.errorIndex = -1;
         this.parsedNumber = null;
         this.parsedCurrency = null;
+        this.errorMessage = null;
     }
 
     /**
