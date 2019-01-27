@@ -93,7 +93,7 @@ public final class ScaleRoundedOperator implements MonetaryOperator {
 	@Override
 	public String toString() {
         return ScaleRoundedOperator.class.getName() + '{' +
-                "scale:" + Integer.toString(scale) + ',' +
+                "scale:" + scale + ',' +
                 "roundingMode:" + roundingMode + '}';
 	}
 
