@@ -207,10 +207,10 @@ final class CurrencyToken implements FormatToken {
                                 context.getErrorIndex());
                     } else if (token.startsWith("€")) {
                         cur = Monetary.getCurrency("EUR");
-                        context.consume("€");
+                        context.consume('€');
                     } else if (token.startsWith("£")) {
                         cur = Monetary.getCurrency("GBP");
-                        context.consume("£");
+                        context.consume('£');
                     } else {
                         cur = Monetary.getCurrency(token);
                         context.consume(token);
