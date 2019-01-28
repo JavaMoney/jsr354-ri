@@ -403,8 +403,8 @@ public class RoundedMoneyTest {
         assertEquals(m2.compareTo(m3), 0);
         assertEquals(m1.compareTo(m4), -1);
         assertEquals(m3.compareTo(m4), -1);
-        assertEquals(m4.compareTo(m1), -1);
-        assertEquals(m4.compareTo(m2), -1);
+        assertEquals(m4.compareTo(m1), 1);
+        assertEquals(m4.compareTo(m2), 1);
     }
 
     /**
