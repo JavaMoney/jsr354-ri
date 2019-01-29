@@ -200,8 +200,7 @@ public class MonetaryAmountFormatTest {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
                 AmountFormatQueryBuilder.of(locale).set(SYMBOL)
                         .build());
-        assertEquals(format.format(money), "1 123 000,50 лв");
-//FIXME        assertEquals(format.format(money), "1 123 000,50 лв.");
+        assertEquals(format.format(money), "1 123 000,50 лв.");
 
         format = MonetaryFormats.getAmountFormat(
                 AmountFormatQueryBuilder.of(locale).set(CODE)

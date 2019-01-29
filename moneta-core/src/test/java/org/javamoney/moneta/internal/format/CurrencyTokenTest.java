@@ -196,8 +196,7 @@ public class CurrencyTokenTest {
         FastMoney amount = FastMoney.of(0, "BGN");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
-//FIXME        assertEquals(sb.toString(), "лв.");
-        assertEquals(sb.toString(), "лв");
+        assertEquals(sb.toString(), "лв.");
     }
 
     @Test
