@@ -80,7 +80,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         setAmountFormatContext(amountFormatContext);
     }
 
-    private void initPattern(String pattern, List<FormatToken> tokens, AmountFormatContext style) {
+    private List<FormatToken> initPattern(String pattern, AmountFormatContext style) {
+        List<FormatToken> tokens = new ArrayList<>(4);
         int index = pattern.indexOf(CURRENCY_SIGN);
         Locale locale = style.get(Locale.class);
         CurrencyStyle currencyStyle = style.get(CurrencyStyle.class);
@@ -108,6 +109,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         } else { // no currency
             tokens.add(new AmountNumberToken(style, pattern));
         }
+        return tokens;
     }
 
     private boolean isLiteralPattern(String pattern) {
@@ -220,21 +222,19 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
 
     private void setAmountFormatContext(AmountFormatContext amountFormatContext) {
         this.amountFormatContext = requireNonNull(amountFormatContext);
-        this.positiveTokens = new ArrayList<>();
-        this.negativeTokens = new ArrayList<>();
         String pattern = resolvePattern(amountFormatContext);
         if (pattern.indexOf(CURRENCY_SIGN) < 0) {
+            this.positiveTokens = new ArrayList<>(1);
             this.positiveTokens.add(new AmountNumberToken(amountFormatContext, pattern));
             this.negativeTokens = positiveTokens;
         } else {
-            // split into (potential) plus, minus patterns
             String[] plusMinusPatterns = splitIntoPlusMinusPatterns(amountFormatContext, pattern);
             String positivePattern = plusMinusPatterns[0];
-            initPattern(positivePattern, this.positiveTokens, amountFormatContext);
-            if (plusMinusPatterns.length > 1) {
+            this.positiveTokens = initPattern(positivePattern, amountFormatContext);
+            if (plusMinusPatterns.length > 1) { // if negative pattern was specified
                 String negativePattern = plusMinusPatterns[1];
                 String pattern1 = negativePattern.replace("-", "");
-                initPattern(pattern1, this.negativeTokens, amountFormatContext);
+                this.negativeTokens = initPattern(pattern1, amountFormatContext);
             } else {
                 this.negativeTokens = this.positiveTokens;
             }
@@ -250,6 +250,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         return pattern;
     }
 
+    /**
+     * Split into (potential) plus, minus patterns
+     */
     private String[] splitIntoPlusMinusPatterns(AmountFormatContext amountFormatContext, String pattern) {
         DecimalFormatSymbols decimalFormatSymbols = amountFormatContext.get(DecimalFormatSymbols.class);
         char patternSeparator = decimalFormatSymbols != null ? decimalFormatSymbols.getPatternSeparator() : SUBPATTERN_BOUNDARY;
