@@ -20,7 +20,6 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.money.format.AmountFormatContext;
@@ -31,6 +30,7 @@ import javax.money.spi.MonetaryAmountFormatProviderSpi;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Default format provider, which mainly maps the existing JDK functionality into the JSR 354 logic.
@@ -62,8 +62,9 @@ public class DefaultAmountFormatProviderSpi implements MonetaryAmountFormatProvi
      */
     @Override
     public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery) {
-        Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-        if (!amountFormatQuery.getProviderNames().contains(getProviderName())) {
+        requireNonNull(amountFormatQuery, "AmountFormatContext required");
+        if (!amountFormatQuery.getProviderNames().isEmpty() &&
+                !amountFormatQuery.getProviderNames().contains(getProviderName())) {
             return emptySet();
         }
         if (amountFormatQuery.getFormatName() != null && !DEFAULT_STYLE.equals(amountFormatQuery.getFormatName())) {

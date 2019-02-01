@@ -161,6 +161,20 @@ public class MonetaryAmountFormatTest {
     }
 
     @Test
+    public void testWithCustomPattern_SYMBOL() {
+        Money money = Money.of(12345.23, "EUR");
+        testCustomFormat(money, "#,##0.## ¤", "12.345,23 €", "12.345,23 €", SYMBOL);
+        testCustomFormat(money, "#,##0.##¤", "12.345,23€", "12.345,23€", SYMBOL);
+        testCustomFormat(money, "¤ #,##0.##", "€ 12.345,23", "€ 12.345,23", SYMBOL);
+        testCustomFormat(money, "¤#,##0.##", "€12.345,23", "€12.345,23", SYMBOL);
+        testCustomFormat(money, "LITERAL ¤#,##0.##", "LITERAL €12.345,23", "LITERAL €12.345,23", SYMBOL);
+        testCustomFormat(money, "LITERAL ¤ #,##0.##", "LITERAL € 12.345,23", "LITERAL € 12.345,23", SYMBOL);
+        testCustomFormat(money, "LITERAL ¤ #,##0.## LITERAL", "LITERAL € 12.345,23 LITERAL", "LITERAL € 12.345,23 LITERAL", SYMBOL);
+        testCustomFormat(money, "LITERAL #,##0.## ¤ LITERAL", "LITERAL 12.345,23 € LITERAL", "LITERAL 12.345,23 € LITERAL", SYMBOL);
+        testCustomFormat(money, "LITERAL #,##0.##¤ LITERAL", "LITERAL 12.345,23€ LITERAL", "LITERAL 12.345,23€ LITERAL", SYMBOL);
+    }
+
+    @Test
     public void testWithCustomPatternForNegativeAmount() {
         Money moneyNegative = Money.of(-12345.23, "EUR");
         testCustomFormat(moneyNegative, "#,##0.## ¤", "-12.345,23 EUR", "-12.345,23 EUR", CODE);
