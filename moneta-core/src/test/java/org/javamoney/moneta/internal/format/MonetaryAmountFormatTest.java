@@ -174,6 +174,9 @@ public class MonetaryAmountFormatTest {
         testCustomFormat(money, "LITERAL #,##0.##¤ LITERAL", "LITERAL 12.345,23€ LITERAL", "LITERAL 12.345,23€ LITERAL", SYMBOL);
     }
 
+    /**
+     * Testcase related to https://github.com/JavaMoney/jsr354-ri/issues/282
+     */
     @Test
     public void testWithCustomPatternForNegativeAmount() {
         Money moneyNegative = Money.of(-12345.23, "EUR");

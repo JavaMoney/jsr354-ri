@@ -17,6 +17,7 @@ import static org.testng.Assert.*;
 public class AmountNumberTokenTest {
     private static final String DEFAULT_STYLE = "default";
     private static final String PATTERN = "#,##0.00 ";
+    private static final String PATTERN_WITH_LEADING_SPACES = "  " + PATTERN;
 
     @Test
     public void testParse_throws_exception() {
@@ -65,6 +66,35 @@ public class AmountNumberTokenTest {
     }
 
     @Test
+    public void testParse_US_PATTERN_WITH_LEADING_SPACES() {
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "0", 1, "zero", 0.0, "0");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "00", 2, "zero dd", 0.0, "00");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "0.0", 3, "zero d.d", 0.0, "0.0");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-0.00", 5, "zero d.dd negative", -0.0, "-0.00");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "123", 3, "int", 123.0, "123");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-123", 4, "int negative", -123.0, "-123");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "0123", 4, "int padding zero", 123.0, "0123");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-0123", 5, "int padding zero negative", -123.0, "-0123");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "123.4", 5, "float 1", 123.4, "123.4");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "123.45", 6, "float 2", 123.45, "123.45");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "123.456", 7, "float 3", 123.456, "123.456");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-123.4", 6, "float 1 negative", -123.4, "-123.4");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-123.45", 7, "float 2 negative", -123.45, "-123.45");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-123.456", 8, "float 3 negative", -123.456, "-123.456");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "12,345", 6, "int thousands", 12345.0, "12,345");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-12,345", 7, "int thousands negative", -12345.0, "-12,345");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "12,345.6", 8, "float 1 thousands", 12345.6, "12,345.6");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "12,345.67", 9, "float 2 thousands", 12345.67, "12,345.67");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "12,345.678", 10, "float 3 thousands", 12345.678, "12,345.678");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-12,345.6", 9, "float 1 thousands negative", -12345.6, "-12,345.6");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-12,345.67", 10, "float 2 thousands negative", -12345.67, "-12,345.67");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-12,345.678", 11, "float 3 thousands negative", -12345.678, "-12,345.678");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, "-1,234,567.89", 13, "float 2 million negative", -1234567.89, "-1,234,567.89");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, " -1,234,567.89", 14, "float 2 million negative with leading space", -1234567.89, " -1,234,567.89");
+        testParse(US, PATTERN_WITH_LEADING_SPACES, null, " -1,234,567.89 ", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1,234,567.89 ");
+    }
+
+    @Test
     public void testParse_FR() {
         testParse(FRANCE, PATTERN, null, "0", 1, "zero", 0.0, "0");
         testParse(FRANCE, PATTERN, null, "00", 2, "zero dd", 0.0, "00");
@@ -89,6 +119,37 @@ public class AmountNumberTokenTest {
         testParse(FRANCE, PATTERN, null, "-12 345,67", 10, "float 2 thousands negative", -12345.67, "-12 345,67");
         testParse(FRANCE, PATTERN, null, "-12 345,678", 11, "float 3 thousands negative", -12345.678, "-12 345,678");
         testParse(FRANCE, PATTERN, null, "-1 234 567,89", 13, "float 2 million negative", -1234567.89, "-1 234 567,89");
+        testParse(FRANCE, PATTERN, null, " -1 234 567,89", 14, "float 2 million negative with leading space", -1234567.89, " -1 234 567,89");
+        testParse(FRANCE, PATTERN, null, " -1 234 567,89 ", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
+    }
+
+    @Test
+    public void testParse_FR_PATTERN_WITH_LEADING_SPACES() {
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "0", 1, "zero", 0.0, "0");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "00", 2, "zero dd", 0.0, "00");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "0,0", 3, "zero d.d", 0.0, "0,0");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-0,00", 5, "zero d.dd negative", -0.0, "-0,00");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "123", 3, "int", 123.0, "123");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-123", 4, "int negative", -123.0, "-123");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "0123", 4, "int padding zero", 123.0, "0123");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-0123", 5, "int padding zero negative", -123.0, "-0123");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "123,4", 5, "float 1", 123.4, "123,4");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "123,45", 6, "float 2", 123.45, "123,45");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "123,456", 7, "float 3", 123.456, "123,456");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-123,4", 6, "float 1 negative", -123.4, "-123,4");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-123,45", 7, "float 2 negative", -123.45, "-123,45");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-123,456", 8, "float 3 negative", -123.456, "-123,456");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "12 345", 6, "int thousands", 12345.0, "12 345");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-12 345", 7, "int thousands negative", -12345.0, "-12 345");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "12 345,6", 8, "float 1 thousands", 12345.6, "12 345,6");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "12 345,67", 9, "float 2 thousands", 12345.67, "12 345,67");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "12 345,678", 10, "float 3 thousands", 12345.678, "12 345,678");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-12 345,6", 9, "float 1 thousands negative", -12345.6, "-12 345,6");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-12 345,67", 10, "float 2 thousands negative", -12345.67, "-12 345,67");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-12 345,678", 11, "float 3 thousands negative", -12345.678, "-12 345,678");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-1 234 567,89", 13, "float 2 million negative", -1234567.89, "-1 234 567,89");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, " -1 234 567,89", 14, "float 2 million negative with leading space", -1234567.89, " -1 234 567,89");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, " -1 234 567,89 ", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
     }
 
     @Test
@@ -102,6 +163,8 @@ public class AmountNumberTokenTest {
         testParse(FRANCE, PATTERN, null, "-12\u00A0345,67", 10, "float 2 thousands negative", -12345.67, "-12 345,67");
         testParse(FRANCE, PATTERN, null, "-12\u00A0345,678", 11, "float 3 thousands negative", -12345.678, "-12 345,678");
         testParse(FRANCE, PATTERN, null, "-1\u00A0234\u00A0567,89", 13, "float 2 million negative", -1234567.89, "-1 234 567,89");
+        testParse(FRANCE, PATTERN, null, "\u00A0-1\u00A0234\u00A0567,89", 14, "float 2 million negative with leading space", -1234567.89, " -1 234 567,89");
+        testParse(FRANCE, PATTERN, null, "\u00A0-1\u00A0234\u00A0567,89\u00A0", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
     }
 
     @Test
@@ -119,6 +182,8 @@ public class AmountNumberTokenTest {
         testParse(FRANCE, PATTERN, syms, "-12\u00A0345,67", 10, "float 2 thousands negative", -12345.67, "-12 345,67");
         testParse(FRANCE, PATTERN, syms, "-12\u00A0345,678", 11, "float 3 thousands negative", -12345.678, "-12 345,678");
         testParse(FRANCE, PATTERN, syms, "-1\u00A0234\u00A0567,89", 13, "float 2 million negative", -1234567.89, "-1 234 567,89");
+        testParse(FRANCE, PATTERN, syms, "\u00A0-1\u00A0234\u00A0567,89", 14, "float 2 million negative with leading space", -1234567.89, " -1 234 567,89");
+        testParse(FRANCE, PATTERN, syms, "\u00A0-1\u00A0234\u00A0567,89\u00A0", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
     }
 
     @Test
@@ -149,6 +214,9 @@ public class AmountNumberTokenTest {
         testParse(CHINA, PATTERN, null, "-123,4567.89", 12, "grouped by ten thousands", -1234567.89, "-123,4567.89");
     }
 
+    /**
+     * testcase for https://github.com/JavaMoney/jsr354-ri/issues/281
+     */
     @Test
     public void testParse_with_literals_in_patern() {
         testParse(US, "#,##0.00 ", null, "-123.45", 7, "without literal", -123.45, "-123.45");
