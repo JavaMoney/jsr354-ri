@@ -27,8 +27,10 @@ import javax.money.*;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
+
 import org.javamoney.moneta.format.CurrencyStyle;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static java.util.logging.Level.FINEST;
 
@@ -81,13 +83,13 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     private List<FormatToken> initPattern(String pattern, AmountFormatContext context) {
-        List<FormatToken> tokens = new ArrayList<>(4);
         int currencySignPos = pattern.indexOf(CURRENCY_SIGN);
         Locale locale = context.get(Locale.class);
         CurrencyStyle currencyStyle = context.get(CurrencyStyle.class);
         if (currencySignPos > 0) { // currency placement after, between
             String p1 = pattern.substring(0, currencySignPos);
             String p2 = pattern.substring(currencySignPos + 1);
+            List<FormatToken> tokens = new ArrayList<>(3);
             if (isLiteralPattern(p1)) {
                 tokens.add(new LiteralToken(p1));
                 tokens.add(new CurrencyToken(currencyStyle, locale));
@@ -102,13 +104,16 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
                     tokens.add(new AmountNumberToken(context, p2));
                 }
             }
+            return tokens;
         } else if (currencySignPos == 0) { // currency placement before
-            tokens.add(new CurrencyToken(currencyStyle, locale));
             String patternWithoutCurrencySign = pattern.substring(1);
-            tokens.add(new AmountNumberToken(context, patternWithoutCurrencySign));
-        } else { // no currency
-            tokens.add(new AmountNumberToken(context, pattern));
+            List<FormatToken> tokens = asList(
+                    new CurrencyToken(currencyStyle, locale),
+                    new AmountNumberToken(context, patternWithoutCurrencySign));
+            return tokens;
         }
+        // no currency
+        List<FormatToken> tokens = asList(new AmountNumberToken(context, pattern));
         return tokens;
     }
 
