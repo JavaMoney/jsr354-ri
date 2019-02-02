@@ -159,6 +159,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         if (Objects.isNull(unit)) {
             unit = this.amountFormatContext.get(CurrencyUnit.class);
         }
+        if (Objects.isNull(unit)) {
+            throw new MonetaryParseException("Failed to parse currency. Is currency sign ¤ present in pattern?", text.toString(), -1);
+        }
         Number num = ctx.getParsedNumber();
         if (Objects.isNull(num)) {
             throw new MonetaryParseException("Failed to parse amount", text.toString(), -1);
