@@ -188,21 +188,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     private void setAmountFormatContext(AmountFormatContext amountFormatContext) {
         this.amountFormatContext = requireNonNull(amountFormatContext);
         String pattern = resolvePattern(amountFormatContext);
-        if (pattern.indexOf(CURRENCY_SIGN) < 0) {
-            this.positiveTokens = new ArrayList<>(1);
-            this.positiveTokens.add(new AmountNumberToken(amountFormatContext, pattern));
-            this.negativeTokens = positiveTokens;
-        } else {
-            String[] plusMinusPatterns = splitIntoPlusMinusPatterns(amountFormatContext, pattern);
-            String positivePattern = plusMinusPatterns[0];
-            this.positiveTokens = initPattern(positivePattern, amountFormatContext);
-            if (plusMinusPatterns.length > 1) { // if negative pattern is specified
-                String negativePattern = plusMinusPatterns[1];
-                String pattern1 = negativePattern.replace("-", "");
-                this.negativeTokens = initPattern(pattern1, amountFormatContext);
-            } else { // only positive patter is specified
-                this.negativeTokens = this.positiveTokens;
-            }
+        String[] plusMinusPatterns = splitIntoPlusMinusPatterns(amountFormatContext, pattern);
+        String positivePattern = plusMinusPatterns[0];
+        this.positiveTokens = initPattern(positivePattern, amountFormatContext);
+        if (plusMinusPatterns.length > 1) { // if negative pattern is specified
+            String negativePattern = plusMinusPatterns[1];
+            String pattern1 = negativePattern.replace("-", "");
+            this.negativeTokens = initPattern(pattern1, amountFormatContext);
+        } else { // only positive patter is specified
+            this.negativeTokens = this.positiveTokens;
         }
     }
 
