@@ -80,34 +80,34 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         setAmountFormatContext(amountFormatContext);
     }
 
-    private List<FormatToken> initPattern(String pattern, AmountFormatContext style) {
+    private List<FormatToken> initPattern(String pattern, AmountFormatContext context) {
         List<FormatToken> tokens = new ArrayList<>(4);
-        int index = pattern.indexOf(CURRENCY_SIGN);
-        Locale locale = style.get(Locale.class);
-        CurrencyStyle currencyStyle = style.get(CurrencyStyle.class);
-        if (index > 0) { // currency placement after, between
-            String p1 = pattern.substring(0, index);
-            String p2 = pattern.substring(index + 1);
+        int currencySignPos = pattern.indexOf(CURRENCY_SIGN);
+        Locale locale = context.get(Locale.class);
+        CurrencyStyle currencyStyle = context.get(CurrencyStyle.class);
+        if (currencySignPos > 0) { // currency placement after, between
+            String p1 = pattern.substring(0, currencySignPos);
+            String p2 = pattern.substring(currencySignPos + 1);
             if (isLiteralPattern(p1)) {
                 tokens.add(new LiteralToken(p1));
                 tokens.add(new CurrencyToken(currencyStyle, locale));
             } else {
-                tokens.add(new AmountNumberToken(style, p1));
+                tokens.add(new AmountNumberToken(context, p1));
                 tokens.add(new CurrencyToken(currencyStyle, locale));
             }
             if (!p2.isEmpty()) {
                 if (isLiteralPattern(p2)) {
                     tokens.add(new LiteralToken(p2));
                 } else {
-                    tokens.add(new AmountNumberToken(style, p2));
+                    tokens.add(new AmountNumberToken(context, p2));
                 }
             }
-        } else if (index == 0) { // currency placement before
+        } else if (currencySignPos == 0) { // currency placement before
             tokens.add(new CurrencyToken(currencyStyle, locale));
             String patternWithoutCurrencySign = pattern.substring(1);
-            tokens.add(new AmountNumberToken(style, patternWithoutCurrencySign));
+            tokens.add(new AmountNumberToken(context, patternWithoutCurrencySign));
         } else { // no currency
-            tokens.add(new AmountNumberToken(style, pattern));
+            tokens.add(new AmountNumberToken(context, pattern));
         }
         return tokens;
     }
@@ -191,12 +191,12 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
             }
         }
         CurrencyUnit unit = ctx.getParsedCurrency();
-        Number num = ctx.getParsedNumber();
         if (Objects.isNull(unit)) {
             unit = this.amountFormatContext.get(CurrencyUnit.class);
         }
+        Number num = ctx.getParsedNumber();
         if (Objects.isNull(num)) {
-            throw new MonetaryParseException(text.toString(), -1);
+            throw new MonetaryParseException("Failed to parse amount", text.toString(), -1);
         }
         MonetaryAmountFactory<?> factory = this.amountFormatContext.getParseFactory();
         if (factory == null) {
@@ -231,11 +231,11 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
             String[] plusMinusPatterns = splitIntoPlusMinusPatterns(amountFormatContext, pattern);
             String positivePattern = plusMinusPatterns[0];
             this.positiveTokens = initPattern(positivePattern, amountFormatContext);
-            if (plusMinusPatterns.length > 1) { // if negative pattern was specified
+            if (plusMinusPatterns.length > 1) { // if negative pattern is specified
                 String negativePattern = plusMinusPatterns[1];
                 String pattern1 = negativePattern.replace("-", "");
                 this.negativeTokens = initPattern(pattern1, amountFormatContext);
-            } else {
+            } else { // only positive patter is specified
                 this.negativeTokens = this.positiveTokens;
             }
         }
