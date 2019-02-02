@@ -82,46 +82,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         setAmountFormatContext(amountFormatContext);
     }
 
-    private List<FormatToken> initPattern(String pattern, AmountFormatContext context) {
-        int currencySignPos = pattern.indexOf(CURRENCY_SIGN);
-        Locale locale = context.get(Locale.class);
-        CurrencyStyle currencyStyle = context.get(CurrencyStyle.class);
-        if (currencySignPos > 0) { // currency placement after, between
-            String p1 = pattern.substring(0, currencySignPos);
-            String p2 = pattern.substring(currencySignPos + 1);
-            List<FormatToken> tokens = new ArrayList<>(3);
-            if (isLiteralPattern(p1)) {
-                tokens.add(new LiteralToken(p1));
-                tokens.add(new CurrencyToken(currencyStyle, locale));
-            } else {
-                tokens.add(new AmountNumberToken(context, p1));
-                tokens.add(new CurrencyToken(currencyStyle, locale));
-            }
-            if (!p2.isEmpty()) {
-                if (isLiteralPattern(p2)) {
-                    tokens.add(new LiteralToken(p2));
-                } else {
-                    tokens.add(new AmountNumberToken(context, p2));
-                }
-            }
-            return tokens;
-        } else if (currencySignPos == 0) { // currency placement before
-            String patternWithoutCurrencySign = pattern.substring(1);
-            List<FormatToken> tokens = asList(
-                    new CurrencyToken(currencyStyle, locale),
-                    new AmountNumberToken(context, patternWithoutCurrencySign));
-            return tokens;
-        }
-        // no currency
-        List<FormatToken> tokens = asList(new AmountNumberToken(context, pattern));
-        return tokens;
-    }
-
-    private boolean isLiteralPattern(String pattern) {
-        // TODO implement better here
-        return !(pattern.contains("#") || pattern.contains("0"));
-    }
-
     /**
      * Formats a value of {@code T} to a {@code String}. {@link java.util.Locale}
      * passed defines the overall target {@link Locale}. This locale state, how the
@@ -264,5 +224,44 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         return pattern.split(String.valueOf(patternSeparator));
     }
 
+    private List<FormatToken> initPattern(String pattern, AmountFormatContext context) {
+        int currencySignPos = pattern.indexOf(CURRENCY_SIGN);
+        Locale locale = context.get(Locale.class);
+        CurrencyStyle currencyStyle = context.get(CurrencyStyle.class);
+        if (currencySignPos > 0) { // currency placement after, between
+            String p1 = pattern.substring(0, currencySignPos);
+            String p2 = pattern.substring(currencySignPos + 1);
+            List<FormatToken> tokens = new ArrayList<>(3);
+            if (isLiteralPattern(p1)) {
+                tokens.add(new LiteralToken(p1));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
+            } else {
+                tokens.add(new AmountNumberToken(context, p1));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
+            }
+            if (!p2.isEmpty()) {
+                if (isLiteralPattern(p2)) {
+                    tokens.add(new LiteralToken(p2));
+                } else {
+                    tokens.add(new AmountNumberToken(context, p2));
+                }
+            }
+            return tokens;
+        } else if (currencySignPos == 0) { // currency placement before
+            String patternWithoutCurrencySign = pattern.substring(1);
+            List<FormatToken> tokens = asList(
+                    new CurrencyToken(currencyStyle, locale),
+                    new AmountNumberToken(context, patternWithoutCurrencySign));
+            return tokens;
+        }
+        // no currency
+        List<FormatToken> tokens = asList(new AmountNumberToken(context, pattern));
+        return tokens;
+    }
+
+    private boolean isLiteralPattern(String pattern) {
+        // TODO implement better here
+        return !(pattern.contains("#") || pattern.contains("0"));
+    }
 
 }
