@@ -25,8 +25,11 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.math.RoundingMode.HALF_EVEN;
+import static java.util.Objects.requireNonNull;
+import static java.util.logging.Level.FINEST;
 
 /**
  * Platform RI: This utility class simplifies implementing {@link MonetaryAmount},
@@ -39,9 +42,6 @@ import java.util.logging.Logger;
  * @author Anatole Tresch
  */
 public final class MoneyUtils {
-    /**
-     * The logger used.
-     */
     private static final Logger LOG = Logger.getLogger(MoneyUtils.class.getName());
     public static final char NBSP = '\u00A0';
     public static final char NNBSP = '\u202F';
@@ -101,10 +101,12 @@ public final class MoneyUtils {
     public static BigDecimal getBigDecimal(Number num, MonetaryContext moneyContext) {
     	BigDecimal bd = getBigDecimal(num);
         if (Objects.nonNull(moneyContext)) {
-            MathContext mc = getMathContext(moneyContext, RoundingMode.HALF_EVEN);
+            MathContext mc = getMathContext(moneyContext, HALF_EVEN);
             bd = new BigDecimal(bd.toString(), mc);
             if (moneyContext.getMaxScale() > 0) {
-                LOG.log(Level.FINE, "Got Max Scale %n", moneyContext.getMaxScale());
+                if (LOG.isLoggable(FINEST)) {
+                    LOG.log(FINEST, "Got Max Scale %n", moneyContext.getMaxScale());
+                }
                 bd = bd.setScale(moneyContext.getMaxScale(), mc.getRoundingMode());
             }
         }
@@ -126,7 +128,7 @@ public final class MoneyUtils {
 		}
 		RoundingMode roundingMode = monetaryContext.get(RoundingMode.class);
 		if (roundingMode == null) {
-			roundingMode = Optional.ofNullable(defaultMode).orElse(RoundingMode.HALF_EVEN);
+			roundingMode = Optional.ofNullable(defaultMode).orElse(HALF_EVEN);
 		}
 		return new MathContext(monetaryContext.getPrecision(), roundingMode);
 	}
@@ -141,9 +143,9 @@ public final class MoneyUtils {
      *                           {@link CurrencyUnit#getCurrencyCode()}).
      */
     public static void checkAmountParameter(MonetaryAmount amount, CurrencyUnit currencyUnit) {
-        Objects.requireNonNull(amount, "Amount must not be null.");
+        requireNonNull(amount, "Amount must not be null.");
         final CurrencyUnit amountCurrency = amount.getCurrency();
-        if (!(currencyUnit.getCurrencyCode().equals(amountCurrency.getCurrencyCode()))) {
+        if (!currencyUnit.getCurrencyCode().equals(amountCurrency.getCurrencyCode())) {
             throw new MonetaryException("Currency mismatch: " + currencyUnit + '/' + amountCurrency);
         }
     }
@@ -155,7 +157,7 @@ public final class MoneyUtils {
      * @throws IllegalArgumentException If the number is null
      */
     public static void checkNumberParameter(Number number) {
-        Objects.requireNonNull(number, "Number is required.");
+        requireNonNull(number, "Number is required.");
     }
 
     /**

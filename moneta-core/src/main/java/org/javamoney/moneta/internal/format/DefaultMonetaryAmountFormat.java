@@ -27,8 +27,10 @@ import javax.money.*;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
+
 import org.javamoney.moneta.format.CurrencyStyle;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static java.util.logging.Level.FINEST;
 
@@ -78,43 +80,6 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      */
     DefaultMonetaryAmountFormat(AmountFormatContext amountFormatContext) {
         setAmountFormatContext(amountFormatContext);
-    }
-
-    private List<FormatToken> initPattern(String pattern, AmountFormatContext style) {
-        List<FormatToken> tokens = new ArrayList<>(4);
-        int index = pattern.indexOf(CURRENCY_SIGN);
-        Locale locale = style.get(Locale.class);
-        CurrencyStyle currencyStyle = style.get(CurrencyStyle.class);
-        if (index > 0) { // currency placement after, between
-            String p1 = pattern.substring(0, index);
-            String p2 = pattern.substring(index + 1);
-            if (isLiteralPattern(p1)) {
-                tokens.add(new LiteralToken(p1));
-                tokens.add(new CurrencyToken(currencyStyle, locale));
-            } else {
-                tokens.add(new AmountNumberToken(style, p1));
-                tokens.add(new CurrencyToken(currencyStyle, locale));
-            }
-            if (!p2.isEmpty()) {
-                if (isLiteralPattern(p2)) {
-                    tokens.add(new LiteralToken(p2));
-                } else {
-                    tokens.add(new AmountNumberToken(style, p2));
-                }
-            }
-        } else if (index == 0) { // currency placement before
-            tokens.add(new CurrencyToken(currencyStyle, locale));
-            String patternWithoutCurrencySign = pattern.substring(1);
-            tokens.add(new AmountNumberToken(style, patternWithoutCurrencySign));
-        } else { // no currency
-            tokens.add(new AmountNumberToken(style, pattern));
-        }
-        return tokens;
-    }
-
-    private boolean isLiteralPattern(String pattern) {
-        // TODO implement better here
-        return !(pattern.contains("#") || pattern.contains("0"));
     }
 
     /**
@@ -191,12 +156,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
             }
         }
         CurrencyUnit unit = ctx.getParsedCurrency();
-        Number num = ctx.getParsedNumber();
         if (Objects.isNull(unit)) {
             unit = this.amountFormatContext.get(CurrencyUnit.class);
         }
+        if (Objects.isNull(unit)) {
+            throw new MonetaryParseException("Failed to parse currency. Is currency sign ¤ present in pattern?", text.toString(), -1);
+        }
+        Number num = ctx.getParsedNumber();
         if (Objects.isNull(num)) {
-            throw new MonetaryParseException(text.toString(), -1);
+            throw new MonetaryParseException("Failed to parse amount", text.toString(), -1);
         }
         MonetaryAmountFactory<?> factory = this.amountFormatContext.getParseFactory();
         if (factory == null) {
@@ -223,21 +191,15 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     private void setAmountFormatContext(AmountFormatContext amountFormatContext) {
         this.amountFormatContext = requireNonNull(amountFormatContext);
         String pattern = resolvePattern(amountFormatContext);
-        if (pattern.indexOf(CURRENCY_SIGN) < 0) {
-            this.positiveTokens = new ArrayList<>(1);
-            this.positiveTokens.add(new AmountNumberToken(amountFormatContext, pattern));
-            this.negativeTokens = positiveTokens;
-        } else {
-            String[] plusMinusPatterns = splitIntoPlusMinusPatterns(amountFormatContext, pattern);
-            String positivePattern = plusMinusPatterns[0];
-            this.positiveTokens = initPattern(positivePattern, amountFormatContext);
-            if (plusMinusPatterns.length > 1) { // if negative pattern was specified
-                String negativePattern = plusMinusPatterns[1];
-                String pattern1 = negativePattern.replace("-", "");
-                this.negativeTokens = initPattern(pattern1, amountFormatContext);
-            } else {
-                this.negativeTokens = this.positiveTokens;
-            }
+        String[] plusMinusPatterns = splitIntoPlusMinusPatterns(amountFormatContext, pattern);
+        String positivePattern = plusMinusPatterns[0];
+        this.positiveTokens = initPattern(positivePattern, amountFormatContext);
+        if (plusMinusPatterns.length > 1) { // if negative pattern is specified
+            String negativePattern = plusMinusPatterns[1];
+            String pattern1 = negativePattern.replace("-", "");
+            this.negativeTokens = initPattern(pattern1, amountFormatContext);
+        } else { // only positive patter is specified
+            this.negativeTokens = this.positiveTokens;
         }
     }
 
@@ -259,5 +221,44 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         return pattern.split(String.valueOf(patternSeparator));
     }
 
+    private List<FormatToken> initPattern(String pattern, AmountFormatContext context) {
+        int currencySignPos = pattern.indexOf(CURRENCY_SIGN);
+        Locale locale = context.get(Locale.class);
+        CurrencyStyle currencyStyle = context.get(CurrencyStyle.class);
+        if (currencySignPos > 0) { // currency placement after, between
+            String p1 = pattern.substring(0, currencySignPos);
+            String p2 = pattern.substring(currencySignPos + 1);
+            List<FormatToken> tokens = new ArrayList<>(3);
+            if (isLiteralPattern(p1)) {
+                tokens.add(new LiteralToken(p1));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
+            } else {
+                tokens.add(new AmountNumberToken(context, p1));
+                tokens.add(new CurrencyToken(currencyStyle, locale));
+            }
+            if (!p2.isEmpty()) {
+                if (isLiteralPattern(p2)) {
+                    tokens.add(new LiteralToken(p2));
+                } else {
+                    tokens.add(new AmountNumberToken(context, p2));
+                }
+            }
+            return tokens;
+        } else if (currencySignPos == 0) { // currency placement before
+            String patternWithoutCurrencySign = pattern.substring(1);
+            List<FormatToken> tokens = asList(
+                    new CurrencyToken(currencyStyle, locale),
+                    new AmountNumberToken(context, patternWithoutCurrencySign));
+            return tokens;
+        }
+        // no currency
+        List<FormatToken> tokens = asList(new AmountNumberToken(context, pattern));
+        return tokens;
+    }
+
+    private boolean isLiteralPattern(String pattern) {
+        // TODO implement better here
+        return !(pattern.contains("#") || pattern.contains("0"));
+    }
 
 }
