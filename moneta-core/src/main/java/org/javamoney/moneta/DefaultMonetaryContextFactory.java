@@ -70,32 +70,32 @@ class DefaultMonetaryContextFactory {
         if (Objects.nonNull(value)) {
             switch (value.toUpperCase(Locale.ENGLISH)) {
                 case "DECIMAL32":
-                    Logger.getLogger(Money.class.getName()).info(
+                    Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info(
                             "Using MathContext.DECIMAL32");
                     builder.set(MathContext.DECIMAL32);
                     break;
                 case "DECIMAL64":
-                    Logger.getLogger(Money.class.getName()).info(
+                    Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info(
                             "Using MathContext.DECIMAL64");
                     builder.set(MathContext.DECIMAL64);
                     break;
                 case "DECIMAL128":
-                    Logger.getLogger(Money.class.getName()).info(
+                    Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info(
                             "Using MathContext.DECIMAL128");
                     builder.set(MathContext.DECIMAL128);
                     break;
                 case "UNLIMITED":
-                    Logger.getLogger(Money.class.getName()).info(
+                    Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info(
                             "Using MathContext.UNLIMITED");
                     builder.set(MathContext.UNLIMITED);
                     break;
                 default:
-                    Logger.getLogger(Money.class.getName()).warning(
+                    Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).warning(
                             "Found invalid MathContext: " + value + ", using default MathContext.DECIMAL64");
                     builder.set(MathContext.DECIMAL64);
             }
         } else {
-            Logger.getLogger(Money.class.getName()).info(
+            Logger.getLogger(DefaultMonetaryContextFactory.class.getName()).info(
                     "Using default MathContext.DECIMAL64");
             builder.set(MathContext.DECIMAL64);
         }

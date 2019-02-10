@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class LoadDataLoaderService {
 
-	private static final Logger LOG = Logger.getLogger(DefaultLoaderListener.class.getName());
+	private static final Logger LOG = Logger.getLogger(LoadDataLoaderService.class.getName());
 
 	private final DefaultLoaderListener listener;
 
