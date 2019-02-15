@@ -145,18 +145,16 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
     }
 
     protected int getScale(String key) {
-		String string = MonetaryConfig.getConfig().getOrDefault(
-				key, "-1");
-		if (string.isEmpty()) {
-			return -1;
-		} else {
-			try {
-				return Integer.valueOf(string);
-			} catch (NumberFormatException e) {
-				return -1;
-			}
-		}
-	}
+        String string = MonetaryConfig.getConfig().get(key);
+        if (string == null || string.isEmpty()) {
+            return -1;
+        }
+        try {
+            return Integer.parseInt(string);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 
     protected ConversionContext getExchangeContext(String key) {
 		int scale = getScale(key);
