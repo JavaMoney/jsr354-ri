@@ -117,8 +117,8 @@ final class AmountNumberToken implements FormatToken {
             if (Objects.isNull(numberGroup)) {
                 char[] groupChars = amountFormatContext.get(GROUPING_GROUPING_SEPARATORS, char[].class);
                 if (groupChars == null || groupChars.length == 0) {
-                    groupChars = new char[]{formatFormat
-                            .getDecimalFormatSymbols().getGroupingSeparator()};
+                    char groupingSeparator = formatFormat.getDecimalFormatSymbols().getGroupingSeparator();
+                    groupChars = new char[]{groupingSeparator};
                 }
                 numberGroup = new StringGrouper(groupChars, groupSizes);
             }
@@ -131,13 +131,14 @@ final class AmountNumberToken implements FormatToken {
 
     private String[] splitNumberParts(DecimalFormat format,
                                       String preformattedValue) {
-        int index = preformattedValue.indexOf(format.getDecimalFormatSymbols()
-                .getDecimalSeparator());
+        char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
+        int index = preformattedValue.indexOf(decimalSeparator);
         if (index < 0) {
             return new String[]{preformattedValue};
         }
-        return new String[]{preformattedValue.substring(0, index),
-                preformattedValue.substring(index + 1)};
+        String beforeSeparator = preformattedValue.substring(0, index);
+        String afterSeparator = preformattedValue.substring(index + 1);
+        return new String[]{beforeSeparator, afterSeparator};
     }
 
     @Override
