@@ -1,5 +1,4 @@
-JavaMoney 'Moneta' User Guide
-=============================
+= JavaMoney 'Moneta' User Guide
 Anatole Tresch <atsticks@gmail.com>
 :Author Initials: ATR
 :source-highlighter: coderay
@@ -168,11 +167,11 @@ also provides currencies for Bitcoin:
 [source,java]
 .Implementing a Bitcoin currency provider
 --------------------------------------------
-public final class BitCoinProvider implements CurrencyProviderSpi{
+public final class BitCoinProvider implements CurrencyProviderSpi {
 
     private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
 
-    public BitCoinProvider(){
+    public BitCoinProvider() {
        bitcoinSet.add(CurrencyUnitBuilder.of("BTC", "MyCurrencyBuilder").build());
        bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
     }
@@ -185,7 +184,7 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
      * @return the corresponding {@link CurrencyUnit}s matching, never null.
      */
     @Override
-    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query) {
        // only ensure BTC is the code, or it is a default query.
        if (query.isEmpty()
            || query.getCurrencyCodes().contains("BTC")
@@ -216,7 +215,7 @@ normal CDI bean, e.g.
 .Implementing a Bitcoin currency provider
 --------------------------------------------
 @Singleton
-public class BitCoinProvider implements CurrencyProviderSpi{
+public class BitCoinProvider implements CurrencyProviderSpi {
   ...
 }
 --------------------------------------------
@@ -573,29 +572,29 @@ based on the mechanism as defined by the Java +ServiceLoader+.
 [source,java]
 .Implement a +RoundingProviderSpi+ providing a currency rounding for "BTC" (Bitcoin)
 --------------------------------------------
-public final class TestRoundingProvider implements RoundingProviderSpi{
+public final class TestRoundingProvider implements RoundingProviderSpi {
 
     private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
 
     private final Set<String> roundingNames;
 
-    public TestRoundingProvider(){
+    public TestRoundingProvider() {
         Set<String> names = new HashSet<>();
         names.add("custom1");
         this.roundingNames = Collections.unmodifiableSet(names);
     }
 
     @Override
-    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery) {
         CurrencyUnit cu = roundingQuery.getCurrency();
-        if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
+        if (cu != null && "BTC".equals(cu.getCurrencyCode())) {
             return ROUNDING;
         }
         return null;
     }
 
     @Override
-    public Set<String> getRoundingNames(){
+    public Set<String> getRoundingNames() {
         return Collections.emptySet();
     }
 
@@ -794,7 +793,7 @@ done based on the mechanism as defined by the Java +ServiceLoader+.
 [source,java]
 .Implement a +MonetaryAmountFormatProviderSpi+ providing a format for "GKC" (GeeCoin)
 --------------------------------------------
-public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
+public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi {
 
     private static final String PROVIDER_NAME = "GeeCoin";
     private static final String STYLE_NAME = "GeeCoin";
@@ -817,7 +816,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
      * javax.money.spi.MonetaryAmountFormatProviderSpi#getProviderName()
      */
     @Override
-    public String getProviderName(){
+    public String getProviderName() {
         return PROVIDER_NAME;
     }
 
@@ -827,7 +826,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
      * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
      */
     @Override
-    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
+    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery) {
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
         if (!amountFormatQuery.getProviderNames().isEmpty()
             && !amountFormatQuery.getProviderNames().contains(getProviderName())) {
@@ -847,12 +846,12 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     }
 
     @Override
-    public Set<Locale> getAvailableLocales(){
+    public Set<Locale> getAvailableLocales() {
         return supportedSets;
     }
 
     @Override
-    public Set<String> getAvailableFormatNames(){
+    public Set<String> getAvailableFormatNames() {
         return formatNames;
     }
 
@@ -864,7 +863,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
 
 The reference implementation supports overriding of the values in +javamoney.properties+ by prefixing the keys with
 a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
-classpath. If no priority is annotated, priority=0 is assumed:
+classpath. If no priority is annotated, +priority=0+ is assumed:
 
 [source,listing]
 .Overriding a Configuration Value using a Priority
