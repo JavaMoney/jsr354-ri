@@ -899,18 +899,12 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * Just to don't break the compatibility.
      * Don't use it
      * @param number the amount, not null.
-     * @deprecated Will be removed.
+     * @deprecated Will be removed. Use
+     * @see NumberVerifier#checkNoInfinityOrNaN
      */
     @Deprecated
     public static void checkNoInfinityOrNaN(Number number) {
-        if (Double.class == number.getClass() || Float.class == number.getClass()) {
-            double dValue = number.doubleValue();
-            if (Double.isNaN(dValue)) {
-                throw new ArithmeticException("Not a valid input: NaN.");
-            } else if (Double.isInfinite(dValue)) {
-                throw new ArithmeticException("Not a valid input: INFINITY: " + dValue);
-            }
-        }
+        NumberVerifier.checkNoInfinityOrNaN(number);
     }
 
 }
