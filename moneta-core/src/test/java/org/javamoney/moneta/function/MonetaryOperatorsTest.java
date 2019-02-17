@@ -261,7 +261,7 @@ public class MonetaryOperatorsTest {
 	}
 
 	@Test
-	public void shouldRouding() {
+	public void shouldRounding() {
 		CurrencyUnit euro = Monetary.getCurrency("EUR");
 		MonetaryAmount money = Money.parse("EUR 2.355432");
 		MonetaryAmount result = MonetaryOperators.rounding().apply(money);
@@ -277,7 +277,7 @@ public class MonetaryOperatorsTest {
 	}
 
 	@Test
-	public void shouldRoudingUsingRoundingMode() {
+	public void shouldRoundingUsingRoundingMode() {
 		CurrencyUnit euro = Monetary.getCurrency("EUR");
 		MonetaryAmount money = Money.parse("EUR 2.355432");
 		MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN).apply(money);
@@ -287,7 +287,7 @@ public class MonetaryOperatorsTest {
 	}
 
 	@Test
-	public void shouldRoudingUsingRoundingModeAndScale() {
+	public void shouldRoundingUsingRoundingModeAndScale() {
 		CurrencyUnit euro = Monetary.getCurrency("EUR");
 		MonetaryAmount money = Money.parse("EUR 2.355432");
 		MonetaryAmount result = MonetaryOperators.rounding(RoundingMode.HALF_EVEN, 4).apply(money);
@@ -297,7 +297,7 @@ public class MonetaryOperatorsTest {
 	}
 
 	@Test
-	public void shouldRoudingUsingScale() {
+	public void shouldRoundingUsingScale() {
 		CurrencyUnit euro = Monetary.getCurrency("EUR");
 		MonetaryAmount money = Money.parse("EUR 2.355432");
 		MonetaryAmount result = MonetaryOperators.rounding(4).apply(money);

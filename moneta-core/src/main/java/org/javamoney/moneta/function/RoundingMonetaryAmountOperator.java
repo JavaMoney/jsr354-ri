@@ -24,25 +24,25 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 
-class RoudingMonetaryAmountOperator implements MonetaryOperator {
+class RoundingMonetaryAmountOperator implements MonetaryOperator {
 
-	static final RoundingMode DEFAULT_ROUDING_MONETARY_AMOUNT = RoundingMode.HALF_EVEN;
+	static final RoundingMode DEFAULT_ROUNDING_MONETARY_AMOUNT = RoundingMode.HALF_EVEN;
 
 	private final RoundingMode roundingMode;
 
 	private final OptionalInt scaleOptional;
 
-	public RoudingMonetaryAmountOperator() {
-		this.roundingMode = DEFAULT_ROUDING_MONETARY_AMOUNT;
+	public RoundingMonetaryAmountOperator() {
+		this.roundingMode = DEFAULT_ROUNDING_MONETARY_AMOUNT;
 		scaleOptional = OptionalInt.empty();
 	}
 
-	public RoudingMonetaryAmountOperator(RoundingMode roundingMode) {
+	public RoundingMonetaryAmountOperator(RoundingMode roundingMode) {
 		this.roundingMode = roundingMode;
 		scaleOptional = OptionalInt.empty();
 	}
 
-	public RoudingMonetaryAmountOperator(RoundingMode roundingMode, int scale) {
+	public RoundingMonetaryAmountOperator(RoundingMode roundingMode, int scale) {
 		this.roundingMode = roundingMode;
 		this.scaleOptional = OptionalInt.of(scale);
 

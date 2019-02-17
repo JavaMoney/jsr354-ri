@@ -29,13 +29,13 @@ import org.javamoney.moneta.Money;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class RoudingMonetaryAmountOperatorTest {
+public class RoundingMonetaryAmountOperatorTest {
 
 	private MonetaryOperator operator;
 
 	@BeforeMethod
 	public void setup() {
-		operator = new RoudingMonetaryAmountOperator();
+		operator = new RoundingMonetaryAmountOperator();
 	}
 
 	@Test
@@ -60,8 +60,8 @@ public class RoudingMonetaryAmountOperatorTest {
 
 
 	@Test
-	public void shouldReturnPositiveValueUsingRoudingType() {
-		operator = new RoudingMonetaryAmountOperator(RoundingMode.HALF_EVEN);
+	public void shouldReturnPositiveValueUsingRoundingType() {
+		operator = new RoundingMonetaryAmountOperator(RoundingMode.HALF_EVEN);
 		CurrencyUnit currency = Monetary.getCurrency("EUR");
 		MonetaryAmount money = Money.parse("EUR 2.3523");
 		MonetaryAmount result = operator.apply(money);
@@ -71,8 +71,8 @@ public class RoudingMonetaryAmountOperatorTest {
 	}
 
 	@Test
-	public void shouldReturnNegativeValueUsingRoudingType() {
-		operator = new RoudingMonetaryAmountOperator(RoundingMode.HALF_EVEN);
+	public void shouldReturnNegativeValueUsingRoundingType() {
+		operator = new RoundingMonetaryAmountOperator(RoundingMode.HALF_EVEN);
 		CurrencyUnit currency = Monetary.getCurrency("BHD");
 		MonetaryAmount money = Money.parse("BHD -1.34534432");
 		MonetaryAmount result = operator.apply(money);
@@ -82,8 +82,8 @@ public class RoudingMonetaryAmountOperatorTest {
 
 
 	@Test
-	public void shouldReturnPositiveValueUsingRoudingTypeAndScale() {
-		operator = new RoudingMonetaryAmountOperator(RoundingMode.HALF_EVEN, 3);
+	public void shouldReturnPositiveValueUsingRoundingTypeAndScale() {
+		operator = new RoundingMonetaryAmountOperator(RoundingMode.HALF_EVEN, 3);
 		CurrencyUnit currency = Monetary.getCurrency("EUR");
 		MonetaryAmount money = Money.parse("EUR 2.3523");
 		MonetaryAmount result = operator.apply(money);
@@ -93,8 +93,8 @@ public class RoudingMonetaryAmountOperatorTest {
 	}
 
 	@Test
-	public void shouldReturnNegativeValueUsingRoudingTypeAndScale() {
-		operator = new RoudingMonetaryAmountOperator(RoundingMode.HALF_EVEN, 4);
+	public void shouldReturnNegativeValueUsingRoundingTypeAndScale() {
+		operator = new RoundingMonetaryAmountOperator(RoundingMode.HALF_EVEN, 4);
 		CurrencyUnit currency = Monetary.getCurrency("BHD");
 		MonetaryAmount money = Money.parse("BHD -1.34534432");
 		MonetaryAmount result = operator.apply(money);

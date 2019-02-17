@@ -63,7 +63,7 @@ public final class MonetaryOperators {
 
     private static final ExtractorMajorPartOperator EXTRACTOR_MAJOR_PART = new ExtractorMajorPartOperator();
 
-    private static final RoudingMonetaryAmountOperator ROUNDING_MONETARY_AMOUNT = new RoudingMonetaryAmountOperator();
+    private static final RoundingMonetaryAmountOperator ROUNDING_MONETARY_AMOUNT = new RoundingMonetaryAmountOperator();
 
     private MonetaryOperators() {
     }
@@ -230,7 +230,7 @@ public final class MonetaryOperators {
 	 * @return the major part as {@link MonetaryOperator}
 	 */
 	public static MonetaryOperator rounding(RoundingMode roundingMode) {
-		return new RoudingMonetaryAmountOperator(Objects.requireNonNull(roundingMode));
+		return new RoundingMonetaryAmountOperator(Objects.requireNonNull(roundingMode));
 	}
 
 	/**
@@ -251,7 +251,7 @@ public final class MonetaryOperators {
 	 * @return the major part as {@link MonetaryOperator}
 	 */
 	public static MonetaryOperator rounding(RoundingMode roundingMode, int scale) {
-		return new RoudingMonetaryAmountOperator(Objects.requireNonNull(roundingMode), scale);
+		return new RoundingMonetaryAmountOperator(Objects.requireNonNull(roundingMode), scale);
 	}
 
 	/**
@@ -271,6 +271,6 @@ public final class MonetaryOperators {
 	 * @return the major part as {@link MonetaryOperator}
 	 */
 	public static MonetaryOperator rounding(int scale) {
-		return new RoudingMonetaryAmountOperator(RoudingMonetaryAmountOperator.DEFAULT_ROUDING_MONETARY_AMOUNT, scale);
+		return new RoundingMonetaryAmountOperator(RoundingMonetaryAmountOperator.DEFAULT_ROUNDING_MONETARY_AMOUNT, scale);
 	}
 }

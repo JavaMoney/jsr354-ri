@@ -46,7 +46,7 @@ public class DefaultMonetaryRoundedFactoryTest {
 	}
 
 	@Test
-	public void shouldReturnGetRoudingOperator() {
+	public void shouldReturnGetRoundingOperator() {
 		MonetaryOperator roundingOperator = factory.getRoundingOperator();
 		assertEquals(identical, roundingOperator);
 	}
