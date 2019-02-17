@@ -115,7 +115,7 @@ Also all currently known currencies can be accessed:
 Collection<CurrencyUnit> allCurrencies = Monetary.getCurrencies();
 --------------------------------------------
 
-Similarly to other access methods you can also explicitly specifiy the provider chain to be used. The _Moneta_
+Similarly to other access methods you can also explicitly specify the provider chain to be used. The _Moneta_
 reference implementation provides the following currency providers:
 
 * _default_: this currency provider (implemented by +org.javamoney.moneta.internal.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
@@ -187,9 +187,9 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
     @Override
     public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
        // only ensure BTC is the code, or it is a default query.
-       if(query.isEmpty()
+       if (query.isEmpty()
            || query.getCurrencyCodes().contains("BTC")
-	   || query.getCurrencyCodes().isEmpty()){
+           || query.getCurrencyCodes().isEmpty()) {
            return bitcoinSet;
        }
        return Collections.emptySet();
@@ -384,7 +384,7 @@ public static MyMoney of(String currencyCode, long number);
 public static MyMoney of(String currencyCode, Number number);
 --------------------------------------------
 
-Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK nubber type
+Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK number type
 to +BigDecimal+ is available on +MoneyUtils+, along with additional helpful methods.
 
 
@@ -467,8 +467,8 @@ when combined with the new Java 8 Lambda/Streaming features:
 * +public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b)+ returns the greater of two
   +MonetaryAmount+ values. If the arguments have the same value, the result is that same value.
 * +public static BinaryOperator<MonetaryAmount> sum()+ Creates a BinaryOperator to sum.
-* +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the mininum amount
-* +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to caclulate the maximum amount.
+* +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the minimum amount
+* +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to calculate the maximum amount.
 
 ==== Performance Aspects
 
@@ -666,7 +666,7 @@ MonetaryAmount amountInCHF = amountInUSD.with(conversion);
 _Moneta_ provides quite powerful conversion providers, which allows you to perform currency conversion for most commonly used
 currencies, in some cases event back until 1995:
 
-* *ECB* connects to the online resources of the European Central Bank, which provides dayily exchange rates related
+* *ECB* connects to the online resources of the European Central Bank, which provides daily exchange rates related
   to EURO.
 * *ECB-HIST90* connects the historic currencies feed of the European Central Bank, which provides exchange rates back
   for the last 90 days.
@@ -804,7 +804,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     /** The provided formats, by name. */
     private Set<String> formatNames = new HashSet<>();
 
-    public GeeCoinFormatProviderSpi(){
+    public GeeCoinFormatProviderSpi() {
         supportedSets.add(Locale.CHINA);
         supportedSets = Collections.unmodifiableSet(supportedSets);
         formatNames.add("GeeCoin");
@@ -829,16 +829,16 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     @Override
     public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-	if(!amountFormatQuery.getProviderNames().isEmpty()
-	    && !amountFormatQuery.getProviderNames().contains(getProviderName())){
+        if (!amountFormatQuery.getProviderNames().isEmpty()
+            && !amountFormatQuery.getProviderNames().contains(getProviderName())) {
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getFormatName()==null
-	    || STYLE_NAME.equals(amountFormatQuery.getFormatName()))){
+        if (!(amountFormatQuery.getFormatName() == null
+            || STYLE_NAME.equals(amountFormatQuery.getFormatName()))) {
             return Collections.emptySet();
         }
         AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(PROVIDER_NAME);
-        if(amountFormatQuery.getLocale()!=null){
+        if (amountFormatQuery.getLocale() != null) {
             builder.setLocale(amountFormatQuery.getLocale());
         }
         builder.importContext(amountFormatQuery, false);
@@ -862,7 +862,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
 
 === Overriding values in javamoney.properties
 
-The reference implementation supports overriding of the values in +javamoney.properties+ by prefexing the keys with
+The reference implementation supports overriding of the values in +javamoney.properties+ by prefixing the keys with
 a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
 classpath. If no priority is annotated, priority=0 is assumed:
 
@@ -872,4 +872,4 @@ classpath. If no priority is annotated, priority=0 is assumed:
 {100}myKey=myValue
 --------------------------------------------
 
-If two entries have the same priority an exeption is thrown.
+If two entries have the same priority an exception is thrown.
