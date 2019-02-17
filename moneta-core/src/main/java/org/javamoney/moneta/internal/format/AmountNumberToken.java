@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal.format;
 
-import org.javamoney.moneta.format.AmountFormatParams;
-
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
@@ -30,6 +28,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.format.AmountFormatParams.GROUPING_GROUPING_SEPARATORS;
+import static org.javamoney.moneta.format.AmountFormatParams.GROUPING_SIZES;
 import static org.javamoney.moneta.spi.MoneyUtils.NBSP;
 import static org.javamoney.moneta.spi.MoneyUtils.NNBSP;
 import static org.javamoney.moneta.spi.MoneyUtils.replaceNbspWithSpace;
@@ -102,7 +102,7 @@ final class AmountNumberToken implements FormatToken {
     @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
-        int[] groupSizes = amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class);
+        int[] groupSizes = amountFormatContext.get(GROUPING_SIZES, int[].class);
         if (groupSizes == null || groupSizes.length == 0) {
             String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
             appendable.append(preformattedValue);
@@ -115,7 +115,7 @@ final class AmountNumberToken implements FormatToken {
             appendable.append(preformattedValue);
         } else {
             if (Objects.isNull(numberGroup)) {
-                char[] groupChars = amountFormatContext.get(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, char[].class);
+                char[] groupChars = amountFormatContext.get(GROUPING_GROUPING_SEPARATORS, char[].class);
                 if (groupChars == null || groupChars.length == 0) {
                     groupChars = new char[]{this.formatFormat
                             .getDecimalFormatSymbols().getGroupingSeparator()};
