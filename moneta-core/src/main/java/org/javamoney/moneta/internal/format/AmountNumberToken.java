@@ -96,7 +96,7 @@ final class AmountNumberToken implements FormatToken {
      * @return the number pattern used, never {@code null}.
      */
     public String getNumberPattern() {
-        return this.partialNumberPattern;
+        return partialNumberPattern;
     }
 
     @Override
@@ -104,26 +104,26 @@ final class AmountNumberToken implements FormatToken {
             throws IOException {
         int[] groupSizes = amountFormatContext.get(GROUPING_SIZES, int[].class);
         if (groupSizes == null || groupSizes.length == 0) {
-            String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
+            String preformattedValue = formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
             appendable.append(preformattedValue);
             return;
         }
-        this.formatFormat.setGroupingUsed(false);
-        String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
-        String[] numberParts = splitNumberParts(this.formatFormat, preformattedValue);
+        formatFormat.setGroupingUsed(false);
+        String preformattedValue = formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
+        String[] numberParts = splitNumberParts(formatFormat, preformattedValue);
         if (numberParts.length != 2) {
             appendable.append(preformattedValue);
         } else {
             if (Objects.isNull(numberGroup)) {
                 char[] groupChars = amountFormatContext.get(GROUPING_GROUPING_SEPARATORS, char[].class);
                 if (groupChars == null || groupChars.length == 0) {
-                    groupChars = new char[]{this.formatFormat
+                    groupChars = new char[]{formatFormat
                             .getDecimalFormatSymbols().getGroupingSeparator()};
                 }
                 numberGroup = new StringGrouper(groupChars, groupSizes);
             }
             preformattedValue = numberGroup.group(numberParts[0])
-                    + this.formatFormat.getDecimalFormatSymbols()
+                    + formatFormat.getDecimalFormatSymbols()
                     .getDecimalSeparator() + numberParts[1];
             appendable.append(preformattedValue);
         }
@@ -156,7 +156,7 @@ final class AmountNumberToken implements FormatToken {
 
     private void parseToken(ParseContext context) {
         ParsePosition pos = new ParsePosition(context.getIndex());
-        Number number = this.parseFormat.parse(context.getOriginalInput(), pos);
+        Number number = parseFormat.parse(context.getOriginalInput(), pos);
         if (Objects.nonNull(number)) {
             context.setParsedNumber(number);
             String consumedToken = context.getOriginalInput().substring(context.getIndex(), pos.getIndex());
