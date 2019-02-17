@@ -780,7 +780,7 @@ as a parameter for a +Locale+ based format query:
 --------------------------------------------
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
   AmountFormatQueryBuilder.of(Locale.GERMANY)
-    .set("pattern", "####,####")
+    .set(AmountFormatParams.PATTERN, "####,####")
     .build()
 );
 --------------------------------------------
