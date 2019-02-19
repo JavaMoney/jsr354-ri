@@ -47,7 +47,7 @@ Basically the API of JSR 354 provides the following packages:
 +javax.money+:: contains the main artifacts, such as +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
 MonetaryQuery, MonetaryRounding+, and the singleton accessors +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+..
 
-+javax.money.conversion+:: contains the conversion artifacts +ExchangeRate, ExchangeRateProvider, CurrencyConversion+
++javax.money.convert+:: contains the conversion artifacts +ExchangeRate, ExchangeRateProvider, CurrencyConversion+
 and the according +MonetaryConversions+ accessor singleton..
 
 +javax.money.format+:: contains the formatting artifacts +MonetaryAmountFormat, AmountFormatContext+ and the according
