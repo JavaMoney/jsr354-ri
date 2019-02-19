@@ -39,7 +39,7 @@ which contains additionally financial calculations and formulas, additional curr
 currencies, currency/region mapping and last but not least EE/CDI support. Below given the most important links:
 
 * JSR 354 API specification available https://jcp.org/en/jsr/detail?id=354[here].
-* JSR 354 on GitHub https://github.com/4[here].
+* JSR 354 on GitHub https://github.com/JavaMoney/jsr354-api[here].
 * JavaMoney Umbrella Site: http://javamoney.org
 
 Basically the API of JSR 354 provides the following packages:
