@@ -64,9 +64,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("USD1,000.42");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000.42D);
-//FIXME        assertEquals(parsedAmount.toString(), "USD 1000.42");
-        // see https://github.com/JavaMoney/jsr354-ri/issues/283
-        assertEquals(parsedAmount.toString(), "USD 1000.420000000000000000000000000000000000000000000000000000000000000");
+        assertEquals(parsedAmount.toString(), "USD 1000.42");
     }
 
     @Test
@@ -78,9 +76,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("0.01 USD");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
-//FIXME        assertEquals(parsedAmount.toString(), "USD 0.01");
-        // see https://github.com/JavaMoney/jsr354-ri/issues/283
-        assertEquals(parsedAmount.toString(), "USD 0.010000000000000000000000000000000000000000000000000000000000000");
+        assertEquals(parsedAmount.toString(), "USD 0.01");
     }
 
     @Test

@@ -103,11 +103,14 @@ public final class MoneyUtils {
         if (Objects.nonNull(moneyContext)) {
             MathContext mc = getMathContext(moneyContext, HALF_EVEN);
             bd = new BigDecimal(bd.toString(), mc);
-            if (moneyContext.getMaxScale() > 0) {
-                if (LOG.isLoggable(FINEST)) {
-                    LOG.log(FINEST, "Got Max Scale %n", moneyContext.getMaxScale());
+            int maxScale = moneyContext.getMaxScale();
+            if (maxScale > 0) {
+                if (bd.scale() > maxScale) {
+                    if (LOG.isLoggable(FINEST)) {
+                        LOG.log(FINEST, "The number scale is " + bd.scale() + " but Max Scale is " + maxScale);
+                    }
+                    bd = bd.setScale(maxScale, mc.getRoundingMode());
                 }
-                bd = bd.setScale(moneyContext.getMaxScale(), mc.getRoundingMode());
             }
         }
         return bd;
