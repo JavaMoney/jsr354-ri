@@ -23,11 +23,14 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.Locale;
 
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatQuery;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
+import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.Money;
 import org.testng.annotations.Test;
@@ -144,6 +147,27 @@ public class MonetaryFormatsTest {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         assertMoneyFormat(format, Money.of(123.01, "CNY"), "CNY123.01");
         assertMoneyFormat(format, Money.of(14000.12, "CNY"), "CNY14,000.12");
+    }
+
+    /**
+     * Test related to https://github.com/JavaMoney/jsr354-ri/issues/294
+     */
+    @Test
+    public void testParse_amount_without_currency_code_but_with_currency_in_context() {
+        CurrencyUnit eur = Monetary.getCurrency("EUR");
+        AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(GERMANY)
+            .set(CurrencyUnit.class, eur)
+            .build();
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
+        try {
+            MonetaryAmount parsedAmount = format.parse("0.01");
+        } catch (MonetaryParseException e) {
+            assertEquals(e.getMessage(), "Error parsing CurrencyUnit: no input.");
+            assertEquals(e.getErrorIndex(), -1);
+        }
+//FIXME        assertSame(parsedAmount.getCurrency(), eur);
+//FIXME        assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
+//FIXME        assertEquals(parsedAmount.toString(), "EUR 0.01");
     }
 
     private void assertMoneyParse(MonetaryAmountFormat format, String text, double expected, String currencyCode) {

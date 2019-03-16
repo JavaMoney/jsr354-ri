@@ -3,6 +3,8 @@ package org.javamoney.moneta.internal.format;
 import org.javamoney.moneta.FastMoney;
 import org.testng.annotations.Test;
 
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.AmountFormatContextBuilder;
@@ -10,6 +12,7 @@ import javax.money.format.MonetaryParseException;
 
 import static java.util.Locale.US;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertSame;
 
 public class DefaultMonetaryAmountFormatTest {
 
@@ -93,4 +96,39 @@ public class DefaultMonetaryAmountFormatTest {
         }
     }
 
+    @Test
+    public void testParse_pattern_without_currency_sign_but_with_currency_in_context() {
+        CurrencyUnit usd = Monetary.getCurrency("USD");
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(US);
+        builder.set("pattern", "0.00");
+        builder.set(CurrencyUnit.class, usd);
+        AmountFormatContext context = builder.build();
+        DefaultMonetaryAmountFormat format = new DefaultMonetaryAmountFormat(context);
+        MonetaryAmount parsedAmount = format.parse("0.01");
+        assertSame(parsedAmount.getCurrency(), usd);
+        assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
+        assertEquals(parsedAmount.toString(), "USD 0.01");
+    }
+
+    /**
+     * Test related to https://github.com/JavaMoney/jsr354-ri/issues/294
+     */
+    @Test
+    public void testParse_pattern_with_currency_sign_and_with_currency_in_context_but_amount_is_without_currency_code() {
+        CurrencyUnit usd = Monetary.getCurrency("USD");
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(US);
+        builder.set("pattern", "0.00 ¤");
+        builder.set(CurrencyUnit.class, usd);
+        AmountFormatContext context = builder.build();
+        DefaultMonetaryAmountFormat format = new DefaultMonetaryAmountFormat(context);
+        try {
+            MonetaryAmount parsedAmount = format.parse("0.01");
+        } catch (MonetaryParseException e) {
+            assertEquals(e.getMessage(), "Error parsing CurrencyUnit: no input.");
+            assertEquals(e.getErrorIndex(), -1);
+        }
+//FIXME        assertSame(parsedAmount.getCurrency(), usd);
+//FIXME        assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
+//FIXME        assertEquals(parsedAmount.toString(), "USD 0.01");
+    }
 }
