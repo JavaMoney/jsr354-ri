@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 class LoadRemoteDataLoaderService {
 
-	private static final Logger LOG = Logger.getLogger(DefaultLoaderListener.class.getName());
+	private static final Logger LOG = Logger.getLogger(LoadRemoteDataLoaderService.class.getName());
 
 	private final DefaultLoaderListener listener;
 

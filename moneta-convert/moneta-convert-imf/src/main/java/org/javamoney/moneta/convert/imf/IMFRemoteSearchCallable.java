@@ -31,7 +31,7 @@ import org.javamoney.moneta.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchR
 
 class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
-	private static final Logger LOG = Logger.getLogger(IMFRemoteSearch.class.getName());
+	private static final Logger LOG = Logger.getLogger(IMFRemoteSearchCallable.class.getName());
 
 	private final IMFHistoricalType type;
 
