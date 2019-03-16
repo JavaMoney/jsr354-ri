@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.internal.format;
 
-import org.javamoney.moneta.format.AmountFormatParams;
-
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
@@ -30,6 +28,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 import static java.util.Objects.requireNonNull;
+import static org.javamoney.moneta.format.AmountFormatParams.GROUPING_GROUPING_SEPARATORS;
+import static org.javamoney.moneta.format.AmountFormatParams.GROUPING_SIZES;
 import static org.javamoney.moneta.spi.MoneyUtils.NBSP;
 import static org.javamoney.moneta.spi.MoneyUtils.NNBSP;
 import static org.javamoney.moneta.spi.MoneyUtils.replaceNbspWithSpace;
@@ -96,34 +96,34 @@ final class AmountNumberToken implements FormatToken {
      * @return the number pattern used, never {@code null}.
      */
     public String getNumberPattern() {
-        return this.partialNumberPattern;
+        return partialNumberPattern;
     }
 
     @Override
     public void print(Appendable appendable, MonetaryAmount amount)
             throws IOException {
-        int[] groupSizes = amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class);
+        int[] groupSizes = amountFormatContext.get(GROUPING_SIZES, int[].class);
         if (groupSizes == null || groupSizes.length == 0) {
-            String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
+            String preformattedValue = formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
             appendable.append(preformattedValue);
             return;
         }
-        this.formatFormat.setGroupingUsed(false);
-        String preformattedValue = this.formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
-        String[] numberParts = splitNumberParts(this.formatFormat, preformattedValue);
+        formatFormat.setGroupingUsed(false);
+        String preformattedValue = formatFormat.format(amount.getNumber().numberValue(BigDecimal.class));
+        String[] numberParts = splitNumberParts(formatFormat, preformattedValue);
         if (numberParts.length != 2) {
             appendable.append(preformattedValue);
         } else {
             if (Objects.isNull(numberGroup)) {
-                char[] groupChars = amountFormatContext.get(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, char[].class);
+                char[] groupChars = amountFormatContext.get(GROUPING_GROUPING_SEPARATORS, char[].class);
                 if (groupChars == null || groupChars.length == 0) {
-                    groupChars = new char[]{this.formatFormat
-                            .getDecimalFormatSymbols().getGroupingSeparator()};
+                    char groupingSeparator = formatFormat.getDecimalFormatSymbols().getGroupingSeparator();
+                    groupChars = new char[]{groupingSeparator};
                 }
                 numberGroup = new StringGrouper(groupChars, groupSizes);
             }
             preformattedValue = numberGroup.group(numberParts[0])
-                    + this.formatFormat.getDecimalFormatSymbols()
+                    + formatFormat.getDecimalFormatSymbols()
                     .getDecimalSeparator() + numberParts[1];
             appendable.append(preformattedValue);
         }
@@ -131,13 +131,14 @@ final class AmountNumberToken implements FormatToken {
 
     private String[] splitNumberParts(DecimalFormat format,
                                       String preformattedValue) {
-        int index = preformattedValue.indexOf(format.getDecimalFormatSymbols()
-                .getDecimalSeparator());
+        char decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
+        int index = preformattedValue.indexOf(decimalSeparator);
         if (index < 0) {
             return new String[]{preformattedValue};
         }
-        return new String[]{preformattedValue.substring(0, index),
-                preformattedValue.substring(index + 1)};
+        String beforeSeparator = preformattedValue.substring(0, index);
+        String afterSeparator = preformattedValue.substring(index + 1);
+        return new String[]{beforeSeparator, afterSeparator};
     }
 
     @Override
@@ -156,7 +157,7 @@ final class AmountNumberToken implements FormatToken {
 
     private void parseToken(ParseContext context) {
         ParsePosition pos = new ParsePosition(context.getIndex());
-        Number number = this.parseFormat.parse(context.getOriginalInput(), pos);
+        Number number = parseFormat.parse(context.getOriginalInput(), pos);
         if (Objects.nonNull(number)) {
             context.setParsedNumber(number);
             String consumedToken = context.getOriginalInput().substring(context.getIndex(), pos.getIndex());

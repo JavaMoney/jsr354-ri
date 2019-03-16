@@ -33,6 +33,7 @@ import org.javamoney.moneta.format.CurrencyStyle;
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static java.util.logging.Level.FINEST;
+import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
 
 /**
  * Formats instances of {@code MonetaryAmount} to a {@link String} or an
@@ -204,7 +205,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     private String resolvePattern(AmountFormatContext amountFormatContext) {
-        String pattern = amountFormatContext.getText("pattern");
+        String pattern = amountFormatContext.getText(PATTERN);
         if (pattern == null) {
             DecimalFormat currencyDecimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale());
             pattern = currencyDecimalFormat.toPattern();

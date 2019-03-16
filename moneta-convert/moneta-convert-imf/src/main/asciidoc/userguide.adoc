@@ -1,5 +1,4 @@
-JavaMoney 'Moneta' User Guide
-=============================
+= JavaMoney 'Moneta' User Guide
 Anatole Tresch <atsticks@gmail.com>
 :Author Initials: ATR
 :source-highlighter: coderay
@@ -115,7 +114,7 @@ Also all currently known currencies can be accessed:
 Collection<CurrencyUnit> allCurrencies = Monetary.getCurrencies();
 --------------------------------------------
 
-Similarly to other access methods you can also explicitly specifiy the provider chain to be used. The _Moneta_
+Similarly to other access methods you can also explicitly specify the provider chain to be used. The _Moneta_
 reference implementation provides the following currency providers:
 
 * _default_: this currency provider (implemented by +org.javamoney.moneta.internal.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
@@ -168,11 +167,11 @@ also provides currencies for Bitcoin:
 [source,java]
 .Implementing a Bitcoin currency provider
 --------------------------------------------
-public final class BitCoinProvider implements CurrencyProviderSpi{
+public final class BitCoinProvider implements CurrencyProviderSpi {
 
     private Set<CurrencyUnit> bitcoinSet = new HashSet<>();
 
-    public BitCoinProvider(){
+    public BitCoinProvider() {
        bitcoinSet.add(CurrencyUnitBuilder.of("BTC", "MyCurrencyBuilder").build());
        bitcoinSet = Collections.unmodifiableSet(bitcoinSet);
     }
@@ -185,11 +184,11 @@ public final class BitCoinProvider implements CurrencyProviderSpi{
      * @return the corresponding {@link CurrencyUnit}s matching, never null.
      */
     @Override
-    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query){
+    public Set<CurrencyUnit> getCurrencies(CurrencyQuery query) {
        // only ensure BTC is the code, or it is a default query.
-       if(query.isEmpty()
+       if (query.isEmpty()
            || query.getCurrencyCodes().contains("BTC")
-	   || query.getCurrencyCodes().isEmpty()){
+           || query.getCurrencyCodes().isEmpty()) {
            return bitcoinSet;
        }
        return Collections.emptySet();
@@ -216,7 +215,7 @@ normal CDI bean, e.g.
 .Implementing a Bitcoin currency provider
 --------------------------------------------
 @Singleton
-public class BitCoinProvider implements CurrencyProviderSpi{
+public class BitCoinProvider implements CurrencyProviderSpi {
   ...
 }
 --------------------------------------------
@@ -384,7 +383,7 @@ public static MyMoney of(String currencyCode, long number);
 public static MyMoney of(String currencyCode, Number number);
 --------------------------------------------
 
-Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK nubber type
+Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK number type
 to +BigDecimal+ is available on +MoneyUtils+, along with additional helpful methods.
 
 
@@ -467,8 +466,8 @@ when combined with the new Java 8 Lambda/Streaming features:
 * +public static MonetaryAmount max(MonetaryAmount a, MonetaryAmount b)+ returns the greater of two
   +MonetaryAmount+ values. If the arguments have the same value, the result is that same value.
 * +public static BinaryOperator<MonetaryAmount> sum()+ Creates a BinaryOperator to sum.
-* +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the mininum amount
-* +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to caclulate the maximum amount.
+* +public static BinaryOperator<MonetaryAmount> min()+ creates a BinaryOperator to calculate the minimum amount
+* +public static BinaryOperator<MonetaryAmount> max()+ creates a BinaryOperator to calculate the maximum amount.
 
 ==== Performance Aspects
 
@@ -573,29 +572,29 @@ based on the mechanism as defined by the Java +ServiceLoader+.
 [source,java]
 .Implement a +RoundingProviderSpi+ providing a currency rounding for "BTC" (Bitcoin)
 --------------------------------------------
-public final class TestRoundingProvider implements RoundingProviderSpi{
+public final class TestRoundingProvider implements RoundingProviderSpi {
 
     private static final MonetaryRounding ROUNDING = new MyCurrencyRounding();
 
     private final Set<String> roundingNames;
 
-    public TestRoundingProvider(){
+    public TestRoundingProvider() {
         Set<String> names = new HashSet<>();
         names.add("custom1");
         this.roundingNames = Collections.unmodifiableSet(names);
     }
 
     @Override
-    public MonetaryRounding getRounding(RoundingQuery roundingQuery){
+    public MonetaryRounding getRounding(RoundingQuery roundingQuery) {
         CurrencyUnit cu = roundingQuery.getCurrency();
-        if(cu!=null && "BTC".equals(cu.getCurrencyCode())){
+        if (cu != null && "BTC".equals(cu.getCurrencyCode())) {
             return ROUNDING;
         }
         return null;
     }
 
     @Override
-    public Set<String> getRoundingNames(){
+    public Set<String> getRoundingNames() {
         return Collections.emptySet();
     }
 
@@ -666,7 +665,7 @@ MonetaryAmount amountInCHF = amountInUSD.with(conversion);
 _Moneta_ provides quite powerful conversion providers, which allows you to perform currency conversion for most commonly used
 currencies, in some cases event back until 1995:
 
-* *ECB* connects to the online resources of the European Central Bank, which provides dayily exchange rates related
+* *ECB* connects to the online resources of the European Central Bank, which provides daily exchange rates related
   to EURO.
 * *ECB-HIST90* connects the historic currencies feed of the European Central Bank, which provides exchange rates back
   for the last 90 days.
@@ -780,7 +779,7 @@ as a parameter for a +Locale+ based format query:
 --------------------------------------------
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
   AmountFormatQueryBuilder.of(Locale.GERMANY)
-    .set("pattern", "####,####")
+    .set(AmountFormatParams.PATTERN, "####,####")
     .build()
 );
 --------------------------------------------
@@ -794,7 +793,7 @@ done based on the mechanism as defined by the Java +ServiceLoader+.
 [source,java]
 .Implement a +MonetaryAmountFormatProviderSpi+ providing a format for "GKC" (GeeCoin)
 --------------------------------------------
-public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi{
+public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProviderSpi {
 
     private static final String PROVIDER_NAME = "GeeCoin";
     private static final String STYLE_NAME = "GeeCoin";
@@ -804,7 +803,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     /** The provided formats, by name. */
     private Set<String> formatNames = new HashSet<>();
 
-    public GeeCoinFormatProviderSpi(){
+    public GeeCoinFormatProviderSpi() {
         supportedSets.add(Locale.CHINA);
         supportedSets = Collections.unmodifiableSet(supportedSets);
         formatNames.add("GeeCoin");
@@ -817,7 +816,7 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
      * javax.money.spi.MonetaryAmountFormatProviderSpi#getProviderName()
      */
     @Override
-    public String getProviderName(){
+    public String getProviderName() {
         return PROVIDER_NAME;
     }
 
@@ -827,18 +826,18 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
      * javax.money.spi.MonetaryAmountFormatProviderSpi#getFormat(javax.money.format.AmountFormatContext)
      */
     @Override
-    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery){
+    public Collection<MonetaryAmountFormat> getAmountFormats(AmountFormatQuery amountFormatQuery) {
         Objects.requireNonNull(amountFormatQuery, "AmountFormatContext required");
-	if(!amountFormatQuery.getProviderNames().isEmpty()
-	    && !amountFormatQuery.getProviderNames().contains(getProviderName())){
+        if (!amountFormatQuery.getProviderNames().isEmpty()
+            && !amountFormatQuery.getProviderNames().contains(getProviderName())) {
             return Collections.emptySet();
         }
-        if(!(amountFormatQuery.getFormatName()==null
-	    || STYLE_NAME.equals(amountFormatQuery.getFormatName()))){
+        if (!(amountFormatQuery.getFormatName() == null
+            || STYLE_NAME.equals(amountFormatQuery.getFormatName()))) {
             return Collections.emptySet();
         }
         AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(PROVIDER_NAME);
-        if(amountFormatQuery.getLocale()!=null){
+        if (amountFormatQuery.getLocale() != null) {
             builder.setLocale(amountFormatQuery.getLocale());
         }
         builder.importContext(amountFormatQuery, false);
@@ -847,12 +846,12 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
     }
 
     @Override
-    public Set<Locale> getAvailableLocales(){
+    public Set<Locale> getAvailableLocales() {
         return supportedSets;
     }
 
     @Override
-    public Set<String> getAvailableFormatNames(){
+    public Set<String> getAvailableFormatNames() {
         return formatNames;
     }
 
@@ -862,9 +861,9 @@ public final class GeeCoinFormatProviderSpi implements MonetaryAmountFormatProvi
 
 === Overriding values in javamoney.properties
 
-The reference implementation supports overriding of the values in +javamoney.properties+ by prefexing the keys with
+The reference implementation supports overriding of the values in +javamoney.properties+ by prefixing the keys with
 a priority value in brackets. Hereby the mechanism reads all +javamoney.properties+ resources visible on the
-classpath. If no priority is annotated, priority=0 is assumed:
+classpath. If no priority is annotated, +priority=0+ is assumed:
 
 [source,listing]
 .Overriding a Configuration Value using a Priority
@@ -872,4 +871,4 @@ classpath. If no priority is annotated, priority=0 is assumed:
 {100}myKey=myValue
 --------------------------------------------
 
-If two entries have the same priority an exeption is thrown.
+If two entries have the same priority an exception is thrown.

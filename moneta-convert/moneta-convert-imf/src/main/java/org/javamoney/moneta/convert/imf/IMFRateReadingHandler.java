@@ -45,12 +45,11 @@ class IMFRateReadingHandler {
 	private static final Logger LOG = Logger
 			.getLogger(IMFRateReadingHandler.class.getName());
 
-	private final Map<String, CurrencyUnit> currenciresByName;
-
+	private final Map<String, CurrencyUnit> currenciesByName;
 	private final ProviderContext context;
 
-	IMFRateReadingHandler(Map<String, CurrencyUnit> currenciresByName, ProviderContext context) {
-		this.currenciresByName = currenciresByName;
+	IMFRateReadingHandler(Map<String, CurrencyUnit> currenciesByName, ProviderContext context) {
+		this.currenciesByName = currenciesByName;
 		this.context = context;
 	}
 
@@ -98,7 +97,7 @@ class IMFRateReadingHandler {
 				continue;
 			}
 			String[] parts = line.split("\\t");
-			CurrencyUnit currency = currenciresByName.get(parts[0].toLowerCase(Locale.ENGLISH));
+			CurrencyUnit currency = currenciesByName.get(parts[0].toLowerCase(Locale.ENGLISH));
 			if (Objects.isNull(currency)) {
 				LOG.finest(() -> "Uninterpretable data from IMF data feed: "
 						+ parts[0]);
@@ -185,7 +184,6 @@ class IMFRateReadingHandler {
 	}
 
 	private Double[] parseValues(String[] parts) throws ParseException {
-
 		ArrayList<Double> result = new ArrayList<>();
 		int index = 0;
 		for (String part : parts) {
@@ -217,9 +215,7 @@ class IMFRateReadingHandler {
 	}
 
 	class RateIMFResult {
-
 		private final Map<CurrencyUnit, List<ExchangeRate>> currencyToSdr;
-
 		private final Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency;
 
 		RateIMFResult(Map<CurrencyUnit, List<ExchangeRate>> currencyToSdr,
@@ -240,7 +236,7 @@ class IMFRateReadingHandler {
 
 	@Override
 	public String toString() {
-		return IMFRateReadingHandler.class.getName() + '{' + " currenciresByName: " + currenciresByName + ',' +
+		return IMFRateReadingHandler.class.getName() + '{' + " currenciesByName: " + currenciesByName + ',' +
 				" context: " + context + '}';
 	}
 }

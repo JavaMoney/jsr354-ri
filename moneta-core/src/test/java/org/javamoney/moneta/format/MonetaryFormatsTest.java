@@ -41,6 +41,7 @@ public class MonetaryFormatsTest {
     public void testParse_DKK_da() {
         AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(DANISH).set(CODE).build();
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
+        assertMoneyParse(format, "00000123 DKK", 123.0, "DKK");
         assertMoneyParse(format, "123 DKK", 123.0, "DKK");
         assertMoneyParse(format, "123,01 DKK", 123.01, "DKK");
         assertMoneyParse(format, "14.000,12 DKK", 14000.12, "DKK");
@@ -59,6 +60,7 @@ public class MonetaryFormatsTest {
     public void testParse_EUR_fr_FR() {
         AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(FRANCE).set(CODE).build();
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
+        assertMoneyParse(format, "00000123 EUR", 123.0, "EUR");
         assertMoneyParse(format, "123 EUR", 123.0, "EUR");
         assertMoneyParse(format, "123,01 EUR", 123.01, "EUR");
         assertMoneyParse(format, "14 000,12 EUR", 14000.12, "EUR");
@@ -78,6 +80,7 @@ public class MonetaryFormatsTest {
     public void testParse_BGN_bg_BG() {
         AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(BULGARIA).set(CODE).build();
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
+        assertMoneyParse(format, "00000123 BGN", 123.0, "BGN");
         assertMoneyParse(format, "123 BGN", 123.0, "BGN");
         assertMoneyParse(format, "123,01 BGN", 123.01, "BGN");
         assertMoneyParse(format, "14 000,12 BGN", 14000.12, "BGN");
@@ -96,6 +99,7 @@ public class MonetaryFormatsTest {
     public void testParse_EUR_de_DE() {
         AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(GERMANY).set(CODE).build();
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
+        assertMoneyParse(format, "00000123 EUR", 123.0, "EUR");
         assertMoneyParse(format, "123 EUR", 123.0, "EUR");
         assertMoneyParse(format, "123,01 EUR", 123.01, "EUR");
         assertMoneyParse(format, "14.000,12 EUR", 14000.12, "EUR");
@@ -127,7 +131,7 @@ public class MonetaryFormatsTest {
     public void testParse_CNY_zh_CN() {
         AmountFormatQuery formatQuery = AmountFormatQueryBuilder.of(CHINA).set(CODE).build();
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
-        assertMoneyParse(format, "CNY123", 123.0, "CNY");
+        assertMoneyParse(format, "CNY00000123", 123.0, "CNY");
         assertMoneyParse(format, "CNY123.01", 123.01, "CNY");
         assertMoneyParse(format, "CNY14,000.12", 14000.12, "CNY");
         assertMoneyParse(format, "CNY 14,000.12", 14000.12, "CNY");
