@@ -36,4 +36,19 @@ module org.javamoney.moneta {
 
     uses org.javamoney.moneta.spi.LoaderService;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
+    
+    uses javax.money.spi.CurrencyProviderSpi;
+    uses javax.money.spi.MonetaryCurrenciesSingletonSpi;
+    uses javax.money.spi.MonetaryAmountFactoryProviderSpi;
+    uses javax.money.spi.MonetaryAmountFormatProviderSpi;
+    uses javax.money.spi.MonetaryAmountsSingletonQuerySpi;
+    uses javax.money.spi.MonetaryAmountsSingletonSpi;
+    uses javax.money.spi.MonetaryConversionsSingletonSpi;
+    uses javax.money.spi.MonetaryFormatsSingletonSpi;
+    uses javax.money.spi.MonetaryRoundingsSingletonSpi;
+    uses javax.money.spi.RoundingProviderSpi;
+    uses javax.money.spi.ServiceProvider;
+    uses javax.money.convert.ExchangeRateProvider;
+    uses javax.money.convert.ExchangeRateProviderSupplier;
+    uses javax.money.format.MonetaryAmountFormat;
 }
