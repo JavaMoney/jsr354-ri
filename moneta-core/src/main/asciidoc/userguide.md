@@ -29,16 +29,10 @@ currencies, currency/region mapping and last but not least EE/CDI support. Below
 
 Basically the API of JSR 354 provides the following packages:
 
-`javax.money`:: contains the main artifacts, such as `CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
-MonetaryQuery, MonetaryRounding`, and the singleton accessors `MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings`.
-
-`javax.money.convert`:: contains the conversion artifacts `ExchangeRate, ExchangeRateProvider, CurrencyConversion`
-and the according `MonetaryConversions` accessor singleton.
-
-`javax.money.format`:: contains the formatting artifacts `MonetaryAmountFormat, AmountFormatContext` and the according
-`MonetaryFormats` accessor singleton.
-
-`javax.money.spi`:: contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
+* `javax.money` contains the main artifacts, such as `CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator, MonetaryQuery, MonetaryRounding`, and the singleton accessors `MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings`.
+* `javax.money.convert` contains the conversion artifacts `ExchangeRate, ExchangeRateProvider, CurrencyConversion` and the according `MonetaryConversions` accessor singleton.
+* `javax.money.format` contains the formatting artifacts `MonetaryAmountFormat, AmountFormatContext` and the according `MonetaryFormats` accessor singleton.
+* `javax.money.spi` contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
 different runtime environments and component loading mechanisms.
 
 Basically the JSR 354 API is complete, meaning users won't have to reference anything other than what is already part of
@@ -100,8 +94,8 @@ Collection<CurrencyUnit> allCurrencies = Monetary.getCurrencies();
 Similarly to other access methods you can also explicitly specify the provider chain to be used. The _Moneta_
 reference implementation provides the following currency providers:
 
-* _default_: this currency provider (implemented by `org.javamoney.moneta.internal.JDKCurrencyProvider`) simply maps/adapts `java.util.Currency`.
-* _ConfigurableCurrencyUnitProvider_ (implemented by `org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider`)
+* `default`: this currency provider (implemented by `org.javamoney.moneta.internal.JDKCurrencyProvider`) simply maps/adapts `java.util.Currency`.
+* `ConfigurableCurrencyUnitProvider` (implemented by `org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider`)
   provides a configuration hook for programmatically add instances. This provider is autoconfigured. Ir provides
   static hooks for adding additional `CurrencyUnit` instances:
 
