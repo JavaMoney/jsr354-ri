@@ -29,28 +29,28 @@ currencies, currency/region mapping and last but not least EE/CDI support. Below
 
 Basically the API of JSR 354 provides the following packages:
 
-+javax.money+:: contains the main artifacts, such as +CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
-MonetaryQuery, MonetaryRounding+, and the singleton accessors +MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings+..
+`javax.money`:: contains the main artifacts, such as `CurrencyUnit, MonetaryAmount, MonetaryContext, MonetaryOperator,
+MonetaryQuery, MonetaryRounding`, and the singleton accessors `MonetaryCurrencies, MonetaryAmounts, MonetaryRoundings`.
 
-+javax.money.convert+:: contains the conversion artifacts +ExchangeRate, ExchangeRateProvider, CurrencyConversion+
-and the according +MonetaryConversions+ accessor singleton..
+`javax.money.convert`:: contains the conversion artifacts `ExchangeRate, ExchangeRateProvider, CurrencyConversion`
+and the according `MonetaryConversions` accessor singleton.
 
-+javax.money.format+:: contains the formatting artifacts +MonetaryAmountFormat, AmountFormatContext+ and the according
-+MonetaryFormats+ accessor singleton.
+`javax.money.format`:: contains the formatting artifacts `MonetaryAmountFormat, AmountFormatContext` and the according
+`MonetaryFormats` accessor singleton.
 
-+javax.money.spi+:: contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
+`javax.money.spi`:: contains the SPI interfaces provided by the JSR 354 API and the bootstrap logic, to support
 different runtime environments and component loading mechanisms.
 
 Basically the JSR 354 API is complete, meaning users won't have to reference anything other than what is already part of
 the JSR's API. As a consequence this reference implementation contains mostly components that are registered into the
 API using the JSR's SPI mechanism. Only a few additions to the API are done, e.g. singletons providing Lambda-supporting
-methods (+MonetaryFunctions+).
+methods (`MonetaryFunctions`).
 
 
 ## Working with Currency Units
 ### Accessing Currency Units
 
-Basically access to  currency units is based on the +javax.money.MonetaryCurrencies+ singleton. Hereby you can access
+Basically access to  currency units is based on the `javax.money.MonetaryCurrencies` singleton. Hereby you can access
 currencies in different ways:
 
 #### Access currencies by currency code
@@ -64,20 +64,20 @@ CurrencyUnit currencyUSD = Monetary.getCurrency("USD");
 CurrencyUnit currencyEUR = Monetary.getCurrency("EUR");
 ```
 
-Hereby all codes available from +java.util.Currency+ in the underlying JDK are mapped by default.
+Hereby all codes available from `java.util.Currency` in the underlying JDK are mapped by default.
 
 #### Access currencies by Locale
 
-You can use +java.util.Locale+ to access currencies. Hereby the +Locale+ instance, represents a
-country. All available countries can be accessed by calling +Locale.getISOCountries()+. With the
-given ISO country code a corresponding +Locale+ can be created:
+You can use `java.util.Locale` to access currencies. Hereby the `Locale` instance, represents a
+country. All available countries can be accessed by calling `Locale.getISOCountries()`. With the
+given ISO country code a corresponding `Locale` can be created:
 
 ```java
 String isoCountry = "USA";
 Locale country = new Locale("", isoCountry);
 ```
 
-Similarly to +java.util.Currency+ a +CurrencyUnit+ can be accessed using this +Locale+:
+Similarly to `java.util.Currency` a `CurrencyUnit` can be accessed using this `Locale`:
 
 _Accessing currencies by Locale_
 ```java
@@ -100,12 +100,12 @@ Collection<CurrencyUnit> allCurrencies = Monetary.getCurrencies();
 Similarly to other access methods you can also explicitly specify the provider chain to be used. The _Moneta_
 reference implementation provides the following currency providers:
 
-* _default_: this currency provider (implemented by +org.javamoney.moneta.internal.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
-* _ConfigurableCurrencyUnitProvider_ (implemented by +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+)
+* _default_: this currency provider (implemented by `org.javamoney.moneta.internal.JDKCurrencyProvider`) simply maps/adapts `java.util.Currency`.
+* _ConfigurableCurrencyUnitProvider_ (implemented by `org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider`)
   provides a configuration hook for programmatically add instances. This provider is autoconfigured. Ir provides
-  static hooks for adding additional +CurrencyUnit+ instances:
+  static hooks for adding additional `CurrencyUnit` instances:
 
-_Example of registering +CurrencyUnit+ instances programmatically._
+_Example of registering `CurrencyUnit` instances programmatically._
 ```java
  /**
  * Registers a bew currency unit under its currency code.
@@ -137,13 +137,13 @@ public static CurrencyUnit removeCurrencyUnit(String currencyCode);
 public static CurrencyUnit removeCurrencyUnit(Locale locale);
 ```
 
-The API is straightforward so far. For most cases the +BuildableCurrencyUnit+ class can be used to create additional
+The API is straightforward so far. For most cases the `BuildableCurrencyUnit` class can be used to create additional
 currency instances that then can be registered using the static methods:
 
 #### Registering Additional Currency Units
 
-For adding additional CurrencyUnit instances to the +MonetaryCurrencies+ singleton, you must implement an instance
-of +CurrencyProviderSpi+. Following a minimal example, hereby also using the +BuildableCurrencyUnit+ class, that
+For adding additional CurrencyUnit instances to the `MonetaryCurrencies` singleton, you must implement an instance
+of `CurrencyProviderSpi`. Following a minimal example, hereby also using the `BuildableCurrencyUnit` class, that
 also provides currencies for Bitcoin:
 
 _Implementing a Bitcoin currency provider_
@@ -178,8 +178,8 @@ public final class BitCoinProvider implements CurrencyProviderSpi {
 }
 ```
 
-By default, the +BitCoinProvider+ class must be configured as service to be loadable by +java.util.ServiceLoader+.
-This can be achieved by adding a file +META-INF/services/javax.money.spi.CurrencyProviderSpi+ with the following content
+By default, the `BitCoinProvider` class must be configured as service to be loadable by `java.util.ServiceLoader`.
+This can be achieved by adding a file `META-INF/services/javax.money.spi.CurrencyProviderSpi` with the following content
 to your classpath:
 
 _Contents of `META-INF/services/javax.money.spi.CurrencyProviderSpi`_
@@ -188,7 +188,7 @@ _Contents of `META-INF/services/javax.money.spi.CurrencyProviderSpi`_
 my.fully.qualified.BitCoinProvider
 ```
 
-Alternatively, if the JSR's +Bootstrap+ logic uses CDI, it would also be possible to register the provider class as
+Alternatively, if the JSR's `Bootstrap` logic uses CDI, it would also be possible to register the provider class as
 normal CDI bean, e.g.
 
 _Implementing a Bitcoin currency provider_
@@ -199,7 +199,7 @@ public class BitCoinProvider implements CurrencyProviderSpi {
 }
 ```
 
-Now given this example it is obvious that the tricky part is to define, when exactly a given +CurrencyQuery+
+Now given this example it is obvious that the tricky part is to define, when exactly a given `CurrencyQuery`
 should be targeted by this provider, or otherwise, be simply ignored. Our case just provides an additional
 currency code, so it is a good idea to just only return data for _default_ query types. Additionally we only return our code
 sublist, when the according code is requested, or a unspecified request is performed.
@@ -209,7 +209,7 @@ sublist, when the according code is requested, or a unspecified request is perfo
 
 You can use the MonetaryCurrencies static methods to register currencies as follows.
 
-_Example of registering +CurrencyUnit+ instances programmatically._
+_Example of registering `CurrencyUnit` instances programmatically._
 ```java
 CurrencyUnit unit = CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
     .setDefaultFractionDigits(3)
@@ -220,10 +220,10 @@ Monetary.registerCurrency(unit);
 Monetary.registerCurrency(unit, Locale.MyCOUNTRY);
 ```
 
-Fortunately +CurrencyUnitBuilder+ is also capable of registering a currency on creation, by just passing
+Fortunately `CurrencyUnitBuilder` is also capable of registering a currency on creation, by just passing
 a register flag to the call: So the same can be rewritten as follows:
 
-_Example of registering +CurrencyUnit+ instances programmatically, using +CurrencyUnitBuilder+._
+_Example of registering `CurrencyUnit` instances programmatically, using `CurrencyUnitBuilder`._
 ```java
 CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
     .setDefaultFractionDigits(3)
@@ -232,7 +232,7 @@ CurrencyUnitBuilder.of("FLS22", "MyCurrencyProvider")
 
 #### Provided Currencies
 
-_Moneta_, by default provides only the same currencies as defined by +java.util.Currency+. Use the extended currency
+_Moneta_, by default provides only the same currencies as defined by `java.util.Currency`. Use the extended currency
 module from the JavaMoney OSS library for additional currency support, e.g. current overloading of currencies
 based on the actual input from the online ISO-4217 resources.
 
@@ -240,39 +240,39 @@ based on the actual input from the online ISO-4217 resources.
 
 Monetary amounts are the key abstraction of JSR 354. _Moneta_ hereby provides different implementations of amounts:
 
-* +Money+ represents a effective implementation, which is based on +java.math.BigDecimal+ internally for
+* `Money` represents a effective implementation, which is based on `java.math.BigDecimal` internally for
   performing the arithmetic operations. The implementation is capable of supporting arbitrary precision
   and scale.
-* +FastMoney+ represents numeric representation that was optimized for speed. It represents a monetary amount only
-  as a integral number of type +long+, hereby using a number scale of 100'000 (10^5).
-* +RoundedMoney+ finally provides an amount implementation that is implicitly rounded after each operation.
+* `FastMoney` represents numeric representation that was optimized for speed. It represents a monetary amount only
+  as a integral number of type `long`, hereby using a number scale of 100'000 (10^5).
+* `RoundedMoney` finally provides an amount implementation that is implicitly rounded after each operation.
 
 #### Choosing an Implementation
 
-Basically, if the numeric capabilities of +FastMoney+ are sufficient for your use cases, you may use this type. If
-not sure, using +Money+ is in general safe. +RoundedMoney+ should only be used, if you are well aware of its usage,
+Basically, if the numeric capabilities of `FastMoney` are sufficient for your use cases, you may use this type. If
+not sure, using `Money` is in general safe. `RoundedMoney` should only be used, if you are well aware of its usage,
 since the immediate rounding may produce unwanted side effects (invalid values).
 
 #### Creating new Amounts
 
-As defined by the JSR's API you can access according +MonetaryAmountFactory+ for all types listed above to create
-new instances of amounts. E.g. instances of +FastMoney+ can be created as follows:
+As defined by the JSR's API you can access according `MonetaryAmountFactory` for all types listed above to create
+new instances of amounts. E.g. instances of `FastMoney` can be created as follows:
 
-_Creating instances of +FastMoney+ using the +Monetary+ singleton:_
+_Creating instances of `FastMoney` using the `Monetary` singleton:_
 ```java
 FastMoney m = Monetary.getAmountFactory(FastMoney.class).setCurrency("USD").setNumber(200.20).create();
 ```
 
 Additionally _Moneta_ also supports static factory methods on the types directly. So the following code is equivalent:
 
-_Creating instances of +FastMoney+ using the static factory method:_
+_Creating instances of `FastMoney` using the static factory method:_
 ```java
 FastMoney m = FastMoney.of(200.20, "USD");
 ```
 
-Creation of +Money+ instances is similar:
+Creation of `Money` instances is similar:
 
-_Creating instances of +Money+:_
+_Creating instances of `Money`:_
 ```java
 Money m1 = Monetary.getAmountFactory(Money.class).setCurrency("USD").setNumber(200.20).create();
 Money m2 = Money.of(200.20, "USD");
@@ -280,19 +280,19 @@ Money m2 = Money.of(200.20, "USD");
 
 ##### Configuring Instances of Money
 
-The +Money+ class is internally based on +java.math.BigDecimal+. Therefore the arithmetic precision and rounding
-capabilities of +BigDecimal+ are also usable with +Money+. Hereby, by default, instances
-of +Money+ internally are initialized with +MathContext.DECIMAL64+. Nevertheless instance also can be configured
-explicitly by passing a +MathContext+ as part of a +MonetaryContext+:
+The `Money` class is internally based on `java.math.BigDecimal`. Therefore the arithmetic precision and rounding
+capabilities of `BigDecimal` are also usable with `Money`. Hereby, by default, instances
+of `Money` internally are initialized with `MathContext.DECIMAL64`. Nevertheless instance also can be configured
+explicitly by passing a `MathContext` as part of a `MonetaryContext`:
 
-_Creating instances of +Money+ configuring the +MathContext+ to be used._
+_Creating instances of `Money` configuring the `MathContext` to be used._
 ```java
 Money money = Money.of(200, "CHF", MonetaryContextBuilder.of().set(MathContext.DECIMAL128).build());
 ```
 
 Using the JSR's main API allows to achieve the same as follows:
 
-_Creating instances of +Money+ configuring the +MathContext+ to be used, using the +MonetaryAmountFactory+._
+_Creating instances of `Money` configuring the `MathContext` to be used, using the `MonetaryAmountFactory`._
 ```java
 Money money = Monetary.getAmountFactory(Money.class)
                               .setCurrencyUnit("CHF").setNumber(200)
@@ -300,16 +300,16 @@ Money money = Monetary.getAmountFactory(Money.class)
                               .create();
 ```
 
-Additionally the default +MathContext+ can be configured with the +javamoney.properties+ located in your classpath:
+Additionally the default `MathContext` can be configured with the `javamoney.properties` located in your classpath:
 
-_Configuring the default +MathContext+ to be used for +Money+._
+_Configuring the default `MathContext` to be used for `Money`._
 ```properties
 org.javamoney.moneta.Money.defaults.mathContext=DECIMAL128
 ```
 
-Alternatively you also can configure the precision and +RoundingMode+ to be used:
+Alternatively you also can configure the precision and `RoundingMode` to be used:
 
-_Configuring the default +MathContext+ to be used for +Money+ (alternative)._
+_Configuring the default `MathContext` to be used for `Money` (alternative)._
 ```properties
 org.javamoney.moneta.Money.defaults.precision=DECIMAL128
 org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
@@ -317,14 +317,14 @@ org.javamoney.moneta.Money.defaults.roundingMode=HALF_EVEN
 
 #### Configuring Internal Rounding of FastMoney
 
-The class +FastMoney+ internally uses a single +long+ value to model a monetary amount. Hereby it uses a fixed scale of
-5 digits. Obviously this may require rounding in some cases. Hereby by default +FastMoney+ rounds input values (of type
-+MonetaryAmount+, or numbers) to its internal 5 digits scale. In most cases that makes sense and makes use of
+The class `FastMoney` internally uses a single `long` value to model a monetary amount. Hereby it uses a fixed scale of
+5 digits. Obviously this may require rounding in some cases. Hereby by default `FastMoney` rounds input values (of type
+`MonetaryAmount`, or numbers) to its internal 5 digits scale. In most cases that makes sense and makes use of
 this class easy and straight forward. Nevertheless there might be scenarios, where you want to throw
-+ArithmeticException+ if an entry value exceeds the maximal scale. This alternate, more rigid behaviour, can be
-activated by adding the following configuration to +javamoney.properties+:
+`ArithmeticException` if an entry value exceeds the maximal scale. This alternate, more rigid behaviour, can be
+activated by adding the following configuration to `javamoney.properties`:
 
-_Activating strict input number validation for +FastMoney+_
+_Activating strict input number validation for `FastMoney`_
 ```properties
 org.javamoney.moneta.FastMoney.enforceScaleCompatibility=true
 ```
@@ -333,8 +333,8 @@ org.javamoney.moneta.FastMoney.enforceScaleCompatibility=true
 #### Registering Additional Amount Implementations
 
 By default, additional implementation classes are added, by registering an instance of
-+MonetaryAmountFactoryProviderSpi+ as JDK services loaded by +java.util.ServiceLoader+.
-For this you have to add the following contents to +META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi+:
+`MonetaryAmountFactoryProviderSpi` as JDK services loaded by `java.util.ServiceLoader`.
+For this you have to add the following contents to `META-INF/services/javax.money.spi.MonetaryAmountFactoryProviderSpi`:
 
 _Providing custom monetary amount implementations_
 ```properties
@@ -351,7 +351,7 @@ public static MyMoney of(String currencyCode, Number number);
 ```
 
 Hereby several commonly used functionality can be reused from the moneta RI, e.g. safe conversion of any JDK number type
-to +BigDecimal+ is available on +MoneyUtils+, along with additional helpful methods.
+to `BigDecimal` is available on `MoneyUtils`, along with additional helpful methods.
 
 
 #### Mixing Amount Implementation Types
@@ -366,9 +366,9 @@ important to mention, if doing so:
 
 Nevertheless there are strategies to mitigate these possible issues. The most easy and obvious strategy hereby is
 simply *converting explicitly to the required target type, before performing any operations*. This can
-be easily achieved, since every implementation in _moneta_ provides corresponding static +from()+ methods:
+be easily achieved, since every implementation in _moneta_ provides corresponding static `from()` methods:
 
-_Using the custom monetary amount implementation with +Money+:_
+_Using the custom monetary amount implementation with `Money`:_
 ```java
 MyMoney money1;
 Money money = Money.from(myMoney);
@@ -379,7 +379,7 @@ fastMoney = FastMoney.from(money);
 ```
 
 In the above example, as long as the scale of 5 is never exceeded, no implicit rounding is performed. Bigger scales
-require rounding, when creating new instances of +FastMoney+.
+require rounding, when creating new instances of `FastMoney`.
 
 
 #### Other utility functions
@@ -434,10 +434,10 @@ money1 = money1.divide(5.456);
 money1 = money1.with(Monetary.getRounding());
 ```
 
-All tests were executed on a notebook with an +Intel i7 2.6GHz+ processor with SSD.
+All tests were executed on a notebook with an `Intel i7 2.6GHz` processor with SSD.
 The VM was not configured in any special way.
 
-This test is executed 100000 times for each monetary amount class +M+:
+This test is executed 100000 times for each monetary amount class `M`:
 
 _Performance Test Results for monetary arithmetic, no implementation mix_
 ```properties
@@ -446,7 +446,7 @@ Duration for 100000 operations (FastMoney,long): 1011 ms (10 ns per loop) -> EUR
 ```
 
 The same test is also done, hereby mixing different implementation types. Also this test is executed 100000 times for
-each monetary amount class +M+:
+each monetary amount class `M`:
 
 _Performance Test Results for monetary arithmetic, mixing implementations_
 ```properties
@@ -457,12 +457,12 @@ Duration for 100000 operations (Money/FastMoney mixed): 1883 ms (18 ns per loop)
 
 ### Rounding
 
-_Moneta_ provides different roundings, all accessible from the +MonetaryRoundings+ singleton.
+_Moneta_ provides different roundings, all accessible from the `MonetaryRoundings` singleton.
 
 #### Arithmetic Roundings
 
-You can acquire instances of arithmetic roundings by passing the target scale and +RoundingMode+ to be used within
-the +RoundingQuery+ passed:
+You can acquire instances of arithmetic roundings by passing the target scale and `RoundingMode` to be used within
+the `RoundingQuery` passed:
 
 _Access and apply arithmetic rounding._
 ```java
@@ -474,7 +474,7 @@ MonetaryAmount roundedAmount = amt.with(rounding);
 
 #### Default Roundings
 
-Also a _default_ +MonetaryRounding+ can be accessed, which basically falls back to the according _default_ rounding
+Also a _default_ `MonetaryRounding` can be accessed, which basically falls back to the according _default_ rounding
 based on the current amount instance to be rounded:
 
 _Access and apply default rounding._
@@ -484,7 +484,7 @@ MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // implicitly uses Monetary.getRounding(CurrencyUnit);
 ```
 
-Also you can access the default rounding for a given +CurrencyUnit+. By default this will return an arithmetic rounding
+Also you can access the default rounding for a given `CurrencyUnit`. By default this will return an arithmetic rounding
 based on the currency's _default fraction digits_, but it may also return a non standard rounding, where useful.
 
 _Access and apply default currency rounding._
@@ -510,10 +510,10 @@ MonetaryAmount roundedAmount = amt.with(rounding); // amount rounded in CHF cash
 
 #### Register your own Roundings
 
-You can add additional roundings by registering instances of +RoundingProviderSpi+. Be default this has to be done
-based on the mechanism as defined by the Java +ServiceLoader+.
+You can add additional roundings by registering instances of `RoundingProviderSpi`. Be default this has to be done
+based on the mechanism as defined by the Java `ServiceLoader`.
 
-_Implement a +RoundingProviderSpi+ providing a currency rounding for "BTC" (Bitcoin)_
+_Implement a `RoundingProviderSpi` providing a currency rounding for "BTC" (Bitcoin)_
 ```java
 public final class TestRoundingProvider implements RoundingProviderSpi {
 
@@ -549,14 +549,14 @@ public final class TestRoundingProvider implements RoundingProviderSpi {
 
 ### Basics
 
-Basically converting of amounts into other currencies is based on the concept of +MonetaryOperator+, which transforms
-an amount into another amount (of the same implementation type). A conversion hereby is based on +ExchangeRate+
+Basically converting of amounts into other currencies is based on the concept of `MonetaryOperator`, which transforms
+an amount into another amount (of the same implementation type). A conversion hereby is based on `ExchangeRate`
 that defines the transformation between amount A in currency Ca to amount B in currency Cb.
 
-Hereby exchange rates can be accessed through an instanceof +ExchangeRateProvider+, which can be accessed from
-the +MonetaryConversions+ singleton:
+Hereby exchange rates can be accessed through an instanceof `ExchangeRateProvider`, which can be accessed from
+the `MonetaryConversions` singleton:
 
-_Access an +ExchangeRateProvider+ and get an +ExchangeRate+_
+_Access an `ExchangeRateProvider` and get an `ExchangeRate`_
 ```java
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("IMF");
 ExchangeRate chfToUsdRate = rateProvider.getExchangeRate("CHF", "USD");
@@ -568,7 +568,7 @@ to evaluate a rate required. By default, the first result returned by a provider
 want to use the "ECB" provider first and only use the "IMF" provider for currencies not covered by the "ECB" provider
 we can write the following code:
 
-_Access a compound +ExchangeRateProvider+ and get an +ExchangeRate+_
+_Access a compound `ExchangeRateProvider` and get an `ExchangeRate`_
 ```java
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
 ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
@@ -576,17 +576,17 @@ ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
 
 Finally we can also omit the definition of a provider chain. This will use the default provider chain:
 
-_Access an +ExchangeRate+ using the default provider chain_
+_Access an `ExchangeRate` using the default provider chain_
 ```java
 ExchangeRateProvider rateProvider = MonetaryConversions.getExchangeRateProvider();
 ExchangeRate eurToChfRate = rateProvider.getExchangeRate("EUR", "CHF");
 ```
 
-#### Extracting a +CurrencyConversion+
+#### Extracting a CurrencyConversion
 
-A +CurrencyConversion+ extends +MonetaryOperator+ and is therefore directly applicable on every +MonetaryAmount+.
-Hereby a +CurrencyConversion+ instance is always bound to a terminating currency and an underlying +ExchangeRateProvider+.
-As a consequence each +ExchangeRateProvider+ allows to get a +CurrencyConversion+ instance by passing the terminating
+A `CurrencyConversion` extends `MonetaryOperator` and is therefore directly applicable on every `MonetaryAmount`.
+Hereby a `CurrencyConversion` instance is always bound to a terminating currency and an underlying `ExchangeRateProvider`.
+As a consequence each `ExchangeRateProvider` allows to get a `CurrencyConversion` instance by passing the terminating
 currency:
 
 _Getting a `CurrencyConversion` from an `ExchangeRateProvider`_
@@ -612,11 +612,11 @@ currencies, in some cases event back until 1995:
   until 1999.
 * `IMF` connects to the data-feed of the International Monetary Fund, which provides daily exchange rates for
 almost all important currencies. Hereby the IMF feeds are internally build up as derived rates, since IMF
-provides data using the intermediate +SDR+ currency unit.
+provides data using the intermediate `SDR` currency unit.
 * `IDENT` provides rates with a factor of 1.0, where base and target currency are the same.
 
-By default the chain of rate providers is configured as +IDENT,ECB,IMF,ECB-HIST,ECB-HIST90+. As defined by the JSR the conversion
-provider chain can be configured in +javamoney.properties+ as follows:
+By default the chain of rate providers is configured as `IDENT,ECB,IMF,ECB-HIST,ECB-HIST90`. As defined by the JSR the conversion
+provider chain can be configured in `javamoney.properties` as follows:
 
 Overriding the conversion provider chain
 ```properties
@@ -698,14 +698,14 @@ MonetaryAmount amount = format.parse(formattedString);
 ```
 
 **NOTE:** Be aware that parsing back an amount in a reverse operation may not always work. If a formatter implements
-      only a unidirectional formatting operation, a +MonetaryParseException+ will be thrown.
+      only a unidirectional formatting operation, a `MonetaryParseException` will be thrown.
 
 
 ### Customizing the Default Amount Formatters
 
 _Moneta_ basically provides similar formatting options to the one of DecimalFormat.
-It is possible to pass a +DecimalFormat+ pattern string
-as a parameter for a +Locale+ based format query:
+It is possible to pass a `DecimalFormat` pattern string
+as a parameter for a `Locale` based format query:
 
 ```java
 MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
@@ -718,8 +718,8 @@ MonetaryAmountFormat formatQueried = MonetaryFormats.getAmountFormat(
 
 ### Registering your own Formats
 
-You can add additional formats by registering instances of +MonetaryAmountFormatProviderSpi+. Be default this has to be
-done based on the mechanism as defined by the Java +ServiceLoader+.
+You can add additional formats by registering instances of `MonetaryAmountFormatProviderSpi`. Be default this has to be
+done based on the mechanism as defined by the Java `ServiceLoader`.
 
 _Implement a `MonetaryAmountFormatProviderSpi` providing a format for "GKC" (GeeCoin)_
 ```java
