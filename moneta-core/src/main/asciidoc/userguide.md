@@ -1,15 +1,15 @@
-# JavaMoney 'Moneta' User Guide
+# JavaMoney Moneta User Guide
 Author: Anatole Tresch <atsticks@gmail.com>
 
-'Moneta' is an implementation of the JSR 354 'Java Money API'. The API is separated
+_Moneta_ is an implementation of the JSR 354 Java Money API. The API is separated
 so also other can provide their own implementations. This document will
-mainly focus on the overall library usage from a user's perspective, when using 'Moneta'. Normally this document
+mainly focus on the overall library usage from a user's perspective, when using Moneta. Normally this document
 will not explicitly differentiate between the JSR 354 API and this implementation, unless it is useful for the
 common understanding.
 
 ## This document
 This is a user guide that describes all relevant aspects of
-Java Money, for using this API along with the 'Moneta' reference implementation.
+Java Money, for using this API along with the Moneta reference implementation.
 
 For a shorter introduction you may check out the quick start guide (tbd).
 
