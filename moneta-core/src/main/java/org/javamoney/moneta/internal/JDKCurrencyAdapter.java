@@ -134,7 +134,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(baseCurrency);
+        return baseCurrency.getCurrencyCode().hashCode();
     }
 
     /*
@@ -149,7 +149,7 @@ public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Com
         }
         if (obj instanceof CurrencyUnit) {
             CurrencyUnit other = (CurrencyUnit) obj;
-            return Objects.equals(getCurrencyCode(), other.getCurrencyCode());
+            return getCurrencyCode().equals(other.getCurrencyCode());
         }
         return false;
     }

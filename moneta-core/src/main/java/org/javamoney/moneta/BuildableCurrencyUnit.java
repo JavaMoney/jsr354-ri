@@ -109,7 +109,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit,
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(currencyCode);
+		return currencyCode.hashCode();
 	}
 
 	/*
@@ -124,7 +124,7 @@ final class BuildableCurrencyUnit implements CurrencyUnit,
 		}
 		if (obj instanceof CurrencyUnit) {
 			CurrencyUnit other = (CurrencyUnit) obj;
-			return Objects.equals(getCurrencyCode(), other.getCurrencyCode());
+			return getCurrencyCode().equals(other.getCurrencyCode());
 		}
 		return false;
 	}
