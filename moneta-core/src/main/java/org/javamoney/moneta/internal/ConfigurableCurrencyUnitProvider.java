@@ -33,6 +33,10 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     private static final Map<String, CurrencyUnit> CURRENCY_UNITS = new ConcurrentHashMap<>();
     /**
+     * The currency units, identified by numeric code.
+     */
+    private static final Map<Integer, CurrencyUnit> CURRENCY_UNITS_BY_NUMERIC_CODE = new ConcurrentHashMap<>();
+    /**
      * The currency units identified by Locale.
      */
     private static final Map<Locale, CurrencyUnit> CURRENCY_UNITS_BY_LOCALE = new ConcurrentHashMap<>();
@@ -69,19 +73,33 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
             }
             return result;
         }
+        if (!currencyQuery.getNumericCodes().isEmpty()) {
+            for (Integer numericCode : currencyQuery.getNumericCodes()) {
+                CurrencyUnit cu = CURRENCY_UNITS_BY_NUMERIC_CODE.get(numericCode);
+                if (cu != null) {
+                    result.add(cu);
+                }
+            }
+            return result;
+        }
         result.addAll(CURRENCY_UNITS.values());
         return result;
     }
 
     /**
-     * Registers a bew currency unit under its currency code.
+     * Registers a new currency unit under its currency code and potentially numeric code.
      *
      * @param currencyUnit the new currency to be registered, not null.
      * @return any unit instance registered previously by this instance, or null.
      */
     public static CurrencyUnit registerCurrencyUnit(CurrencyUnit currencyUnit) {
         Objects.requireNonNull(currencyUnit);
-        return ConfigurableCurrencyUnitProvider.CURRENCY_UNITS.put(currencyUnit.getCurrencyCode(), currencyUnit);
+        CurrencyUnit registered = ConfigurableCurrencyUnitProvider.CURRENCY_UNITS.put(currencyUnit.getCurrencyCode(), currencyUnit);
+        int numericCode = currencyUnit.getNumericCode();
+        if (numericCode != -1) {
+            ConfigurableCurrencyUnitProvider.CURRENCY_UNITS_BY_NUMERIC_CODE.put(numericCode, currencyUnit);
+        }
+        return registered;
     }
 
     /**
@@ -105,7 +123,14 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     public static CurrencyUnit removeCurrencyUnit(String currencyCode) {
         Objects.requireNonNull(currencyCode);
-        return ConfigurableCurrencyUnitProvider.CURRENCY_UNITS.remove(currencyCode);
+        CurrencyUnit removed = ConfigurableCurrencyUnitProvider.CURRENCY_UNITS.remove(currencyCode);
+        if (removed != null) {
+            int numericCode = removed.getNumericCode();
+            if (numericCode != -1) {
+                ConfigurableCurrencyUnitProvider.CURRENCY_UNITS_BY_NUMERIC_CODE.remove(numericCode);
+            }
+        }
+        return removed;
     }
 
     /**
@@ -126,8 +151,9 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
      */
     @Override
     public String toString() {
-        return "ConfigurableCurrencyUnitProvider [CURRENCY_UNITS=" + CURRENCY_UNITS + ", CURRENCY_UNITS_BY_LOCALE=" +
-                CURRENCY_UNITS_BY_LOCALE + ']';
+        return "ConfigurableCurrencyUnitProvider [CURRENCY_UNITS=" + CURRENCY_UNITS
+                        + ", CURRENCY_UNITS_BY_NUMERIC_CODE=" + CURRENCY_UNITS_BY_NUMERIC_CODE
+                        + ", CURRENCY_UNITS_BY_LOCALE=" + CURRENCY_UNITS_BY_LOCALE + ']';
     }
 
 }
