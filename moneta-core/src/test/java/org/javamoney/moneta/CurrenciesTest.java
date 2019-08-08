@@ -16,7 +16,9 @@
 package org.javamoney.moneta;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNotSame;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
@@ -128,6 +130,27 @@ public class CurrenciesTest {
 		assertTrue(0 > cur2.compareTo(cur1));
 		assertEquals(0, cur1.compareTo(cur1));
 		assertEquals(0, cur2.compareTo(cur2));
+	}
+	
+	/**
+	 * Test equals and hashCode methods for
+	 * {@link javax.money.CurrencyUnit}s.
+	 */
+	@Test
+	public void testEqualsHashCode() {
+		String currencyCode = "USD";
+		CurrencyUnit cur1 = Monetary.getCurrency(currencyCode, "default");
+		CurrencyUnit cur2 = CurrencyUnitBuilder.of(currencyCode, "equals-hashCode-test")
+                .setDefaultFractionDigits(2)
+                .build(false);
+
+		assertNotSame(cur1, cur2);
+		assertNotEquals(cur1.getContext().getProviderName(), cur2.getContext().getProviderName());
+		assertEquals(cur1, cur2);
+		assertEquals(cur2, cur1);
+		assertEquals(cur1.hashCode(), cur2.hashCode());
+		assertEquals(cur1.hashCode(), currencyCode.hashCode());
+		assertEquals(cur2.hashCode(), currencyCode.hashCode());
 	}
 
 	/**
