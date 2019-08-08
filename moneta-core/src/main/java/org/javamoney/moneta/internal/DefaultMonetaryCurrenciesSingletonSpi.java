@@ -15,6 +15,7 @@ package org.javamoney.moneta.internal;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
 import javax.money.CurrencyQuery;
+import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.CurrencyProviderSpi;
@@ -22,6 +23,7 @@ import javax.money.spi.MonetaryCurrenciesSingletonSpi;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +52,25 @@ public class DefaultMonetaryCurrenciesSingletonSpi implements MonetaryCurrencies
             }
         }
         return result;
+    }
+
+    @Override
+    public boolean isCurrencyAvailable(String code, String... providers) {
+        return isCurrencyAvailable(CurrencyQueryBuilder.of().setCurrencyCodes(code).setProviderNames(providers).build());
+    }
+
+    @Override
+    public boolean isCurrencyAvailable(Locale locale, String... providers) {
+        return isCurrencyAvailable(CurrencyQueryBuilder.of().setCountries(locale).setProviderNames(providers).build());
+    }
+
+    private boolean isCurrencyAvailable(CurrencyQuery query) {
+        for (CurrencyProviderSpi provider : collectProviders(query)) {
+            if (provider.isCurrencyAvailable(query)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<CurrencyProviderSpi> collectProviders(CurrencyQuery query) {
