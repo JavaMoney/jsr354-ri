@@ -21,6 +21,7 @@ import static java.util.Locale.GERMANY;
 import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 import static org.testng.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 
 import javax.money.CurrencyUnit;
@@ -168,6 +169,26 @@ public class MonetaryFormatsTest {
 //FIXME        assertSame(parsedAmount.getCurrency(), eur);
 //FIXME        assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
 //FIXME        assertEquals(parsedAmount.toString(), "EUR 0.01");
+    }
+    
+    /**
+     * Test related to parsing currency symbols.
+     */
+    @Test
+    public void testParseCurrencySymbol() {
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
+                    AmountFormatQueryBuilder.of(Locale.GERMANY)
+                        .set(CurrencyStyle.SYMBOL)
+                        .build());
+        Money money = Money.of(new BigDecimal("1234567.89"), "EUR");
+        String expectedFormattedString = "1.234.567,89 €";
+        assertEquals(expectedFormattedString, format.format(money));
+        assertEquals(money, Money.parse(expectedFormattedString, format));
+
+        money = Money.of(new BigDecimal("1234567.89"), "INR");
+        expectedFormattedString = "1.234.567,89 ₹";
+        assertEquals(expectedFormattedString, format.format(money));
+        assertEquals(money, Money.parse(expectedFormattedString, format));
     }
 
     private void assertMoneyParse(MonetaryAmountFormat format, String text, double expected, String currencyCode) {
