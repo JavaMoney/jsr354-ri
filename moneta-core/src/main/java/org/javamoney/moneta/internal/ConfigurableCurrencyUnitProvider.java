@@ -103,7 +103,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
     }
 
     /**
-     * Registers a bew currency unit under the given Locale.
+     * Registers a new currency unit under the given Locale.
      *
      * @param currencyUnit the new currency to be registered, not null.
      * @param locale       the Locale, not null.
