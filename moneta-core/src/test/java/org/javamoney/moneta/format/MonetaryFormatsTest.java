@@ -34,6 +34,7 @@ import javax.money.format.MonetaryFormats;
 import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.Money;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsTest {
@@ -175,6 +176,7 @@ public class MonetaryFormatsTest {
      * Test related to parsing currency symbols.
      */
     @Test
+    @Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
     public void testParseCurrencySymbol() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
                     AmountFormatQueryBuilder.of(Locale.GERMANY)
