@@ -15,12 +15,16 @@
  */
 package org.javamoney.moneta.internal.format;
 
+import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.format.CurrencyStyle;
+import org.javamoney.moneta.internal.JDKCurrencyProvider;
 
+import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
 import javax.money.format.MonetaryParseException;
+import javax.money.spi.CurrencyProviderSpi;
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;
@@ -208,7 +212,17 @@ final class CurrencyToken implements FormatToken {
                         cur = Monetary.getCurrency("GBP");
                         context.consume('£');
                     } else {
-                        cur = Monetary.getCurrency(token);
+                        //System.out.println(token);
+                        // Workaround for https://github.com/JavaMoney/jsr354-ri/issues/274
+                        String code = token;
+                        for (Currency juc : Currency.getAvailableCurrencies()) {
+                            if (token.equals(juc.getSymbol())) {
+                                //System.out.println(juc);
+                                code = juc.getCurrencyCode();
+                                break;
+                            }
+                        }
+                        cur = Monetary.getCurrency(code);
                         context.consume(token);
                     }
                     context.setParsedCurrency(cur);

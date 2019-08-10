@@ -29,14 +29,14 @@ import org.javamoney.moneta.Money;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
-public class MonetaryFormatsParseTest {
+public class MonetaryFormatsParseBySymbolTest {
     public static final Locale INDIA = new Locale("en, IN");
 
     /**
      * Test related to parsing currency symbols.
      */
     @Test
-    @Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
+    //@Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
     public void testParseCurrencySymbol1() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
                     AmountFormatQueryBuilder.of(Locale.GERMANY)
@@ -57,7 +57,7 @@ public class MonetaryFormatsParseTest {
      * Test related to parsing currency symbols.
      */
     @Test
-    @Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
+    //@Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
     public void testParseCurrencySymbol2() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
                     AmountFormatQueryBuilder.of(INDIA)
