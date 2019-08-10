@@ -20,7 +20,6 @@ import static org.testng.Assert.assertEquals;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatQueryBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
