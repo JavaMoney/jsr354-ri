@@ -26,7 +26,6 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 
 import org.javamoney.moneta.Money;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsParseBySymbolTest {
@@ -36,8 +35,8 @@ public class MonetaryFormatsParseBySymbolTest {
      * Test related to parsing currency symbols.
      */
     @Test
-    //@Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
-    public void testParseCurrencySymbol1() {
+    //"see https://github.com/JavaMoney/jsr354-ri/issues/274"
+    public void testParseCurrencySymbolINR1() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
                     AmountFormatQueryBuilder.of(Locale.GERMANY)
                         .set(CurrencyStyle.SYMBOL)
@@ -57,8 +56,8 @@ public class MonetaryFormatsParseBySymbolTest {
      * Test related to parsing currency symbols.
      */
     @Test
-    //@Ignore("see https://github.com/JavaMoney/jsr354-ri/issues/274")
-    public void testParseCurrencySymbol2() {
+    //"see https://github.com/JavaMoney/jsr354-ri/issues/274"
+    public void testParseCurrencySymbolINR2() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(
                     AmountFormatQueryBuilder.of(INDIA)
                         .set(CurrencyStyle.SYMBOL)
@@ -72,17 +71,5 @@ public class MonetaryFormatsParseBySymbolTest {
         expectedFormattedString = "₹ 1,234,567.89";
         assertEquals(expectedFormattedString, format.format(money));
         assertEquals(money, Money.parse(expectedFormattedString, format));
-    }
-
-    
-    private void assertMoneyParse(MonetaryAmountFormat format, String text, double expected, String currencyCode) {
-        MonetaryAmount amountInt = format.parse(text);
-        assertEquals(amountInt.getNumber().doubleValueExact(), expected);
-        assertEquals(amountInt.getCurrency().getCurrencyCode(), currencyCode);
-    }
-
-    private void assertMoneyFormat(MonetaryAmountFormat format, MonetaryAmount amount, String expected) {
-        String formatted = format.format(amount);
-        assertEquals(formatted, expected);
     }
 }
