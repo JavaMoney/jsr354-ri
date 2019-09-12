@@ -667,7 +667,13 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public String toString() {
-        return getCurrency().getCurrencyCode() + ' ' + number.toPlainString();
+        try {
+            MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
+            return getCurrency().getCurrencyCode() + ' ' + amount.getNumber().numberValue(BigDecimal.class)
+                    .toPlainString();
+        }catch(Exception e) {
+            return getCurrency().getCurrencyCode() + ' ' + number.toPlainString();
+        }
     }
 
     /*

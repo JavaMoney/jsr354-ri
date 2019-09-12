@@ -36,15 +36,15 @@ public enum ExchangeRateType implements ExchangeRateProviderSupplier {
      */
     ECB("ECB", "Exchange rate to the European Central Bank."),
     /**
-     * Exchange rate to the International Monetary Fond. Uses the
+     * Exchange rate to the International Monetary Fund. Uses the
      * {@code IMFRateProvider} implementation.
      */
-    IMF("IMF", "Exchange rate to the International Monetary Fond."),
+    IMF("IMF", "Exchange rate to the International Monetary Fund."),
     /**
-     * Exchange rate to the International Monetary Fond from historic. Uses the
+     * Exchange rate to the International Monetary Fund from historic. Uses the
      * {@code IMFHistoricRateProvider} implementation.
      */
-    IMF_HIST("IMF-HIST", "Exchange rate to the International Monetary Fond that retrieve historical information on lazy way."),
+    IMF_HIST("IMF-HIST", "Exchange rate to the International Monetary Fund that retrieve historical information on lazy way."),
     /**
      * Exchange rate to European Central Bank (last 90 days). Uses the
      * {@code ECBHistoric90RateProvider} implementation.
