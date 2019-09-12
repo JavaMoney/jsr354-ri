@@ -28,6 +28,7 @@ import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 
+import org.javamoney.moneta.format.AmountFormatParams;
 import org.javamoney.moneta.format.CurrencyStyle;
 
 import static java.util.Arrays.asList;
@@ -80,6 +81,12 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @param amountFormatContext the {@link javax.money.format.AmountFormatContext} to be used, not {@code null}.
      */
     DefaultMonetaryAmountFormat(AmountFormatContext amountFormatContext) {
+        Locale locale = amountFormatContext.getLocale();
+        if(locale != null && locale.getCountry().equals("IN")){
+            // Fix invalid JDK grouping for rupees...
+            amountFormatContext = amountFormatContext.toBuilder().set(AmountFormatParams.GROUPING_SIZES, new int[]{3,2})
+                                        .build();
+        }
         setAmountFormatContext(amountFormatContext);
     }
 

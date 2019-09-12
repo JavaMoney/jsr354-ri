@@ -152,6 +152,21 @@ public class MonetaryFormatsTest {
     }
 
     /**
+     * Test related to parsing and formatting for India.
+     */
+    @Test
+    public void testRupeeFormatting() {
+        BigDecimal amount = new BigDecimal("67890000000000");
+        Locale india = new Locale("en", "IN");
+
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(india);
+        Money money = Money.of(amount, "INR");
+        String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
+        assertEquals(format.format(money), expectedFormattedString);
+        assertEquals(money, Money.parse(expectedFormattedString, format));
+    }
+
+    /**
      * Test related to https://github.com/JavaMoney/jsr354-ri/issues/294
      */
     @Test

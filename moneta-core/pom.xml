@@ -379,10 +379,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>9</source>
-					<target>9</target>
-				</configuration>
 				<executions>
 					<execution>
 						<id>default-compile</id>
@@ -390,7 +386,7 @@
 							<!-- compile everything to ensure module-info contains right entries -->
 							<!-- required when JAVA_HOME is JDK 8 or below -->
 							<jdkToolchain>
-								<version>9</version>
+								<version>${maven.compiler.release}</version>
 							</jdkToolchain>
 							<release>9</release>
 						</configuration>
@@ -402,7 +398,9 @@
 						</goals>
 						<!-- recompile everything for target VM except the module-info.java -->
 						<configuration>
-							<release>${maven.compiler.release}</release>
+							<source>8</source>
+							<target>8</target>
+							<release>8</release>
 							<excludes>
 								<exclude>module-info.java</exclude>
 							</excludes>
