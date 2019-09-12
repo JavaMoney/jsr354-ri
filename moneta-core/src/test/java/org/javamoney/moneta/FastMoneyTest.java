@@ -32,6 +32,7 @@ import java.io.ObjectOutputStream;
 import java.lang.invoke.MethodHandles;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1166,11 +1167,17 @@ public class FastMoneyTest {
      */
     @Test
     public void testToString() {
-        assertEquals("XXX 1.23455", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
-        assertEquals("CHF 1234.00000", FastMoney.of(1234, "CHF").toString());
-        assertEquals("CHF 1234.00000", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
-        assertEquals("CHF 1234.10000", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-        assertEquals("CHF 0.01000", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+        Locale defaultLocale = Locale.getDefault();
+        try{
+            Locale.setDefault(Locale.GERMANY);
+            assertEquals("0,00 XXX", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
+            assertEquals("1.234,00 CHF", FastMoney.of(1234, "CHF").toString());
+            assertEquals("1.234,00 CHF", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("1.234,10 CHF", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("0,01 CHF", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+        }finally{
+            Locale.setDefault(defaultLocale);
+        }
     }
 
     /**

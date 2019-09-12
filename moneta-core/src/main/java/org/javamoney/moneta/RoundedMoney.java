@@ -22,12 +22,14 @@ import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
 import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -756,7 +758,13 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      */
     @Override
     public String toString() {
-        return currency.getCurrencyCode() + ' ' + number;
+        try {
+            MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
+            MonetaryAmountFormat fmt = MonetaryFormats.getAmountFormat(Locale.getDefault());
+            return fmt.format(amount);
+        }catch(Exception e) {
+            return currency.getCurrencyCode() + ' ' + number;
+        }
     }
 
     /*

@@ -22,10 +22,13 @@ import org.javamoney.moneta.spi.MonetaryConfig;
 import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
+import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -557,7 +560,13 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     @Override
     public String toString() {
-        return currency.toString() + ' ' + getBigDecimal();
+        try {
+            MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
+            MonetaryAmountFormat fmt = MonetaryFormats.getAmountFormat(Locale.getDefault());
+            return fmt.format(amount);
+        }catch(Exception e) {
+            return currency.toString() + ' ' + getBigDecimal();
+        }
     }
 
     // Internal helper methods

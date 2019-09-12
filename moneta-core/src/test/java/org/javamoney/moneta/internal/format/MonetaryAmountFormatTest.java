@@ -53,8 +53,8 @@ public class MonetaryAmountFormatTest {
         assertEquals("123.456.789.101.112,12 INR", defaultFormat.format(amountInr));
         defaultFormat = MonetaryFormats.getAmountFormat(new Locale("", "IN"));
         MonetaryAmount amountChf = Monetary.getDefaultAmountFactory().setCurrency("CHF").setNumber(1211112.50).create();
-        assertEquals("CHF 1,211,112.50", defaultFormat.format(amountChf));
-        assertEquals("INR 123,456,789,101,112.12", defaultFormat.format(amountInr));
+        assertEquals("CHF 12,11,112.50", defaultFormat.format(amountChf));
+        assertEquals("INR 12,34,56,78,91,01,112.12", defaultFormat.format(amountInr));
         // Locale india = new Locale("", "IN");
         // defaultFormat = MonetaryFormats.getAmountFormatBuilder(india)
         // .setNumberGroupSizes(3, 2).of();
@@ -108,11 +108,11 @@ public class MonetaryAmountFormatTest {
         defaultFormat = MonetaryFormats.getAmountFormat(new Locale("", "IN"));
         defaultFormat
                 .print(b, Monetary.getDefaultAmountFactory().setCurrency("CHF").setNumber(1211112.50).create());
-        assertEquals("CHF 1,211,112.50", b.toString());
+        assertEquals("CHF 12,11,112.50", b.toString());
         b.setLength(0);
         defaultFormat.print(b, Monetary.getDefaultAmountFactory().setCurrency("INR")
                 .setNumber(123456789101112.123456).create());
-        assertEquals("INR 123,456,789,101,112.12", b.toString());
+        assertEquals("INR 12,34,56,78,91,01,112.12", b.toString());
         b.setLength(0);
         // Locale india = new Locale("", "IN");
         // defaultFormat = MonetaryFormats.getAmountFormat(india)

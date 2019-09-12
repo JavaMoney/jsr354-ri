@@ -67,7 +67,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("USD1,000.42");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000.42D);
-        assertEquals(parsedAmount.toString(), "USD 1000.42");
+        assertEquals(parsedAmount.toString(), "USD 1'000.42");
     }
 
     @Test

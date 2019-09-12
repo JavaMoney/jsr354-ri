@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Locale;
 
 import javax.money.*;
 
@@ -960,11 +961,17 @@ public class RoundedMoneyTest {
      */
     @Test
     public void testToString() {
-        assertEquals("XXX 1.23455645", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
-        assertEquals("CHF 1234", RoundedMoney.of(1234, "CHF").toString());
-        assertEquals("CHF 1234", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
-        assertEquals("CHF 1234.1", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-        assertEquals("CHF 0.01", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+        Locale defaultLocale = Locale.getDefault();
+        try{
+            Locale.setDefault(Locale.ENGLISH);
+            assertEquals("XXX0.00", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("CHF1,234.00", RoundedMoney.of(1234, "CHF").toString());
+            assertEquals("CHF1,234.00", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF1,234.10", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("CHF0.01", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+        }finally{
+            Locale.setDefault(defaultLocale);
+        }
     }
 
     // /**

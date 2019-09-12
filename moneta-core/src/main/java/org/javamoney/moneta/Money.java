@@ -22,10 +22,12 @@ import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
 import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -669,8 +671,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     public String toString() {
         try {
             MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
-            return getCurrency().getCurrencyCode() + ' ' + amount.getNumber().numberValue(BigDecimal.class)
-                    .toPlainString();
+            MonetaryAmountFormat fmt = MonetaryFormats.getAmountFormat(Locale.getDefault());
+            return fmt.format(amount);
         }catch(Exception e) {
             return getCurrency().getCurrencyCode() + ' ' + number.toPlainString();
         }
