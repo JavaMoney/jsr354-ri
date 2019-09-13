@@ -18,7 +18,7 @@ module org.javamoney.moneta {
     exports org.javamoney.moneta.format;
     exports org.javamoney.moneta.function;
     exports org.javamoney.moneta.spi;
-    requires transitive javax.money;
+    requires transitive java.money;
     requires transitive java.logging;
     requires java.annotation;
     requires static org.osgi.core;
