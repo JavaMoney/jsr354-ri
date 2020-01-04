@@ -117,7 +117,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
             }
         }
         throw new CurrencyConversionException(conversionQuery.getBaseCurrency(), conversionQuery.getCurrency(), null,
-                "All delegate prov iders failed to deliver rate, providers=" + this.providers +
+                "All delegate providers failed to deliver rate, providers=" + this.providers +
                         ", query=" + conversionQuery);
     }
 
