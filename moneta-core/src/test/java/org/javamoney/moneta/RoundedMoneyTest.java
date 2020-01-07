@@ -964,11 +964,17 @@ public class RoundedMoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.ENGLISH);
-            assertEquals("XXX0.00", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
-            assertEquals("CHF1,234.00", RoundedMoney.of(1234, "CHF").toString());
-            assertEquals("CHF1,234.00", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("CHF1,234.10", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("CHF0.01", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("0.00 XXX", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("1234.00 CHF", RoundedMoney.of(1234, "CHF").toString());
+            assertEquals("1234.00 CHF", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("1234.10 CHF", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("0.01 CHF", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+
+            assertEquals("0.00 XXX", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("1234.00 CHF", RoundedMoney.of(1234, "CHF").toString());
+            assertEquals("1234.00 CHF", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("1234.10 CHF", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("0.01 CHF", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
         }finally{
             Locale.setDefault(defaultLocale);
         }

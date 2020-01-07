@@ -1,6 +1,8 @@
 package org.javamoney.moneta.internal.format;
 
 import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.spi.MoneyUtils;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import javax.money.format.*;
@@ -20,7 +22,7 @@ public class AmountNumberTokenTest {
     private static final String PATTERN_WITH_LEADING_SPACES = "  " + PATTERN;
 
     @Test
-    public void testParse_throws_exception() {
+    public void testParse_nodigots_throws_exception() {
         AmountNumberToken token = new AmountNumberToken(contextForLocale(US, null), PATTERN);
         ParseContext context = new ParseContext("incorrect amount");
         try {
@@ -29,12 +31,32 @@ public class AmountNumberTokenTest {
         } catch (MonetaryParseException e) {
             assertEquals(e.getInput(), "incorrect amount");
             assertEquals(e.getErrorIndex(), 0);
-            assertEquals(e.getMessage(), "Unparseable number: \"incorrect amount\"");
+            assertEquals(e.getMessage(), "No digits found: \"incorrect amount\"");
         }
         assertEquals(context.getIndex(), 0);
         assertFalse(context.isComplete());
         assertTrue(context.hasError());
-        assertEquals(context.getErrorMessage(), "Unparseable number: \"incorrect amount\"");
+        assertEquals(context.getErrorMessage(), "No digits found: \"incorrect amount\"");
+        assertNull(context.getParsedNumber());
+    }
+
+    @Test
+    @Ignore("The current JDK parses a number of '12-54.234' to 12 without error!")
+    public void testParse_mismatchingPattern_throws_exception() {
+        AmountNumberToken token = new AmountNumberToken(contextForLocale(US, null), PATTERN);
+        ParseContext context = new ParseContext("12-54.234");
+        try {
+            token.parse(context);
+            fail();
+        } catch (MonetaryParseException e) {
+            assertEquals(e.getInput(), "12354:234");
+            assertEquals(e.getErrorIndex(), 0);
+            assertEquals(e.getMessage(), "Unparseable amount: \"12354ghd.234\"");
+        }
+        assertEquals(context.getIndex(), 0);
+        assertFalse(context.isComplete());
+        assertTrue(context.hasError());
+        assertEquals(context.getErrorMessage(), "Unparseable amount: \"12354ghd.234\"");
         assertNull(context.getParsedNumber());
     }
 
@@ -120,7 +142,7 @@ public class AmountNumberTokenTest {
         testParse(FRANCE, PATTERN, null, "-12 345,678", 11, "float 3 thousands negative", -12345.678, "-12 345,678");
         testParse(FRANCE, PATTERN, null, "-1 234 567,89", 13, "float 2 million negative", -1234567.89, "-1 234 567,89");
         testParse(FRANCE, PATTERN, null, " -1 234 567,89", 14, "float 2 million negative with leading space", -1234567.89, " -1 234 567,89");
-        testParse(FRANCE, PATTERN, null, " -1 234 567,89 ", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
+        testParse(FRANCE, PATTERN, null, " -1 234 567,89 ", 15, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
     }
 
     @Test
@@ -149,7 +171,7 @@ public class AmountNumberTokenTest {
         testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-12 345,678", 11, "float 3 thousands negative", -12345.678, "-12 345,678");
         testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, "-1 234 567,89", 13, "float 2 million negative", -1234567.89, "-1 234 567,89");
         testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, " -1 234 567,89", 14, "float 2 million negative with leading space", -1234567.89, " -1 234 567,89");
-        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, " -1 234 567,89 ", 14, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
+        testParse(FRANCE, PATTERN_WITH_LEADING_SPACES, null, " -1 234 567,89 ", 15, "float 2 million negative with leading and trailing space", -1234567.89, " -1 234 567,89 ");
     }
 
     @Test
@@ -218,7 +240,7 @@ public class AmountNumberTokenTest {
      * testcase for https://github.com/JavaMoney/jsr354-ri/issues/281
      */
     @Test
-    public void testParse_with_literals_in_patern() {
+    public void testParse_with_literals_in_pattern() {
         testParse(US, "#,##0.00 ", null, "-123.45", 7, "without literal", -123.45, "-123.45");
         testParse(US, "BEFORE #,##0.00 ", null, "BEFORE 123.45", 13, "Literal on start", 123.45, "BEFORE 123.45");
 //FIXME        testParse(US, "ONE TWO #,##0.00 ", "ONE TWO -123.45", 7, "Two literals on start", -123.45);
@@ -274,6 +296,6 @@ public class AmountNumberTokenTest {
         assertEquals(context.getIndex(), expectedIndex, errorPrefix);
         assertFalse(context.isComplete(), errorPrefix);
         assertFalse(context.hasError(), errorPrefix);
-        assertEquals(context.getOriginalInput(), formatted, errorPrefix);
+        assertEquals(MoneyUtils.replaceNbspWithSpace(context.getOriginalInput()), formatted, errorPrefix);
     }
 }

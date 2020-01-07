@@ -19,7 +19,7 @@ import static java.util.Locale.CHINA;
 import static java.util.Locale.FRANCE;
 import static java.util.Locale.GERMANY;
 import static org.javamoney.moneta.format.CurrencyStyle.CODE;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -33,14 +33,17 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 import javax.money.format.MonetaryParseException;
 
+import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.Money;
+import org.javamoney.moneta.RoundedMoney;
+import org.javamoney.moneta.spi.MoneyUtils;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsTest {
     private static final Locale DANISH = new Locale("da");
     private static final Locale BULGARIA = new Locale("bg", "BG");
-    public static final Locale INDIA = new Locale("en, IN");
+    public static final Locale INDIA = new Locale("en", "IN");
 
     @Test
     public void testParse_DKK_da() {
@@ -88,8 +91,9 @@ public class MonetaryFormatsTest {
         assertMoneyParse(format, "00000123 BGN", 123.0, "BGN");
         assertMoneyParse(format, "123 BGN", 123.0, "BGN");
         assertMoneyParse(format, "123,01 BGN", 123.01, "BGN");
+        assertMoneyParse(format, "14000,12 BGN", 14000.12, "BGN");
+        assertMoneyParse(format, "14\u00A0000,12 BGN", 14000.12, "BGN");
         assertMoneyParse(format, "14 000,12 BGN", 14000.12, "BGN");
-        assertMoneyParse(format, "14\u00A0000,12\u00A0BGN", 14000.12, "BGN");
     }
 
     @Test
@@ -128,8 +132,7 @@ public class MonetaryFormatsTest {
     @Test
     public void testFormat_INR_en_IN() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
-        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), "INR 67,890,000,000,000.00");
-//TODO        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), "INR 6,78,90,00,00,00,000.00");
+        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), "INR 6,78,90,00,00,00,000.00");
     }
 
     @Test
@@ -178,13 +181,94 @@ public class MonetaryFormatsTest {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(formatQuery);
         try {
             MonetaryAmount parsedAmount = format.parse("0.01");
+            assertSame(parsedAmount.getCurrency(), eur);
+            assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
+            assertEquals(parsedAmount.toString(), "EUR 0.01");
         } catch (MonetaryParseException e) {
             assertEquals(e.getMessage(), "Error parsing CurrencyUnit: no input.");
             assertEquals(e.getErrorIndex(), -1);
         }
-//FIXME        assertSame(parsedAmount.getCurrency(), eur);
-//FIXME        assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
-//FIXME        assertEquals(parsedAmount.toString(), "EUR 0.01");
+    }
+
+    /**
+     * Tests formatting and parsing back the values using all available locales.
+     */
+    @Test
+    public void testRoundRobinForAllLocales_Money(){
+        String report = "";
+        Locale defaultLocale = Locale.getDefault();
+        try {
+            for (Locale locale : Locale.getAvailableLocales()) {
+                Locale.setDefault(locale);
+                try {
+                    Money money = Money.of(1.2, "EUR");
+                    if (!money.equals(Money.parse(money.toString()))) {
+                        report += "FAILED : " + locale + "(" + money.toString() + ")\n";
+                    } else {
+                        report += "SUCCESS: " + locale + "\n";
+                    }
+                }catch(Exception e){
+                    report += "ERROR: " + locale + " -> " + e + "\n";
+                }
+            }
+            assertFalse(report.contains("FAILED"),"Formatting and parsing failed for some locales:\n\n"+report);
+        }finally{
+            Locale.setDefault(defaultLocale);
+        }
+    }
+
+    /**
+     * Tests formatting and parsing back the values using all available locales.
+     */
+    @Test
+    public void testRoundRobinForAllLocales_FastMoney(){
+        String report = "";
+        Locale defaultLocale = Locale.getDefault();
+        try {
+            for (Locale locale : Locale.getAvailableLocales()) {
+                Locale.setDefault(locale);
+                try {
+                    FastMoney money = FastMoney.of(1.2, "EUR");
+                    if (!money.equals(FastMoney.parse(money.toString()))) {
+                        report += "FAILED : " + locale + "(" + money.toString() + ")\n";
+                    } else {
+                        report += "SUCCESS: " + locale + "\n";
+                    }
+                }catch(Exception e){
+                    report += "ERROR: " + locale + " -> " + e + "\n";
+                }
+            }
+            assertFalse(report.contains("FAILED"),"Formatting and parsing failed for some locales:\n\n"+report);
+        }finally{
+            Locale.setDefault(defaultLocale);
+        }
+    }
+
+    /**
+     * Tests formatting and parsing back the values using all available locales.
+     */
+    @Test
+    public void testRoundRobinForAllLocales_RoundedMoney(){
+        String report = "";
+        Locale defaultLocale = Locale.getDefault();
+        try {
+            for (Locale locale : Locale.getAvailableLocales()) {
+                Locale.setDefault(locale);
+                try {
+                    RoundedMoney money = RoundedMoney.of(1.2, "EUR");
+                    if (!money.equals(RoundedMoney.parse(money.toString()))) {
+                        report += "FAILED : " + locale + "(" + money.toString() + ")\n";
+                    } else {
+                        report += "SUCCESS: " + locale + "\n";
+                    }
+                }catch(Exception e){
+                    report += "ERROR: " + locale + " -> " + e + "\n";
+                }
+            }
+            assertFalse(report.contains("FAILED"),"Formatting and parsing failed for some locales:\n\n"+report);
+        }finally{
+            Locale.setDefault(defaultLocale);
+        }
     }
 
     private void assertMoneyParse(MonetaryAmountFormat format, String text, double expected, String currencyCode) {
@@ -196,5 +280,12 @@ public class MonetaryFormatsTest {
     private void assertMoneyFormat(MonetaryAmountFormat format, MonetaryAmount amount, String expected) {
         String formatted = format.format(amount);
         assertEquals(formatted, expected);
+    }
+
+    @Test
+    public void testChars(){
+        System.out.println("Character.isSpaceChar(' ''): " + Character.isSpaceChar(' '));
+        System.out.println("Character.isSpaceChar('\\u00A0'): " + Character.isSpaceChar(MoneyUtils.NBSP));
+        System.out.println("Character.isSpaceChar('\\u202F'): " + Character.isSpaceChar(MoneyUtils.NNBSP));
     }
 }

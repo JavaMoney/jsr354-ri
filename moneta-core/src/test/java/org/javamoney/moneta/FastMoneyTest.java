@@ -42,6 +42,7 @@ import javax.money.MonetaryAmount;
 import javax.money.MonetaryOperator;
 import javax.money.MonetaryQuery;
 
+import org.javamoney.moneta.spi.MonetaryConfig;
 import org.testng.annotations.Test;
 
 /**
@@ -1170,12 +1171,29 @@ public class FastMoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            assertEquals("0,00 XXX", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
-            assertEquals("1.234,00 CHF", FastMoney.of(1234, "CHF").toString());
-            assertEquals("1.234,00 CHF", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("1.234,10 CHF", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("0,01 CHF", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("0.00 XXX", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
+            assertEquals("1234.00 CHF", FastMoney.of(1234, "CHF").toString());
+            assertEquals("1234.00 CHF", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("1234.10 CHF", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("0.01 CHF", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
         }finally{
+            Locale.setDefault(defaultLocale);
+        }
+    }
+
+    @Test
+    public void testToStringWithReverseOrder() {
+        Locale defaultLocale = Locale.getDefault();
+        try{
+            Locale.setDefault(Locale.GERMANY);
+            MonetaryConfig.setValue("org.javamoney.toStringFormatOrder", "ca");
+            assertEquals("XXX 0.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
+            assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
+            assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("CHF 0.01", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+        }finally{
+            MonetaryConfig.setValue("org.javamoney.toStringFormatOrder", "ac");
             Locale.setDefault(defaultLocale);
         }
     }

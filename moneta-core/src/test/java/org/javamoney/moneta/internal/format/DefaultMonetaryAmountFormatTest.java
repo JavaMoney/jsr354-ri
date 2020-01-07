@@ -67,7 +67,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("USD1,000.42");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000.42D);
-        assertEquals(parsedAmount.toString(), "USD 1'000.42");
+        assertEquals(parsedAmount.toString(), "1000.42 USD");
     }
 
     @Test
@@ -79,7 +79,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("0.01 USD");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
-        assertEquals(parsedAmount.toString(), "USD 0.01");
+        assertEquals(parsedAmount.toString(), "0.01 USD");
     }
 
     @Test
@@ -107,7 +107,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("0.01");
         assertSame(parsedAmount.getCurrency(), usd);
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
-        assertEquals(parsedAmount.toString(), "USD 0.01");
+        assertEquals(parsedAmount.toString(), "0.01 USD");
     }
 
     /**
@@ -124,6 +124,7 @@ public class DefaultMonetaryAmountFormatTest {
         try {
             MonetaryAmount parsedAmount = format.parse("0.01");
         } catch (MonetaryParseException e) {
+            e.printStackTrace();
             assertEquals(e.getMessage(), "Error parsing CurrencyUnit: no input.");
             assertEquals(e.getErrorIndex(), -1);
         }

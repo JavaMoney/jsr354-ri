@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import javax.money.*;
 
+import org.javamoney.moneta.spi.MonetaryConfig;
 import org.testng.annotations.Test;
 
 /**
@@ -1073,16 +1074,35 @@ public class MoneyTest {
      * Test method for {@link org.javamoney.moneta.Money#toString()}.
      */
     @Test
+    public void testToString_ReverseOrder() {
+        Locale defaultLocale = Locale.getDefault();
+        try{
+            Locale.setDefault(Locale.GERMANY);
+            MonetaryConfig.setValue("org.javamoney.toStringFormatOrder", "ca");
+            assertEquals("XXX 0.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
+            assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("CHF 50.00",
+                    Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
+        }finally{
+            MonetaryConfig.setValue("org.javamoney.toStringFormatOrder", "ac");
+            Locale.setDefault(defaultLocale);
+        }
+    }
+
+    @Test
     public void testToString() {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            assertEquals("0,00 XXX", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
-            assertEquals("1.234,00 CHF", Money.of(1234, "CHF").toString());
-            assertEquals("1.234,00 CHF", Money.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("1.234,10 CHF", Money.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("0,01 CHF", Money.of(new BigDecimal("0.0100"), "CHF").toString());
-            assertEquals("50,00 CHF",
+            assertEquals("0.00 XXX", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("1234.00 CHF", Money.of(1234, "CHF").toString());
+            assertEquals("1234.00 CHF", Money.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("1234.10 CHF", Money.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals("0.01 CHF", Money.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("50.00 CHF",
                     Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
         }finally{
             Locale.setDefault(defaultLocale);
