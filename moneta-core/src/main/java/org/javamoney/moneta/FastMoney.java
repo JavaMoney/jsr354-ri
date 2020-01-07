@@ -16,6 +16,8 @@
 package org.javamoney.moneta;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
+import org.javamoney.moneta.format.MonetaryAmountDecimalFormat;
+import org.javamoney.moneta.format.MonetaryAmountDecimalFormatBuilder;
 import org.javamoney.moneta.internal.FastMoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MonetaryConfig;
@@ -562,8 +564,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     public String toString() {
         try {
             MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
-            MonetaryAmountFormat fmt = MonetaryFormats.getAmountFormat(Locale.getDefault());
-            return fmt.format(amount);
+            return defaultFormat().format(amount);
         }catch(Exception e) {
             return currency.toString() + ' ' + getBigDecimal();
         }
@@ -645,7 +646,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      * @throws UnknownCurrencyException if the currency cannot be resolved
      */
     public static FastMoney parse(CharSequence text) {
-        return parse(text, DEFAULT_FORMATTER);
+        return parse(text, defaultFormat());
     }
 
     /**
@@ -659,8 +660,23 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return from(formatter.parse(text));
     }
 
-    private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
-            .of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+    private static MonetaryAmountFormat defaultFormat() {
+        String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
+        try{
+            if(Boolean.parseBoolean(useDefault)){
+                Logger.getLogger(FastMoney.class.getName()).info("Using JDK formatter for toString().");
+                return MonetaryAmountDecimalFormat.of();
+            }else{
+                Logger.getLogger(FastMoney.class.getName()).info("Using default formatter for toString().");
+                return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+            }
+        }catch(Exception e){
+            Logger.getLogger(FastMoney.class.getName()).log(Level.WARNING,
+                    "Invalid boolean parameter for 'org.javamoney.moneta.useJDKdefaultFormat', " +
+                            "using default formatter for toString().");
+            return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+        }
+    }
 
     private BigDecimal getBigDecimal() {
         return BigDecimal.valueOf(this.number, SCALE);

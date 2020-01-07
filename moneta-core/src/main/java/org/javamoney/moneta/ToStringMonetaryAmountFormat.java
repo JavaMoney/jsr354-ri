@@ -15,8 +15,11 @@
  */
 package org.javamoney.moneta;
 
+import org.javamoney.moneta.spi.MonetaryConfig;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -29,8 +32,26 @@ import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 
 /**
- * class to format and parse a text string such as 'EUR 25.25' or vice versa.
- * This class will used to toString and parse in all implementation on Moneta.
+ * Class to format and parse a text string such as 'EUR 25.25' or vice versa using BigDecimal default formatting.
+ * This class will used as default by toString and parse in all implementation on Moneta.
+ *
+ * By default this formatter formats the amounts as {@code AMOUNT.DECIMAL CURRENCY}, e.g. {code 100232.12 CHF}.
+ * Hereby the currency is represented by its code and the amount formatted as BigDecimal, rounded on 2 digits after
+ * the decimal separator (which always is a dot).
+ *
+ * You can configure the order of formatting with the {@code org.javamoney.toStringFormatOrder} configuration property:
+ *
+ * <ul>
+ *     <li>Ordering of <b>CURRENCY AMOUNT</b> can be configured with values equal to {@code 'ca', 'c-a', 'c a'}.</li>
+ *     <li>Ordering of <b>AMOUNT CURRENCY</b> can be configured with values equal to {@code 'ac', 'a-c', 'a c'} or
+ *     any other (default).</li>
+ * </ul>
+ *
+ * Parsing should work either with the currency prefixed or postfixed.
+ *
+ * <b>Note:</b> This formatter is active by default, but can be replaced with the standard JDK formatter by setting the
+ * {@code org.javamoney.moneta.useJDKdefaultFormat} configuration property to {@code true}.
+ *
  * {@link Money#toString()}
  * {@link Money#parse(CharSequence)}
  * {@link FastMoney#toString()}
@@ -38,10 +59,15 @@ import javax.money.format.MonetaryParseException;
  * {@link RoundedMoney#toString()}
  * {@link RoundedMoney#parse(CharSequence)}
  * @author Otavio Santana
+ * @author Anatole Tresch
  */
 public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
     private static final String CONTEXT_PREFIX = "ToString_";
+
+    private static final ToStringMonetaryAmountFormat INSTANCE_FASTMONEY = new ToStringMonetaryAmountFormat(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
+    private static final ToStringMonetaryAmountFormat INSTANCE_MONEY = new ToStringMonetaryAmountFormat(ToStringMonetaryAmountFormatStyle.MONEY);
+    private static final ToStringMonetaryAmountFormat INSTANCE_ROUNDEDMONEY = new ToStringMonetaryAmountFormat(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
 
     private final ToStringMonetaryAmountFormatStyle style;
 
@@ -54,13 +80,39 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
 
     public static ToStringMonetaryAmountFormat of(
             ToStringMonetaryAmountFormatStyle style) {
-        return new ToStringMonetaryAmountFormat(style);
+        switch(style){
+        case FAST_MONEY:
+            return INSTANCE_FASTMONEY;
+            case ROUNDED_MONEY:
+                return INSTANCE_ROUNDEDMONEY;
+            case MONEY:
+            default:
+                return INSTANCE_MONEY;
+        }
     }
 
     @Override
     public String queryFrom(MonetaryAmount amount) {
-		return Optional.ofNullable(amount).map(MonetaryAmount::toString)
-				.orElse("null");
+		return Optional.ofNullable(amount).map((m) -> {
+            BigDecimal dec = amount.getNumber().numberValue(BigDecimal.class);
+            dec = dec.setScale(2, RoundingMode.HALF_UP);
+            String order = MonetaryConfig.getString("org.javamoney.toStringFormatOrder").orElse("ac");
+            switch(order){
+                case "currency-amount":
+                case "currency amount":
+                case "ca":
+                case "c a":
+                case "c-a":
+                    return m.getCurrency().getCurrencyCode() + " " + dec.toPlainString();
+                case "amount-currency":
+                case "amount currency":
+                case "ac":
+                case "a c":
+                case "a-c":
+                default:
+                    return dec.toPlainString() + " " + m.getCurrency().getCurrencyCode();
+            }
+        }).orElse("null");
     }
 
     @Override
@@ -91,9 +143,16 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
         if(array.length != 2) {
         	throw new MonetaryParseException("An error happened when try to parse the Monetary Amount.",text,0);
         }
-        CurrencyUnit currencyUnit = Monetary.getCurrency(array[0]);
-        BigDecimal number = new BigDecimal(array[1]);
-        return new ParserMonetaryAmount(currencyUnit, number);
+        try {
+            CurrencyUnit currencyUnit = Monetary.getCurrency(array[1]);
+            BigDecimal number = new BigDecimal(array[0]);
+            return new ParserMonetaryAmount(currencyUnit, number);
+        }catch(Exception e){
+            CurrencyUnit currencyUnit = Monetary.getCurrency(array[0]);
+            BigDecimal number = new BigDecimal(array[1]);
+            return new ParserMonetaryAmount(currencyUnit, number);
+        }
+
     }
 
     private static class ParserMonetaryAmount {

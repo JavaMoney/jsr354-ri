@@ -139,7 +139,9 @@ public class MonetaryAmountDecimalFormatBuilder {
         if (Objects.isNull(producer)) {
             producer = new MoneyProducer();
         }
-        decimalFormat.setCurrency(Currency.getInstance(currencyUnit.getCurrencyCode()));
+        if(currencyUnit!=null) {
+            decimalFormat.setCurrency(Currency.getInstance(currencyUnit.getCurrencyCode()));
+        }
         return new MonetaryAmountDecimalFormat(decimalFormat, producer, currencyUnit);
     }
 

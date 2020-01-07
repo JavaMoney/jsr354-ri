@@ -5,6 +5,8 @@ import org.javamoney.moneta.FastMoney;
 import org.testng.annotations.Test;
 
 import javax.money.CurrencyUnit;
+import javax.money.format.AmountFormatContext;
+import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryParseException;
 import java.io.IOException;
 import java.util.Locale;
@@ -17,9 +19,10 @@ public class CurrencyTokenTest {
 
     public static final CurrencyUnit BTC = CurrencyUnitBuilder.of("BTC", "crypto").build();
 
+
     @Test
     public void testParse_CODE() {
-        CurrencyToken token = new CurrencyToken(CODE, FRANCE);
+        CurrencyToken token = new CurrencyToken(CODE, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("EUR");
         token.parse(context);
         assertEquals(context.getIndex(), 3);
@@ -27,7 +30,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testParse_CODE_unknown() {
-        CurrencyToken token = new CurrencyToken(CODE, FRANCE);
+        CurrencyToken token = new CurrencyToken(CODE, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("BTC");
         try {
             token.parse(context);
@@ -44,7 +47,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testParse_SYMBOL_EUR() {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("€");
         token.parse(context);
         assertEquals(context.getIndex(), 1);
@@ -52,7 +55,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testParse_SYMBOL_GBP() {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("£");
         token.parse(context);
         assertEquals(context.getIndex(), 1);
@@ -60,7 +63,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testParse_SYMBOL_ambiguous_dollar() {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("$");
         try {
             token.parse(context);
@@ -77,7 +80,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testParse_NUMERIC_CODE() {
-        CurrencyToken token = new CurrencyToken(NUMERIC_CODE, FRANCE);
+        CurrencyToken token = new CurrencyToken(NUMERIC_CODE, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("840");
         try {
             token.parse(context);
@@ -94,7 +97,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testParse_NAME() {
-        CurrencyToken token = new CurrencyToken(NAME, FRANCE);
+        CurrencyToken token = new CurrencyToken(NAME, AmountFormatContextBuilder.of(FRANCE).build());
         ParseContext context = new ParseContext("US Dollar");
         try {
             token.parse(context);
@@ -111,7 +114,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_CODE() throws IOException {
-        CurrencyToken token = new CurrencyToken(CODE, FRANCE);
+        CurrencyToken token = new CurrencyToken(CODE, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, "EUR");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -120,7 +123,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_USD() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, US);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "USD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -129,7 +132,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_USD_for_France() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, "USD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -138,7 +141,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_HKD() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, new Locale("en", "HK"));
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(new Locale("en", "HK")).build());
         FastMoney amount = FastMoney.of(0, "HKD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -147,7 +150,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_HKD_for_US() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, US);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "HKD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -156,7 +159,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_UAH() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, new Locale("uk", "UA"));
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(new Locale("uk", "UA")).build());
         FastMoney amount = FastMoney.of(0, "UAH");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -165,7 +168,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_UAH_for_US() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, US);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "UAH");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -174,7 +177,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_RUB() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, new Locale("ru", "RU"));
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(new Locale("ru", "RU")).build());
         FastMoney amount = FastMoney.of(0, "RUB");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -183,7 +186,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_RUB_for_US() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, US);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "RUB");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -192,7 +195,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_BGN() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, new Locale("bg", "BG"));
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(new Locale("bg", "BG")).build());
         FastMoney amount = FastMoney.of(0, "BGN");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -201,7 +204,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_BGN_for_US() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, US);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "BGN");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -210,7 +213,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_EUR() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, "EUR");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -219,7 +222,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_EUR_for_US() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, US);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "EUR");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -228,7 +231,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_GBP() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, UK);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(UK).build());
         FastMoney amount = FastMoney.of(0, "GBP");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -237,7 +240,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_GBP_for_France() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, "GBP");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -246,7 +249,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_SYMBOL_BTC() throws IOException {
-        CurrencyToken token = new CurrencyToken(SYMBOL, FRANCE);
+        CurrencyToken token = new CurrencyToken(SYMBOL, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, BTC);
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -255,7 +258,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_NAME_USD_for_US() throws IOException {
-        CurrencyToken token = new CurrencyToken(NAME, US);
+        CurrencyToken token = new CurrencyToken(NAME, AmountFormatContextBuilder.of(US).build());
         FastMoney amount = FastMoney.of(0, "USD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -264,7 +267,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_NAME_USD_for_FR() throws IOException {
-        CurrencyToken token = new CurrencyToken(NAME, FRANCE);
+        CurrencyToken token = new CurrencyToken(NAME, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, "USD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -273,7 +276,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_NAME_BTC() throws IOException {
-        CurrencyToken token = new CurrencyToken(NAME, FRANCE);
+        CurrencyToken token = new CurrencyToken(NAME, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, BTC);
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -282,7 +285,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testPrint_NUMERIC_CODE() throws IOException {
-        CurrencyToken token = new CurrencyToken(NUMERIC_CODE, FRANCE);
+        CurrencyToken token = new CurrencyToken(NUMERIC_CODE, AmountFormatContextBuilder.of(FRANCE).build());
         FastMoney amount = FastMoney.of(0, "USD");
         StringBuilder sb = new StringBuilder();
         token.print(sb, amount);
@@ -291,7 +294,7 @@ public class CurrencyTokenTest {
 
     @Test
     public void testToString() {
-        CurrencyToken token = new CurrencyToken(CODE, FRANCE);
+        CurrencyToken token = new CurrencyToken(CODE, AmountFormatContextBuilder.of(FRANCE).build());
         assertEquals(token.toString(), "CurrencyToken [locale=fr_FR, style=CODE]");
     }
 }

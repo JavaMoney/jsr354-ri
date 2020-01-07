@@ -16,6 +16,7 @@
 package org.javamoney.moneta.internal.format;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -25,11 +26,13 @@ import java.util.Objects;
 import java.util.logging.Logger;
 import javax.money.*;
 import javax.money.format.AmountFormatContext;
+import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.format.AmountFormatParams;
 import org.javamoney.moneta.format.CurrencyStyle;
+import org.javamoney.moneta.spi.MoneyUtils;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
@@ -87,6 +90,18 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
             // Fix invalid JDK grouping for rupees...
             amountFormatContext = amountFormatContext.toBuilder().set(AmountFormatParams.GROUPING_SIZES, new int[]{3,2})
                                         .build();
+        }
+        if(locale != null && locale.getCountry().equals("BG")){
+            AmountFormatContextBuilder builder = amountFormatContext.toBuilder();
+            if(amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class)==null) {
+                // Fix invalid JDK grouping for rupees...
+                builder.set(AmountFormatParams.GROUPING_SIZES, new int[]{3}).build();
+            }
+            if(amountFormatContext.get(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, int[].class)==null) {
+                // Fix invalid JDK grouping for rupees...
+                builder.set(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, new String[]{"\u00A0"}).build();
+            }
+            amountFormatContext = builder.build();
         }
         setAmountFormatContext(amountFormatContext);
     }
@@ -149,6 +164,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     @Override
     public MonetaryAmount parse(CharSequence text)
             throws MonetaryParseException {
+        text = MoneyUtils.replaceNbspWithSpace(text.toString()).trim();
         ParseContext ctx = new ParseContext(text);
         try {
             for (FormatToken token : this.positiveTokens) {
@@ -216,7 +232,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         String pattern = amountFormatContext.getText(PATTERN);
         if (pattern == null) {
             DecimalFormat currencyDecimalFormat = (DecimalFormat) DecimalFormat.getCurrencyInstance(amountFormatContext.getLocale());
-            pattern = currencyDecimalFormat.toPattern();
+            pattern = MoneyUtils.replaceNbspWithSpace(currencyDecimalFormat.toPattern());
         }
         return pattern;
     }
@@ -231,38 +247,143 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
     }
 
     private List<FormatToken> initPattern(String pattern, AmountFormatContext context) {
-        int currencySignPos = pattern.indexOf(CURRENCY_SIGN);
         Locale locale = context.get(Locale.class);
+        DecimalFormat format = (DecimalFormat)DecimalFormat.getCurrencyInstance(locale);
         CurrencyStyle currencyStyle = context.get(CurrencyStyle.class);
-        if (currencySignPos > 0) { // currency placement after, between
-            String p1 = pattern.substring(0, currencySignPos);
-            String p2 = pattern.substring(currencySignPos + 1);
-            List<FormatToken> tokens = new ArrayList<>(3);
-            if (isLiteralPattern(p1)) {
-                tokens.add(new LiteralToken(p1));
-                tokens.add(new CurrencyToken(currencyStyle, locale));
-            } else {
-                tokens.add(new AmountNumberToken(context, p1));
-                tokens.add(new CurrencyToken(currencyStyle, locale));
-            }
-            if (!p2.isEmpty()) {
-                if (isLiteralPattern(p2)) {
-                    tokens.add(new LiteralToken(p2));
-                } else {
-                    tokens.add(new AmountNumberToken(context, p2));
+        List<String> patternParts = tokenizePattern(pattern, format);
+        List<FormatToken> tokens = new ArrayList<>(3);
+        for(String p:patternParts){
+            if (isNumberToken(p)) {
+                tokens.add(new AmountNumberToken(context, p.substring(4)));
+            } else if(isCurrencyToken(p)){
+                tokens.add(new CurrencyToken(currencyStyle, context));
+            } else{
+                if(!p.isEmpty()) {
+                    tokens.add(new LiteralToken(p));
                 }
             }
-            return tokens;
-        } else if (currencySignPos == 0) { // currency placement before
-            String patternWithoutCurrencySign = pattern.substring(1);
-            List<FormatToken> tokens = asList(
-                    new CurrencyToken(currencyStyle, locale),
-                    new AmountNumberToken(context, patternWithoutCurrencySign));
-            return tokens;
         }
-        // no currency
-        List<FormatToken> tokens = asList(new AmountNumberToken(context, pattern));
         return tokens;
+    }
+
+    private boolean isNumberToken(String token) {
+        return token.startsWith("NUM:");
+    }
+
+    private boolean isCurrencyToken(String token) {
+        return token.length()==0 || token.charAt(0)==CURRENCY_SIGN;
+    }
+
+    private List<String> tokenizePattern(String pattern, DecimalFormat format) {
+        List<String> result = splitPatternForCurrency(pattern);
+        return splitNumberPattern(result, format);
+    }
+
+    /**
+     * Splits the given pattern into a prefix, a currency token and a postfix token.
+     * @param pattern
+     * @return
+     */
+    private List<String> splitPatternForCurrency(String pattern) {
+        List<String> result = new ArrayList();
+        int index = pattern.indexOf(CURRENCY_SIGN);
+        if(index<0){
+            result.add(pattern);
+        }else {
+            String p = pattern.substring(0, index);
+            if (!p.isEmpty()) {
+                result.add(p);
+            }
+            result.add("" + CURRENCY_SIGN);
+            p = pattern.substring(index + 1);
+            if (!p.isEmpty()) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Splits away the number pattern for targeting an AmountToken, if possible.
+     * @param tokens the token identified so far.
+     * @param format the target locale.
+     * @return the tokenized list.
+     */
+    private List<String> splitNumberPattern(List<String> tokens, DecimalFormat format){
+        List<String> result = new ArrayList();
+        String numberPattern = format.toLocalizedPattern()
+                .replace(""+CURRENCY_SIGN, "").trim();
+        for(String token:tokens){
+            int index = token.indexOf(numberPattern);
+            if(index>0){
+                String part0 = token.substring(0, index);
+                if(!part0.isEmpty()){
+                    result.add(part0);
+                }
+                result.add("NUM:"+numberPattern);
+                String part1 = token.substring(index+numberPattern.length());
+                if(!part1.isEmpty()){
+                    result.add(part1);
+                }
+            }else{
+                result.add(token);
+            }
+        }
+        if(result.size() == tokens.size()){
+            result.clear();
+            // we have to check each token for a number pattern manually...
+            for(String token:tokens){
+                numberPattern = getNumberPattern(token, format);
+                if(numberPattern==null) {
+                    result.add(token);
+                }else {
+                    int index = token.indexOf(numberPattern);
+                    String part0 = token.substring(0, index);
+                    if (!part0.isEmpty()) {
+                        result.add(part0);
+                    }
+                    result.add("NUM:" + numberPattern);
+                    String part1 = token.substring(index + numberPattern.length());
+                    if (!part1.isEmpty()) {
+                        result.add(part1);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private String getNumberPattern(String token, DecimalFormat format) {
+        // Parse the token for
+        int first = -1;
+        int last = -1;
+        DecimalFormatSymbols syms = format.getDecimalFormatSymbols();
+        char[] chars = token.toCharArray();
+        int nonMatching = 0;
+        for(int i=0; i<chars.length;i++){
+            if(chars[i] ==syms.getMonetaryDecimalSeparator() ||
+                    chars[i] ==syms.getMonetaryDecimalSeparator() ||
+                    chars[i] ==syms.getDecimalSeparator() ||
+                    chars[i] ==syms.getGroupingSeparator() ||
+                    chars[i] ==syms.getMinusSign() ||
+                    chars[i] ==syms.getPercent() ||
+                    chars[i] ==syms.getPerMill() ||
+                    chars[i] ==syms.getZeroDigit() ||
+                    chars[i] ==syms.getDigit()){
+                if(first<0)first = i;
+                last = i;
+                nonMatching = 0;
+            }else{
+                nonMatching++;
+            }
+            if(last!=-1 && first<last && nonMatching>2){
+                break;
+            }
+        }
+        if(last!=-1 && first<last){
+            return token.substring(first, last+1);
+        }
+        return null;
     }
 
     private boolean isLiteralPattern(String pattern) {

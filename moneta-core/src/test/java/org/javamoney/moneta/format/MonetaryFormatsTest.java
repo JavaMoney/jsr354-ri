@@ -22,6 +22,8 @@ import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 import static org.testng.Assert.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Currency;
 import java.util.Locale;
 
 import javax.money.CurrencyUnit;
@@ -37,6 +39,7 @@ import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.RoundedMoney;
 import org.javamoney.moneta.spi.MoneyUtils;
+import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
@@ -188,6 +191,17 @@ public class MonetaryFormatsTest {
             assertEquals(e.getMessage(), "Error parsing CurrencyUnit: no input.");
             assertEquals(e.getErrorIndex(), -1);
         }
+    }
+
+    @Test
+    public void testFormattingCustomAndNegatives() {
+        MonetaryAmountFormat formatter = MonetaryFormats.getAmountFormat(
+                AmountFormatQueryBuilder.of(Locale.US)
+                        .set(CurrencyStyle.CODE)
+                        .set(AmountFormatParams.PATTERN, "¤ ###0.00;¤ -###0.00")
+                        .build());
+        Assert.assertEquals(formatter.parse("EUR -10.00"), Money.of(-10, "EUR")); // OK
+        Assert.assertEquals(formatter.format(Money.of(-10, "EUR")), "EUR -10.00"); // KO : EUR- -10.00
     }
 
     /**

@@ -16,8 +16,11 @@
 package org.javamoney.moneta;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
+import org.javamoney.moneta.format.MonetaryAmountDecimalFormat;
+import org.javamoney.moneta.format.MonetaryAmountDecimalFormatBuilder;
 import org.javamoney.moneta.internal.RoundedMoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.javamoney.moneta.spi.MonetaryConfig;
 import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
@@ -32,6 +35,8 @@ import java.math.RoundingMode;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Platform RI: Default immutable implementation of {@link MonetaryAmount} based on
@@ -679,7 +684,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @throws UnknownCurrencyException the currency cannot be resolved
      */
     public static RoundedMoney parse(CharSequence text) {
-        return parse(text, DEFAULT_FORMATTER);
+        return parse(text, defaultFormat());
     }
 
     /**
@@ -693,8 +698,24 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         return from(formatter.parse(text));
     }
 
-    private static final ToStringMonetaryAmountFormat DEFAULT_FORMATTER = ToStringMonetaryAmountFormat
-            .of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
+
+    private static MonetaryAmountFormat defaultFormat() {
+        String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
+        try{
+            if(Boolean.parseBoolean(useDefault)){
+                Logger.getLogger(Money.class.getName()).finest("Using JDK formatter for toString().");
+                return MonetaryAmountDecimalFormat.of();
+            }else{
+                Logger.getLogger(Money.class.getName()).finest("Using default formatter for toString().");
+                return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
+            }
+        }catch(Exception e){
+            Logger.getLogger(Money.class.getName()).log(Level.WARNING,
+                    "Invalid boolean parameter for 'org.javamoney.moneta.useJDKdefaultFormat', " +
+                            "using default formatter for toString().");
+            return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
+        }
+    }
 
     /*
      * (non-Javadoc)
@@ -760,8 +781,7 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     public String toString() {
         try {
             MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
-            MonetaryAmountFormat fmt = MonetaryFormats.getAmountFormat(Locale.getDefault());
-            return fmt.format(amount);
+            return defaultFormat().format(amount);
         }catch(Exception e) {
             return currency.getCurrencyCode() + ' ' + number;
         }

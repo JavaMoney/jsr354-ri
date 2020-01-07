@@ -17,12 +17,7 @@ package org.javamoney.moneta.spi;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,6 +87,57 @@ public final class MonetaryConfig {
             }
             // else ignore entry with lower prio!
         }
+    }
+
+    public static String setValue(String key, String value){
+        if(value==null){
+            return INSTANCE.config.remove(key);
+        }
+        return INSTANCE.config.put(key, value);
+    }
+
+    public static Optional<String> getString(String key){
+        return Optional.ofNullable(INSTANCE.config.get(key));
+    }
+
+    public static Optional<Boolean> getBoolean(String key){
+        String val = INSTANCE.config.get(key);
+        if(val != null){
+            return Optional.ofNullable(Boolean.parseBoolean(val));
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Integer> getInteger(String key){
+        String val = INSTANCE.config.get(key);
+        if(val != null){
+            return Optional.ofNullable(Integer.parseInt(val));
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Long> getLong(String key){
+        String val = INSTANCE.config.get(key);
+        if(val != null){
+            return Optional.ofNullable(Long.parseLong(val));
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Float> getFloat(String key){
+        String val = INSTANCE.config.get(key);
+        if(val != null){
+            return Optional.ofNullable(Float.parseFloat(val));
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Double> getDouble(String key){
+        String val = INSTANCE.config.get(key);
+        if(val != null){
+            return Optional.ofNullable(Double.parseDouble(val));
+        }
+        return Optional.empty();
     }
 
     public static Map<String, String> getConfig() {

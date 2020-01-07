@@ -15,6 +15,9 @@
  */
 package org.javamoney.moneta.internal.format;
 
+import org.javamoney.moneta.format.AmountFormatParams;
+import org.javamoney.moneta.spi.MoneyUtils;
+
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
@@ -59,6 +62,7 @@ final class AmountNumberToken implements FormatToken {
     private void initDecimalFormats() {
         Locale locale = amountFormatContext.get(Locale.class);
         formatFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
+        formatFormat.applyPattern(MoneyUtils.replaceNbspWithSpace(formatFormat.toPattern()));
         parseFormat = (DecimalFormat) formatFormat.clone();
         DecimalFormatSymbols syms = amountFormatContext.get(DecimalFormatSymbols.class);
         if (Objects.nonNull(syms)) {
@@ -74,9 +78,15 @@ final class AmountNumberToken implements FormatToken {
         parseFormat.applyPattern(partialNumberPattern.trim());
     }
 
-    private void fixThousandsSeparatorWithSpace(DecimalFormatSymbols syms) {
-        if (syms.getGroupingSeparator() == NBSP || syms.getGroupingSeparator() == NNBSP) {
-            syms.setGroupingSeparator(' ');
+    private void fixThousandsSeparatorWithSpace(DecimalFormatSymbols symbols) {
+        if(Character.isSpaceChar(formatFormat.getDecimalFormatSymbols().getGroupingSeparator())){
+            symbols.setGroupingSeparator(' ');
+        }
+        if(Character.isWhitespace(formatFormat.getDecimalFormatSymbols().getDecimalSeparator())){
+            symbols.setDecimalSeparator(' ');
+        }
+        if(Character.isWhitespace(formatFormat.getDecimalFormatSymbols().getMonetaryDecimalSeparator())){
+            symbols.setMonetaryDecimalSeparator(' ');
         }
     }
 
@@ -157,17 +167,58 @@ final class AmountNumberToken implements FormatToken {
 
     private void parseToken(ParseContext context) {
         ParsePosition pos = new ParsePosition(context.getIndex());
-        Number number = parseFormat.parse(context.getOriginalInput(), pos);
+        String consumedInput = context.getInput().toString();
+
+        // Check for amount with currenccy, so we only parse the amount part...
+        int[] range = evalNumberRange(consumedInput); // 0: firstDigit, 1: lastDigit
+        if(range[0]<0){
+            context.setError();
+            context.setErrorIndex(0);
+            context.setErrorMessage("No digits found: \"" + context.getOriginalInput() + "\"");
+            return;
+        }
+        consumedInput = consumedInput.substring(0, range[1]+1);
+        String input = consumedInput.substring(0, range[0]) + // any literal part
+                        consumedInput.substring(range[0]) // number part, without any spaces.
+                                .replace(" ", "")
+                                .replace(MoneyUtils.NBSP_STRING, "")
+                                .replace(MoneyUtils.NNBSP_STRING, "");
+        pos = new ParsePosition(0);
+        Number number = parseFormat.parse(input, pos);
         if (Objects.nonNull(number)) {
             context.setParsedNumber(number);
-            String consumedToken = context.getOriginalInput().substring(context.getIndex(), pos.getIndex());
-            context.consume(consumedToken);
+            context.consume(consumedInput);
         } else {
             Logger.getLogger(getClass().getName()).finest("Could not parse amount from: " + context.getOriginalInput());
             context.setError();
             context.setErrorIndex(pos.getErrorIndex());
             context.setErrorMessage("Unparseable number: \"" + context.getOriginalInput() + "\"");
         }
+    }
+
+    private int[] evalNumberRange(String input) {
+        int firstDigit = -1;
+        int lastDigit = -1;
+        for(int i=0;i<input.length();i++){
+            if(Character.isDigit(input.charAt(i)) ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getMinusSign() ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getGroupingSeparator() ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getDecimalSeparator() ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getMonetaryDecimalSeparator() ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getPercent() ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getPerMill() ||
+                    input.charAt(i) == parseFormat.getDecimalFormatSymbols().getZeroDigit()){
+                if(firstDigit<0){
+                    firstDigit = i;
+                }
+                lastDigit = i;
+            }else if(Character.isAlphabetic(input.charAt(i))){
+                if(firstDigit>0) {
+                    break;
+                }
+            }
+        }
+        return new int[]{firstDigit, lastDigit};
     }
 
     @Override

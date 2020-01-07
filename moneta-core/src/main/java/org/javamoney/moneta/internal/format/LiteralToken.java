@@ -60,6 +60,10 @@ final class LiteralToken implements FormatToken, Serializable {
     @Override
     public void parse(ParseContext context) throws MonetaryParseException {
         if (!context.consume(token)) {
+            if(token.trim().isEmpty()){
+                // assume this is ok
+                return;
+            }
             context.setError();
             context.setErrorMessage("Parse Error");
             throw new MonetaryParseException(context.getOriginalInput(), context.getErrorIndex());

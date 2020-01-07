@@ -23,6 +23,7 @@ import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
+import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
 import javax.money.spi.CurrencyProviderSpi;
 import java.io.IOException;
@@ -44,6 +45,10 @@ import static org.javamoney.moneta.format.CurrencyStyle.CODE;
  */
 final class CurrencyToken implements FormatToken {
     /**
+     * The current conversion context.
+     */
+    private final AmountFormatContext context;
+    /**
      * The style defining, how the currency should be localized.
      */
     private CurrencyStyle style = CODE;
@@ -57,10 +62,11 @@ final class CurrencyToken implements FormatToken {
      *
      * @param style  The style defining, how the currency should be localized, not
      *               {@code null}.
-     * @param locale The target locale, not {@code null}.
+     * @param context The target context, not {@code null}.
      */
-    CurrencyToken(CurrencyStyle style, Locale locale) {
-        this.locale = requireNonNull(locale, "Locale null");
+    CurrencyToken(CurrencyStyle style, AmountFormatContext context) {
+        this.context = requireNonNull(context);
+        this.locale = requireNonNull(context.getLocale(), "Locale null");
         if (Objects.nonNull(style)) {
             this.style = style;
         }
@@ -189,15 +195,17 @@ final class CurrencyToken implements FormatToken {
         }
         try {
             CurrencyUnit cur;
+            String[] providers = this.context.get("currencyProviderName", String.class)!=null?
+                    new String[]{this.context.get("currencyProviderName", String.class)}:new String[0];
             switch (style) {
                 case CODE:
-                    if (!Monetary.isCurrencyAvailable(token)) {
+                    if (!Monetary.isCurrencyAvailable(token, providers)) {
                         // Perhaps blank is missing between currency code and number...
                         String subCurrency = parseCurrencyCode(token);
-                        cur = Monetary.getCurrency(subCurrency);
+                        cur = Monetary.getCurrency(subCurrency, providers);
                         context.consume(subCurrency);
                     } else {
-                        cur = Monetary.getCurrency(token);
+                        cur = Monetary.getCurrency(token, providers);
                         context.consume(token);
                     }
                     break;
@@ -206,10 +214,10 @@ final class CurrencyToken implements FormatToken {
                         throw new MonetaryParseException("$ is not a unique currency symbol.", token,
                                 context.getErrorIndex());
                     } else if (token.startsWith("€")) {
-                        cur = Monetary.getCurrency("EUR");
+                        cur = Monetary.getCurrency("EUR", providers);
                         context.consume('€');
                     } else if (token.startsWith("£")) {
-                        cur = Monetary.getCurrency("GBP");
+                        cur = Monetary.getCurrency("GBP", providers);
                         context.consume('£');
                     } else {
                         //System.out.println(token);
@@ -222,7 +230,7 @@ final class CurrencyToken implements FormatToken {
                                 break;
                             }
                         }
-                        cur = Monetary.getCurrency(code);
+                        cur = Monetary.getCurrency(code, providers);
                         context.consume(token);
                     }
                     context.setParsedCurrency(cur);
@@ -234,6 +242,11 @@ final class CurrencyToken implements FormatToken {
             }
             if (Objects.nonNull(cur)) {
                 context.setParsedCurrency(cur);
+            }else{
+                CurrencyUnit fixed = this.context.get(CurrencyUnit.class);
+                if(fixed!=null){
+                    context.setParsedCurrency(fixed);
+                }
             }
         } catch (MonetaryParseException e) {
             context.setError();

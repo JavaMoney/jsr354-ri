@@ -41,6 +41,8 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
 
     static final String STYLE = "MonetaryAmountFormatSymbols";
 
+    private static final MonetaryAmountFormat DEFAULT_INSTANCE = MonetaryAmountDecimalFormatBuilder.newInstance().build();
+
     private static final AmountFormatContext CONTEXT = AmountFormatContextBuilder.of(STYLE).build();
 
     private final DecimalFormat decimalFormat;
@@ -53,6 +55,14 @@ public class MonetaryAmountDecimalFormat implements MonetaryAmountFormat {
         this.decimalFormat = decimalFormat;
         this.producer = producer;
         this.currencyUnit = currencyUnit;
+    }
+
+    /**
+     * Get the default formatter based on the current default locale.
+     * @return
+     */
+    public static MonetaryAmountFormat of() {
+        return DEFAULT_INSTANCE;
     }
 
 

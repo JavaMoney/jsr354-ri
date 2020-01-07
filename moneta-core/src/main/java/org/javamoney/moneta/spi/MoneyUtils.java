@@ -42,9 +42,13 @@ import static java.util.logging.Level.FINEST;
  * @author Anatole Tresch
  */
 public final class MoneyUtils {
+
     private static final Logger LOG = Logger.getLogger(MoneyUtils.class.getName());
-    public static final char NBSP = '\u00A0';
-    public static final char NNBSP = '\u202F';
+
+    public static final String NBSP_STRING = "\u00A0";
+    public static final String NNBSP_STRING = "\u202F";
+    public static final char NBSP = NBSP_STRING.charAt(0);
+    public static final char NNBSP = NNBSP_STRING.charAt(0);
 
     private MoneyUtils() {
     }
