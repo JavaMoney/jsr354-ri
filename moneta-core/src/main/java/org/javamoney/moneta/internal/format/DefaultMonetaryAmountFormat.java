@@ -47,6 +47,10 @@ import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
  * {@link MonetaryAmountFormat} instances a new instance should be created on
  * each access.
  *
+ * When parsing currencies this format supports an optional {@code currencyProviderName}
+ * context parameter on the {@link AmountFormatContext}. This name will be passed as a currency trarget provider when
+ * resolving cuirrency codes and symbols.
+ *
  * @author Anatole Tresch
  * @author Werner Keil
  */
