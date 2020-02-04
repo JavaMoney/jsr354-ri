@@ -1207,26 +1207,26 @@ public class MoneyTest {
     }
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void shouldRerturnErrorWhenUsingZeroTheCurrencyIsNull() {
+    public void shouldReturnErrorWhenUsingZeroTheCurrencyIsNull() {
     	Money.zero(null);
     	fail();
     }
 
     @Test
-    public void shouldRerturnZeroWhenUsingZero() {
+    public void shouldReturnZeroWhenUsingZero() {
     	MonetaryAmount zero = Money.zero(BRAZILIAN_REAL);
     	assertEquals(BigDecimal.ZERO, zero.getNumber().numberValue(BigDecimal.class));
     	assertEquals(BRAZILIAN_REAL, zero.getCurrency());
     }
 
 	@Test(expectedExceptions = NullPointerException.class)
-	public void shouldRerturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
+	public void shouldReturnErrorWhenUsingOfMinorTheCurrencyIsNull() {
 		Money.ofMinor(null, 1234L);
 		fail();
 	}
 
 	@Test
-	public void shouldRerturnMonetaryAmount() {
+	public void shouldReturnMonetaryAmount() {
 		MonetaryAmount amount = Money.ofMinor(DOLLAR, 1234L);
 		assertEquals(12.34d, amount.getNumber().doubleValue());
 		assertEquals(DOLLAR, amount.getCurrency());
@@ -1243,7 +1243,7 @@ public class MoneyTest {
 	}
 
 	@Test
-	public void shouldRerturnMonetaryAmountUsingFractionDigits() {
+	public void shouldReturnMonetaryAmountUsingFractionDigits() {
 		MonetaryAmount amount = Money.ofMinor(DOLLAR, 1234L, 3);
 		assertEquals(1.234d, amount.getNumber().doubleValue());
 		assertEquals(DOLLAR, amount.getCurrency());
