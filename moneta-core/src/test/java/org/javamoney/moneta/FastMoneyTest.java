@@ -1186,14 +1186,14 @@ public class FastMoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            MonetaryConfig.setValue("org.javamoney.toStringFormatOrder", "ca");
+            System.setProperty("org.javamoney.toStringFormatOrder", "ca");
             assertEquals("XXX 0.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
             assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals("CHF 0.01", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
         }finally{
-            MonetaryConfig.setValue("org.javamoney.toStringFormatOrder", "ac");
+            System.clearProperty("org.javamoney.toStringFormatOrder");
             Locale.setDefault(defaultLocale);
         }
     }

@@ -17,7 +17,6 @@ package org.javamoney.moneta;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.javamoney.moneta.format.MonetaryAmountDecimalFormat;
-import org.javamoney.moneta.format.MonetaryAmountDecimalFormatBuilder;
 import org.javamoney.moneta.internal.MoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MonetaryConfig;
