@@ -67,6 +67,12 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
                 if (cu != null) {
                     result.add(cu);
                 }
+                else{
+                    // try regex
+                    CACHED.keySet().stream()
+                            .filter(k -> k.matches(code))
+                            .forEach(r -> result.add(CACHED.get(code)));
+                }
             }
             return result;
         }

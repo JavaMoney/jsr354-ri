@@ -61,6 +61,12 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
                 if (cu != null) {
                     result.add(cu);
                 }
+                else{
+                    // try regex
+                    CURRENCY_UNITS.keySet().stream()
+                            .filter(k -> k.matches(code))
+                            .forEach(r -> result.add(CURRENCY_UNITS.get(code)));
+                }
             }
             return result;
         }
