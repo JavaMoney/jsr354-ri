@@ -15,6 +15,9 @@
  */
 package org.javamoney.moneta.internal;
 
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.spi.MonetaryConfig;
+
 import javax.money.MonetaryAmount;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryException;
@@ -27,6 +30,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Default implementation ot {@link javax.money.spi.MonetaryAmountsSingletonSpi} loading the SPIs on startup
@@ -57,7 +62,14 @@ public class DefaultMonetaryAmountsSingletonSpi implements MonetaryAmountsSingle
      */
     // type check should be safe, exception will be logged if not.
     private Class<? extends MonetaryAmount> loadDefaultAmountType() {
-        return null;
+        try{
+            return (Class<? extends MonetaryAmount>)Class.forName(MonetaryConfig.getString(
+                    "org.javamoney.moneta.Money.defaults.amountType").orElse(Money.class.getName()));
+        }catch(Exception e){
+            Logger.getLogger(getClass().getName()).log(Level.WARNING,
+                    "Using Money as default amount type, because loading of configured org.javamoney.moneta.Money.defaults.amountType failed", e);
+        }
+        return Money.class;
     }
 
 

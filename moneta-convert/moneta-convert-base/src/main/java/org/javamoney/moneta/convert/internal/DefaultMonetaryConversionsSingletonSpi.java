@@ -152,7 +152,7 @@ public class DefaultMonetaryConversionsSingletonSpi implements MonetaryConversio
     @Override
     public List<String> getDefaultProviderChain() {
         List<String> provList = new ArrayList<>();
-        String defaultChain = MonetaryConfig.getConfig().get("conversion.default-chain");
+        String defaultChain = MonetaryConfig.getString("conversion.default-chain").orElse(null);
         if(defaultChain!=null) {
             String[] items = defaultChain.split(",");
             for (String item : items) {
