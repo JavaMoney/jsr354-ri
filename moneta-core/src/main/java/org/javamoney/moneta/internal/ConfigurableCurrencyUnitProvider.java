@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * This class provides a programmatic singleton for globally registering new {@link java.util.Currency}  into the
@@ -62,10 +63,10 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
                     result.add(cu);
                 }
                 else{
-                    // try regex
+                    Pattern pattern = Pattern.compile(code);
                     CURRENCY_UNITS.keySet().stream()
-                            .filter(k -> k.matches(code))
-                            .forEach(r -> result.add(CURRENCY_UNITS.get(code)));
+                            .filter(k -> pattern.matcher(code).matches())
+                            .forEach(r -> result.add(CURRENCY_UNITS.get(r)));
                 }
             }
             return result;

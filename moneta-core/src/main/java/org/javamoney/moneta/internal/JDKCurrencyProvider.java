@@ -18,6 +18,7 @@ package org.javamoney.moneta.internal;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyUnit;
@@ -68,10 +69,10 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
                     result.add(cu);
                 }
                 else{
-                    // try regex
+                    Pattern pattern = Pattern.compile(code);
                     CACHED.keySet().stream()
-                            .filter(k -> k.matches(code))
-                            .forEach(r -> result.add(CACHED.get(code)));
+                            .filter(k -> pattern.matcher(code).matches())
+                            .forEach(r -> result.add(CACHED.get(r)));
                 }
             }
             return result;
