@@ -65,7 +65,7 @@ public class ConfigurableCurrencyUnitProvider implements CurrencyProviderSpi {
                 else{
                     Pattern pattern = Pattern.compile(code);
                     CURRENCY_UNITS.keySet().stream()
-                            .filter(k -> pattern.matcher(code).matches())
+                            .filter(k -> pattern.matcher(k).matches())
                             .forEach(r -> result.add(CURRENCY_UNITS.get(r)));
                 }
             }

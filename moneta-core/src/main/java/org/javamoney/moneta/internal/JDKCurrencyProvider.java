@@ -71,7 +71,7 @@ public class JDKCurrencyProvider implements CurrencyProviderSpi {
                 else{
                     Pattern pattern = Pattern.compile(code);
                     CACHED.keySet().stream()
-                            .filter(k -> pattern.matcher(code).matches())
+                            .filter(k -> pattern.matcher(k).matches())
                             .forEach(r -> result.add(CACHED.get(r)));
                 }
             }

@@ -56,7 +56,7 @@ public class CurrencyQueryTest {
             availableDollarCodes.remove(dollarCurrency.getCurrencyCode());
         }
 
-        assertFalse(availableDollarCodes.isEmpty());
+        assertTrue(availableDollarCodes.isEmpty());
     }
 
 }
