@@ -67,7 +67,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("USD1,000.42");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000.42D);
-        assertEquals(parsedAmount.toString(), "1000.42 USD");
+        assertEquals(parsedAmount.toString(), "USD 1000.42");
     }
 
     @Test
@@ -79,7 +79,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("0.01 USD");
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
-        assertEquals(parsedAmount.toString(), "0.01 USD");
+        assertEquals(parsedAmount.toString(), "USD 0.01");
     }
 
     @Test
@@ -107,7 +107,7 @@ public class DefaultMonetaryAmountFormatTest {
         MonetaryAmount parsedAmount = format.parse("0.01");
         assertSame(parsedAmount.getCurrency(), usd);
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
-        assertEquals(parsedAmount.toString(), "0.01 USD");
+        assertEquals(parsedAmount.toString(), "USD 0.01");
     }
 
     /**

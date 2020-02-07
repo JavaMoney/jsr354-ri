@@ -26,10 +26,7 @@ import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryParseException;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 public class ToStringMonetaryAmountFormatSuffixTest {
 
@@ -42,15 +39,15 @@ public class ToStringMonetaryAmountFormatSuffixTest {
 
 
 
-	@BeforeTest
+	@BeforeMethod
 	public void init() throws InterruptedException {
+        System.setProperty("org.javamoney.toStringFormatOrder", "ac");
 		money = Money.of(BigDecimal.TEN, BRAZILIAN_REAL);
 		fastMoney = FastMoney.of(BigDecimal.TEN, BRAZILIAN_REAL);
 		roundedMoney = RoundedMoney.of(BigDecimal.TEN, BRAZILIAN_REAL);
-		System.setProperty("org.javamoney.toStringFormatOrder", "ac");
 	}
 
-	@AfterClass
+	@AfterMethod
 	public void tearDown(){
 		System.clearProperty("org.javamoney.toStringFormatOrder");
 	}
