@@ -96,21 +96,21 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
 		return Optional.ofNullable(amount).map((m) -> {
             BigDecimal dec = amount.getNumber().numberValue(BigDecimal.class);
             dec = dec.setScale(2, RoundingMode.HALF_UP);
-            String order = MonetaryConfig.getString("org.javamoney.toStringFormatOrder").orElse("ac");
+            String order = MonetaryConfig.getString("org.javamoney.toStringFormatOrder").orElse("ca");
             switch(order){
-                case "currency-amount":
-                case "currency amount":
-                case "ca":
-                case "c a":
-                case "c-a":
-                    return m.getCurrency().getCurrencyCode() + " " + dec.toPlainString();
                 case "amount-currency":
                 case "amount currency":
                 case "ac":
                 case "a c":
                 case "a-c":
-                default:
                     return dec.toPlainString() + " " + m.getCurrency().getCurrencyCode();
+                case "currency-amount":
+                case "currency amount":
+                case "ca":
+                case "c a":
+                case "c-a":
+                default:
+                    return m.getCurrency().getCurrencyCode() + " " + dec.toPlainString();
             }
         }).orElse("null");
     }

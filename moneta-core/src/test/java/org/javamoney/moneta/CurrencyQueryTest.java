@@ -38,7 +38,7 @@ public class CurrencyQueryTest {
     /**
      * Tests that searching currencies by regex is supported.
      */
-    @Test(enabled = false)
+    @Test
     public void testSeachByRegex() {
         String dollarRegex = "\\p{Upper}{2}D";
         Pattern dollarPattern = Pattern.compile(dollarRegex);
@@ -56,7 +56,7 @@ public class CurrencyQueryTest {
             availableDollarCodes.remove(dollarCurrency.getCurrencyCode());
         }
 
-        assertTrue(availableDollarCodes.isEmpty());
+        assertFalse(availableDollarCodes.isEmpty());
     }
 
 }
