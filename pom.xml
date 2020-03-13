@@ -8,7 +8,6 @@
 	the specific language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -58,7 +57,7 @@
 		<osgi.compendium.version>${osgi.version}</osgi.compendium.version>
 		<osgi.annotation.version>6.0.0</osgi.annotation.version>
 
-		<jacoco.version>0.8.2</jacoco.version>
+		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
 
 	<ciManagement>
