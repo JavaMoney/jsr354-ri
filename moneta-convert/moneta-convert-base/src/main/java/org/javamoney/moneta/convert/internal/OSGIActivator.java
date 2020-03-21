@@ -16,6 +16,7 @@
 package org.javamoney.moneta.convert.internal;
 
 import org.javamoney.moneta.OSGIServiceHelper;
+import org.javamoney.moneta.convert.DefaultMonetaryConversionsSingletonSpi;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
