@@ -15,6 +15,7 @@
  */
 package org.javamoney.moneta.internal;
 
+import org.javamoney.moneta.JDKCurrencyProvider;
 import org.javamoney.moneta.OSGIServiceHelper;
 import org.javamoney.moneta.internal.loader.DefaultLoaderService;
 import org.osgi.framework.BundleActivator;

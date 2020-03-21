@@ -13,7 +13,7 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.internal;
+package org.javamoney.moneta;
 
 import java.io.Serializable;
 import java.util.Currency;
@@ -29,7 +29,7 @@ import javax.money.CurrencyUnit;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 0.6
+ * @version 1.0
  */
 public final class JDKCurrencyAdapter implements CurrencyUnit, Serializable, Comparable<CurrencyUnit> {
 

@@ -15,17 +15,13 @@
  */
 package org.javamoney.moneta.internal.format;
 
-import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.format.CurrencyStyle;
-import org.javamoney.moneta.internal.JDKCurrencyProvider;
 
-import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.MonetaryParseException;
-import javax.money.spi.CurrencyProviderSpi;
 import java.io.IOException;
 import java.util.Currency;
 import java.util.Locale;

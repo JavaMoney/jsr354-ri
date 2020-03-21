@@ -1,3 +1,5 @@
+import org.javamoney.moneta.JDKCurrencyProvider;
+
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
@@ -24,7 +26,7 @@ module org.javamoney.moneta {
     requires static org.osgi.core;
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;
-    provides javax.money.spi.CurrencyProviderSpi with org.javamoney.moneta.internal.JDKCurrencyProvider, org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
+    provides javax.money.spi.CurrencyProviderSpi with JDKCurrencyProvider, org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
     provides javax.money.spi.MonetaryAmountFactoryProviderSpi with org.javamoney.moneta.internal.MoneyAmountFactoryProvider, org.javamoney.moneta.internal.FastMoneyAmountFactoryProvider, org.javamoney.moneta.internal.RoundedMoneyAmountFactoryProvider;
     provides javax.money.spi.MonetaryAmountFormatProviderSpi with org.javamoney.moneta.internal.format.DefaultAmountFormatProviderSpi;
     provides javax.money.spi.MonetaryAmountsSingletonQuerySpi with org.javamoney.moneta.internal.DefaultMonetaryAmountsSingletonQuerySpi;

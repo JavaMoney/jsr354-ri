@@ -13,7 +13,9 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.internal;
+package org.javamoney.moneta;
+
+import org.javamoney.moneta.JDKCurrencyAdapter;
 
 import java.util.*;
 import java.util.logging.Level;
