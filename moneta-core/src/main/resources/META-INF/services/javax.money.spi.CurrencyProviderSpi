@@ -12,5 +12,5 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 #
-org.javamoney.moneta.JDKCurrencyProvider
-org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider
+org.javamoney.moneta.spi.JDKCurrencyProvider
+org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider

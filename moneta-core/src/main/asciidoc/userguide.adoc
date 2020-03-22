@@ -117,8 +117,8 @@ Collection<CurrencyUnit> allCurrencies = Monetary.getCurrencies();
 Similarly to other access methods you can also explicitly specify the provider chain to be used. The _Moneta_
 reference implementation provides the following currency providers:
 
-* _default_: this currency provider (implemented by +org.javamoney.moneta.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
-* _ConfigurableCurrencyUnitProvider_ (implemented by +org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider+)
+* _default_: this currency provider (implemented by +org.javamoney.moneta.spi.JDKCurrencyProvider+) simply maps/adapts +java.util.Currency+.
+* _ConfigurableCurrencyUnitProvider_ (implemented by +org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider+)
   provides a configuration hook for programmatically add instances. This provider is autoconfigured. Ir provides
   static hooks for adding additional +CurrencyUnit+ instances:
 

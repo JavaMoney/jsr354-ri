@@ -37,7 +37,7 @@ import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 
 import org.javamoney.moneta.convert.imf.IMFRateReadingHandler.RateIMFResult;
-import org.javamoney.moneta.spi.LoaderService;
+import org.javamoney.moneta.spi.loader.LoaderService;
 
 /**
  * Find by historic from IMF

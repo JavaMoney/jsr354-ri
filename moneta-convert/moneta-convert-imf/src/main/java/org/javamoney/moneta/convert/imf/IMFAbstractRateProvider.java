@@ -47,7 +47,7 @@ import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.convert.imf.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.AbstractRateProvider;
-import org.javamoney.moneta.spi.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
 abstract class IMFAbstractRateProvider extends AbstractRateProvider implements LoaderListener {
 

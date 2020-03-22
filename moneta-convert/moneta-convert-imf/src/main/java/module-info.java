@@ -1,3 +1,5 @@
+import org.javamoney.moneta.spi.loader.LoaderService;
+
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
@@ -20,6 +22,6 @@ module org.javamoney.moneta.convert.imf {
     requires static org.osgi.annotation;
     provides javax.money.convert.ExchangeRateProvider with
             org.javamoney.moneta.convert.imf.IMFRateProvider, org.javamoney.moneta.convert.imf.IMFHistoricRateProvider;
-    uses org.javamoney.moneta.spi.LoaderService;
+    uses LoaderService;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
 }

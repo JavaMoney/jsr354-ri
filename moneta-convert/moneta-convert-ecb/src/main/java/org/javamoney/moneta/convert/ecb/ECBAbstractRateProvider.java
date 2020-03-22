@@ -44,8 +44,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
-import org.javamoney.moneta.spi.LoaderService;
-import org.javamoney.moneta.spi.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService;
+import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
 /**
  * Base to all Europe Central Bank implementation.

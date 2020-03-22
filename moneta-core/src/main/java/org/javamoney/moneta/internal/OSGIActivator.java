@@ -15,9 +15,11 @@
  */
 package org.javamoney.moneta.internal;
 
-import org.javamoney.moneta.JDKCurrencyProvider;
+import org.javamoney.moneta.spi.*;
 import org.javamoney.moneta.OSGIServiceHelper;
-import org.javamoney.moneta.internal.loader.DefaultLoaderService;
+import org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi;
+import org.javamoney.moneta.spi.loader.DefaultLoaderService;
+import org.javamoney.moneta.spi.loader.LoaderService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -50,7 +52,7 @@ public class OSGIActivator implements BundleActivator {
         OSGIServiceHelper.registerService(context.getBundle(), MonetaryAmountFactoryProviderSpi.class, MoneyAmountFactoryProvider.class);
         OSGIServiceHelper.registerService(context.getBundle(), MonetaryAmountFactoryProviderSpi.class, RoundedMoneyAmountFactoryProvider.class);
 
-        OSGIServiceHelper.registerService(context.getBundle(), MonetaryAmountFormatProviderSpi.class, org.javamoney.moneta.internal.format.DefaultAmountFormatProviderSpi.class);
+        OSGIServiceHelper.registerService(context.getBundle(), MonetaryAmountFormatProviderSpi.class, DefaultAmountFormatProviderSpi.class);
 
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonQuerySpi.class, DefaultMonetaryAmountsSingletonQuerySpi.class);
 
@@ -58,7 +60,7 @@ public class OSGIActivator implements BundleActivator {
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonSpi.class, DefaultMonetaryAmountsSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
-        OSGIServiceHelper.registerService(context.getBundle(), org.javamoney.moneta.spi.LoaderService.class, DefaultLoaderService.class);
+        OSGIServiceHelper.registerService(context.getBundle(), LoaderService.class, DefaultLoaderService.class);
         LOG.info("Registered JavaMoney services...");
     }
 
@@ -73,7 +75,7 @@ public class OSGIActivator implements BundleActivator {
             OSGIServiceHelper.unregisterService(context.getBundle(), MonetaryAmountFactoryProviderSpi.class, MoneyAmountFactoryProvider.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), MonetaryAmountFactoryProviderSpi.class, RoundedMoneyAmountFactoryProvider.class);
 
-            OSGIServiceHelper.unregisterService(context.getBundle(), MonetaryAmountFormatProviderSpi.class, org.javamoney.moneta.internal.format.DefaultAmountFormatProviderSpi.class);
+            OSGIServiceHelper.unregisterService(context.getBundle(), MonetaryAmountFormatProviderSpi.class, DefaultAmountFormatProviderSpi.class);
 
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonQuerySpi.class, DefaultMonetaryAmountsSingletonQuerySpi.class);
 
@@ -81,7 +83,7 @@ public class OSGIActivator implements BundleActivator {
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonSpi.class, DefaultMonetaryAmountsSingletonSpi.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
-            OSGIServiceHelper.unregisterService(context.getBundle(), org.javamoney.moneta.spi.LoaderService.class, DefaultLoaderService.class);
+            OSGIServiceHelper.unregisterService(context.getBundle(), LoaderService.class, DefaultLoaderService.class);
         }
     }
 }

@@ -26,7 +26,7 @@ import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
 import javax.money.spi.Bootstrap;
 
-import org.javamoney.moneta.spi.LoaderService;
+import org.javamoney.moneta.spi.loader.LoaderService;
 
 /**
  * Implements a {@link ExchangeRateProvider} that loads the IMF conversion data.

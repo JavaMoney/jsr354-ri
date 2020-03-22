@@ -17,20 +17,16 @@ package org.javamoney.moneta;
 
 import org.javamoney.moneta.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.javamoney.moneta.format.MonetaryAmountDecimalFormat;
-import org.javamoney.moneta.format.MonetaryAmountDecimalFormatBuilder;
-import org.javamoney.moneta.internal.FastMoneyAmountFactory;
+import org.javamoney.moneta.spi.FastMoneyAmountFactory;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.MonetaryConfig;
 import org.javamoney.moneta.spi.MoneyUtils;
 
 import javax.money.*;
-import javax.money.format.AmountFormatQuery;
 import javax.money.format.MonetaryAmountFormat;
-import javax.money.format.MonetaryFormats;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;

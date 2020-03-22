@@ -14,6 +14,6 @@
   the License.
  */
 /**
- * Defines common base classes used for implementing SPIs and the {@link org.javamoney.moneta.spi.LoaderService}.
+ * Defines common base classes used for implementing SPIs and the {@link org.javamoney.moneta.spi.loader.LoaderService}.
  */
 package org.javamoney.moneta.spi;

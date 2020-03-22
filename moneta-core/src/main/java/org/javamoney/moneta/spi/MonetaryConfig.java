@@ -15,8 +15,6 @@
  */
 package org.javamoney.moneta.spi;
 
-import org.javamoney.moneta.internal.DefaultConfigProvider;
-
 import javax.money.spi.Bootstrap;
 import java.util.*;
 import java.util.logging.Logger;

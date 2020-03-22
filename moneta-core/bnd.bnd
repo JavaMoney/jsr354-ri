@@ -38,4 +38,4 @@ Export-Service: \
     javax.money.spi.MonetaryCurrenciesSingletonSpi,\
     javax.money.spi.RoundingProviderSpi,\
     javax.money.spi.ServiceProvider,\
-    org.javamoney.moneta.spi.LoaderService
+    org.javamoney.moneta.spi.loader.LoaderService

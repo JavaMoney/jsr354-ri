@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta;
 
-import org.javamoney.moneta.internal.PriorityServiceComparator;
+import org.javamoney.moneta.spi.PriorityServiceComparator;
 import org.osgi.framework.*;
 
 import java.net.URL;

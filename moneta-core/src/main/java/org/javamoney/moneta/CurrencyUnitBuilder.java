@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta;
 
-import org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider;
+import org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider;
 
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;

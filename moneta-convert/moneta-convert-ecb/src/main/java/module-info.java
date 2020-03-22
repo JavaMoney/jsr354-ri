@@ -1,3 +1,5 @@
+import org.javamoney.moneta.spi.loader.LoaderService;
+
 /*
 Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
 
@@ -21,6 +23,6 @@ module org.javamoney.moneta.convert.ecb {
     requires static org.osgi.annotation;
     provides javax.money.convert.ExchangeRateProvider with
         org.javamoney.moneta.convert.ecb.ECBCurrentRateProvider, org.javamoney.moneta.convert.ecb.ECBHistoric90RateProvider, org.javamoney.moneta.convert.ecb.ECBHistoricRateProvider;
-    uses org.javamoney.moneta.spi.LoaderService;
+    uses LoaderService;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;
 }

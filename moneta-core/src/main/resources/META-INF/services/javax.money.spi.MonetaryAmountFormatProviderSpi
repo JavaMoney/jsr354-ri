@@ -12,4 +12,4 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 #
-org.javamoney.moneta.internal.format.DefaultAmountFormatProviderSpi
+org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi

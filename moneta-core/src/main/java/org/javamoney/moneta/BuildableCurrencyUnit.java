@@ -16,6 +16,8 @@
 package org.javamoney.moneta;
 
 
+import org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider;
+
 import javax.money.CurrencyContext;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryException;
@@ -26,7 +28,7 @@ import java.util.Objects;
 /**
  * Implementation of {@link javax.money.CurrencyUnit} that allows to of new
  * instances using a fluent API. Instances created also can be added to the
- * {@link org.javamoney.moneta.internal.ConfigurableCurrencyUnitProvider}
+ * {@link ConfigurableCurrencyUnitProvider}
  * singleton, which publishes the instances, so they are visible from the
  * {@link javax.money.Monetary} singleton.
  */

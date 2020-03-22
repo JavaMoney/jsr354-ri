@@ -17,8 +17,6 @@ package org.javamoney.moneta.convert;
 
 import javax.money.convert.ExchangeRateProviderSupplier;
 
-import org.javamoney.moneta.convert.internal.IdentityRateProvider;
-
 /**
  * <p>
  * This enum contains all implementations by Moneta. Using this enum will easier
