@@ -1,20 +1,37 @@
+/**
+ * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package org.javamoney.moneta.spi.format;
 
 import org.javamoney.moneta.FastMoney;
 import org.testng.annotations.Test;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.format.AmountFormatContext;
-import javax.money.format.AmountFormatContextBuilder;
-import javax.money.format.MonetaryParseException;
+import javax.money.*;
+import javax.money.format.*;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.*;
+import java.util.logging.Logger;
 
 import static java.util.Locale.US;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertSame;
+import static org.testng.Assert.*;
+import static org.testng.AssertJUnit.fail;
 
 public class DefaultMonetaryAmountFormatTest {
+    private static final Logger LOG = Logger.getLogger(DefaultMonetaryAmountFormatTest.class.getName());
 
     @Test
     public void testFormat() {
@@ -131,5 +148,62 @@ public class DefaultMonetaryAmountFormatTest {
 //FIXME        assertSame(parsedAmount.getCurrency(), usd);
 //FIXME        assertEquals(parsedAmount.getNumber().doubleValueExact(), 0.01D);
 //FIXME        assertEquals(parsedAmount.toString(), "USD 0.01");
+    }
+
+    @Test(description =
+            "Test formats and parses (round-trip) any supported amount type for each supported Locale, " +
+                    "using different format queries.")
+    public void testParseDifferentStyles() {
+        final String[] langArray = {"as", "ar", "bn", "ckb", "dz", "fa", "ig", "ks", "lrc",
+                "mr", "my", "mzn", "ne", "pa", "ps", "sd", "th", "ur", "uz"};
+        final Set<String> SKIPPED_LANGUAGES = new HashSet<>(Arrays.asList(langArray));
+        final Locale[] locArray = new Locale[]{new Locale("dz", "BT")
+        };
+        final Set<Locale> SKIPPED_LOCALES = new HashSet<>(Arrays.asList(locArray));
+
+        for (Locale locale : MonetaryFormats.getAvailableLocales()) {
+            if (SKIPPED_LANGUAGES.contains(locale.getLanguage()) ||
+                    SKIPPED_LOCALES.contains(locale)) {
+                continue;
+            }
+            LOG.finer("Locale: " + locale);
+            for (Class clazz : Monetary.getAmountTypes()) {
+                MonetaryAmountFactory fact = Monetary.getAmountFactory(clazz);
+                AmountFormatQuery query = AmountFormatQueryBuilder.of(locale).setMonetaryAmountFactory(fact).build();
+                final MonetaryAmount amt = fact.setCurrency("USD").setNumber(10.5).create();
+                final NumberFormat jdkFormat = NumberFormat.getCurrencyInstance(locale);
+                final String jdkProduced = jdkFormat.format(10.5);
+                final MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(query);
+                final String formatProduced = format.format(amt);
+                LOG.finer(String.format("Formatted: %s (%s)", formatProduced, jdkProduced));
+                assertNotNull(formatProduced, "No MonetaryAmountFormat returned from MonetaryFormats." +
+                        "getMonetaryFormat(Locale,String...) with supported Locale: " + locale);
+                assertFalse(formatProduced.isEmpty(), "MonetaryAmountFormat returned empty String for " + amt);
+                try {
+                    final MonetaryAmount amtParsed = format.parse(formatProduced);
+                    assertNotNull(amtParsed, "Reverse-parsing of MonetaryAmount failed for '" + formatProduced +
+                            "' using MonetaryAmountFormat: " + format);
+                    assertEquals(amtParsed.getClass(), clazz,
+                            "Reverse-parsing of MonetaryAmount failed for '" + formatProduced +
+                                    "' using MonetaryAmountFormat(invalid type " +
+                                    amtParsed.getClass().getName() + ") for format: " + format);
+                } catch (MonetaryException e) {
+                    try {
+                        final Number jdkNum = jdkFormat.parse(jdkProduced);
+                        LOG.finer(String.format("Parsed (JDK): %s (%s)", jdkNum, jdkProduced));
+                        final Currency jdkCur = Currency.getInstance(locale);
+                        final String jdkTweaked = jdkProduced.replace(jdkCur.getSymbol(), "USD");
+                        LOG.finer(String.format("Trying to parse: %s", jdkTweaked));
+                        final Number parsedNum = jdkFormat.parse(jdkTweaked);
+                        LOG.finer(String.format("Parsed: %s (%s)", parsedNum, jdkTweaked));
+
+                        fail("Reverse-parsing of MonetaryAmount failed for '" + formatProduced +
+                                "' using MonetaryAmountFormat: " + format.getClass().getName() + " for Locale: " + locale);
+                    } catch (ParseException pe) {
+                        fail("Reverse-parsing via JDK failed for '" + jdkProduced + " with Locale: " + locale);
+                    }
+                }
+            }
+        }
     }
 }

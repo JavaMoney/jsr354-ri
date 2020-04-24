@@ -30,7 +30,7 @@ import javax.money.spi.CurrencyProviderSpi;
  * Default implementation of a {@link CurrencyUnit} based on the using the JDK's
  * {@link Currency}.
  *
- * @version 0.5.1
+ * @version 1.0.0
  * @author Anatole Tresch
  * @author Werner Keil
  */

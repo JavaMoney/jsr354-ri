@@ -35,6 +35,7 @@ import org.javamoney.moneta.spi.MoneyUtils;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.INFO;
 import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
 
 /**
@@ -175,8 +176,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         } catch (Exception e) {
             // try parsing negative...
             Logger log = Logger.getLogger(getClass().getName());
-            if (log.isLoggable(FINEST)) {
-                log.log(FINEST, "Failed to parse positive pattern, trying negative for: " + text, e);
+            if (log.isLoggable(INFO)) {
+                log.log(INFO, "Failed to parse positive pattern, trying negative for: " + text, e);
             }
             for (FormatToken token : this.negativeTokens) {
                 token.parse(ctx);
