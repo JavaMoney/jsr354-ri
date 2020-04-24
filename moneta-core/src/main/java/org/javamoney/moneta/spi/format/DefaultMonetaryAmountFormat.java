@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2019, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -32,7 +32,6 @@ import javax.money.format.MonetaryParseException;
 import org.javamoney.moneta.format.AmountFormatParams;
 import org.javamoney.moneta.format.CurrencyStyle;
 import org.javamoney.moneta.spi.MoneyUtils;
-import org.javamoney.moneta.spi.format.*;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.logging.Level.FINEST;
@@ -48,7 +47,7 @@ import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
  *
  * When parsing currencies this format supports an optional {@code currencyProviderName}
  * context parameter on the {@link AmountFormatContext}. This name will be passed as a currency trarget provider when
- * resolving cuirrency codes and symbols.
+ * resolving currency codes and symbols.
  *
  * @author Anatole Tresch
  * @author Werner Keil
@@ -97,11 +96,11 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         if(locale != null && locale.getCountry().equals("BG")){
             AmountFormatContextBuilder builder = amountFormatContext.toBuilder();
             if(amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class)==null) {
-                // Fix invalid JDK grouping for rupees...
+                // Fix invalid JDK grouping for leva...
                 builder.set(AmountFormatParams.GROUPING_SIZES, new int[]{3}).build();
             }
             if(amountFormatContext.get(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, int[].class)==null) {
-                // Fix invalid JDK grouping for rupees...
+                // Fix invalid JDK grouping for leva...
                 builder.set(AmountFormatParams.GROUPING_GROUPING_SEPARATORS, new String[]{"\u00A0"}).build();
             }
             amountFormatContext = builder.build();
