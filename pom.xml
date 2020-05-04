@@ -13,9 +13,9 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>1.1-SNAPSHOT</version>
+		<version>1.1</version>
 	</parent>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.4</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -41,7 +41,7 @@
 	</licenses>
 
 	<properties>
-		<jsr.version>1.1-SNAPSHOT</jsr.version>
+		<jsr.version>1.1</jsr.version>
 		<jdkVersion>1.8</jdkVersion>
 		<maven.compiler.release>8</maven.compiler.release>
 
