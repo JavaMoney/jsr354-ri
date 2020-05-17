@@ -58,6 +58,7 @@
 		<osgi.annotation.version>6.0.0</osgi.annotation.version>
 
 		<jacoco.version>0.8.5</jacoco.version>
+		<javadoc.plugin.version>3.2.0</javadoc.plugin.version>
 	</properties>
 
 	<ciManagement>
@@ -147,7 +148,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.2.0</version>
+						<version>${javadoc.plugin.version}</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -206,6 +207,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${javadoc.plugin.version}</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -454,6 +456,27 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <detectLinks>true</detectLinks>
+                        <keywords>true</keywords>
+                        <linksource>true</linksource>
+                        <failOnError>false</failOnError>
+                        <source>${maven.compile.sourceLevel}</source>
+                        <verbose>true</verbose>
+                    </configuration>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -477,7 +500,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>${javadoc.plugin.version}</version>
 				<inherited>true</inherited>
 				<configuration>
 					<source>1.9</source>
