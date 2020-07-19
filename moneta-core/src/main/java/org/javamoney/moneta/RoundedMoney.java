@@ -45,7 +45,7 @@ import java.util.logging.Logger;
  * @author Anatole Tresch
  * @author Werner Keil
  * @author Otavio Santana
- * @version 0.6.1
+ * @version 0.7
  */
 public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 
@@ -695,7 +695,6 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         return from(formatter.parse(text));
     }
 
-
     private static MonetaryAmountFormat defaultFormat() {
         String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
         try{
@@ -731,7 +730,6 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     }
 
 
-    @Deprecated
     @SuppressWarnings("unchecked")
     public <T> T asType(Class<T> type) {
         if (BigDecimal.class.equals(type)) {
