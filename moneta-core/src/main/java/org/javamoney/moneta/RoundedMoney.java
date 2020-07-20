@@ -45,7 +45,7 @@ import java.util.logging.Logger;
  * @author Anatole Tresch
  * @author Werner Keil
  * @author Otavio Santana
- * @version 0.7
+ * @version 1.0
  */
 public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 
@@ -86,12 +86,18 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      *
      * @param currency the currency, not null.
      * @param number   the amount, not null.
+     * @deprecated, will be private, use of()
      */
     public RoundedMoney(Number number, CurrencyUnit currency, MonetaryOperator rounding) {
         this(number, currency, null, rounding);
     }
-
-    @Deprecated
+    /**
+     * 
+     * @param number
+     * @param currency
+     * @param mathContext
+     * @deprecated, will be private, use of()
+     */
     public RoundedMoney(Number number, CurrencyUnit currency, MathContext mathContext) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
@@ -104,7 +110,14 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         this.number = MoneyUtils.getBigDecimal(number, monetaryContext);
     }
 
-    @Deprecated
+    /**
+     * 
+     * @param number
+     * @param currency
+     * @param context
+     * @param rounding
+     * @deprecated, will be private, use of()
+     */
     public RoundedMoney(Number number, CurrencyUnit currency, MonetaryContext context, MonetaryOperator rounding) {
         Objects.requireNonNull(currency, "Currency is required.");
         this.currency = currency;
@@ -168,7 +181,6 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param number   The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    @Deprecated
     public static RoundedMoney of(Number number, CurrencyUnit currency) {
         return new RoundedMoney(number, currency, (MonetaryOperator) null);
     }
@@ -206,7 +218,6 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param rounding        The rounding to be applied.
      * @return A new instance of {@link RoundedMoney}.
      */
-    @Deprecated
     public static RoundedMoney of(CurrencyUnit currency, Number number, MonetaryContext monetaryContext,
                                   MonetaryOperator rounding) {
         return new RoundedMoney(number, currency,
@@ -244,7 +255,6 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param number       The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    @Deprecated
     public static RoundedMoney of(Number number, String currencyCode, MonetaryContext monetaryContext) {
         return new RoundedMoney(number, Monetary.getCurrency(currencyCode),
                 DEFAULT_MONETARY_CONTEXT.toBuilder().importContext(monetaryContext).build(), null);
@@ -658,6 +668,10 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         }
     }
 
+    /**
+     * @param amt amount
+     * @return A new RoundedMoney based on the given amount
+     */
     public static RoundedMoney from(MonetaryAmount amt) {
         if (amt.getClass() == RoundedMoney.class) {
             return (RoundedMoney) amt;
