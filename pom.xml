@@ -15,7 +15,7 @@
 		<artifactId>javamoney-parent</artifactId>
 		<version>1.2</version>
 	</parent>
-	<version>1.4.1-SNAPSHOT</version>
+	<version>1.4.1</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -23,7 +23,7 @@
 	<inceptionYear>2012</inceptionYear>
 	<description>JSR 354 provides an API for representing, transporting, and performing comprehensive calculations with
         Money and Currency.
-        This module implements JSR 354.
+        This module is the Reference Implementatation of JSR 354.
     </description>
 
 	<organization>
@@ -49,7 +49,7 @@
 		<basedir>.</basedir>
 
 		<!-- dependency versions -->
-		<testng.version>6.13.1</testng.version>
+		<testng.version>6.13.1</testng.version><!-- TODO use 7 or above in the next major version of the JSR -->
 		<additionalparam>-Xdoclint:none</additionalparam>
 
 		<!-- OSGI support -->
