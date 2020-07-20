@@ -220,7 +220,6 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
      * @param number       The numeric part, not null.
      * @return A new instance of {@link RoundedMoney}.
      */
-    @Deprecated
     public static RoundedMoney of(Number number, String currencyCode) {
         return new RoundedMoney(number, Monetary.getCurrency(currencyCode),
                 Monetary.getDefaultRounding());
