@@ -88,13 +88,13 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      */
     DefaultMonetaryAmountFormat(AmountFormatContext amountFormatContext) {
         Locale locale = amountFormatContext.getLocale();
-        if(locale != null && locale.getCountry().equals("IN")
+        if(locale != null && "IN".equals(locale.getCountry())
         && amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class)==null){
             // Fix invalid JDK grouping for rupees...
             amountFormatContext = amountFormatContext.toBuilder().set(AmountFormatParams.GROUPING_SIZES, new int[]{3,2})
                                         .build();
         }
-        if(locale != null && locale.getCountry().equals("BG")){
+        if(locale != null && "BG".equals(locale.getCountry())){
             AmountFormatContextBuilder builder = amountFormatContext.toBuilder();
             if(amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class)==null) {
                 // Fix invalid JDK grouping for leva...
