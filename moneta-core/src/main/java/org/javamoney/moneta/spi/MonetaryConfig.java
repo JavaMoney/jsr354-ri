@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2020, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -15,19 +15,18 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.money.spi.Bootstrap;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Loader for the Java Money JSR configuration.
  *
  * @author Anatole Tresch
- * @deprecated Will be removed from the SPI. Implement and register an instance of {@link MonetaryConfigProvider}
- * instead of.
- * @see MonetaryConfigProvider
+ * @author Werner Keil
  */
-@Deprecated
 public final class MonetaryConfig {
 
     private static final Logger LOG = Logger
@@ -35,35 +34,75 @@ public final class MonetaryConfig {
 
     private static final MonetaryConfig INSTANCE = new MonetaryConfig();
 
+    private final Map<String, String> config = new HashMap<>();
+    private final Map<String, Integer> priorities = new HashMap<>();
+
     private MonetaryConfig() {
+        try {
+            Enumeration<URL> urls = getClass().getClassLoader().getResources(
+                    "javamoney.properties");
+            while (urls.hasMoreElements()) {
+                URL url = urls.nextElement();
+                try {
+                    Properties props = new Properties();
+                    props.load(url.openStream());
+                    updateConfig(props);
+                } catch (Exception e) {
+                    LOG.log(Level.SEVERE,
+                            "Error loading javamoney.properties, ignoring "
+                                    + url, e);
+                }
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Error loading javamoney.properties.", e);
+        }
     }
 
-    /**
-     * Sets a new config value. Note that when a custom {@link MonetaryConfigProvider} is registered, writing
-     * of configuration values is not supported. In this case a debug log (fine) is written.
-     *
-     * @param key the key to be set, not null.
-     * @param value the new value, or null.
-     * @return the previous value.
-     */
-    public static String setValue(String key, String value){
-        if(Bootstrap.getService(MonetaryConfigProvider.class) instanceof DefaultConfigProvider) {
-            DefaultConfigProvider defaultConfigProvider = (DefaultConfigProvider)Bootstrap.getService(MonetaryConfigProvider.class);
-            if (value == null) {
-                return defaultConfigProvider.config.remove(key);
+    private void updateConfig(Properties props) {
+        for (Map.Entry<Object, Object> en : props.entrySet()) {
+            String key = en.getKey().toString();
+            String value = en.getValue().toString();
+            int prio = 0;
+            if (key.startsWith("{")) {
+                int index = key.indexOf('}');
+                if (index > 0) {
+                    String prioString = key.substring(1, index);
+                    try {
+                        prio = Integer.parseInt(prioString);
+                        key = key.substring(index + 1);
+                    } catch (NumberFormatException e) {
+                        LOG.warning("Invalid config key in javamoney.properties: " + key);
+                    }
+                }
             }
-            return defaultConfigProvider.config.put(key, value);
+            Integer existingPrio = priorities.get(key);
+            if (Objects.isNull(existingPrio)) {
+                priorities.put(key, prio);
+                config.put(key, value);
+            } else if (existingPrio < prio) {
+                priorities.put(key, prio);
+                config.put(key, value);
+            } else if (existingPrio == prio) {
+                throw new IllegalStateException(
+                        "AmbiguousConfiguration detected for '" + key + "'.");
+            }
+            // else ignore entry with lower prio!
         }
-        LOG.fine("MonetaryConfig does not support deprecated write of " + key + "=" + value);
-        return null;
+    }
+
+    public static String setValue(String key, String value){
+        if(value==null){
+            return INSTANCE.config.remove(key);
+        }
+        return INSTANCE.config.put(key, value);
     }
 
     public static Optional<String> getString(String key){
-        return Optional.ofNullable(Bootstrap.getService(MonetaryConfigProvider.class).getProperty(key));
+        return Optional.ofNullable(INSTANCE.config.get(key));
     }
 
     public static Optional<Boolean> getBoolean(String key){
-        String val = Bootstrap.getService(MonetaryConfigProvider.class).getProperty(key);
+        String val = INSTANCE.config.get(key);
         if(val != null){
             return Optional.ofNullable(Boolean.parseBoolean(val));
         }
@@ -71,7 +110,7 @@ public final class MonetaryConfig {
     }
 
     public static Optional<Integer> getInteger(String key){
-        String val = Bootstrap.getService(MonetaryConfigProvider.class).getProperty(key);
+        String val = INSTANCE.config.get(key);
         if(val != null){
             return Optional.ofNullable(Integer.parseInt(val));
         }
@@ -79,7 +118,7 @@ public final class MonetaryConfig {
     }
 
     public static Optional<Long> getLong(String key){
-        String val = Bootstrap.getService(MonetaryConfigProvider.class).getProperty(key);
+        String val = INSTANCE.config.get(key);
         if(val != null){
             return Optional.ofNullable(Long.parseLong(val));
         }
@@ -87,7 +126,7 @@ public final class MonetaryConfig {
     }
 
     public static Optional<Float> getFloat(String key){
-        String val = Bootstrap.getService(MonetaryConfigProvider.class).getProperty(key);
+        String val = INSTANCE.config.get(key);
         if(val != null){
             return Optional.ofNullable(Float.parseFloat(val));
         }
@@ -95,7 +134,7 @@ public final class MonetaryConfig {
     }
 
     public static Optional<Double> getDouble(String key){
-        String val = Bootstrap.getService(MonetaryConfigProvider.class).getProperty(key);
+        String val = INSTANCE.config.get(key);
         if(val != null){
             return Optional.ofNullable(Double.parseDouble(val));
         }
@@ -103,8 +142,6 @@ public final class MonetaryConfig {
     }
 
     public static Map<String, String> getConfig() {
-        return Collections.unmodifiableMap(Bootstrap.getService(MonetaryConfigProvider.class).getProperties());
+        return Collections.unmodifiableMap(INSTANCE.config);
     }
-
-
 }
