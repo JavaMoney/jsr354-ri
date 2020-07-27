@@ -24,19 +24,19 @@ You can access the RI by adding the following Maven dependencies:
 <dependency>
   <groupId>org.javamoney</groupId>
   <artifactId>moneta</artifactId>
-  <version>1.4</version>
+  <version>1.4.2</version>
   <type>pom</type>
 </dependency>
 ```
 
 The same for Gradle:
 ```groovy
-compile group: 'org.javamoney', name: 'moneta', version: '1.4', ext: 'pom'
+compile group: 'org.javamoney', name: 'moneta', version: '1.4.2', ext: 'pom'
 ```
 
 SBT:
 ```scala
-libraryDependencies += "org.javamoney" % "moneta" % "1.4" pomOnly()
+libraryDependencies += "org.javamoney" % "moneta" % "1.4.2" pomOnly()
 ```
 
 The release artifacts are accessible from the following repositories:
