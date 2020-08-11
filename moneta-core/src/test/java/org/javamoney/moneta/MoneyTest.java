@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import javax.money.*;
 
-import org.javamoney.moneta.spi.MonetaryConfig;
 import org.testng.annotations.Test;
 
 /**
@@ -44,7 +43,7 @@ import org.testng.annotations.Test;
  */
 public class MoneyTest {
     // TODO break this down into smaller test classes, 1.5k LOC seems a bit large;-)
-
+	private static final BigInteger BI_COMPARISON1 = new BigInteger("-9223372036854775807");
     private static final BigDecimal TEN = new BigDecimal(10.0d);
     protected static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
     protected static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
@@ -91,7 +90,7 @@ public class MoneyTest {
         Money[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000000000000000001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-                new BigDecimal("0.49999999999999999999"));
+                new BigDecimal("0.5"));
     }
 
     @Test
@@ -822,7 +821,7 @@ public class MoneyTest {
         m = Money.of(-0.0, "CHF");
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MAX_VALUE, "CHF");
-        assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
+        assertEquals(BI_COMPARISON1.longValue(), m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
         assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
         // try {
@@ -846,7 +845,7 @@ public class MoneyTest {
         m = Money.of(Long.MAX_VALUE, "CHF");
         assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
-        assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
+        assertEquals(-BI_COMPARISON1.longValue(), m.getNumber().longValue(), "longValue of " + m);
         try {
             m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
             m.getNumber().longValueExact();
@@ -1079,7 +1078,7 @@ public class MoneyTest {
         try{
             Locale.setDefault(Locale.GERMANY);
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
-            assertEquals("XXX 0.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("XXX 1.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
             assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());
@@ -1097,7 +1096,7 @@ public class MoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            assertEquals("XXX 0.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals("XXX 1.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
             assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());

@@ -1,7 +1,6 @@
 import org.javamoney.moneta.spi.*;
 import org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi;
-import org.javamoney.moneta.spi.loader.DefaultLoaderService;
-import org.javamoney.moneta.spi.loader.LoaderService;
+import org.javamoney.moneta.spi.loader.*;
 
 /*
 Copyright (c) 2012, 2020, Werner Keil, Otavio Santana and others by the @author tag.
@@ -40,12 +39,15 @@ module org.javamoney.moneta {
     provides javax.money.spi.RoundingProviderSpi with DefaultRoundingProvider;
     provides javax.money.spi.ServiceProvider with PriorityAwareServiceProvider;
     provides LoaderService with DefaultLoaderService;
+    provides ResourceCache with DefaultResourceCache;
     provides org.javamoney.moneta.spi.MonetaryConfigProvider with DefaultConfigProvider;
-           
+
+    uses DataStreamFactory;
+    uses MonetaryAmountProducer;
+    uses MonetaryConfigProvider;
     uses LoaderService;
-    uses org.javamoney.moneta.spi.MonetaryAmountProducer;
-    uses org.javamoney.moneta.spi.MonetaryConfigProvider;
-    
+    uses ResourceCache;
+
     uses javax.money.spi.CurrencyProviderSpi;
     uses javax.money.spi.MonetaryCurrenciesSingletonSpi;
     uses javax.money.spi.MonetaryAmountFactoryProviderSpi;
@@ -57,6 +59,7 @@ module org.javamoney.moneta {
     uses javax.money.spi.MonetaryRoundingsSingletonSpi;
     uses javax.money.spi.RoundingProviderSpi;
     uses javax.money.spi.ServiceProvider;
+    uses org.javamoney.moneta.spi.format.FormatToken;
     uses javax.money.convert.ExchangeRateProvider;
     uses javax.money.convert.ExchangeRateProviderSupplier;
     uses javax.money.format.MonetaryAmountFormat;

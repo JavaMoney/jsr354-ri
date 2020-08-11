@@ -1171,7 +1171,7 @@ public class FastMoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            assertEquals("XXX 0.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
+            assertEquals("XXX 1.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
             assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
@@ -1187,7 +1187,7 @@ public class FastMoneyTest {
         try{
             Locale.setDefault(Locale.GERMANY);
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
-            assertEquals("XXX 0.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
+            assertEquals("XXX 1.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
             assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
