@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2019, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2020, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -22,8 +22,6 @@ import static org.javamoney.moneta.format.CurrencyStyle.CODE;
 import static org.testng.Assert.*;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.Currency;
 import java.util.Locale;
 
 import javax.money.CurrencyUnit;
@@ -40,7 +38,6 @@ import org.javamoney.moneta.Money;
 import org.javamoney.moneta.RoundedMoney;
 import org.javamoney.moneta.spi.MoneyUtils;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class MonetaryFormatsTest {
@@ -167,8 +164,9 @@ public class MonetaryFormatsTest {
 
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(india);
         Money money = Money.of(amount, "INR");
-        String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
-        assertEquals(format.format(money), expectedFormattedString);
+        final String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
+        String actualFormattedString = format.format(money); 
+        assertEquals(actualFormattedString, expectedFormattedString);
         assertEquals(money, Money.parse(expectedFormattedString, format));
     }
 
