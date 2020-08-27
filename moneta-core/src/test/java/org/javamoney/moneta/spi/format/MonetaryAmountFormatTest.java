@@ -37,6 +37,7 @@ import org.testng.annotations.Test;
 
 /**
  * @author Anatole
+ * @author Werner
  */
 public class MonetaryAmountFormatTest {
 
@@ -55,12 +56,6 @@ public class MonetaryAmountFormatTest {
         MonetaryAmount amountChf = Monetary.getDefaultAmountFactory().setCurrency("CHF").setNumber(1211112.50).create();
         assertEquals("CHF 12,11,112.50", defaultFormat.format(amountChf));
         assertEquals("INR 12,34,56,78,91,01,112.12", defaultFormat.format(amountInr));
-        // Locale india = new Locale("", "IN");
-        // defaultFormat = MonetaryFormats.getAmountFormatBuilder(india)
-        // .setNumberGroupSizes(3, 2).of();
-        // assertEquals("INR 12,34,56,78,91,01,112.12",
-        // defaultFormat.format(Monetary.getAmount("INR",
-        // 123456789101112.123456)));
     }
 
     /**
@@ -114,13 +109,6 @@ public class MonetaryAmountFormatTest {
                 .setNumber(123456789101112.123456).create());
         assertEquals("INR 12,34,56,78,91,01,112.12", b.toString());
         b.setLength(0);
-        // Locale india = new Locale("", "IN");
-        // defaultFormat = MonetaryFormats.getAmountFormat(india)
-        // .setNumberGroupSizes(3, 2).of();
-        // defaultFormat.print(b, Monetary.getAmount("INR",
-        // 123456789101112.123456));
-        // assertEquals("INR 12,34,56,78,91,01,112.12",
-        // b.toString());
     }
 
     /**

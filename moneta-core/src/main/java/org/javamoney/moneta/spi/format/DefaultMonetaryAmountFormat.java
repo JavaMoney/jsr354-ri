@@ -35,7 +35,7 @@ import org.javamoney.moneta.spi.MoneyUtils;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.logging.Level.FINEST;
-import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
 import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
 
 /**
@@ -88,13 +88,13 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      */
     DefaultMonetaryAmountFormat(AmountFormatContext amountFormatContext) {
         Locale locale = amountFormatContext.getLocale();
-        if(locale != null && locale.getCountry().equals("IN")
+        if(locale != null && "IN".equals(locale.getCountry())
         && amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class)==null){
             // Fix invalid JDK grouping for rupees...
             amountFormatContext = amountFormatContext.toBuilder().set(AmountFormatParams.GROUPING_SIZES, new int[]{3,2})
                                         .build();
         }
-        if(locale != null && locale.getCountry().equals("BG")){
+        if(locale != null && "BG".equals(locale.getCountry())){
             AmountFormatContextBuilder builder = amountFormatContext.toBuilder();
             if(amountFormatContext.get(AmountFormatParams.GROUPING_SIZES, int[].class)==null) {
                 // Fix invalid JDK grouping for leva...
@@ -176,8 +176,8 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         } catch (Exception e) {
             // try parsing negative...
             Logger log = Logger.getLogger(getClass().getName());
-            if (log.isLoggable(INFO)) {
-                log.log(INFO, "Failed to parse positive pattern, trying negative for: " + text, e);
+            if (log.isLoggable(WARNING)) { // TODO should be FINER not WARNING?
+                log.log(WARNING, "Failed to parse positive pattern, trying negative for: " + text, e);
             }
             for (FormatToken token : this.negativeTokens) {
                 token.parse(ctx);
@@ -288,7 +288,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @return
      */
     private List<String> splitPatternForCurrency(String pattern) {
-        List<String> result = new ArrayList();
+        List<String> result = new ArrayList<>();
         int index = pattern.indexOf(CURRENCY_SIGN);
         if(index<0){
             result.add(pattern);
@@ -313,7 +313,7 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
      * @return the tokenized list.
      */
     private List<String> splitNumberPattern(List<String> tokens, DecimalFormat format){
-        List<String> result = new ArrayList();
+        List<String> result = new ArrayList<>();
         String numberPattern = format.toLocalizedPattern()
                 .replace(""+CURRENCY_SIGN, "").trim();
         for(String token:tokens){
@@ -389,9 +389,9 @@ final class DefaultMonetaryAmountFormat implements MonetaryAmountFormat {
         return null;
     }
 
-    private boolean isLiteralPattern(String pattern) {
-        // TODO implement better here
-        return !(pattern.contains("#") || pattern.contains("0"));
-    }
+//    private boolean isLiteralPattern(String pattern) {
+//        // TODO implement better here
+//        return !(pattern.contains("#") || pattern.contains("0"));
+//    }
 
 }
