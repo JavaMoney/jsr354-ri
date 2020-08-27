@@ -24,19 +24,19 @@ You can access the RI by adding the following Maven dependencies:
 <dependency>
   <groupId>org.javamoney</groupId>
   <artifactId>moneta</artifactId>
-  <version>1.4.2</version>
+  <version>1.3</version>
   <type>pom</type>
 </dependency>
 ```
 
 The same for Gradle:
 ```groovy
-compile group: 'org.javamoney', name: 'moneta', version: '1.4.2', ext: 'pom'
+compile group: 'org.javamoney', name: 'moneta', version: '1.3', ext: 'pom'
 ```
 
 SBT:
 ```scala
-libraryDependencies += "org.javamoney" % "moneta" % "1.4.2" pomOnly()
+libraryDependencies += "org.javamoney" % "moneta" % "1.3" pomOnly()
 ```
 
 The release artifacts are accessible from the following repositories:
@@ -45,7 +45,7 @@ The release artifacts are accessible from the following repositories:
 
 [Release notes](https://github.com/JavaMoney/jsr354-ri/releases)
 
-The implementation supports JDK8 and later.
+The library supports JDK8 and later but also is available a limited backport to JDK7 [jsr354-ri-bp](https://github.com/JavaMoney/jsr354-ri-bp).
 
 Help and support
 ----------------

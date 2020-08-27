@@ -17,7 +17,6 @@ package org.javamoney.moneta.internal;
 
 import org.osgi.framework.*;
 
-import javax.money.Monetary;
 import javax.money.spi.ServiceProvider;
 import java.net.URL;
 import java.util.*;
@@ -98,7 +97,7 @@ public class OSGIServiceProvider implements ServiceProvider {
             LOG.log(Level.SEVERE, "could not create services of type: " + serviceType, e);
         }
         try{
-            for(T service:ServiceLoader.load(serviceType, Monetary.class.getClassLoader())){
+            for(T service:ServiceLoader.load(serviceType)){
                 services.add(service);
             }
             return services;

@@ -20,13 +20,11 @@ import java.util.Map;
 /**
  * Dynamic interface for providing monetary configuration. Register a custom implementation with the {@link java.util.ServiceLoader}
  * to configure JavaMoney.
- * @deprecated Preview, for 2.0 we may reconsider that e.g. backed by a full scale config subsystem like
- * Spring or MP Config but for now this is error-prone, see https://hibernate.atlassian.net/browse/HV-1793
  */
 public interface MonetaryConfigProvider {
 
     /**
-     * Simple method to get a property.
+     * Simple methoid to get a property.
      * @param key the key, not null.
      * @return the value, or null.
      */

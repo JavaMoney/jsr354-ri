@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2020, Werner Keil, Otavio Santana and others by the @author tag.
+ * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -41,8 +41,7 @@ import javax.money.convert.RateType;
  * @author Werner Keil
  */
 public abstract class AbstractRateProvider implements ExchangeRateProvider {
-// TODO refactor to spi.convert in moneta.convert in a future release
-	
+
     /**
      * The {@link ConversionContext} of this provider.
      */

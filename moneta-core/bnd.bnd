@@ -20,7 +20,7 @@ Bundle-Activator: org.javamoney.moneta.internal.OSGIActivator
 Bundle-SymbolicName: org.javamoney.moneta
 Bundle-Description: JavaMoney - Moneta Reference Implementation
 Bundle-Category: Implementation
-Bundle-Copyright: (C) 2012, 2020 Werner Keil and others
+Bundle-Copyright: (C) 2012, 2018 Anatole Tresch, Werner Keil and others
 Bundle-License: Apache License, Version 2.0
 Bundle-Vendor: JavaMoney Project
 Bundle-DocURL: http://www.javamoney.org

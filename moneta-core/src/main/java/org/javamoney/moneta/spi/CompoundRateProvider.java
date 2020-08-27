@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2020, Werner Keil, Otavio Santana and others by the @author tag.
+ * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -34,10 +34,8 @@ import java.util.Set;
  * a collection of child {@link ExchangeRateProvider} instance.
  *
  * @author Anatole Tresch
- * @author Werner Keil
  */
 public class CompoundRateProvider extends AbstractRateProvider {
-// TODO refactor to spi.convert in moneta.convert in a future release	
     /**
      * Key used to store a list of child {@link javax.money.convert.ProviderContext} instances of the providers
      * contained within this instance.
@@ -122,5 +120,6 @@ public class CompoundRateProvider extends AbstractRateProvider {
                 "All delegate providers failed to deliver rate, providers=" + this.providers +
                         ", query=" + conversionQuery);
     }
+
 
 }
