@@ -16,6 +16,7 @@
 package org.javamoney.moneta.spi;
 
 import javax.annotation.Priority;
+import javax.money.Monetary;
 import javax.money.spi.ServiceProvider;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,7 @@ import java.util.logging.Logger;
  * {@link java.util.ServiceLoader} to load the services required.
  *
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public class PriorityAwareServiceProvider implements ServiceProvider {
     /**
@@ -95,7 +97,7 @@ public class PriorityAwareServiceProvider implements ServiceProvider {
     private <T> List<T> loadServices(final Class<T> serviceType) {
         List<T> services = new ArrayList<>();
         try {
-            for (T t : ServiceLoader.load(serviceType)) {
+            for (T t : ServiceLoader.load(serviceType, Monetary.class.getClassLoader())) {
                 services.add(t);
             }
             services.sort(PriorityAwareServiceProvider::compareServices);
