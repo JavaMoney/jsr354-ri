@@ -887,10 +887,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
         try{
             if(Boolean.parseBoolean(useDefault)){
-                Logger.getLogger(Money.class.getName()).info("Using JDK formatter for toString().");
+                Logger.getLogger(Money.class.getName()).fine("Using JDK formatter for toString().");
                 return MonetaryAmountDecimalFormat.of();
             }else{
-                Logger.getLogger(Money.class.getName()).info("Using default formatter for toString().");
+                Logger.getLogger(Money.class.getName()).fine("Using default formatter for toString().");
                 return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY);
             }
         }catch(Exception e){
