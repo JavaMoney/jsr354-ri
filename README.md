@@ -39,9 +39,7 @@ SBT:
 libraryDependencies += "org.javamoney" % "moneta" % "1.4.2" pomOnly()
 ```
 
-The release artifacts are accessible from the following repositories:
-* [Maven Central](https://mvnrepository.com/artifact/org.javamoney/moneta/) 
-* [JCenter by Bintray](https://jcenter.bintray.com/org/javamoney/moneta/)
+The release artifacts are accessible from the [Maven Central](https://mvnrepository.com/artifact/org.javamoney/moneta/).
 
 [Release notes](https://github.com/JavaMoney/jsr354-ri/releases)
 
