@@ -2,6 +2,7 @@ JSR 354: Money and Currency: Moneta Reference Implementation
 ===========================================================
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.javamoney/moneta.svg)](https://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.javamoney%22%20AND%20a%3A%22moneta%22)
+[![Build Status](https://travis-ci.com/JavaMoney/jsr354-ri.svg?branch=master)](https://travis-ci.com/JavaMoney/jsr354-ri)
 [![Coverage Status](https://coveralls.io/repos/JavaMoney/jsr354-ri/badge.svg?branch=master)](https://coveralls.io/r/JavaMoney/jsr354-ri?branch=master)
 [![Stability: Maintenance](https://masterminds.github.io/stability/maintenance.svg)](https://masterminds.github.io/stability/maintenance.html)
 [![License](https://img.shields.io/badge/license-Apache2-red.svg)](http://opensource.org/licenses/apache-2.0)
