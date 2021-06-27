@@ -139,10 +139,7 @@ public abstract class AbstractCurrencyConversion implements CurrencyConversion {
         if (amount.getContext().getMaxScale() > 0) {
             MathContext mathContext = amount.getContext().get(MathContext.class);
             if(mathContext==null){
-                int scale = factor.getScale();
-                if (factor.getScale() > amount.getContext().getMaxScale()) {
-                    scale = amount.getContext().getMaxScale();
-                }
+                int scale = Math.max(factor.getScale(), amount.getContext().getMaxScale());
                 RoundingMode roundingMode = amount.getContext().get(RoundingMode.class);
                 if(roundingMode==null){
                     roundingMode = RoundingMode.HALF_EVEN;
