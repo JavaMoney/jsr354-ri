@@ -42,38 +42,6 @@
 		<url>https://github.com/JavaMoney/jsr354-ri</url>
 	</scm>
 
-	<distributionManagement>
-		<repository>
-			<id>bintray-release</id>
-			<name>oss-jfrog-artifactory-release</name>
-			<url>https://oss.jfrog.org/artifactory/oss-release-local</url>
-		</repository>
-		<snapshotRepository>
-			<id>bintray-snapshot</id>
-			<name>oss-jfrog-artifactory-snapshot</name>
-			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>bintray-release</id>
-			<name>libs-release</name>
-			<url>http://oss.jfrog.org/artifactory/libs-release</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<id>bintray-snapshot</id>
-			<name>libs-snapshot</name>
-			<url>http://oss.jfrog.org/artifactory/libs-snapshot</url>
-		</repository>
-	</repositories>
-
 	<profiles>
 		<profile>
 			<id>travis</id>
@@ -345,7 +313,6 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.1</version>
 					<executions>
 						<execution>
 							<id>prepare-agent</id>
@@ -518,7 +485,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.1</version>
 				<configuration>
 					<destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
 					<dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
