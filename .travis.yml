@@ -1,9 +1,7 @@
 language: java
 jdk:
   - openjdk9
-  - openjdk10
   - openjdk11
-  - openjdk14
 
 after_success:
   - mvn --batch-mode deploy -Dmaven.test.skip -DcreateDocs=true -s settings.xml
