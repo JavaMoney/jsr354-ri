@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2019, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2021, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -68,8 +68,8 @@ public final class OSGIServiceHelper {
     public static <T> void registerService(Bundle bundle, Class<T> serviceClass, Class<? extends T> implClass) {
         try {
             // Load the service class
-            if (LOG.isLoggable(Level.INFO)) {
-                LOG.info("Loaded Service Factory (" + serviceClass.getName() + "): " + implClass.getName());
+            if (LOG.isLoggable(Level.WARNING)) {
+                LOG.warning("Loaded Service Factory (" + serviceClass.getName() + "): " + implClass.getName());
             }
             // Provide service properties
             Hashtable<String, String> props = new Hashtable<>();
@@ -84,8 +84,8 @@ public final class OSGIServiceHelper {
             JDKUtilServiceFactory<T> factory = new JDKUtilServiceFactory<>(implClass);
             BundleContext bundleContext = bundle.getBundleContext();
             bundleContext.registerService(serviceClass.getName(), factory, props);
-            if (LOG.isLoggable(Level.INFO)) {
-                LOG.info("Registered service class: " + implClass.getName() + "(" + serviceClass.getName() + ")");
+            if (LOG.isLoggable(Level.FINE)) {
+                LOG.fine("Registered service class: " + implClass.getName() + "(" + serviceClass.getName() + ")");
             }
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Failed to load service: " + implClass.getName(), e);
@@ -135,5 +135,4 @@ public final class OSGIServiceHelper {
           // nothing to do
         }
     }
-
 }

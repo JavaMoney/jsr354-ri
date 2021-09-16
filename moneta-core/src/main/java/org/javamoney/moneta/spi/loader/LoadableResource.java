@@ -224,7 +224,7 @@ public class LoadableResource implements DataStreamFactory {
             try {
                 return load(itemToLoad, false);
             } catch (Exception e) {
-                LOG.log(Level.INFO, "Failed to load resource: " + itemToLoad, e);
+                LOG.log(Level.WARNING, "Failed to load resource: " + itemToLoad, e);
             }
         }
         return false;
@@ -355,19 +355,19 @@ public class LoadableResource implements DataStreamFactory {
             }
             return true;
         } catch (Exception e) {
-            LOG.log(Level.INFO, "Failed to load resource input for " + resourceId + " from " + itemToLoad, e);
+            LOG.log(Level.WARNING, "Failed to load resource input for " + resourceId + " from " + itemToLoad, e);
         } finally {
             if (Objects.nonNull(is)) {
                 try {
                     is.close();
                 } catch (Exception e) {
-                    LOG.log(Level.INFO, "Error closing resource input for " + resourceId, e);
+                    LOG.log(Level.WARNING, "Error closing resource input for " + resourceId, e);
                 }
             }
             try {
                 stream.close();
             } catch (IOException e) {
-                LOG.log(Level.INFO, "Error closing resource input for " + resourceId, e);
+                LOG.log(Level.WARNING, "Error closing resource input for " + resourceId, e);
             }
         }
         return false;

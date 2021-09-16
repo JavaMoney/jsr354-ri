@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2021, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -57,7 +57,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
@@ -887,10 +887,10 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
         try{
             if(Boolean.parseBoolean(useDefault)){
-                Logger.getLogger(Money.class.getName()).info("Using JDK formatter for toString().");
+                Logger.getLogger(Money.class.getName()).fine("Using JDK formatter for toString().");
                 return MonetaryAmountDecimalFormat.of();
             }else{
-                Logger.getLogger(Money.class.getName()).info("Using default formatter for toString().");
+                Logger.getLogger(Money.class.getName()).fine("Using default formatter for toString().");
                 return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY);
             }
         }catch(Exception e){
@@ -918,7 +918,6 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         return false;
     }
 
-
     /**
      * Just to don't break the compatibility.
      * Don't use it
@@ -930,5 +929,4 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     public static void checkNoInfinityOrNaN(Number number) {
         NumberVerifier.checkNoInfinityOrNaN(number);
     }
-
 }

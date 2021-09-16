@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2021, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -34,7 +34,6 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 	private static final Logger LOG = Logger.getLogger(IMFRemoteSearchCallable.class.getName());
 
 	private final IMFHistoricalType type;
-
 	private final YearMonth yearMonth;
 	private final String userAgent;
 
@@ -62,7 +61,7 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
             }
             return new IMFRemoteSearchResult(type, new ByteArrayInputStream(stream.toByteArray()));
         } catch (Exception e) {
-            LOG.log(Level.INFO, "Failed to load resource from url " + type.getUrl(yearMonth), e);
+            LOG.log(Level.WARNING, "Failed to load resource from url " + type.getUrl(yearMonth), e);
         }
 		return null;
 	}
@@ -72,7 +71,7 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 		try {
 			return new URL(type.getUrl(yearMonth)).openConnection();
 		} catch (Exception e) {
-			LOG.log(Level.INFO, "Failed to load resource from url "
+			LOG.log(Level.WARNING, "Failed to load resource from url "
 					+ type.getUrl(yearMonth), e);
 		}
 		return null;
@@ -109,5 +108,4 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
                     " type: " + type + ", stream: " + stream + '}';
 		}
 	}
-
 }

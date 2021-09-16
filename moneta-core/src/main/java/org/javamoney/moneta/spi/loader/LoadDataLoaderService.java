@@ -37,9 +37,9 @@ public class LoadDataLoaderService {
 		if (Objects.nonNull(load)) {
 			try {
 				if (load.load()) {
-					LOG.log(Level.INFO, "Read data from: " + load.getRemoteResources());
+					LOG.log(Level.FINE, "Read data from: " + load.getRemoteResources());
 					listener.trigger(resourceId, load);
-					LOG.log(Level.INFO, "New data successfully loaded from: " + load.getRemoteResources());
+					LOG.log(Level.FINE, "New data successfully loaded from: " + load.getRemoteResources());
 					return true;
 				}
 			} catch (Exception e) {
