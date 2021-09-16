@@ -57,7 +57,7 @@
 		<osgi.compendium.version>${osgi.version}</osgi.compendium.version>
 		<osgi.annotation.version>6.0.0</osgi.annotation.version>
 
-		<jacoco.version>0.8.5</jacoco.version>
+		<jacoco.version>0.8.7</jacoco.version>
 	</properties>
 
 	<ciManagement>
@@ -651,8 +651,9 @@
 		</plugins>
 	</reporting>
 	<modules>
+<!--
 		<module>moneta-core</module>
-<!-- 		
+ 		
 		<module>moneta-convert</module>
  -->		
 		<module>moneta</module>
