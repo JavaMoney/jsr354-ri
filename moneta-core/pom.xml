@@ -25,7 +25,7 @@
     
 	<ciManagement>
 		<system>Travis CI</system>
-		<url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
+		<url>https://app.travis-ci.com/github/JavaMoney/jsr354-ri</url>
 	</ciManagement>
 
 	<prerequisites>
@@ -38,38 +38,6 @@
 		<developerConnection>scm:git:https://github.com/JavaMoney/jsr354-ri.git</developerConnection>
 		<url>https://github.com/JavaMoney/jsr354-ri</url>
 	</scm>
-
-	<distributionManagement>
-		<repository>
-			<id>bintray-release</id>
-			<name>oss-jfrog-artifactory-release</name>
-			<url>https://oss.jfrog.org/artifactory/oss-release-local</url>
-		</repository>
-		<snapshotRepository>
-			<id>bintray-snapshot</id>
-			<name>oss-jfrog-artifactory-snapshot</name>
-			<url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>bintray-release</id>
-			<name>libs-release</name>
-			<url>https://oss.jfrog.org/artifactory/libs-release</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<id>bintray-snapshot</id>
-			<name>libs-snapshot</name>
-			<url>https://oss.jfrog.org/artifactory/libs-snapshot</url>
-		</repository>
-	</repositories>
 
 	<profiles>
 		<profile>

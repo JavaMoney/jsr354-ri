@@ -62,7 +62,7 @@
 
 	<ciManagement>
 		<system>Travis CI</system>
-		<url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
+		<url>https://app.travis-ci.com/github/JavaMoney/jsr354-ri</url>
 	</ciManagement>
 
 	<mailingLists>
