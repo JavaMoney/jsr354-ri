@@ -72,7 +72,7 @@ public final class OSGIServiceHelper {
                 LOG.warning("Loaded Service Factory (" + serviceClass.getName() + "): " + implClass.getName());
             }
             // Provide service properties
-            Hashtable<String, String> props = new Hashtable<>();
+            Hashtable<String, Object> props = new Hashtable<>();
             props.put(Constants.VERSION_ATTRIBUTE, bundle.getVersion().toString());
             String vendor = bundle.getHeaders().get(Constants.BUNDLE_VENDOR);
             props.put(Constants.SERVICE_VENDOR, (vendor != null ? vendor : "anonymous"));
