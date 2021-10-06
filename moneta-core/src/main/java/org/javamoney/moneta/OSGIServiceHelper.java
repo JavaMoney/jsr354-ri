@@ -78,7 +78,7 @@ public final class OSGIServiceHelper {
             props.put(Constants.SERVICE_VENDOR, (vendor != null ? vendor : "anonymous"));
             // Translate annotated @Priority into a service ranking
             props.put(Constants.SERVICE_RANKING,
-                    String.valueOf(PriorityServiceComparator.getPriority(implClass)));
+                    Integer.valueOf(PriorityServiceComparator.getPriority(implClass)));
 
             // Register the service factory on behalf of the intercepted bundle
             JDKUtilServiceFactory<T> factory = new JDKUtilServiceFactory<>(implClass);
