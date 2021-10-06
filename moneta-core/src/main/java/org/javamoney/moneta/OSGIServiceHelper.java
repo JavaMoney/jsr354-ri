@@ -72,13 +72,13 @@ public final class OSGIServiceHelper {
                 LOG.warning("Loaded Service Factory (" + serviceClass.getName() + "): " + implClass.getName());
             }
             // Provide service properties
-            Hashtable<String, String> props = new Hashtable<>();
+            Hashtable<String, Object> props = new Hashtable<>();
             props.put(Constants.VERSION_ATTRIBUTE, bundle.getVersion().toString());
             String vendor = bundle.getHeaders().get(Constants.BUNDLE_VENDOR);
             props.put(Constants.SERVICE_VENDOR, (vendor != null ? vendor : "anonymous"));
             // Translate annotated @Priority into a service ranking
             props.put(Constants.SERVICE_RANKING,
-                    String.valueOf(PriorityServiceComparator.getPriority(implClass)));
+                    Integer.valueOf(PriorityServiceComparator.getPriority(implClass)));
 
             // Register the service factory on behalf of the intercepted bundle
             JDKUtilServiceFactory<T> factory = new JDKUtilServiceFactory<>(implClass);
