@@ -660,16 +660,16 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
         try{
             if(Boolean.parseBoolean(useDefault)){
-                Logger.getLogger(FastMoney.class.getName()).fine("Using JDK formatter for toString().");
+                LOG.finest("Using JDK formatter for print/parse.");
                 return MonetaryAmountDecimalFormat.of();
             }else{
-                Logger.getLogger(FastMoney.class.getName()).fine("Using default formatter for toString().");
+            	LOG.finest("Using default formatter for print/parse.");
                 return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
             }
         }catch(Exception e){
-            Logger.getLogger(FastMoney.class.getName()).log(Level.WARNING,
+            LOG.log(Level.WARNING,
                     "Invalid boolean parameter for 'org.javamoney.moneta.useJDKdefaultFormat', " +
-                            "using default formatter for toString().");
+                            "using default formatter for print/parse.");
             return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
         }
     }
