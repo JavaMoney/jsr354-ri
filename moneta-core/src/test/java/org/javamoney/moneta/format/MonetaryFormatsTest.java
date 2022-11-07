@@ -126,13 +126,13 @@ public class MonetaryFormatsTest {
     @Test
     public void testParse_INR_en_IN() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
-        assertMoneyParse(format, "INR 6,78,90,00,00,00,000.00", 67890000000000L, "INR");
+        assertMoneyParse(format, "INR6,78,90,00,00,00,000.00", 67890000000000L, "INR");
     }
 
     @Test
     public void testFormat_INR_en_IN() {
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
-        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), "INR 6,78,90,00,00,00,000.00");
+        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), "INR6,78,90,00,00,00,000.00");
     }
 
     @Test
@@ -164,7 +164,7 @@ public class MonetaryFormatsTest {
 
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(india);
         Money money = Money.of(amount, "INR");
-        final String expectedFormattedString = "INR 6,78,90,00,00,00,000.00";
+        final String expectedFormattedString = "INR6,78,90,00,00,00,000.00";
         String actualFormattedString = format.format(money); 
         assertEquals(actualFormattedString, expectedFormattedString);
         assertEquals(money, Money.parse(expectedFormattedString, format));
