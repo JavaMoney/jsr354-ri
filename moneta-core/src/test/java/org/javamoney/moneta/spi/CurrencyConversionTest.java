@@ -49,7 +49,7 @@ public class CurrencyConversionTest {
     }
 
     @BeforeClass
-    private void init() {
+    public void init() {
 
         exactRateProvider = new AbstractRateProvider(ProviderContext.of("test_ctx_accurate")) {
             @Override

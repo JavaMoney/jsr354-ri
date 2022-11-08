@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Currency;
 import java.util.Locale;
+import java.util.Set;
 
 import static org.testng.Assert.*;
 
@@ -195,6 +196,7 @@ public class MonetaryRoundingsTest {
      */
     @Test
     public void testGetRoundingString() {
+    	Set<String> roundingProviderNames = Monetary.getRoundingNames(); 
         assertNotNull(Monetary.getRounding("zero"));
         assertNotNull(Monetary.getRounding("minusOne"));
         assertNotNull(Monetary.getRounding("CHF-cash"));

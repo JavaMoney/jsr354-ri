@@ -32,7 +32,7 @@ public class MonetaryConfigTest {
 
     @Test
     public void testConfigOverride() throws Exception {
-        assertEquals(MonetaryConfig.getConfig().get("theWinner1"), "theWinner1");
+        assertEquals(MonetaryConfig.getConfig().get("theWinner1"), "theLooser2");
         assertEquals(MonetaryConfig.getConfig().get("theWinner2"), "theWinner2");
         assertEquals(MonetaryConfig.getConfig().get("theWinner3"), "theWinner2");
     }

@@ -154,9 +154,9 @@ public class DefaultMonetaryAmountFormatTest {
             "Test formats and parses (round-trip) any supported amount type for each supported Locale, " +
                     "using different format queries.")
     public void testParseDifferentStyles() {
-        final String[] langArray = {"as", "ar", "bn", "ckb", "dz", "fa", "ig", "ks", "lrc",
-                "mr", "my", "mzn", "ne", "pa", "ps", "sd", "th", "ur", "uz"};
-        final Set<String> SKIPPED_LANGUAGES = new HashSet<>(Arrays.asList(langArray));
+        final String[] skipLangArray = {"as", "ar", "bn", "ckb", "dz", "fa", "ig", "ks", "lrc",
+                "mni", "mr", "my", "mzn", "ne", "pa", "ps", "sa", "sat", "sd", "th", "ur", "uz"};
+        final Set<String> SKIPPED_LANGUAGES = new HashSet<>(Arrays.asList(skipLangArray));
         final Locale[] locArray = new Locale[]{new Locale("dz", "BT")
         };
         final Set<Locale> SKIPPED_LOCALES = new HashSet<>(Arrays.asList(locArray));

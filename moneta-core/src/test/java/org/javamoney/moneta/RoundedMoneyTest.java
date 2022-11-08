@@ -964,13 +964,13 @@ public class RoundedMoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.ENGLISH);
-            assertEquals("XXX 0.00", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals(RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.00");
             assertEquals("CHF 1234.00", RoundedMoney.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals("CHF 0.01", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
 
-            assertEquals("XXX 0.00", RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals(RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.00");
             assertEquals("CHF 1234.00", RoundedMoney.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());

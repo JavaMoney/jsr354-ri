@@ -91,7 +91,7 @@ public class MoneyTest {
         Money[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000000000000000001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-                new BigDecimal("0.49999999999999999999"));
+                new BigDecimal("0.5"));
     }
 
     @Test
