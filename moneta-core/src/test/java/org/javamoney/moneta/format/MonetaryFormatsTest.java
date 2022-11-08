@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2020, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2022, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -36,14 +36,19 @@ import javax.money.format.MonetaryParseException;
 import org.javamoney.moneta.FastMoney;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.RoundedMoney;
+import org.javamoney.moneta.internal.JDKHelper;
 import org.javamoney.moneta.spi.MoneyUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class MonetaryFormatsTest {
+public class MonetaryFormatsTest {	
     private static final Locale DANISH = new Locale("da");
     private static final Locale BULGARIA = new Locale("bg", "BG");
     public static final Locale INDIA = new Locale("en", "IN");
+    // After this JDK version the formatting for Indian locale changed
+    private static final int INDIA_JDK_CHANGE = 13;
+    private static final String INR_EXPECTED = "INR6,78,90,00,00,00,000.00";
+    private static final String INR_EXPECTED_BLANK = "INR 6,78,90,00,00,00,000.00";
 
     @Test
     public void testParse_DKK_da() {
@@ -125,14 +130,16 @@ public class MonetaryFormatsTest {
 
     @Test
     public void testParse_INR_en_IN() {
-        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
-        assertMoneyParse(format, "INR6,78,90,00,00,00,000.00", 67890000000000L, "INR");
+        final MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
+        final String expectedFormattedString = (JDKHelper.getVersion() > INDIA_JDK_CHANGE ? INR_EXPECTED : INR_EXPECTED_BLANK);
+        assertMoneyParse(format, expectedFormattedString, 67890000000000L, "INR");
     }
 
     @Test
     public void testFormat_INR_en_IN() {
-        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
-        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), "INR6,78,90,00,00,00,000.00");
+        final MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(INDIA);
+        final String expectedFormattedString = (JDKHelper.getVersion() > INDIA_JDK_CHANGE ? INR_EXPECTED : INR_EXPECTED_BLANK);
+        assertMoneyFormat(format, Money.of(67890000000000L, "INR"), expectedFormattedString);
     }
 
     @Test
@@ -164,7 +171,7 @@ public class MonetaryFormatsTest {
 
         MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(india);
         Money money = Money.of(amount, "INR");
-        final String expectedFormattedString = "INR6,78,90,00,00,00,000.00";
+        final String expectedFormattedString = (JDKHelper.getVersion() > INDIA_JDK_CHANGE ? INR_EXPECTED : INR_EXPECTED_BLANK);
         String actualFormattedString = format.format(money); 
         assertEquals(actualFormattedString, expectedFormattedString);
         assertEquals(money, Money.parse(expectedFormattedString, format));

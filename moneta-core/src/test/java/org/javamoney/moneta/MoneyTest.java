@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2022, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -1079,7 +1079,7 @@ public class MoneyTest {
         try{
             Locale.setDefault(Locale.GERMANY);
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
-            assertEquals("XXX 0.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.00");
             assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());
@@ -1097,7 +1097,7 @@ public class MoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            assertEquals("XXX 0.00", Money.of(new BigDecimal("1.23455645"), "XXX").toString());
+            assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.00");
             assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());

@@ -281,10 +281,10 @@
 							<configuration>
 								<rules>
 									<requireMavenVersion>
-										<version>3.0.4</version>
+										<version>3.5.0</version>
 									</requireMavenVersion>
 									<requireJavaVersion>
-										<version>1.7.0</version>
+										<version>1.8.0</version>
 									</requireJavaVersion>
 									<!-- <bannedDependencies> <excludes> <exclude>commons-logging:*</exclude> 
 										</excludes> </bannedDependencies> -->

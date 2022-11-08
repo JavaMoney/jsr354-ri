@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2022, Werner Keil and others by the @author tag.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -47,6 +47,7 @@ import org.testng.annotations.Test;
 
 /**
  * @author Anatole
+ * @author Werner
  */
 public class FastMoneyTest {
 
@@ -1171,7 +1172,7 @@ public class FastMoneyTest {
         Locale defaultLocale = Locale.getDefault();
         try{
             Locale.setDefault(Locale.GERMANY);
-            assertEquals("XXX 0.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
+            assertEquals(FastMoney.of(new BigDecimal("1.23455"), "XXX").toString(), "XXX 1.00");
             assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
             assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
@@ -1187,8 +1188,8 @@ public class FastMoneyTest {
         try{
             Locale.setDefault(Locale.GERMANY);
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
-            assertEquals("XXX 0.00", FastMoney.of(new BigDecimal("1.23455"), "XXX").toString());
-            assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
+            assertEquals(FastMoney.of(new BigDecimal("1.23455"), "XXX").toString(), "XXX 1.00");
+            assertEquals(FastMoney.of(1234, "CHF").toString(), "CHF 1234.00");
             assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals("CHF 0.01", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
