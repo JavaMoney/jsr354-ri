@@ -17,7 +17,7 @@ package org.javamoney.moneta.internal;
 
 import org.osgi.framework.ServiceReference;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import java.util.Comparator;
 
 /**

@@ -27,7 +27,7 @@ module org.javamoney.moneta {
     exports org.javamoney.moneta.spi.loader;
     requires transitive java.money;
     requires transitive java.logging;
-    requires java.annotation;
+    requires jakarta.annotation;
     requires static org.osgi.core;
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;

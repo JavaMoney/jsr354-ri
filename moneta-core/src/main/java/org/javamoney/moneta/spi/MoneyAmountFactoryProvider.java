@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import javax.money.MonetaryAmountFactory;
 import javax.money.MonetaryContext;
 import javax.money.spi.MonetaryAmountFactoryProviderSpi;
