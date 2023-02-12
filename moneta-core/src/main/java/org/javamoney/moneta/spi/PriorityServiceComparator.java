@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import java.io.Serializable;
 import java.util.Comparator;
 

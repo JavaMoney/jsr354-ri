@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi;
 
-import javax.annotation.Priority;
+import jakarta.annotation.Priority;
 import javax.money.Monetary;
 import javax.money.spi.ServiceProvider;
 import java.util.ArrayList;
