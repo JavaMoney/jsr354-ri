@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta;
+package org.javamoney.moneta.format;
 
 import static org.testng.Assert.assertEquals;
 
@@ -25,6 +25,9 @@ import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import javax.money.format.MonetaryParseException;
 
+import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.RoundedMoney;
 import org.javamoney.moneta.format.ToStringMonetaryAmountFormat;
 import org.javamoney.moneta.format.ToStringMonetaryAmountFormat.ToStringMonetaryAmountFormatStyle;
 import org.testng.annotations.*;
