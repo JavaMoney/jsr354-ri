@@ -18,6 +18,7 @@ package org.javamoney.moneta.spi.loader;
 import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -75,7 +76,7 @@ class LoaderConfigurator {
         boolean startRemote = Boolean.valueOf(props.get("startRemote"));
         String[] resources;
         if (Objects.isNull(resourcesString)) {
-            LOG.info("No update URLs configured for: " + name);
+            LOG.warning("No update URLs configured for: " + name);
             resources = new String[0];
         } else {
             resources = resourcesString.split(",");
@@ -106,8 +107,9 @@ class LoaderConfigurator {
 
     private URI getClassLoaderLocation(String res) {
         URL url = null;
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();        
         if (Objects.nonNull(cl)) {
+        	InputStream is = cl.getResourceAsStream(res);
             url = cl.getResource(res);
         }
         if (Objects.isNull(url)) {

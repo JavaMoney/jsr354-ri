@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2019, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -42,9 +42,9 @@ public class OSGIActivator implements BundleActivator {
     public void start(BundleContext context) {
         // Register marker service
         this.serviceProvider = new OSGIServiceProvider(context);
-        LOG.info("Registered OSGI ServiceProvider...");
+        LOG.config("Registered OSGI ServiceProvider...");
         Bootstrap.init(this.serviceProvider);
-        LOG.info("Registering JavaMoney services...");
+        LOG.config("Registering JavaMoney services...");
         OSGIServiceHelper.registerService(context.getBundle(), CurrencyProviderSpi.class, JDKCurrencyProvider.class);
         OSGIServiceHelper.registerService(context.getBundle(), CurrencyProviderSpi.class, ConfigurableCurrencyUnitProvider.class);
 
@@ -61,13 +61,13 @@ public class OSGIActivator implements BundleActivator {
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
         OSGIServiceHelper.registerService(context.getBundle(), LoaderService.class, DefaultLoaderService.class);
-        LOG.info("Registered JavaMoney services...");
+        LOG.config("Registered JavaMoney services...");
     }
 
     @Override
     public void stop(BundleContext context) {
         if(serviceProvider!=null) {
-            LOG.info("Unregistering JavaMoney services...");
+            LOG.config("Unregistering JavaMoney services...");
             OSGIServiceHelper.unregisterService(context.getBundle(), CurrencyProviderSpi.class, JDKCurrencyProvider.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), CurrencyProviderSpi.class, ConfigurableCurrencyUnitProvider.class);
 

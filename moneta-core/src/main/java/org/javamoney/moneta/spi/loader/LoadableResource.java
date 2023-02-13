@@ -326,6 +326,10 @@ public class LoadableResource implements DataStreamFactory {
             	conn.setRequestProperty("User-Agent", userAgent);
             }
             
+            conn.setRequestProperty("Accept", "application/xhtml+xml");
+            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
+            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
+            
             String timeout = this.properties.get("connection.connect.timeout");
             if(timeout!=null){
                 int seconds = Integer.parseInt(timeout);
@@ -340,6 +344,10 @@ public class LoadableResource implements DataStreamFactory {
             }else{
                 conn.setReadTimeout(10000);
             }
+            
+            int newReadTimeout = conn.getReadTimeout();
+            int newTimeout = conn.getConnectTimeout();
+            
             byte[] data = new byte[4096];
             is = conn.getInputStream();
             int read = is.read(data);

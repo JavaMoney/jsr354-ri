@@ -13,8 +13,11 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta;
+package org.javamoney.moneta.format;
 
+import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.Money;
+import org.javamoney.moneta.RoundedMoney;
 import org.javamoney.moneta.spi.MonetaryConfig;
 
 import java.io.IOException;
