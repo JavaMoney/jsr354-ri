@@ -36,11 +36,7 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import javax.money.MonetaryOperator;
-import javax.money.MonetaryQuery;
+import javax.money.*;
 
 import org.javamoney.moneta.spi.MonetaryConfig;
 import org.testng.annotations.Test;
@@ -1164,20 +1160,28 @@ public class FastMoneyTest {
                 FastMoney.of(new BigDecimal("0.34738"), "CHF").getNumber().numberValue(BigDecimal.class));
     }
 
+    @Test
+    public void testParseFromToString() {
+        MonetaryAmount source = FastMoney.of(1.23456, "EUR");
+        String srcTxt = source.toString();
+        MonetaryAmount dest = FastMoney.parse(srcTxt);
+        assertEquals(source, dest);
+    }
+
     /**
      * Test method for {@link org.javamoney.moneta.FastMoney#toString()}.
      */
     @Test
     public void testToString() {
         Locale defaultLocale = Locale.getDefault();
-        try{
+        try {
             Locale.setDefault(Locale.GERMANY);
-            assertEquals(FastMoney.of(new BigDecimal("1.23455"), "XXX").toString(), "XXX 1.00");
-            assertEquals("CHF 1234.00", FastMoney.of(1234, "CHF").toString());
-            assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("CHF 0.01", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
-        }finally{
+            assertEquals(FastMoney.of(new BigDecimal("1.23455"), "XXX").toString(), "XXX 1.23455");
+            assertEquals(FastMoney.of(1234, "CHF").toString(), "CHF 1234");
+            assertEquals(FastMoney.of(new BigDecimal("1234.0"), "CHF").toString(), "CHF 1234");
+            assertEquals(FastMoney.of(new BigDecimal("1234.1"), "CHF").toString(), "CHF 1234.1");
+            assertEquals(FastMoney.of(new BigDecimal("0.0100"), "CHF").toString(), "CHF 0.01");
+        } finally{
             Locale.setDefault(defaultLocale);
         }
     }
@@ -1185,15 +1189,15 @@ public class FastMoneyTest {
     @Test
     public void testToStringWithReverseOrder() {
         Locale defaultLocale = Locale.getDefault();
-        try{
+        try {
             Locale.setDefault(Locale.GERMANY);
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
-            assertEquals(FastMoney.of(new BigDecimal("1.23455"), "XXX").toString(), "XXX 1.00");
-            assertEquals(FastMoney.of(1234, "CHF").toString(), "CHF 1234.00");
-            assertEquals("CHF 1234.00", FastMoney.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("CHF 1234.10", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals(FastMoney.of(new BigDecimal("1.23455"), "XXX").toString(), "XXX 1.23455");
+            assertEquals(FastMoney.of(1234, "CHF").toString(), "CHF 1234");
+            assertEquals(FastMoney.of(new BigDecimal("1234.0"), "CHF").toString(), "CHF 1234");
+            assertEquals("CHF 1234.1", FastMoney.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals("CHF 0.01", FastMoney.of(new BigDecimal("0.0100"), "CHF").toString());
-        }finally{
+        } finally {
             System.clearProperty("org.javamoney.toStringFormatOrder");
             Locale.setDefault(defaultLocale);
         }

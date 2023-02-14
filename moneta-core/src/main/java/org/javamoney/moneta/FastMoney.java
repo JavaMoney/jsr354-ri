@@ -80,7 +80,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 1.1
+ * @version 1.2
  * @since 1.0
  */
 public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
@@ -467,10 +467,22 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return this.number <= 0L;
     }
 
+    /**
+     * Returns the scale of this <type>FastMoney</type>. For this type the scale is always 5.
+     * @return the scale of this <type>FastMoney</type>.
+     * @since 0.5
+     */
     public int getScale() {
-        return FastMoney.SCALE;
+        return SCALE;
     }
 
+    /**
+     * Returns the precision of this <type>RoundedMoney</type>. (The precision is the number of digits in the unscaled value.)
+     * The precision of a zero value is 1.
+     * @return the precision of this <type>RoundedMoney</type>.
+     * @see BigDecimal#precision()
+     * @since 0.5
+     */
     public int getPrecision() {
         return getNumber().numberValue(BigDecimal.class).precision();
     }
@@ -560,8 +572,8 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     @Override
     public String toString() {
         try {
-            MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
-            return defaultFormat().format(amount);
+            //MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
+            return defaultFormat().format(this);
         }catch(Exception e) {
             return currency.toString() + ' ' + getBigDecimal();
         }
@@ -658,16 +670,16 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
     private static MonetaryAmountFormat defaultFormat() {
-        String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
-        try{
-            if(Boolean.parseBoolean(useDefault)){
+        final String useJDK = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
+        try {
+            if(Boolean.parseBoolean(useJDK)){
                 LOG.finest("Using JDK formatter for print/parse.");
                 return MonetaryAmountDecimalFormat.of();
-            }else{
+            } else {
             	LOG.finest("Using default formatter for print/parse.");
                 return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY);
             }
-        }catch(Exception e){
+        } catch(Exception e) {
             LOG.log(Level.WARNING,
                     "Invalid boolean parameter for 'org.javamoney.moneta.useJDKdefaultFormat', " +
                             "using default formatter for print/parse.");

@@ -46,7 +46,7 @@ import java.util.logging.Logger;
  * @author Anatole Tresch
  * @author Werner Keil
  * @author Otavio Santana
- * @version 0.6.1
+ * @version 1.0
  */
 public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
 
@@ -553,17 +553,22 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         return new RoundedMoney(MoneyUtils.getBigDecimal(amount), currency, rounding);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.money.MonetaryAmount#getScale()
+    /**
+     * Returns the scale of this <type>RoundedMoney</type>. If zero or positive, the scale is the number of digits to the right of the decimal point. If negative, the unscaled value of the number is multiplied by ten to the power of the negation of the scale. For example, a scale of -3 means the unscaled value is multiplied by 1000.
+     * @return the scale of this <type>RoundedMoney</type>.
+     * @see java.math.BigDecimal#scale()
+     * @since 0.6
      */
     public int getScale() {
         return number.scale();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.money.MonetaryAmount#getPrecision()
+    /**
+     * Returns the precision of this <type>RoundedMoney</type>. (The precision is the number of digits in the unscaled value.)
+     * The precision of a zero value is 1.
+     * @return the precision of this <type>RoundedMoney</type>.
+     * @see BigDecimal#precision()
+     * @since 0.6
      */
     public int getPrecision() {
         return number.precision();
@@ -696,18 +701,17 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
         return from(formatter.parse(text));
     }
 
-
     private static MonetaryAmountFormat defaultFormat() {
-        String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
-        try{
-            if(Boolean.parseBoolean(useDefault)){
+        final String useJDK = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
+        try {
+            if(Boolean.parseBoolean(useJDK)){
                 Logger.getLogger(Money.class.getName()).finest("Using JDK formatter for toString().");
                 return MonetaryAmountDecimalFormat.of();
-            }else{
+            } else {
                 Logger.getLogger(Money.class.getName()).finest("Using default formatter for toString().");
                 return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY);
             }
-        }catch(Exception e){
+        } catch(Exception e) {
             Logger.getLogger(Money.class.getName()).log(Level.WARNING,
                     "Invalid boolean parameter for 'org.javamoney.moneta.useJDKdefaultFormat', " +
                             "using default formatter for toString().");
@@ -778,9 +782,9 @@ public final class RoundedMoney implements MonetaryAmount, Comparable<MonetaryAm
     @Override
     public String toString() {
         try {
-            MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
-            return defaultFormat().format(amount);
-        }catch(Exception e) {
+            //MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
+            return defaultFormat().format(this);
+        } catch(Exception e) {
             return currency.getCurrencyCode() + ' ' + number;
         }
     }

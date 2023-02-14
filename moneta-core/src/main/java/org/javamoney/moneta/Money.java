@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2021, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -58,7 +58,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 1.2
+ * @version 1.3
  * @since 1.0
  */
 public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
@@ -353,6 +353,26 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
         return signum() <= 0;
     }
 
+    /**
+     * Returns the scale of this <type>Money</type>. If zero or positive, the scale is the number of digits to the right of the decimal point. If negative, the unscaled value of the number is multiplied by ten to the power of the negation of the scale. For example, a scale of -3 means the unscaled value is multiplied by 1000.
+     * @return the scale of this <type>Money</type>.
+     * @see java.math.BigDecimal#scale()
+     * @since 1.3
+     */
+    public int getScale() {
+        return number.scale();
+    }
+
+    /**
+     * Returns the precision of this <type>RoundedMoney</type>. (The precision is the number of digits in the unscaled value.)
+     * The precision of a zero value is 1.
+     * @return the precision of this <type>RoundedMoney</type>.
+     * @see BigDecimal#precision()
+     * @since 1.3
+     */
+    public int getPrecision() {
+        return number.precision();
+    }
 
     /*
      * (non-Javadoc)
@@ -673,8 +693,8 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     @Override
     public String toString() {
         try {
-            MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
-            return defaultFormat().format(amount);
+            //MonetaryAmount amount = Monetary.getDefaultRounding().apply(this);
+            return defaultFormat().format(this);
         }catch(Exception e) {
             return getCurrency().getCurrencyCode() + ' ' + number.toPlainString();
         }
@@ -885,16 +905,16 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
     }
 
     private static MonetaryAmountFormat defaultFormat() {
-        String useDefault = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
-        try{
-            if(Boolean.parseBoolean(useDefault)){
+        final String useJDK = MonetaryConfig.getConfig().getOrDefault("org.javamoney.moneta.useJDKdefaultFormat", "false");
+        try {
+            if(Boolean.parseBoolean(useJDK)){
                 Logger.getLogger(Money.class.getName()).fine("Using JDK formatter for toString().");
                 return MonetaryAmountDecimalFormat.of();
-            }else{
+            } else {
                 Logger.getLogger(Money.class.getName()).fine("Using default formatter for toString().");
                 return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY);
             }
-        }catch(Exception e){
+        } catch(Exception e) {
             Logger.getLogger(Money.class.getName()).log(Level.WARNING,
                     "Invalid boolean parameter for 'org.javamoney.moneta.useJDKdefaultFormat', " +
                             "using default formatter for toString().");
@@ -907,6 +927,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      * Don't use it
      * @param number the amount, not null
      * @deprecated Will be removed.
+     * @see NumberVerifier#isInfinityAndNotNaN
      */
     @Deprecated
     public static boolean isInfinityAndNotNaN(Number number) {

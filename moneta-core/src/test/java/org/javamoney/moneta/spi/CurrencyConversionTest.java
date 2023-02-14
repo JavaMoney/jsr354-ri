@@ -91,21 +91,21 @@ public class CurrencyConversionTest {
         assertEquals(zeroAmount.with(
                 exactRateProvider.getCurrencyConversion(TERM_CURRENCY)
                 ).toString(),
-                "UAH 0.00"
+                "UAH 0"
         );
 
         assertEquals(
                 amountWithCents.with(
                         exactRateProvider.getCurrencyConversion(TERM_CURRENCY)
                 ).toString(),
-                "UAH 28465.82"
+                "UAH 28465.81732"
         );
 
         assertEquals(
                 roundedAmount.with(
                         exactRateProvider.getCurrencyConversion(TERM_CURRENCY)
                 ).toString(),
-                "UAH 28456.00"
+                "UAH 28456"
         );
 
         assertEquals(
@@ -119,7 +119,7 @@ public class CurrencyConversionTest {
                 roundedAmount.with(
                         integerRateProvider.getCurrencyConversion(TERM_CURRENCY)
                 ).toString(),
-                "UAH 28000.00"
+                "UAH 28000"
         );
     }
 }

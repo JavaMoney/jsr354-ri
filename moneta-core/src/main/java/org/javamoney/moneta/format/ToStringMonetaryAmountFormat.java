@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
@@ -63,6 +64,8 @@ import javax.money.format.MonetaryParseException;
  * {@link RoundedMoney#parse(CharSequence)}
  * @author Otavio Santana
  * @author Anatole Tresch
+ * @author Werner Keil
+ * @version 1.8
  */
 public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
 
@@ -98,7 +101,18 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
     public String queryFrom(MonetaryAmount amount) {
 		return Optional.ofNullable(amount).map((m) -> {
             BigDecimal dec = amount.getNumber().numberValue(BigDecimal.class);
-            dec = dec.setScale(2, RoundingMode.HALF_UP);
+            final int maxScale = amount.getContext().getMaxScale();
+            int scale = 2;
+            if (amount instanceof FastMoney) {
+                scale = ((maxScale == -1) ? dec.scale() : ((dec.scale() < maxScale) ? dec.scale() : maxScale));
+            } else {
+                if (amount.getContext().isFixedScale()) {
+                    scale = ((maxScale == -1) ? dec.scale() : maxScale);
+                } else {
+                    scale = ((maxScale == -1) ? dec.scale() : ((dec.scale() < maxScale) ? dec.scale() : maxScale));
+                }
+            }
+            dec = dec.setScale(scale, RoundingMode.HALF_UP);
             String order = MonetaryConfig.getString("org.javamoney.toStringFormatOrder").orElse("ca");
             switch(order){
                 case "amount-currency":
@@ -155,7 +169,6 @@ public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat 
             BigDecimal number = new BigDecimal(array[1]);
             return new ParserMonetaryAmount(currencyUnit, number);
         }
-
     }
 
     private static class ParserMonetaryAmount {

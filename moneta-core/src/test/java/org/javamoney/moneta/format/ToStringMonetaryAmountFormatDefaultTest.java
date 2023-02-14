@@ -119,7 +119,7 @@ public class ToStringMonetaryAmountFormatDefaultTest {
 	public void shoudReturnToStringOnQueryFromWhenMonetaryWithFastMoney() {
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY).queryFrom(money);
-		assertEquals(result, "BRL 10.00");
+		assertEquals(result, "BRL 10");
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class ToStringMonetaryAmountFormatDefaultTest {
 	public void shoudReturnToStringOnQueryFromWhenMonetaryWithMoney() {
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY).queryFrom(money);
-		assertEquals(result, "BRL 10.00");
+		assertEquals(result, "BRL 10");
 	}
 
 	@Test
@@ -145,7 +145,7 @@ public class ToStringMonetaryAmountFormatDefaultTest {
 	public void shoudReturnToStringOnQueryFromWhenMonetaryWithRoundedMoney() {
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		String result = ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY).queryFrom(money);
-		assertEquals(result, "BRL 10.00");
+		assertEquals(result, "BRL 10");
 	}
 	@Test
 	public void shoudReturNullStringOnPrintWhenMonetaryIsNullWithFastMoney() throws IOException {
@@ -159,7 +159,7 @@ public class ToStringMonetaryAmountFormatDefaultTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.FAST_MONEY).print(sb, money);
-		assertEquals(sb.toString(), "BRL 10.00");
+		assertEquals(sb.toString(), "BRL 10");
 	}
 //
 	@Test
@@ -174,7 +174,7 @@ public class ToStringMonetaryAmountFormatDefaultTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY).print(sb, money);
-		assertEquals(sb.toString(), "BRL 10.00");
+		assertEquals(sb.toString(), "BRL 10");
 	}
 	@Test
 	public void shoudReturNullStringOnPrintWhenMonetaryIsNullWithRoundedMoney() throws IOException {
@@ -188,7 +188,7 @@ public class ToStringMonetaryAmountFormatDefaultTest {
 		StringBuilder sb = new StringBuilder();
 		MonetaryAmount money = Money.of(10, BRAZILIAN_REAL);
 		ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.ROUNDED_MONEY).print(sb, money);
-		assertEquals(sb.toString(), "BRL 10.00");
+		assertEquals(sb.toString(), "BRL 10");
 	}
 
 	private void executeTest(MonetaryAmount expectedMoney, MonetaryAmount a,

@@ -1076,17 +1076,17 @@ public class MoneyTest {
     @Test
     public void testToString_ReverseOrder() {
         Locale defaultLocale = Locale.getDefault();
-        try{
+        try {
             Locale.setDefault(Locale.GERMANY);
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
-            assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.00");
-            assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
-            assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.23455645");
+            assertEquals("CHF 1234", Money.of(1234, "CHF").toString());
+            assertEquals("CHF 1234", Money.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
-            assertEquals("CHF 50.00",
+            assertEquals("CHF 50",
                     Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
-        }finally{
+        } finally {
             System.clearProperty("org.javamoney.toStringFormatOrder");
             Locale.setDefault(defaultLocale);
         }
@@ -1095,16 +1095,20 @@ public class MoneyTest {
     @Test
     public void testToString() {
         Locale defaultLocale = Locale.getDefault();
-        try{
+        try {
             Locale.setDefault(Locale.GERMANY);
-            assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.00");
-            assertEquals("CHF 1234.00", Money.of(1234, "CHF").toString());
-            assertEquals("CHF 1234.00", Money.of(new BigDecimal("1234.0"), "CHF").toString());
-            assertEquals("CHF 1234.10", Money.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.23455645");
+            assertEquals(Money.of(1234, "CHF").toString(), "CHF 1234");
+            assertEquals(Money.of(new BigDecimal("1234.0"), "CHF").toString(), "CHF 1234");
+            assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
+            assertEquals(Money.of(new BigDecimal("1234.1"), "CHF",
+                    MonetaryContextBuilder.of().setMaxScale(2).build()).toString(), "CHF 1234.1");
+            assertEquals(Money.of(new BigDecimal("1234.1"), "CHF",
+                    MonetaryContextBuilder.of().setMaxScale(2).setFixedScale(true).build()).toString(), "CHF 1234.10");
             assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
-            assertEquals("CHF 50.00",
+            assertEquals("CHF 50",
                     Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
-        }finally{
+        } finally {
             Locale.setDefault(defaultLocale);
         }
     }
@@ -1140,10 +1144,18 @@ public class MoneyTest {
     }
 
     @Test
-    public void parseTest() {
+    public void testParse() {
         Money money = Money.parse("EUR 25.25");
         assertEquals(money.getCurrency(), EURO);
         assertEquals(money.getNumber().doubleValue(), 25.25);
+    }
+
+    @Test
+    public void testParseFromToString() {
+        MonetaryAmount source = Money.of(1.23456, "EUR");
+        String srcTxt = source.toString();
+        MonetaryAmount dest = Money.parse(srcTxt);
+        assertEquals(source, dest);
     }
 
     @Test
