@@ -1096,18 +1096,26 @@ public class MoneyTest {
     public void testToString() {
         Locale defaultLocale = Locale.getDefault();
         try {
+            final MonetaryContext twoDigitFixedContext = MonetaryContextBuilder.of().setMaxScale(2).setFixedScale(true).build();
             Locale.setDefault(Locale.GERMANY);
             assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.23455645");
             assertEquals(Money.of(1234, "CHF").toString(), "CHF 1234");
+            assertEquals(Money.of(new BigDecimal("1234"), "CHF",
+                    MonetaryContextBuilder.of().setMaxScale(2).setFixedScale(true).build()).toString(), "CHF 1234.00");
             assertEquals(Money.of(new BigDecimal("1234.0"), "CHF").toString(), "CHF 1234");
             assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals(Money.of(new BigDecimal("1234.1"), "CHF",
                     MonetaryContextBuilder.of().setMaxScale(2).build()).toString(), "CHF 1234.1");
-            assertEquals(Money.of(new BigDecimal("1234.1"), "CHF",
-                    MonetaryContextBuilder.of().setMaxScale(2).setFixedScale(true).build()).toString(), "CHF 1234.10");
+            assertEquals(Money.of(new BigDecimal("1234.1"), "CHF", twoDigitFixedContext).toString(), "CHF 1234.10");
             assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
             assertEquals("CHF 50",
                     Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
+            Money money1 = Money.of(1234567.3456, "EUR");
+            assertEquals(money1.toString(), "EUR 1234567.3456");
+            Money money2 = Money.of(1234567.3444, "EUR", MonetaryContextBuilder.of().setMaxScale(2).build());
+            assertEquals(money2.toString(), "EUR 1234567.34");
+            Money money3 = Money.of(1234567.3, "EUR", twoDigitFixedContext);
+            assertEquals(money3.toString(), "EUR 1234567.30");
         } finally {
             Locale.setDefault(defaultLocale);
         }

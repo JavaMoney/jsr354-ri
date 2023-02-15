@@ -30,19 +30,38 @@ import java.util.Set;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import javax.money.Monetary;
+import javax.money.MonetaryContext;
 import javax.money.format.AmountFormatContext;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryParseException;
 
 /**
+ * <p>
  * Class to format and parse a text string such as 'EUR 25.25' or vice versa using BigDecimal default formatting.
  * This class will used as default by toString and parse in all implementation on Moneta.
  *
- * By default this formatter formats the amounts as {@code AMOUNT.DECIMAL CURRENCY}, e.g. {code 100232.12 CHF}.
- * Hereby the currency is represented by its code and the amount formatted as BigDecimal, rounded on 2 digits after
- * the decimal separator (which always is a dot).
- *
+ * By default this formatter formats the amounts as {@code AMOUNT.DECIMAL CURRENCY}, e.g. {code 1234 CHF}.
+ * Hereby the currency is represented by its code and the amount formatted as BigDecimal, using its scale.
+ * The decimal separator is always a dot.
+ * </p>
+ * <br>
+ * If the amount contains a {@link MonetaryContext} its {@code maxScale} and {@code fixedScale} attributes allow to configure the output,
+ * by checking them against the {@code scale} of the BigDecimal.
+ * <br>For example:
+ * <pre><code>
+ * Money money1 = Money.of(1234567.3456, "EUR");
+ * System.out.println(money1.toString());</code></pre>
+ * prints "EUR 1234567.3456", while:<br>
+ * <pre><code>
+ * Money money2 = Money.of(1234567.3456, "EUR", MonetaryContextBuilder.of().setMaxScale(2).build());
+ * System.out.println(money2.toString());</code></pre>
+ * prints "EUR 1234567.34". And:
+ * <pre><code>
+ * Money money3 = Money.of(1234567.3, "EUR", MonetaryContextBuilder.of().setMaxScale(2).setFixedScale(true).build());
+ * System.out.println(money2.toString());</code></pre>
+ * prints "EUR 1234567.30".
+ * <br><br>
  * You can configure the order of formatting with the {@code org.javamoney.toStringFormatOrder} configuration property:
  *
  * <ul>
@@ -65,6 +84,7 @@ import javax.money.format.MonetaryParseException;
  * @author Otavio Santana
  * @author Anatole Tresch
  * @author Werner Keil
+ * @see MonetaryContext
  * @version 1.8
  */
 public final class ToStringMonetaryAmountFormat implements MonetaryAmountFormat {
