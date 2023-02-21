@@ -15,7 +15,9 @@
 	<modules>
 		<module>moneta-convert-base</module>
 		<module>moneta-convert-ecb</module>
+<!--
 		<module>moneta-convert-imf</module>
+-->
 	</modules>
 
 	<build>
