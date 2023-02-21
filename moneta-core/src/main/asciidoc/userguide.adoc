@@ -698,20 +698,20 @@ data feeds and the (re)load/update settings:
 # ECB Rates
 load.ECBCurrentRateProvider.type=SCHEDULED
 load.ECBCurrentRateProvider.period=03:00
-load.ECBCurrentRateProvider.resource=/org/javamoney/convert/ecb/defaults/eurofxref-daily.xml
+load.ECBCurrentRateProvider.resource=org/javamoney/convert/ecb/defaults/eurofxref-daily.xml
 load.ECBCurrentRateProvider.urls=https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
 
 load.ECBHistoric90RateProvider.type=SCHEDULED
 load.ECBHistoric90RateProvider.period=03:00
 #load.ECBHistoric90RateProvider.at=12:00
-load.ECBHistoric90RateProvider.resource=/org/javamoney/convert/ecb/defaults/eurofxref-hist-90d.xml
+load.ECBHistoric90RateProvider.resource=org/javamoney/convert/ecb/defaults/eurofxref-hist-90d.xml
 load.ECBHistoric90RateProvider.urls=https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml
 
 load.ECBHistoricRateProvider.type=SCHEDULED
 load.ECBHistoricRateProvider.period=24:00
 load.ECBHistoricRateProvider.delay=01:00
 load.ECBHistoricRateProvider.at=07:00
-load.ECBHistoricRateProvider.resource=/org/javamoney/convert/ecb/defaults/eurofxref-hist.xml
+load.ECBHistoricRateProvider.resource=org/javamoney/convert/ecb/defaults/eurofxref-hist.xml
 load.ECBHistoricRateProvider.urls=https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml
 
 # IMF Rates
