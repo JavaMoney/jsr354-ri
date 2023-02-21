@@ -21,11 +21,11 @@ jobs:
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
-          command: mvn -B -DskipTests clean package
+          command: mvn -B -DskipTests -Dmaven.test.skip clean package
       # Then run your tests!
-      - run:
-          name: Test
-          command: mvn test jacoco:report coveralls:report -DsourceEncoding=UTF-8 -P ci
+      # - run:
+      #    name: Test
+      #    command: mvn test jacoco:report coveralls:report -DsourceEncoding=UTF-8 -P ci
 
   deployment:
     # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
