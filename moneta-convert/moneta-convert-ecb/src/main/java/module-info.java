@@ -16,6 +16,7 @@ License for the specific language governing permissions and limitations under
 the License.
 */
 module org.javamoney.moneta.convert.ecb {
+    opens org.javamoney.moneta.convert.ecb.defaults;
     requires java.xml;
     requires org.javamoney.moneta.convert;
     requires static org.osgi.core;
