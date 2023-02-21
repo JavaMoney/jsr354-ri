@@ -1116,6 +1116,10 @@ public class MoneyTest {
             assertEquals(money2.toString(), "EUR 1234567.34");
             Money money3 = Money.of(1234567.3, "EUR", twoDigitFixedContext);
             assertEquals(money3.toString(), "EUR 1234567.30");
+
+            BigDecimal bd = BigDecimal.valueOf(1000,2);
+            Money money = Money.of(bd, "EUR", twoDigitFixedContext);
+            assertEquals(money.toString(),"EUR 10.00");
         } finally {
             Locale.setDefault(defaultLocale);
         }

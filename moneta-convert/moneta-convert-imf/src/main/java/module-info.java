@@ -16,7 +16,8 @@ License for the specific language governing permissions and limitations under
 the License.
 */
 module org.javamoney.moneta.convert.imf {
-    requires org.javamoney.moneta.convert;
+	opens org.javamoney.moneta.convert.imf.defaults;
+	requires org.javamoney.moneta.convert;
     requires static org.osgi.core;
     requires static org.osgi.compendium;
     requires static org.osgi.annotation;

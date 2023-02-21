@@ -719,7 +719,7 @@ load.IMFRateProvider.type=SCHEDULED
 load.IMFRateProvider.period=06:00
 #load.IMFRateProvider.delay=12:00
 #load.IMFRateProvider.at=12:00
-load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.xls
+load.IMFRateProvider.resource=/java-money/defaults/IMF/rms_five.tsv
 load.IMFRateProvider.urls=https://www.imf.org/external/np/fin/data/rms_five.aspx?tsvflag=Y
 --------------------------------------------
 

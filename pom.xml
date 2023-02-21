@@ -114,6 +114,8 @@
 
 	<profiles>
 		<profile>
+			<id>ci</id>
+			<!--
 			<id>travis</id>
 			<activation>
 				<property>
@@ -121,6 +123,7 @@
 					<value>true</value>
 				</property>
 			</activation>
+			-->
 			<build>
 				<plugins>
 					<plugin>
@@ -130,6 +133,17 @@
 					<plugin>
 						<groupId>org.eluder.coveralls</groupId>
 						<artifactId>coveralls-maven-plugin</artifactId>
+						<version>4.3.0</version>
+						<dependencies>
+							<dependency>
+								<groupId>javax.xml.bind</groupId>
+								<artifactId>jaxb-api</artifactId>
+								<version>2.2.3</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+						</configuration>
 					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -326,7 +340,6 @@
 			<groupId>jakarta.annotation</groupId>
 			<artifactId>jakarta.annotation-api</artifactId>
 			<version>2.0.0</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 

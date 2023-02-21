@@ -101,7 +101,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
             parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
             int newSize = this.rates.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
-            LOG.info(loadState);
+            LOG.config(loadState);
         } catch (Exception e) {
             loadState = "Last Error during data load: " + e.getMessage();
         	LOG.log(Level.FINEST, "Error during data load.", e);

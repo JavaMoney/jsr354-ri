@@ -116,7 +116,7 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
             this.currencyToSdr = result.getCurrencyToSdr();
             int newSize = this.sdrToCurrency.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
-            LOG.info(loadState);
+            LOG.config(loadState);
             loadLock.countDown();
         } catch (Exception e) {
             loadState = "Last Error during data load: " + e.getMessage();

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2019, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -31,16 +31,16 @@ public class OSGIActivator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) {
-        LOG.info("Registering JavaMoney services...");
+        LOG.config("Registering JavaMoney services...");
         OSGIServiceHelper.registerService(context.getBundle(), ExchangeRateProvider.class, ECBCurrentRateProvider.class);
         OSGIServiceHelper.registerService(context.getBundle(), ExchangeRateProvider.class, ECBHistoricRateProvider.class);
         OSGIServiceHelper.registerService(context.getBundle(), ExchangeRateProvider.class, ECBHistoric90RateProvider.class);
-        LOG.info("Registered JavaMoney services...");
+        LOG.config("Registered JavaMoney services...");
     }
 
     @Override
     public void stop(BundleContext context) {
-        LOG.info("Unregistering JavaMoney services...");
+        LOG.config("Unregistering JavaMoney services...");
         OSGIServiceHelper.unregisterService(context.getBundle(), ExchangeRateProvider.class, ECBCurrentRateProvider.class);
         OSGIServiceHelper.unregisterService(context.getBundle(), ExchangeRateProvider.class, ECBHistoricRateProvider.class);
         OSGIServiceHelper.unregisterService(context.getBundle(), ExchangeRateProvider.class, ECBHistoric90RateProvider.class);
