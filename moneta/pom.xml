@@ -228,11 +228,13 @@
 			<artifactId>moneta-convert</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+<!--
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-imf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+-->
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-ecb</artifactId>
