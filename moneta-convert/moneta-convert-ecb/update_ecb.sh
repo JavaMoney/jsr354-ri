@@ -10,8 +10,8 @@ printf "\n Done. Downloading the ECB-90 resource. \n"
 curl --fail "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml" \
 		--output src/main/resources/org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist-90d.xml
 printf "\n Done. Downloading the ECB-hist resource. \n"
-# wget https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml
-# mv eurofxref-hist.xml src/main/resources/org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml
-curl --fail "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml" \
-		--output src/main/resources/org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml
-printf "\n Done.
+wget https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml
+mv eurofxref-hist.xml src/main/resources/org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml
+# curl --fail "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml" \
+#		--output src/main/resources/org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml
+printf "\n Done."
