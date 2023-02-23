@@ -97,8 +97,9 @@ public class DefaultConfigProvider implements MonetaryConfigProvider {
                 priorities.put(key, prio);
                 config.put(key, value);
             } else if (existingPrio == prio) {
-                throw new IllegalStateException(
-                        "AmbiguousConfiguration detected for '" + key + "'.");
+//                throw new IllegalStateException(
+//                        "AmbiguousConfiguration detected for '" + key + "'.");
+                LOG.warning("AmbiguousConfiguration detected for '" + key + "'.");
             }
             // else ignore entry with lower prio!
         }

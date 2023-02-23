@@ -17,6 +17,7 @@ package org.javamoney.moneta.convert.ecb;
 
 import java.io.InputStream;
 import java.math.MathContext;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -46,6 +47,8 @@ import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.loader.LoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * Base to all Europe Central Bank implementation.
@@ -97,8 +100,18 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
     public void newDataLoaded(String resourceId, InputStream is) {
         final int oldSize = this.rates.size();
         try {
-            SAXParser parser = saxParserFactory.newSAXParser();
-            parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
+            final SAXParser parser = saxParserFactory.newSAXParser();
+            //parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
+
+            XMLReader xmlReader = parser.getXMLReader();
+            xmlReader.setContentHandler(new ECBRateReadingHandler(rates, getContext()));
+
+            final InputSource source = new InputSource(is);
+
+            // different encoding
+            source.setEncoding(StandardCharsets.UTF_8.displayName());
+            xmlReader.parse(source);
+
             int newSize = this.rates.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
             LOG.config(loadState);
