@@ -44,6 +44,7 @@ import javax.money.convert.ExchangeRateProvider;
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.convert.ExchangeRateType;
 import org.javamoney.moneta.convert.ecb.ECBHistoric90RateProvider;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -57,23 +58,22 @@ public class ECBHistoric90RateProviderTest {
     private static final CurrencyUnit BRAZILIAN_REAL = Monetary
             .getCurrency("BRL");
 
-    private ExchangeRateProvider provider;
+    private static ExchangeRateProvider provider;
 
-    @BeforeTest
-    public void setup() throws InterruptedException {
+    @BeforeClass
+    public static void setup() throws InterruptedException {
         provider = getExchangeRateProvider(ExchangeRateType.ECB_HIST90);
         Thread.sleep(10_000L);
-
     }
 
     @Test
-    public void shouldReturnsECBHistoric90RateProvider() {
+    public void shouldReturnECBHistoric90RateProvider() {
         assertTrue(Objects.nonNull(provider));
         assertEquals(provider.getClass(), ECBHistoric90RateProvider.class);
     }
 
     @Test
-    public void shouldReturnsSameDollarValue() {
+    public void shouldReturnSameDollarValue() {
         CurrencyConversion currencyConversion = provider.getCurrencyConversion(DOLLAR);
         assertNotNull(currencyConversion);
         MonetaryAmount money = Money.of(BigDecimal.TEN, DOLLAR);
@@ -86,7 +86,7 @@ public class ECBHistoric90RateProviderTest {
     }
 
     @Test
-    public void shouldReturnsSameBrazilianValue() {
+    public void shouldReturnSameBrazilianValue() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(BRAZILIAN_REAL);
         assertNotNull(currencyConversion);
@@ -100,7 +100,7 @@ public class ECBHistoric90RateProviderTest {
     }
 
     @Test
-    public void shouldReturnsSameEuroValue() {
+    public void shouldReturnSameEuroValue() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(EURO);
         assertNotNull(currencyConversion);
@@ -140,7 +140,7 @@ public class ECBHistoric90RateProviderTest {
     }
 
     @Test
-    public void shouldConvertsBrazilianToDollar() {
+    public void shouldConvertBrazilianToDollar() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(DOLLAR);
         assertNotNull(currencyConversion);
@@ -153,7 +153,7 @@ public class ECBHistoric90RateProviderTest {
     }
 
     @Test
-    public void shouldConvertsDollarToBrazilian() {
+    public void shouldConvertDollarToBrazilian() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(BRAZILIAN_REAL);
         assertNotNull(currencyConversion);

@@ -104,7 +104,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
             LOG.config(loadState);
         } catch (Exception e) {
             loadState = "Last Error during data load: " + e.getMessage();
-        	LOG.log(Level.FINEST, "Error during data load.", e);
+        	LOG.log(Level.FINEST, "Error during data load.", e); //TODO could be WARNING?
         } finally{
             loadLock.countDown();
         }

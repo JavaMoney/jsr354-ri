@@ -16,17 +16,19 @@
 package org.javamoney.moneta.convert.ecb;
 
 import static javax.money.convert.MonetaryConversions.getExchangeRateProvider;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import javax.money.convert.ConversionQueryBuilder;
 import javax.money.convert.CurrencyConversion;
 import javax.money.convert.ExchangeRateProvider;
+import javax.money.convert.MonetaryConversions;
 
 import org.javamoney.moneta.Money;
 import org.javamoney.moneta.convert.ExchangeRateType;
@@ -53,13 +55,13 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldReturnsECBHistoricRateProvider() {
+    public void shouldReturnECBHistoricRateProvider() {
         assertTrue(Objects.nonNull(provider));
         assertEquals(provider.getClass(), ECBHistoricRateProvider.class);
     }
 
     @Test
-    public void shouldReturnsSameDollarValue() {
+    public void shouldReturnSameDollarValue() {
         CurrencyConversion currencyConversion = provider.getCurrencyConversion(DOLLAR);
         assertNotNull(currencyConversion);
         MonetaryAmount money = Money.of(BigDecimal.TEN, DOLLAR);
@@ -72,7 +74,7 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldReturnsSameBrazilianValue() {
+    public void shouldReturnSameBrazilianValue() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(BRAZILIAN_REAL);
         assertNotNull(currencyConversion);
@@ -86,7 +88,7 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldReturnsSameEuroValue() {
+    public void shouldReturnSameEuroValue() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(EURO);
         assertNotNull(currencyConversion);
@@ -100,7 +102,7 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldConvertsDollarToEuro() {
+    public void shouldConvertDollarToEuro() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(EURO);
         assertNotNull(currencyConversion);
@@ -113,7 +115,7 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldConvertsEuroToDollar() {
+    public void shouldConvertEuroToDollar() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(DOLLAR);
         assertNotNull(currencyConversion);
@@ -126,7 +128,7 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldConvertsBrazilianToDollar() {
+    public void shouldConvertBrazilianToDollar() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(DOLLAR);
         assertNotNull(currencyConversion);
@@ -139,7 +141,7 @@ public class ECBHistoricRateProviderTest {
     }
 
     @Test
-    public void shouldConvertsDollarToBrazilian() {
+    public void shouldConvertDollarToBrazilian() {
         CurrencyConversion currencyConversion = provider
                 .getCurrencyConversion(BRAZILIAN_REAL);
         assertNotNull(currencyConversion);
@@ -150,4 +152,36 @@ public class ECBHistoricRateProviderTest {
         assertTrue(result.getNumber().doubleValue() > 0);
 
     }
+
+    @Test
+    void selectFromECBWithGivenDate() {
+        MonetaryAmount inEUR = Money.of(BigDecimal.TEN, "EUR");
+
+        CurrencyConversion conv2 = provider.getCurrencyConversion(ConversionQueryBuilder.of()
+                .setTermCurrency("USD")
+                .set(LocalDate.now())
+                .build());
+        /*CurrencyConversion conv2 = MonetaryConversions.getConversion(ConversionQueryBuilder.of()
+                .setProviderName("ECB-HIST")
+                .setTermCurrency("USD")
+                .set(LocalDate.now())
+                .build());*/
+
+        /*CurrencyConversion conv1 = MonetaryConversions.getConversion(
+                ConversionQueryBuilder.of()
+                        .setProviderName("ECB-HIST")
+                        .setTermCurrency("USD")
+                        .set(LocalDate.of(2008, 1, 1))
+                        .build());
+*/
+        CurrencyConversion conv1 = provider.getCurrencyConversion(ConversionQueryBuilder.of()
+                .setTermCurrency("USD")
+                .set(LocalDate.of(2008, 1, 1))
+                .build());
+
+        assertEquals(inEUR.with(conv1), inEUR.with(conv1));
+        assertEquals(inEUR.with(conv2), inEUR.with(conv2));
+        assertNotEquals(inEUR.with(conv1), inEUR.with(conv2)); // <- failing step
+    }
+
 }
