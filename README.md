@@ -6,7 +6,7 @@ JSR 354: Money and Currency: Moneta Reference Implementation
 [![Coverage Status](https://coveralls.io/repos/JavaMoney/jsr354-ri/badge.svg?branch=master)](https://coveralls.io/r/JavaMoney/jsr354-ri?branch=master)
 [![Stability: Maintenance](https://masterminds.github.io/stability/maintenance.svg)](https://masterminds.github.io/stability/maintenance.html)
 [![License](https://img.shields.io/badge/license-Apache2-red.svg)](http://opensource.org/licenses/apache-2.0)
-[![Join the chat at https://gitter.im/JavaMoney/jsr354-ri](https://badges.gitter.im/JavaMoney/jsr354-ri.svg)](https://gitter.im/JavaMoney/jsr354-ri?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/JavaMoney/jsr354-ri](https://img.shields.io/gitter/room/badges/shields.svg)](https://gitter.im/JavaMoney/jsr354-ri?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 The Moneta is a reference implementation (RI) of the [JSR 354 Money & Currency API](http://javamoney.org) and provides:
 * Monetary amounts: fixed sized `FastMoney` and `Money` for big amounts.
