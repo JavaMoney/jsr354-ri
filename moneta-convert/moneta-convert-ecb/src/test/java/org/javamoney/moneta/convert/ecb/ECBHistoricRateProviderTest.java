@@ -51,7 +51,6 @@ public class ECBHistoricRateProviderTest {
     @BeforeTest
     public void setup() throws InterruptedException {
         provider = getExchangeRateProvider(ExchangeRateType.ECB_HIST);
-        Thread.sleep(20_000L);
     }
 
     @Test
