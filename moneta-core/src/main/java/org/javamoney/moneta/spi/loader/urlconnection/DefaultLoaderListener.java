@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.spi.loader;
+package org.javamoney.moneta.spi.loader.urlconnection;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.javamoney.moneta.spi.loader.DataStreamFactory;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
 class DefaultLoaderListener {

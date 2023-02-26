@@ -18,7 +18,7 @@ package org.javamoney.moneta.internal;
 import org.javamoney.moneta.spi.*;
 import org.javamoney.moneta.OSGIServiceHelper;
 import org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi;
-import org.javamoney.moneta.spi.loader.DefaultLoaderService;
+import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -60,7 +60,7 @@ public class OSGIActivator implements BundleActivator {
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonSpi.class, DefaultMonetaryAmountsSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
-        OSGIServiceHelper.registerService(context.getBundle(), LoaderService.class, DefaultLoaderService.class);
+        OSGIServiceHelper.registerService(context.getBundle(), LoaderService.class, URLConnectionLoaderService.class);
         LOG.config("Registered JavaMoney services...");
     }
 
@@ -83,7 +83,7 @@ public class OSGIActivator implements BundleActivator {
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonSpi.class, DefaultMonetaryAmountsSingletonSpi.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
-            OSGIServiceHelper.unregisterService(context.getBundle(), LoaderService.class, DefaultLoaderService.class);
+            OSGIServiceHelper.unregisterService(context.getBundle(), LoaderService.class, URLConnectionLoaderService.class);
         }
     }
 }

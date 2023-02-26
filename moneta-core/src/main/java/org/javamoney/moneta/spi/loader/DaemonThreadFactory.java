@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadFactory;
  * @see Thread
  * @author Otavio Santana
  */
-enum DaemonThreadFactory implements ThreadFactory {
+public enum DaemonThreadFactory implements ThreadFactory {
 
 	/**
 	 * The singleton instance to {@link DaemonThreadFactory}

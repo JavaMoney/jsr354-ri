@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.spi.loader;
+package org.javamoney.moneta.spi.loader.urlconnection;
+
+import org.javamoney.moneta.spi.loader.ResourceCache;
 
 import java.io.File;
 import java.io.IOException;

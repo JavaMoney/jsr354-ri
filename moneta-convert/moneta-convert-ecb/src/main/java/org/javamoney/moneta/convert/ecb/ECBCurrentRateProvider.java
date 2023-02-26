@@ -27,6 +27,9 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.javamoney.moneta.convert.ecb.defaults.Defaults.ECB_CURRENT_FALLBACK_PATH;
+import static org.javamoney.moneta.convert.ecb.defaults.Defaults.ECB_CURRENT_URL;
+
 /**
  * This class implements an {@link javax.money.convert.ExchangeRateProvider} that loads data from
  * the European Central Bank data feed (XML). It loads the current exchange
@@ -68,8 +71,8 @@ public class ECBCurrentRateProvider extends ECBAbstractRateProvider {
                 .withResourceId(getDataId())
                 .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
                 .withProperties(props)
-                .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-daily.xml"))
-                .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"))
+                .withBackupResource(URI.create(ECB_CURRENT_FALLBACK_PATH))
+                .withResourceLocations(URI.create(ECB_CURRENT_URL))
                 .withStartRemote(true)
                 .build();
     }

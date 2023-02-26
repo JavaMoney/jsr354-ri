@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoaderConfigurator {
+public class LoaderConfigurator {
 
     private static final String LOAD = "load.";
 
@@ -40,6 +40,10 @@ class LoaderConfigurator {
     LoaderConfigurator(LoaderService loaderService) {
         Objects.requireNonNull(loaderService);
         this.loaderService = loaderService;
+    }
+
+    public static final LoaderConfigurator of(LoaderService loaderService) {
+        return new LoaderConfigurator(loaderService);
     }
 
     public void load() {

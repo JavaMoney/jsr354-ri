@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.spi.loader;
+package org.javamoney.moneta.spi.loader.urlconnection;
+
+import org.javamoney.moneta.spi.loader.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,19 +37,20 @@ import javax.money.spi.Bootstrap;
 
 /**
  * This class provides a mechanism to register resources, that may be updated
- * regularly. The implementation, based on the {@link UpdatePolicy}
- * loads/updates the resources from arbitrary locations and stores it to the
- * format file cache. Default loading tasks can be configured within the javamoney.properties
- * file, @see org.javamoney.moneta.spi.loader.LoaderConfigurator .
- * <p>
+ * regularly. The implementation, based on the {@link LoaderService.UpdatePolicy}
+ * loads/updates the resources from arbitrary locations via {@link java.net.URLConnection} and stores them to the
+ * format file cache. Default loading tasks can be configured within the <code>javamoney.properties</code>
+ * file.
+ * @see org.javamoney.moneta.spi.loader.LoaderConfigurator
+ * @see java.net.URLConnection
  * @author Anatole Tresch
  */
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-public class DefaultLoaderService implements LoaderService {
+public class URLConnectionLoaderService implements LoaderService {
     /**
      * Logger used.
      */
-    private static final Logger LOG = Logger.getLogger(DefaultLoaderService.class.getName());
+    private static final Logger LOG = Logger.getLogger(URLConnectionLoaderService.class.getName());
     /**
      * The data resources managed by this instance.
      */
@@ -77,7 +80,7 @@ public class DefaultLoaderService implements LoaderService {
     /**
      * Constructor, initializing from config.
      */
-    public DefaultLoaderService() {
+    public URLConnectionLoaderService() {
         initialize();
     }
 
@@ -92,7 +95,7 @@ public class DefaultLoaderService implements LoaderService {
             oldTimer.cancel();
         }
         // (re)initialize
-        LoaderConfigurator configurator = new LoaderConfigurator(this);
+        LoaderConfigurator configurator = LoaderConfigurator.of(this);
         defaultLoaderServiceFacade = new DefaultLoaderServiceFacade(timer, listener, resources);
         configurator.load();
     }
@@ -118,7 +121,7 @@ public class DefaultLoaderService implements LoaderService {
      * @return the resource cache, not null.
      */
     static ResourceCache getResourceCache() {
-        return DefaultLoaderService.CACHE;
+        return URLConnectionLoaderService.CACHE;
     }
 
     /**
@@ -323,6 +326,6 @@ public class DefaultLoaderService implements LoaderService {
 
     @Override
     public String toString() {
-        return "DefaultLoaderService [resources=" + resources + ']';
+        return "URLConnectionLoaderService [resources=" + resources + ']';
     }
 }

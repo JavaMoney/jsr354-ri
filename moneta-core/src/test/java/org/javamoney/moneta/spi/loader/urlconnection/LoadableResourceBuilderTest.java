@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.spi.loader;
+package org.javamoney.moneta.spi.loader.urlconnection;
 
 import static org.testng.Assert.assertNotNull;
 
@@ -22,6 +22,8 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Map;
 
+import org.javamoney.moneta.spi.loader.LoadDataInformation;
+import org.javamoney.moneta.spi.loader.LoadDataInformationBuilder;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 import org.testng.annotations.BeforeMethod;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -51,6 +51,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * currency="LTL" rate="3.4528"/> ...
  *
  * @author Anatole Tresch
+ * @author Werner Keil
  * @author otaviojava
  */
 class ECBRateReadingHandler extends DefaultHandler {
@@ -124,5 +125,4 @@ class ECBRateReadingHandler extends DefaultHandler {
         }
         rateMap.put(term.getCurrencyCode(), exchangeRate);
     }
-
 }

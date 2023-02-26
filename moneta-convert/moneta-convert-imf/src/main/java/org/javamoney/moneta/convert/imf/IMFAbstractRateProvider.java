@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -50,7 +50,6 @@ import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
 abstract class IMFAbstractRateProvider extends AbstractRateProvider implements LoaderListener {
-
 
     private static final Logger LOG = Logger.getLogger(IMFAbstractRateProvider.class.getName());
 
@@ -134,11 +133,11 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
                 if (!isAvailable(conversionQuery)) {
                     return null;
                 }
-                CurrencyUnit base = conversionQuery.getBaseCurrency();
-                CurrencyUnit term = conversionQuery.getCurrency();
-                LocalDate[] times = getQueryDates(conversionQuery);
-                ExchangeRate rate1 = getExchangeRate(currencyToSdr.get(base), times);
-                ExchangeRate rate2 = getExchangeRate(sdrToCurrency.get(term), times);
+                final CurrencyUnit base = conversionQuery.getBaseCurrency();
+                final CurrencyUnit term = conversionQuery.getCurrency();
+                LocalDate[] dates = getQueryDates(conversionQuery);
+                ExchangeRate rate1 = getExchangeRate(currencyToSdr.get(base), dates);
+                ExchangeRate rate2 = getExchangeRate(sdrToCurrency.get(term), dates);
                 if (base.equals(SDR)) {
                     return rate2;
                 } else if (term.equals(SDR)) {
@@ -185,8 +184,8 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
         			return exchangeRateOptional.get();
         		}
 			}
-          	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
-        	throw new MonetaryException("There is not exchange on day " + datesOnErros + " to rate to  rate on IFMRateProvider.");
+          	final String datesOnErrors = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
+        	throw new MonetaryException("There is not exchange on day " + datesOnErrors + " to rate to  rate on IFMRateProvider.");
         }
     }
 
@@ -195,5 +194,4 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
         return getClass().getName() + '{' +
                 " context: " + context + '}';
     }
-
 }

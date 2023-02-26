@@ -15,6 +15,8 @@
  */
 package org.javamoney.moneta.spi.loader;
 
+import org.javamoney.moneta.spi.loader.urlconnection.DefaultResourceCache;
+
 import java.io.IOException;
 
 /**

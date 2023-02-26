@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -18,12 +18,12 @@ package org.javamoney.moneta.convert.imf;
 import java.time.YearMonth;
 import java.util.Objects;
 
+import static org.javamoney.moneta.convert.imf.defaults.Defaults.*;
+
 enum IMFHistoricalType {
-	SDR_Currency("SDRCV"), Currency_SDR("CVSDR");
+	SDR_Currency(SCRCV), Currency_SDR(CVSDR);
 
 	private final String type;
-
-	private static final String HOST = "https://www.imf.org/external/np/fin/data/rms_mth.aspx?SelectDate=%s&reportType=%s&tsvflag=Y";
 
 	IMFHistoricalType(String type) {
 		this.type = type;

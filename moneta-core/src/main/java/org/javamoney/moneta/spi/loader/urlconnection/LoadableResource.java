@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -13,7 +13,12 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.spi.loader;
+package org.javamoney.moneta.spi.loader.urlconnection;
+
+import org.javamoney.moneta.spi.loader.DataStreamFactory;
+import org.javamoney.moneta.spi.loader.LoadDataInformation;
+import org.javamoney.moneta.spi.loader.LoaderService;
+import org.javamoney.moneta.spi.loader.ResourceCache;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -94,8 +99,6 @@ public class LoadableResource implements DataStreamFactory {
 
 
     LoadableResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
-
-
         Objects.requireNonNull(loadDataInformation.getResourceId(), "resourceId required");
         Objects.requireNonNull(loadDataInformation.getProperties(), "properties required");
         Objects.requireNonNull(loadDataInformation.getUpdatePolicy(), "updatePolicy required");
@@ -475,5 +478,4 @@ public class LoadableResource implements DataStreamFactory {
         }
 
     }
-
 }
