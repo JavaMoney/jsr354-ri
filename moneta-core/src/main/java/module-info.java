@@ -4,7 +4,7 @@ import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService;
 
 /*
-Copyright (c) 2012, 2020, Werner Keil and others by the @author tag.
+Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -29,9 +29,8 @@ module org.javamoney.moneta {
     requires transitive java.money;
     requires transitive java.logging;
     requires jakarta.annotation;
-    requires static org.osgi.core;
-    requires static org.osgi.compendium;
-    requires static org.osgi.annotation;
+    requires static osgi.core;
+    requires static osgi.annotation;
     provides javax.money.spi.CurrencyProviderSpi with JDKCurrencyProvider, ConfigurableCurrencyUnitProvider;
     provides javax.money.spi.MonetaryAmountFactoryProviderSpi with MoneyAmountFactoryProvider, FastMoneyAmountFactoryProvider, RoundedMoneyAmountFactoryProvider;
     provides javax.money.spi.MonetaryAmountFormatProviderSpi with DefaultAmountFormatProviderSpi;

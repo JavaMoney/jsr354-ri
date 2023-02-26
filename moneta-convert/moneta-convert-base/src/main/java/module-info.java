@@ -2,7 +2,7 @@ import org.javamoney.moneta.convert.DefaultMonetaryConversionsSingletonSpi;
 import org.javamoney.moneta.convert.IdentityRateProvider;
 
 /*
-Copyright (c) 2012, 2018, Anatole Tresch, Werner Keil and others by the @author tag.
+Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -19,9 +19,8 @@ the License.
 module org.javamoney.moneta.convert {
     exports org.javamoney.moneta.convert;
     requires transitive org.javamoney.moneta;
-    requires static org.osgi.core;
-    requires static org.osgi.compendium;
-    requires static org.osgi.annotation;
+    requires static osgi.core;
+    requires static osgi.annotation;
     provides javax.money.spi.MonetaryConversionsSingletonSpi with DefaultMonetaryConversionsSingletonSpi;
     provides javax.money.convert.ExchangeRateProvider with IdentityRateProvider;
     uses org.javamoney.moneta.spi.MonetaryAmountProducer;

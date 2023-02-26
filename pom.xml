@@ -53,16 +53,16 @@
 		<additionalparam>-Xdoclint:none</additionalparam>
 
 		<!-- OSGI support -->
-		<osgi.version>5.0.0</osgi.version>
-		<osgi.compendium.version>${osgi.version}</osgi.compendium.version>
-		<osgi.annotation.version>6.0.0</osgi.annotation.version>
+		<osgi.version>8.0.0</osgi.version>
+		<osgi.annotation.version>8.1.0</osgi.annotation.version>
 
-		<jacoco.version>0.8.7</jacoco.version>
+		<!-- Test coverage -->
+		<jacoco.version>0.8.8</jacoco.version>
 	</properties>
 
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://app.travis-ci.com/github/JavaMoney/jsr354-ri</url>
+		<system>Circle CI</system>
+		<url>https://app.circleci.com/pipelines/github/JavaMoney/jsr354-ri</url>
 	</ciManagement>
 
 	<mailingLists>
@@ -302,21 +302,14 @@
 			<!-- OSGI support -->
 			<dependency>
 				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.annotation</artifactId>
+				<artifactId>osgi.annotation</artifactId>
 				<scope>provided</scope>
 				<version>${osgi.annotation.version}</version>
 				<optional>true</optional>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.compendium</artifactId>
-				<scope>provided</scope>
-				<version>${osgi.compendium.version}</version>
-				<optional>true</optional>
-			</dependency>
-			<dependency>
-				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.core</artifactId>
+				<artifactId>osgi.core</artifactId>
 				<version>${osgi.version}</version>
 				<scope>provided</scope>
 				<optional>true</optional>

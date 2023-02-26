@@ -6,9 +6,8 @@ javac.target: 1.8
 Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version>=8.0))"
 
 -buildpath: \
-	osgi.annotation; version=6.0.0,\
-	osgi.core; version=6.0,\
-	osgi.cmpn; version=6.0
+	osgi.annotation; version=8.0.0,\
+	osgi.core; version=8.0
 
 # JPMS
 Automatic-Module-Name: org.javamoney.moneta
