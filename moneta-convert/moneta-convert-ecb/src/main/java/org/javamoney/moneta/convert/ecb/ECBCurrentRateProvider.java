@@ -24,6 +24,7 @@ import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -60,13 +61,28 @@ public class ECBCurrentRateProvider extends ECBAbstractRateProvider {
 
     @Override
     protected LoadDataInformation getDefaultLoadData() {
+        final Map<String, String> props = new HashMap<>();
+        props.put("period", "03:00");
+
         return new LoadDataInformationBuilder()
-            .withResourceId(getDataId())
-            .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
-            .withProperties(Map.of("period", "03:00"))
-            .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-daily.xml"))
-            .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"))
-            .withStartRemote(true)
-            .build();
+                .withResourceId(getDataId())
+                .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
+                .withProperties(props)
+                .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-daily.xml"))
+                .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"))
+                .withStartRemote(true)
+                .build();
     }
+
+//    @Override TODO a Java 9+ version for a MRJ
+//    protected LoadDataInformation getDefaultLoadData() {
+//        return new LoadDataInformationBuilder()
+//            .withResourceId(getDataId())
+//            .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
+//            .withProperties(Map.of("period", "03:00"))
+//            .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-daily.xml"))
+//            .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"))
+//            .withStartRemote(true)
+//            .build();
+//    }
 }

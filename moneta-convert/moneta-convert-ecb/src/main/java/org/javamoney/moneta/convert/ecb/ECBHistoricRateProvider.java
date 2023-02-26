@@ -24,6 +24,7 @@ import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -68,20 +69,35 @@ public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
     public String getDataId() {
         return DATA_ID;
     }
-
-
     @Override
     protected LoadDataInformation getDefaultLoadData() {
+        final Map<String, String> props = new HashMap<>();
+        props.put("period", "24:00");
+        props.put("delay", "01:00");
+        props.put("at", "07:00");
+
         return new LoadDataInformationBuilder()
             .withResourceId(getDataId())
             .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
-            .withProperties(Map.of("period", "24:00",
-                "delay", "01:00",
-                "at", "07:00"))
+            .withProperties(props)
             .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml"))
             .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"))
             .withStartRemote(true)
             .build();
     }
+
+//    @Override TODO a Java 9+ version for a MRJ
+//    protected LoadDataInformation getDefaultLoadData() {
+//        return new LoadDataInformationBuilder()
+//            .withResourceId(getDataId())
+//            .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
+//            .withProperties(Map.of("period", "24:00",
+//                "delay", "01:00",
+//                "at", "07:00"))
+//            .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml"))
+//            .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"))
+//            .withStartRemote(true)
+//            .build();
+//    }
 
 }
