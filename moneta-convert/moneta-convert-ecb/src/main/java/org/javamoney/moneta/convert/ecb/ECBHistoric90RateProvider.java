@@ -15,9 +15,15 @@
  */
 package org.javamoney.moneta.convert.ecb;
 
+import org.javamoney.moneta.spi.loader.LoadDataInformation;
+import org.javamoney.moneta.spi.loader.LoadDataInformationBuilder;
+import org.javamoney.moneta.spi.loader.LoaderService;
+
 import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
+import java.net.URI;
+import java.util.Map;
 
 /**
  * <p>
@@ -56,5 +62,17 @@ public class ECBHistoric90RateProvider extends ECBAbstractRateProvider {
         return DATA_ID;
     }
 
+
+    @Override
+    protected LoadDataInformation getDefaultLoadData() {
+        return new LoadDataInformationBuilder()
+            .withResourceId(getDataId())
+            .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
+            .withProperties(Map.of("period", "03:00"))
+            .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist-90d.xml"))
+            .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"))
+            .withStartRemote(true)
+            .build();
+    }
 
 }

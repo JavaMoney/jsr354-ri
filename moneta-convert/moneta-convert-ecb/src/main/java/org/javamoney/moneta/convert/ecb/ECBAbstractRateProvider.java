@@ -15,6 +15,25 @@
  */
 package org.javamoney.moneta.convert.ecb;
 
+import org.javamoney.moneta.convert.ExchangeRateBuilder;
+import org.javamoney.moneta.spi.AbstractRateProvider;
+import org.javamoney.moneta.spi.DefaultNumberValue;
+import org.javamoney.moneta.spi.loader.LoadDataInformation;
+import org.javamoney.moneta.spi.loader.LoaderService;
+import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import javax.money.MonetaryException;
+import javax.money.convert.ConversionQuery;
+import javax.money.convert.CurrencyConversionException;
+import javax.money.convert.ExchangeRate;
+import javax.money.convert.ProviderContext;
+import javax.money.spi.Bootstrap;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
 import java.math.MathContext;
 import java.nio.charset.StandardCharsets;
@@ -30,25 +49,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import javax.money.MonetaryException;
-import javax.money.convert.ConversionQuery;
-import javax.money.convert.CurrencyConversionException;
-import javax.money.convert.ExchangeRate;
-import javax.money.convert.ProviderContext;
-import javax.money.spi.Bootstrap;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.javamoney.moneta.convert.ExchangeRateBuilder;
-import org.javamoney.moneta.spi.AbstractRateProvider;
-import org.javamoney.moneta.spi.DefaultNumberValue;
-import org.javamoney.moneta.spi.loader.LoaderService;
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 /**
  * Base to all Europe Central Bank implementation.
@@ -90,11 +90,22 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
         LoaderService loader = Bootstrap.getService(LoaderService.class);
+        if (!loader.isResourceRegistered(getDataId())) {
+            loader.registerData(getDefaultLoadData());
+        }
         loader.addLoaderListener(this, getDataId());
         loader.loadDataAsync(getDataId());
     }
 
     protected abstract String getDataId();
+
+    /**
+     * Gets the default data loading configuration.
+     *
+     * This configuration is used if no other is provided.
+     * @return the configuration
+     */
+    protected abstract LoadDataInformation getDefaultLoadData();
 
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {

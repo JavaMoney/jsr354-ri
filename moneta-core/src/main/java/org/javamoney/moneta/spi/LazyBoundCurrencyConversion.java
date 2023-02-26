@@ -59,8 +59,6 @@ public class LazyBoundCurrencyConversion extends AbstractCurrencyConversion impl
         return this.rateProvider.getExchangeRate(ConversionQueryBuilder
                 .of(conversionQuery).setBaseCurrency(amount.getCurrency())
                 .build());
-        // return this.rateProvider.getExchangeRate(amount.getCurrency(),
-        // getCurrency());
     }
 
     @Override
