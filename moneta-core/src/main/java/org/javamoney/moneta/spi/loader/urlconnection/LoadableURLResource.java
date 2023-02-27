@@ -41,12 +41,12 @@ import java.util.logging.Logger;
  * To create this instance use: {@link LoadableResourceBuilder}
  * @author Anatole Tresch
  */
-public class LoadableResource implements DataStreamFactory {
+public class LoadableURLResource implements DataStreamFactory {
 
     /**
      * The logger used.
      */
-    private static final Logger LOG = Logger.getLogger(LoadableResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(LoadableURLResource.class.getName());
     /**
      * Lock for this instance.
      */
@@ -98,7 +98,7 @@ public class LoadableResource implements DataStreamFactory {
     private final Map<String, String> properties;
 
 
-    LoadableResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
+    LoadableURLResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
         Objects.requireNonNull(loadDataInformation.getResourceId(), "resourceId required");
         Objects.requireNonNull(loadDataInformation.getProperties(), "properties required");
         Objects.requireNonNull(loadDataInformation.getUpdatePolicy(), "updatePolicy required");
@@ -444,7 +444,7 @@ public class LoadableResource implements DataStreamFactory {
 
     @Override
     public String toString() {
-        return "LoadableResource [resourceId=" + resourceId + ", fallbackLocation=" +
+        return "LoadableURLResource [resourceId=" + resourceId + ", fallbackLocation=" +
                 fallbackLocation + ", remoteResources=" + remoteResources +
                 ", loadCount=" + loadCount + ", accessCount=" + accessCount + ", lastLoaded=" + lastLoaded + ']';
     }

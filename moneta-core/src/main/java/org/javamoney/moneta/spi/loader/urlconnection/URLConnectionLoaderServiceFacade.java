@@ -18,28 +18,28 @@ package org.javamoney.moneta.spi.loader.urlconnection;
 import java.util.Map;
 import java.util.Timer;
 
-class DefaultLoaderServiceFacade {
+class URLConnectionLoaderServiceFacade {
 
-	private final ScheduledDataLoaderService scheduledDataLoaderService;
+	private final ScheduledDataService scheduledDataLoaderService;
 
-	private final LoadDataLoaderService loadDataLoaderService;
+	private final LoadDataService loadDataLoaderService;
 
-	private final LoadDataLocalLoaderService loadDataLocalLoaderService;
+	private final LoadLocaDataService loadDataLocalLoaderService;
 
-	private final LoadRemoteDataLoaderService loadRemoteDataLoaderService;
+	private final LoadRemoteDataService loadRemoteDataLoaderService;
 
-	DefaultLoaderServiceFacade(Timer timer, DefaultLoaderListener listener, Map<String, LoadableResource> resources){
-		this.scheduledDataLoaderService = new ScheduledDataLoaderService(timer, listener);
-		this.loadDataLoaderService = new LoadDataLoaderService(listener);
-		this.loadDataLocalLoaderService = new LoadDataLocalLoaderService(resources, listener);
-		this.loadRemoteDataLoaderService = new LoadRemoteDataLoaderService(listener);
+	URLConnectionLoaderServiceFacade(Timer timer, URLConnectionLoaderListener listener, Map<String, LoadableURLResource> resources){
+		this.scheduledDataLoaderService = new ScheduledDataService(timer, listener);
+		this.loadDataLoaderService = new LoadDataService(listener);
+		this.loadDataLocalLoaderService = new LoadLocaDataService(resources, listener);
+		this.loadRemoteDataLoaderService = new LoadRemoteDataService(listener);
 	}
 
-	public void scheduledData(LoadableResource load) {
+	public void scheduledData(LoadableURLResource load) {
 		scheduledDataLoaderService.execute(load);
 	}
 
-	public boolean loadData(String resourceId, Map<String, LoadableResource> resources){
+	public boolean loadData(String resourceId, Map<String, LoadableURLResource> resources){
 		return loadDataLoaderService.execute(resourceId, resources);
 	}
 
@@ -47,12 +47,12 @@ class DefaultLoaderServiceFacade {
 		return loadDataLocalLoaderService.execute(resourceId);
 	}
 
-	public boolean loadDataRemote(String resourceId, Map<String, LoadableResource> resources){
+	public boolean loadDataRemote(String resourceId, Map<String, LoadableURLResource> resources){
 		return loadRemoteDataLoaderService.execute(resourceId, resources);
 	}
 	@Override
 	public String toString() {
-        return DefaultLoaderServiceFacade.class.getName() + '{' +
+        return URLConnectionLoaderServiceFacade.class.getName() + '{' +
                 " scheduledDataLoaderService: " + scheduledDataLoaderService + ',' +
                 " asyncLoaderService: " + loadDataLoaderService + ',' +
                 " loadDataLocalLoaderService: " + loadDataLocalLoaderService + ',';

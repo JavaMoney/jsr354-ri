@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -33,11 +33,11 @@ import javax.money.MonetaryException;
  *
  * @author Anatole Tresch
  */
-public class DefaultResourceCache implements ResourceCache {
+class URLConnectionResourceCache implements ResourceCache {
     /**
      * The logger used.
      */
-    private static final Logger LOG = Logger.getLogger(DefaultResourceCache.class.getName());
+    private static final Logger LOG = Logger.getLogger(URLConnectionResourceCache.class.getName());
     /**
      * Suffix for files created.
      */
@@ -54,7 +54,7 @@ public class DefaultResourceCache implements ResourceCache {
     /**
      * Constructor.
      */
-    public DefaultResourceCache() {
+    public URLConnectionResourceCache() {
         if (!localDir.exists()) {
             if (!localDir.mkdirs()) {
                 LOG.severe("Error creating cache dir  " + localDir + ", resource cache disabled!");
@@ -151,7 +151,7 @@ public class DefaultResourceCache implements ResourceCache {
 
     @Override
     public String toString() {
-        return "DefaultResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + ']';
+        return "URLConnectionResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + ']';
     }
 
 }

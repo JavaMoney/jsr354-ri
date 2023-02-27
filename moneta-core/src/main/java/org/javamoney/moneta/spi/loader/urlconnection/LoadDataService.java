@@ -20,20 +20,20 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoadDataLoaderService {
+class LoadDataService {
 
-	private static final Logger LOG = Logger.getLogger(LoadDataLoaderService.class.getName());
+	private static final Logger LOG = Logger.getLogger(LoadDataService.class.getName());
 
-	private final DefaultLoaderListener listener;
+	private final URLConnectionLoaderListener listener;
 
-   LoadDataLoaderService(DefaultLoaderListener listener) {
+   LoadDataService(URLConnectionLoaderListener listener) {
 		this.listener = listener;
 	}
 
 	public boolean execute(String resourceId,
-			Map<String, LoadableResource> resources) {
+			Map<String, LoadableURLResource> resources) {
 
-		LoadableResource load = resources.get(resourceId);
+		LoadableURLResource load = resources.get(resourceId);
 		if (Objects.nonNull(load)) {
 			try {
 				if (load.load()) {
@@ -66,7 +66,7 @@ public class LoadDataLoaderService {
 
 	@Override
 	public String toString() {
-		return LoadDataLoaderService.class.getName() + '{' + " listener: " + listener + '}';
+		return LoadDataService.class.getName() + '{' + " listener: " + listener + '}';
 	}
 
 }

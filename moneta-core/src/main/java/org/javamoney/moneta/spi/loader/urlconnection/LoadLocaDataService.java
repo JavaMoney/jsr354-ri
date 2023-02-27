@@ -20,24 +20,24 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoadDataLocalLoaderService {
+class LoadLocaDataService {
 
-	private static final Logger LOG = Logger.getLogger(LoadDataLocalLoaderService.class.getName());
+	private static final Logger LOG = Logger.getLogger(LoadLocaDataService.class.getName());
 
-	private final Map<String, LoadableResource> resources;
+	private final Map<String, LoadableURLResource> resources;
 
-	private final DefaultLoaderListener listener;
+	private final URLConnectionLoaderListener listener;
 
 
-	 LoadDataLocalLoaderService(Map<String, LoadableResource> resources,
-			DefaultLoaderListener listener) {
+	 LoadLocaDataService(Map<String, LoadableURLResource> resources,
+						 URLConnectionLoaderListener listener) {
 		this.resources = resources;
 		this.listener = listener;
 	}
 
 
 	public boolean execute(String resourceId) {
-	        LoadableResource load = this.resources.get(resourceId);
+	        LoadableURLResource load = this.resources.get(resourceId);
 	        if (Objects.nonNull(load)) {
 	            try {
 	                if (load.loadFallback()) {
@@ -55,7 +55,7 @@ class LoadDataLocalLoaderService {
 
 	@Override
 	public String toString() {
-		return LoadDataLocalLoaderService.class.getName() + '{' + " resources: "
+		return LoadLocaDataService.class.getName() + '{' + " resources: "
 				+ resources + ", defaultLoaderListener: " + listener + '}';
 	}
 }

@@ -54,11 +54,11 @@ public class URLConnectionLoaderService implements LoaderService {
     /**
      * The data resources managed by this instance.
      */
-    private final Map<String, LoadableResource> resources = new ConcurrentHashMap<>();
+    private final Map<String, LoadableURLResource> resources = new ConcurrentHashMap<>();
     /**
      * The registered {@link LoaderListener} instances.
      */
-     private final DefaultLoaderListener listener = new DefaultLoaderListener();
+     private final URLConnectionLoaderListener listener = new URLConnectionLoaderListener();
 
     /**
      * The local resource cache, to allow keeping current data on the local
@@ -70,7 +70,7 @@ public class URLConnectionLoaderService implements LoaderService {
      */
     private final ExecutorService executors = Executors.newCachedThreadPool(DaemonThreadFactory.INSTANCE);
 
-    private DefaultLoaderServiceFacade defaultLoaderServiceFacade;
+    private URLConnectionLoaderServiceFacade defaultLoaderServiceFacade;
 
     /**
      * The timer used for schedules.
@@ -96,7 +96,7 @@ public class URLConnectionLoaderService implements LoaderService {
         }
         // (re)initialize
         LoaderConfigurator configurator = LoaderConfigurator.of(this);
-        defaultLoaderServiceFacade = new DefaultLoaderServiceFacade(timer, listener, resources);
+        defaultLoaderServiceFacade = new URLConnectionLoaderServiceFacade(timer, listener, resources);
         configurator.load();
     }
 
@@ -108,10 +108,10 @@ public class URLConnectionLoaderService implements LoaderService {
     private static ResourceCache loadResourceCache() {
         try {
             return Optional.ofNullable(Bootstrap.getService(ResourceCache.class)).orElseGet(
-                    DefaultResourceCache::new);
+                    URLConnectionResourceCache::new);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
-            return new DefaultResourceCache();
+            return new URLConnectionResourceCache();
         }
     }
 
@@ -130,7 +130,7 @@ public class URLConnectionLoaderService implements LoaderService {
      * @param resourceId the resource id.
      */
     public void unload(String resourceId) {
-        LoadableResource res = this.resources.get(resourceId);
+        LoadableURLResource res = this.resources.get(resourceId);
         if (Objects.nonNull(res)) {
             res.unload();
         }
@@ -151,7 +151,7 @@ public class URLConnectionLoaderService implements LoaderService {
             throw new IllegalArgumentException("Resource : " + loadDataInformation.getResourceId() + " already registered.");
         }
 
-		LoadableResource resource = new LoadableResourceBuilder()
+		LoadableURLResource resource = new LoadableResourceBuilder()
 				.withCache(CACHE).withLoadDataInformation(loadDataInformation)
 				.build();
         this.resources.put(loadDataInformation.getResourceId(), resource);
@@ -211,7 +211,7 @@ public class URLConnectionLoaderService implements LoaderService {
                 .withResourceLocations(resourceLocations)
                 .build();
 
-        LoadableResource resource = new LoadableResourceBuilder()
+        LoadableURLResource resource = new LoadableResourceBuilder()
                 .withCache(CACHE).withLoadDataInformation(loadInfo)
                 .build();
         this.resources.put(loadInfo.getResourceId(), resource);
@@ -232,7 +232,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public Map<String, String> getUpdateConfiguration(String resourceId) {
-        LoadableResource load = this.resources.get(resourceId);
+        LoadableURLResource load = this.resources.get(resourceId);
         if (Objects.nonNull(load)) {
             return load.getProperties();
         }
@@ -251,7 +251,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public InputStream getData(String resourceId) throws IOException {
-        LoadableResource load = this.resources.get(resourceId);
+        LoadableURLResource load = this.resources.get(resourceId);
         if (Objects.nonNull(load)) {
             return load.getDataStream();
         }
@@ -276,7 +276,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public void resetData(String resourceId) throws IOException {
-        LoadableResource load = Optional.ofNullable(this.resources.get(resourceId))
+        LoadableURLResource load = Optional.ofNullable(this.resources.get(resourceId))
                 .orElseThrow(() -> new IllegalArgumentException("No such resource: " + resourceId));
         if (load.resetToFallback()) {
         	listener.trigger(resourceId, load);
@@ -319,7 +319,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public UpdatePolicy getUpdatePolicy(String resourceId) {
-        LoadableResource load = Optional.of(this.resources.get(resourceId))
+        LoadableURLResource load = Optional.of(this.resources.get(resourceId))
                 .orElseThrow(() -> new IllegalArgumentException("No such resource: " + resourceId));
         return load.getUpdatePolicy();
     }

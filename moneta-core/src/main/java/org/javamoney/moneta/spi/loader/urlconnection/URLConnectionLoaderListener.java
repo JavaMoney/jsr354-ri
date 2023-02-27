@@ -27,9 +27,9 @@ import java.util.logging.Logger;
 import org.javamoney.moneta.spi.loader.DataStreamFactory;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
-class DefaultLoaderListener {
+class URLConnectionLoaderListener {
 
-	private static final Logger LOG = Logger.getLogger(DefaultLoaderListener.class.getName());
+	private static final Logger LOG = Logger.getLogger(URLConnectionLoaderListener.class.getName());
 
 	private final Map<String, List<LoaderListener>> listenersMap = new ConcurrentHashMap<>();
 
@@ -91,7 +91,7 @@ class DefaultLoaderListener {
 
     @Override
     public String toString() {
-        return DefaultLoaderListener.class.getName() + '{' +
+        return URLConnectionLoaderListener.class.getName() + '{' +
                 "listenersMap: " + listenersMap + '}';
     }
 }

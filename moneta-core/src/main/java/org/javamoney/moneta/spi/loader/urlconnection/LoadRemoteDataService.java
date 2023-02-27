@@ -20,20 +20,20 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoadRemoteDataLoaderService {
+class LoadRemoteDataService {
 
-	private static final Logger LOG = Logger.getLogger(LoadRemoteDataLoaderService.class.getName());
+	private static final Logger LOG = Logger.getLogger(LoadRemoteDataService.class.getName());
 
-	private final DefaultLoaderListener listener;
+	private final URLConnectionLoaderListener listener;
 
-	LoadRemoteDataLoaderService(DefaultLoaderListener listener) {
+	LoadRemoteDataService(URLConnectionLoaderListener listener) {
 		this.listener = listener;
 	}
 
 	public boolean execute(String resourceId,
-			Map<String, LoadableResource> resources) {
+			Map<String, LoadableURLResource> resources) {
 
-		LoadableResource load = resources.get(resourceId);
+		LoadableURLResource load = resources.get(resourceId);
 		if (Objects.nonNull(load)) {
 			try {
 				load.readCache();
@@ -55,6 +55,6 @@ class LoadRemoteDataLoaderService {
 
 	@Override
 	public String toString() {
-		return LoadRemoteDataLoaderService.class.getName() + '{' + " listener: " + listener + '}';
+		return LoadRemoteDataService.class.getName() + '{' + " listener: " + listener + '}';
 	}
 }

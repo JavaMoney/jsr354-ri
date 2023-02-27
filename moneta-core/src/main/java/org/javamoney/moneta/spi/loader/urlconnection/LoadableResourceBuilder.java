@@ -21,9 +21,9 @@ import org.javamoney.moneta.spi.loader.ResourceCache;
 import java.util.Objects;
 
 /**
- * Builder for {@link LoadableResource}.
+ * Builder for {@link LoadableURLResource}.
  */
-public class LoadableResourceBuilder {
+class LoadableResourceBuilder {
 
 	private LoadDataInformation loadDataInformation;
 
@@ -39,14 +39,14 @@ public class LoadableResourceBuilder {
 		return this;
 	}
 
-	public LoadableResource build() {
+	public LoadableURLResource build() {
 		if(Objects.isNull(cache)) {
 			throw new IllegalStateException("The cache should be informed");
 		}
 		if(Objects.isNull(loadDataInformation)) {
 			throw new IllegalStateException("The loadDataInformation should be informed");
 		}
-		return new LoadableResource(cache, loadDataInformation);
+		return new LoadableURLResource(cache, loadDataInformation);
 	}
 
 	@Override

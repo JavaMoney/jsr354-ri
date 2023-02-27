@@ -25,19 +25,19 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class ScheduledDataLoaderService {
+class ScheduledDataService {
 
-    private static final Logger LOG = Logger.getLogger(ScheduledDataLoaderService.class.getName());
+    private static final Logger LOG = Logger.getLogger(ScheduledDataService.class.getName());
 
     private final Timer timer;
-    private final DefaultLoaderListener listener;
+    private final URLConnectionLoaderListener listener;
 
-    ScheduledDataLoaderService(Timer timer, DefaultLoaderListener listener) {
+    ScheduledDataService(Timer timer, URLConnectionLoaderListener listener) {
         this.timer = timer;
         this.listener = listener;
     }
 
-    public void execute(final LoadableResource load) {
+    public void execute(final LoadableURLResource load) {
         Objects.requireNonNull(load);
         Map<String, String> props = load.getProperties();
         if (Objects.nonNull(props)) {
@@ -127,7 +127,7 @@ class ScheduledDataLoaderService {
         return periodMS;
     }
 
-    private TimerTask createTimerTask(final LoadableResource load)
+    private TimerTask createTimerTask(final LoadableURLResource load)
     {
         return new TimerTask() {
             @Override
@@ -145,7 +145,7 @@ class ScheduledDataLoaderService {
 
     @Override
     public String toString() {
-        return ScheduledDataLoaderService.class.getName() + '{' + " timer: "
+        return ScheduledDataService.class.getName() + '{' + " timer: "
                 + timer + '}';
     }
 }

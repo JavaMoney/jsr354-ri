@@ -55,8 +55,8 @@ public class LoadableResourceBuilderTest {
 
 	@Test
 	public void shouldCreateLoadableResource() {
-		LoadableResource resource = new LoadableResourceBuilder()
-				.withCache(new DefaultResourceCache())
+		LoadableURLResource resource = new LoadableResourceBuilder()
+				.withCache(new URLConnectionResourceCache())
 				.withLoadDataInformation(loadInformation).build();
 		assertNotNull(resource);
 	}
