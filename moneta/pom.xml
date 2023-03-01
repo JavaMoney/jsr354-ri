@@ -167,7 +167,6 @@
 							<baseDir>${project.basedir}</baseDir>
 							<imagesDir>src/main/asciidoc/images/</imagesDir>
 							<embedAssets>true</embedAssets>
-							<!-- eruby>erubis</eruby -->
 						</configuration>
 						<executions>
 							<execution>
@@ -228,7 +227,7 @@
 			<artifactId>moneta-convert</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-<!--
+<!-- FIXME this is only temporary to isolate ECB from IMF issues
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-imf</artifactId>
