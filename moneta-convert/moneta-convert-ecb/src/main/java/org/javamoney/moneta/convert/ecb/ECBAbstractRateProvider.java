@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2023, Otavio Santana,, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,14 +16,12 @@
 package org.javamoney.moneta.convert.ecb;
 
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
-import org.javamoney.moneta.convert.ecb.model.Exchange;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
 import org.javamoney.moneta.spi.loader.LoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -36,15 +34,11 @@ import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.math.MathContext;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -59,6 +53,7 @@ import java.util.stream.Stream;
  * Base to all Europe Central Bank implementation.
  *
  * @author otaviojava
+ * @author Werner Keil
  */
 abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         LoaderListener {
@@ -116,7 +111,6 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
-        final ECBUnmarshaller unmarshaller = new ECBUnmarshaller();
         final int oldSize = this.rates.size();
         try {
             //final ExchangeRateParser erp = new ExchangeRateParser(is, getContext().getText());
@@ -127,7 +121,6 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
             //xmlReader.setContentHandler(new ECBRateReadingHandler(rates, getContext()));
 
             //final InputSource source = new InputSource(is);
-            //List<Exchange> exchanges = unmarshaller.apply(remoteResource);
 
             // different encoding
             //source.setEncoding(StandardCharsets.UTF_8.displayName());
