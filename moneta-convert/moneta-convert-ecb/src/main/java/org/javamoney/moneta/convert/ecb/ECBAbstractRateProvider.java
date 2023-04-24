@@ -16,6 +16,7 @@
 package org.javamoney.moneta.convert.ecb;
 
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
+import org.javamoney.moneta.convert.ecb.model.Exchange;
 import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
@@ -35,11 +36,15 @@ import javax.money.spi.Bootstrap;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.math.MathContext;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -83,9 +88,11 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     private final ProviderContext context;
 
+    protected final String remoteResource;
 
-    ECBAbstractRateProvider(ProviderContext context) {
+    ECBAbstractRateProvider(ProviderContext context, final String remoteRes) {
         super(context);
+        this.remoteResource = remoteRes;
 		this.context = context;
         saxParserFactory.setNamespaceAware(false);
         saxParserFactory.setValidating(false);
@@ -109,19 +116,28 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
 
     @Override
     public void newDataLoaded(String resourceId, InputStream is) {
+        final ECBUnmarshaller unmarshaller = new ECBUnmarshaller();
         final int oldSize = this.rates.size();
         try {
+            //final ExchangeRateParser erp = new ExchangeRateParser(is, getContext().getText());
             final SAXParser parser = saxParserFactory.newSAXParser();
             //parser.parse(is, new ECBRateReadingHandler(rates, getContext()));
 
-            XMLReader xmlReader = parser.getXMLReader();
-            xmlReader.setContentHandler(new ECBRateReadingHandler(rates, getContext()));
+            //XMLReader xmlReader = parser.getXMLReader();
+            //xmlReader.setContentHandler(new ECBRateReadingHandler(rates, getContext()));
 
-            final InputSource source = new InputSource(is);
+            //final InputSource source = new InputSource(is);
+            //List<Exchange> exchanges = unmarshaller.apply(remoteResource);
 
             // different encoding
-            source.setEncoding(StandardCharsets.UTF_8.displayName());
-            xmlReader.parse(source);
+            //source.setEncoding(StandardCharsets.UTF_8.displayName());
+            //xmlReader.parse(source, new ECBRateReadingHandler(rates, getContext()));
+
+            //Reader isr = new InputStreamReader(is);
+            //InputSource src = new InputSource();
+            //src.setCharacterStream(isr);
+            InputSource src = new InputSource(new URL(remoteResource).openStream());
+            parser.parse(src, new ECBRateReadingHandler(rates, getContext()));
 
             int newSize = this.rates.size();
             loadState = "Loaded " + resourceId + " exchange rates for days:" + (newSize - oldSize);
@@ -177,7 +193,7 @@ abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         		}
 			}
         	String datesOnErros = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
-        	throw new MonetaryException("There is not exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
+        	throw new MonetaryException("There is no exchange on day " + datesOnErros + " to rate to  rate on ECBRateProvider.");
         }
 
 

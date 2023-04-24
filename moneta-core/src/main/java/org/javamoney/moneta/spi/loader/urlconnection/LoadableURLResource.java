@@ -303,7 +303,7 @@ public class LoadableURLResource implements DataStreamFactory {
     /**
      * Tries to load the data from the given location. The location hereby can be a remote location or a local
      * location. Also it can be an URL pointing to a current dataset, or an url directing to fallback resources,
-     * e.g. within the cuzrrent classpath.
+     * e.g. within the current classpath.
      *
      * @param itemToLoad   the target {@link URL}
      * @param fallbackLoad true, for a fallback URL.

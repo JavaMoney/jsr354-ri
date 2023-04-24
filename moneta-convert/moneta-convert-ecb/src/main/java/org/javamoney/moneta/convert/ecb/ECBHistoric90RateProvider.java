@@ -58,7 +58,7 @@ public class ECBHistoric90RateProvider extends ECBAbstractRateProvider {
                     .set("providerDescription", "European Central Bank (last 90 days)").set("days", 90).build();
 
     public ECBHistoric90RateProvider() {
-        super(CONTEXT);
+        super(CONTEXT, ECB_HIST90_URL);
     }
 
     @Override

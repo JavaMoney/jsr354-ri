@@ -175,7 +175,7 @@ public class ECBHistoricRateProviderTest {
 */
         CurrencyConversion conv1 = provider.getCurrencyConversion(ConversionQueryBuilder.of()
                 .setTermCurrency("USD")
-                .set(LocalDate.of(2008, 1, 1))
+                .set(LocalDate.of(2008, 1, 2))
                 .build());
 
         assertEquals(inEUR.with(conv1), inEUR.with(conv1));

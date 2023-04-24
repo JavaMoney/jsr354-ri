@@ -9,6 +9,10 @@
 	</parent>
 	<artifactId>moneta-convert-ecb</artifactId>
 	<packaging>jar</packaging>
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
