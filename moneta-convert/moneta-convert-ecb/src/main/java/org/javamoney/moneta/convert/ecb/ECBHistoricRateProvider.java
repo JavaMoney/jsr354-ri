@@ -27,6 +27,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.javamoney.moneta.convert.ecb.defaults.Defaults.ECB_HIST_URL;
+
 /**
  * <p>
  * This class implements an {@link javax.money.convert.ExchangeRateProvider}
@@ -61,7 +63,7 @@ public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
                     .set("providerDescription", "European Central Bank").set("days", 1500).build();
 
     public ECBHistoricRateProvider() {
-        super(CONTEXT);
+        super(CONTEXT, ECB_HIST_URL);
     }
 
     @Override
@@ -80,8 +82,8 @@ public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
             .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
             .withProperties(props)
             .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml"))
-            .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"))
-            .withStartRemote(true)
+            .withResourceLocations(URI.create(ECB_HIST_URL))
+            .withStartRemote(false)
             .build();
     }
 

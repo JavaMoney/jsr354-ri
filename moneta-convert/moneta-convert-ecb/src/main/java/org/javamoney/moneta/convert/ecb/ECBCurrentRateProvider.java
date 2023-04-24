@@ -54,7 +54,7 @@ public class ECBCurrentRateProvider extends ECBAbstractRateProvider {
                     .set("days", 1).build();
 
     public ECBCurrentRateProvider() {
-        super(CONTEXT);
+        super(CONTEXT, ECB_CURRENT_URL);
     }
 
     @Override
