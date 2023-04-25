@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,6 +20,8 @@ import static org.testng.Assert.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.Objects;
 
 import javax.money.CurrencyUnit;
@@ -156,23 +158,29 @@ public class ECBHistoricRateProviderTest {
     void selectFromECBWithGivenDate() {
         MonetaryAmount inEUR = Money.of(BigDecimal.TEN, "EUR");
 
-        CurrencyConversion conv2 = provider.getCurrencyConversion(ConversionQueryBuilder.of()
+        final ExchangeRateProvider provider2 = getExchangeRateProvider(ExchangeRateType.ECB);
+        LocalDateTime time = LocalDateTime.now();
+        // As ECB rates are only updated on 4pm of each day, we check, if it's after 4 or the day is on a weekend (cannot get all bank holidays yet)
+        if (isWeekend(time)) {
+            time = time.minusDays(2);
+        } else {
+            if (time.getHour() < 16) {
+                time = time.minusDays(1);
+            }
+        }
+        CurrencyConversion conv2 = provider2.getCurrencyConversion(ConversionQueryBuilder.of()
+                .setTermCurrency("USD")
+                .set(time)
+                .build());
+/*
+        CurrencyConversion conv2 = MonetaryConversions.getConversion(ConversionQueryBuilder.of()
+                .setProviderName(ExchangeRateType.ECB_HIST90.name())
                 .setTermCurrency("USD")
                 .set(LocalDate.now())
                 .build());
-        /*CurrencyConversion conv2 = MonetaryConversions.getConversion(ConversionQueryBuilder.of()
-                .setProviderName("ECB-HIST")
-                .setTermCurrency("USD")
-                .set(LocalDate.now())
-                .build());*/
-
-        /*CurrencyConversion conv1 = MonetaryConversions.getConversion(
-                ConversionQueryBuilder.of()
-                        .setProviderName("ECB-HIST")
-                        .setTermCurrency("USD")
-                        .set(LocalDate.of(2008, 1, 1))
-                        .build());
 */
+
+
         CurrencyConversion conv1 = provider.getCurrencyConversion(ConversionQueryBuilder.of()
                 .setTermCurrency("USD")
                 .set(LocalDate.of(2008, 1, 2))
@@ -183,4 +191,20 @@ public class ECBHistoricRateProviderTest {
         assertNotEquals(inEUR.with(conv1), inEUR.with(conv2)); // <- failing step
     }
 
+
+    /**
+     * This method checks or verifies whether passed LocalDate is weekend or not considering
+     *
+     * - SATURDAY is 6
+     * - SUNDAY is 7
+     *
+     * @param localDateTime
+     * @return
+     */
+    private static boolean isWeekend(LocalDateTime localDateTime) {
+
+        // get Day of week for the passed LocalDate
+        return (localDateTime.get(ChronoField.DAY_OF_WEEK) == 6)
+                || (localDateTime.get(ChronoField.DAY_OF_WEEK) == 7);
+    }
 }
