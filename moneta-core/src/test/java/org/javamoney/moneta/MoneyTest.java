@@ -159,6 +159,16 @@ public class MoneyTest {
         assertEquals(Money.DEFAULT_MONETARY_CONTEXT, money1.getContext());
     }
 
+    @Test
+    public void testShouldUseDefaultMathContext() {
+        final BigDecimal amount = new BigDecimal("1.233350000000000000001");
+
+        assertEquals(
+                Money.of(amount, EURO),
+                Money.of(amount, EURO, Money.DEFAULT_MONETARY_CONTEXT)
+        );
+    }
+
     /**
      * Test method for
      * {@link org.javamoney.moneta.Money#of(java.math.BigDecimal, javax.money.CurrencyUnit,
