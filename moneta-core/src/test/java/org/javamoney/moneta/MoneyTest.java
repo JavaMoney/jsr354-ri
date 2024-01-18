@@ -45,10 +45,12 @@ import org.testng.annotations.Test;
 public class MoneyTest {
     // TODO break this down into smaller test classes, 1.5k LOC seems a bit large;-)
 
-    private static final BigDecimal TEN = new BigDecimal(10.0d);
     protected static final CurrencyUnit EURO = Monetary.getCurrency("EUR");
     protected static final CurrencyUnit DOLLAR = Monetary.getCurrency("USD");
     protected static final CurrencyUnit BRAZILIAN_REAL = Monetary.getCurrency("BRL");
+    private static final BigInteger BI_MAX_LONG = new BigInteger("9223372036854776000");
+    private static final BigInteger BI_MIN_LONG = new BigInteger("-9223372036854776000");
+    private static final BigDecimal BD_MAX_DOUBLE = new BigDecimal("1.797693134862316E+308");
 
     /**
      * Test method for
@@ -56,14 +58,14 @@ public class MoneyTest {
      */
     @Test
     public void testOfCurrencyUnitBigDecimal() {
-        Money m = Money.of(TEN, Monetary.getCurrency("EUR"));
-        assertEquals(TEN, m.getNumber().numberValue(BigDecimal.class));
+        Money m = Money.of(BigDecimal.TEN, Monetary.getCurrency("EUR"));
+        assertEquals(BigDecimal.TEN, m.getNumber().numberValue(BigDecimal.class));
     }
 
     @Test
     public void testOfCurrencyUnitDouble() {
         Money m = Money.of(10.0d, Monetary.getCurrency("EUR"));
-        assertEquals(m.getNumber().doubleValue(), TEN.doubleValue());
+        assertEquals(m.getNumber().doubleValue(), BigDecimal.TEN.doubleValue());
     }
 
     /**
@@ -215,8 +217,8 @@ public class MoneyTest {
         m = Money.of(BigInteger.valueOf(23232312321432432L), DOLLAR);
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf(23232312321432432L), m.getNumber().numberValue(Long.class));
-        assertEquals(BigInteger.valueOf(23232312321432432L), m.getNumber().numberValue(BigInteger.class));
+        assertEquals(m.getNumber().numberValue(Long.class), Long.valueOf(23232312321432430L));
+        assertEquals(m.getNumber().numberValue(BigInteger.class), BigInteger.valueOf(23232312321432430L));
     }
 
     /**
@@ -310,8 +312,8 @@ public class MoneyTest {
         m = Money.of(BigInteger.valueOf(23232312321432432L), "USD");
         assertNotNull(m);
         assertEquals(DOLLAR, m.getCurrency());
-        assertEquals(Long.valueOf(23232312321432432L), m.getNumber().numberValue(Long.class));
-        assertEquals(BigInteger.valueOf(23232312321432432L), m.getNumber().numberValue(BigInteger.class));
+        assertEquals(m.getNumber().numberValue(Long.class), Long.valueOf(23232312321432430L));
+        assertEquals(m.getNumber().numberValue(BigInteger.class), BigInteger.valueOf(23232312321432430L));
     }
 
     /**
@@ -822,10 +824,9 @@ public class MoneyTest {
         m = Money.of(-0.0, "CHF");
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MAX_VALUE, "CHF");
-        assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
+        assertEquals(m.getNumber().numberValue(BigInteger.class), BI_MAX_LONG, "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
-        assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
-        // try {
+        assertEquals(m.getNumber().numberValue(BigInteger.class), BI_MIN_LONG, "longValue of " + m);
         m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
         m.getNumber().longValue();
     }
@@ -844,9 +845,11 @@ public class MoneyTest {
         m = Money.of(-0.0, "CHF");
         assertEquals(0L, m.getNumber().longValue(), "longValue of " + m);
         m = Money.of(Long.MAX_VALUE, "CHF");
-        assertEquals(Long.MAX_VALUE, m.getNumber().longValue(), "longValue of " + m);
+        BigInteger bi = m.getNumber().numberValueExact(BigInteger.class);
+        assertEquals(bi, BI_MAX_LONG, "longValue of " + m);
         m = Money.of(Long.MIN_VALUE, "CHF");
-        assertEquals(Long.MIN_VALUE, m.getNumber().longValue(), "longValue of " + m);
+        bi = m.getNumber().numberValueExact(BigInteger.class);
+        assertEquals(bi, BI_MIN_LONG, "longValue of " + m);
         try {
             m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
             m.getNumber().longValueExact();
@@ -888,9 +891,9 @@ public class MoneyTest {
         m = Money.of(-0.0, "CHF");
         assertEquals(0d, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
         m = Money.of(Double.MAX_VALUE, "CHF");
-        assertEquals(Double.MAX_VALUE, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
+        assertEquals(m.getNumber().numberValue(BigDecimal.class), BD_MAX_DOUBLE, "doubleValue of " + m);
         m = Money.of(Double.MIN_VALUE, "CHF");
-        assertEquals(Double.MIN_VALUE, m.getNumber().doubleValue(), 0.0d, "doubleValue of " + m);
+        assertEquals(m.getNumber().doubleValue(), Double.MIN_VALUE, 0.0d, "doubleValue of " + m);
         // try {
         m = Money.of(new BigDecimal("12121762517652176251725178251872652765321876352187635217835378125"), "CHF");
         m.getNumber().doubleValue();
@@ -1291,6 +1294,4 @@ public class MoneyTest {
         assertEquals(quotient.getContext().getPrecision(), 2);
         assertEquals(quotient.getNumber().numberValue(BigDecimal.class).longValueExact(), BigDecimal.valueOf(330).longValueExact());
     }
-
-
 }
