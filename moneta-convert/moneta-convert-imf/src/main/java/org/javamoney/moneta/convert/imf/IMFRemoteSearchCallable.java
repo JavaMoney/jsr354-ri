@@ -18,16 +18,16 @@ package org.javamoney.moneta.convert.imf;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.time.YearMonth;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.javamoney.moneta.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchResult;
-
 
 class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
@@ -46,13 +46,19 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
 	@Override
 	public IMFRemoteSearchResult call() throws Exception {
+		//connection.addRequestProperty("User-Agent", userAgent);
 
-		URLConnection connection = getConnection();
-		if(Objects.isNull(connection)) {
-			return null;
-		}
-		connection.addRequestProperty("User-Agent", userAgent);
-        try (InputStream inputStream = connection.getInputStream(); ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+		OkHttpClient client = new OkHttpClient.Builder()
+				.build();
+
+		Request request = new Request.Builder()
+				.url(getUrl())
+				.build();
+
+		Call call = client.newCall(request);
+
+        try (InputStream inputStream =  call.execute().body().byteStream();
+			 ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             byte[] data = new byte[4096];
             int read = inputStream.read(data);
             while (read > 0) {
@@ -61,20 +67,14 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
             }
             return new IMFRemoteSearchResult(type, new ByteArrayInputStream(stream.toByteArray()));
         } catch (Exception e) {
-            LOG.log(Level.WARNING, "Failed to load resource from url " + type.getUrl(yearMonth), e);
+            LOG.log(Level.WARNING, "Failed to load resource from url " + getUrl(), e);
         }
 		return null;
 	}
 
 
-	private URLConnection getConnection() {
-		try {
-			return new URL(type.getUrl(yearMonth)).openConnection();
-		} catch (Exception e) {
-			LOG.log(Level.WARNING, "Failed to load resource from url "
-					+ type.getUrl(yearMonth), e);
-		}
-		return null;
+	private String getUrl() {
+		return type.getUrl(yearMonth);
 	}
 
 	@Override

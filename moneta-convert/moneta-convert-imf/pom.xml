@@ -33,6 +33,11 @@
 			<artifactId>moneta-convert</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.12.0</version>
+		</dependency>
 	</dependencies>
 	<name>Moneta Currency Conversion - IMF Provider</name>
 

@@ -20,6 +20,7 @@ module org.javamoney.moneta.convert.imf {
 	requires org.javamoney.moneta.convert;
     requires static osgi.core;
     requires static osgi.annotation;
+    requires okhttp3;
     provides javax.money.convert.ExchangeRateProvider with
             org.javamoney.moneta.convert.imf.IMFRateProvider, org.javamoney.moneta.convert.imf.IMFHistoricRateProvider;
     uses LoaderService;

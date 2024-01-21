@@ -15,9 +15,7 @@
 	<modules>
 		<module>moneta-convert-base</module>
 		<module>moneta-convert-ecb</module>
-<!-- FIXME this is only temporary to isolate ECB from IMF issues
 		<module>moneta-convert-imf</module>
--->
 	</modules>
 
 	<build>
