@@ -13,9 +13,12 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
+package org.javamoney.moneta.spi.loader.okhttp;
 
-import org.javamoney.moneta.spi.loader.*;
+import org.javamoney.moneta.spi.loader.DataStreamFactory;
+import org.javamoney.moneta.spi.loader.LoadDataInformation;
+import org.javamoney.moneta.spi.loader.LoaderService;
+import org.javamoney.moneta.spi.loader.ResourceCache;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,27 +26,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * This class represent a resource that automatically is reloaded, if needed.
- * To create this instance use: {@link LoadableURLResourceBuilder}
+ * To create this instance use: {@link LoadableHttpResourceBuilder}
  * @author Anatole Tresch
  */
-public class LoadableURLResource implements DataStreamFactory {
+public class LoadableHttpResource implements DataStreamFactory {
 
     /**
      * The logger used.
      */
-    private static final Logger LOG = Logger.getLogger(LoadableURLResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(LoadableHttpResource.class.getName());
     /**
      * Lock for this instance.
      */
@@ -95,7 +93,7 @@ public class LoadableURLResource implements DataStreamFactory {
     private final Map<String, String> properties;
 
 
-    LoadableURLResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
+    LoadableHttpResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
         Objects.requireNonNull(loadDataInformation.getResourceId(), "resourceId required");
         Objects.requireNonNull(loadDataInformation.getProperties(), "properties required");
         Objects.requireNonNull(loadDataInformation.getUpdatePolicy(), "updatePolicy required");

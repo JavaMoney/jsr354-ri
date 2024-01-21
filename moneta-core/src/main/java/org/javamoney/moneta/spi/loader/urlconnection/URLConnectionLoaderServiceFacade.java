@@ -15,24 +15,26 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
+import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+
 import java.util.Map;
 import java.util.Timer;
 
 class URLConnectionLoaderServiceFacade {
 
-	private final ScheduledDataService scheduledDataLoaderService;
+	private final ScheduledURLDataService scheduledDataLoaderService;
 
-	private final LoadDataService loadDataLoaderService;
+	private final URLLoadDataService loadDataLoaderService;
 
-	private final LoadLocaDataService loadDataLocalLoaderService;
+	private final URLLoadLocalDataService loadDataLocalLoaderService;
 
-	private final LoadRemoteDataService loadRemoteDataLoaderService;
+	private final URLLoadRemoteDataService loadRemoteDataLoaderService;
 
-	URLConnectionLoaderServiceFacade(Timer timer, URLConnectionLoaderListener listener, Map<String, LoadableURLResource> resources){
-		this.scheduledDataLoaderService = new ScheduledDataService(timer, listener);
-		this.loadDataLoaderService = new LoadDataService(listener);
-		this.loadDataLocalLoaderService = new LoadLocaDataService(resources, listener);
-		this.loadRemoteDataLoaderService = new LoadRemoteDataService(listener);
+	URLConnectionLoaderServiceFacade(Timer timer, ConnectionLoaderListener listener, Map<String, LoadableURLResource> resources){
+		this.scheduledDataLoaderService = new ScheduledURLDataService(timer, listener);
+		this.loadDataLoaderService = new URLLoadDataService(listener);
+		this.loadDataLocalLoaderService = new URLLoadLocalDataService(resources, listener);
+		this.loadRemoteDataLoaderService = new URLLoadRemoteDataService(listener);
 	}
 
 	public void scheduledData(LoadableURLResource load) {

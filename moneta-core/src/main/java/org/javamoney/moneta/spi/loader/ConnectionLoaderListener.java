@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
+package org.javamoney.moneta.spi.loader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,12 +24,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.javamoney.moneta.spi.loader.DataStreamFactory;
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
-class URLConnectionLoaderListener {
+public class ConnectionLoaderListener {
 
-	private static final Logger LOG = Logger.getLogger(URLConnectionLoaderListener.class.getName());
+	private static final Logger LOG = Logger.getLogger(ConnectionLoaderListener.class.getName());
 
 	private final Map<String, List<LoaderListener>> listenersMap = new ConcurrentHashMap<>();
 
@@ -91,7 +90,7 @@ class URLConnectionLoaderListener {
 
     @Override
     public String toString() {
-        return URLConnectionLoaderListener.class.getName() + '{' +
+        return ConnectionLoaderListener.class.getName() + '{' +
                 "listenersMap: " + listenersMap + '}';
     }
 }

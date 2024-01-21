@@ -15,24 +15,20 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class ScheduledDataService {
+class ScheduledURLDataService {
 
-    private static final Logger LOG = Logger.getLogger(ScheduledDataService.class.getName());
+    private static final Logger LOG = Logger.getLogger(ScheduledURLDataService.class.getName());
 
     private final Timer timer;
-    private final URLConnectionLoaderListener listener;
+    private final ConnectionLoaderListener listener;
 
-    ScheduledDataService(Timer timer, URLConnectionLoaderListener listener) {
+    public ScheduledURLDataService(Timer timer, ConnectionLoaderListener listener) {
         this.timer = timer;
         this.listener = listener;
     }
@@ -145,7 +141,7 @@ class ScheduledDataService {
 
     @Override
     public String toString() {
-        return ScheduledDataService.class.getName() + '{' + " timer: "
+        return ScheduledURLDataService.class.getName() + '{' + " timer: "
                 + timer + '}';
     }
 }

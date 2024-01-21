@@ -15,22 +15,24 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
+import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoadLocaDataService {
+class URLLoadLocalDataService {
 
-	private static final Logger LOG = Logger.getLogger(LoadLocaDataService.class.getName());
+	private static final Logger LOG = Logger.getLogger(URLLoadLocalDataService.class.getName());
 
 	private final Map<String, LoadableURLResource> resources;
 
-	private final URLConnectionLoaderListener listener;
+	private final ConnectionLoaderListener listener;
 
 
-	 LoadLocaDataService(Map<String, LoadableURLResource> resources,
-						 URLConnectionLoaderListener listener) {
+	 URLLoadLocalDataService(Map<String, LoadableURLResource> resources,
+							 ConnectionLoaderListener listener) {
 		this.resources = resources;
 		this.listener = listener;
 	}
@@ -55,7 +57,7 @@ class LoadLocaDataService {
 
 	@Override
 	public String toString() {
-		return LoadLocaDataService.class.getName() + '{' + " resources: "
+		return URLLoadLocalDataService.class.getName() + '{' + " resources: "
 				+ resources + ", defaultLoaderListener: " + listener + '}';
 	}
 }

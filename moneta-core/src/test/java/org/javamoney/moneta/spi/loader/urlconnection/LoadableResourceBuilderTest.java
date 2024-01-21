@@ -55,7 +55,7 @@ public class LoadableResourceBuilderTest {
 
 	@Test
 	public void shouldCreateLoadableResource() {
-		LoadableURLResource resource = new LoadableResourceBuilder()
+		LoadableURLResource resource = new LoadableURLResourceBuilder()
 				.withCache(new URLConnectionResourceCache())
 				.withLoadDataInformation(loadInformation).build();
 		assertNotNull(resource);
@@ -63,13 +63,13 @@ public class LoadableResourceBuilderTest {
 
 	@Test(expectedExceptions = IllegalStateException.class)
 	public void shouldReturnErrorWhendResourceCacheWasNotInformed() {
-		new LoadableResourceBuilder()
+		new LoadableURLResourceBuilder()
 				.withLoadDataInformation(loadInformation).build();
 	}
 
 	@Test(expectedExceptions = IllegalStateException.class)
 	public void shouldReturnErrorWhendLoadDataInformationWasNotInformed() {
-		new LoadableResourceBuilder()
+		new LoadableURLResourceBuilder()
 				 .withLoadDataInformation(loadInformation).build();
 	}
 }

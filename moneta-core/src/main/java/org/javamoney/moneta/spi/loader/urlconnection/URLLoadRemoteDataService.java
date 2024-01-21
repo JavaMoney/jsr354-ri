@@ -15,25 +15,28 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
+import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.DataStreamFactory;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoadRemoteDataService {
+class URLLoadRemoteDataService {
 
-	private static final Logger LOG = Logger.getLogger(LoadRemoteDataService.class.getName());
+	private static final Logger LOG = Logger.getLogger(URLLoadRemoteDataService.class.getName());
 
-	private final URLConnectionLoaderListener listener;
+	private final ConnectionLoaderListener listener;
 
-	LoadRemoteDataService(URLConnectionLoaderListener listener) {
+	URLLoadRemoteDataService(ConnectionLoaderListener listener) {
 		this.listener = listener;
 	}
 
 	public boolean execute(String resourceId,
 			Map<String, LoadableURLResource> resources) {
 
-		LoadableURLResource load = resources.get(resourceId);
+		DataStreamFactory load = resources.get(resourceId);
 		if (Objects.nonNull(load)) {
 			try {
 				load.readCache();
@@ -55,6 +58,6 @@ class LoadRemoteDataService {
 
 	@Override
 	public String toString() {
-		return LoadRemoteDataService.class.getName() + '{' + " listener: " + listener + '}';
+		return URLLoadRemoteDataService.class.getName() + '{' + " listener: " + listener + '}';
 	}
 }

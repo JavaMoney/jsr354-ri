@@ -15,18 +15,20 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
+import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class LoadDataService {
+class URLLoadDataService {
 
-	private static final Logger LOG = Logger.getLogger(LoadDataService.class.getName());
+	private static final Logger LOG = Logger.getLogger(URLLoadDataService.class.getName());
 
-	private final URLConnectionLoaderListener listener;
+	private final ConnectionLoaderListener listener;
 
-   LoadDataService(URLConnectionLoaderListener listener) {
+   URLLoadDataService(ConnectionLoaderListener listener) {
 		this.listener = listener;
 	}
 
@@ -66,7 +68,7 @@ class LoadDataService {
 
 	@Override
 	public String toString() {
-		return LoadDataService.class.getName() + '{' + " listener: " + listener + '}';
+		return URLLoadDataService.class.getName() + '{' + " listener: " + listener + '}';
 	}
 
 }

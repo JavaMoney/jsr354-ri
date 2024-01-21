@@ -22,4 +22,7 @@ public interface DataStreamFactory
 
     InputStream getDataStream();
 
+    boolean loadRemote();
+
+    boolean readCache();
 }

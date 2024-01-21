@@ -1,31 +1,27 @@
 /*
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+  Copyright (c) 2023, 2024, Werner Keil and others by the @author tag.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
+package org.javamoney.moneta.spi.loader.okhttp;
 
 import org.javamoney.moneta.spi.loader.*;
 
+import javax.money.spi.Bootstrap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Timer;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,28 +29,26 @@ import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.money.spi.Bootstrap;
-
 /**
  * This class provides a mechanism to register resources, that may be updated
- * regularly. The implementation, based on the {@link LoaderService.UpdatePolicy}
- * loads/updates the resources from arbitrary locations via {@link java.net.URLConnection} and stores them to the
+ * regularly. The implementation, based on the {@link UpdatePolicy}
+ * loads/updates the resources from arbitrary locations via {@link OkHttpClient} and stores them to the
  * format file cache. Default loading tasks can be configured within the <code>javamoney.properties</code>
  * file.
- * @see org.javamoney.moneta.spi.loader.LoaderConfigurator
- * @see java.net.URLConnection
- * @author Anatole Tresch
+ * @see LoaderConfigurator
+ * @see okhttp3.OkHttpClient
+ * @author Werner Keil
  */
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-public class URLConnectionLoaderService implements LoaderService {
+public class HttpConnectionLoaderService implements LoaderService {
     /**
      * Logger used.
      */
-    private static final Logger LOG = Logger.getLogger(URLConnectionLoaderService.class.getName());
+    private static final Logger LOG = Logger.getLogger(HttpConnectionLoaderService.class.getName());
     /**
      * The data resources managed by this instance.
      */
-    private final Map<String, LoadableURLResource> resources = new ConcurrentHashMap<>();
+    private final Map<String, LoadableHttpResource> resources = new ConcurrentHashMap<>();
     /**
      * The registered {@link LoaderListener} instances.
      */
@@ -70,7 +64,7 @@ public class URLConnectionLoaderService implements LoaderService {
      */
     private final ExecutorService executors = Executors.newCachedThreadPool(DaemonThreadFactory.INSTANCE);
 
-    private URLConnectionLoaderServiceFacade defaultLoaderServiceFacade;
+    private HttpConnectionLoaderServiceFacade defaultLoaderServiceFacade;
 
     /**
      * The timer used for schedules.
@@ -80,7 +74,7 @@ public class URLConnectionLoaderService implements LoaderService {
     /**
      * Constructor, initializing from config.
      */
-    public URLConnectionLoaderService() {
+    public HttpConnectionLoaderService() {
         initialize();
     }
 
@@ -96,7 +90,7 @@ public class URLConnectionLoaderService implements LoaderService {
         }
         // (re)initialize
         LoaderConfigurator configurator = LoaderConfigurator.of(this);
-        defaultLoaderServiceFacade = new URLConnectionLoaderServiceFacade(timer, listener, resources);
+        defaultLoaderServiceFacade = new HttpConnectionLoaderServiceFacade(timer, listener, resources);
         configurator.load();
     }
 
@@ -108,10 +102,10 @@ public class URLConnectionLoaderService implements LoaderService {
     private static ResourceCache loadResourceCache() {
         try {
             return Optional.ofNullable(Bootstrap.getService(ResourceCache.class)).orElseGet(
-                    URLConnectionResourceCache::new);
+                    HttpConnectionResourceCache::new);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
-            return new URLConnectionResourceCache();
+            return new HttpConnectionResourceCache();
         }
     }
 
@@ -121,7 +115,7 @@ public class URLConnectionLoaderService implements LoaderService {
      * @return the resource cache, not null.
      */
     static ResourceCache getResourceCache() {
-        return URLConnectionLoaderService.CACHE;
+        return HttpConnectionLoaderService.CACHE;
     }
 
     /**
@@ -130,7 +124,7 @@ public class URLConnectionLoaderService implements LoaderService {
      * @param resourceId the resource id.
      */
     public void unload(String resourceId) {
-        LoadableURLResource res = this.resources.get(resourceId);
+        LoadableHttpResource res = this.resources.get(resourceId);
         if (Objects.nonNull(res)) {
             res.unload();
         }
@@ -151,7 +145,7 @@ public class URLConnectionLoaderService implements LoaderService {
             throw new IllegalArgumentException("Resource : " + loadDataInformation.getResourceId() + " already registered.");
         }
 
-		LoadableURLResource resource = new LoadableURLResourceBuilder()
+		LoadableHttpResource resource = new LoadableHttpResourceBuilder()
 				.withCache(CACHE).withLoadDataInformation(loadDataInformation)
 				.build();
         this.resources.put(loadDataInformation.getResourceId(), resource);
@@ -211,7 +205,7 @@ public class URLConnectionLoaderService implements LoaderService {
                 .withResourceLocations(resourceLocations)
                 .build();
 
-        LoadableURLResource resource = new LoadableURLResourceBuilder()
+        LoadableHttpResource resource = new LoadableHttpResourceBuilder()
                 .withCache(CACHE).withLoadDataInformation(loadInfo)
                 .build();
         this.resources.put(loadInfo.getResourceId(), resource);
@@ -232,7 +226,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public Map<String, String> getUpdateConfiguration(String resourceId) {
-        LoadableURLResource load = this.resources.get(resourceId);
+        LoadableHttpResource load = this.resources.get(resourceId);
         if (Objects.nonNull(load)) {
             return load.getProperties();
         }
@@ -251,7 +245,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public InputStream getData(String resourceId) throws IOException {
-        LoadableURLResource load = this.resources.get(resourceId);
+        LoadableHttpResource load = this.resources.get(resourceId);
         if (Objects.nonNull(load)) {
             return load.getDataStream();
         }
@@ -276,7 +270,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public void resetData(String resourceId) throws IOException {
-        LoadableURLResource load = Optional.ofNullable(this.resources.get(resourceId))
+        LoadableHttpResource load = Optional.ofNullable(this.resources.get(resourceId))
                 .orElseThrow(() -> new IllegalArgumentException("No such resource: " + resourceId));
         if (load.resetToFallback()) {
         	listener.trigger(resourceId, load);
@@ -319,7 +313,7 @@ public class URLConnectionLoaderService implements LoaderService {
 
     @Override
     public UpdatePolicy getUpdatePolicy(String resourceId) {
-        LoadableURLResource load = Optional.of(this.resources.get(resourceId))
+        LoadableHttpResource load = Optional.of(this.resources.get(resourceId))
                 .orElseThrow(() -> new IllegalArgumentException("No such resource: " + resourceId));
         return load.getUpdatePolicy();
     }

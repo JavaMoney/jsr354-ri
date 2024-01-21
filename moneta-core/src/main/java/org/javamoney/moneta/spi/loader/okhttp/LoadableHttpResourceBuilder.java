@@ -13,7 +13,7 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
+package org.javamoney.moneta.spi.loader.okhttp;
 
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
 import org.javamoney.moneta.spi.loader.ResourceCache;
@@ -21,37 +21,37 @@ import org.javamoney.moneta.spi.loader.ResourceCache;
 import java.util.Objects;
 
 /**
- * Builder for {@link LoadableURLResource}.
+ * Builder for {@link LoadableHttpResource}.
  */
-class LoadableResourceBuilder {
+class LoadableHttpResourceBuilder {
 
 	private LoadDataInformation loadDataInformation;
 
 	private ResourceCache cache;
 
-	public LoadableResourceBuilder withLoadDataInformation(LoadDataInformation loadDataInformation) {
+	public LoadableHttpResourceBuilder withLoadDataInformation(LoadDataInformation loadDataInformation) {
 		this.loadDataInformation = loadDataInformation;
 		return this;
 	}
 
-	public LoadableResourceBuilder withCache(ResourceCache cache) {
+	public LoadableHttpResourceBuilder withCache(ResourceCache cache) {
 		this.cache = cache;
 		return this;
 	}
 
-	public LoadableURLResource build() {
+	public LoadableHttpResource build() {
 		if(Objects.isNull(cache)) {
 			throw new IllegalStateException("The cache should be informed");
 		}
 		if(Objects.isNull(loadDataInformation)) {
 			throw new IllegalStateException("The loadDataInformation should be informed");
 		}
-		return new LoadableURLResource(cache, loadDataInformation);
+		return new LoadableHttpResource(cache, loadDataInformation);
 	}
 
 	@Override
 	public String toString() {
-		return LoadableResourceBuilder.class.getName() + '{' +
+		return LoadableHttpResourceBuilder.class.getName() + '{' +
                 " loadDataInformation: " + loadDataInformation + ',' +
                 " cache: " + loadDataInformation + '}';
 	}
