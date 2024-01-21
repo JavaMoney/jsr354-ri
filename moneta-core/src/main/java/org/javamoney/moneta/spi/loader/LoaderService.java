@@ -77,7 +77,7 @@ public interface LoaderService {
      * @see #resetData(String)
      * @see #loadData(String)
      */
-    interface LoaderListener {
+    interface LoaderListener { // TODO rename to Listener
         /**
          * Callback called from the {@link LoaderService}, when new data was
          * read for a given data item.

@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 
-public class ConnectionLoaderListener {
+public class ConnectionLoaderListener { // TODO rename to LoaderListener
 
 	private static final Logger LOG = Logger.getLogger(ConnectionLoaderListener.class.getName());
 
