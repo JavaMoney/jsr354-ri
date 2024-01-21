@@ -20,9 +20,9 @@ import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
 import java.util.Map;
 import java.util.Timer;
 
-class HttpConnectionLoaderServiceFacade {
+class OkHttpLoaderServiceFacade {
 
-	private final ScheduledHttpDataService scheduledDataLoaderService;
+	private final OkHttpScheduler scheduledDataLoaderService;
 
 	private final HttpLoadDataService loadDataLoaderService;
 
@@ -30,8 +30,8 @@ class HttpConnectionLoaderServiceFacade {
 
 	private final HttpLoadRemoteDataService loadRemoteDataLoaderService;
 
-	HttpConnectionLoaderServiceFacade(Timer timer, ConnectionLoaderListener listener, Map<String, LoadableHttpResource> resources){
-		this.scheduledDataLoaderService = new ScheduledHttpDataService(timer, listener);
+	OkHttpLoaderServiceFacade(Timer timer, ConnectionLoaderListener listener, Map<String, LoadableHttpResource> resources){
+		this.scheduledDataLoaderService = new OkHttpScheduler(timer, listener);
 		this.loadDataLoaderService = new HttpLoadDataService(listener);
 		this.loadDataLocalLoaderService = new HttpLoadLocalDataService(resources, listener);
 		this.loadRemoteDataLoaderService = new HttpLoadRemoteDataService(listener);
@@ -54,7 +54,7 @@ class HttpConnectionLoaderServiceFacade {
 	}
 	@Override
 	public String toString() {
-        return HttpConnectionLoaderServiceFacade.class.getName() + '{' +
+        return OkHttpLoaderServiceFacade.class.getName() + '{' +
                 " scheduledDataLoaderService: " + scheduledDataLoaderService + ',' +
                 " asyncLoaderService: " + loadDataLoaderService + ',' +
                 " loadDataLocalLoaderService: " + loadDataLocalLoaderService + ',';

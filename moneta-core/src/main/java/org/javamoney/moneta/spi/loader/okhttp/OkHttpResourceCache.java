@@ -32,11 +32,11 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  */
-class HttpConnectionResourceCache implements ResourceCache {
+class OkHttpResourceCache implements ResourceCache {
     /**
      * The logger used.
      */
-    private static final Logger LOG = Logger.getLogger(HttpConnectionResourceCache.class.getName());
+    private static final Logger LOG = Logger.getLogger(OkHttpResourceCache.class.getName());
     /**
      * Suffix for files created.
      */
@@ -53,7 +53,7 @@ class HttpConnectionResourceCache implements ResourceCache {
     /**
      * Constructor.
      */
-    public HttpConnectionResourceCache() {
+    public OkHttpResourceCache() {
         if (!localDir.exists()) {
             if (!localDir.mkdirs()) {
                 LOG.severe("Error creating cache dir  " + localDir + ", resource cache disabled!");

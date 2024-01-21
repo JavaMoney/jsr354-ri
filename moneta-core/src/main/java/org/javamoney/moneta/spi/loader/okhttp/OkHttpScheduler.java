@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2024 Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -13,7 +13,7 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
+package org.javamoney.moneta.spi.loader.okhttp;
 
 import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
 
@@ -21,19 +21,19 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class ScheduledURLDataService {
+class OkHttpScheduler {
 
-    private static final Logger LOG = Logger.getLogger(ScheduledURLDataService.class.getName());
+    private static final Logger LOG = Logger.getLogger(OkHttpScheduler.class.getName());
 
     private final Timer timer;
     private final ConnectionLoaderListener listener;
 
-    public ScheduledURLDataService(Timer timer, ConnectionLoaderListener listener) {
+    public OkHttpScheduler(Timer timer, ConnectionLoaderListener listener) {
         this.timer = timer;
         this.listener = listener;
     }
 
-    public void execute(final LoadableURLResource load) {
+    public void execute(final LoadableHttpResource load) {
         Objects.requireNonNull(load);
         Map<String, String> props = load.getProperties();
         if (Objects.nonNull(props)) {
@@ -123,7 +123,7 @@ class ScheduledURLDataService {
         return periodMS;
     }
 
-    private TimerTask createTimerTask(final LoadableURLResource load)
+    private TimerTask createTimerTask(final LoadableHttpResource load)
     {
         return new TimerTask() {
             @Override
@@ -141,7 +141,7 @@ class ScheduledURLDataService {
 
     @Override
     public String toString() {
-        return ScheduledURLDataService.class.getName() + '{' + " timer: "
+        return OkHttpScheduler.class.getName() + '{' + " timer: "
                 + timer + '}';
     }
 }

@@ -22,7 +22,7 @@ import java.util.Timer;
 
 class URLConnectionLoaderServiceFacade {
 
-	private final ScheduledURLDataService scheduledDataLoaderService;
+	private final URLConnectionScheduler scheduledDataLoaderService;
 
 	private final URLLoadDataService loadDataLoaderService;
 
@@ -31,7 +31,7 @@ class URLConnectionLoaderServiceFacade {
 	private final URLLoadRemoteDataService loadRemoteDataLoaderService;
 
 	URLConnectionLoaderServiceFacade(Timer timer, ConnectionLoaderListener listener, Map<String, LoadableURLResource> resources){
-		this.scheduledDataLoaderService = new ScheduledURLDataService(timer, listener);
+		this.scheduledDataLoaderService = new URLConnectionScheduler(timer, listener);
 		this.loadDataLoaderService = new URLLoadDataService(listener);
 		this.loadDataLocalLoaderService = new URLLoadLocalDataService(resources, listener);
 		this.loadRemoteDataLoaderService = new URLLoadRemoteDataService(listener);

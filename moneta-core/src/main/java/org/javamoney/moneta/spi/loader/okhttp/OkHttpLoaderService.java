@@ -40,11 +40,11 @@ import java.util.logging.Logger;
  * @author Werner Keil
  */
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
-public class HttpConnectionLoaderService implements LoaderService {
+public class OkHttpLoaderService implements LoaderService {
     /**
      * Logger used.
      */
-    private static final Logger LOG = Logger.getLogger(HttpConnectionLoaderService.class.getName());
+    private static final Logger LOG = Logger.getLogger(OkHttpLoaderService.class.getName());
     /**
      * The data resources managed by this instance.
      */
@@ -64,7 +64,7 @@ public class HttpConnectionLoaderService implements LoaderService {
      */
     private final ExecutorService executors = Executors.newCachedThreadPool(DaemonThreadFactory.INSTANCE);
 
-    private HttpConnectionLoaderServiceFacade defaultLoaderServiceFacade;
+    private OkHttpLoaderServiceFacade defaultLoaderServiceFacade;
 
     /**
      * The timer used for schedules.
@@ -74,7 +74,7 @@ public class HttpConnectionLoaderService implements LoaderService {
     /**
      * Constructor, initializing from config.
      */
-    public HttpConnectionLoaderService() {
+    public OkHttpLoaderService() {
         initialize();
     }
 
@@ -90,7 +90,7 @@ public class HttpConnectionLoaderService implements LoaderService {
         }
         // (re)initialize
         LoaderConfigurator configurator = LoaderConfigurator.of(this);
-        defaultLoaderServiceFacade = new HttpConnectionLoaderServiceFacade(timer, listener, resources);
+        defaultLoaderServiceFacade = new OkHttpLoaderServiceFacade(timer, listener, resources);
         configurator.load();
     }
 
@@ -102,10 +102,10 @@ public class HttpConnectionLoaderService implements LoaderService {
     private static ResourceCache loadResourceCache() {
         try {
             return Optional.ofNullable(Bootstrap.getService(ResourceCache.class)).orElseGet(
-                    HttpConnectionResourceCache::new);
+                    OkHttpResourceCache::new);
         } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error loading ResourceCache instance.", e);
-            return new HttpConnectionResourceCache();
+            return new OkHttpResourceCache();
         }
     }
 
@@ -115,7 +115,7 @@ public class HttpConnectionLoaderService implements LoaderService {
      * @return the resource cache, not null.
      */
     static ResourceCache getResourceCache() {
-        return HttpConnectionLoaderService.CACHE;
+        return OkHttpLoaderService.CACHE;
     }
 
     /**
