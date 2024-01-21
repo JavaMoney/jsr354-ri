@@ -32,6 +32,7 @@ module org.javamoney.moneta {
     requires jakarta.annotation;
     requires static osgi.core;
     requires static osgi.annotation;
+    requires okhttp3;
     provides javax.money.spi.CurrencyProviderSpi with JDKCurrencyProvider, ConfigurableCurrencyUnitProvider;
     provides javax.money.spi.MonetaryAmountFactoryProviderSpi with MoneyAmountFactoryProvider, FastMoneyAmountFactoryProvider, RoundedMoneyAmountFactoryProvider;
     provides javax.money.spi.MonetaryAmountFormatProviderSpi with DefaultAmountFormatProviderSpi;

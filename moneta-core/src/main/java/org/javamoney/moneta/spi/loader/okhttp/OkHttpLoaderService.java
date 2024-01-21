@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 /**
  * This class provides a mechanism to register resources, that may be updated
  * regularly. The implementation, based on the {@link UpdatePolicy}
- * loads/updates the resources from arbitrary locations via {@link OkHttpClient} and stores them to the
+ * loads/updates the resources from arbitrary locations via {@link okhttp3.OkHttpClient} and stores them to the
  * format file cache. Default loading tasks can be configured within the <code>javamoney.properties</code>
  * file.
  * @see LoaderConfigurator

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -86,7 +86,7 @@ class URLConnectionResourceCache implements ResourceCache {
      * (non-Javadoc)
      *
      * @see
-     * org.javamoney.moneta.loader.format.ResourceCache#write(java.lang.String
+     * org.javamoney.moneta.spi.loader.ResourceCache#write(java.lang.String
      * , byte[])
      */
     @Override
@@ -109,7 +109,7 @@ class URLConnectionResourceCache implements ResourceCache {
      * (non-Javadoc)
      *
      * @see
-     * org.javamoney.moneta.loader.format.ResourceCache#isCached(java.lang
+     * org.javamoney.moneta.spi.loader.ResourceCache#isCached(java.lang
      * .String)
      */
     @Override
@@ -121,7 +121,7 @@ class URLConnectionResourceCache implements ResourceCache {
      * (non-Javadoc)
      *
      * @see
-     * org.javamoney.moneta.loader.format.ResourceCache#read(java.lang.String)
+     * org.javamoney.moneta.spi.loader.ResourceCache#read(java.lang.String)
      */
     @Override
     public byte[] read(String resourceId) {

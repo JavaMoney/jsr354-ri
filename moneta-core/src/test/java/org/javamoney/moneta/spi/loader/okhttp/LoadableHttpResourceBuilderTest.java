@@ -13,14 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
-
-import static org.testng.Assert.assertNotNull;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.Map;
+package org.javamoney.moneta.spi.loader.okhttp;
 
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
 import org.javamoney.moneta.spi.loader.LoadDataInformationBuilder;
@@ -29,7 +22,14 @@ import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class LoadableResourceBuilderTest {
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.Map;
+
+import static org.testng.Assert.assertNotNull;
+
+public class LoadableHttpResourceBuilderTest {
 
 	private LoadDataInformation loadInformation;
 
@@ -55,21 +55,21 @@ public class LoadableResourceBuilderTest {
 
 	@Test
 	public void shouldCreateLoadableResource() {
-		LoadableURLResource resource = new LoadableURLResourceBuilder()
-				.withCache(new URLConnectionResourceCache())
+		LoadableHttpResource resource = new LoadableHttpResourceBuilder()
+				.withCache(new OkHttpResourceCache())
 				.withLoadDataInformation(loadInformation).build();
 		assertNotNull(resource);
 	}
 
 	@Test(expectedExceptions = IllegalStateException.class)
-	public void shouldReturnErrorWhendResourceCacheWasNotInformed() {
-		new LoadableURLResourceBuilder()
+	public void shouldReturnErrorWhenResourceCacheWasNotInformed() {
+		new LoadableHttpResourceBuilder()
 				.withLoadDataInformation(loadInformation).build();
 	}
 
 	@Test(expectedExceptions = IllegalStateException.class)
-	public void shouldReturnErrorWhendLoadDataInformationWasNotInformed() {
-		new LoadableURLResourceBuilder()
+	public void shouldReturnErrorWhenLoadDataInformationWasNotInformed() {
+		new LoadableHttpResourceBuilder()
 				 .withLoadDataInformation(loadInformation).build();
 	}
 }

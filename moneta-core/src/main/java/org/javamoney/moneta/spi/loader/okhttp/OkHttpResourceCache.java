@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 /**
  * Default implementation of {@link ResourceCache}, using the local file system.
  *
- * @author Anatole Tresch
+ * @author Werner Keil
  */
 class OkHttpResourceCache implements ResourceCache {
     /**
@@ -85,7 +85,7 @@ class OkHttpResourceCache implements ResourceCache {
      * (non-Javadoc)
      *
      * @see
-     * org.javamoney.moneta.loader.format.ResourceCache#write(java.lang.String
+     * org.javamoney.moneta.spi.loader.ResourceCache#write(java.lang.String
      * , byte[])
      */
     @Override
@@ -108,7 +108,7 @@ class OkHttpResourceCache implements ResourceCache {
      * (non-Javadoc)
      *
      * @see
-     * org.javamoney.moneta.loader.format.ResourceCache#isCached(java.lang
+     * org.javamoney.moneta.spi.loader.ResourceCache#isCached(java.lang
      * .String)
      */
     @Override
@@ -120,7 +120,7 @@ class OkHttpResourceCache implements ResourceCache {
      * (non-Javadoc)
      *
      * @see
-     * org.javamoney.moneta.loader.format.ResourceCache#read(java.lang.String)
+     * org.javamoney.moneta.spi.loader.ResourceCache#read(java.lang.String)
      */
     @Override
     public byte[] read(String resourceId) {
@@ -150,7 +150,7 @@ class OkHttpResourceCache implements ResourceCache {
 
     @Override
     public String toString() {
-        return "URLConnectionResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + ']';
+        return "OkHttpResourceCache [localDir=" + localDir + ", cachedResources=" + cachedResources + ']';
     }
 
 }
