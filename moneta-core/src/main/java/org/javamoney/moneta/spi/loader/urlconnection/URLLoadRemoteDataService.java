@@ -36,7 +36,7 @@ class URLLoadRemoteDataService {
 	public boolean execute(String resourceId,
 			Map<String, LoadableURLResource> resources) {
 
-		DataStreamFactory load = resources.get(resourceId);
+		LoadableURLResource load = resources.get(resourceId);
 		if (Objects.nonNull(load)) {
 			try {
 				load.readCache();
