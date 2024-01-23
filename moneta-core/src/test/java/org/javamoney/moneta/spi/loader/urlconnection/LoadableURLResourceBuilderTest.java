@@ -19,7 +19,7 @@ import static org.testng.Assert.assertNotNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
@@ -37,7 +37,7 @@ public class LoadableURLResourceBuilderTest {
 	public void setup() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = Collections.emptyMap();
+	    Map<String, String> properties = new HashMap<>();
 	    Listener listener = (id, is) -> {};
         URI backupResource = new URI("localhost");
         URI[] resourceLocations = new URI[]{new URI("localhost")};

@@ -46,8 +46,6 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 
 	@Override
 	public IMFRemoteSearchResult call() throws Exception {
-		//connection.addRequestProperty("User-Agent", userAgent);
-		// TODO apply userAgent where applicable
 		final OkHttpClient client = new OkHttpClient.Builder()
 				.build();
 
@@ -83,7 +81,7 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
                 " type: " + type + ", yearMonth: " + yearMonth + '}';
 	}
 
-	class IMFRemoteSearchResult {
+	static class IMFRemoteSearchResult {
 
 		private final IMFHistoricalType type;
 

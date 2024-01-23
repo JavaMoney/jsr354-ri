@@ -20,14 +20,12 @@ import org.javamoney.moneta.spi.loader.LoadDataInformation;
 import org.javamoney.moneta.spi.loader.LoaderService;
 import org.javamoney.moneta.spi.loader.ResourceCache;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.ref.SoftReference;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -314,63 +312,65 @@ class LoadableHttpResource implements DataStreamFactory {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         try {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            if (fallbackLoad) {
+                is = new BufferedInputStream(itemToLoad.toURL().openStream());
+            } else {
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-            String proxyPort = this.properties.get("proxy.port");
-            String proxyHost = this.properties.get("proxy.host");
-            String proxyType = this.properties.get("proxy.type");
-            if(proxyPort != null && proxyHost != null) {
-                if (proxyType == null) {
-                    proxyType = Proxy.Type.HTTP.name();
+                String proxyPort = this.properties.get("proxy.port");
+                String proxyHost = this.properties.get("proxy.host");
+                String proxyType = this.properties.get("proxy.type");
+                if (proxyPort != null && proxyHost != null) {
+                    if (proxyType == null) {
+                        proxyType = Proxy.Type.HTTP.name();
+                    }
+                    Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
+                            InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
+                    builder = builder.proxy(proxy);
                 }
-                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
-                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
-                builder = builder.proxy(proxy);
-            }
 
-            String connectTimeout = this.properties.get("connection.connect.timeout");
-            if(connectTimeout != null) {
-                int seconds = Integer.parseInt(connectTimeout);
-                builder = builder.connectTimeout(seconds, TimeUnit.SECONDS);
+                String connectTimeout = this.properties.get("connection.connect.timeout");
+                if (connectTimeout != null) {
+                    int seconds = Integer.parseInt(connectTimeout);
+                    builder = builder.connectTimeout(seconds, TimeUnit.SECONDS);
 //            }else{
 //                conn.setConnectTimeout(10000);
-            }
-            final String readTimeout = this.properties.get("connection.read.timeout");
-            if(readTimeout != null) {
-                int seconds = Integer.parseInt(readTimeout);
-                builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
-            }
-//            else{
-//                conn.setReadTimeout(10000);
-//            }
-            final String writeTimeout = this.properties.get("connection.write.timeout");
-            if(writeTimeout != null) {
-                int seconds = Integer.parseInt(writeTimeout);
-                builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
-            }
+                }
+                final String readTimeout = this.properties.get("connection.read.timeout");
+                if (readTimeout != null) {
+                    int seconds = Integer.parseInt(readTimeout);
+                    builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
+                }
 
-            final OkHttpClient client = builder.build();
+                final String writeTimeout = this.properties.get("connection.write.timeout");
+                if (writeTimeout != null) {
+                    int seconds = Integer.parseInt(writeTimeout);
+                    builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
+                }
 
-            Request.Builder requestBuilder = new Request.Builder();
-            final String userAgent = this.properties.get("useragent");
-            if(userAgent != null) {
-                requestBuilder = requestBuilder.header("User-Agent", userAgent);
-            }
+                final OkHttpClient client = builder.build();
 
-            final Request request = requestBuilder
-                    .url(itemToLoad.toString())
-                    .build();
-            
+                Request.Builder requestBuilder = new Request.Builder();
+//                final String userAgent = this.properties.get("useragent");
+//                if (userAgent != null) {
+//                    requestBuilder = requestBuilder.header("User-Agent", userAgent);
+//                }
+
+                final Request request = requestBuilder
+                        .url(itemToLoad.toString())
+                        .build();
+
 //            conn.setRequestProperty("Accept", "application/xhtml+xml");
 //            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
 //            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
 //            TODO check if any of those are necessary?
 
-            final Call call = client.newCall(request);
+                final Call call = client.newCall(request);
+                //is = conn.getInputStream();
+                is = call.execute().body().byteStream();
+            }
 
             byte[] data = new byte[4096];
-            //is = conn.getInputStream();
-            is = call.execute().body().byteStream();
             int read = is.read(data);
             while (read > 0) {
                 stream.write(data, 0, read);
