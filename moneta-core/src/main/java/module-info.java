@@ -1,6 +1,7 @@
 import org.javamoney.moneta.spi.*;
 import org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi;
-import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
+//import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
+import org.javamoney.moneta.spi.loader.okhttp.OkHttpLoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService;
 
 /*
@@ -41,7 +42,8 @@ module org.javamoney.moneta {
     provides javax.money.spi.MonetaryCurrenciesSingletonSpi with DefaultMonetaryCurrenciesSingletonSpi;
     provides javax.money.spi.RoundingProviderSpi with DefaultRoundingProvider;
     provides javax.money.spi.ServiceProvider with PriorityAwareServiceProvider;
-    provides LoaderService with URLConnectionLoaderService;
+    //provides LoaderService with URLConnectionLoaderService;
+    provides LoaderService with OkHttpLoaderService;
     provides org.javamoney.moneta.spi.MonetaryConfigProvider with DefaultConfigProvider;
     
     uses org.javamoney.moneta.spi.MonetaryConfigProvider;    

@@ -22,6 +22,7 @@ import java.util.Objects;
 
 /**
  * Builder for {@link LoadableHttpResource}.
+ * @author Werner Keil
  */
 class LoadableHttpResourceBuilder {
 
@@ -41,10 +42,10 @@ class LoadableHttpResourceBuilder {
 
 	public LoadableHttpResource build() {
 		if(Objects.isNull(cache)) {
-			throw new IllegalStateException("The cache should be informed");
+			throw new IllegalStateException("The cache should be present");
 		}
 		if(Objects.isNull(loadDataInformation)) {
-			throw new IllegalStateException("The loadDataInformation should be informed");
+			throw new IllegalStateException("The loadDataInformation should be present");
 		}
 		return new LoadableHttpResource(cache, loadDataInformation);
 	}

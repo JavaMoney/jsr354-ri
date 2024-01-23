@@ -47,15 +47,15 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 	@Override
 	public IMFRemoteSearchResult call() throws Exception {
 		//connection.addRequestProperty("User-Agent", userAgent);
-
-		OkHttpClient client = new OkHttpClient.Builder()
+		// TODO apply userAgent where applicable
+		final OkHttpClient client = new OkHttpClient.Builder()
 				.build();
 
-		Request request = new Request.Builder()
+		final Request request = new Request.Builder()
 				.url(getUrl())
 				.build();
 
-		Call call = client.newCall(request);
+		final Call call = client.newCall(request);
 
         try (InputStream inputStream =  call.execute().body().byteStream();
 			 ByteArrayOutputStream stream = new ByteArrayOutputStream()) {

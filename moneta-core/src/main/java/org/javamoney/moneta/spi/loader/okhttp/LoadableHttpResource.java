@@ -25,16 +25,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
-import java.net.*;
+import java.net.URI;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * This class represent a resource that automatically is reloaded, if needed.
  * To create this instance use: {@link LoadableHttpResourceBuilder}
- * @author Anatole Tresch
+ * @author Werner Keil
  */
 public class LoadableHttpResource implements DataStreamFactory {
 
@@ -300,54 +304,71 @@ public class LoadableHttpResource implements DataStreamFactory {
      * location. Also it can be an URL pointing to a current dataset, or an url directing to fallback resources,
      * e.g. within the current classpath.
      *
-     * @param itemToLoad   the target {@link URL}
+     * @param itemToLoad   the target {@link URI}
      * @param fallbackLoad true, for a fallback URL.
      */
     protected boolean load(URI itemToLoad, boolean fallbackLoad) {
         InputStream is = null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try{
-            URLConnection conn;
-            String proxyPort = this.properties.get("proxy.port");
-            String proxyHost = this.properties.get("proxy.host");
-            String proxyType = this.properties.get("proxy.type");
-            if(proxyType!=null){
-                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
-                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
-                conn = itemToLoad.toURL().openConnection(proxy);
-            }else{
-                conn = itemToLoad.toURL().openConnection();
+
+        try {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+            String connectTimeout = this.properties.get("connection.connect.timeout");
+            if(connectTimeout != null) {
+                int seconds = Integer.parseInt(connectTimeout);
+                builder = builder.connectTimeout(seconds, TimeUnit.SECONDS);
+//            }else{
+//                conn.setConnectTimeout(10000);
             }
-            
-            String userAgent = this.properties.get("useragent");
-            if(userAgent!=null && conn instanceof HttpURLConnection) {
-            	conn.setRequestProperty("User-Agent", userAgent);
+            final String readTimeout = this.properties.get("connection.read.timeout");
+            if(readTimeout != null) {
+                int seconds = Integer.parseInt(readTimeout);
+                builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
             }
-            
-            conn.setRequestProperty("Accept", "application/xhtml+xml");
-            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
-            
-            String timeout = this.properties.get("connection.connect.timeout");
-            if(timeout!=null){
-                int seconds = Integer.parseInt(timeout);
-                conn.setConnectTimeout(seconds*1000);
-            }else{
-                conn.setConnectTimeout(10000);
+//            else{
+//                conn.setReadTimeout(10000);
+//            }
+            final String writeTimeout = this.properties.get("connection.write.timeout");
+            if(writeTimeout != null) {
+                int seconds = Integer.parseInt(writeTimeout);
+                builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
             }
-            timeout = this.properties.get("connection.read.timeout");
-            if(timeout!=null){
-                int seconds = Integer.parseInt(timeout);
-                conn.setReadTimeout(seconds*1000);
-            }else{
-                conn.setReadTimeout(10000);
+
+            final OkHttpClient client = builder.build();
+
+            Request.Builder requestBuilder = new Request.Builder();
+            final String userAgent = this.properties.get("useragent");
+            if(userAgent != null) {
+                requestBuilder = requestBuilder.header("User-Agent", userAgent);
             }
+
+            final Request request = requestBuilder
+                    .url(itemToLoad.toString())
+                    .build();
+
+//            String proxyPort = this.properties.get("proxy.port");
+//            String proxyHost = this.properties.get("proxy.host");
+//            String proxyType = this.properties.get("proxy.type");
+//            if(proxyType!=null){
+//                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
+//                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
+//                conn = itemToLoad.toURL().openConnection(proxy);
+//            }else{
+//                conn = itemToLoad.toURL().openConnection();
+//            }
+//
             
-            int newReadTimeout = conn.getReadTimeout();
-            int newTimeout = conn.getConnectTimeout();
-            
+//            conn.setRequestProperty("Accept", "application/xhtml+xml");
+//            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
+//            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
+//
+
+            final Call call = client.newCall(request);
+
             byte[] data = new byte[4096];
-            is = conn.getInputStream();
+            //is = conn.getInputStream();
+            is = call.execute().body().byteStream();
             int read = is.read(data);
             while (read > 0) {
                 stream.write(data, 0, read);
@@ -413,7 +434,6 @@ public class LoadableHttpResource implements DataStreamFactory {
         this.data = new SoftReference<>(bytes);
     }
 
-
     public void unload() {
         synchronized (lock) {
             int count = accessCount.decrementAndGet();
@@ -471,6 +491,5 @@ public class LoadableHttpResource implements DataStreamFactory {
                 unload();
             }
         }
-
     }
 }
