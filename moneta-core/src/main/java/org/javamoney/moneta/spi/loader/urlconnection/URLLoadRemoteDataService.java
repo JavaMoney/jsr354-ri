@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 import org.javamoney.moneta.spi.loader.DataStreamFactory;
 
 import java.util.Map;
@@ -27,9 +27,9 @@ class URLLoadRemoteDataService {
 
 	private static final Logger LOG = Logger.getLogger(URLLoadRemoteDataService.class.getName());
 
-	private final ConnectionLoaderListener listener;
+	private final LoaderListener listener;
 
-	URLLoadRemoteDataService(ConnectionLoaderListener listener) {
+	URLLoadRemoteDataService(LoaderListener listener) {
 		this.listener = listener;
 	}
 

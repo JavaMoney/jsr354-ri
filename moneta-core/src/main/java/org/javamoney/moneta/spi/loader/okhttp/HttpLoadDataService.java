@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.okhttp;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 
 import java.util.Map;
 import java.util.Objects;
@@ -26,9 +26,9 @@ class HttpLoadDataService {
 
 	private static final Logger LOG = Logger.getLogger(HttpLoadDataService.class.getName());
 
-	private final ConnectionLoaderListener listener;
+	private final LoaderListener listener;
 
-   HttpLoadDataService(ConnectionLoaderListener listener) {
+   HttpLoadDataService(LoaderListener listener) {
 		this.listener = listener;
 	}
 

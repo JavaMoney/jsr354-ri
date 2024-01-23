@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.okhttp;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 import org.javamoney.moneta.spi.loader.DataStreamFactory;
 
 import java.util.Map;
@@ -27,9 +27,9 @@ class HttpLoadRemoteDataService {
 
 	private static final Logger LOG = Logger.getLogger(HttpLoadRemoteDataService.class.getName());
 
-	private final ConnectionLoaderListener listener;
+	private final LoaderListener listener;
 
-	HttpLoadRemoteDataService(ConnectionLoaderListener listener) {
+	HttpLoadRemoteDataService(LoaderListener listener) {
 		this.listener = listener;
 	}
 

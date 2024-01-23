@@ -50,9 +50,9 @@ public class OkHttpLoaderService implements LoaderService {
      */
     private final Map<String, LoadableHttpResource> resources = new ConcurrentHashMap<>();
     /**
-     * The registered {@link LoaderListener} instances.
+     * The registered {@link Listener} instances.
      */
-     private final ConnectionLoaderListener listener = new ConnectionLoaderListener();
+     private final LoaderListener listener = new LoaderListener();
 
     /**
      * The local resource cache, to allow keeping current data on the local
@@ -180,19 +180,19 @@ public class OkHttpLoaderService implements LoaderService {
     }
 
     @Override
-    public void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, LoaderListener loaderListener, URI backupResource, URI... resourceLocations) {
+    public void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, Listener listener, URI backupResource, URI... resourceLocations) {
         registerAndLoadData(new LoadDataInformationBuilder()
                 .withResourceId(resourceId)
                 .withUpdatePolicy(updatePolicy)
                 .withProperties(properties)
-                .withLoaderListener(loaderListener)
+                .withLoaderListener(listener)
                 .withBackupResource(backupResource)
                 .withResourceLocations(resourceLocations)
                 .build());
     }
 
     @Override
-    public void registerData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, LoaderListener loaderListener, URI backupResource, URI... resourceLocations) {
+    public void registerData(String resourceId, UpdatePolicy updatePolicy, Map<String, String> properties, Listener listener, URI backupResource, URI... resourceLocations) {
         if (resources.containsKey(resourceId)) {
             throw new IllegalArgumentException("Resource : " + resourceId + " already registered.");
         }
@@ -200,7 +200,7 @@ public class OkHttpLoaderService implements LoaderService {
                 .withResourceId(resourceId)
                 .withUpdatePolicy(updatePolicy)
                 .withProperties(properties)
-                .withLoaderListener(loaderListener)
+                .withLoaderListener(listener)
                 .withBackupResource(backupResource)
                 .withResourceLocations(resourceLocations)
                 .build();
@@ -278,15 +278,15 @@ public class OkHttpLoaderService implements LoaderService {
     }
 
     @Override
-    public void addLoaderListener(LoaderListener l, String... resourceIds) {
+    public void addLoaderListener(Listener l, String... resourceIds) {
         if (resourceIds.length == 0) {
-            List<LoaderListener> listeners = listener.getListeners("");
+            List<Listener> listeners = listener.getListeners("");
             synchronized (listeners) {
                 listeners.add(l);
             }
         } else {
             for (String dataId : resourceIds) {
-                List<LoaderListener> listeners = listener.getListeners(dataId);
+                List<Listener> listeners = listener.getListeners(dataId);
                 synchronized (listeners) {
                     listeners.add(l);
                 }
@@ -295,15 +295,15 @@ public class OkHttpLoaderService implements LoaderService {
     }
 
     @Override
-    public void removeLoaderListener(LoaderListener loadListener, String... resourceIds) {
+    public void removeLoaderListener(Listener loadListener, String... resourceIds) {
         if (resourceIds.length == 0) {
-            List<LoaderListener> listeners = listener.getListeners("");
+            List<Listener> listeners = listener.getListeners("");
             synchronized (listeners) {
                 listeners.remove(loadListener);
             }
         } else {
             for (String dataId : resourceIds) {
-                List<LoaderListener> listeners = listener.getListeners(dataId);
+                List<Listener> listeners = listener.getListeners(dataId);
                 synchronized (listeners) {
                     listeners.remove(loadListener);
                 }

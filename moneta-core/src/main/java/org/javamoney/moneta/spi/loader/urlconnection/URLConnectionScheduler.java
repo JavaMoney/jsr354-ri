@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -26,9 +26,9 @@ class URLConnectionScheduler {
     private static final Logger LOG = Logger.getLogger(URLConnectionScheduler.class.getName());
 
     private final Timer timer;
-    private final ConnectionLoaderListener listener;
+    private final LoaderListener listener;
 
-    public URLConnectionScheduler(Timer timer, ConnectionLoaderListener listener) {
+    public URLConnectionScheduler(Timer timer, LoaderListener listener) {
         this.timer = timer;
         this.listener = listener;
     }

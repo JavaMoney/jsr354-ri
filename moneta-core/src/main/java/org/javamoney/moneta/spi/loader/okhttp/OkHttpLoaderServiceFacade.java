@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.okhttp;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 
 import java.util.Map;
 import java.util.Timer;
@@ -30,7 +30,7 @@ class OkHttpLoaderServiceFacade {
 
 	private final HttpLoadRemoteDataService loadRemoteDataLoaderService;
 
-	OkHttpLoaderServiceFacade(Timer timer, ConnectionLoaderListener listener, Map<String, LoadableHttpResource> resources){
+	OkHttpLoaderServiceFacade(Timer timer, LoaderListener listener, Map<String, LoadableHttpResource> resources){
 		this.scheduledDataLoaderService = new OkHttpScheduler(timer, listener);
 		this.loadDataLoaderService = new HttpLoadDataService(listener);
 		this.loadDataLocalLoaderService = new HttpLoadLocalDataService(resources, listener);

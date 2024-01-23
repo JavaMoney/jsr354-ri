@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.urlconnection;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 
 import java.util.Map;
 import java.util.Objects;
@@ -28,11 +28,11 @@ class URLLoadLocalDataService {
 
 	private final Map<String, LoadableURLResource> resources;
 
-	private final ConnectionLoaderListener listener;
+	private final LoaderListener listener;
 
 
 	 URLLoadLocalDataService(Map<String, LoadableURLResource> resources,
-							 ConnectionLoaderListener listener) {
+							 LoaderListener listener) {
 		this.resources = resources;
 		this.listener = listener;
 	}

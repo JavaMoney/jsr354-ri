@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
 import org.javamoney.moneta.spi.loader.LoadDataInformationBuilder;
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService.Listener;
 import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -38,7 +38,7 @@ public class LoadableURLResourceBuilderTest {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
 	    Map<String, String> properties = Collections.emptyMap();
-	    LoaderListener loaderListener = (id, is) -> {};
+	    Listener listener = (id, is) -> {};
         URI backupResource = new URI("localhost");
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
@@ -46,7 +46,7 @@ public class LoadableURLResourceBuilderTest {
 				.withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy)
 				.withProperties(properties)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.withBackupResource(backupResource)
 				.withResourceLocations(resourceLocations)
 				.build();

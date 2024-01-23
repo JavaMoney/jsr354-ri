@@ -42,7 +42,7 @@ import okhttp3.Request;
  * To create this instance use: {@link LoadableHttpResourceBuilder}
  * @author Werner Keil
  */
-public class LoadableHttpResource implements DataStreamFactory {
+class LoadableHttpResource implements DataStreamFactory {
 
     /**
      * The logger used.

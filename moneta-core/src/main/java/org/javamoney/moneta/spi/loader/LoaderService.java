@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -35,6 +35,7 @@ import java.util.concurrent.Future;
  * JSR's API.
  *
  * @author Anatole Tresch
+ * @author Werner Keil
  */
 public interface LoaderService {
 
@@ -77,7 +78,7 @@ public interface LoaderService {
      * @see #resetData(String)
      * @see #loadData(String)
      */
-    interface LoaderListener { // TODO rename to Listener
+    interface Listener {
         /**
          * Callback called from the {@link LoaderService}, when new data was
          * read for a given data item.
@@ -98,7 +99,7 @@ public interface LoaderService {
      *resourceLocations The remote resource locations, not {@code null}.
      *backupResource    The backup resource location in the classpath, not
      *                          {@code null}.
-     *loaderListener    An (optional) LoaderListener to be registered.
+     *loaderListener    An (optional) Listener to be registered.
      */
     void registerData(LoadDataInformation loadDataInformation);
 
@@ -112,19 +113,19 @@ public interface LoaderService {
      * resourceLocations The remote resource locations, not {@code null}.
      * backupResource    The backup resource location in the classpath, not
      *                          {@code null}.
-     * loaderListener    An (optional) LoaderListener to be registered.
+     * loaderListener    An (optional) Listener to be registered.
      */
     void registerAndLoadData(LoadDataInformation loadDataInformation);
 
     @Deprecated
     void registerAndLoadData(String resourceId, UpdatePolicy updatePolicy,
-                             Map<String, String> properties, LoaderListener loaderListener,
+                             Map<String, String> properties, Listener listener,
                              URI backupResource,
                              URI... resourceLocations);
 
     @Deprecated
     void registerData(String resourceId, UpdatePolicy updatePolicy,
-                      Map<String, String> properties, LoaderListener loaderListener,
+                      Map<String, String> properties, Listener listener,
                       URI backupResource,
                       URI... resourceLocations);
 
@@ -147,7 +148,7 @@ public interface LoaderService {
     Map<String, String> getUpdateConfiguration(String resourceId);
 
     /**
-     * Add a {@link LoaderListener} callback that is informed when a data
+     * Add a {@link Listener} callback that is informed when a data
      * resource was update from remote, or resetToFallback. Passing an empty String or
      * {@code null} sa {@code dataId} allows to register a listener for all data
      * resources registered. {@link #loadData(String)}
@@ -155,18 +156,18 @@ public interface LoaderService {
      *
      * @param resourceIds The unique identifiers of the resource, not {@code null}.
      * @param l           The listener to be added
-     * @see #removeLoaderListener(LoaderListener, String...)
+     * @see #removeLoaderListener(Listener, String...)
      */
-    void addLoaderListener(LoaderListener l, String... resourceIds);
+    void addLoaderListener(Listener l, String... resourceIds);
 
     /**
-     * Remove a registered {@link LoaderListener} callback.
+     * Remove a registered {@link Listener} callback.
      *
      * @param resourceIds The unique identifier of the resource, not {@code null}.
      * @param l           The listener to be removed
-     * @see #addLoaderListener(LoaderListener, String...)
+     * @see #addLoaderListener(Listener, String...)
      */
-    void removeLoaderListener(LoaderListener l, String... resourceIds);
+    void removeLoaderListener(Listener l, String... resourceIds);
 
     /**
      * Allows to check if a data resource with the given dataId is registered.

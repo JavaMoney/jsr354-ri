@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,26 +24,26 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService.Listener;
 
-public class ConnectionLoaderListener { // TODO rename to LoaderListener
+public class LoaderListener {
 
-	private static final Logger LOG = Logger.getLogger(ConnectionLoaderListener.class.getName());
+	private static final Logger LOG = Logger.getLogger(LoaderListener.class.getName());
 
-	private final Map<String, List<LoaderListener>> listenersMap = new ConcurrentHashMap<>();
+	private final Map<String, List<Listener>> listenersMap = new ConcurrentHashMap<>();
 
 	 /**
-     * Evaluate the {@link LoaderListener} instances, listening fo a dataId
+     * Evaluate the {@link Listener} instances, listening fo a dataId
      * given.
      *
      * @param dataId The dataId, not null
      * @return the according listeners
      */
-    public List<LoaderListener> getListeners(String dataId) {
+    public List<Listener> getListeners(String dataId) {
         if (Objects.isNull(dataId)) {
             dataId = "";
         }
-        List<LoaderListener> listeners = this.listenersMap.get(dataId);
+        List<Listener> listeners = this.listenersMap.get(dataId);
         if (Objects.isNull(listeners)) {
             synchronized (listenersMap) {
                 listeners = this.listenersMap.get(dataId);
@@ -64,9 +64,9 @@ public class ConnectionLoaderListener { // TODO rename to LoaderListener
      */
     @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public void trigger(String dataId, DataStreamFactory dataStreamFactory) {
-        List<LoaderListener> listeners = getListeners("");
+        List<Listener> listeners = getListeners("");
         synchronized (listeners) {
-            for (LoaderListener ll : listeners) {
+            for (Listener ll : listeners) {
                 try {
                     ll.newDataLoaded(dataId, dataStreamFactory.getDataStream());
                 } catch (Exception e) {
@@ -77,7 +77,7 @@ public class ConnectionLoaderListener { // TODO rename to LoaderListener
         if (!(Objects.isNull(dataId) || dataId.isEmpty())) {
             listeners = getListeners(dataId);
             synchronized (listeners) {
-                for (LoaderListener ll : listeners) {
+                for (Listener ll : listeners) {
                     try {
                         ll.newDataLoaded(dataId, dataStreamFactory.getDataStream());
                     } catch (Exception e) {
@@ -90,7 +90,7 @@ public class ConnectionLoaderListener { // TODO rename to LoaderListener
 
     @Override
     public String toString() {
-        return ConnectionLoaderListener.class.getName() + '{' +
+        return LoaderListener.class.getName() + '{' +
                 "listenersMap: " + listenersMap + '}';
     }
 }

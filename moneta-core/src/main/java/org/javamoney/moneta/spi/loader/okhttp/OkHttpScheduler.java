@@ -15,7 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader.okhttp;
 
-import org.javamoney.moneta.spi.loader.ConnectionLoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderListener;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -26,9 +26,9 @@ class OkHttpScheduler {
     private static final Logger LOG = Logger.getLogger(OkHttpScheduler.class.getName());
 
     private final Timer timer;
-    private final ConnectionLoaderListener listener;
+    private final LoaderListener listener;
 
-    public OkHttpScheduler(Timer timer, ConnectionLoaderListener listener) {
+    public OkHttpScheduler(Timer timer, LoaderListener listener) {
         this.timer = timer;
         this.listener = listener;
     }

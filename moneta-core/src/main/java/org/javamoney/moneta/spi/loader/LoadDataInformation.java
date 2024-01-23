@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService.Listener;
 import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 
 /**
@@ -36,7 +36,7 @@ public class LoadDataInformation {
 
     private final Map<String, String> properties;
 
-    private final LoaderListener loaderListener;
+    private final Listener listener;
 
     private final URI backupResource;
 
@@ -45,12 +45,12 @@ public class LoadDataInformation {
     private final boolean startRemote;
 
 	LoadDataInformation(String resourceId, UpdatePolicy updatePolicy,
-			Map<String, String> properties, LoaderListener loaderListener,
+			Map<String, String> properties, LoaderService.Listener listener,
 			URI backupResource, URI[] resourceLocations, boolean startRemote) {
 		this.resourceId = resourceId;
 		this.updatePolicy = updatePolicy;
 		this.properties = properties;
-		this.loaderListener = loaderListener;
+		this.listener = listener;
 		this.backupResource = backupResource;
 		this.resourceLocations = resourceLocations;
 		this.startRemote = startRemote;
@@ -68,8 +68,8 @@ public class LoadDataInformation {
 		return properties;
 	}
 
-	public LoaderListener getLoaderListener() {
-		return loaderListener;
+	public LoaderService.Listener getLoaderListener() {
+		return listener;
 	}
 
 	public URI getBackupResource() {
@@ -107,7 +107,7 @@ public class LoadDataInformation {
                 " resourceId: " + resourceId + ',' +
                 " updatePolicy: " + updatePolicy + ',' +
                 " properties: " + properties + ',' +
-                " LoaderListener: " + loaderListener + ',' +
+                " Listener: " + listener + ',' +
                 " backupResource: " + backupResource + ',' +
                 " resourceLocations: " + Arrays.toString(resourceLocations) + '}';
 	}

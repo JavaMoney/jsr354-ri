@@ -20,7 +20,6 @@ import org.javamoney.moneta.spi.AbstractRateProvider;
 import org.javamoney.moneta.spi.DefaultNumberValue;
 import org.javamoney.moneta.spi.loader.LoadDataInformation;
 import org.javamoney.moneta.spi.loader.LoaderService;
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 import org.xml.sax.InputSource;
 
 import javax.money.CurrencyUnit;
@@ -56,7 +55,7 @@ import java.util.stream.Stream;
  * @author Werner Keil
  */
 abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
-        LoaderListener {
+        LoaderService.Listener {
 
 	private static final Logger LOG = Logger.getLogger(ECBAbstractRateProvider.class.getName());
 
