@@ -18,7 +18,6 @@ package org.javamoney.moneta.spi.loader;
 import java.io.InputStream;
 
 @FunctionalInterface
-public interface DataStreamFactory
-{
+public interface DataStreamFactory {
     InputStream getDataStream();
 }
