@@ -25,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -314,6 +316,18 @@ public class LoadableHttpResource implements DataStreamFactory {
         try {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
+            String proxyPort = this.properties.get("proxy.port");
+            String proxyHost = this.properties.get("proxy.host");
+            String proxyType = this.properties.get("proxy.type");
+            if(proxyPort != null && proxyHost != null) {
+                if (proxyType == null) {
+                    proxyType = Proxy.Type.HTTP.name();
+                }
+                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
+                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
+                builder = builder.proxy(proxy);
+            }
+
             String connectTimeout = this.properties.get("connection.connect.timeout");
             if(connectTimeout != null) {
                 int seconds = Integer.parseInt(connectTimeout);
@@ -346,23 +360,11 @@ public class LoadableHttpResource implements DataStreamFactory {
             final Request request = requestBuilder
                     .url(itemToLoad.toString())
                     .build();
-
-//            String proxyPort = this.properties.get("proxy.port");
-//            String proxyHost = this.properties.get("proxy.host");
-//            String proxyType = this.properties.get("proxy.type");
-//            if(proxyType!=null){
-//                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
-//                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
-//                conn = itemToLoad.toURL().openConnection(proxy);
-//            }else{
-//                conn = itemToLoad.toURL().openConnection();
-//            }
-//
             
 //            conn.setRequestProperty("Accept", "application/xhtml+xml");
 //            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
 //            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
-//
+//            TODO check if any of those are necessary?
 
             final Call call = client.newCall(request);
 
