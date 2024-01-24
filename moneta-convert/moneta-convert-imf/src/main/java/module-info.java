@@ -1,7 +1,7 @@
 import org.javamoney.moneta.spi.loader.LoaderService;
 
 /*
-Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -20,6 +20,7 @@ module org.javamoney.moneta.convert.imf {
 	requires org.javamoney.moneta.convert;
     requires static osgi.core;
     requires static osgi.annotation;
+    requires okhttp3;
     provides javax.money.convert.ExchangeRateProvider with
             org.javamoney.moneta.convert.imf.IMFRateProvider, org.javamoney.moneta.convert.imf.IMFHistoricRateProvider;
     uses LoaderService;

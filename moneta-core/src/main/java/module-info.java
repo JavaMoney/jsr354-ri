@@ -1,10 +1,11 @@
 import org.javamoney.moneta.spi.*;
 import org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi;
-import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
+//import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
+import org.javamoney.moneta.spi.loader.okhttp.OkHttpLoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService;
 
 /*
-Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
@@ -26,11 +27,13 @@ module org.javamoney.moneta {
     exports org.javamoney.moneta.spi.format;
     exports org.javamoney.moneta.spi.loader;
     exports org.javamoney.moneta.spi.loader.urlconnection;
+    exports org.javamoney.moneta.spi.loader.okhttp;
     requires transitive java.money;
     requires transitive java.logging;
     requires jakarta.annotation;
     requires static osgi.core;
     requires static osgi.annotation;
+    requires okhttp3;
     provides javax.money.spi.CurrencyProviderSpi with JDKCurrencyProvider, ConfigurableCurrencyUnitProvider;
     provides javax.money.spi.MonetaryAmountFactoryProviderSpi with MoneyAmountFactoryProvider, FastMoneyAmountFactoryProvider, RoundedMoneyAmountFactoryProvider;
     provides javax.money.spi.MonetaryAmountFormatProviderSpi with DefaultAmountFormatProviderSpi;
@@ -39,7 +42,8 @@ module org.javamoney.moneta {
     provides javax.money.spi.MonetaryCurrenciesSingletonSpi with DefaultMonetaryCurrenciesSingletonSpi;
     provides javax.money.spi.RoundingProviderSpi with DefaultRoundingProvider;
     provides javax.money.spi.ServiceProvider with PriorityAwareServiceProvider;
-    provides LoaderService with URLConnectionLoaderService;
+    //provides LoaderService with URLConnectionLoaderService;
+    provides LoaderService with OkHttpLoaderService;
     provides org.javamoney.moneta.spi.MonetaryConfigProvider with DefaultConfigProvider;
     
     uses org.javamoney.moneta.spi.MonetaryConfigProvider;    

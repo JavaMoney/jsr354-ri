@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
+  Copyright (c) 2023, 2024, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -13,37 +13,39 @@
   License for the specific language governing permissions and limitations under
   the License.
  */
-package org.javamoney.moneta.spi.loader.urlconnection;
+package org.javamoney.moneta.spi.loader.okhttp;
 
-import org.javamoney.moneta.spi.loader.*;
+import org.javamoney.moneta.spi.loader.DataStreamFactory;
+import org.javamoney.moneta.spi.loader.LoadDataInformation;
+import org.javamoney.moneta.spi.loader.LoaderService;
+import org.javamoney.moneta.spi.loader.ResourceCache;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.ref.SoftReference;
-import java.net.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URI;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * This class represent a resource that automatically is reloaded, if needed.
- * To create this instance use: {@link LoadableURLResourceBuilder}
- * @author Anatole Tresch
+ * To create this instance use: {@link LoadableHttpResourceBuilder}
+ * @author Werner Keil
  */
-class LoadableURLResource implements DataStreamFactory {
+class LoadableHttpResource implements DataStreamFactory {
 
     /**
      * The logger used.
      */
-    private static final Logger LOG = Logger.getLogger(LoadableURLResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(LoadableHttpResource.class.getName());
     /**
      * Lock for this instance.
      */
@@ -95,7 +97,7 @@ class LoadableURLResource implements DataStreamFactory {
     private final Map<String, String> properties;
 
 
-    LoadableURLResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
+    LoadableHttpResource(ResourceCache cache, LoadDataInformation loadDataInformation) {
         Objects.requireNonNull(loadDataInformation.getResourceId(), "resourceId required");
         Objects.requireNonNull(loadDataInformation.getProperties(), "properties required");
         Objects.requireNonNull(loadDataInformation.getUpdatePolicy(), "updatePolicy required");
@@ -302,54 +304,73 @@ class LoadableURLResource implements DataStreamFactory {
      * location. Also it can be an URL pointing to a current dataset, or an url directing to fallback resources,
      * e.g. within the current classpath.
      *
-     * @param itemToLoad   the target {@link URL}
+     * @param itemToLoad   the target {@link URI}
      * @param fallbackLoad true, for a fallback URL.
      */
     protected boolean load(URI itemToLoad, boolean fallbackLoad) {
         InputStream is = null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try{
-            URLConnection conn;
-            String proxyPort = this.properties.get("proxy.port");
-            String proxyHost = this.properties.get("proxy.host");
-            String proxyType = this.properties.get("proxy.type");
-            if(proxyType!=null){
-                Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
-                        InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
-                conn = itemToLoad.toURL().openConnection(proxy);
-            }else{
-                conn = itemToLoad.toURL().openConnection();
+
+        try {
+            if (fallbackLoad) {
+                is = new BufferedInputStream(itemToLoad.toURL().openStream());
+            } else {
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+                String proxyPort = this.properties.get("proxy.port");
+                String proxyHost = this.properties.get("proxy.host");
+                String proxyType = this.properties.get("proxy.type");
+                if (proxyPort != null && proxyHost != null) {
+                    if (proxyType == null) {
+                        proxyType = Proxy.Type.HTTP.name();
+                    }
+                    Proxy proxy = new Proxy(Proxy.Type.valueOf(proxyType.toUpperCase()),
+                            InetSocketAddress.createUnresolved(proxyHost, Integer.parseInt(proxyPort)));
+                    builder = builder.proxy(proxy);
+                }
+
+                String connectTimeout = this.properties.get("connection.connect.timeout");
+                if (connectTimeout != null) {
+                    int seconds = Integer.parseInt(connectTimeout);
+                    builder = builder.connectTimeout(seconds, TimeUnit.SECONDS);
+//            }else{
+//                conn.setConnectTimeout(10000);
+                }
+                final String readTimeout = this.properties.get("connection.read.timeout");
+                if (readTimeout != null) {
+                    int seconds = Integer.parseInt(readTimeout);
+                    builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
+                }
+
+                final String writeTimeout = this.properties.get("connection.write.timeout");
+                if (writeTimeout != null) {
+                    int seconds = Integer.parseInt(writeTimeout);
+                    builder = builder.readTimeout(seconds, TimeUnit.SECONDS);
+                }
+
+                final OkHttpClient client = builder.build();
+
+                Request.Builder requestBuilder = new Request.Builder();
+//                final String userAgent = this.properties.get("useragent");
+//                if (userAgent != null) {
+//                    requestBuilder = requestBuilder.header("User-Agent", userAgent);
+//                }
+
+                final Request request = requestBuilder
+                        .url(itemToLoad.toString())
+                        .build();
+
+//            conn.setRequestProperty("Accept", "application/xhtml+xml");
+//            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
+//            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
+//            TODO check if any of those are necessary?
+
+                final Call call = client.newCall(request);
+                //is = conn.getInputStream();
+                is = call.execute().body().byteStream();
             }
-            
-            String userAgent = this.properties.get("useragent");
-            if(userAgent!=null && conn instanceof HttpURLConnection) {
-            	conn.setRequestProperty("User-Agent", userAgent);
-            }
-            
-            conn.setRequestProperty("Accept", "application/xhtml+xml");
-            conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
-            conn.setRequestProperty("Accept-Language", "en-US,en;q=0.9");
-            
-            String timeout = this.properties.get("connection.connect.timeout");
-            if(timeout!=null){
-                int seconds = Integer.parseInt(timeout);
-                conn.setConnectTimeout(seconds*1000);
-            }else{
-                conn.setConnectTimeout(10000);
-            }
-            timeout = this.properties.get("connection.read.timeout");
-            if(timeout!=null){
-                int seconds = Integer.parseInt(timeout);
-                conn.setReadTimeout(seconds*1000);
-            }else{
-                conn.setReadTimeout(10000);
-            }
-            
-            int newReadTimeout = conn.getReadTimeout();
-            int newTimeout = conn.getConnectTimeout();
-            
+
             byte[] data = new byte[4096];
-            is = conn.getInputStream();
             int read = is.read(data);
             while (read > 0) {
                 stream.write(data, 0, read);
@@ -415,7 +436,6 @@ class LoadableURLResource implements DataStreamFactory {
         this.data = new SoftReference<>(bytes);
     }
 
-
     public void unload() {
         synchronized (lock) {
             int count = accessCount.decrementAndGet();
@@ -473,6 +493,5 @@ class LoadableURLResource implements DataStreamFactory {
                 unload();
             }
         }
-
     }
 }

@@ -51,11 +51,10 @@ public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
     private static final String DATA_ID = IMFHistoricRateProvider.class.getSimpleName();
 
 	private static final ProviderContext CONTEXT = ProviderContextBuilder.of("IMF-HIST", RateType.HISTORIC)
-	            .set("providerDescription", "Historic International Monetary Fund")
+			.set("providerDescription", "Historic International Monetary Fund")
 			.set("days", 0)
-			.set("User-Agent", "Chrome/51.0.2704.103")
+			//.set("User-Agent", "Chrome/51.0.2704.103") This was a URLConnection hack, OkHttp works without the User-Agent
 			.build();
-
 
 	private final List<YearMonth> cachedHistoric = new ArrayList<>();
 	public IMFHistoricRateProvider() {

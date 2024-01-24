@@ -221,6 +221,11 @@
 			<artifactId>money-api</artifactId>
 			<version>${jsr.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>${okhttp.version}</version>
+		</dependency>
 		<!-- OSGI support -->
 		<dependency>
 			<groupId>org.osgi</groupId>

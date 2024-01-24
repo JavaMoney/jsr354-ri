@@ -1,6 +1,6 @@
 = JavaMoney 'Moneta' User Guide
-Anatole Tresch <atsticks@gmail.com>
-:Author Initials: ATR
+Werner Keil <werner.keil@gmail.com>
+:Author Initials: WKE
 :source-highlighter: coderay
 :toc:
 :data-uri:

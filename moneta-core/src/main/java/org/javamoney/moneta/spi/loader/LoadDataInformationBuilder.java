@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService.Listener;
 import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 
 /**
@@ -36,8 +36,8 @@ public class LoadDataInformationBuilder {
 	private UpdatePolicy updatePolicy;
 
     private Map<String, String> properties;
-	/** An (optional) LoaderListener to be registered. */
-    private LoaderListener loaderListener;
+	/** An (optional) Listener to be registered. */
+    private Listener listener;
 	/**
 	 * The backup resource location in the classpath, not
 	 *                          {@code null}.
@@ -64,8 +64,8 @@ public class LoadDataInformationBuilder {
 		return this;
 	}
 
-	public LoadDataInformationBuilder withLoaderListener(LoaderListener loaderListener) {
-		this.loaderListener = loaderListener;
+	public LoadDataInformationBuilder withLoaderListener(Listener listener) {
+		this.listener = listener;
 		return this;
 	}
 
@@ -98,7 +98,7 @@ public class LoadDataInformationBuilder {
 			throw new IllegalStateException("The properties should be informed");
 		}
 		return new LoadDataInformation(resourceId, updatePolicy, properties,
-				loaderListener, backupResource, resourceLocations, startRemote);
+                listener, backupResource, resourceLocations, startRemote);
 	}
 
 

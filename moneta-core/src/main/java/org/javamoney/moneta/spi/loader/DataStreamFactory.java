@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,9 +17,7 @@ package org.javamoney.moneta.spi.loader;
 
 import java.io.InputStream;
 
-public interface DataStreamFactory
-{
-
+@FunctionalInterface
+public interface DataStreamFactory {
     InputStream getDataStream();
-
 }

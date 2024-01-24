@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2024, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -14,6 +14,6 @@
   the License.
  */
 /**
- * Contains format loader for updating resources loaded from remote, e.g. current conversion rates.
+ * Contains loaders for updating resources from remote locations, e.g. currency conversion rates.
  */
 package org.javamoney.moneta.spi.loader;

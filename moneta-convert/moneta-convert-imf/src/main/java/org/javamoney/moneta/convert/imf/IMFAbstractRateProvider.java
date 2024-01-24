@@ -47,9 +47,9 @@ import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.convert.ExchangeRateBuilder;
 import org.javamoney.moneta.convert.imf.IMFRateReadingHandler.RateIMFResult;
 import org.javamoney.moneta.spi.AbstractRateProvider;
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
+import org.javamoney.moneta.spi.loader.LoaderService.Listener;
 
-abstract class IMFAbstractRateProvider extends AbstractRateProvider implements LoaderListener {
+abstract class IMFAbstractRateProvider extends AbstractRateProvider implements Listener {
 
     private static final Logger LOG = Logger.getLogger(IMFAbstractRateProvider.class.getName());
 
@@ -63,9 +63,9 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
             CurrencyUnitBuilder.of("SDR", CurrencyContextBuilder.of(IMFRateProvider.class.getSimpleName()).build())
                     .setDefaultFractionDigits(3).build(true);
 
-	protected Map<CurrencyUnit, List<ExchangeRate>> currencyToSdr = Collections.emptyMap();
+	protected Map<CurrencyUnit, List<ExchangeRate>> currencyToSdr = new HashMap<>();
 
-	protected Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = Collections.emptyMap();
+	protected Map<CurrencyUnit, List<ExchangeRate>> sdrToCurrency = new HashMap<>();
 
     protected volatile String loadState;
 

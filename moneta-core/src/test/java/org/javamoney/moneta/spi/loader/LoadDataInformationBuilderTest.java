@@ -17,13 +17,9 @@ package org.javamoney.moneta.spi.loader;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.javamoney.moneta.spi.loader.LoadDataInformation;
-import org.javamoney.moneta.spi.loader.LoadDataInformationBuilder;
-import org.javamoney.moneta.spi.loader.LoaderService.LoaderListener;
 import org.javamoney.moneta.spi.loader.LoaderService.UpdatePolicy;
 import org.testng.annotations.Test;
 
@@ -36,8 +32,8 @@ public class LoadDataInformationBuilderTest {
 	public void shouldCreateLoadDataInformation() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = Collections.emptyMap();
-		LoaderListener loaderListener = (id, is) -> {};
+	    Map<String, String> properties = new HashMap<>();
+		LoaderService.Listener listener = (id, is) -> {};
         URI backupResource = new URI("localhost");
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
@@ -45,7 +41,7 @@ public class LoadDataInformationBuilderTest {
 				.withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy)
 				.withProperties(properties)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.withBackupResource(backupResource)
 				.withStartRemote(true)
 				.withResourceLocations(resourceLocations)
@@ -86,15 +82,15 @@ public class LoadDataInformationBuilderTest {
 	public void shouldCreateLoadDataInformationWithOutBackupResource() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = Collections.emptyMap();
-		LoaderListener loaderListener = (id, is) -> {};
+	    Map<String, String> properties = new HashMap<>();
+		LoaderService.Listener listener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
 		LoadDataInformation loadInformation = new LoadDataInformationBuilder()
 				.withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy)
 				.withProperties(properties)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.withResourceLocations(resourceLocations)
 				.build();
 
@@ -110,14 +106,14 @@ public class LoadDataInformationBuilderTest {
 	@Test(expectedExceptions = IllegalStateException.class)
 	public void shouldReturnsErrorWhenResourceIdWasNotInformed() throws URISyntaxException {
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = Collections.emptyMap();
-		LoaderListener loaderListener = (id, is) -> {};
+	    Map<String, String> properties = new HashMap<>();
+		LoaderService.Listener listener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
 		new LoadDataInformationBuilder()
 				.withUpdatePolicy(updatePolicy)
 				.withProperties(properties)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.withResourceLocations(resourceLocations)
 				.build();
 
@@ -126,14 +122,14 @@ public class LoadDataInformationBuilderTest {
 	@Test(expectedExceptions = IllegalStateException.class)
 	public void shouldReturnsErrorWhenUpdatePolicyWasNotInformed() throws URISyntaxException {
 		String resourceId = "resourceId";
-	    Map<String, String> properties = Collections.emptyMap();
-		LoaderListener loaderListener = (id, is) -> {};
+	    Map<String, String> properties = new HashMap<>();
+		LoaderService.Listener listener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
 		new LoadDataInformationBuilder()
 				.withResourceId(resourceId)
 				.withProperties(properties)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.withResourceLocations(resourceLocations)
 				.build();
 
@@ -143,13 +139,13 @@ public class LoadDataInformationBuilderTest {
 	public void shouldReturnsErrorWhenPropertiesWasNotInformed() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-		LoaderListener loaderListener = (id, is) -> {};
+		LoaderService.Listener listener = (id, is) -> {};
         URI[] resourceLocations = new URI[]{new URI("localhost")};
 
 		new LoadDataInformationBuilder()
 				.withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.withResourceLocations(resourceLocations)
 				.build();
 
@@ -159,14 +155,14 @@ public class LoadDataInformationBuilderTest {
 	public void shouldReturnsErrorWhenResourceLocationsWasNotInformed() throws URISyntaxException {
 		String resourceId = "resourceId";
 		UpdatePolicy updatePolicy = UpdatePolicy.LAZY;
-	    Map<String, String> properties = Collections.emptyMap();
-		LoaderListener loaderListener = (id, is) -> {};
+	    Map<String, String> properties = new HashMap<>();
+		LoaderService.Listener listener = (id, is) -> {};
 
 		new LoadDataInformationBuilder()
 				.withResourceId(resourceId)
 				.withUpdatePolicy(updatePolicy)
 				.withProperties(properties)
-				.withLoaderListener(loaderListener)
+				.withLoaderListener(listener)
 				.build();
 	}
 

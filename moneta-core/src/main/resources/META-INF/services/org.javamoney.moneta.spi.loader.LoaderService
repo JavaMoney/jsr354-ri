@@ -12,4 +12,5 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 #
-org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService
+#org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService
+org.javamoney.moneta.spi.loader.okhttp.OkHttpLoaderService
