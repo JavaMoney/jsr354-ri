@@ -13,9 +13,9 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>1.4-SNAPSHOT</version>
+		<version>1.4</version>
 	</parent>
-	<version>1.4.3-SNAPSHOT</version>
+	<version>1.4.3</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -50,15 +50,12 @@
 
 		<!-- dependency versions -->
 		<okhttp.version>4.12.0</okhttp.version>
-		<testng.version>7.7.1</testng.version>
+		<testng.version>7.9.0</testng.version>
 		<additionalparam>-Xdoclint:none</additionalparam>
 
 		<!-- OSGI support -->
 		<osgi.version>8.0.0</osgi.version>
 		<osgi.annotation.version>8.1.0</osgi.annotation.version>
-
-		<!-- Test coverage -->
-		<jacoco.version>0.8.10</jacoco.version>
 	</properties>
 
 	<ciManagement>
