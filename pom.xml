@@ -15,7 +15,7 @@
 		<artifactId>javamoney-parent</artifactId>
 		<version>1.4</version>
 	</parent>
-	<version>1.4.3</version>
+	<version>1.4.4-SNAPSHOT</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
