@@ -15,7 +15,7 @@
 		<artifactId>javamoney-parent</artifactId>
 		<version>1.4</version>
 	</parent>
-	<version>1.4.4-SNAPSHOT</version>
+	<version>1.4.4</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -113,15 +113,12 @@
 	<profiles>
 		<profile>
 			<id>ci</id>
-			<!--
-			<id>travis</id>
 			<activation>
 				<property>
-					<name>env.TRAVIS</name>
+					<name>env.CI</name>
 					<value>true</value>
 				</property>
 			</activation>
-			-->
 			<build>
 				<plugins>
 					<plugin>
@@ -427,12 +424,12 @@
 						<dependency>
 							<groupId>ch.qos.logback</groupId>
 							<artifactId>logback-core</artifactId>
-							<version>1.2.9</version>
+							<version>1.2.13</version>
 						</dependency>
 						<dependency>
 							<groupId>org.slf4j</groupId>
 							<artifactId>slf4j-api</artifactId>
-							<version>1.7.13</version>
+							<version>1.7.36</version>
 						</dependency>
 					</dependencies>
 					<executions>

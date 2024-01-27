@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.4.4</version>
 	</parent>
 	<artifactId>moneta</artifactId>
 	<packaging>pom</packaging>
@@ -44,10 +44,10 @@
 
 	<profiles>
 		<profile>
-			<id>travis</id>
+			<id>ci</id>
 			<activation>
 				<property>
-					<name>env.TRAVIS</name>
+					<name>env.CI</name>
 					<value>true</value>
 				</property>
 			</activation>
