@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.4.4</version>
 	</parent>
 	<artifactId>moneta</artifactId>
 	<packaging>pom</packaging>
@@ -227,13 +227,11 @@
 			<artifactId>moneta-convert</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-<!-- FIXME this is only temporary to isolate ECB from IMF issues
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-imf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
--->
 		<dependency>
 			<groupId>org.javamoney.moneta</groupId>
 			<artifactId>moneta-convert-ecb</artifactId>
@@ -242,9 +240,7 @@
 	</dependencies>
 
 	<build>
-
 		<defaultGoal>install</defaultGoal>
-
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
