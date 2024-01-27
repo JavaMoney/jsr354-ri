@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.4.4</version>
+		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>moneta</artifactId>
 	<packaging>pom</packaging>
@@ -27,8 +27,8 @@
     </description>
 
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.org/JavaMoney/jsr354-ri</url>
+		<system>Circle CI</system>
+		<url>https://app.circleci.com/pipelines/github/JavaMoney/jsr354-ri</url>
 	</ciManagement>
 
 	<prerequisites>

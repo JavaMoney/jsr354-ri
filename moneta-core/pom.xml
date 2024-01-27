@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>moneta-parent</artifactId>
-		<version>1.4.4</version>
+		<version>1.4.4-SNAPSHOT</version>
 	</parent>
 	<groupId>org.javamoney.moneta</groupId>
 	<artifactId>moneta-core</artifactId>
@@ -24,8 +24,8 @@
 	<description>The engine of moneta, this projects has implementations of MonetayAmount, CurrencyUnit, loaders, formatters and core parts of the SPI.</description>
     
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://app.travis-ci.com/github/JavaMoney/jsr354-ri</url>
+		<system>Circle CI</system>
+		<url>https://app.circleci.com/pipelines/github/JavaMoney/jsr354-ri</url>
 	</ciManagement>
 
 	<prerequisites>
