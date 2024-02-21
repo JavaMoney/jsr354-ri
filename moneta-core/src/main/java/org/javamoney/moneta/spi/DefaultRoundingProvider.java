@@ -62,6 +62,8 @@ public class DefaultRoundingProvider implements RoundingProviderSpi {
             if (Boolean.TRUE.equals(roundingQuery.getBoolean("cashRounding"))) {
                 if ("CHF".equals(currency.getCurrencyCode())) {
                     return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
+                } else if ("AWG".equals(currency.getCurrencyCode())) {
+                    return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 5);
                 } else if ("SEK".equals(currency.getCurrencyCode())) {
                     return new DefaultCashRounding(currency, RoundingMode.HALF_UP, 100);
                 } else if ("NOK".equals(currency.getCurrencyCode())) {
