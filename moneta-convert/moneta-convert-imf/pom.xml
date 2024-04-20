@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.javamoney.moneta</groupId>
 		<artifactId>moneta-convert-parent</artifactId>
-		<version>1.4.4</version>
+		<version>1.4.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>moneta-convert-imf</artifactId>
 	<packaging>jar</packaging>
