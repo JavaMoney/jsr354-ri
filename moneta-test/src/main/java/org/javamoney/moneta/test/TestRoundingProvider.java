@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.javamoney.moneta.function.test;
+package org.javamoney.moneta.test;
 
 import org.javamoney.moneta.function.MonetaryOperators;
 
