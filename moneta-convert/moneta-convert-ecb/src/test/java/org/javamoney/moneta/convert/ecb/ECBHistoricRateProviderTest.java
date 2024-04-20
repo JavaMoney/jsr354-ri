@@ -19,6 +19,7 @@ import static javax.money.convert.MonetaryConversions.getExchangeRateProvider;
 import static org.testng.Assert.*;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
@@ -162,7 +163,7 @@ public class ECBHistoricRateProviderTest {
         LocalDateTime time = LocalDateTime.now();
         // As ECB rates are only updated on 4pm of each day, we check, if it's after 4 or the day is on a weekend (cannot get all bank holidays yet)
         if (isWeekend(time)) {
-            time = time.minusDays(2);
+            time = time.with(DayOfWeek.FRIDAY);
         } else {
             if (time.getHour() < 16) {
                 time = time.minusDays(1);
