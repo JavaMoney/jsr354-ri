@@ -654,5 +654,6 @@
 		<module>moneta-core</module>
 		<module>moneta-convert</module>
 		<module>moneta</module>
-	</modules>
+        <module>moneta-test</module>
+    </modules>
 </project>
