@@ -105,7 +105,7 @@ public class CompoundRateProvider extends AbstractRateProvider {
      */
     @Override
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery) {
-        return getExchangeRate(conversionQuery, false);
+        return getExchangeRate(conversionQuery, true);
     }
 
     public ExchangeRate getExchangeRate(ConversionQuery conversionQuery, boolean failFast) {

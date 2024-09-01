@@ -23,8 +23,9 @@ public class CompoundRateProviderTest {
                 .set(date)
                 .build();
 
-        ExchangeRateProvider compoundRateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "ECB-HIST90");
-        assertNotNull(compoundRateProvider.getExchangeRate(conversionQuery));
+        // Need to cast to CompoundRateProvider to access the getExchangeRate method that takes a boolean parameter
+        CompoundRateProvider compoundRateProvider = (CompoundRateProvider) MonetaryConversions.getExchangeRateProvider("ECB", "ECB-HIST90");
+        assertNotNull(compoundRateProvider.getExchangeRate(conversionQuery, false));
     }
 
     @Test
@@ -38,8 +39,9 @@ public class CompoundRateProviderTest {
                 .set(date)
                 .build();
 
-        ExchangeRateProvider compoundRateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
-        assertThrows(CurrencyConversionException.class, () -> compoundRateProvider.getExchangeRate(conversionQuery));
+        // Need to cast to CompoundRateProvider to access the getExchangeRate method that takes a boolean parameter
+        CompoundRateProvider compoundRateProvider = (CompoundRateProvider) MonetaryConversions.getExchangeRateProvider("ECB", "IMF");
+        assertThrows(CurrencyConversionException.class, () -> compoundRateProvider.getExchangeRate(conversionQuery, false));
     }
 
     @Test
@@ -53,9 +55,8 @@ public class CompoundRateProviderTest {
                 .set(date)
                 .build();
 
-        // Need to cast to CompoundRateProvider to access the getExchangeRate method that takes a boolean parameter
-        CompoundRateProvider compoundRateProvider = (CompoundRateProvider) MonetaryConversions.getExchangeRateProvider("ECB", "ECB-HIST90");
-        assertThrows(CurrencyConversionException.class, () -> compoundRateProvider.getExchangeRate(conversionQuery, true));
+        ExchangeRateProvider compoundRateProvider = MonetaryConversions.getExchangeRateProvider("ECB", "ECB-HIST90");
+        assertThrows(CurrencyConversionException.class, () -> compoundRateProvider.getExchangeRate(conversionQuery));
     }
 
     private LocalDate lastWeekTuesday() {
