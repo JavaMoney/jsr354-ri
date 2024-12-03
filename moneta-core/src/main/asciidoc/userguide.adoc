@@ -552,13 +552,13 @@ MonetaryAmount roundedAmount = amt.with(rounding); // uses Monetary.getRounding(
 
 For Swiss Francs also a corresponding cash rounding is accessible. In Switzerland the smallest minor in cash are
 5 Rappen, so everything must be rounded to minors dividable by 5. This rounding can be accessed by setting the
-+cashRounding=tru+ property, when accessing a currency rounding for CHF:
++cashRounding=true+ property, when accessing a currency rounding for CHF:
 
 [source,java]
 .Access Swiss Francs Cash Rounding
 --------------------------------------------
-MonetaryRounding rounding = Monetary.getRounding(Monetary.getCurrency("CHF"),
-  RoundingQueryBuilder.of().set("cashRounding", true).build()
+MonetaryRounding rounding = Monetary.getRounding(
+  RoundingQueryBuilder.of().setCurrency(Monetary.getCurrency("CHF")).set("cashRounding", true).build()
 );
 MonetaryAmount amt = ...;
 MonetaryAmount roundedAmount = amt.with(rounding); // amount rounded in CHF cash rounding

@@ -185,7 +185,7 @@ abstract class IMFAbstractRateProvider extends AbstractRateProvider implements L
         		}
 			}
           	final String datesOnErrors = Stream.of(dates).map(date -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)).collect(Collectors.joining(","));
-        	throw new MonetaryException("There is not exchange on day " + datesOnErrors + " to rate to  rate on IFMRateProvider.");
+        	throw new MonetaryException("There is not exchange on day " + datesOnErrors + " to rate to  rate on IMFRateProvider.");
         }
     }
 
