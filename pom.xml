@@ -33,7 +33,7 @@
 
 	<licenses>
 		<license>
-			<name>Apache 2 License</name>
+			<name>Apache-2.0</name>
 			<comments>RI</comments>
 			<url>LICENSE.txt</url>
 			<distribution>repo</distribution>
