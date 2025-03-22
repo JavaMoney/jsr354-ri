@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -18,7 +18,7 @@ package org.javamoney.moneta.internal;
 import org.javamoney.moneta.spi.*;
 import org.javamoney.moneta.OSGIServiceHelper;
 import org.javamoney.moneta.spi.format.DefaultAmountFormatProviderSpi;
-import org.javamoney.moneta.spi.loader.urlconnection.URLConnectionLoaderService;
+import org.javamoney.moneta.spi.loader.okhttp.OkHttpLoaderService;
 import org.javamoney.moneta.spi.loader.LoaderService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -60,7 +60,7 @@ public class OSGIActivator implements BundleActivator {
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonSpi.class, DefaultMonetaryAmountsSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
         OSGIServiceHelper.registerService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
-        OSGIServiceHelper.registerService(context.getBundle(), LoaderService.class, URLConnectionLoaderService.class);
+        OSGIServiceHelper.registerService(context.getBundle(), LoaderService.class, OkHttpLoaderService.class);
         LOG.config("Registered JavaMoney services...");
     }
 
@@ -83,7 +83,7 @@ public class OSGIActivator implements BundleActivator {
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryAmountsSingletonSpi.class, DefaultMonetaryAmountsSingletonSpi.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.MonetaryCurrenciesSingletonSpi.class, DefaultMonetaryCurrenciesSingletonSpi.class);
             OSGIServiceHelper.unregisterService(context.getBundle(), javax.money.spi.RoundingProviderSpi.class, DefaultRoundingProvider.class);
-            OSGIServiceHelper.unregisterService(context.getBundle(), LoaderService.class, URLConnectionLoaderService.class);
+            OSGIServiceHelper.unregisterService(context.getBundle(), LoaderService.class, OkHttpLoaderService.class);
         }
     }
 }

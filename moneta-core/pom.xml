@@ -361,7 +361,7 @@
 							<jdkToolchain>
 								<version>${maven.compiler.release}</version>
 							</jdkToolchain>
-							<release>9</release>
+							<release>11</release>
 						</configuration>
 					</execution>
 					<execution>
