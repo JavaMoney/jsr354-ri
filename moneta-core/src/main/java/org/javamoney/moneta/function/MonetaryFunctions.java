@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Anatole Tresch, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -65,20 +65,6 @@ public final class MonetaryFunctions {
 		Supplier<MonetarySummaryStatistics> supplier = () -> new DefaultMonetarySummaryStatistics(currencyUnit);
 		return Collector.of(supplier, MonetarySummaryStatistics::accept, MonetarySummaryStatistics::combine);
     }
-
-	/**
-	 * reates a the summary of MonetaryAmounts.
-	 * @param currencyUnit the target {@link javax.money.CurrencyUnit}
-	 * @param provider the rate provider
-     * @return the MonetarySummaryStatistics
-	 * @deprecated Use #summarizingMonetary(CurrencyUnit) instead of.
-     */
-	@Deprecated
-	public static Collector<MonetaryAmount, MonetarySummaryStatistics, MonetarySummaryStatistics> summarizingMonetary(
-			CurrencyUnit currencyUnit, ExchangeRateProvider provider){
-		// TODO implement method here
-		return summarizingMonetary(currencyUnit);
-	}
 
     /**
      * of MonetaryAmount group by MonetarySummary
@@ -381,6 +367,4 @@ public final class MonetaryFunctions {
 			return m2;
 		};
 	}
-
-
 }
