@@ -13,9 +13,9 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>1.4</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
-	<version>1.4.5-SNAPSHOT</version>
+	<version>1.5-SNAPSHOT</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -454,6 +454,11 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>2.18.0</version>
 			</plugin>
 		</plugins>
 	</build>
