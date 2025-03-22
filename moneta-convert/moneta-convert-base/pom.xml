@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.javamoney.moneta</groupId>
     <artifactId>moneta-convert-parent</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.4.5</version>
   </parent>
   <artifactId>moneta-convert</artifactId>
 
