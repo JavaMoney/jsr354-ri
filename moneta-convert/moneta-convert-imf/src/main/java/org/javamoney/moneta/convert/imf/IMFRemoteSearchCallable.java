@@ -36,16 +36,11 @@ class IMFRemoteSearchCallable implements Callable<IMFRemoteSearchResult>{
 	private final IMFHistoricalType type;
 	private final YearMonth yearMonth;
 
-	/** The Useragent
-	 * @deprecated not needed anymore for IMF, likely removed */
-	private final String userAgent;
-
 	IMFRemoteSearchCallable(IMFHistoricalType type, YearMonth yearMonth, String userAgent) {
 		this.type = Objects.requireNonNull(type);
 		this.yearMonth = Objects.requireNonNull(yearMonth);
-		this.userAgent = userAgent;
+		// userAgent currently not used, leaving it for possible future use.
 	}
-
 
 	@Override
 	public IMFRemoteSearchResult call() throws Exception {
