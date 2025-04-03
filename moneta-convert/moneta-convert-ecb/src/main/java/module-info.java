@@ -16,6 +16,9 @@ License for the specific language governing permissions and limitations under
 the License.
 */
 module org.javamoney.moneta.convert.ecb {
+    exports org.javamoney.moneta.convert.ecb;
+    exports org.javamoney.moneta.convert.ecb.defaults;
+
     opens org.javamoney.moneta.convert.ecb;
     opens org.javamoney.moneta.convert.ecb.defaults;
     requires java.xml;
