@@ -59,9 +59,14 @@ class LoadableHttpResource implements DataStreamFactory {
      */
     private final List<URI> remoteResources = new ArrayList<>();
     /**
-     * The fallback location (classpath).
+     * The fallback location (local).
      */
     private final URI fallbackLocation;
+
+    /**
+     * The fallback stream (classpath).
+     */
+    private final InputStream fallbackStream;
     /**
      * The cache used.
      */
@@ -110,6 +115,7 @@ class LoadableHttpResource implements DataStreamFactory {
         this.updatePolicy = loadDataInformation.getUpdatePolicy();
         this.properties = loadDataInformation.getProperties();
         this.fallbackLocation = loadDataInformation.getBackupResource();
+        this.fallbackStream = loadDataInformation.getFallbackStream();
         this.remoteResources.addAll(Arrays.asList(loadDataInformation.getResourceLocations()));
     }
 
@@ -172,6 +178,15 @@ class LoadableHttpResource implements DataStreamFactory {
     }
 
     /**
+     * Return the fallback input stream.
+     *
+     * @return the fallback stream, or null.
+     */
+    public InputStream getFallbackStream() {
+        return fallbackStream;
+    }
+
+    /**
      * Return the fallback location.
      *
      * @return the fallback location, or null.
@@ -224,7 +239,7 @@ class LoadableHttpResource implements DataStreamFactory {
     public boolean loadRemote() {
         for (URI itemToLoad : remoteResources) {
             try {
-                return load(itemToLoad, false);
+                return load(itemToLoad, false, null);
             } catch (Exception e) {
                 LOG.log(Level.WARNING, "Failed to load resource: " + itemToLoad, e);
             }
@@ -245,7 +260,7 @@ class LoadableHttpResource implements DataStreamFactory {
                         ", loadFallback not supported.");
                 return false;
             }
-            load(fallbackLocation, true);
+            load(fallbackLocation, true, fallbackStream);
             clearCache();
             return true;
         } catch (Exception e) {
@@ -302,18 +317,22 @@ class LoadableHttpResource implements DataStreamFactory {
     /**
      * Tries to load the data from the given location. The location hereby can be a remote location or a local
      * location. Also it can be an URL pointing to a current dataset, or an url directing to fallback resources,
-     * e.g. within the current classpath.
+     * e.g. within the current file system.
      *
      * @param itemToLoad   the target {@link URI}
      * @param fallbackLoad true, for a fallback URL.
      */
-    protected boolean load(URI itemToLoad, boolean fallbackLoad) {
+    private boolean load(URI itemToLoad, boolean fallbackLoad, InputStream fallbackStream) {
         InputStream is = null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         try {
             if (fallbackLoad) {
-                is = new BufferedInputStream(itemToLoad.toURL().openStream());
+                if (fallbackStream != null) {
+                    is = new BufferedInputStream(fallbackStream);
+                } else {
+                    is = new BufferedInputStream(itemToLoad.toURL().openStream());
+                }
             } else {
                 OkHttpClient.Builder builder = new OkHttpClient.Builder();
 

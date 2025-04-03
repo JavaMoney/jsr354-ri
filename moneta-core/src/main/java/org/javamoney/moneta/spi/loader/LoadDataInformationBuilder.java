@@ -15,6 +15,7 @@
  */
 package org.javamoney.moneta.spi.loader;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
@@ -36,11 +37,17 @@ public class LoadDataInformationBuilder {
 	private UpdatePolicy updatePolicy;
 
     private Map<String, String> properties;
+
 	/** An (optional) Listener to be registered. */
     private Listener listener;
+
 	/**
-	 * The backup resource location in the classpath, not
-	 *                          {@code null}.
+	 * The fallback input stream in the classpath.
+	 */
+	private InputStream fallbackStream;
+
+	/**
+	 * The backup resource location in the local filesystem.
 	 */
     private URI backupResource;
 
@@ -66,6 +73,11 @@ public class LoadDataInformationBuilder {
 
 	public LoadDataInformationBuilder withLoaderListener(Listener listener) {
 		this.listener = listener;
+		return this;
+	}
+
+	public LoadDataInformationBuilder withFallbackStream(InputStream stream) {
+		this.fallbackStream = stream;
 		return this;
 	}
 
@@ -98,8 +110,7 @@ public class LoadDataInformationBuilder {
 			throw new IllegalStateException("The properties should be informed");
 		}
 		return new LoadDataInformation(resourceId, updatePolicy, properties,
-                listener, backupResource, resourceLocations, startRemote);
+                listener, fallbackStream, backupResource, resourceLocations, startRemote);
 	}
-
 
 }
