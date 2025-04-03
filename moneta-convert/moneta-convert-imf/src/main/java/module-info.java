@@ -16,6 +16,9 @@ License for the specific language governing permissions and limitations under
 the License.
 */
 module org.javamoney.moneta.convert.imf {
+    exports org.javamoney.moneta.convert.imf;
+    exports org.javamoney.moneta.convert.imf.defaults;
+
     opens org.javamoney.moneta.convert.imf;
     opens org.javamoney.moneta.convert.imf.defaults;
 	requires org.javamoney.moneta.convert;
