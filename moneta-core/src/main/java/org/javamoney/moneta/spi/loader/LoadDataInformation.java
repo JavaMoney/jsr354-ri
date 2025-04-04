@@ -15,7 +15,6 @@
  */
 package org.javamoney.moneta.spi.loader;
 
-import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Map;
@@ -41,24 +40,17 @@ public class LoadDataInformation {
 
     private final URI backupResource;
 
-	public InputStream getFallbackStream() {
-		return fallbackStream;
-	}
-
-	private final InputStream fallbackStream;
-
     private final URI[] resourceLocations;
 
     private final boolean startRemote;
 
 	LoadDataInformation(String resourceId, UpdatePolicy updatePolicy,
 			Map<String, String> properties, LoaderService.Listener listener,
-			InputStream fallbackStream, URI backupResource, URI[] resourceLocations, boolean startRemote) {
+			URI backupResource, URI[] resourceLocations, boolean startRemote) {
 		this.resourceId = resourceId;
 		this.updatePolicy = updatePolicy;
 		this.properties = properties;
 		this.listener = listener;
-		this.fallbackStream = fallbackStream;
 		this.backupResource = backupResource;
 		this.resourceLocations = resourceLocations;
 		this.startRemote = startRemote;

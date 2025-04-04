@@ -50,17 +50,10 @@ class HttpLoadDataService {
 			}
 			try {
 				if (load.loadFallback()) {
-					if (load.getFallbackStream() != null) {
-						LOG.log(Level.FINE, "Read fallback data from stream");
-						listener.trigger(resourceId, load);
-						LOG.log(Level.FINE, "Loaded fallback data from input stream");
-						return true;
-					} else if (load.getFallbackResource() != null) {
-						LOG.log(Level.FINE, "Read fallback data from: " + load.getFallbackResource());
-						listener.trigger(resourceId, load);
-						LOG.log(Level.FINE, "Loaded fallback data from: " + load.getFallbackResource());
-						return true;
-					}
+					LOG.log(Level.WARNING, "Read fallback data from: " + load.getFallbackResource());
+					listener.trigger(resourceId, load);
+					LOG.log(Level.WARNING, "Loaded fallback data from: " + load.getFallbackResource());
+					return true;
 				}
 			} catch (Exception e) {
 				LOG.log(Level.SEVERE, "Failed to read/load fallback resource: " + resourceId,
