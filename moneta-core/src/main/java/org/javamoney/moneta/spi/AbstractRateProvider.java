@@ -179,7 +179,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
     }
 
     /**
-     * Return a URI from the given location.
+     * Return a URI to the given location.
      *
      * @param path the given location.
      * @param clazz the class to use for path resolution
