@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,6 +19,9 @@ import static org.javamoney.moneta.spi.AbstractCurrencyConversion.KEY_SCALE;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -47,8 +50,7 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      */
     private final ProviderContext context;
 
-    @Deprecated
-    protected final Logger log = Logger.getLogger(getClass().getName());
+    protected static final Logger LOG = Logger.getLogger(AbstractRateProvider.class.getName());
 
     /**
      * Constructor.
@@ -174,5 +176,25 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
         	return query.get(LocalDate[].class);
         }
         return null;
+    }
+
+    /**
+     * Return a URI to the given location.
+     *
+     * @param path the given location.
+     * @param clazz the class to use for path resolution
+     * @return the URL resource, or null.
+     */
+    protected URI getResourceFromPath(String path, Class<?> clazz) {
+        final URL url = clazz.getResource(path);
+        URI resource = null;
+        if (url != null) {
+            try {
+                resource = url.toURI();
+            } catch (URISyntaxException e) {
+                LOG.warning(e.getMessage());
+            }
+        }
+        return resource;
     }
 }

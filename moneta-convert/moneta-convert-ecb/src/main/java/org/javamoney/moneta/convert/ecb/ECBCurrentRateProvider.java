@@ -71,7 +71,7 @@ public class ECBCurrentRateProvider extends ECBAbstractRateProvider {
                 .withResourceId(getDataId())
                 .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
                 .withProperties(props)
-                .withBackupResource(URI.create(ECB_CURRENT_FALLBACK_PATH))
+                .withBackupResource(getResourceFromPath(ECB_CURRENT_FALLBACK_PATH, getClass()))
                 .withResourceLocations(URI.create(ECB_CURRENT_URL))
                 .withStartRemote(true)
                 .build();

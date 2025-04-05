@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -27,6 +27,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.javamoney.moneta.convert.ecb.defaults.Defaults.ECB_HIST_FALLBACK_PATH;
 import static org.javamoney.moneta.convert.ecb.defaults.Defaults.ECB_HIST_URL;
 
 /**
@@ -81,7 +82,7 @@ public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
             .withResourceId(getDataId())
             .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
             .withProperties(props)
-            .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml"))
+            .withBackupResource(getResourceFromPath(ECB_HIST_FALLBACK_PATH, getClass()))
             .withResourceLocations(URI.create(ECB_HIST_URL))
             .withStartRemote(false)
             .build();
@@ -95,8 +96,8 @@ public class ECBHistoricRateProvider extends ECBAbstractRateProvider {
 //            .withProperties(Map.of("period", "24:00",
 //                "delay", "01:00",
 //                "at", "07:00"))
-//            .withBackupResource(URI.create("org/javamoney/moneta/convert/ecb/defaults/eurofxref-hist.xml"))
-//            .withResourceLocations(URI.create("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml"))
+//            .withBackupResource(getResourceFromPath(ECB_HIST_FALLBACK_PATH, getClass()))
+//            .withResourceLocations(URI.create(ECB_HIST_URL))
 //            .withStartRemote(true)
 //            .build();
 //    }

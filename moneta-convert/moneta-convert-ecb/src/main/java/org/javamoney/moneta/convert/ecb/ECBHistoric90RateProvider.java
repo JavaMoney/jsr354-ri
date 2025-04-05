@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -23,6 +23,8 @@ import javax.money.convert.ProviderContext;
 import javax.money.convert.ProviderContextBuilder;
 import javax.money.convert.RateType;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +77,7 @@ public class ECBHistoric90RateProvider extends ECBAbstractRateProvider {
                 .withResourceId(getDataId())
                 .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
                 .withProperties(props)
-                .withBackupResource(URI.create(ECB_HIST90_FALLBACK_PATH))
+                .withBackupResource(getResourceFromPath(ECB_HIST90_FALLBACK_PATH, getClass()))
                 .withResourceLocations(URI.create(ECB_HIST90_URL))
                 .withStartRemote(true)
                 .build();
