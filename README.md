@@ -43,7 +43,10 @@ The release artifacts are accessible from [Maven Central](https://mvnrepository.
 
 [Release notes](https://github.com/JavaMoney/jsr354-ri/releases)
 
-The implementation supports JDK8 and later.
+Minimum Java SE Version
+----------------
+* Moneta up to 1.4.x: Java SE 8 or higher
+* Moneta 1.5.x: Java SE 11 or higher
 
 Help and support
 ----------------
