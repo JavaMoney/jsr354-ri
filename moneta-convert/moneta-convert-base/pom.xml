@@ -44,9 +44,9 @@
                             <!-- compile everything to ensure module-info contains right entries -->
                             <!-- required when JAVA_HOME is JDK 8 or below -->
                             <jdkToolchain>
-                                <version>9</version>
+                                <version>11</version>
                             </jdkToolchain>
-                            <release>9</release>
+                            <release>11</release>
                         </configuration>
                     </execution>
                     <execution>
