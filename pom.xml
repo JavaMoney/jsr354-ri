@@ -42,8 +42,8 @@
 
 	<properties>
 		<jsr.version>1.1</jsr.version>
-		<jdkVersion>1.8</jdkVersion>
-		<maven.compiler.release>8</maven.compiler.release>
+		<jdkVersion>11</jdkVersion>
+		<maven.compiler.release>11</maven.compiler.release>
 
 		<moduleDir>.</moduleDir>
 		<basedir>.</basedir>

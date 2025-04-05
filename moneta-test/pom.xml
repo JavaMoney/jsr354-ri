@@ -28,11 +28,10 @@
                         <id>default-compile</id>
                         <configuration>
                             <!-- compile everything to ensure module-info contains right entries -->
-                            <!-- required when JAVA_HOME is JDK 8 or below -->
                             <jdkToolchain>
                                 <version>${maven.compiler.release}</version>
                             </jdkToolchain>
-                            <release>9</release>
+                            <release>${maven.compiler.release}</release>
                         </configuration>
                     </execution>
                     <execution>
@@ -40,7 +39,7 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <!-- recompile everything for target VM except the module-info.java -->
+                        <!-- recompile everything for target VM except the module-info.java
                         <configuration>
                             <source>8</source>
                             <target>8</target>
@@ -48,7 +47,7 @@
                             <excludes>
                                 <exclude>module-info.java</exclude>
                             </excludes>
-                        </configuration>
+                        </configuration> -->
                     </execution>
                 </executions>
             </plugin>

@@ -35,7 +35,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <release>11</release>
+                    <release>${maven.compiler.release}</release>
                 </configuration>
                 <executions>
                     <execution>
@@ -46,7 +46,7 @@
                             <jdkToolchain>
                                 <version>11</version>
                             </jdkToolchain>
-                            <release>11</release>
+                            <release>${maven.compiler.release}</release>
                         </configuration>
                     </execution>
                     <execution>
@@ -54,13 +54,13 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-                        <!-- recompile everything for target VM except the module-info.java -->
+                        <!-- recompile everything for target VM except the module-info.java
                         <configuration>
                             <release>${maven.compiler.release}</release>
                             <excludes>
                                 <exclude>module-info.java</exclude>
                             </excludes>
-                        </configuration>
+                        </configuration> -->
                     </execution>
                 </executions>
             </plugin>
