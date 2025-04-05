@@ -57,7 +57,7 @@ import java.util.stream.Stream;
 abstract class ECBAbstractRateProvider extends AbstractRateProvider implements
         LoaderService.Listener {
 
-	protected static final Logger LOG = Logger.getLogger(ECBAbstractRateProvider.class.getName());
+	private static final Logger LOG = Logger.getLogger(ECBAbstractRateProvider.class.getName());
 
     private static final String BASE_CURRENCY_CODE = "EUR";
 

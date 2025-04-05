@@ -72,19 +72,12 @@ public class ECBHistoric90RateProvider extends ECBAbstractRateProvider {
     protected LoadDataInformation getDefaultLoadData() {
         final Map<String, String> props = new HashMap<>();
         props.put("period", "03:00");
-        final URL backupUrl = getClass().getResource(ECB_HIST90_FALLBACK_PATH);
-        // TODO factor fallBackResource into ECBAbstractRateProvider
-        URI backupResource = null;
-        try {
-            backupResource = backupUrl.toURI();
-        } catch (URISyntaxException e) {
-            LOG.warning(e.getMessage());
-        }
+
         return new LoadDataInformationBuilder()
                 .withResourceId(getDataId())
                 .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
                 .withProperties(props)
-                .withBackupResource(backupResource)
+                .withBackupResource(getResourceFromPath(ECB_HIST90_FALLBACK_PATH))
                 .withResourceLocations(URI.create(ECB_HIST90_URL))
                 .withStartRemote(true)
                 .build();
