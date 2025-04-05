@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2023, Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -58,7 +58,7 @@ import java.util.logging.Logger;
  *
  * @author Anatole Tresch
  * @author Werner Keil
- * @version 1.3
+ * @version 2.0
  * @since 1.0
  */
 public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, Serializable {
@@ -920,35 +920,5 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
                             "using default formatter for toString().");
             return ToStringMonetaryAmountFormat.of(ToStringMonetaryAmountFormatStyle.MONEY);
         }
-    }
-
-    /**
-     * Just to don't break the compatibility.
-     * Don't use it
-     * @param number the amount, not null
-     * @deprecated Will be removed.
-     * @see NumberVerifier#isInfinityAndNotNaN
-     */
-    @Deprecated
-    public static boolean isInfinityAndNotNaN(Number number) {
-        if (Double.class == number.getClass() || Float.class == number.getClass()) {
-            double dValue = number.doubleValue();
-            if (!Double.isNaN(dValue) && Double.isInfinite(dValue)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Just to don't break the compatibility.
-     * Don't use it
-     * @param number the amount, not null.
-     * @deprecated Will be removed. Use
-     * @see NumberVerifier#checkNoInfinityOrNaN
-     */
-    @Deprecated
-    public static void checkNoInfinityOrNaN(Number number) {
-        NumberVerifier.checkNoInfinityOrNaN(number);
     }
 }

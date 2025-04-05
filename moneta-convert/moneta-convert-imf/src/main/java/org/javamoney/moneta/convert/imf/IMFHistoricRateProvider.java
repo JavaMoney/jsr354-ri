@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2012, 2015, Credit Suisse (Anatole Tresch), Werner Keil and others by the @author tag.
+  Copyright (c) 2012, 2025, Credit Suisse, Werner Keil and others by the @author tag.
 
   Licensed under the Apache License, Version 2.0 (the "License"); you may not
   use this file except in compliance with the License. You may obtain a copy of
@@ -42,6 +42,7 @@ import org.javamoney.moneta.spi.loader.LoaderService;
 /**
  * Find by historic from IMF
  * @author otaviojava
+ * @author keilw
  * @since 1.0.1
  */
 public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
@@ -53,7 +54,6 @@ public class IMFHistoricRateProvider extends IMFAbstractRateProvider {
 	private static final ProviderContext CONTEXT = ProviderContextBuilder.of("IMF-HIST", RateType.HISTORIC)
 			.set("providerDescription", "Historic International Monetary Fund")
 			.set("days", 0)
-			//.set("User-Agent", "Chrome/51.0.2704.103") This was a URLConnection hack, OkHttp works without the User-Agent
 			.build();
 
 	private final List<YearMonth> cachedHistoric = new ArrayList<>();

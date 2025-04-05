@@ -320,6 +320,6 @@ public class OkHttpLoaderService implements LoaderService {
 
     @Override
     public String toString() {
-        return "URLConnectionLoaderService [resources=" + resources + ']';
+        return "OkHttpLoaderService [resources=" + resources + ']';
     }
 }

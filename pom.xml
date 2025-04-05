@@ -13,9 +13,9 @@
 	<parent>
 		<groupId>org.javamoney</groupId>
 		<artifactId>javamoney-parent</artifactId>
-		<version>1.4</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
-	<version>1.4.6-SNAPSHOT</version>
+	<version>1.5-SNAPSHOT</version>
 	<artifactId>moneta-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Moneta Parent</name>
@@ -33,7 +33,7 @@
 
 	<licenses>
 		<license>
-			<name>Apache 2 License</name>
+			<name>Apache-2.0</name>
 			<comments>RI</comments>
 			<url>LICENSE.txt</url>
 			<distribution>repo</distribution>
