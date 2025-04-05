@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2020, Anatole Tresch, Werner Keil and others by the @author tag.
+ * Copyright (c) 2012, 2025, Werner Keil and others by the @author tag.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -157,7 +157,7 @@ public class DefaultMonetaryAmountFormatTest {
         final String[] skipLangArray = {"as", "ar", "bn", "ckb", "dz", "fa", "ig", "ks", "lrc",
                 "mni", "mr", "my", "mzn", "ne", "pa", "ps", "sa", "sat", "sd", "th", "ur", "uz", "raj", "bgc", "bho"};
         final Set<String> SKIPPED_LANGUAGES = new HashSet<>(Arrays.asList(skipLangArray));
-        final Locale[] locArray = new Locale[]{new Locale("dz", "BT")
+        final Locale[] locArray = new Locale[]{new Locale.Builder().setLanguage("dz").setRegion("BT").build()
         };
         final Set<Locale> SKIPPED_LOCALES = new HashSet<>(Arrays.asList(locArray));
 
