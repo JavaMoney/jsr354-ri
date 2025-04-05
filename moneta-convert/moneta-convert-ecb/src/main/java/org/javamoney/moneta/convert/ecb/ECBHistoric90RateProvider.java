@@ -77,7 +77,7 @@ public class ECBHistoric90RateProvider extends ECBAbstractRateProvider {
                 .withResourceId(getDataId())
                 .withUpdatePolicy(LoaderService.UpdatePolicy.SCHEDULED)
                 .withProperties(props)
-                .withBackupResource(getResourceFromPath(ECB_HIST90_FALLBACK_PATH))
+                .withBackupResource(getResourceFromPath(ECB_HIST90_FALLBACK_PATH, getClass()))
                 .withResourceLocations(URI.create(ECB_HIST90_URL))
                 .withStartRemote(true)
                 .build();

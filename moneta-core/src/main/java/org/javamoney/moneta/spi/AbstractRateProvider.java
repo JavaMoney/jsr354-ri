@@ -182,10 +182,11 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
      * Return a URI from the given location.
      *
      * @param path the given location.
+     * @param clazz the class to use for path resolution
      * @return the URL resource, or null.
      */
-    protected URI getResourceFromPath(String path) {
-        final URL url = getClass().getResource(path);
+    protected URI getResourceFromPath(String path, Class<?> clazz) {
+        final URL url = clazz.getResource(path);
         URI resource = null;
         try {
             resource = url.toURI();
