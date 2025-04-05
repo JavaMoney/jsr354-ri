@@ -188,10 +188,12 @@ public abstract class AbstractRateProvider implements ExchangeRateProvider {
     protected URI getResourceFromPath(String path, Class<?> clazz) {
         final URL url = clazz.getResource(path);
         URI resource = null;
-        try {
-            resource = url.toURI();
-        } catch (URISyntaxException e) {
-            LOG.warning(e.getMessage());
+        if (url != null) {
+            try {
+                resource = url.toURI();
+            } catch (URISyntaxException e) {
+                LOG.warning(e.getMessage());
+            }
         }
         return resource;
     }
