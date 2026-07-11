@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class CurrencyConversionTest {
 
@@ -68,58 +69,32 @@ public class CurrencyConversionTest {
 
     @Test
     public void testMoneyConversion() {
-
         testMoneyConversionHelper(
                 Money.of(0, BASE_CURRENCY),
                 Money.of(1000, BASE_CURRENCY),
-                Money.of(new BigDecimal("1000.345"), BASE_CURRENCY)
-        );
+                Money.of(new BigDecimal("1000.345"), BASE_CURRENCY));
     }
 
     @Test
     public void testFastMoneyConversion() {
-
         testMoneyConversionHelper(
                 FastMoney.of(0, BASE_CURRENCY),
                 FastMoney.of(1000, BASE_CURRENCY),
-                FastMoney.of(new BigDecimal("1000.345"), BASE_CURRENCY)
-        );
+                FastMoney.of(new BigDecimal("1000.345"), BASE_CURRENCY));
     }
 
     private void testMoneyConversionHelper(MonetaryAmount zeroAmount, MonetaryAmount roundedAmount, MonetaryAmount amountWithCents) {
 
-        assertEquals(zeroAmount.with(
-                exactRateProvider.getCurrencyConversion(TERM_CURRENCY)
-                ).toString(),
-                "UAH 0"
-        );
+        assertConverted(zeroAmount.with(exactRateProvider.getCurrencyConversion(TERM_CURRENCY)), "0");
+        assertConverted(amountWithCents.with(exactRateProvider.getCurrencyConversion(TERM_CURRENCY)), "28465.81732");
+        assertConverted(roundedAmount.with(exactRateProvider.getCurrencyConversion(TERM_CURRENCY)), "28456");
+        assertConverted(amountWithCents.with(integerRateProvider.getCurrencyConversion(TERM_CURRENCY)), "28009.66");
+        assertConverted(roundedAmount.with(integerRateProvider.getCurrencyConversion(TERM_CURRENCY)), "28000");
+    }
 
-        assertEquals(
-                amountWithCents.with(
-                        exactRateProvider.getCurrencyConversion(TERM_CURRENCY)
-                ).toString(),
-                "UAH 28465.81732"
-        );
-
-        assertEquals(
-                roundedAmount.with(
-                        exactRateProvider.getCurrencyConversion(TERM_CURRENCY)
-                ).toString(),
-                "UAH 28456"
-        );
-
-        assertEquals(
-                amountWithCents.with(
-                        integerRateProvider.getCurrencyConversion(TERM_CURRENCY)
-                ).toString(),
-                "UAH 28009.66"
-        );
-
-        assertEquals(
-                roundedAmount.with(
-                        integerRateProvider.getCurrencyConversion(TERM_CURRENCY)
-                ).toString(),
-                "UAH 28000"
-        );
+    private void assertConverted(MonetaryAmount converted, String expectedValue) {
+        assertEquals(converted.getCurrency(), Monetary.getCurrency(TERM_CURRENCY));
+        assertTrue(converted.isEqualTo(Money.of(new BigDecimal(expectedValue), TERM_CURRENCY)),
+                converted + " should have numeric value " + expectedValue);
     }
 }

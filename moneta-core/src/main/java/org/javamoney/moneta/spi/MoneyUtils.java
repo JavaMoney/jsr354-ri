@@ -121,6 +121,23 @@ public final class MoneyUtils {
     }
 
     /**
+     * Returns the numeric value with any non-significant trailing zeros removed, mapping any
+     * zero value (including {@code -0}) to {@link BigDecimal#ZERO}.
+     *
+     * @param value the value to normalize, not null.
+     * @return the value with non-significant trailing zeros stripped.
+     */
+    public static BigDecimal stripScalingZeroes(BigDecimal value) {
+        if (value.signum() == 0) {
+            return BigDecimal.ZERO;
+        }
+        if (value.scale() > 0) {
+            return value.stripTrailingZeros();
+        }
+        return value;
+    }
+
+    /**
      * Evaluates the {@link MathContext} from the given {@link MonetaryContext}.
      *
      * @param monetaryContext the {@link MonetaryContext}

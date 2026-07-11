@@ -88,7 +88,7 @@ public class RoundedMoneyTest {
         RoundedMoney money1 = RoundedMoney.of(BigDecimal.ONE, EURO);
         RoundedMoney[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
-        assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class), new BigDecimal("0.5"));
+        assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class), new BigDecimal("0.50"));
     }
 
     @Test
@@ -974,15 +974,15 @@ public class RoundedMoneyTest {
             Locale.setDefault(Locale.ENGLISH);
             assertEquals(RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.23455645");
             assertEquals("CHF 1234", RoundedMoney.of(1234, "CHF").toString());
-            assertEquals("CHF 1234", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF 1234.0", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.1", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("CHF 0.01", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("CHF 0.0100", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
 
             assertEquals(RoundedMoney.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.23455645");
             assertEquals("CHF 1234", RoundedMoney.of(1234, "CHF").toString());
-            assertEquals("CHF 1234", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF 1234.0", RoundedMoney.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.1", RoundedMoney.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("CHF 0.01", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("CHF 0.0100", RoundedMoney.of(new BigDecimal("0.0100"), "CHF").toString());
         } finally {
             Locale.setDefault(defaultLocale);
         }

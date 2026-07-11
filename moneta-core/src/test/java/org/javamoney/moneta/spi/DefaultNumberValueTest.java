@@ -142,7 +142,7 @@ public class DefaultNumberValueTest {
 
 	@Test
 	public void shouldReturnAmountFractionDenominatorForNegativeScale() {
-		NumberValue numberValue = DefaultNumberValue.of(BigDecimal.valueOf(10.00));
+		NumberValue numberValue = DefaultNumberValue.of(new BigDecimal("1E+1"));
 		assertEquals(1, numberValue.getAmountFractionDenominator());
 	}
 
