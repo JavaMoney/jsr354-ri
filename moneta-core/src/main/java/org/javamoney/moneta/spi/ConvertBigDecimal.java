@@ -60,24 +60,21 @@ public enum ConvertBigDecimal {
     NUMBERVALUE {
 		@Override
 		BigDecimal getDecimal(Number num) {
-			BigDecimal result = ((NumberValue)num).numberValue(BigDecimal.class);
-			return stripScalingZeroes(result);
+			return ((NumberValue)num).numberValue(BigDecimal.class);
 		}
 	},
     /** Conversion from BigDecimal. */
     BIGDECIMAL {
 		@Override
 		BigDecimal getDecimal(Number num) {
-			BigDecimal result = ((BigDecimal)num);
-			return stripScalingZeroes(result);
+			return (BigDecimal) num;
 		}
 	},
     /** Conversion from BigDecimal, extended. */
     BIGDECIMAL_EXTENDS {
 		@Override
 		BigDecimal getDecimal(Number num) {
-			BigDecimal result = ((BigDecimal)num).stripTrailingZeros();
-			return stripScalingZeroes(result);
+			return (BigDecimal) num;
 		}
 	},
     /** Default conversion based on String, if everything else failed. */
@@ -89,9 +86,8 @@ public enum ConvertBigDecimal {
 				result = new BigDecimal(num.toString());
 			} catch (NumberFormatException ignored) {
 			}
-			result = Optional.ofNullable(result).orElse(
+			return Optional.ofNullable(result).orElse(
 					BigDecimal.valueOf(num.doubleValue()));
-			return stripScalingZeroes(result);
 		}
 	};
 	
@@ -131,14 +127,4 @@ public enum ConvertBigDecimal {
 	
 	private static final List<Class<? extends Number>> FLOATINGS = Arrays.asList(
 			Float.class, Double.class);
-	
-	private static BigDecimal stripScalingZeroes(BigDecimal result) {
-		if (result.signum() == 0) {
-			return BigDecimal.ZERO;
-		}
-		if (result.scale() > 0) {
-			return result.stripTrailingZeros();
-		}
-		return result;
-	}
 }

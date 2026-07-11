@@ -194,7 +194,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
     private long getInternalNumber(Number number) {
-        BigDecimal bd = MoneyUtils.getBigDecimal(number);
+        BigDecimal bd = getStrippedBigDecimal(number);
         if (bd.scale() > SCALE) {
             throw new ArithmeticException(number + " can not be represented by this class, scale > " + SCALE);
         }
@@ -206,6 +206,9 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         return bd.movePointRight(SCALE).longValue();
     }
 
+    private static BigDecimal getStrippedBigDecimal(Number number) {
+        return MoneyUtils.stripScalingZeroes(MoneyUtils.getBigDecimal(number));
+    }
 
     /**
      * Static factory method for creating a new instance of {@link FastMoney}.
@@ -333,11 +336,12 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
 
     private void checkAmountParameter(MonetaryAmount amount) {
         MoneyUtils.checkAmountParameter(amount, this.currency);
-        // numeric check for overflow...
-        if (amount.getNumber().getScale() > SCALE) {
+        // numeric check for overflow, based on the effective (trailing-zero stripped) value
+        BigDecimal bd = MoneyUtils.stripScalingZeroes(amount.getNumber().numberValue(BigDecimal.class));
+        if (bd.scale() > SCALE) {
             throw new ArithmeticException("Parameter exceeds maximal scale: " + SCALE);
         }
-        if (amount.getNumber().getPrecision() > MAX_BD.precision()) {
+        if (bd.precision() > MAX_BD.precision()) {
             throw new ArithmeticException("Parameter exceeds maximal precision: " + SCALE);
         }
     }
@@ -427,7 +431,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
     }
 
     private boolean isOne(Number number) {
-        BigDecimal bd = MoneyUtils.getBigDecimal(number);
+        BigDecimal bd = getStrippedBigDecimal(number);
         try {
             return bd.scale() == 0 && bd.longValueExact() == 1L;
         } catch (Exception e) {
@@ -566,7 +570,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
      */
     @Override
     public NumberValue getNumber() {
-        return new DefaultNumberValue(getBigDecimal());
+        return new DefaultNumberValue(MoneyUtils.stripScalingZeroes(getBigDecimal()));
     }
 
     @Override
@@ -594,7 +598,7 @@ public final class FastMoney implements MonetaryAmount, Comparable<MonetaryAmoun
         if (number.longValue() > MAX_BD.longValue()) {
             throw new ArithmeticException("Value exceeds maximal value: " + MAX_BD);
         }
-        BigDecimal bd = MoneyUtils.getBigDecimal(number);
+        BigDecimal bd = getStrippedBigDecimal(number);
         if (bd.precision() > MAX_BD.precision()) {
             throw new ArithmeticException("Precision exceeds maximal precision: " + MAX_BD.precision());
         }

@@ -93,7 +93,7 @@ public class MoneyTest {
         Money[] divideAndRemainder = money1.divideAndRemainder(new BigDecimal("0.50000000000000000001"));
         assertEquals(divideAndRemainder[0].getNumber().numberValue(BigDecimal.class), BigDecimal.ONE);
         assertEquals(divideAndRemainder[1].getNumber().numberValue(BigDecimal.class),
-                new BigDecimal("0.5"));
+                new BigDecimal("0.5000000000000000"));
     }
 
     @Test
@@ -1084,10 +1084,10 @@ public class MoneyTest {
             System.setProperty("org.javamoney.toStringFormatOrder", "ca");
             assertEquals(Money.of(new BigDecimal("1.23455645"), "XXX").toString(), "XXX 1.23455645");
             assertEquals("CHF 1234", Money.of(1234, "CHF").toString());
-            assertEquals("CHF 1234", Money.of(new BigDecimal("1234.0"), "CHF").toString());
+            assertEquals("CHF 1234.0", Money.of(new BigDecimal("1234.0"), "CHF").toString());
             assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
-            assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
-            assertEquals("CHF 50",
+            assertEquals("CHF 0.0100", Money.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("CHF 50.0",
                     Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
         } finally {
             System.clearProperty("org.javamoney.toStringFormatOrder");
@@ -1105,13 +1105,13 @@ public class MoneyTest {
             assertEquals(Money.of(1234, "CHF").toString(), "CHF 1234");
             assertEquals(Money.of(new BigDecimal("1234"), "CHF",
                     MonetaryContextBuilder.of().setMaxScale(2).setFixedScale(true).build()).toString(), "CHF 1234.00");
-            assertEquals(Money.of(new BigDecimal("1234.0"), "CHF").toString(), "CHF 1234");
+            assertEquals(Money.of(new BigDecimal("1234.0"), "CHF").toString(), "CHF 1234.0");
             assertEquals("CHF 1234.1", Money.of(new BigDecimal("1234.1"), "CHF").toString());
             assertEquals(Money.of(new BigDecimal("1234.1"), "CHF",
                     MonetaryContextBuilder.of().setMaxScale(2).build()).toString(), "CHF 1234.1");
             assertEquals(Money.of(new BigDecimal("1234.1"), "CHF", twoDigitFixedContext).toString(), "CHF 1234.10");
-            assertEquals("CHF 0.01", Money.of(new BigDecimal("0.0100"), "CHF").toString());
-            assertEquals("CHF 50",
+            assertEquals("CHF 0.0100", Money.of(new BigDecimal("0.0100"), "CHF").toString());
+            assertEquals("CHF 50.0",
                     Money.of(new BigDecimal("500").multiply(new BigDecimal(".1")), "CHF").toString());
             Money money1 = Money.of(1234567.3456, "EUR");
             assertEquals(money1.toString(), "EUR 1234567.3456");
