@@ -30,12 +30,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Locale;
 
 import javax.money.*;
 
 import org.javamoney.moneta.spi.MonetaryConfig;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -593,6 +595,86 @@ public class MoneyTest {
         assertEquals(Money.of(-100, "CHF"), m.negate());
         m = Money.of(-123.234, "CHF");
         assertEquals(Money.of(123.234, "CHF"), m.negate());
+    }
+
+    private static MonetaryContext negateCentsContext() {
+        return MonetaryContextBuilder.of(Money.class)
+                .setPrecision(4).setMaxScale(2).set(RoundingMode.DOWN).build();
+    }
+
+    @DataProvider
+    public Object[][] negateContextInputs() {
+        return new Object[][]{{"12.34"}, {"-12.34"}, {"0.00"}};
+    }
+
+    @Test(dataProvider = "negateContextInputs")
+    public void testNegatePreservesCompleteContext(String text) {
+        MonetaryContext context = negateCentsContext().toBuilder()
+                .setFixedScale(true).set(new MathContext(4, RoundingMode.DOWN))
+                .set("test.policy", "issue-362").build();
+        CurrencyUnit currency = Monetary.getCurrency("AUD");
+        Money source = Money.of(new BigDecimal(text), currency, context);
+        BigDecimal before = source.getNumber().numberValueExact(BigDecimal.class);
+        int scale = source.getScale();
+        int precision = source.getPrecision();
+
+        Money result = source.negate();
+
+        assertEquals(result.getNumber().numberValueExact(BigDecimal.class), before.negate());
+        assertEquals(result.getScale(), scale);
+        assertEquals(result.getPrecision(), precision);
+        assertEquals(result.getCurrency(), currency);
+        assertEquals(result.getContext(), context);
+        assertEquals(source.getNumber().numberValueExact(BigDecimal.class), before);
+        assertEquals(source.getScale(), scale);
+        assertEquals(source.getPrecision(), precision);
+        assertEquals(source.getCurrency(), currency);
+        assertEquals(source.getContext(), context);
+    }
+
+    @DataProvider
+    public Object[][] negateDivisionCases() {
+        return new Object[][]{{"3", "-3.33"}, {"6", "-1.66"}, {"0.03", "-333.3"}};
+    }
+
+    @Test(dataProvider = "negateDivisionCases")
+    public void testNegatePreservesDivisionPolicy(String divisorText, String expectedText) {
+        MonetaryContext context = negateCentsContext();
+        Money source = Money.of(new BigDecimal("10.00"), "AUD", context);
+        BigDecimal divisor = new BigDecimal(divisorText);
+        BigDecimal expected = new BigDecimal(expectedText);
+        Money control = source.multiply(-1).divide(divisor);
+        assertEquals(control.getNumber().numberValueExact(BigDecimal.class), expected);
+        assertEquals(control.getContext(), context);
+
+        Money result = source.negate().divide(divisor);
+
+        assertEquals(result.getNumber().numberValueExact(BigDecimal.class), expected);
+        assertEquals(result.getScale(), expected.scale());
+        assertEquals(result.getPrecision(), expected.precision());
+        assertEquals(result.getCurrency(), source.getCurrency());
+        assertEquals(result.getContext(), context);
+    }
+
+    @Test
+    public void testNegativeAbsPreservesContextAndDivisionPolicy() {
+        MonetaryContext context = negateCentsContext();
+        CurrencyUnit currency = Monetary.getCurrency("AUD");
+        Money source = Money.of(new BigDecimal("-10.00"), currency, context);
+        BigDecimal before = source.getNumber().numberValueExact(BigDecimal.class);
+        int scale = source.getScale();
+
+        Money absolute = source.abs();
+
+        assertEquals(absolute.getNumber().numberValueExact(BigDecimal.class), before.abs());
+        assertEquals(absolute.getScale(), scale);
+        assertEquals(absolute.getCurrency(), currency);
+        assertEquals(absolute.divide(3).getNumber().numberValueExact(BigDecimal.class), new BigDecimal("3.33"));
+        assertEquals(absolute.getContext(), context);
+        assertEquals(source.getNumber().numberValueExact(BigDecimal.class), before);
+        assertEquals(source.getScale(), scale);
+        assertEquals(source.getCurrency(), currency);
+        assertEquals(source.getContext(), context);
     }
 
     /**

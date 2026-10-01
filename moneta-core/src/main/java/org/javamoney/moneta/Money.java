@@ -515,7 +515,7 @@ public final class Money implements MonetaryAmount, Comparable<MonetaryAmount>, 
      */
     @Override
     public Money negate() {
-        return new Money(this.number.negate(), getCurrency());
+        return new Money(this.number.negate(), getCurrency(), monetaryContext);
     }
 
     /*
