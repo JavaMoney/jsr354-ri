@@ -16,6 +16,8 @@
 package org.javamoney.moneta.spi.format;
 
 import org.javamoney.moneta.FastMoney;
+import org.javamoney.moneta.format.CurrencyStyle;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.money.*;
@@ -85,6 +87,54 @@ public class DefaultMonetaryAmountFormatTest {
         assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "USD");
         assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000.42D);
         assertEquals(parsedAmount.toString(), "USD 1000.42");
+    }
+
+    @DataProvider
+    public Object[][] explicitDollarAmounts() {
+        return new Object[][] {
+                {US, "USD", "$1000", 1000D},
+                {US, "USD", "$1000.00", 1000D},
+                {US, "USD", "$0.01", 0.01D},
+                {US, "USD", "$-1000.00", -1000D},
+                {Locale.CANADA, "CAD", "$1000.00", 1000D},
+                {new Locale("en", "AU"), "AUD", "$1000.00", 1000D}
+        };
+    }
+
+    @Test(dataProvider = "explicitDollarAmounts")
+    public void testParse_with_explicit_dollar_currency(Locale locale, String code, String input, double number) {
+        CurrencyUnit currency = Monetary.getCurrency(code);
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.of(locale)
+                .set(CurrencyStyle.SYMBOL).set(CurrencyUnit.class, currency).build());
+        MonetaryAmount parsedAmount = format.parse(input);
+        assertSame(parsedAmount.getCurrency(), currency);
+        assertEquals(parsedAmount.getNumber().doubleValueExact(), number);
+    }
+
+    @Test
+    public void testParse_with_localised_explicit_dollar_currency() {
+        CurrencyUnit usd = Monetary.getCurrency("USD");
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.of(Locale.FRANCE)
+                .set(CurrencyStyle.SYMBOL).set(CurrencyUnit.class, usd).set("pattern", "¤#,##0.00").build());
+        MonetaryAmount parsedAmount = format.parse("$US1000,00");
+        assertSame(parsedAmount.getCurrency(), usd);
+        assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000D);
+    }
+
+    @Test
+    public void testParse_explicit_currency_remains_a_fallback() {
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.of(US)
+                .set(CurrencyStyle.SYMBOL).set(CurrencyUnit.class, Monetary.getCurrency("USD")).build());
+        MonetaryAmount parsedAmount = format.parse("€1000.00");
+        assertEquals(parsedAmount.getCurrency().getCurrencyCode(), "EUR");
+        assertEquals(parsedAmount.getNumber().doubleValueExact(), 1000D);
+    }
+
+    @Test(expectedExceptions = MonetaryParseException.class)
+    public void testParse_dollar_without_explicit_currency() {
+        MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(AmountFormatQueryBuilder.of(US)
+                .set(CurrencyStyle.SYMBOL).build());
+        format.parse("$1000.00");
     }
 
     @Test

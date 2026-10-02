@@ -17,9 +17,11 @@ package org.javamoney.moneta.spi.format;
 
 import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.javamoney.moneta.FastMoney;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import javax.money.format.AmountFormatContextBuilder;
 import javax.money.format.MonetaryParseException;
 import java.io.IOException;
@@ -83,6 +85,65 @@ public class CurrencyTokenTest {
             token.parse(context);
         } catch (MonetaryParseException e) {
             assertEquals(e.getInput(), "$");
+            assertEquals(e.getErrorIndex(), -1);
+            assertEquals(e.getMessage(), "$ is not a unique currency symbol.");
+        }
+        assertEquals(context.getIndex(), 0);
+        assertFalse(context.isComplete());
+        assertTrue(context.hasError());
+        assertEquals(context.getErrorMessage(), "$ is not a unique currency symbol.");
+    }
+
+    @DataProvider
+    public Object[][] explicitDollarCurrencies() {
+        return new Object[][] {
+                {US, Monetary.getCurrency("USD"), "$", "$"},
+                {US, Monetary.getCurrency("USD"), "$1000.00", "$"},
+                {CANADA, Monetary.getCurrency("CAD"), "$1000.00", "$"},
+                {new Locale("en", "AU"), Monetary.getCurrency("AUD"), "$1000.00", "$"},
+                {FRANCE, Monetary.getCurrency("USD"), "$US1000,00", "$US"},
+                {US, CurrencyUnitBuilder.of("USD", "configured").build(), "$1000.00", "$"}
+        };
+    }
+
+    @Test(dataProvider = "explicitDollarCurrencies")
+    public void testParse_SYMBOL_explicit_dollar(Locale locale, CurrencyUnit currency, String input, String symbol) {
+        CurrencyToken token = new CurrencyToken(SYMBOL,
+                AmountFormatContextBuilder.of(locale).set(CurrencyUnit.class, currency).build());
+        ParseContext context = new ParseContext(input);
+        token.parse(context);
+        assertSame(context.getParsedCurrency(), currency);
+        assertEquals(context.getIndex(), symbol.length());
+        assertFalse(context.hasError());
+        assertEquals(context.isFullyParsed(), input.equals(symbol));
+        if (!context.isFullyParsed()) {
+            assertEquals(context.lookupNextToken(), input.substring(symbol.length()));
+        }
+    }
+
+    @DataProvider
+    public Object[][] ambiguousDollarCurrencies() {
+        return new Object[][] {
+                {US, null, "$1000.00"},
+                {US, Monetary.getCurrency("EUR"), "$1000.00"},
+                {FRANCE, Monetary.getCurrency("USD"), "$1000,00"},
+                {FRANCE, Monetary.getCurrency("USD"), "$U1000,00"}
+        };
+    }
+
+    @Test(dataProvider = "ambiguousDollarCurrencies")
+    public void testParse_SYMBOL_dollar_requires_matching_currency(Locale locale, CurrencyUnit currency, String input) {
+        AmountFormatContextBuilder builder = AmountFormatContextBuilder.of(locale);
+        if (currency != null) {
+            builder.set(CurrencyUnit.class, currency);
+        }
+        CurrencyToken token = new CurrencyToken(SYMBOL, builder.build());
+        ParseContext context = new ParseContext(input);
+        try {
+            token.parse(context);
+            fail("Expected ambiguous dollar input to be rejected");
+        } catch (MonetaryParseException e) {
+            assertEquals(e.getInput(), input);
             assertEquals(e.getErrorIndex(), -1);
             assertEquals(e.getMessage(), "$ is not a unique currency symbol.");
         }

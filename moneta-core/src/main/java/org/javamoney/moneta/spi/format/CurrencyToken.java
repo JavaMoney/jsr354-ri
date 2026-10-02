@@ -207,8 +207,14 @@ final class CurrencyToken implements FormatToken {
                     break;
                 case SYMBOL:
                     if (token.startsWith("$")) {
-                        throw new MonetaryParseException("$ is not a unique currency symbol.", token,
-                                context.getErrorIndex());
+                        CurrencyUnit fixed = this.context.get(CurrencyUnit.class);
+                        String symbol = fixed == null ? "" : getCurrencySymbol(fixed);
+                        if (symbol.isEmpty() || !token.startsWith(symbol)) {
+                            throw new MonetaryParseException("$ is not a unique currency symbol.", token,
+                                    context.getErrorIndex());
+                        }
+                        cur = fixed;
+                        context.consume(symbol);
                     } else if (token.startsWith("€")) {
                         cur = Monetary.getCurrency("EUR", providers);
                         context.consume('€');
