@@ -16,18 +16,22 @@
 package org.javamoney.moneta;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.Currency;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.money.UnknownCurrencyException;
 
 import org.testng.annotations.Test;
 
@@ -163,6 +167,35 @@ public class CurrenciesTest {
 		String toString = cur1.toString();
 		assertNotNull(toString);
 		assertTrue(toString.contains("USD"), "Does not contain currency code.");
+	}
+
+	/**
+	 * A single-code lookup must be exact: a regex-like code such as {@code "X*"} must not resolve to
+	 * the ISO code {@code "XXX"} that it happens to match as a pattern. See issue #428.
+	 */
+	@Test(expectedExceptions = UnknownCurrencyException.class)
+	public void testGetCurrencyRejectsRegexLikeCode() {
+		Monetary.getCurrency("X*");
+	}
+
+	/**
+	 * A garbage currency code that matches a cached code as a regular expression must be reported as
+	 * unknown rather than silently resolving to that currency. See issue #428.
+	 */
+	@Test(expectedExceptions = UnknownCurrencyException.class)
+	public void testGetCurrencyRejectsGarbageCode() {
+		Monetary.getCurrency("X+|helloWorld");
+	}
+
+	/**
+	 * Searching currencies by regular expression through {@code getCurrencies(CurrencyQuery)} must
+	 * keep working; only the single-code {@code getCurrency(String)} lookup is exact. See issue #428.
+	 */
+	@Test
+	public void testGetCurrenciesByRegexStillWorks() {
+		Collection<CurrencyUnit> result = Monetary
+				.getCurrencies(CurrencyQueryBuilder.of().setCurrencyCodes("X.*").build());
+		assertFalse(result.isEmpty(), "Regex currency query should still match currencies.");
 	}
 
 }
