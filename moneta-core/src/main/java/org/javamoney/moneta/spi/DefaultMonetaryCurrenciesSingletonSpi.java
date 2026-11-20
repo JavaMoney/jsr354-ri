@@ -18,6 +18,8 @@ package org.javamoney.moneta.spi;
 import javax.money.CurrencyQuery;
 import javax.money.CurrencyQueryBuilder;
 import javax.money.CurrencyUnit;
+import javax.money.MonetaryException;
+import javax.money.UnknownCurrencyException;
 import javax.money.spi.Bootstrap;
 import javax.money.spi.CurrencyProviderSpi;
 import javax.money.spi.MonetaryCurrenciesSingletonSpi;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,6 +56,25 @@ public class DefaultMonetaryCurrenciesSingletonSpi implements MonetaryCurrencies
             }
         }
         return result;
+    }
+
+    @Override
+    public CurrencyUnit getCurrency(String currencyCode, String... providers) {
+        Objects.requireNonNull(currencyCode, "Currency Code may not be null");
+        Set<CurrencyUnit> found = getCurrencies(
+                CurrencyQueryBuilder.of().setCurrencyCodes(currencyCode).setProviderNames(providers).build());
+        // A single-code lookup must be exact. Providers may match the currency code as a regular
+        // expression (see JDKCurrencyProvider), which is intended for getCurrencies(CurrencyQuery)
+        // searches but must not leak into getCurrency(code): otherwise a code such as "X*" resolves
+        // to the ISO code "XXX" instead of being reported as unknown. See issue #428.
+        found.removeIf(currency -> !currencyCode.equals(currency.getCurrencyCode()));
+        if (found.isEmpty()) {
+            throw new UnknownCurrencyException(currencyCode);
+        }
+        if (found.size() > 1) {
+            throw new MonetaryException("Ambiguous CurrencyUnit for code: " + currencyCode + ": " + found);
+        }
+        return found.iterator().next();
     }
 
     @Override
